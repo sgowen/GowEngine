@@ -19,8 +19,8 @@ _timing(timing),
 _processPacketFunc(processPacketFunc),
 _handleNoResponseFunc(handleNoResponseFunc),
 _handleConnectionResetFunc(handleConnectionResetFunc),
-_bytesReceivedPerSecond(new WeightedTimedMovingAverage(timing, 1.f)),
-_bytesSentPerSecond(new WeightedTimedMovingAverage(timing, 1.f)),
+_bytesReceivedPerSecond(timing, 1.0f),
+_bytesSentPerSecond(timing, 1.0f),
 _bytesSentThisFrame(0),
 _isServer(isServer)
 {
@@ -29,8 +29,7 @@ _isServer(isServer)
 
 PacketHandler::~PacketHandler()
 {
-    delete _bytesReceivedPerSecond;
-    delete _bytesSentPerSecond;
+    // Empty
 }
 
 void PacketHandler::processIncomingPackets()
@@ -44,19 +43,19 @@ void PacketHandler::processIncomingPackets()
 
 const WeightedTimedMovingAverage& PacketHandler::getBytesReceivedPerSecond() const
 {
-    return *_bytesReceivedPerSecond;
+    return _bytesReceivedPerSecond;
 }
 
 const WeightedTimedMovingAverage& PacketHandler::getBytesSentPerSecond() const
 {
-    return *_bytesSentPerSecond;
+    return _bytesSentPerSecond;
 }
 
 void PacketHandler::updateBytesSentLastFrame()
 {
     if (_bytesSentThisFrame > 0)
     {
-        _bytesSentPerSecond->updatePerSecond(static_cast<float>(_bytesSentThisFrame));
+        _bytesSentPerSecond.updatePerSecond(static_cast<float>(_bytesSentThisFrame));
         
         _bytesSentThisFrame = 0;
     }
@@ -64,5 +63,5 @@ void PacketHandler::updateBytesSentLastFrame()
 
 void PacketHandler::updateBytesReceivedLastFrame(int totalReadByteCount)
 {
-    _bytesReceivedPerSecond->updatePerSecond(static_cast<float>(totalReadByteCount));
+    _bytesReceivedPerSecond.updatePerSecond(static_cast<float>(totalReadByteCount));
 }

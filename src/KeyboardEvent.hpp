@@ -8,12 +8,12 @@
 
 #pragma once
 
-typedef enum
+enum KeyboardEventType
 {
     KeyboardEventType_DOWN,
     KeyboardEventType_HELD,
     KeyboardEventType_UP
-} KeyboardEventType;
+};
 
 struct KeyboardEvent
 {

@@ -17,7 +17,7 @@ struct Framebuffer
     uint32_t _texture;
     uint32_t _fbo;
 
-    Framebuffer(int width, int height) :
+    Framebuffer(int width = 0, int height = 0) :
     _width(width),
     _height(height),
     _texture(0),

@@ -8,14 +8,14 @@
 
 #pragma once
 
-typedef enum
+enum CursorEventType
 {
     CursorEventType_DOWN,
     CursorEventType_DRAGGED,
     CursorEventType_MOVED,
     CursorEventType_UP,
     CursorEventType_SCROLL
-} CursorEventType;
+};
 
 struct CursorEvent
 {
@@ -31,5 +31,10 @@ struct CursorEvent
     _isAlt(isAlt)
     {
         // Empty
+    }
+    
+    bool isPressed()
+    {
+        return _type == CursorEventType_DOWN || _type == CursorEventType_DRAGGED;
     }
 };

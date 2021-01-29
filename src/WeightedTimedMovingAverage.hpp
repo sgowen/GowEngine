@@ -13,7 +13,7 @@ class Timing;
 class WeightedTimedMovingAverage
 {
 public:
-    WeightedTimedMovingAverage(Timing* timing, float duration = 5.f);
+    WeightedTimedMovingAverage(Timing* timing, float duration = 5.0f);
     
     void updatePerSecond(float value);
     void update(float value);

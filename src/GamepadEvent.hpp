@@ -10,7 +10,7 @@
 
 #include <stdint.h>
 
-typedef enum
+enum GamepadEventType
 {
     GamepadEventType_BUTTON_X = 0,
     GamepadEventType_BUTTON_A = 1,
@@ -33,7 +33,7 @@ typedef enum
     GamepadEventType_STICK_LEFT,
     GamepadEventType_STICK_RIGHT,
     GamepadEventType_TRIGGER
-} GamepadEventType;
+};
 
 struct GamepadEvent
 {

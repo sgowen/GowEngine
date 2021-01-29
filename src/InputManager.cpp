@@ -8,6 +8,9 @@
 
 #include "InputManager.hpp"
 
+#include "StringUtil.hpp"
+#include "PlatformMacros.hpp"
+
 InputManager& InputManager::getInstance()
 {
     static InputManager ret = InputManager();
@@ -16,6 +19,10 @@ InputManager& InputManager::getInstance()
 
 void InputManager::onCursorInput(CursorEventType type, float x, float y, bool isAlt)
 {
+#if IS_DEBUG
+    LOG("onCursorInput %d%", type);
+#endif
+    
     CursorEvent* e = _poolCursor.newObject();
     e->_type = type;
     e->_x = x;
@@ -27,6 +34,10 @@ void InputManager::onCursorInput(CursorEventType type, float x, float y, bool is
 
 void InputManager::onGamepadInput(GamepadEventType type, uint8_t index, float x, float y)
 {
+#if IS_DEBUG
+    LOG("onGamepadInput %d%", type);
+#endif
+    
     if (index >= 4)
     {
         // Must be 0, 1, 2, 3 (supports 4 players)
@@ -44,6 +55,10 @@ void InputManager::onGamepadInput(GamepadEventType type, uint8_t index, float x,
 
 void InputManager::onKeyboardInput(uint16_t key, bool isUp)
 {
+#if IS_DEBUG
+    LOG("onKeyboardInput %d%", key);
+#endif
+    
     bool wasLastEventDown = false;
     
     auto q = _lastKnownKeyStates.find(key);

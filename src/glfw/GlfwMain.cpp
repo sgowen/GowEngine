@@ -99,11 +99,13 @@ void mouse_button_callback(GLFWwindow* window, int button, int action, int mods)
 
 void mouse_cursor_pos_callback(GLFWwindow*, double x, double y)
 {
-    _engine->onCursorMoved(x, y);
-    
     if (isDown)
     {
         _engine->onCursorDragged(x, y, isAlt);
+    }
+    else
+    {
+        _engine->onCursorMoved(x, y);
     }
 }
 

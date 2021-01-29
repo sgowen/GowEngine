@@ -8,11 +8,12 @@
 
 #pragma once
 
+#include "WeightedTimedMovingAverage.hpp"
+
 #include <queue>
 #include <list>
 
 class Timing;
-class WeightedTimedMovingAverage;
 class InputMemoryBitStream;
 class OutputMemoryBitStream;
 class MachineAddress;
@@ -48,6 +49,6 @@ protected:
     void updateBytesReceivedLastFrame(int totalReadByteCount);
     
 private:
-    WeightedTimedMovingAverage* _bytesReceivedPerSecond;
-    WeightedTimedMovingAverage* _bytesSentPerSecond;
+    WeightedTimedMovingAverage _bytesReceivedPerSecond;
+    WeightedTimedMovingAverage _bytesSentPerSecond;
 };
