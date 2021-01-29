@@ -1,0 +1,126 @@
+//
+//  CircleBatcher.cpp
+//  GowEngine
+//
+//  Created by Stephen Gowen on 11/15/14.
+//  Copyright © 2021 Stephen Gowen. All rights reserved.
+//
+
+#include "CircleBatcher.hpp"
+
+#include "Circle.hpp"
+#include "Color.hpp"
+#include "Shader.hpp"
+
+#include "OpenGLWrapper.hpp"
+#include "Constants.hpp"
+#include "MathUtil.hpp"
+
+#include <math.h>
+#include <assert.h>
+
+#define DEGREE_SPACING 6
+
+CircleBatcher::CircleBatcher(int maxBatchSize) :
+_vertexBuffer(0)
+{
+    _vertices.reserve(maxBatchSize * NUM_VERTICES_PER_RECTANGLE);
+}
+
+CircleBatcher::~CircleBatcher()
+{
+    // Empty
+}
+
+void CircleBatcher::createDeviceDependentResources()
+{
+    _vertexBuffer = OGL.loadVertexBuffer(sizeof(VERTEX_2D) * _vertices.capacity());
+}
+
+void CircleBatcher::releaseDeviceDependentResources()
+{
+    OGL.unloadBuffer(_vertexBuffer);
+}
+
+void CircleBatcher::begin()
+{
+    _vertices.clear();
+    _circles.clear();
+}
+
+void CircleBatcher::addCircle(Circle& c)
+{
+    addCircle(c._center.x(), c._center.y(), c._radius);
+}
+
+void CircleBatcher::addCircle(float x, float y, float radius)
+{
+    size_t numExistingPoints = _vertices.size();
+    
+    for (int i = 0; i <= 360; i += DEGREE_SPACING)
+    {
+        float rad = DEGREES_TO_RADIANS(i);
+        float cos = cosf(rad);
+        float sin = sinf(rad);
+        
+        _vertices.emplace_back(cos * radius + x, sin * radius + y);
+        _vertices.emplace_back(x, y);
+    }
+    
+    size_t numPoints = _vertices.size() - numExistingPoints;
+    _circles.push_back(numPoints);
+}
+
+void CircleBatcher::addPartialCircle(Circle& c, int arcDegrees)
+{
+    addPartialCircle(c._center.x(), c._center.y(), c._radius, arcDegrees);
+}
+
+void CircleBatcher::addPartialCircle(float x, float y, float radius, int arcDegrees)
+{
+    size_t numExistingPoints = _vertices.size();
+    
+    for (int i = 90; i < (450 - arcDegrees); i += DEGREE_SPACING)
+    {
+        float rad = DEGREES_TO_RADIANS(i);
+        float cos = cosf(rad);
+        float sin = sinf(rad);
+        
+        _vertices.emplace_back(cos * radius + x, sin * radius + y);
+        _vertices.emplace_back(x, y);
+    }
+    
+    float rad = DEGREES_TO_RADIANS(450 - arcDegrees);
+    float cos = cosf(rad);
+    float sin = sinf(rad);
+    
+    _vertices.emplace_back(cos * radius + x, sin * radius + y);
+    _vertices.emplace_back(x, y);
+    
+    size_t numPoints = _vertices.size() - numExistingPoints;
+    _circles.push_back(numPoints);
+}
+
+void CircleBatcher::end(Shader& s, mat4& matrix, const Color& c)
+{
+    if (_circles.empty())
+    {
+        return;
+    }
+    
+    OGL.bindVertexBuffer(_vertexBuffer, sizeof(VERTEX_2D) * _vertices.size(), &_vertices[0]);
+    OGL.bindShader(s);
+    OGL.bindMatrix(s, "u_Matrix", matrix);
+    OGL.bindColor(s, "u_Color", c);
+
+    uint32_t offset = 0;
+    for (std::vector<size_t>::iterator i = _circles.begin(); i != _circles.end(); ++i)
+    {
+        uint32_t numPoints = (uint32_t)(*i);
+        OGL.draw(GL_TRIANGLE_STRIP, offset, numPoints);
+        offset += numPoints;
+    }
+
+    OGL.unbindShader(s);
+    OGL.unbindVertexBuffer();
+}
