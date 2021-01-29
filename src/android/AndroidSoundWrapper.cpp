@@ -19,8 +19,3 @@ AndroidSoundWrapper::AndroidSoundWrapper(SimpleMultiPlayer* simpleMultiPlayer, u
         _sounds.push_back(new AndroidSound(simpleMultiPlayer, soundID, filePath));
     }
 }
-
-AndroidSoundWrapper::~AndroidSoundWrapper()
-{
-    // Empty
-}

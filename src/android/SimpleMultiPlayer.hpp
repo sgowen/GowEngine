@@ -19,7 +19,7 @@ class SimpleMultiPlayer : public oboe::AudioStreamCallback
 {
 public:
     SimpleMultiPlayer();
-    ~SimpleMultiPlayer();
+    ~SimpleMultiPlayer() {}
 
     virtual oboe::DataCallbackResult onAudioReady(oboe::AudioStream *oboeStream, void *audioData, int32_t numFrames) override;
     virtual void onErrorAfterClose(oboe::AudioStream *oboeStream, oboe::Result error) override;

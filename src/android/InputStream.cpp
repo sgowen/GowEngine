@@ -19,11 +19,6 @@ _pos(0)
     // Empty
 }
 
-InputStream::~InputStream()
-{
-    // Empty
-}
-
 int32_t InputStream::read(void *buff, int32_t numBytes)
 {
     int32_t numAvail = _bufferLen - _pos;

@@ -8,17 +8,16 @@
 
 #include "EntityIDManager.hpp"
 
-#include "Constants.hpp"
 #include "MathUtil.hpp"
+
+#define  STATIC_ENTITY_ID_BEGIN 0x00000001u
+#define  STATIC_ENTITY_ID_END   0x000FFFFFu
+#define DYNAMIC_ENTITY_ID_BEGIN 0x00100000u
+#define DYNAMIC_ENTITY_ID_END   0xFFFFFFFFu
 
 EntityIDManager::EntityIDManager() :
 _staticEntityID(STATIC_ENTITY_ID_BEGIN),
 _dynamicEntityID(DYNAMIC_ENTITY_ID_BEGIN)
-{
-    // Empty
-}
-
-EntityIDManager::~EntityIDManager()
 {
     // Empty
 }

@@ -15,7 +15,6 @@
 #include "Shader.hpp"
 
 #include "OpenGLWrapper.hpp"
-#include "Constants.hpp"
 
 PolygonBatcher::PolygonBatcher(int maxBatchSize, bool isFill) :
 _maxBatchSize(maxBatchSize),
@@ -26,11 +25,6 @@ _triangleVertexBuffer(0)
 {
     _quadVertices.reserve(maxBatchSize * NUM_VERTICES_PER_RECTANGLE);
     _triangleVertices.resize(maxBatchSize * NUM_VERTICES_PER_TRIANGLE);
-}
-
-PolygonBatcher::~PolygonBatcher()
-{
-    // Empty
 }
 
 void PolygonBatcher::createDeviceDependentResources()

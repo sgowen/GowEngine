@@ -13,7 +13,6 @@
 #include "Shader.hpp"
 
 #include "OpenGLWrapper.hpp"
-#include "Constants.hpp"
 #include "MathUtil.hpp"
 
 #include <math.h>
@@ -25,11 +24,6 @@ CircleBatcher::CircleBatcher(int maxBatchSize) :
 _vertexBuffer(0)
 {
     _vertices.reserve(maxBatchSize * NUM_VERTICES_PER_RECTANGLE);
-}
-
-CircleBatcher::~CircleBatcher()
-{
-    // Empty
 }
 
 void CircleBatcher::createDeviceDependentResources()

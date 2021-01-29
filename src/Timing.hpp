@@ -12,7 +12,7 @@ class Timing
 {
 public:
     Timing();
-    ~Timing();
+    ~Timing() {}
     
     void onFrame();
     void reset();

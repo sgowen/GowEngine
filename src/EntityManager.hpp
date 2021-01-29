@@ -19,7 +19,7 @@ class EntityManager
 {
 public:
     EntityManager(HandleEntityCreatedFunc handleEntityCreatedFunc, HandleEntityDeletionFunc handleEntityDeletionFunc);
-    ~EntityManager();
+    ~EntityManager() {}
     
     Entity* getEntityByID(uint32_t id) const;
     void registerEntity(Entity* e);

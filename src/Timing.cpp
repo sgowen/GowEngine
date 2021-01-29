@@ -16,11 +16,6 @@ _time(0)
     // Empty
 }
 
-Timing::~Timing()
-{
-    // Empty
-}
-
 void Timing::onFrame()
 {
     _time += FRAME_RATE;

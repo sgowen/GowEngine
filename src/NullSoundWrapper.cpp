@@ -17,8 +17,3 @@ NullSoundWrapper::NullSoundWrapper(uint16_t soundID, const char *path, int numIn
         _sounds.push_back(new NullSound(soundID, path));
     }
 }
-
-NullSoundWrapper::~NullSoundWrapper()
-{
-    // Empty
-}

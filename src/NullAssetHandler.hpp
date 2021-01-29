@@ -13,9 +13,9 @@
 class NullAssetHandler : public AssetHandler
 {
 public:
-	NullAssetHandler();
-    virtual ~NullAssetHandler();
+    NullAssetHandler() : AssetHandler() {}
+    virtual ~NullAssetHandler() {}
     
     virtual FileData loadAsset(const char* filePath);
-    virtual void releaseAsset(const FileData& fileData);
+    virtual void releaseAsset(const FileData& fileData) {}
 };

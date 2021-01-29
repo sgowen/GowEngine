@@ -29,7 +29,6 @@ public:
     void write(bool data);
     void writeLarge(const std::string& value);
     void writeSmall(const std::string& value);
-    void writeSignedBinaryValue(float value);
     
     template <typename T, uint32_t BIT_COUNT = sizeof(T) * 8>
     void write(T data)

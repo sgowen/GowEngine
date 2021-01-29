@@ -14,11 +14,6 @@ _state(CLIENT_NOT_READY_TO_SAY_HELLO)
     // Empty
 }
 
-ClientHelper::~ClientHelper()
-{
-    // Empty
-}
-
 int ClientHelper::state()
 {
     return _state;

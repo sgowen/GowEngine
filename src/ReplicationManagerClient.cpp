@@ -39,13 +39,13 @@ void ReplicationManagerClient::read(InputMemoryBitStream& inputStream)
         
         switch(action)
         {
-            case RA_Create:
+            case ReplicationAction_CREATE:
                 readAndDoCreateAction(inputStream, networkID);
                 break;
-            case RA_Update:
+            case ReplicationAction_UPDATE:
                 readAndDoUpdateAction(inputStream, networkID);
                 break;
-            case RA_Destroy:
+            case ReplicationAction_DESTROY:
                 readAndDoDestroyAction(inputStream, networkID);
                 break;
         }

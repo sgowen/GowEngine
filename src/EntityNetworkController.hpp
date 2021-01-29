@@ -30,7 +30,7 @@ class EntityNetworkController
     
 public:
     EntityNetworkController(Entity* e, bool isServer);
-    virtual ~EntityNetworkController();
+    virtual ~EntityNetworkController() {}
     
     virtual void read(InputMemoryBitStream& ip);
     virtual uint16_t write(OutputMemoryBitStream& op, uint16_t dirtyState);

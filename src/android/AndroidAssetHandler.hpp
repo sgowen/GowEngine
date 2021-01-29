@@ -19,6 +19,6 @@ public:
     virtual void releaseAsset(const FileData& fileData);
     
 protected:
-    AndroidAssetHandler();
-    virtual ~AndroidAssetHandler();
+    AndroidAssetHandler() : AssetHandler() {}
+    virtual ~AndroidAssetHandler() {}
 };

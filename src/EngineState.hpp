@@ -24,8 +24,7 @@ public:
     virtual void releaseDeviceDependentResources() = 0;
     virtual void onResume() = 0;
     virtual void onPause() = 0;
-    virtual void update() = 0;
-    virtual void render(double alpha) = 0;
+    virtual void render() = 0;
 
 protected:
     EngineState() {}

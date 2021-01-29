@@ -8,6 +8,8 @@
 
 #pragma once
 
+#include "Vector2.hpp"
+
 enum CursorEventType
 {
     CursorEventType_DOWN,
@@ -20,14 +22,12 @@ enum CursorEventType
 struct CursorEvent
 {
     CursorEventType _type;
-    float _x;
-    float _y;
+    Vector2 _pos;
     bool _isAlt;
     
     CursorEvent(CursorEventType type = CursorEventType_DOWN, float x = 0, float y = 0, bool isAlt = false) :
     _type(type),
-    _x(x),
-    _y(y),
+    _pos(x, y),
     _isAlt(isAlt)
     {
         // Empty

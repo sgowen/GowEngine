@@ -29,7 +29,7 @@ private:
     AAssetManager* _assetManager;
 
     JNIAndroidAssetHandler(JNIEnv *env, jobject assetManager);
-    ~JNIAndroidAssetHandler();
+    ~JNIAndroidAssetHandler() {}
     JNIAndroidAssetHandler(const JNIAndroidAssetHandler&);
     JNIAndroidAssetHandler& operator=(const JNIAndroidAssetHandler&);
 };

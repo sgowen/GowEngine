@@ -14,7 +14,7 @@ class NullSound : public Sound
 {
 public:
     NullSound(uint16_t soundID, const char *path, float volume = 1.0f);
-    virtual ~NullSound();
+    virtual ~NullSound() {}
 
     virtual void play(bool isLooping = false);
     virtual void resume();

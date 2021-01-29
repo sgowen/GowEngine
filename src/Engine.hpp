@@ -8,8 +8,11 @@
 
 #pragma once
 
-#define REQUESTED_ACTION_UPDATE 0
-#define REQUESTED_ACTION_EXIT -1
+enum EngineRequestedHostAction
+{
+    EngineRequestedHostAction_NONE =    0,
+    EngineRequestedHostAction_EXIT =    1 << 0
+};
 
 #include "StateMachine.hpp"
 
@@ -22,14 +25,14 @@ class Engine
 {
 public:
     Engine(EngineController& engineController);
-    ~Engine();
+    ~Engine() {}
     
     void createDeviceDependentResources();
     void onWindowSizeChanged(int screenWidth, int screenHeight, int cursorWidth = 0, int cursorHeight = 0);
     void releaseDeviceDependentResources();
     void onResume();
     void onPause();
-    int update(double deltaTime);
+    EngineRequestedHostAction update(double deltaTime);
     void render();
     
     void onCursorDown(float x, float y, bool isAlt = false);
@@ -42,7 +45,7 @@ public:
     void onGamepadInputTrigger(uint8_t index, float triggerLeft, float triggerRight);
     void onGamepadInputButton(uint8_t index, uint8_t gamepadEventType, uint8_t isPressed);
     void onKeyboardInput(unsigned short key, bool isUp = false);
-    void setRequestedAction(int value);
+    void setRequestedAction(EngineRequestedHostAction value);
     StateMachine<Engine, EngineState>& getStateMachine();
     int screenWidth();
     int screenHeight();
@@ -53,7 +56,7 @@ private:
     StateMachine<Engine, EngineState> _stateMachine;
     double _frameRate;
     double _stateTime;
-    int _requestedAction;
+    EngineRequestedHostAction _requestedAction;
     int _screenWidth;
     int _screenHeight;
     int _cursorWidth;

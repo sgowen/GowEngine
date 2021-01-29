@@ -25,7 +25,7 @@ inline float clamp(float x, float lower, float upper)
 
 inline float sanitizeCloseToZeroValue(float x)
 {
-    if (x < 0.05f && x > -0.05f)
+    if (x < 0.06f && x > -0.06f)
     {
         return 0.0f;
     }

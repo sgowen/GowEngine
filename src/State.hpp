@@ -12,15 +12,8 @@ template <class ObjectType>
 class State
 {
 public:
-    State()
-    {
-        // Empty
-    }
-    
-    virtual ~State()
-    {
-        // Empty
-    }
+    State() {}
+    virtual ~State() {}
     
     virtual void enter(ObjectType* owner) = 0;
     virtual void execute(ObjectType* owner) = 0;

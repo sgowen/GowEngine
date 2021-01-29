@@ -17,16 +17,6 @@
 
 #include <assert.h>
 
-Config::Config()
-{
-    // Empty
-}
-
-Config::~Config()
-{
-    // Empty
-}
-
 void Config::initWithJSONFile(const char* filePath)
 {
     AssetHandler* ah = AssetHandlerFactory::create();

@@ -42,13 +42,3 @@ void LinuxAssetHandler::releaseAsset(const FileData& fileData)
 
     free((void *)fileData._data);
 }
-
-LinuxAssetHandler::LinuxAssetHandler() : AssetHandler()
-{
-    // Empty
-}
-
-LinuxAssetHandler::~LinuxAssetHandler()
-{
-    // Empty
-}

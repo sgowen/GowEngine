@@ -19,6 +19,6 @@ public:
     virtual void releaseAsset(const FileData& fileData);
     
 protected:
-    LinuxAssetHandler();
-    virtual ~LinuxAssetHandler();
+    LinuxAssetHandler() : AssetHandler() {}
+    virtual ~LinuxAssetHandler() {}
 };

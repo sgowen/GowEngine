@@ -20,37 +20,7 @@ _entity(e)
     // Empty
 }
 
-EntityController::~EntityController()
-{
-    // Empty
-}
-
-void EntityController::update()
-{
-    // Empty
-}
-
-void EntityController::receiveMessage(uint16_t message, void* data)
-{
-    // Empty
-}
-
-void EntityController::onFixturesCreated(std::vector<b2Fixture*>& fixtures)
-{
-    // Empty
-}
-
 bool EntityController::shouldCollide(Entity* e, b2Fixture* fixtureA, b2Fixture* fixtureB)
 {
     return true;
-}
-
-void EntityController::handleBeginContact(Entity* e, b2Fixture* fixtureA, b2Fixture* fixtureB)
-{
-    // Empty
-}
-
-void EntityController::handleEndContact(Entity* e, b2Fixture* fixtureA, b2Fixture* fixtureB)
-{
-    // Empty
 }

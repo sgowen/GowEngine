@@ -20,7 +20,7 @@ class ClientHelper : public NetworkHelper
 {
 public:
     ClientHelper(PacketHandler* packetHandler);
-    virtual ~ClientHelper();
+    virtual ~ClientHelper() {}
     
     virtual void handleUninitialized() = 0;
     virtual void sendPacket(const OutputMemoryBitStream& outputStream) = 0;

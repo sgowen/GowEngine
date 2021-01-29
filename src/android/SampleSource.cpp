@@ -22,11 +22,6 @@ _gain(1.0f)
     setPan(pan);
 }
 
-SampleSource::~SampleSource()
-{
-    // Empty
-}
-
 void SampleSource::mixAudio(float* outBuff, int numChannels, int numFrames, bool isLooping)
 {
     int32_t numSampleFrames = _sampleBuffer->getNumSampleFrames();

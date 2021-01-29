@@ -17,8 +17,8 @@
 class TextureManager
 {
 public:
-    TextureManager();
-    ~TextureManager();
+    TextureManager() {}
+    ~TextureManager() {}
     
     void createDeviceDependentResources();
     void releaseDeviceDependentResources();

@@ -13,7 +13,6 @@
 
 #include "ShaderInput.hpp"
 #include "OpenGLWrapper.hpp"
-#include "Constants.hpp"
 #include "Color.hpp"
 
 ScreenRenderer::ScreenRenderer() :
@@ -21,11 +20,6 @@ _vertexBuffer(0),
 _indexBuffer(0),
 _screenWidth(0),
 _screenHeight(0)
-{
-    // Empty
-}
-
-ScreenRenderer::~ScreenRenderer()
 {
     // Empty
 }
@@ -55,15 +49,7 @@ void ScreenRenderer::renderToScreen(Shader& s, Framebuffer& fb)
     OGL.bindScreenFramebuffer(_screenWidth, _screenHeight, Color::BLACK);
     OGL.enableBlending(false);
     
-    OGL.bindVertexBuffer(_vertexBuffer);
-    OGL.bindShader(s);
-    OGL.bindTexture(s, "u_Texture", 0, fb._texture);
-    
-    OGL.drawIndexed(GL_TRIANGLES, _indexBuffer, 1);
-    
-    OGL.unbindTexture(0);
-    OGL.unbindShader(s);
-    OGL.unbindVertexBuffer();
+    renderFramebuffer(s, fb);
 }
 
 void ScreenRenderer::renderFramebuffer(Shader& s, Framebuffer& fb)

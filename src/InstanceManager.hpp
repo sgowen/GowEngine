@@ -23,8 +23,8 @@ public:
 private:
     std::map<uint32_t, void*> _instanceMap;
     
-    InstanceManager();
-    ~InstanceManager();
+    InstanceManager() {}
+    ~InstanceManager() {}
     InstanceManager(const InstanceManager&);
     InstanceManager& operator=(const InstanceManager&);
 };

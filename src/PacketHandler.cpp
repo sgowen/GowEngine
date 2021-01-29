@@ -27,11 +27,6 @@ _isServer(isServer)
     // Empty
 }
 
-PacketHandler::~PacketHandler()
-{
-    // Empty
-}
-
 void PacketHandler::processIncomingPackets()
 {
     readIncomingPacketsIntoQueue();

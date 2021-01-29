@@ -15,16 +15,6 @@
 #include <AL/alut.h>
 #include <stdio.h>
 
-void LinuxAudioEngineHelper::pause()
-{
-    // Empty
-}
-
-void LinuxAudioEngineHelper::resume()
-{
-    // Empty
-}
-
 SoundWrapper* LinuxAudioEngineHelper::loadSound(uint16_t soundID, const char *filePath, int numInstances)
 {
     return new LinuxSoundWrapper(soundID, filePath, numInstances);

@@ -230,13 +230,3 @@ FILE* EntityLayoutMapper::openFile(const char* path, const char* mode)
 
     return file;
 }
-
-EntityLayoutMapper::EntityLayoutMapper()
-{
-    // Empty
-}
-
-EntityLayoutMapper::~EntityLayoutMapper()
-{
-    // Empty
-}

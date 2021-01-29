@@ -14,7 +14,7 @@ class Sound
 {
 public:
     Sound(uint16_t soundID);
-    virtual ~Sound();
+    virtual ~Sound() {}
     
     virtual void play(bool isLooping = false) = 0;
     virtual void resume() = 0;

@@ -20,7 +20,7 @@ public:
 
     WavRIFFChunkHeader();
     WavRIFFChunkHeader(RiffID tag);
-    virtual ~WavRIFFChunkHeader();
+    virtual ~WavRIFFChunkHeader() {}
 
     virtual void read(InputStream* inputStream);
 };

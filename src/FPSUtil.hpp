@@ -20,7 +20,7 @@ public:
     
 private:
     FPSUtil();
-    ~FPSUtil();
+    ~FPSUtil() {}
     
     double _stateTime;
     int _fPS;

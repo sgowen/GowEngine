@@ -13,10 +13,7 @@
 #include "InputMemoryBitStream.hpp"
 
 #include "StringUtil.hpp"
-#include "Constants.hpp"
 #include "PlatformMacros.hpp"
-
-#define ACK_TIMEOUT 0.5
 
 DeliveryNotificationManager::DeliveryNotificationManager(Timing* timing, bool shouldSendAcks, bool shouldProcessAcks) :
 _timing(timing),
@@ -67,7 +64,7 @@ bool DeliveryNotificationManager::readAndProcessState(InputMemoryBitStream& inpu
 
 void DeliveryNotificationManager::processTimedOutPackets(float frameStartTime)
 {
-    float timeoutTime = frameStartTime - ACK_TIMEOUT;
+    float timeoutTime = frameStartTime - NW_ACK_TIMEOUT;
     
     while (!_inFlightPackets.empty())
     {

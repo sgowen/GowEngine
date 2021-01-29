@@ -10,7 +10,6 @@
 
 #include "MathUtil.hpp"
 #include "StringUtil.hpp"
-#include "Constants.hpp"
 
 #include <cstring>
 #include <assert.h>
@@ -119,16 +118,6 @@ void OutputMemoryBitStream::writeSmall(const std::string& value)
     for (const auto& element : value)
     {
         write(element);
-    }
-}
-
-void OutputMemoryBitStream::writeSignedBinaryValue(float value)
-{
-    bool isNonZero = (value != 0.f);
-    write(isNonZero);
-    if (isNonZero)
-    {
-        write(value > 0.f);
     }
 }
 

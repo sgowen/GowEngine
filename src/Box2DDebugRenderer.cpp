@@ -24,11 +24,6 @@ _matrix(NULL)
     // Empty
 }
 
-Box2DDebugRenderer::~Box2DDebugRenderer()
-{
-    // Empty
-}
-
 void Box2DDebugRenderer::DrawPolygon(const b2Vec2* vertices, int32 vertexCount, const b2Color& color)
 {
     Color c = Color(color.r, color.g, color.b, 0.3f);

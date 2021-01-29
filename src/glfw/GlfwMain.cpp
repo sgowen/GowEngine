@@ -264,13 +264,13 @@ int GlfwMain::exec(EngineController& engineController, const char* windowTitle)
             }
         }
 
-        int requestedAction = _engine->update(deltaTime);
+        EngineRequestedHostAction requestedAction = _engine->update(deltaTime);
         switch (requestedAction)
         {
-            case REQUESTED_ACTION_EXIT:
+            case EngineRequestedHostAction_EXIT:
                 glfwSetWindowShouldClose(window, GLFW_TRUE);
                 break;
-            case REQUESTED_ACTION_UPDATE:
+            case EngineRequestedHostAction_NONE:
             default:
                 break;
         }

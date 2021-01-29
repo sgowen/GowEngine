@@ -90,22 +90,6 @@ void InputMemoryBitStream::readBytes(void* outData, uint32_t byteCount)
     readBits(outData, byteCount << 3);
 }
 
-void InputMemoryBitStream::readSignedBinaryValue(float& outValue)
-{
-    bool isNonZero;
-    read(isNonZero);
-    if (isNonZero)
-    {
-        bool isPositive;
-        read(isPositive);
-        outValue = isPositive ? 1.f : -1.f;
-    }
-    else
-    {
-        outValue = 0.f;
-    }
-}
-
 void InputMemoryBitStream::read(bool& outData)
 {
     readBits(&outData, 1);

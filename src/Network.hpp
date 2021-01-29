@@ -42,6 +42,38 @@
 
 #define ALL_DIRTY_STATE 0xFFFFu
 
+enum InstanceKeys
+{
+    InstanceKey_TIMING_SERVER = 'TIMS',
+    InstanceKey_TIMING_CLIENT = 'TIMC',
+    InstanceKey_ENTITY_ID_MANAGER_SERVER = 'EIMS',
+    InstanceKey_ENTITY_ID_MANAGER_CLIENT = 'EIMC'
+};
+
+enum NetworkPacketType
+{
+    NetworkPacketType_HELLO = 0x01u,
+    NetworkPacketType_WELCOME = 0x02u,
+    NetworkPacketType_STATE = 0x03u,
+    NetworkPacketType_INPUT = 0x04u,
+    NetworkPacketType_ADD_LOCAL_PLAYER = 0x05u,
+    NetworkPacketType_DROP_LOCAL_PLAYER = 0x06u,
+    NetworkPacketType_LOCAL_PLAYER_ADDED = 0x07u,
+    NetworkPacketType_LOCAL_PLAYER_DENIED = 0x08u,
+    NetworkPacketType_CLIENT_EXIT = 0x09u,
+    NetworkPacketType_SERVER_EXIT = 0x0Au
+};
+
+#define NW_CLIENT_TIME_BETWEEN_HELLOS 1.0
+#define NW_CLIENT_TIMEOUT 3.0
+#define NW_SERVER_TIMEOUT 5.0
+#define NW_CONNECT_TO_SERVER_TIMEOUT 15.0
+#define NW_ACK_TIMEOUT 0.5
+#define NW_MAX_NUM_PLAYERS 4
+#define NW_MAX_NUM_PACKETS_PER_FRAME 10
+#define NW_MAX_PACKET_SIZE 1200
+#define NW_INPUT_UNASSIGNED 7
+
 #ifndef htonll
 #define htonll(x) \
 ((uint64_t)((((uint64_t)(x) & 0xff00000000000000ULL) >> 56) | \

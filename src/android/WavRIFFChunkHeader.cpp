@@ -25,11 +25,6 @@ _formatID(RIFFID_WAVE)
     // Empty
 }
 
-WavRIFFChunkHeader::~WavRIFFChunkHeader()
-{
-    // Empty
-}
-
 void WavRIFFChunkHeader::read(InputStream* inputStream)
 {
     WavChunkHeader::read(inputStream);

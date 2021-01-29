@@ -20,7 +20,7 @@ class Box2DDebugRenderer : public b2Draw
 {
 public:
     Box2DDebugRenderer(int maxBatchSize);
-    virtual ~Box2DDebugRenderer();
+    virtual ~Box2DDebugRenderer() {}
     
     /// Draw a closed polygon provided in CCW order.
     virtual void DrawPolygon(const b2Vec2* vertices, int32 vertexCount, const b2Color& color);

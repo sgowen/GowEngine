@@ -28,7 +28,7 @@ public:
 
     WavFmtChunkHeader();
     WavFmtChunkHeader(RiffID tag);
-    virtual ~WavFmtChunkHeader();
+    virtual ~WavFmtChunkHeader() {}
 
     virtual void read(InputStream* inputStream);
 };

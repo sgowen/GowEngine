@@ -22,7 +22,7 @@ public:
 
     WavChunkHeader();
     WavChunkHeader(RiffID chunkID);
-    virtual ~WavChunkHeader();
+    virtual ~WavChunkHeader() {}
 
     virtual void read(InputStream* inputStream);
 };

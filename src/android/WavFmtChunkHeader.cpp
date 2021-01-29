@@ -41,11 +41,6 @@ _extraBytes(0)
     // Empty
 }
 
-WavFmtChunkHeader::~WavFmtChunkHeader()
-{
-    // Empty
-}
-
 void WavFmtChunkHeader::read(InputStream* inputStream)
 {
     WavChunkHeader::read(inputStream);

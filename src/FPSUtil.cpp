@@ -40,8 +40,3 @@ _numFrames(0)
 {
     // Empty
 }
-
-FPSUtil::~FPSUtil()
-{
-    // Empty
-}

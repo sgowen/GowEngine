@@ -11,16 +11,6 @@
 #include "TextureDescriptor.hpp"
 #include "Assets.hpp"
 
-TextureManager::TextureManager()
-{
-    // Empty
-}
-
-TextureManager::~TextureManager()
-{
-    // Empty
-}
-
 void TextureManager::createDeviceDependentResources()
 {
     assert(_textures.size() == 0);

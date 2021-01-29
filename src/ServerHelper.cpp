@@ -14,8 +14,3 @@ _handleClientDisconnectedFunc(handleClientDisconnectedFunc)
 {
     // Empty
 }
-
-ServerHelper::~ServerHelper()
-{
-    // Empty
-}

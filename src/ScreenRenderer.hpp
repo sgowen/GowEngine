@@ -17,7 +17,7 @@ class ScreenRenderer
 {
 public:
     ScreenRenderer();
-    ~ScreenRenderer();
+    ~ScreenRenderer() {}
     
     void createDeviceDependentResources();
     void onWindowSizeChanged(int screenWidth, int screenHeight);

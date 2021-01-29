@@ -68,13 +68,3 @@ void WindowsAssetHandler::releaseAsset(const FileData& fileData)
     const std::vector<uint8_t>* handle = static_cast<const std::vector<uint8_t>*>(fileData._fileHandle);
     delete handle;
 }
-
-WindowsAssetHandler::WindowsAssetHandler() : AssetHandler()
-{
-    // Empty
-}
-
-WindowsAssetHandler::~WindowsAssetHandler()
-{
-    // Empty
-}

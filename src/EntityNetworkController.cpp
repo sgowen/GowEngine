@@ -23,11 +23,6 @@ _isServer(isServer)
     // Empty
 }
 
-EntityNetworkController::~EntityNetworkController()
-{
-    // Empty
-}
-
 void EntityNetworkController::read(InputMemoryBitStream& ip)
 {
     Entity& e = *_entity;

@@ -43,11 +43,6 @@ _cycleTime(0)
     }
 }
 
-Animation::~Animation()
-{
-    // Empty
-}
-
 TextureRegion& Animation::getTextureRegion(uint16_t stateTime)
 {
 	int frameIndex = getFrameIndex(stateTime);

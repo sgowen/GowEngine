@@ -13,7 +13,7 @@ struct Texture;
 class TextureLoader
 {
 public:
-    TextureLoader();
+    TextureLoader() {}
     
     void loadTextureData(Texture& t);
     void releaseTextureData(Texture& t);

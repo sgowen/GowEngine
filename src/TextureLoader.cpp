@@ -19,11 +19,6 @@
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"
 
-TextureLoader::TextureLoader()
-{
-    // Empty
-}
-
 void TextureLoader::loadTextureData(Texture& t)
 {
     AssetHandler* ah = AssetHandlerFactory::create();

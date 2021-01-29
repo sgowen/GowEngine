@@ -34,11 +34,6 @@ _spriteBatcher(maxBatchSize)
 	}
 }
 
-FontRenderer::~FontRenderer()
-{
-    // Empty
-}
-
 void FontRenderer::createDeviceDependentResources()
 {
     _spriteBatcher.createDeviceDependentResources();

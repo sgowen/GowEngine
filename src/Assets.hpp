@@ -34,8 +34,8 @@ private:
     std::vector<SoundDescriptor> _soundDescriptors;
     std::vector<TextureDescriptor> _textureDescriptors;
     
-    Assets();
-    ~Assets();
+    Assets() {}
+    ~Assets() {}
     Assets(const Assets&);
     Assets& operator=(const Assets&);
 };

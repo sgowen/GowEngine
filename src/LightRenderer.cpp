@@ -12,7 +12,6 @@
 #include "Texture.hpp"
 
 #include "OpenGLWrapper.hpp"
-#include "Constants.hpp"
 
 #include <assert.h>
 
@@ -20,11 +19,6 @@ LightRenderer::LightRenderer() :
 _lightIndex(0)
 {
     resetLights();
-}
-
-LightRenderer::~LightRenderer()
-{
-    // Empty
 }
 
 void LightRenderer::createDeviceDependentResources()

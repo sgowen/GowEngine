@@ -15,11 +15,6 @@
 #include "FileData.hpp"
 #include "OpenGLWrapper.hpp"
 
-ShaderLoader::ShaderLoader()
-{
-    // Empty
-}
-
 void ShaderLoader::loadShader(Shader& s)
 {
     AssetHandler* ah = AssetHandlerFactory::create();

@@ -20,19 +20,13 @@ Engine::Engine(EngineController& engineController) :
 _stateMachine(this),
 _frameRate(FRAME_RATE),
 _stateTime(0),
-_requestedAction(REQUESTED_ACTION_UPDATE),
+_requestedAction(EngineRequestedHostAction_NONE),
 _screenWidth(0),
 _screenHeight(0),
 _cursorWidth(0),
 _cursorHeight(0)
 {
     _stateMachine.setCurrentState(engineController.getInitialState());
-    _stateMachine.getCurrentState()->execute(this);
-}
-
-Engine::~Engine()
-{
-    // Empty
 }
 
 void Engine::createDeviceDependentResources()
@@ -46,6 +40,8 @@ void Engine::onWindowSizeChanged(int screenWidth, int screenHeight, int cursorWi
     _screenHeight = screenHeight;
     _cursorWidth = cursorWidth > 0 ? cursorWidth : screenWidth;
     _cursorHeight = cursorHeight > 0 ? cursorHeight : screenHeight;
+    
+    INPUT_MGR.setCursorSize(_cursorWidth, _cursorHeight);
     
     _stateMachine.getCurrentState()->onWindowSizeChanged(screenWidth, screenHeight, cursorWidth, cursorHeight);
 }
@@ -65,7 +61,7 @@ void Engine::onPause()
     _stateMachine.getCurrentState()->onPause();
 }
 
-int Engine::update(double deltaTime)
+EngineRequestedHostAction Engine::update(double deltaTime)
 {
     FPS_UTIL.update(deltaTime);
     
@@ -76,18 +72,18 @@ int Engine::update(double deltaTime)
         
         INPUT_MGR.process();
         
-        _stateMachine.getCurrentState()->update();
+        _stateMachine.execute();
     }
     
-    int ret = _requestedAction;
-    _requestedAction = REQUESTED_ACTION_UPDATE;
+    EngineRequestedHostAction ret = _requestedAction;
+    _requestedAction = EngineRequestedHostAction_NONE;
     
     return ret;
 }
 
 void Engine::render()
 {
-    _stateMachine.getCurrentState()->render(_stateTime / _frameRate);
+    _stateMachine.getCurrentState()->render();
 }
 
 void Engine::onCursorDown(float x, float y, bool isAlt)
@@ -140,7 +136,7 @@ void Engine::onKeyboardInput(unsigned short key, bool isUp)
     INPUT_MGR.onKeyboardInput(key, isUp);
 }
 
-void Engine::setRequestedAction(int value)
+void Engine::setRequestedAction(EngineRequestedHostAction value)
 {
     _requestedAction = value;
 }

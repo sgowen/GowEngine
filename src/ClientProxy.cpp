@@ -13,11 +13,10 @@
 #include "MachineAddress.hpp"
 #include "Timing.hpp"
 
-#include "Constants.hpp"
 #include "InstanceManager.hpp"
 
 ClientProxy::ClientProxy(EntityManager* entityManager, MachineAddress* machineAddress, const std::string& name, uint8_t playerID) :
-_timing(static_cast<Timing*>(INSTANCE_MGR.get(INSTANCE_TIME_SERVER))),
+_timing(static_cast<Timing*>(INSTANCE_MGR.get(InstanceKey_TIMING_SERVER))),
 _deliveryNotificationManager(DeliveryNotificationManager(_timing, false, true)),
 _replicationManagerServer(new ReplicationManagerServer(entityManager)),
 _machineAddress(machineAddress->createNewCopy()),
@@ -42,7 +41,7 @@ MachineAddress* ClientProxy::getMachineAddress() const
 
 uint8_t ClientProxy::getPlayerID(uint8_t index) const
 {
-    return _playerIDs.size() > index ? _playerIDs[index] : INPUT_UNASSIGNED;
+    return _playerIDs.size() > index ? _playerIDs[index] : NW_INPUT_UNASSIGNED;
 }
 
 const std::string& ClientProxy::getName() const

@@ -297,13 +297,3 @@ std::vector<TextureDescriptor>& Assets::getTextureDescriptors()
 {
     return _textureDescriptors;
 }
-
-Assets::Assets()
-{
-    // Empty
-}
-
-Assets::~Assets()
-{
-    // Empty
-}

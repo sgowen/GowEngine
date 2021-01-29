@@ -19,11 +19,6 @@ _chunkSize(0)
     // Empty
 }
 
-WavChunkHeader::~WavChunkHeader()
-{
-    // Empty
-}
-
 WavChunkHeader::WavChunkHeader(RiffID chunkID) :
 _chunkID(chunkID),
 _chunkSize(0)

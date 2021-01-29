@@ -14,5 +14,5 @@ class NullSoundWrapper : public SoundWrapper
 {
 public:
     NullSoundWrapper(uint16_t soundID, const char *path, int numInstances = 1);
-    virtual ~NullSoundWrapper();
+    virtual ~NullSoundWrapper() {}
 };

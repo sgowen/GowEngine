@@ -19,13 +19,3 @@ void AndroidAssetHandler::releaseAsset(const FileData& fileData)
 {
     JNIAndroidAssetHandler::getInstance()->releaseAsset(fileData);
 }
-
-AndroidAssetHandler::AndroidAssetHandler() : AssetHandler()
-{
-    // Empty
-}
-
-AndroidAssetHandler::~AndroidAssetHandler()
-{
-    // Empty
-}

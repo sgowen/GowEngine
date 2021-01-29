@@ -22,7 +22,7 @@ class SpriteBatcher
 {
 public:
     SpriteBatcher(int maxBatchSize);
-    ~SpriteBatcher();
+    ~SpriteBatcher() {}
 
     void createDeviceDependentResources();
     void releaseDeviceDependentResources();

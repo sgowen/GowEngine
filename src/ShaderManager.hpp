@@ -17,8 +17,8 @@
 class ShaderManager
 {
 public:
-    ShaderManager();
-    ~ShaderManager();
+    ShaderManager() {}
+    ~ShaderManager() {}
     
     void createDeviceDependentResources();
     void releaseDeviceDependentResources();

@@ -56,8 +56,3 @@ JNIAndroidAssetHandler::JNIAndroidAssetHandler(JNIEnv *env, jobject assetManager
     _assetManager = AAssetManager_fromJava(env, assetManager);
     assert(_assetManager != NULL);
 }
-
-JNIAndroidAssetHandler::~JNIAndroidAssetHandler()
-{
-    // Empty
-}

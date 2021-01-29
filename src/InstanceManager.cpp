@@ -29,13 +29,3 @@ void InstanceManager::registerInstance(uint32_t key, void* instance)
 {
     _instanceMap[key] = instance;
 }
-
-InstanceManager::InstanceManager()
-{
-    // Empty
-}
-
-InstanceManager::~InstanceManager()
-{
-    // Empty
-}

@@ -23,7 +23,7 @@ class PolygonBatcher
 {
 public:
     PolygonBatcher(int maxBatchSize, bool isFill);
-    ~PolygonBatcher();
+    ~PolygonBatcher() {}
 
     void createDeviceDependentResources();
     void releaseDeviceDependentResources();

@@ -13,7 +13,7 @@ struct Shader;
 class ShaderLoader
 {
 public:
-    ShaderLoader();
+    ShaderLoader() {}
     
     void loadShader(Shader& s);
     void unloadShader(Shader& s);

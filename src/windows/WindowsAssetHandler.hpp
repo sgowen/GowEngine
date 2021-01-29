@@ -19,6 +19,6 @@ public:
     virtual void releaseAsset(const FileData& fileData);
     
 protected:
-    WindowsAssetHandler();
-    virtual ~WindowsAssetHandler();
+    WindowsAssetHandler() : AssetHandler() {}
+    virtual ~WindowsAssetHandler() {}
 };

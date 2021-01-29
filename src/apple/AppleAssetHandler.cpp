@@ -19,13 +19,3 @@ void AppleAssetHandler::releaseAsset(const FileData& fileData)
 {
     appleReleaseAsset(fileData);
 }
-
-AppleAssetHandler::AppleAssetHandler() : AssetHandler()
-{
-    // Empty
-}
-
-AppleAssetHandler::~AppleAssetHandler()
-{
-    // Empty
-}

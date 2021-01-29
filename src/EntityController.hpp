@@ -33,14 +33,14 @@ class EntityController
     
 public:
     EntityController(Entity* e);
-    virtual ~EntityController();
+    virtual ~EntityController() {}
     
-    virtual void update();
-    virtual void receiveMessage(uint16_t message, void* data = NULL);
-    virtual void onFixturesCreated(std::vector<b2Fixture*>& fixtures);
+    virtual void update() {}
+    virtual void receiveMessage(uint16_t message, void* data = NULL) {}
+    virtual void onFixturesCreated(std::vector<b2Fixture*>& fixtures) {}
     virtual bool shouldCollide(Entity* e, b2Fixture* fixtureA, b2Fixture* fixtureB);
-    virtual void handleBeginContact(Entity* e, b2Fixture* fixtureA, b2Fixture* fixtureB);
-    virtual void handleEndContact(Entity* e, b2Fixture* fixtureA, b2Fixture* fixtureB);
+    virtual void handleBeginContact(Entity* e, b2Fixture* fixtureA, b2Fixture* fixtureB) {}
+    virtual void handleEndContact(Entity* e, b2Fixture* fixtureA, b2Fixture* fixtureB) {}
     
 protected:
     Entity* _entity;

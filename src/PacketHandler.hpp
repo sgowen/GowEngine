@@ -26,7 +26,7 @@ class PacketHandler
 {
 public:
     PacketHandler(Timing* timing, bool isServer, ProcessPacketFunc processPacketFunc, HandleNoResponseFunc handleNoResponseFunc, HandleConnectionResetFunc handleConnectionResetFunc);
-    virtual ~PacketHandler();
+    virtual ~PacketHandler() {}
     
     virtual void sendPacket(const OutputMemoryBitStream& outputStream, MachineAddress* fromAddress) = 0;
     

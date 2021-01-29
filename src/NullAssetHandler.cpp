@@ -8,22 +8,7 @@
 
 #include "NullAssetHandler.hpp"
 
-NullAssetHandler::NullAssetHandler() : AssetHandler()
-{
-    // Empty
-}
-
-NullAssetHandler::~NullAssetHandler()
-{
-    // Empty
-}
-
 FileData NullAssetHandler::loadAsset(const char* filePath)
 {
     return FileData(0, (const char*)0, (const void*)0);
-}
-
-void NullAssetHandler::releaseAsset(const FileData& fileData)
-{
-    // Empty
 }

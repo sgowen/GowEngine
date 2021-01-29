@@ -42,6 +42,11 @@ struct Framebuffer;
 struct Shader;
 struct Texture;
 
+#define NUM_VERTICES_PER_LINE 2
+#define NUM_VERTICES_PER_TRIANGLE 3
+#define NUM_VERTICES_PER_RECTANGLE 4
+#define NUM_INDICES_PER_RECTANGLE 6
+
 #define OGL OpenGLWrapper::getInstance()
 
 class OpenGLWrapper
@@ -90,8 +95,8 @@ private:
     void unloadShader(GLuint program);
     GLuint compileShader(const GLenum type, const char* source, const GLint length);
 
-    OpenGLWrapper();
-    ~OpenGLWrapper();
+    OpenGLWrapper() {}
+    ~OpenGLWrapper() {}
     OpenGLWrapper(const OpenGLWrapper&);
     OpenGLWrapper& operator=(const OpenGLWrapper&);
 };

@@ -17,7 +17,7 @@
 #include "ShaderUniform.hpp"
 #include "PlatformMacros.hpp"
 #include "Macros.hpp"
-#include "Constants.hpp"
+#include "StringUtil.hpp"
 
 #define NUM_TEXTURE_SLOTS 2
 GLenum OpenGLWrapper::TEXTURE_SLOTS[NUM_TEXTURE_SLOTS] = {GL_TEXTURE0, GL_TEXTURE1};
@@ -467,7 +467,7 @@ GLuint OpenGLWrapper::compileShader(const GLenum type, const char* source, const
 
         GLchar* errorLog = (GLchar*) malloc(maxLength);
         glGetShaderInfoLog(ret, maxLength, &maxLength, errorLog);
-        UNUSED(errorLog);
+        LOG(errorLog);
 
         glDeleteShader(ret);
 
@@ -477,14 +477,4 @@ GLuint OpenGLWrapper::compileShader(const GLenum type, const char* source, const
     }
 
     return ret;
-}
-
-OpenGLWrapper::OpenGLWrapper()
-{
-    // Empty
-}
-
-OpenGLWrapper::~OpenGLWrapper()
-{
-    // Empty
 }

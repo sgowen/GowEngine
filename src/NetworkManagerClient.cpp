@@ -23,7 +23,6 @@
 #include "StringUtil.hpp"
 #include "SocketAddressFactory.hpp"
 #include "Macros.hpp"
-#include "Constants.hpp"
 #include "InstanceManager.hpp"
 
 #include <assert.h>
@@ -201,16 +200,16 @@ void NetworkManagerClient::processPacket(InputMemoryBitStream& inputStream, Mach
     
     switch (packetType)
     {
-        case NW_PACKET_TYPE_WELCOME:
+        case NetworkPacketType_WELCOME:
             handleWelcomePacket(inputStream);
             break;
-        case NW_PACKET_TYPE_LOCAL_PLAYER_ADDED:
+        case NetworkPacketType_LOCAL_PLAYER_ADDED:
             handleLocalPlayerAddedPacket(inputStream);
             break;
-        case NW_PACKET_TYPE_LOCAL_PLAYER_DENIED:
+        case NetworkPacketType_LOCAL_PLAYER_DENIED:
             handleLocalPlayerDeniedPacket();
             break;
-        case NW_PACKET_TYPE_STATE:
+        case NetworkPacketType_STATE:
             if (_deliveryNotificationManager->readAndProcessState(inputStream))
             {
                 handleStatePacket(inputStream);
@@ -251,7 +250,7 @@ void NetworkManagerClient::updateSayingHello()
     {
         OutputMemoryBitStream helloPacket;
         
-        helloPacket.write(static_cast<uint8_t>(NW_PACKET_TYPE_HELLO));
+        helloPacket.write(static_cast<uint8_t>(NetworkPacketType_HELLO));
         helloPacket.writeSmall(getPlayerName());
         
         sendPacket(helloPacket);
@@ -353,7 +352,7 @@ void NetworkManagerClient::sendInputPacket()
     {
         OutputMemoryBitStream inputPacket;
         
-        inputPacket.write(static_cast<uint8_t>(NW_PACKET_TYPE_INPUT));
+        inputPacket.write(static_cast<uint8_t>(NetworkPacketType_INPUT));
         
         _deliveryNotificationManager->writeState(inputPacket);
         
@@ -413,7 +412,7 @@ void NetworkManagerClient::updateAddLocalPlayerRequest()
         {
             OutputMemoryBitStream packet;
             
-            packet.write(static_cast<uint8_t>(NW_PACKET_TYPE_ADD_LOCAL_PLAYER));
+            packet.write(static_cast<uint8_t>(NetworkPacketType_ADD_LOCAL_PLAYER));
             packet.write(_nextIndex);
             
             sendPacket(packet);
@@ -431,7 +430,7 @@ void NetworkManagerClient::updateDropLocalPlayerRequest()
         
         OutputMemoryBitStream packet;
         
-        packet.write(static_cast<uint8_t>(NW_PACKET_TYPE_DROP_LOCAL_PLAYER));
+        packet.write(static_cast<uint8_t>(NetworkPacketType_DROP_LOCAL_PLAYER));
         packet.write(_isRequestingToDropLocalPlayer);
         
         sendPacket(packet);
@@ -454,7 +453,7 @@ void NetworkManagerClient::updateNextIndex()
 }
 
 NetworkManagerClient::NetworkManagerClient(ClientHelper* clientHelper, HandleEntityCreatedFunc handleEntityCreatedFunc, HandleEntityDeletionFunc handleEntityDeletionFunc, RemoveProcessedMovesFunc removeProcessedMovesFunc, GetMoveListFunc getMoveListFunc, OnPlayerWelcomedFunc onPlayerWelcomedFunc) :
-_timing(static_cast<Timing*>(INSTANCE_MGR.get(INSTANCE_TIME_CLIENT))),
+_timing(static_cast<Timing*>(INSTANCE_MGR.get(InstanceKey_TIMING_CLIENT))),
 _clientHelper(clientHelper),
 _removeProcessedMovesFunc(removeProcessedMovesFunc),
 _getMoveListFunc(getMoveListFunc),

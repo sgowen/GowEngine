@@ -21,7 +21,7 @@ class LineBatcher
 {
 public:
     LineBatcher(int maxBatchSize);
-    ~LineBatcher();
+    ~LineBatcher() {}
 
     void createDeviceDependentResources();
     void releaseDeviceDependentResources();

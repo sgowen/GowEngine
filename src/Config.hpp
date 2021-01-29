@@ -14,8 +14,8 @@
 class Config
 {
 public:
-    Config();
-    ~Config();
+    Config() {}
+    ~Config() {}
     
     void initWithJSONFile(const char* filePath);
     void initWithJSON(const char* json);

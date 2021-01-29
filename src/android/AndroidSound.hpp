@@ -16,7 +16,7 @@ class AndroidSound : public Sound
 {
 public:
     AndroidSound(SimpleMultiPlayer* simpleMultiPlayer, uint16_t soundID, const char *filePath, float volume = 1.0f);
-    virtual ~AndroidSound();
+    virtual ~AndroidSound() {}
 
     virtual void play(bool isLooping = false);
     virtual void resume();

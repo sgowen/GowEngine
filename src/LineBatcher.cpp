@@ -13,7 +13,6 @@
 #include "Shader.hpp"
 
 #include "OpenGLWrapper.hpp"
-#include "Constants.hpp"
 
 #include <assert.h>
 
@@ -21,11 +20,6 @@ LineBatcher::LineBatcher(int maxBatchSize) :
 _vertexBuffer(0)
 {
     _vertices.reserve(maxBatchSize * NUM_VERTICES_PER_LINE);
-}
-
-LineBatcher::~LineBatcher()
-{
-    // Empty
 }
 
 void LineBatcher::createDeviceDependentResources()

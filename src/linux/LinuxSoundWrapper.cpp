@@ -17,8 +17,3 @@ LinuxSoundWrapper::LinuxSoundWrapper(uint16_t soundID, const char *filePath, int
         _sounds.push_back(new LinuxSound(soundID, filePath));
     }
 }
-
-LinuxSoundWrapper::~LinuxSoundWrapper()
-{
-    // Empty
-}

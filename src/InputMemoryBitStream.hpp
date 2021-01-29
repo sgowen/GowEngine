@@ -26,7 +26,6 @@ public:
     void readBits(uint8_t& outData, uint32_t bitCount);
     void readBits(void* outData, uint32_t bitCount);
     void readBytes(void* outData, uint32_t byteCount);
-    void readSignedBinaryValue(float& outData);
     void read(bool& outData);
     void resetToCapacity(uint32_t byteCapacity);
     void readLarge(std::string& value);

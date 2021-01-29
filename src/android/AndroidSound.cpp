@@ -49,11 +49,6 @@ _isPaused(false)
     assert(isFormatValid);
 }
 
-AndroidSound::~AndroidSound()
-{
-    // Empty
-}
-
 void AndroidSound::play(bool isLooping)
 {
     _isLooping = isLooping;

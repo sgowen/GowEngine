@@ -27,11 +27,6 @@ _numSampleBuffers(0)
     // Empty
 }
 
-SimpleMultiPlayer::~SimpleMultiPlayer()
-{
-    // Empty
-}
-
 DataCallbackResult SimpleMultiPlayer::onAudioReady(AudioStream *oboeStream, void *audioData, int32_t numFrames)
 {
     StreamState streamState = oboeStream->getState();

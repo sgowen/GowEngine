@@ -19,7 +19,6 @@
 #include "StringUtil.hpp"
 #include "SocketAddressFamily.hpp"
 #include "PlatformMacros.hpp"
-#include "Constants.hpp"
 #include "Network.hpp"
 #include "InstanceManager.hpp"
 
@@ -94,11 +93,9 @@ void SocketPacketHandler::readIncomingPacketsIntoQueue()
     }
 
     static char packetMem[NW_MAX_PACKET_SIZE];
-    static uint32_t packetSize = sizeof(packetMem);
-
     bzero(packetMem, NW_MAX_PACKET_SIZE);
 
-    InputMemoryBitStream inputStream(packetMem, packetSize * 8);
+    InputMemoryBitStream inputStream(packetMem, NW_MAX_PACKET_SIZE * 8);
     SocketAddress fromAddress;
 
     //keep reading until we don't have anything to read (or we hit a max number that we'll process per frame)
@@ -107,8 +104,8 @@ void SocketPacketHandler::readIncomingPacketsIntoQueue()
 
     while (receivedPacketCount < NW_MAX_NUM_PACKETS_PER_FRAME)
     {
-        int readByteCount = _socket->receiveFromAddress(packetMem, packetSize, fromAddress);
-        assert(readByteCount <= packetSize);
+        int readByteCount = _socket->receiveFromAddress(packetMem, NW_MAX_PACKET_SIZE, fromAddress);
+        assert(readByteCount <= NW_MAX_PACKET_SIZE);
         
         if (readByteCount == 0)
         {

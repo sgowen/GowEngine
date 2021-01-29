@@ -23,7 +23,7 @@ class FontRenderer
 {
 public:
 	FontRenderer(int maxBatchSize, int offsetX, int offsetY, int glyphsPerRow, int glyphWidth, int glyphHeight, int textureWidth, int textureHeight);
-    ~FontRenderer();
+    ~FontRenderer() {}
     
     void createDeviceDependentResources();
     void releaseDeviceDependentResources();

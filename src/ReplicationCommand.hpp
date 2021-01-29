@@ -31,6 +31,6 @@ public:
     void clearDirtyState(uint16_t stateToClear);
     
 private:
-    uint16_t _dirtyState;
     ReplicationAction _action;
+    uint16_t _dirtyState;
 };

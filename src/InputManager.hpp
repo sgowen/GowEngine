@@ -12,6 +12,7 @@
 #include "GamepadEvent.hpp"
 #include "KeyboardEvent.hpp"
 #include "FixedSizePool.hpp"
+#include "Vector2.hpp"
 
 #include <map>
 #include <vector>
@@ -30,15 +31,24 @@ public:
     std::vector<CursorEvent*>& getCursorEvents();
     std::vector<GamepadEvent*>& getGamepadEvents();
     std::vector<KeyboardEvent*>& getKeyboardEvents();
+    Vector2& convert(CursorEvent& ce);
+    Vector2& convert(Vector2& v);
+    void setCursorSize(int cursorWidth, int cursorHeight);
+    void setMatrixSize(float matrixWidth, float matrixHeight);
     
 private:
     FixedSizePool<CursorEvent> _poolCursor;
     FixedSizePool<GamepadEvent> _poolGamepad;
     FixedSizePool<KeyboardEvent> _poolKeyboard;
     std::map<unsigned short, bool> _lastKnownKeyStates;
+    Vector2 _lastConvertedCursorPos;
+    int _cursorWidth;
+    int _cursorHeight;
+    float _matrixWidth;
+    float _matrixHeight;
     
     InputManager();
-    ~InputManager();
+    ~InputManager() {}
     InputManager(const InputManager&);
     InputManager& operator=(const InputManager&);
 };

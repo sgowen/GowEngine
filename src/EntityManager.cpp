@@ -17,11 +17,6 @@ _handleEntityDeletionFunc(handleEntityDeletionFunc)
     // Empty
 }
 
-EntityManager::~EntityManager()
-{
-    // Empty
-}
-
 Entity* EntityManager::getEntityByID(uint32_t id) const
 {
     auto q = _entityMap.find(id);

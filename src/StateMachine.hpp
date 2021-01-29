@@ -24,10 +24,7 @@ public:
         // Empty
     }
     
-    ~StateMachine()
-    {
-        // Empty
-    }
+    ~StateMachine() {}
     
     void execute() const
     {

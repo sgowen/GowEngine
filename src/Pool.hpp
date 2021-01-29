@@ -17,10 +17,7 @@ template <typename T>
 class Pool
 {
 public:
-    Pool()
-    {
-        // Empty
-    }
+    Pool() {}
     
     ~Pool()
     {

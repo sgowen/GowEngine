@@ -14,5 +14,5 @@ class LinuxSoundWrapper : public SoundWrapper
 {
 public:
     LinuxSoundWrapper(uint16_t soundID, const char *filePath, int numInstances = 1);
-    virtual ~LinuxSoundWrapper();
+    virtual ~LinuxSoundWrapper() {}
 };

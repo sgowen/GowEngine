@@ -13,6 +13,7 @@
 #include "resampler/MultiChannelResampler.h"
 
 SampleBuffer::SampleBuffer() :
+_sampleData(NULL),
 _numSamples(0)
 {
     // Empty

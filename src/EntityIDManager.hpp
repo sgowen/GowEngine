@@ -14,7 +14,7 @@ class EntityIDManager
 {
 public:
     EntityIDManager();
-    ~EntityIDManager();
+    ~EntityIDManager() {}
     
     void reset();
     uint32_t getNextStaticEntityID();

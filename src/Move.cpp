@@ -26,11 +26,6 @@ _timestamp(0)
     // Empty
 }
 
-Move::~Move()
-{
-    // Empty
-}
-
 void Move::write(OutputMemoryBitStream& outputStream) const
 {
     outputStream.write(_timestamp);

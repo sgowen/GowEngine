@@ -17,8 +17,3 @@ AppleSoundWrapper::AppleSoundWrapper(uint16_t soundID, const char *filePath, int
         _sounds.push_back(new AppleSound(soundID, filePath));
     }
 }
-
-AppleSoundWrapper::~AppleSoundWrapper()
-{
-    // Empty
-}

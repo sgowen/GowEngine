@@ -14,11 +14,6 @@ _soundID(soundID)
     // Empty
 }
 
-Sound::~Sound()
-{
-    // Empty
-}
-
 uint16_t Sound::getSoundID()
 {
     return _soundID;

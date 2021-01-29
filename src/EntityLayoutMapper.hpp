@@ -81,8 +81,8 @@ private:
     void loadEntityLayout(const char* data);
     FILE* openFile(const char* path, const char* mode);
     
-    EntityLayoutMapper();
-    ~EntityLayoutMapper();
+    EntityLayoutMapper() {}
+    ~EntityLayoutMapper() {}
     EntityLayoutMapper(const EntityLayoutMapper&);
     EntityLayoutMapper& operator=(const EntityLayoutMapper&);
 };

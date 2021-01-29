@@ -73,13 +73,13 @@ void ReplicationManagerServer::write(OutputMemoryBitStream& outputStream, Replic
             //now do what?
             switch(action)
             {
-                case RA_Create:
+                case ReplicationAction_CREATE:
                     writtenState = writeCreateAction(outputStream, networkID, dirtyState);
                     break;
-                case RA_Update:
+                case ReplicationAction_UPDATE:
                     writtenState = writeUpdateAction(outputStream, networkID, dirtyState);
                     break;
-                case RA_Destroy:
+                case ReplicationAction_DESTROY:
                     //don't need anything other than state!
                     writtenState = writeDestroyAction(outputStream, networkID, dirtyState);
                     break;

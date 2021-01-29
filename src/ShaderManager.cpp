@@ -11,16 +11,6 @@
 #include "ShaderDescriptor.hpp"
 #include "Assets.hpp"
 
-ShaderManager::ShaderManager()
-{
-    // Empty
-}
-
-ShaderManager::~ShaderManager()
-{
-    // Empty
-}
-
 void ShaderManager::createDeviceDependentResources()
 {
     assert(_shaders.size() == 0);

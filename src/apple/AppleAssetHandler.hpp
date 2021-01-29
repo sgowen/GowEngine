@@ -19,6 +19,6 @@ public:
     virtual void releaseAsset(const FileData& fileData);
     
 private:
-    AppleAssetHandler();
-    virtual ~AppleAssetHandler();
+    AppleAssetHandler() : AssetHandler() {}
+    virtual ~AppleAssetHandler() {}
 };

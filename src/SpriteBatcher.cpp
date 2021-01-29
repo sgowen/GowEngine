@@ -13,7 +13,6 @@
 #include "Texture.hpp"
 
 #include "OpenGLWrapper.hpp"
-#include "Constants.hpp"
 #include "MathUtil.hpp"
 
 SpriteBatcher::SpriteBatcher(int maxBatchSize) :
@@ -22,11 +21,6 @@ _vertexBuffer(0),
 _indexBuffer(0)
 {
     _vertices.reserve(_maxBatchSize * NUM_VERTICES_PER_RECTANGLE);
-}
-
-SpriteBatcher::~SpriteBatcher()
-{
-    // Empty
 }
 
 void SpriteBatcher::createDeviceDependentResources()

@@ -10,6 +10,8 @@
 
 #include "StringUtil.hpp"
 #include "PlatformMacros.hpp"
+#include "Network.hpp"
+#include "MathUtil.hpp"
 
 InputManager& InputManager::getInstance()
 {
@@ -20,13 +22,12 @@ InputManager& InputManager::getInstance()
 void InputManager::onCursorInput(CursorEventType type, float x, float y, bool isAlt)
 {
 #if IS_DEBUG
-    LOG("onCursorInput %d%", type);
+    LOG("onCursorInput %d", type);
 #endif
     
     CursorEvent* e = _poolCursor.newObject();
     e->_type = type;
-    e->_x = x;
-    e->_y = y;
+    e->_pos.set(x, y);
     e->_isAlt = isAlt;
     
     _poolCursor.add(e);
@@ -35,10 +36,10 @@ void InputManager::onCursorInput(CursorEventType type, float x, float y, bool is
 void InputManager::onGamepadInput(GamepadEventType type, uint8_t index, float x, float y)
 {
 #if IS_DEBUG
-    LOG("onGamepadInput %d%", type);
+    LOG("onGamepadInput %d", type);
 #endif
     
-    if (index >= 4)
+    if (index >= NW_MAX_NUM_PLAYERS)
     {
         // Must be 0, 1, 2, 3 (supports 4 players)
         return;
@@ -47,8 +48,8 @@ void InputManager::onGamepadInput(GamepadEventType type, uint8_t index, float x,
     GamepadEvent* e = _poolGamepad.newObject();
     e->_type = type;
     e->_index = index;
-    e->_x = x;
-    e->_y = y;
+    e->_x = sanitizeCloseToZeroValue(x);
+    e->_y = sanitizeCloseToZeroValue(y);
     
     _poolGamepad.add(e);
 }
@@ -56,7 +57,7 @@ void InputManager::onGamepadInput(GamepadEventType type, uint8_t index, float x,
 void InputManager::onKeyboardInput(uint16_t key, bool isUp)
 {
 #if IS_DEBUG
-    LOG("onKeyboardInput %d%", key);
+    LOG("onKeyboardInput %d", key);
 #endif
     
     bool wasLastEventDown = false;
@@ -100,15 +101,38 @@ std::vector<KeyboardEvent*>& InputManager::getKeyboardEvents()
     return _poolKeyboard.getObjects();
 }
 
+Vector2& InputManager::convert(CursorEvent& ce)
+{
+    return convert(ce._pos);
+}
+
+Vector2& InputManager::convert(Vector2& v)
+{
+    _lastConvertedCursorPos.set((v.x() / _cursorWidth) * _matrixWidth, (1 - v.y() / _cursorHeight) * _matrixHeight);
+    return _lastConvertedCursorPos;
+}
+
+void InputManager::setCursorSize(int cursorWidth, int cursorHeight)
+{
+    _cursorWidth = (float) cursorWidth;
+    _cursorHeight = (float) cursorHeight;
+}
+
+void InputManager::setMatrixSize(float matrixWidth, float matrixHeight)
+{
+    _matrixWidth = matrixWidth;
+    _matrixHeight = matrixHeight;
+}
+
 InputManager::InputManager() :
 _poolCursor(4096),
 _poolGamepad(16384),
-_poolKeyboard(4096)
-{
-    // Empty
-}
-
-InputManager::~InputManager()
+_poolKeyboard(4096),
+_lastConvertedCursorPos(),
+_cursorWidth(1),
+_cursorHeight(1),
+_matrixWidth(1),
+_matrixHeight(1)
 {
     // Empty
 }

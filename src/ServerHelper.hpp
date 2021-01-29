@@ -19,7 +19,7 @@ class ServerHelper : public NetworkHelper
 {
 public:
     ServerHelper(PacketHandler* packetHandler, GetClientProxyFunc getClientProxyFunc, HandleClientDisconnectedFunc handleClientDisconnectedFunc);
-    virtual ~ServerHelper();
+    virtual ~ServerHelper() {}
     
     virtual void onClientDisconnected(ClientProxy* clientProxy) = 0;
     virtual MachineAddress* getServerAddress() = 0;

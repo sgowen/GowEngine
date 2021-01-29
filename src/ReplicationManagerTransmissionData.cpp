@@ -39,13 +39,13 @@ void ReplicationManagerTransmissionData::handleDeliveryFailure(DeliveryNotificat
         
         switch(rt.getAction())
         {
-            case RA_Create:
+            case ReplicationAction_CREATE:
                 handleCreateDeliveryFailure(networkID);
                 break;
-            case RA_Update:
+            case ReplicationAction_UPDATE:
                 handleUpdateStateDeliveryFailure(networkID, rt.state(), dnm);
                 break;
-            case RA_Destroy:
+            case ReplicationAction_DESTROY:
                 handleDestroyDeliveryFailure(networkID);
                 break;
         }
@@ -59,13 +59,13 @@ void ReplicationManagerTransmissionData::handleDeliverySuccess(DeliveryNotificat
     {
         switch(rt.getAction())
         {
-            case RA_Create:
+            case ReplicationAction_CREATE:
                 handleCreateDeliverySuccess(rt.getID());
                 break;
-            case RA_Destroy:
+            case ReplicationAction_DESTROY:
                 handleDestroyDeliverySuccess(rt.getID());
                 break;
-            case RA_Update:
+            case ReplicationAction_UPDATE:
                 break;
         }
     }

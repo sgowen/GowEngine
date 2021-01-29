@@ -17,7 +17,7 @@ class Move
 public:
     Move(InputState* inputState, float timestamp);
     Move(InputState* inputState);
-    ~Move();
+    ~Move() {}
     
     void write(OutputMemoryBitStream& outputStream) const;
     void read(InputMemoryBitStream& inputStream);

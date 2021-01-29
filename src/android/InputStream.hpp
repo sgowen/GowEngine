@@ -14,7 +14,7 @@ class InputStream
 {
 public:
     InputStream(unsigned char *buff, int32_t len);
-    ~InputStream();
+    ~InputStream() {}
 
     int32_t read(void *buff, int32_t numBytes);
     int32_t peek(void *buff, int32_t numBytes);
