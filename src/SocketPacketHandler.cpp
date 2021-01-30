@@ -35,11 +35,17 @@ _isInitialized(false)
     }
 
     _socket = SOCKET_UTIL.createUDPSocket(INET);
-    _socket->bindSocket(*_socketAddress);
+    int bindSocketResult = _socket->bindSocket(*_socketAddress);
+    if (bindSocketResult != NO_ERROR)
+    {
+        LOG("bindSocket failed. Error code %d", bindSocketResult);
+        assert(false);
+    }
 
     LOG("Initializing SocketPacketHandler at port %hu", port);
 
-    if (_socket && _socket->setNonBlockingMode(true) == NO_ERROR)
+    if (_socket != NULL &&
+        _socket->setNonBlockingMode(true) == NO_ERROR)
     {
         _isInitialized = true;
     }

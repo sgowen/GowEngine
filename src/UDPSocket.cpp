@@ -17,9 +17,9 @@
 int UDPSocket::bindSocket(const SocketAddress& bindAddress)
 {
     int error = bind(_socket, &bindAddress._socketAddress, bindAddress.getSize());
-    if (error != 0)
+    if (error != NO_ERROR)
     {
-        SOCKET_UTIL.reportError("UDPSocket::Bind");
+        SOCKET_UTIL.reportError("UDPSocket::bindSocket");
         
         return SOCKET_UTIL.getLastError();
     }
@@ -37,9 +37,9 @@ int UDPSocket::sendToAddress(const void* toSend, int length, const SocketAddress
     if (byteSentCount <= 0)
     {
         //we'll return error as negative number to indicate less than requested amount of bytes sent...
-        SOCKET_UTIL.reportError("UDPSocket::SendTo");
+        SOCKET_UTIL.reportError("UDPSocket::sendToAddress");
         
-        LOG("Error UDPSocket::SendTo %s", toAddress.toString().c_str());
+        LOG("Error UDPSocket::sendToAddress %s", toAddress.toString().c_str());
         
         return -SOCKET_UTIL.getLastError();
     }
@@ -80,7 +80,7 @@ int UDPSocket::receiveFromAddress(void* toReceive, int maxLength, SocketAddress&
         }
         else
         {
-            SOCKET_UTIL.reportError("UDPSocket::ReceiveFrom");
+            SOCKET_UTIL.reportError("UDPSocket::receiveFromAddress");
             
             return -error;
         }

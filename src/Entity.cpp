@@ -15,6 +15,7 @@
 
 #include "EntityMapper.hpp"
 #include "Constants.hpp"
+#include "Macros.hpp"
 
 Entity::Entity(EntityDef entityDef) :
 _entityDef(entityDef),
@@ -101,9 +102,9 @@ void Entity::initPhysics(b2World& world)
     
     b2BodyDef bodyDef;
     bodyDef.position.Set(_pose._position.x, _pose._position.y);
-    bodyDef.type = _entityDef._bodyFlags & BODF_STATIC ? b2_staticBody : b2_dynamicBody;
-    bodyDef.fixedRotation = _entityDef._bodyFlags & BODF_FIXED_ROTATION;
-    bodyDef.bullet = _entityDef._bodyFlags & BODF_BULLET;
+    bodyDef.type = IS_BIT_SET(_entityDef._bodyFlags, BODF_STATIC) ? b2_staticBody : b2_dynamicBody;
+    bodyDef.fixedRotation = IS_BIT_SET(_entityDef._bodyFlags, BODF_FIXED_ROTATION);
+    bodyDef.bullet = IS_BIT_SET(_entityDef._bodyFlags, BODF_BULLET);
     bodyDef.userData.pointer = (uintptr_t)this;
     _body = world.CreateBody(&bodyDef);
     
@@ -274,7 +275,7 @@ int Entity::getSoundMapping(int state)
 
 bool Entity::isFixedRotation() const
 {
-    return _entityDef._bodyFlags & BODF_FIXED_ROTATION;
+    return IS_BIT_SET(_entityDef._bodyFlags, BODF_FIXED_ROTATION);
 }
 
 Entity::Pose& Entity::pose()
@@ -310,7 +311,7 @@ void Entity::createFixtures()
         b2Shape* shape;
         b2PolygonShape polygonShape;
         b2CircleShape circleShape;
-        if (def._flags & FIXF_CIRCLE)
+        if (IS_BIT_SET(def._flags, FIXF_CIRCLE))
         {
             circleShape.m_p.Set(def._center.x * _entityDef._width, def._center.y * _entityDef._height);
             circleShape.m_radius = def._vertices[0].x * _entityDef._width;
@@ -319,7 +320,7 @@ void Entity::createFixtures()
         }
         else
         {
-            if (def._flags & FIXF_BOX)
+            if (IS_BIT_SET(def._flags, FIXF_BOX))
             {
                 float wFactor = _entityDef._width * def._vertices[0].x;
                 float hFactor = _entityDef._height * def._vertices[0].y;
@@ -343,14 +344,14 @@ void Entity::createFixtures()
         
         b2FixtureDef fixtureDef;
         fixtureDef.shape = shape;
-        fixtureDef.isSensor = def._flags & FIXF_SENSOR;
+        fixtureDef.isSensor = IS_BIT_SET(def._flags, FIXF_SENSOR);
         fixtureDef.density = def._density;
         fixtureDef.friction = def._friction;
         fixtureDef.restitution = def._restitution;
         fixtureDef.userData.pointer = (uintptr_t)this;
         b2Fixture* fixture = _body->CreateFixture(&fixtureDef);
         
-        if (def._flags & FIXF_GROUND_CONTACT)
+        if (IS_BIT_SET(def._flags, FIXF_GROUND_CONTACT))
         {
             _groundSensorFixture = fixture;
         }

@@ -190,7 +190,9 @@ void GowAudioEngine::loadSound(uint16_t soundID, const char *path, int numInstan
 
 void GowAudioEngine::playSound(uint16_t soundID, float volume, bool isLooping)
 {
-    if (_areSoundsDisabled || _soundsToPlay.size() >= MAX_SOUNDS_TO_PLAY_PER_FRAME)
+    if (_areSoundsDisabled ||
+        _soundsToPlay.size() >= MAX_SOUNDS_TO_PLAY_PER_FRAME ||
+        soundID == 0)
     {
         return;
     }

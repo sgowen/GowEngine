@@ -13,6 +13,7 @@
 #include "OutputMemoryBitStream.hpp"
 
 #include "MemoryBitStreamUtil.hpp"
+#include "Macros.hpp"
 
 IMPL_EntityNetworkController_create(EntityNetworkController);
 
@@ -72,7 +73,7 @@ uint16_t EntityNetworkController::write(OutputMemoryBitStream& op, uint16_t dirt
     
     uint16_t writtenState = 0;
     
-    bool pose = dirtyState & Entity::RSTF_POSE;
+    bool pose = IS_BIT_SET(dirtyState, Entity::RSTF_POSE);
     op.write(pose);
     if (pose)
     {
@@ -96,7 +97,7 @@ uint16_t EntityNetworkController::write(OutputMemoryBitStream& op, uint16_t dirt
     
     if (e._entityDef._stateSensitive)
     {
-        bool state = dirtyState & Entity::RSTF_STATE;
+        bool state = IS_BIT_SET(dirtyState, Entity::RSTF_STATE);
         op.write(state);
         if (state)
         {
