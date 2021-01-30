@@ -90,8 +90,8 @@ void ReplicationManagerTransmissionData::handleCreateDeliveryFailure(uint32_t ne
     assert(_entityManager);
     
     //does the object still exist? it might be dead, in which case we don't resend a create
-    Entity* entity = _entityManager->getEntityByID(networkID);
-    if (entity)
+    Entity* e = _entityManager->getEntityByID(networkID);
+    if (e != NULL)
     {
         _replicationManagerServer->replicateCreate(networkID, ALL_DIRTY_STATE);
     }

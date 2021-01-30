@@ -44,7 +44,8 @@ enum BodyFlags
 {
     BODF_STATIC =         1 << 0,
     BODF_FIXED_ROTATION = 1 << 1,
-    BODF_BULLET =         1 << 2
+    BODF_BULLET =         1 << 2,
+    BODF_PLAYER =         1 << 3
 };
 
 struct EntityDef
@@ -82,7 +83,7 @@ public:
     ~Entity();
     
     void update();
-    void interpolate(double alpha);
+    void selfProcessPhysics();
     void endInterpolation();
     bool shouldCollide(Entity* e, b2Fixture* fixtureA, b2Fixture* fixtureB);
     void handleBeginContact(Entity* e, b2Fixture* fixtureA, b2Fixture* fixtureB);
@@ -188,7 +189,6 @@ private:
     b2Fixture* _groundSensorFixture;
     Pose _pose;
     Pose _poseNetworkCache;
-    Pose _poseInterpolateCache;
     State _state;
     State _stateNetworkCache;
     const uint32_t _ID;

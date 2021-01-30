@@ -18,14 +18,17 @@ typedef void (*HandleClientDisconnectedFunc)(ClientProxy* clientProxy);
 class ServerHelper : public NetworkHelper
 {
 public:
-    ServerHelper(PacketHandler* packetHandler, GetClientProxyFunc getClientProxyFunc, HandleClientDisconnectedFunc handleClientDisconnectedFunc);
+    ServerHelper(uint8_t maxNumPlayers, PacketHandler* packetHandler, GetClientProxyFunc getClientProxyFunc, HandleClientDisconnectedFunc handleClientDisconnectedFunc);
     virtual ~ServerHelper() {}
     
     virtual void onClientDisconnected(ClientProxy* clientProxy) = 0;
     virtual MachineAddress* getServerAddress() = 0;
     virtual bool isConnected() = 0;
     
+    uint8_t maxNumPlayers();
+    
 protected:
+    uint8_t _maxNumPlayers;
     GetClientProxyFunc _getClientProxyFunc;
     HandleClientDisconnectedFunc _handleClientDisconnectedFunc;
 };

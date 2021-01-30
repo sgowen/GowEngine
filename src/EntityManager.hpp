@@ -12,8 +12,8 @@
 
 class Entity;
 
-typedef void (*HandleEntityCreatedFunc)(Entity* entity);
-typedef void (*HandleEntityDeletionFunc)(Entity* entity);
+typedef void (*HandleEntityCreatedFunc)(Entity* e);
+typedef void (*HandleEntityDeletionFunc)(Entity* e);
 
 class EntityManager
 {

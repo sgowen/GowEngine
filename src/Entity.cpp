@@ -14,6 +14,7 @@
 #include <box2d/box2d.h>
 
 #include "EntityMapper.hpp"
+#include "Constants.hpp"
 
 Entity::Entity(EntityDef entityDef) :
 _entityDef(entityDef),
@@ -23,7 +24,6 @@ _body(NULL),
 _groundSensorFixture(NULL),
 _pose(entityDef._x, entityDef._y),
 _poseNetworkCache(_pose),
-_poseInterpolateCache(_pose),
 _ID(entityDef._ID),
 _deadZoneY(-_entityDef._height / 2.0f),
 _isRequestingDeletion(false),
@@ -55,23 +55,12 @@ void Entity::update()
     _controller->update();
 }
 
-void Entity::interpolate(double alpha)
+void Entity::selfProcessPhysics()
 {
-    float x = _pose._position.x * alpha + _poseInterpolateCache._position.x * (1.0f - alpha);
-    float y = _pose._position.y * alpha + _poseInterpolateCache._position.y * (1.0f - alpha);
-    float a = _pose._angle * alpha + _poseInterpolateCache._angle * (1.0f - alpha);
+    _pose._velocity *= FRAME_RATE;
+    _pose._position += _pose._velocity;
     
-    _poseInterpolateCache._position = _pose._position;
-    _poseInterpolateCache._angle = _pose._angle;
-    
-    _pose._position.Set(x, y);
-    _pose._angle = a;
-}
-
-void Entity::endInterpolation()
-{
-    _pose._position = _poseInterpolateCache._position;
-    _pose._angle = _poseInterpolateCache._angle;
+    // TODO, add controller method to check for collisions
 }
 
 bool Entity::shouldCollide(Entity *e, b2Fixture* fixtureA, b2Fixture* fixtureB)
@@ -108,7 +97,7 @@ void Entity::handleEndContact(Entity* e, b2Fixture* fixtureA, b2Fixture* fixture
 
 void Entity::initPhysics(b2World& world)
 {
-    assert(!_body);
+    assert(_body == NULL);
     
     b2BodyDef bodyDef;
     bodyDef.position.Set(_pose._position.x, _pose._position.y);
@@ -123,7 +112,7 @@ void Entity::initPhysics(b2World& world)
 
 void Entity::deinitPhysics()
 {
-    assert(_body);
+    assert(_body != NULL);
     
     destroyFixtures();
     
@@ -134,7 +123,7 @@ void Entity::deinitPhysics()
 
 void Entity::updatePoseFromBody()
 {
-    if (!_body)
+    if (_body == NULL)
     {
         return;
     }
@@ -146,7 +135,7 @@ void Entity::updatePoseFromBody()
 
 void Entity::updateBodyFromPose()
 {
-    if (!_body)
+    if (_body == NULL)
     {
         return;
     }

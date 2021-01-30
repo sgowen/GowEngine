@@ -8,9 +8,15 @@
 
 #include "ServerHelper.hpp"
 
-ServerHelper::ServerHelper(PacketHandler* packetHandler, GetClientProxyFunc getClientProxyFunc, HandleClientDisconnectedFunc handleClientDisconnectedFunc) : NetworkHelper(packetHandler),
+ServerHelper::ServerHelper(uint8_t maxNumPlayers, PacketHandler* packetHandler, GetClientProxyFunc getClientProxyFunc, HandleClientDisconnectedFunc handleClientDisconnectedFunc) : NetworkHelper(packetHandler),
+_maxNumPlayers(maxNumPlayers),
 _getClientProxyFunc(getClientProxyFunc),
 _handleClientDisconnectedFunc(handleClientDisconnectedFunc)
 {
     // Empty
+}
+
+uint8_t ServerHelper::maxNumPlayers()
+{
+    return _maxNumPlayers;
 }

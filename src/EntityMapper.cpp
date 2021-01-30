@@ -68,6 +68,7 @@ void EntityMapper::initWithJSON(const char* json)
         entry->_keyName = keyStr;
         entry->_controller = RapidJSONUtil::getString(iv, "controller", "Entity");
         
+        if (iv.HasMember("textureMappings"))
         {
             const Value& v = iv["textureMappings"];
             assert(v.IsObject());
@@ -78,6 +79,13 @@ void EntityMapper::initWithJSON(const char* json)
                 std::string value = i->value.GetString();
                 entry->_textureMappings.insert(std::make_pair(state, value));
             }
+        }
+        else
+        {
+            const Value& v = iv["textureMapping"];
+            assert(v.IsString());
+            std::string value = v.GetString();
+            entry->_textureMappings.insert(std::make_pair(0, value));
         }
         
         if (iv.HasMember("soundMappings"))

@@ -10,7 +10,6 @@
 
 #include "StringUtil.hpp"
 #include "PlatformMacros.hpp"
-#include "Network.hpp"
 #include "MathUtil.hpp"
 
 InputManager& InputManager::getInstance()
@@ -39,7 +38,7 @@ void InputManager::onGamepadInput(GamepadEventType type, uint8_t index, float x,
     LOG("onGamepadInput %d", type);
 #endif
     
-    if (index >= NW_MAX_NUM_PLAYERS)
+    if (index >= _maxNumPlayers)
     {
         // Must be 0, 1, 2, 3 (supports 4 players)
         return;
@@ -124,6 +123,11 @@ void InputManager::setMatrixSize(float matrixWidth, float matrixHeight)
     _matrixHeight = matrixHeight;
 }
 
+void InputManager::setMaxNumPlayers(uint8_t maxNumPlayers)
+{
+    _maxNumPlayers = maxNumPlayers;
+}
+
 InputManager::InputManager() :
 _poolCursor(4096),
 _poolGamepad(16384),
@@ -132,7 +136,8 @@ _lastConvertedCursorPos(),
 _cursorWidth(1),
 _cursorHeight(1),
 _matrixWidth(1),
-_matrixHeight(1)
+_matrixHeight(1),
+_maxNumPlayers(4)
 {
     // Empty
 }

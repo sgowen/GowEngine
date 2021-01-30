@@ -35,6 +35,7 @@ public:
     Vector2& convert(Vector2& v);
     void setCursorSize(int cursorWidth, int cursorHeight);
     void setMatrixSize(float matrixWidth, float matrixHeight);
+    void setMaxNumPlayers(uint8_t maxNumPlayers);
     
 private:
     FixedSizePool<CursorEvent> _poolCursor;
@@ -46,6 +47,7 @@ private:
     int _cursorHeight;
     float _matrixWidth;
     float _matrixHeight;
+    uint8_t _maxNumPlayers;
     
     InputManager();
     ~InputManager() {}

@@ -14,15 +14,15 @@
 #define GOW_KEY_ASCII_COMMA 0x002C
 #define GOW_KEY_ASCII_PERIOD 0x002E
 #define GOW_KEY_ZERO 0x0030
-#define GOW_KEY_ONE 0x0031
-#define GOW_KEY_TWO 0x0032
-#define GOW_KEY_THREE 0x0033
-#define GOW_KEY_FOUR 0x0034
-#define GOW_KEY_FIVE 0x0035
-#define GOW_KEY_SIX 0x0036
-#define GOW_KEY_SEVEN 0x0037
-#define GOW_KEY_EIGHT 0x0038
-#define GOW_KEY_NINE 0x0039
+#define GOW_KEY_1 0x0031
+#define GOW_KEY_2 0x0032
+#define GOW_KEY_3 0x0033
+#define GOW_KEY_4 0x0034
+#define GOW_KEY_5 0x0035
+#define GOW_KEY_6 0x0036
+#define GOW_KEY_7 0x0037
+#define GOW_KEY_8 0x0038
+#define GOW_KEY_9 0x0039
 #define GOW_KEY_COLON 0x003A
 #define GOW_KEY_A 0x0041
 #define GOW_KEY_B 0x0042
@@ -78,15 +78,15 @@ inline std::vector<uint16_t>& getSupportedKeys()
         keys.push_back(GOW_KEY_PERIOD);
 		keys.push_back(GOW_KEY_COMMA);
 		keys.push_back(GOW_KEY_ZERO);
-		keys.push_back(GOW_KEY_ONE);
-		keys.push_back(GOW_KEY_TWO);
-		keys.push_back(GOW_KEY_THREE);
-		keys.push_back(GOW_KEY_FOUR);
-		keys.push_back(GOW_KEY_FIVE);
-		keys.push_back(GOW_KEY_SIX);
-		keys.push_back(GOW_KEY_SEVEN);
-		keys.push_back(GOW_KEY_EIGHT);
-		keys.push_back(GOW_KEY_NINE);
+		keys.push_back(GOW_KEY_1);
+		keys.push_back(GOW_KEY_2);
+		keys.push_back(GOW_KEY_3);
+		keys.push_back(GOW_KEY_4);
+		keys.push_back(GOW_KEY_5);
+		keys.push_back(GOW_KEY_6);
+		keys.push_back(GOW_KEY_7);
+		keys.push_back(GOW_KEY_8);
+		keys.push_back(GOW_KEY_9);
 		keys.push_back(GOW_KEY_COLON);
 		keys.push_back(GOW_KEY_A);
 		keys.push_back(GOW_KEY_B);
@@ -132,15 +132,15 @@ inline std::vector<uint16_t>& getNumericalKeys()
     if (keys.size() == 0)
     {
         keys.push_back(GOW_KEY_ZERO);
-        keys.push_back(GOW_KEY_ONE);
-        keys.push_back(GOW_KEY_TWO);
-        keys.push_back(GOW_KEY_THREE);
-        keys.push_back(GOW_KEY_FOUR);
-        keys.push_back(GOW_KEY_FIVE);
-        keys.push_back(GOW_KEY_SIX);
-        keys.push_back(GOW_KEY_SEVEN);
-        keys.push_back(GOW_KEY_EIGHT);
-        keys.push_back(GOW_KEY_NINE);
+        keys.push_back(GOW_KEY_1);
+        keys.push_back(GOW_KEY_2);
+        keys.push_back(GOW_KEY_3);
+        keys.push_back(GOW_KEY_4);
+        keys.push_back(GOW_KEY_5);
+        keys.push_back(GOW_KEY_6);
+        keys.push_back(GOW_KEY_7);
+        keys.push_back(GOW_KEY_8);
+        keys.push_back(GOW_KEY_9);
     }
     
     return keys;

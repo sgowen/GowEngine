@@ -285,7 +285,7 @@ void NetworkManagerServer::processPacket(InputMemoryBitStream& inputStream, Mach
     auto it = _addressHashToClientMap.find(fromAddress->getHash());
     if (it == _addressHashToClientMap.end())
     {
-        if (_playerIDToClientMap.size() < NW_MAX_NUM_PLAYERS)
+        if (_playerIDToClientMap.size() < _serverHelper->maxNumPlayers())
         {
             LOG("New Client with %s", fromAddress->toString().c_str());
             
@@ -528,7 +528,7 @@ void NetworkManagerServer::handleInputPacket(ClientProxy* clientProxy, InputMemo
 
 void NetworkManagerServer::handleAddLocalPlayerPacket(ClientProxy* clientProxy, InputMemoryBitStream& inputStream)
 {
-    if (_playerIDToClientMap.size() < NW_MAX_NUM_PLAYERS)
+    if (_playerIDToClientMap.size() < _serverHelper->maxNumPlayers())
     {
         // read the current number of local players for this client at the time when the request was made
         uint8_t requestedIndex;
@@ -628,7 +628,7 @@ void NetworkManagerServer::updateNextPlayerID()
     
     // Find the next available Player ID
     _nextPlayerID = 1;
-    for (uint8_t i = 0; i < NW_MAX_NUM_PLAYERS; ++i)
+    for (uint8_t i = 0; i < _serverHelper->maxNumPlayers(); ++i)
     {
         for (auto const& entry : _playerIDToClientMap)
         {

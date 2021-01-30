@@ -16,14 +16,14 @@
 #include "OutputMemoryBitStream.hpp"
 #include "InstanceManager.hpp"
 
-SocketServerHelper::SocketServerHelper(uint16_t port, ProcessPacketFunc processPacketFunc, HandleNoResponseFunc handleNoResponseFunc, HandleConnectionResetFunc handleConnectionResetFunc, GetClientProxyFunc getClientProxyFunc, HandleClientDisconnectedFunc handleClientDisconnectedFunc) : ServerHelper(new SocketPacketHandler(static_cast<Timing*>(INSTANCE_MGR.get(INSK_TIMING_SERVER)), true, port, processPacketFunc, handleNoResponseFunc, handleConnectionResetFunc), getClientProxyFunc, handleClientDisconnectedFunc)
+SocketServerHelper::SocketServerHelper(uint16_t port, uint8_t maxNumPlayers, ProcessPacketFunc processPacketFunc, HandleNoResponseFunc handleNoResponseFunc, HandleConnectionResetFunc handleConnectionResetFunc, GetClientProxyFunc getClientProxyFunc, HandleClientDisconnectedFunc handleClientDisconnectedFunc) : ServerHelper(maxNumPlayers, new SocketPacketHandler(static_cast<Timing*>(INSTANCE_MGR.get(INSK_TIMING_SERVER)), true, port, processPacketFunc, handleNoResponseFunc, handleConnectionResetFunc), getClientProxyFunc, handleClientDisconnectedFunc)
 {
     // Empty
 }
 
 SocketServerHelper::~SocketServerHelper()
 {
-    for (uint8_t i = 0; i < NW_MAX_NUM_PLAYERS; ++i)
+    for (uint8_t i = 0; i < _maxNumPlayers; ++i)
     {
         ClientProxy* clientProxy = _getClientProxyFunc(i);
         if (clientProxy)
@@ -50,7 +50,7 @@ void SocketServerHelper::processSpecialPacket(uint8_t packetType, InputMemoryBit
             
             // Find the connection that should exist for this users address
             bool isFound = false;
-            for (uint8_t i = 0; i < NW_MAX_NUM_PLAYERS; ++i)
+            for (uint8_t i = 0; i < _maxNumPlayers; ++i)
             {
                 ClientProxy* clientProxy = _getClientProxyFunc(i);
                 if (clientProxy)

@@ -34,9 +34,7 @@ void Assets::initWithJSONFile(const char* filePath)
 
 void Assets::initWithJSON(const char* json)
 {
-    _shaderDescriptors.clear();
-    _soundDescriptors.clear();
-    _textureDescriptors.clear();
+    clear();
     
     using namespace rapidjson;
     
@@ -224,6 +222,13 @@ void Assets::initWithJSON(const char* json)
             }
         }
     }
+}
+
+void Assets::clear()
+{
+    _shaderDescriptors.clear();
+    _soundDescriptors.clear();
+    _textureDescriptors.clear();
 }
 
 TextureRegion& Assets::findTextureRegion(std::string key, uint16_t stateTime)
