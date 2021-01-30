@@ -267,10 +267,10 @@ int GlfwMain::exec(EngineController& engineController, const char* windowTitle)
         EngineRequestedHostAction requestedAction = _engine->update(deltaTime);
         switch (requestedAction)
         {
-            case EngineRequestedHostAction_EXIT:
+            case ERHA_EXIT:
                 glfwSetWindowShouldClose(window, GLFW_TRUE);
                 break;
-            case EngineRequestedHostAction_NONE:
+            case ERHA_DEFAULT:
             default:
                 break;
         }

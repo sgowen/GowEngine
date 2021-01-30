@@ -10,9 +10,9 @@
 
 enum KeyboardEventType
 {
-    KeyboardEventType_DOWN,
-    KeyboardEventType_HELD,
-    KeyboardEventType_UP
+    KBET_DOWN,
+    KBET_HELD,
+    KBET_UP
 };
 
 struct KeyboardEvent
@@ -20,7 +20,7 @@ struct KeyboardEvent
     KeyboardEventType _type;
     uint16_t _key;
     
-    KeyboardEvent(KeyboardEventType type = KeyboardEventType_DOWN, uint16_t key = 0) :
+    KeyboardEvent(KeyboardEventType type = KBET_DOWN, uint16_t key = 0) :
     _type(type),
     _key(key)
     {
@@ -29,21 +29,11 @@ struct KeyboardEvent
     
     bool isPressed()
     {
-        return _type == KeyboardEventType_DOWN || _type == KeyboardEventType_HELD;
-    }
-    
-    bool isDown()
-    {
-        return _type == KeyboardEventType_DOWN;
-    }
-
-    bool isHeld()
-    {
-        return _type == KeyboardEventType_HELD;
+        return _type == KBET_DOWN || _type == KBET_HELD;
     }
 
     bool isUp()
     {
-        return _type == KeyboardEventType_UP;
+        return _type == KBET_UP;
     }
 };

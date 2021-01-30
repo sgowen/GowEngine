@@ -74,7 +74,7 @@ void InputManager::onKeyboardInput(uint16_t key, bool isUp)
     
     KeyboardEvent* e = _poolKeyboard.newObject();
     e->_key = key;
-    e->_type = isUp ? KeyboardEventType_UP : wasLastEventDown ? KeyboardEventType_HELD : KeyboardEventType_DOWN;
+    e->_type = isUp ? KBET_UP : wasLastEventDown ? KBET_HELD : KBET_DOWN;
     
     _poolKeyboard.add(e);
 }
@@ -101,9 +101,9 @@ std::vector<KeyboardEvent*>& InputManager::getKeyboardEvents()
     return _poolKeyboard.getObjects();
 }
 
-Vector2& InputManager::convert(CursorEvent& ce)
+Vector2& InputManager::convert(CursorEvent* ce)
 {
-    return convert(ce._pos);
+    return convert(ce->_pos);
 }
 
 Vector2& InputManager::convert(Vector2& v)

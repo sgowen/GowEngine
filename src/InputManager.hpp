@@ -31,7 +31,7 @@ public:
     std::vector<CursorEvent*>& getCursorEvents();
     std::vector<GamepadEvent*>& getGamepadEvents();
     std::vector<KeyboardEvent*>& getKeyboardEvents();
-    Vector2& convert(CursorEvent& ce);
+    Vector2& convert(CursorEvent* ce);
     Vector2& convert(Vector2& v);
     void setCursorSize(int cursorWidth, int cursorHeight);
     void setMatrixSize(float matrixWidth, float matrixHeight);

@@ -146,6 +146,9 @@ void Assets::initWithJSON(const char* json)
             
             if (iv.HasMember("mappings"))
             {
+                int textureWidth = RapidJSONUtil::getInteger(iv, "textureWidth", 2048);
+                int textureHeight = RapidJSONUtil::getInteger(iv, "textureHeight", 2048);
+                
                 TextureDescriptor& td = _textureDescriptors.back();
                 std::map<std::string, Animation>& animations = td.getAnimations();
                 std::map<std::string, TextureRegion>& textureRegions = td.getTextureRegions();
@@ -162,8 +165,6 @@ void Assets::initWithJSON(const char* json)
                     int y = RapidJSONUtil::getInteger(iv, "y");
                     int regionWidth = RapidJSONUtil::getInteger(iv, "regionWidth");
                     int regionHeight = RapidJSONUtil::getInteger(iv, "regionHeight");
-                    int textureWidth = RapidJSONUtil::getInteger(iv, "textureWidth", 2048);
-                    int textureHeight = RapidJSONUtil::getInteger(iv, "textureHeight", 2048);
                     
                     if (iv.HasMember("frameTimes") || iv.HasMember("frameTime"))
                     {

@@ -12,21 +12,22 @@
 #include <vector>
 #include <string>
 
-enum AudioEngineState
+enum GowAudioEngineState
 {
-    AudioEngineState_None = 0,
-    AudioEngineState_Pause,
-    AudioEngineState_Resume
+    GAES_DEFAULT,
+    GAES_PAUSE,
+    GAES_RESUME
 };
 
 enum MusicState
 {
-    MusicState_None = 0,
-    MusicState_Stop,
-    MusicState_Pause,
-    MusicState_Resume,
-    MusicState_SetVolume,
-    MusicState_Play
+    MUSS_DEFAULT,
+    MUSS_STOP,
+    MUSS_PAUSE,
+    MUSS_RESUME,
+    MUSS_SET_VOLUME,
+    MUSS_PLAY_SINGLE,
+    MUSS_PLAY_LOOP
 };
 
 class SoundWrapper;
@@ -38,14 +39,13 @@ class AudioEngineHelper;
 class GowAudioEngine
 {
 public:
-    static void create();
-    static GowAudioEngine* getInstance();
-    static void destroy();
+    static GowAudioEngine& getInstance();
     
+    void createDeviceDependentResources();
+    void releaseDeviceDependentResources();
     void render();
     void pause();
     void resume();
-    void loadFromAssets();
     void loadSound(uint16_t soundID, const char *path, int numInstances = 1);
     void playSound(uint16_t soundID, float volume = 1.0f, bool isLooping = false);
     void stopSound(uint16_t soundID);
@@ -69,10 +69,8 @@ public:
     void reset();
     
 private:
-    static GowAudioEngine* s_instance;
-    
     AudioEngineHelper* _audioEngineHelper;
-    int _state;
+    GowAudioEngineState _state;
     std::map<uint16_t, SoundWrapper*> _sounds;
     std::vector<Sound*> _soundsToPlay;
     std::vector<Sound*> _soundsToStop;
@@ -83,14 +81,13 @@ private:
     SoundWrapper* _music;
     std::vector<int> _musicStates;
     float _musicVolume;
-    bool _isMusicLooping;
     bool _isMusicDisabled;
     bool _areSoundsDisabled;
     
     SoundWrapper* findSound(uint16_t soundID);
     
     GowAudioEngine();
-    ~GowAudioEngine();
+    ~GowAudioEngine() {}
     GowAudioEngine(const GowAudioEngine&);
     GowAudioEngine& operator=(const GowAudioEngine&);
 };

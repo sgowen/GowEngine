@@ -327,7 +327,7 @@ void NetworkManagerServer::handlePacketFromNewClient(InputMemoryBitStream& input
     // read the beginning- is it a hello?
     uint8_t packetType;
     inputStream.read(packetType);
-    if (packetType == NetworkPacketType_HELLO)
+    if (packetType == NWPT_HELLO)
     {
         // read the name
         std::string name;
@@ -379,21 +379,21 @@ void NetworkManagerServer::processPacket(ClientProxy* clientProxy, InputMemoryBi
     
     switch (packetType)
     {
-        case NetworkPacketType_HELLO:
+        case NWPT_HELLO:
             //need to resend welcome. to be extra safe we should check the name is the one we expect from this address,
             //otherwise something weird is going on...
             sendWelcomePacket(clientProxy);
             break;
-        case NetworkPacketType_INPUT:
+        case NWPT_INPUT:
             if (clientProxy->getDeliveryNotificationManager().readAndProcessState(inputStream))
             {
                 handleInputPacket(clientProxy, inputStream);
             }
             break;
-        case NetworkPacketType_ADD_LOCAL_PLAYER:
+        case NWPT_ADD_LOCAL_PLAYER:
             handleAddLocalPlayerPacket(clientProxy, inputStream);
             break;
-        case NetworkPacketType_DROP_LOCAL_PLAYER:
+        case NWPT_DROP_LOCAL_PLAYER:
             handleDropLocalPlayerPacket(clientProxy, inputStream);
             break;
         default:
@@ -406,7 +406,7 @@ void NetworkManagerServer::sendWelcomePacket(ClientProxy* clientProxy)
 {
     OutputMemoryBitStream packet;
     
-    packet.write(static_cast<uint8_t>(NetworkPacketType_WELCOME));
+    packet.write(static_cast<uint8_t>(NWPT_WELCOME));
     packet.write<uint8_t, 3>(clientProxy->getPlayerID());
     
     LOG("Server welcoming new client '%s' as player %d", clientProxy->getName().c_str(), clientProxy->getPlayerID());
@@ -420,7 +420,7 @@ void NetworkManagerServer::sendStatePacketToClient(ClientProxy* clientProxy)
     OutputMemoryBitStream statePacket;
     
     //it's state!
-    statePacket.write(static_cast<uint8_t>(NetworkPacketType_STATE));
+    statePacket.write(static_cast<uint8_t>(NWPT_STATE));
     
     InFlightPacket* ifp = clientProxy->getDeliveryNotificationManager().writeState(statePacket);
     
@@ -557,7 +557,7 @@ void NetworkManagerServer::handleAddLocalPlayerPacket(ClientProxy* clientProxy, 
     else
     {
         OutputMemoryBitStream packet;
-        packet.write(static_cast<uint8_t>(NetworkPacketType_LOCAL_PLAYER_DENIED));
+        packet.write(static_cast<uint8_t>(NWPT_LOCAL_PLAYER_DENIED));
         
         sendPacket(packet, clientProxy->getMachineAddress());
     }
@@ -569,7 +569,7 @@ void NetworkManagerServer::sendLocalPlayerAddedPacket(ClientProxy* clientProxy, 
     
     OutputMemoryBitStream packet;
     
-    packet.write(static_cast<uint8_t>(NetworkPacketType_LOCAL_PLAYER_ADDED));
+    packet.write(static_cast<uint8_t>(NWPT_LOCAL_PLAYER_ADDED));
     packet.write<uint8_t, 3>(playerID);
     
     std::string localPlayerName = StringUtil::format("%s(%d)", clientProxy->getName().c_str(), index);
@@ -649,7 +649,7 @@ _handleLostClientFunc(handleLostClientFunc),
 _inputStateCreationFunc(inputStateCreationFunc),
 _inputStateReleaseFunc(inputStateReleaseFunc),
 _entityManager(new EntityManager(NULL, NULL)),
-_timing(static_cast<Timing*>(INSTANCE_MGR.get(InstanceKey_TIMING_SERVER))),
+_timing(static_cast<Timing*>(INSTANCE_MGR.get(INSK_TIMING_SERVER))),
 _nextPlayerID(1),
 _map(0)
 {

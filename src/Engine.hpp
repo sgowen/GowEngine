@@ -8,10 +8,22 @@
 
 #pragma once
 
+enum EngineRequestedStateAction
+{
+    ERSA_DEFAULT,
+    ERSA_CREATE_RESOURCES,
+    ERSA_WINDOW_SIZE_CHANGED,
+    ERSA_RELEASE_RESOURCES,
+    ERSA_RESUME,
+    ERSA_PAUSE,
+    ERSA_UPDATE,
+    ERSA_RENDER
+};
+
 enum EngineRequestedHostAction
 {
-    EngineRequestedHostAction_NONE =    0,
-    EngineRequestedHostAction_EXIT =    1 << 0
+    ERHA_DEFAULT,
+    ERHA_EXIT
 };
 
 #include "StateMachine.hpp"
@@ -19,7 +31,6 @@ enum EngineRequestedHostAction
 #include <stdint.h>
 
 class EngineController;
-class EngineState;
 
 class Engine
 {
@@ -45,20 +56,24 @@ public:
     void onGamepadInputTrigger(uint8_t index, float triggerLeft, float triggerRight);
     void onGamepadInputButton(uint8_t index, uint8_t gamepadEventType, uint8_t isPressed);
     void onKeyboardInput(unsigned short key, bool isUp = false);
-    void setRequestedAction(EngineRequestedHostAction value);
-    StateMachine<Engine, EngineState>& getStateMachine();
+    void setRequestedHostAction(EngineRequestedHostAction value);
+    StateMachine<Engine>& getStateMachine();
+    EngineRequestedStateAction state();
     int screenWidth();
     int screenHeight();
     int cursorWidth();
     int cursorHeight();
     
 private:
-    StateMachine<Engine, EngineState> _stateMachine;
+    StateMachine<Engine> _stateMachine;
+    EngineRequestedStateAction _requestedStateAction;
+    EngineRequestedHostAction _requestedHostAction;
     double _frameRate;
     double _stateTime;
-    EngineRequestedHostAction _requestedAction;
     int _screenWidth;
     int _screenHeight;
     int _cursorWidth;
     int _cursorHeight;
+    
+    void execute(EngineRequestedStateAction ersa);
 };

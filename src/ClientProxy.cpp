@@ -16,7 +16,7 @@
 #include "InstanceManager.hpp"
 
 ClientProxy::ClientProxy(EntityManager* entityManager, MachineAddress* machineAddress, const std::string& name, uint8_t playerID) :
-_timing(static_cast<Timing*>(INSTANCE_MGR.get(InstanceKey_TIMING_SERVER))),
+_timing(static_cast<Timing*>(INSTANCE_MGR.get(INSK_TIMING_SERVER))),
 _deliveryNotificationManager(DeliveryNotificationManager(_timing, false, true)),
 _replicationManagerServer(new ReplicationManagerServer(entityManager)),
 _machineAddress(machineAddress->createNewCopy()),

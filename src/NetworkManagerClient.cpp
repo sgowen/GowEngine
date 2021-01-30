@@ -75,32 +75,32 @@ void NetworkManagerClient::sendOutgoingPackets()
     
     switch (_state)
     {
-        case NCS_SayingHello:
+        case NWCS_SAYING_HELLO:
             updateSayingHello();
             break;
-        case NCS_Welcomed:
+        case NWCS_WELCOMED:
             updateSendingInputPacket();
             updateAddLocalPlayerRequest();
             updateDropLocalPlayerRequest();
             break;
-        case NCS_Uninitialized:
+        case NWCS_DEFAULT:
             _clientHelper->handleUninitialized();
             break;
-        case NCS_Disconnected:
+        case NWCS_DISCONNECTED:
             break;
     }
     
-    if (_state != NCS_Disconnected)
+    if (_state != NWCS_DISCONNECTED)
     {
         int clientHelperState = _clientHelper->state();
         if (clientHelperState == CLIENT_READY_TO_SAY_HELLO
-            && _state != NCS_Welcomed)
+            && _state != NWCS_WELCOMED)
         {
-            _state = NCS_SayingHello;
+            _state = NWCS_SAYING_HELLO;
         }
         else if (clientHelperState == CLIENT_AUTH_FAILED)
         {
-            _state = NCS_Disconnected;
+            _state = NWCS_DISCONNECTED;
         }
     }
 }
@@ -200,16 +200,16 @@ void NetworkManagerClient::processPacket(InputMemoryBitStream& inputStream, Mach
     
     switch (packetType)
     {
-        case NetworkPacketType_WELCOME:
+        case NWPT_WELCOME:
             handleWelcomePacket(inputStream);
             break;
-        case NetworkPacketType_LOCAL_PLAYER_ADDED:
+        case NWPT_LOCAL_PLAYER_ADDED:
             handleLocalPlayerAddedPacket(inputStream);
             break;
-        case NetworkPacketType_LOCAL_PLAYER_DENIED:
+        case NWPT_LOCAL_PLAYER_DENIED:
             handleLocalPlayerDeniedPacket();
             break;
-        case NetworkPacketType_STATE:
+        case NWPT_STATE:
             if (_deliveryNotificationManager->readAndProcessState(inputStream))
             {
                 handleStatePacket(inputStream);
@@ -225,10 +225,10 @@ void NetworkManagerClient::handleNoResponse()
 {
     float time = _timing->getTime();
     
-    float timeout = _state == NCS_Uninitialized ? NW_CONNECT_TO_SERVER_TIMEOUT : NW_SERVER_TIMEOUT;
+    float timeout = _state == NWCS_DEFAULT ? NW_CONNECT_TO_SERVER_TIMEOUT : NW_SERVER_TIMEOUT;
     if (time > _lastServerCommunicationTimestamp + timeout)
     {
-        _state = NCS_Disconnected;
+        _state = NWCS_DISCONNECTED;
     }
 }
 
@@ -250,7 +250,7 @@ void NetworkManagerClient::updateSayingHello()
     {
         OutputMemoryBitStream helloPacket;
         
-        helloPacket.write(static_cast<uint8_t>(NetworkPacketType_HELLO));
+        helloPacket.write(static_cast<uint8_t>(NWPT_HELLO));
         helloPacket.writeSmall(getPlayerName());
         
         sendPacket(helloPacket);
@@ -261,13 +261,13 @@ void NetworkManagerClient::updateSayingHello()
 
 void NetworkManagerClient::handleWelcomePacket(InputMemoryBitStream& inputStream)
 {
-    if (_state == NCS_SayingHello)
+    if (_state == NWCS_SAYING_HELLO)
     {
         // if we got a player id, we've been welcomed!
         uint8_t playerID;
         inputStream.read<uint8_t, 3>(playerID);
         
-        _state = NCS_Welcomed;
+        _state = NWCS_WELCOMED;
         
         _indexToPlayerIDMap.clear();
         _indexToPlayerIDMap[_nextIndex] = playerID;
@@ -282,7 +282,7 @@ void NetworkManagerClient::handleWelcomePacket(InputMemoryBitStream& inputStream
 
 void NetworkManagerClient::handleLocalPlayerAddedPacket(InputMemoryBitStream& inputStream)
 {
-    if (_state == NCS_Welcomed
+    if (_state == NWCS_WELCOMED
         && _isRequestingToAddLocalPlayer)
     {
         // if we got a player id, our local player has been added!
@@ -310,7 +310,7 @@ void NetworkManagerClient::handleLocalPlayerDeniedPacket()
 
 void NetworkManagerClient::handleStatePacket(InputMemoryBitStream& inputStream)
 {
-    if (_state == NCS_Welcomed)
+    if (_state == NWCS_WELCOMED)
     {
         readLastMoveProcessedOnServerTimestamp(inputStream);
         
@@ -352,7 +352,7 @@ void NetworkManagerClient::sendInputPacket()
     {
         OutputMemoryBitStream inputPacket;
         
-        inputPacket.write(static_cast<uint8_t>(NetworkPacketType_INPUT));
+        inputPacket.write(static_cast<uint8_t>(NWPT_INPUT));
         
         _deliveryNotificationManager->writeState(inputPacket);
         
@@ -412,7 +412,7 @@ void NetworkManagerClient::updateAddLocalPlayerRequest()
         {
             OutputMemoryBitStream packet;
             
-            packet.write(static_cast<uint8_t>(NetworkPacketType_ADD_LOCAL_PLAYER));
+            packet.write(static_cast<uint8_t>(NWPT_ADD_LOCAL_PLAYER));
             packet.write(_nextIndex);
             
             sendPacket(packet);
@@ -430,7 +430,7 @@ void NetworkManagerClient::updateDropLocalPlayerRequest()
         
         OutputMemoryBitStream packet;
         
-        packet.write(static_cast<uint8_t>(NetworkPacketType_DROP_LOCAL_PLAYER));
+        packet.write(static_cast<uint8_t>(NWPT_DROP_LOCAL_PLAYER));
         packet.write(_isRequestingToDropLocalPlayer);
         
         sendPacket(packet);
@@ -453,7 +453,7 @@ void NetworkManagerClient::updateNextIndex()
 }
 
 NetworkManagerClient::NetworkManagerClient(ClientHelper* clientHelper, HandleEntityCreatedFunc handleEntityCreatedFunc, HandleEntityDeletionFunc handleEntityDeletionFunc, RemoveProcessedMovesFunc removeProcessedMovesFunc, GetMoveListFunc getMoveListFunc, OnPlayerWelcomedFunc onPlayerWelcomedFunc) :
-_timing(static_cast<Timing*>(INSTANCE_MGR.get(InstanceKey_TIMING_CLIENT))),
+_timing(static_cast<Timing*>(INSTANCE_MGR.get(INSK_TIMING_CLIENT))),
 _clientHelper(clientHelper),
 _removeProcessedMovesFunc(removeProcessedMovesFunc),
 _getMoveListFunc(getMoveListFunc),
@@ -461,7 +461,7 @@ _onPlayerWelcomedFunc(onPlayerWelcomedFunc),
 _entityManager(new EntityManager(handleEntityCreatedFunc, handleEntityDeletionFunc)),
 _replicationManagerClient(new ReplicationManagerClient(_entityManager)),
 _avgRoundTripTime(new WeightedTimedMovingAverage(_timing, 1.f)),
-_state(NCS_Uninitialized),
+_state(NWCS_DEFAULT),
 _deliveryNotificationManager(new DeliveryNotificationManager(_timing, true, false)),
 _timeOfLastHello(0.0f),
 _lastMoveProcessedByServerTimestamp(0.0f),

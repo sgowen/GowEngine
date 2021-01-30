@@ -10,7 +10,7 @@
 
 enum ReplicationAction
 {
-    ReplicationAction_CREATE = 1,
-    ReplicationAction_UPDATE,
-    ReplicationAction_DESTROY
+    REPA_CREATE = 1,
+    REPA_UPDATE,
+    REPA_DESTROY
 };

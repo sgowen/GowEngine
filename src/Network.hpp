@@ -44,24 +44,30 @@
 
 enum InstanceKeys
 {
-    InstanceKey_TIMING_SERVER = 'TIMS',
-    InstanceKey_TIMING_CLIENT = 'TIMC',
-    InstanceKey_ENTITY_ID_MANAGER_SERVER = 'EIMS',
-    InstanceKey_ENTITY_ID_MANAGER_CLIENT = 'EIMC'
+    INSK_TIMING_SERVER = 'TIMS',
+    INSK_TIMING_CLIENT = 'TIMC',
+    INSK_ENTITY_ID_MANAGER_SERVER = 'EIMS',
+    INSK_ENTITY_ID_MANAGER_CLIENT = 'EIMC'
 };
 
 enum NetworkPacketType
 {
-    NetworkPacketType_HELLO = 0x01u,
-    NetworkPacketType_WELCOME = 0x02u,
-    NetworkPacketType_STATE = 0x03u,
-    NetworkPacketType_INPUT = 0x04u,
-    NetworkPacketType_ADD_LOCAL_PLAYER = 0x05u,
-    NetworkPacketType_DROP_LOCAL_PLAYER = 0x06u,
-    NetworkPacketType_LOCAL_PLAYER_ADDED = 0x07u,
-    NetworkPacketType_LOCAL_PLAYER_DENIED = 0x08u,
-    NetworkPacketType_CLIENT_EXIT = 0x09u,
-    NetworkPacketType_SERVER_EXIT = 0x0Au
+    NWPT_HELLO = 0x01u,
+    NWPT_WELCOME = 0x02u,
+    NWPT_STATE = 0x03u,
+    NWPT_INPUT = 0x04u,
+    NWPT_ADD_LOCAL_PLAYER = 0x05u,
+    NWPT_DROP_LOCAL_PLAYER = 0x06u,
+    NWPT_LOCAL_PLAYER_ADDED = 0x07u,
+    NWPT_LOCAL_PLAYER_DENIED = 0x08u,
+    NWPT_CLIENT_EXIT = 0x09u,
+    NWPT_SERVER_EXIT = 0x0Au
+};
+
+enum SocketAddressFamily
+{
+    INET = AF_INET,
+    INET6 = AF_INET6
 };
 
 #define NW_CLIENT_TIME_BETWEEN_HELLOS 1.0

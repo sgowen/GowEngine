@@ -15,7 +15,10 @@
 #include <assert.h>
 
 FontRenderer::FontRenderer(int maxBatchSize, int offsetX, int offsetY, int glyphsPerRow, int glyphWidth, int glyphHeight, int textureWidth, int textureHeight) :
-_spriteBatcher(maxBatchSize)
+_spriteBatcher(maxBatchSize),
+_glyphWidthToHeightRatio(glyphHeight / (float)glyphWidth),
+_matrixWidth(1),
+_matrixHeight(1)
 {
 	int x = offsetX;
 	int y = offsetY;
@@ -44,21 +47,40 @@ void FontRenderer::releaseDeviceDependentResources()
     _spriteBatcher.releaseDeviceDependentResources();
 }
 
-void FontRenderer::renderText(Shader& s, mat4& matrix, Texture& t, TextView& tv)
+void FontRenderer::setMatrixSize(float matrixWidth, float matrixHeight)
 {
-    assert(tv._textAlignment >= TextAlignment_LEFT && tv._textAlignment <= TextAlignment_RIGHT);
+    mat4_identity(_matrix);
+    mat4_ortho(_matrix, 0, matrixWidth, 0, matrixHeight, -1, 1);
+    _matrixWidth = matrixWidth;
+    _matrixHeight = matrixHeight;
+}
+
+void FontRenderer::configure(TextView& tv, float xWeight, float yWeight, float glyphWidthWeight)
+{
+    tv._x = _matrixWidth * xWeight;
+    tv._y = _matrixHeight * yWeight;
+    tv._glyphWidth = _matrixWidth * glyphWidthWeight;
+    tv._glyphHeight = tv._glyphWidth * _glyphWidthToHeightRatio;
+}
+
+void FontRenderer::renderText(Shader& s, Texture& t, TextView& tv)
+{
+    if (tv._visibility == TEXV_HIDDEN)
+    {
+        return;
+    }
     
     unsigned long len = tv._text.length();
     
     float x = tv._x;
     
-    if (tv._textAlignment == TextAlignment_CENTER)
+    if (tv._alignment == TEXA_CENTER)
     {
         float result = tv._glyphWidth / 2;
         x -= len * result;
         x += tv._glyphWidth / 2;
     }
-    else if (tv._textAlignment == TextAlignment_RIGHT)
+    else if (tv._alignment == TEXA_RIGHT)
     {
         x -= (len - 1) * tv._glyphWidth;
     }
@@ -72,13 +94,13 @@ void FontRenderer::renderText(Shader& s, mat4& matrix, Texture& t, TextView& tv)
 
         x += tv._glyphWidth;
     }
-    _spriteBatcher.end(s, matrix, t);
+    _spriteBatcher.end(s, _matrix, t);
 }
 
-void FontRenderer::renderText(Shader& s, mat4& matrix, Texture& t, std::string text, float x, float y, float glyphWidth, float glyphHeight, TextAlignment textAlignment)
+void FontRenderer::renderText(Shader& s, Texture& t, TextAlignment alignment, std::string text, float x, float y, float glyphWidth, float glyphHeight)
 {
-    TextView tv(text, x, y, glyphWidth, glyphHeight, textAlignment);
-    renderText(s, matrix, t, tv);
+    TextView tv(alignment, text, TEXV_VISIBLE, x, y, glyphWidth, glyphHeight);
+    renderText(s, t, tv);
 }
 
 void FontRenderer::renderAsciiChar(int asciiChar, float x, float y, float glyphWidth, float glyphHeight)

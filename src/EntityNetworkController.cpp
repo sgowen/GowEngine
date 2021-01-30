@@ -72,7 +72,7 @@ uint16_t EntityNetworkController::write(OutputMemoryBitStream& op, uint16_t dirt
     
     uint16_t writtenState = 0;
     
-    bool pose = dirtyState & Entity::ReadStateFlag_Pose;
+    bool pose = dirtyState & Entity::RSTF_POSE;
     op.write(pose);
     if (pose)
     {
@@ -91,12 +91,12 @@ uint16_t EntityNetworkController::write(OutputMemoryBitStream& op, uint16_t dirt
         
         op.write(e._pose._isFacingLeft);
         
-        writtenState |= Entity::ReadStateFlag_Pose;
+        writtenState |= Entity::RSTF_POSE;
     }
     
     if (e._entityDef._stateSensitive)
     {
-        bool state = dirtyState & Entity::ReadStateFlag_State;
+        bool state = dirtyState & Entity::RSTF_STATE;
         op.write(state);
         if (state)
         {
@@ -104,7 +104,7 @@ uint16_t EntityNetworkController::write(OutputMemoryBitStream& op, uint16_t dirt
             op.write(e._state._state);
             op.write(e._state._stateFlags);
             
-            writtenState |= Entity::ReadStateFlag_State;
+            writtenState |= Entity::RSTF_STATE;
         }
     }
     
@@ -130,13 +130,13 @@ uint16_t EntityNetworkController::getDirtyState()
     if (e._poseNetworkCache != e._pose)
     {
         e._poseNetworkCache = e._pose;
-        ret |= Entity::ReadStateFlag_Pose;
+        ret |= Entity::RSTF_POSE;
     }
     
     if (e._stateNetworkCache != e._state)
     {
         e._stateNetworkCache = e._state;
-        ret |= Entity::ReadStateFlag_State;
+        ret |= Entity::RSTF_STATE;
     }
     
     return ret;

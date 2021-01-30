@@ -24,10 +24,10 @@ class b2Contact;
 
 enum FixtureFlags
 {
-    FixtureFlag_Box = 1 << 0,
-    FixtureFlag_Sensor = 1 << 1,
-    FixtureFlag_GroundContact = 1 << 2,
-    FixtureFlag_Circle = 1 << 3
+    FIXF_BOX =            1 << 0,
+    FIXF_SENSOR =         1 << 1,
+    FIXF_GROUND_CONTACT = 1 << 2,
+    FIXF_CIRCLE =         1 << 3
 };
 
 struct FixtureDef
@@ -42,11 +42,9 @@ struct FixtureDef
 
 enum BodyFlags
 {
-    BodyFlag_Static =        1 << 0,
-    BodyFlag_FixedRotation = 1 << 1,
-    BodyFlag_Bullet =        1 << 2,
-    BodyFlag_Unused =        1 << 3,
-    BodyFlag_Player =        1 << 4
+    BODF_STATIC =         1 << 0,
+    BODF_FIXED_ROTATION = 1 << 1,
+    BODF_BULLET =         1 << 2
 };
 
 struct EntityDef
@@ -76,8 +74,8 @@ class Entity
 public:
     enum ReadStateFlag
     {
-        ReadStateFlag_Pose =  1 << 0,
-        ReadStateFlag_State = 1 << 1
+        RSTF_POSE =  1 << 0,
+        RSTF_STATE = 1 << 1
     };
     
     Entity(EntityDef entityDef);

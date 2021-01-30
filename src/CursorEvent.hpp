@@ -12,11 +12,11 @@
 
 enum CursorEventType
 {
-    CursorEventType_DOWN,
-    CursorEventType_DRAGGED,
-    CursorEventType_MOVED,
-    CursorEventType_UP,
-    CursorEventType_SCROLL
+    CUET_DOWN,
+    CUET_DRAGGED,
+    CUET_MOVED,
+    CUET_UP,
+    CUET_SCROLL
 };
 
 struct CursorEvent
@@ -25,7 +25,7 @@ struct CursorEvent
     Vector2 _pos;
     bool _isAlt;
     
-    CursorEvent(CursorEventType type = CursorEventType_DOWN, float x = 0, float y = 0, bool isAlt = false) :
+    CursorEvent(CursorEventType type = CUET_DOWN, float x = 0, float y = 0, bool isAlt = false) :
     _type(type),
     _pos(x, y),
     _isAlt(isAlt)
@@ -35,6 +35,6 @@ struct CursorEvent
     
     bool isPressed()
     {
-        return _type == CursorEventType_DOWN || _type == CursorEventType_DRAGGED;
+        return _type == CUET_DOWN || _type == CUET_DRAGGED;
     }
 };

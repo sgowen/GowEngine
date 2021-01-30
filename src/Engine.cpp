@@ -9,7 +9,6 @@
 #include "Engine.hpp"
 
 #include "EngineController.hpp"
-#include "EngineState.hpp"
 
 #include "InputManager.hpp"
 #include "PlatformMacros.hpp"
@@ -18,9 +17,10 @@
 
 Engine::Engine(EngineController& engineController) :
 _stateMachine(this),
+_requestedStateAction(ERSA_DEFAULT),
+_requestedHostAction(ERHA_DEFAULT),
 _frameRate(FRAME_RATE),
 _stateTime(0),
-_requestedAction(EngineRequestedHostAction_NONE),
 _screenWidth(0),
 _screenHeight(0),
 _cursorWidth(0),
@@ -31,7 +31,7 @@ _cursorHeight(0)
 
 void Engine::createDeviceDependentResources()
 {
-    _stateMachine.getCurrentState()->createDeviceDependentResources();
+    execute(ERSA_CREATE_RESOURCES);
 }
 
 void Engine::onWindowSizeChanged(int screenWidth, int screenHeight, int cursorWidth, int cursorHeight)
@@ -43,22 +43,22 @@ void Engine::onWindowSizeChanged(int screenWidth, int screenHeight, int cursorWi
     
     INPUT_MGR.setCursorSize(_cursorWidth, _cursorHeight);
     
-    _stateMachine.getCurrentState()->onWindowSizeChanged(screenWidth, screenHeight, cursorWidth, cursorHeight);
+    execute(ERSA_WINDOW_SIZE_CHANGED);
 }
 
 void Engine::releaseDeviceDependentResources()
 {
-    _stateMachine.getCurrentState()->releaseDeviceDependentResources();
+    execute(ERSA_RELEASE_RESOURCES);
 }
 
 void Engine::onResume()
 {
-    _stateMachine.getCurrentState()->onResume();
+    execute(ERSA_RESUME);
 }
 
 void Engine::onPause()
 {
-    _stateMachine.getCurrentState()->onPause();
+    execute(ERSA_PAUSE);
 }
 
 EngineRequestedHostAction Engine::update(double deltaTime)
@@ -72,58 +72,58 @@ EngineRequestedHostAction Engine::update(double deltaTime)
         
         INPUT_MGR.process();
         
-        _stateMachine.execute();
+        execute(ERSA_UPDATE);
     }
     
-    EngineRequestedHostAction ret = _requestedAction;
-    _requestedAction = EngineRequestedHostAction_NONE;
+    EngineRequestedHostAction ret = _requestedHostAction;
+    _requestedHostAction = ERHA_DEFAULT;
     
     return ret;
 }
 
 void Engine::render()
 {
-    _stateMachine.getCurrentState()->render();
+    execute(ERSA_RENDER);
 }
 
 void Engine::onCursorDown(float x, float y, bool isAlt)
 {
-    INPUT_MGR.onCursorInput(CursorEventType_DOWN, x, y, isAlt);
+    INPUT_MGR.onCursorInput(CUET_DOWN, x, y, isAlt);
 }
 
 void Engine::onCursorDragged(float x, float y, bool isAlt)
 {
-    INPUT_MGR.onCursorInput(CursorEventType_DRAGGED, x, y, isAlt);
+    INPUT_MGR.onCursorInput(CUET_DRAGGED, x, y, isAlt);
 }
 
 void Engine::onCursorMoved(float x, float y)
 {
-    INPUT_MGR.onCursorInput(CursorEventType_MOVED, x, y);
+    INPUT_MGR.onCursorInput(CUET_MOVED, x, y);
 }
 
 void Engine::onCursorUp(float x, float y, bool isAlt)
 {
-    INPUT_MGR.onCursorInput(CursorEventType_UP, x, y, isAlt);
+    INPUT_MGR.onCursorInput(CUET_UP, x, y, isAlt);
 }
 
 void Engine::onCursorScrolled(float yoffset)
 {
-    INPUT_MGR.onCursorInput(CursorEventType_SCROLL, 0, yoffset);
+    INPUT_MGR.onCursorInput(CUET_SCROLL, 0, yoffset);
 }
 
 void Engine::onGamepadInputStickLeft(uint8_t index, float stickLeftX, float stickLeftY)
 {
-    INPUT_MGR.onGamepadInput(GamepadEventType_STICK_LEFT, index, stickLeftX, stickLeftY);
+    INPUT_MGR.onGamepadInput(GPET_STICK_LEFT, index, stickLeftX, stickLeftY);
 }
 
 void Engine::onGamepadInputStickRight(uint8_t index, float stickRightX, float stickRightY)
 {
-    INPUT_MGR.onGamepadInput(GamepadEventType_STICK_RIGHT, index, stickRightX, stickRightY);
+    INPUT_MGR.onGamepadInput(GPET_STICK_RIGHT, index, stickRightX, stickRightY);
 }
 
 void Engine::onGamepadInputTrigger(uint8_t index, float triggerLeft, float triggerRight)
 {
-    INPUT_MGR.onGamepadInput(GamepadEventType_TRIGGER, index, triggerLeft, triggerRight);
+    INPUT_MGR.onGamepadInput(GPET_TRIGGER, index, triggerLeft, triggerRight);
 }
 
 void Engine::onGamepadInputButton(uint8_t index, uint8_t gamepadEventType, uint8_t isPressed)
@@ -136,14 +136,19 @@ void Engine::onKeyboardInput(unsigned short key, bool isUp)
     INPUT_MGR.onKeyboardInput(key, isUp);
 }
 
-void Engine::setRequestedAction(EngineRequestedHostAction value)
+void Engine::setRequestedHostAction(EngineRequestedHostAction value)
 {
-    _requestedAction = value;
+    _requestedHostAction = value;
 }
 
-StateMachine<Engine, EngineState>& Engine::getStateMachine()
+StateMachine<Engine>& Engine::getStateMachine()
 {
     return _stateMachine;
+}
+
+EngineRequestedStateAction Engine::state()
+{
+    return _requestedStateAction;
 }
 
 int Engine::screenWidth()
@@ -164,4 +169,11 @@ int Engine::cursorWidth()
 int Engine::cursorHeight()
 {
     return _cursorHeight;
+}
+
+void Engine::execute(EngineRequestedStateAction ersa)
+{
+    _requestedStateAction = ersa;
+    _stateMachine.execute();
+    _requestedStateAction = ERSA_DEFAULT;
 }

@@ -36,10 +36,10 @@ typedef void (*OnPlayerWelcomedFunc)(uint8_t playerID);
 
 enum NetworkClientState
 {
-    NCS_Uninitialized,
-    NCS_SayingHello,
-    NCS_Welcomed,
-    NCS_Disconnected
+    NWCS_DEFAULT,
+    NWCS_SAYING_HELLO,
+    NWCS_WELCOMED,
+    NWCS_DISCONNECTED
 };
 
 class NetworkManagerClient

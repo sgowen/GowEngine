@@ -8,12 +8,14 @@
 
 #pragma once
 
-class EngineState;
+#include "StateMachine.hpp"
+
+class Engine;
 
 class EngineController
 {
 public:
-    virtual EngineState* getInitialState() = 0;
+    virtual State<Engine>* getInitialState() = 0;
     
 protected:
     EngineController() {}

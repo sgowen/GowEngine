@@ -14,6 +14,7 @@
 #include "SpriteBatcher.hpp"
 #include "ShaderInput.hpp"
 #include "TextView.hpp"
+#include "ShaderInput.hpp"
 
 struct Shader;
 struct Texture;
@@ -27,12 +28,17 @@ public:
     
     void createDeviceDependentResources();
     void releaseDeviceDependentResources();
-    
-    void renderText(Shader& s, mat4& matrix, Texture& t, TextView& tv);
-	void renderText(Shader& s, mat4& matrix, Texture& t, std::string text, float x, float y, float glyphWidth, float glyphHeight, TextAlignment textAlignment = TextAlignment_LEFT);
+    void setMatrixSize(float matrixWidth, float matrixHeight);
+    void configure(TextView& tv, float xWeight, float yWeight, float glyphWidthWeight);
+    void renderText(Shader& s, Texture& t, TextView& tv);
+	void renderText(Shader& s, Texture& t, TextAlignment textAlignment, std::string text, float x, float y, float glyphWidth, float glyphHeight);
     void renderAsciiChar(int asciiChar, float x, float y, float glyphWidth, float glyphHeight);
 
 private:
     SpriteBatcher _spriteBatcher;
     std::vector<TextureRegion> _glyphs;
+    float _glyphWidthToHeightRatio;
+    mat4 _matrix;
+    float _matrixWidth;
+    float _matrixHeight;
 };

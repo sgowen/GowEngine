@@ -11,3 +11,4 @@
 #define UNUSED(x) (void)(x)
 #define BUFFER_OFFSET(i) ((void*)(i))
 #define SET_BIT(val, bit, set) val = (val & ~bit) | (set ? bit : 0)
+#define IS_BIT_SET(val, bit) (val & bit)

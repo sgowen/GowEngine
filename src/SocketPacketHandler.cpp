@@ -17,7 +17,6 @@
 #include "InputMemoryBitStream.hpp"
 #include "SocketUtil.hpp"
 #include "StringUtil.hpp"
-#include "SocketAddressFamily.hpp"
 #include "PlatformMacros.hpp"
 #include "Network.hpp"
 #include "InstanceManager.hpp"

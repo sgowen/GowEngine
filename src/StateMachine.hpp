@@ -8,16 +8,26 @@
 
 #pragma once
 
-#include "State.hpp"
-
 #include <stack>
 #include <assert.h>
 
-template <class ObjectType, class StateType>
+template <class T>
+class State
+{
+public:
+    State() {}
+    virtual ~State() {}
+    
+    virtual void enter(T* owner) = 0;
+    virtual void execute(T* owner) = 0;
+    virtual void exit(T* owner) = 0;
+};
+
+template <class T>
 class StateMachine
 {
 public:
-    StateMachine(ObjectType* owner) :
+    StateMachine(T* owner) :
     _owner(owner),
     _globalState(NULL)
     {
@@ -39,7 +49,7 @@ public:
         }
     }
     
-    void changeState(StateType* newState, bool overwrite = false)
+    void changeState(State<T>* newState, bool overwrite = false)
     {
         assert(newState != NULL);
         
@@ -64,7 +74,7 @@ public:
         enter();
     }
     
-    void setCurrentState(StateType* state)
+    void setCurrentState(State<T>* state)
     {
         while (!_states.empty())
         {
@@ -74,30 +84,30 @@ public:
         _states.push(state);
     }
     
-    StateType* getCurrentState() const
+    State<T>* getCurrentState() const
     {
         return _states.size() > 0 ? _states.top() : NULL;
     }
     
-    void setGlobalState(StateType* state)
+    void setGlobalState(State<T>* state)
     {
         _globalState = state;
     }
     
-    StateType* getGlobalState() const
+    State<T>* getGlobalState() const
     {
         return _globalState;
     }
     
 private:
-    ObjectType* _owner;
+    T* _owner;
     
-    StateType* _globalState;
-    std::stack<StateType*> _states;
+    State<T>* _globalState;
+    std::stack<State<T>*> _states;
     
     void enter()
     {
-        StateType* currentState = getCurrentState();
+        State<T>* currentState = getCurrentState();
         assert(currentState != NULL);
         
         currentState->enter(_owner);
@@ -105,7 +115,7 @@ private:
     
     void exit()
     {
-        StateType* currentState = getCurrentState();
+        State<T>* currentState = getCurrentState();
         assert(currentState != NULL);
         
         currentState->exit(_owner);

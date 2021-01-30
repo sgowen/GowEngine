@@ -17,7 +17,7 @@
 #include "InstanceManager.hpp"
 
 SocketClientHelper::SocketClientHelper(std::string serverIPAddress, std::string name, uint16_t port, ProcessPacketFunc processPacketFunc, HandleNoResponseFunc handleNoResponseFunc, HandleConnectionResetFunc handleConnectionResetFunc) :
-ClientHelper(new SocketPacketHandler(static_cast<Timing*>(INSTANCE_MGR.get(InstanceKey_TIMING_CLIENT)), false, port, processPacketFunc, handleNoResponseFunc, handleConnectionResetFunc)),
+ClientHelper(new SocketPacketHandler(static_cast<Timing*>(INSTANCE_MGR.get(INSK_TIMING_CLIENT)), false, port, processPacketFunc, handleNoResponseFunc, handleConnectionResetFunc)),
 _serverAddress(SocketAddressFactory::createIPv4FromString(serverIPAddress)),
 _name(name)
 {
@@ -27,7 +27,7 @@ _name(name)
 SocketClientHelper::~SocketClientHelper()
 {
     OutputMemoryBitStream packet;
-    packet.write(static_cast<uint8_t>(NetworkPacketType_CLIENT_EXIT));
+    packet.write(static_cast<uint8_t>(NWPT_CLIENT_EXIT));
     sendPacket(packet);
     
     if (_serverAddress)
@@ -40,7 +40,7 @@ void SocketClientHelper::processSpecialPacket(uint8_t packetType, InputMemoryBit
 {
     switch (packetType)
     {
-        case NetworkPacketType_SERVER_EXIT:
+        case NWPT_SERVER_EXIT:
             LOG("Server Shutting Down");
             
             if (_serverAddress)

@@ -9,14 +9,14 @@
 #include "ReplicationCommand.hpp"
 
 ReplicationCommand::ReplicationCommand() :
-_action(ReplicationAction_CREATE),
+_action(REPA_CREATE),
 _dirtyState(0)
 {
     // Empty
 }
 
 ReplicationCommand::ReplicationCommand(uint16_t initialDirtyState) :
-_action(ReplicationAction_CREATE),
+_action(REPA_CREATE),
 _dirtyState(initialDirtyState)
 {
     // Empty
@@ -24,10 +24,10 @@ _dirtyState(initialDirtyState)
 
 void ReplicationCommand::handleCreateAckd()
 {
-    if (_action == ReplicationAction_CREATE)
+    if (_action == REPA_CREATE)
     {
         // if the create is ack'd, we can demote to just an update...
-        _action = ReplicationAction_UPDATE;
+        _action = REPA_UPDATE;
     }
 }
 
@@ -38,12 +38,12 @@ void ReplicationCommand::addDirtyState(uint16_t state)
 
 void ReplicationCommand::setDestroy()
 {
-    _action = ReplicationAction_DESTROY;
+    _action = REPA_DESTROY;
 }
 
 bool ReplicationCommand::hasDirtyState() const
 {
-    return (_action == ReplicationAction_DESTROY) || (_dirtyState != 0);
+    return (_action == REPA_DESTROY) || (_dirtyState != 0);
 }
 
 ReplicationAction ReplicationCommand::getAction() const
@@ -60,8 +60,8 @@ void ReplicationCommand::clearDirtyState(uint16_t stateToClear)
 {
     _dirtyState &= ~stateToClear;
     
-    if (_action == ReplicationAction_DESTROY)
+    if (_action == REPA_DESTROY)
     {
-        _action = ReplicationAction_UPDATE;
+        _action = REPA_UPDATE;
     }
 }

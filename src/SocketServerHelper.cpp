@@ -16,7 +16,7 @@
 #include "OutputMemoryBitStream.hpp"
 #include "InstanceManager.hpp"
 
-SocketServerHelper::SocketServerHelper(uint16_t port, ProcessPacketFunc processPacketFunc, HandleNoResponseFunc handleNoResponseFunc, HandleConnectionResetFunc handleConnectionResetFunc, GetClientProxyFunc getClientProxyFunc, HandleClientDisconnectedFunc handleClientDisconnectedFunc) : ServerHelper(new SocketPacketHandler(static_cast<Timing*>(INSTANCE_MGR.get(InstanceKey_TIMING_SERVER)), true, port, processPacketFunc, handleNoResponseFunc, handleConnectionResetFunc), getClientProxyFunc, handleClientDisconnectedFunc)
+SocketServerHelper::SocketServerHelper(uint16_t port, ProcessPacketFunc processPacketFunc, HandleNoResponseFunc handleNoResponseFunc, HandleConnectionResetFunc handleConnectionResetFunc, GetClientProxyFunc getClientProxyFunc, HandleClientDisconnectedFunc handleClientDisconnectedFunc) : ServerHelper(new SocketPacketHandler(static_cast<Timing*>(INSTANCE_MGR.get(INSK_TIMING_SERVER)), true, port, processPacketFunc, handleNoResponseFunc, handleConnectionResetFunc), getClientProxyFunc, handleClientDisconnectedFunc)
 {
     // Empty
 }
@@ -31,7 +31,7 @@ SocketServerHelper::~SocketServerHelper()
             SocketAddress* userAddress = static_cast<SocketAddress*>(clientProxy->getMachineAddress());
             
             OutputMemoryBitStream packet;
-            packet.write(static_cast<uint8_t>(NetworkPacketType_SERVER_EXIT));
+            packet.write(static_cast<uint8_t>(NWPT_SERVER_EXIT));
             
             sendPacket(packet, userAddress);
         }
@@ -42,7 +42,7 @@ void SocketServerHelper::processSpecialPacket(uint8_t packetType, InputMemoryBit
 {
     switch (packetType)
     {
-        case NetworkPacketType_CLIENT_EXIT:
+        case NWPT_CLIENT_EXIT:
         {
             LOG("Client is leaving the server");
             

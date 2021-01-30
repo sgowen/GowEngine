@@ -12,28 +12,45 @@
 
 enum TextAlignment
 {
-    TextAlignment_LEFT,
-    TextAlignment_CENTER,
-    TextAlignment_RIGHT
+    TEXA_LEFT,
+    TEXA_CENTER,
+    TEXA_RIGHT
+};
+
+enum TextVisibility
+{
+    TEXV_VISIBLE,
+    TEXV_HIDDEN
 };
 
 struct TextView
 {
+    TextAlignment _alignment;
     std::string _text;
+    TextVisibility _visibility;
+    bool _hidden;
     float _x;
     float _y;
     float _glyphWidth;
     float _glyphHeight;
-    TextAlignment _textAlignment;
     
-    TextView(std::string text, float x, float y, float glyphWidth, float glyphHeight, TextAlignment textAlignment = TextAlignment_LEFT) :
+    TextView(TextAlignment alignment = TEXA_LEFT, std::string text = "", TextVisibility visibility = TEXV_VISIBLE, float x = 0, float y = 0, float glyphWidth = 1, float glyphHeight = 1) :
+    _alignment(alignment),
     _text(text),
+    _visibility(visibility),
     _x(x),
     _y(y),
     _glyphWidth(glyphWidth),
-    _glyphHeight(glyphHeight),
-    _textAlignment(textAlignment)
+    _glyphHeight(glyphHeight)
     {
         // Empty
+    }
+    
+    void configure(int camWidth, int camHeight, float xWeight, float yWeight, float glyphWidthWeight, float glyphHeightToWidthRatio)
+    {
+        _x = camWidth * xWeight;
+        _y = camHeight * yWeight;
+        _glyphWidth = camWidth * glyphWidthWeight;
+        _glyphHeight = _glyphWidth * glyphHeightToWidthRatio;
     }
 };
