@@ -11,6 +11,7 @@
 #include "SocketAddress.hpp"
 
 #include "SocketUtil.hpp"
+#include "StringUtil.hpp"
 
 #include <cstring>
 
@@ -27,7 +28,7 @@ SocketAddress* SocketAddressFactory::createIPv4FromString(const std::string& val
     else
     {
         host = value;
-        //use default port...
+        LOG("Using default port of 0, is that what you want?");
         service = "0";
     }
     
