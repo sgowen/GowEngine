@@ -45,12 +45,4 @@ struct TextView
     {
         // Empty
     }
-    
-    void configure(int camWidth, int camHeight, float xWeight, float yWeight, float glyphWidthWeight, float glyphHeightToWidthRatio)
-    {
-        _x = camWidth * xWeight;
-        _y = camHeight * yWeight;
-        _glyphWidth = camWidth * glyphWidthWeight;
-        _glyphHeight = _glyphWidth * glyphHeightToWidthRatio;
-    }
 };

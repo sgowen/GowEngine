@@ -12,8 +12,8 @@
 
 struct AudioProperties
 {
-    int32_t channelCount;
-    int32_t sampleRate;
+    int32_t _channelCount;
+    int32_t _sampleRate;
 };
 
 class WavStreamReader;

@@ -27,8 +27,8 @@ SampleBuffer::~SampleBuffer()
 void SampleBuffer::loadSampleData(WavStreamReader* reader)
 {
     // Although we read this in, we only support mono
-    _audioProperties.channelCount = reader->getNumChannels();
-    _audioProperties.sampleRate = reader->getSampleRate();
+    _audioProperties._channelCount = reader->getNumChannels();
+    _audioProperties._sampleRate = reader->getSampleRate();
 
     reader->positionToAudio();
 
@@ -52,8 +52,8 @@ class ResampleBlock
 {
 public:
     int32_t _sampleRate;
-    float*  mBuffer;
-    int32_t mNumFrames;
+    float*  _buffer;
+    int32_t _numFrames;
 };
 
 void _resampleData(const ResampleBlock& input, ResampleBlock* output, int numChannels)
@@ -62,7 +62,7 @@ void _resampleData(const ResampleBlock& input, ResampleBlock* output, int numCha
     
     // Calculate output buffer size
     double temp =
-            ((double)input.mNumFrames * (double)output->_sampleRate) / (double)input._sampleRate;
+            ((double)input._numFrames * (double)output->_sampleRate) / (double)input._sampleRate;
 
     // round up
     int32_t numOutFrames = (int32_t)(temp + 0.5);
@@ -76,12 +76,12 @@ void _resampleData(const ResampleBlock& input, ResampleBlock* output, int numCha
             output->_sampleRate, // output sampleRate
             MultiChannelResampler::Quality::Medium); // conversion quality
 
-    float *inputBuffer = input.mBuffer;;     // multi-channel buffer to be consumed
+    float *inputBuffer = input._buffer;;     // multi-channel buffer to be consumed
     float *outputBuffer = new float[numOutFrames];    // multi-channel buffer to be filled
-    output->mBuffer = outputBuffer;
+    output->_buffer = outputBuffer;
 
     int numOutputFrames = 0;
-    int inputFramesLeft = input.mNumFrames;
+    int inputFramesLeft = input._numFrames;
     while (inputFramesLeft > 0)
     {
         if (resampler->isWriteNeeded())
@@ -97,35 +97,35 @@ void _resampleData(const ResampleBlock& input, ResampleBlock* output, int numCha
             numOutputFrames++;
         }
     }
-    output->mNumFrames = numOutputFrames;
+    output->_numFrames = numOutputFrames;
 
     delete resampler;
 }
 
 void SampleBuffer::resampleData(int sampleRate)
 {
-    if (_audioProperties.sampleRate == sampleRate)
+    if (_audioProperties._sampleRate == sampleRate)
     {
         // nothing to do
         return;
     }
 
     ResampleBlock inputBlock;
-    inputBlock.mBuffer = _sampleData;
-    inputBlock.mNumFrames = _numSamples;
-    inputBlock._sampleRate = _audioProperties.sampleRate;
+    inputBlock._buffer = _sampleData;
+    inputBlock._numFrames = _numSamples;
+    inputBlock._sampleRate = _audioProperties._sampleRate;
 
     ResampleBlock outputBlock;
     outputBlock._sampleRate = sampleRate;
-    _resampleData(inputBlock, &outputBlock, _audioProperties.channelCount);
+    _resampleData(inputBlock, &outputBlock, _audioProperties._channelCount);
 
     // delete previous samples
     delete[] _sampleData;
 
     // install the resampled data
-    _sampleData = outputBlock.mBuffer;
-    _numSamples = outputBlock.mNumFrames;
-    _audioProperties.sampleRate = outputBlock._sampleRate;
+    _sampleData = outputBlock._buffer;
+    _numSamples = outputBlock._numFrames;
+    _audioProperties._sampleRate = outputBlock._sampleRate;
 }
 
 AudioProperties SampleBuffer::getProperties() const
