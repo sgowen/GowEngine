@@ -30,6 +30,7 @@ public:
     
     void initWithJSONFile(const char* filePath);
     void initWithJSON(const char* json);
+    void clear();
     Entity* createEntity(EntityInstanceDef* eid, bool isServer);
     Entity* createEntityFromDef(EntityDef* entityDef, EntityInstanceDef* eid, bool isServer);
     EntityDef* getEntityDef(uint32_t fourCCName);

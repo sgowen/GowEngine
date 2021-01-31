@@ -42,8 +42,7 @@ void EntityMapper::initWithJSONFile(const char* filePath)
 
 void EntityMapper::initWithJSON(const char* json)
 {
-    GowUtil::cleanUpMapOfPointers(_entityDescriptorsMap);
-    _entityDescriptors.clear();
+    clear();
     
     using namespace rapidjson;
     
@@ -150,6 +149,12 @@ void EntityMapper::initWithJSON(const char* json)
         _entityDescriptorsMap[key] = entry;
         _entityDescriptors.push_back(entry);
     }
+}
+
+void EntityMapper::clear()
+{
+    GowUtil::cleanUpMapOfPointers(_entityDescriptorsMap);
+    _entityDescriptors.clear();
 }
 
 Entity* EntityMapper::createEntity(EntityInstanceDef* eid, bool isServer)

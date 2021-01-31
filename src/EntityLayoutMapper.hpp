@@ -64,6 +64,7 @@ public:
     
     void initWithJSONFile(const char* filePath);
     void initWithJSON(const char* data);
+    void clear();
     void loadEntityLayout(uint32_t name, EntityIDManager* entityIDManager);
     void loadEntityLayout(std::string filePath, EntityIDManager* entityIDManager);
     void saveEntityLayout(uint32_t name, EntityLayoutDef* layout);

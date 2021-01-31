@@ -41,8 +41,7 @@ void EntityLayoutMapper::initWithJSONFile(const char* filePath)
 
 void EntityLayoutMapper::initWithJSON(const char* data)
 {
-    _maps.clear();
-    _layouts.clear();
+    clear();
     
     using namespace rapidjson;
     
@@ -65,6 +64,12 @@ void EntityLayoutMapper::initWithJSON(const char* data)
         _maps.push_back(MapDef(key, keyStr, fileName));
         _layouts[key] = fileName;
     }
+}
+
+void EntityLayoutMapper::clear()
+{
+    _maps.clear();
+    _layouts.clear();
 }
 
 void EntityLayoutMapper::loadEntityLayout(uint32_t name, EntityIDManager* entityIDManager)
