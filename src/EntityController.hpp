@@ -38,9 +38,11 @@ public:
     virtual void update() {}
     virtual void onMessage(uint16_t message, void* data = NULL) {}
     virtual void onFixturesCreated(std::vector<b2Fixture*>& fixtures) {}
-    virtual bool shouldCollide(Entity* e, b2Fixture* fixtureA, b2Fixture* fixtureB);
+    virtual bool shouldCollide(Entity* e, b2Fixture* fixtureA, b2Fixture* fixtureB) { return false; }
     virtual void handleBeginContact(Entity* e, b2Fixture* fixtureA, b2Fixture* fixtureB) {}
     virtual void handleEndContact(Entity* e, b2Fixture* fixtureA, b2Fixture* fixtureB) {}
+    virtual std::string getTextureMapping(uint8_t state) { return ""; }
+    virtual void onCollision(Entity* e) {}
     
 protected:
     Entity* _entity;

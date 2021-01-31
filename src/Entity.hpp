@@ -85,6 +85,7 @@ public:
     
     void update();
     void selfProcessPhysics();
+    void selfProcessCollisions(std::vector<Entity*>& entities);
     void endInterpolation();
     bool shouldCollide(Entity* e, b2Fixture* fixtureA, b2Fixture* fixtureB);
     void handleBeginContact(Entity* e, b2Fixture* fixtureA, b2Fixture* fixtureB);
@@ -112,8 +113,8 @@ public:
     bool isRequestingDeletion();
     bool isServer();
     bool isFacingLeft();
-    std::string& getTextureMapping();
-    std::string& getTextureMapping(uint8_t state);
+    std::string getTextureMapping();
+    std::string getTextureMapping(uint8_t state);
     int getSoundMapping(int state);
     bool isFixedRotation() const;
     

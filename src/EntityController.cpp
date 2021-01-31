@@ -19,8 +19,3 @@ _entity(e)
 {
     // Empty
 }
-
-bool EntityController::shouldCollide(Entity* e, b2Fixture* fixtureA, b2Fixture* fixtureB)
-{
-    return true;
-}

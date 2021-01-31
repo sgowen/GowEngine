@@ -15,6 +15,7 @@
 #define COLOR_GREEN 0.0f, 1.0f, 0.0f, 1.0f
 #define COLOR_BLUE 0.0f, 0.0f, 1.0f, 1.0f
 #define COLOR_HALF 0.5f, 0.5f, 0.5f, 0.5f
+#define COLOR_DIM 0.1f, 0.1f, 0.1f, 0.9f
 #define COLOR_DOUBLE 2.0f, 2.0f, 2.0f, 1.0f
 
 struct Color
@@ -26,6 +27,7 @@ struct Color
     static const Color GREEN;
     static const Color BLUE;
     static const Color HALF;
+    static const Color DIM;
     static const Color DOUBLE;
     
     float _red;

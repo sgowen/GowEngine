@@ -16,6 +16,8 @@
 #include "EntityMapper.hpp"
 #include "Constants.hpp"
 #include "Macros.hpp"
+#include "Rektangle.hpp"
+#include "OverlapTester.hpp"
 
 Entity::Entity(EntityDef entityDef) :
 _entityDef(entityDef),
@@ -61,8 +63,47 @@ void Entity::selfProcessPhysics()
     b2Vec2 vel = _pose._velocity;
     vel *= FRAME_RATE;
     _pose._position += vel;
+}
+
+void Entity::selfProcessCollisions(std::vector<Entity*>& entities)
+{
+    float x = getPosition().x;
+    float y = getPosition().y;
+    float w = getWidth();
+    float h = getHeight();
+    Rektangle bounds(x - w / 2, y - h / 2, w, h);
     
-    // TODO, add controller method to check for collisions
+    for (Entity* e : entities)
+    {
+        if (this == e)
+        {
+            continue;
+        }
+        
+        float x = e->getPosition().x;
+        float y = e->getPosition().y;
+        float w = e->getWidth();
+        float h = e->getHeight();
+        Rektangle boundsToTest(x - w / 2, y - h / 2, w, h);
+        
+        if (OverlapTester::doRektanglesOverlap(bounds, boundsToTest))
+        {
+            if (bounds.right() >= boundsToTest.left() ||
+                bounds.left() <= boundsToTest.right() ||
+                bounds.top() >= boundsToTest.bottom() ||
+                bounds.bottom() <= boundsToTest.top())
+            {
+                b2Vec2 vel = getVelocity();
+                vel *= FRAME_RATE;
+                b2Vec2 pos = getPosition();
+                pos -= vel;
+                setPosition(pos);
+            }
+            
+            _controller->onCollision(e);
+            break;
+        }
+    }
 }
 
 bool Entity::shouldCollide(Entity *e, b2Fixture* fixtureA, b2Fixture* fixtureB)
@@ -247,18 +288,21 @@ bool Entity::isFacingLeft()
     return _pose._isFacingLeft;
 }
 
-std::string& Entity::getTextureMapping()
+std::string Entity::getTextureMapping()
 {
     return getTextureMapping(_state._state);
 }
 
-std::string& Entity::getTextureMapping(uint8_t state)
+std::string Entity::getTextureMapping(uint8_t state)
 {
     auto q = _entityDef._textureMappings.find(state);
     
-    assert(q != _entityDef._textureMappings.end());
+    if (q != _entityDef._textureMappings.end())
+    {
+        return q->second;
+    }
     
-    return q->second;
+    return _controller->getTextureMapping(state);
 }
 
 int Entity::getSoundMapping(int state)
