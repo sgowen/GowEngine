@@ -58,8 +58,9 @@ void Entity::update()
 
 void Entity::selfProcessPhysics()
 {
-    _pose._velocity *= FRAME_RATE;
-    _pose._position += _pose._velocity;
+    b2Vec2 vel = _pose._velocity;
+    vel *= FRAME_RATE;
+    _pose._position += vel;
     
     // TODO, add controller method to check for collisions
 }
@@ -262,11 +263,23 @@ std::string& Entity::getTextureMapping(uint8_t state)
 
 int Entity::getSoundMapping(int state)
 {
-    auto q = _entityDef._soundMappings.find(state);
-    
-    if (q != _entityDef._soundMappings.end())
     {
-        return q->second;
+        auto q = _entityDef._soundMappings.find(state);
+        if (q != _entityDef._soundMappings.end())
+        {
+            return q->second;
+        }
+    }
+    
+    {
+        auto q = _entityDef._soundCollectionMappings.find(state);
+        if (q != _entityDef._soundCollectionMappings.end())
+        {
+            std::vector<int> soundCollection = q->second;
+            
+            int index = rand() % soundCollection.size();
+            return soundCollection[index];
+        }
     }
     
     // No sound for this state

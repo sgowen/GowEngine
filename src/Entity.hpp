@@ -57,6 +57,7 @@ struct EntityDef
     std::string _controller;
     std::map<int, std::string> _textureMappings;
     std::map<int, int> _soundMappings;
+    std::map<int, std::vector<int> > _soundCollectionMappings;
     std::vector<FixtureDef> _fixtures;
     int _bodyFlags;
     int _x;

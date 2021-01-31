@@ -100,6 +100,27 @@ void EntityMapper::initWithJSON(const char* json)
             }
         }
         
+        if (iv.HasMember("soundCollectionMappings"))
+        {
+            const Value& v = iv["soundCollectionMappings"];
+            assert(v.IsObject());
+            for (Value::ConstMemberIterator i = v.MemberBegin(); i != v.MemberEnd(); ++i)
+            {
+                assert(i->value.IsArray());
+                const Value& array = i->value.GetArray();
+                std::vector<int> soundCollection;
+                for (SizeType i = 0; i < array.Size(); ++i)
+                {
+                    const Value& iv = array[i];
+                    assert(iv.IsInt());
+                    soundCollection.push_back(iv.GetInt());
+                }
+                std::string name = i->name.GetString();
+                int state = StringUtil::stringToNumber<int>(name);
+                entry->_soundCollectionMappings.insert(std::make_pair(state, soundCollection));
+            }
+        }
+        
         if (iv.HasMember("fixtures"))
         {
             const Value& v = iv["fixtures"];
