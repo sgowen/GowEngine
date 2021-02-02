@@ -60,7 +60,7 @@ void ReplicationManagerClient::readAndDoCreateAction(InputMemoryBitStream& ip, u
     //we might already have this object- could happen if our ack of the create got dropped so server resends create request
     //(even though we might have created)
     Entity* e = _entityManager->getEntityByID(networkID);
-    if (!e)
+    if (e == NULL)
     {
         //create the object and map it...
         EntityInstanceDef eid(networkID, fourCCName);
@@ -81,11 +81,9 @@ void ReplicationManagerClient::readAndDoUpdateAction(InputMemoryBitStream& ip, u
     
     //entity MUST be found, because create was ack'd if we're getting an update...
     //and read state
+    assert(e != NULL);
     
-    if (e)
-    {
-        e->getNetworkController()->read(ip);
-    }
+    e->getNetworkController()->read(ip);
 }
 
 void ReplicationManagerClient::readAndDoDestroyAction(InputMemoryBitStream& ip, uint32_t networkID)
@@ -93,7 +91,7 @@ void ReplicationManagerClient::readAndDoDestroyAction(InputMemoryBitStream& ip, 
     //if something was destroyed before the create went through, we'll never get it
     //but we might get the destroy request, so be tolerant of being asked to destroy something that wasn't created
     Entity* e = _entityManager->getEntityByID(networkID);
-    if (e)
+    if (e != NULL)
     {
         _entityManager->deregisterEntity(e);
     }
