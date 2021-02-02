@@ -14,7 +14,6 @@
 #include <box2d/box2d.h>
 
 #include "EntityMapper.hpp"
-#include "Constants.hpp"
 #include "Macros.hpp"
 #include "Rektangle.hpp"
 #include "OverlapTester.hpp"
@@ -56,54 +55,6 @@ void Entity::update()
     }
     
     _controller->update();
-}
-
-void Entity::selfProcessPhysics()
-{
-    b2Vec2 vel = _pose._velocity;
-    vel *= FRAME_RATE;
-    _pose._position += vel;
-}
-
-void Entity::selfProcessCollisions(std::vector<Entity*>& entities)
-{
-    float x = getPosition().x;
-    float y = getPosition().y;
-    float w = getWidth();
-    float h = getHeight();
-    Rektangle bounds(x - w / 2, y - h / 2, w, h);
-    
-    for (Entity* e : entities)
-    {
-        if (this == e)
-        {
-            continue;
-        }
-        
-        float x = e->getPosition().x;
-        float y = e->getPosition().y;
-        float w = e->getWidth();
-        float h = e->getHeight();
-        Rektangle boundsToTest(x - w / 2, y - h / 2, w, h);
-        
-        if (OverlapTester::doRektanglesOverlap(bounds, boundsToTest))
-        {
-            if (bounds.right() >= boundsToTest.left() ||
-                bounds.left() <= boundsToTest.right() ||
-                bounds.top() >= boundsToTest.bottom() ||
-                bounds.bottom() <= boundsToTest.top())
-            {
-                b2Vec2 vel = getVelocity();
-                vel *= FRAME_RATE;
-                b2Vec2 pos = getPosition();
-                pos -= vel;
-                setPosition(pos);
-            }
-            
-            _controller->onCollision(e);
-            break;
-        }
-    }
 }
 
 bool Entity::shouldCollide(Entity *e, b2Fixture* fixtureA, b2Fixture* fixtureB)

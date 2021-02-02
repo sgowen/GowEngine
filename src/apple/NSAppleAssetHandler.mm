@@ -36,7 +36,7 @@ FileData appleLoadAsset(const char *filePath)
 
     fseek(stream, 0, SEEK_SET);
 
-    void* buffer = malloc(size);
+    uint8_t* buffer = (uint8_t*) malloc(size);
     
     rewind(stream);
     fread(buffer, size, 1, stream);
@@ -44,7 +44,7 @@ FileData appleLoadAsset(const char *filePath)
     assert(ferror(stream) == 0);
     fclose(stream);
 
-    return FileData(size, (const char*)buffer, NULL);
+    return FileData(size, buffer, NULL);
 }
 
 void appleReleaseAsset(const FileData& fileData)

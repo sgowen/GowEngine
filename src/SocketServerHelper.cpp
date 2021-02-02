@@ -16,7 +16,7 @@
 #include "OutputMemoryBitStream.hpp"
 #include "InstanceManager.hpp"
 
-SocketServerHelper::SocketServerHelper(uint16_t port, uint8_t maxNumPlayers, ProcessPacketFunc processPacketFunc, HandleNoResponseFunc handleNoResponseFunc, HandleConnectionResetFunc handleConnectionResetFunc, GetClientProxyFunc getClientProxyFunc, HandleClientDisconnectedFunc handleClientDisconnectedFunc) : ServerHelper(maxNumPlayers, new SocketPacketHandler(static_cast<Timing*>(INSTANCE_MGR.get(INSK_TIMING_SERVER)), true, port, processPacketFunc, handleNoResponseFunc, handleConnectionResetFunc), getClientProxyFunc, handleClientDisconnectedFunc)
+SocketServerHelper::SocketServerHelper(uint16_t port, uint8_t maxNumPlayers, ProcessPacketFunc processPacketFunc, HandleNoResponseFunc handleNoResponseFunc, HandleConnectionResetFunc handleConnectionResetFunc, GetClientProxyFunc getClientProxyFunc, HandleClientDisconnectedFunc handleClientDisconnectedFunc) : ServerHelper(maxNumPlayers, new SocketPacketHandler(INSTANCE_MGR.get<TimeTracker>(INSK_TIMING_SERVER), true, port, processPacketFunc, handleNoResponseFunc, handleConnectionResetFunc), getClientProxyFunc, handleClientDisconnectedFunc)
 {
     // Empty
 }

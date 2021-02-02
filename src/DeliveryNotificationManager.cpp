@@ -8,15 +8,15 @@
 
 #include "DeliveryNotificationManager.hpp"
 
-#include "Timing.hpp"
+#include "TimeTracker.hpp"
 #include "OutputMemoryBitStream.hpp"
 #include "InputMemoryBitStream.hpp"
 
 #include "StringUtil.hpp"
 #include "PlatformMacros.hpp"
 
-DeliveryNotificationManager::DeliveryNotificationManager(Timing* timing, bool shouldSendAcks, bool shouldProcessAcks) :
-_timing(timing),
+DeliveryNotificationManager::DeliveryNotificationManager(TimeTracker* timing, bool shouldSendAcks, bool shouldProcessAcks) :
+_timeTracker(timing),
 _shouldSendAcks(shouldSendAcks),
 _shouldProcessAcks(shouldProcessAcks),
 _nextOutgoingSequenceNumber(0),
@@ -115,7 +115,7 @@ InFlightPacket* DeliveryNotificationManager::writeSequenceNumber(OutputMemoryBit
     
     if (_shouldProcessAcks)
     {
-        _inFlightPackets.push_back(InFlightPacket(sequenceNumber, _timing->getTime()));
+        _inFlightPackets.push_back(InFlightPacket(sequenceNumber, _timeTracker->_time));
         
         return &_inFlightPackets.back();
     }

@@ -32,7 +32,7 @@ public:
     void configure(TextView& tv, float xWeight, float yWeight, float glyphWidthWeight);
     void renderText(Shader& s, Texture& t, TextView& tv);
 	void renderText(Shader& s, Texture& t, TextAlignment textAlignment, std::string text, float x, float y, float glyphWidth, float glyphHeight);
-    void renderAsciiChar(int asciiChar, float x, float y, float glyphWidth, float glyphHeight);
+    void renderAsciiChar(uint8_t asciiChar, float x, float y, float glyphWidth, float glyphHeight);
 
 private:
     SpriteBatcher _spriteBatcher;

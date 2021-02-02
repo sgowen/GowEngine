@@ -8,20 +8,20 @@
 
 #pragma once
 
-class Timing;
+class TimeTracker;
 
 class WeightedTimedMovingAverage
 {
 public:
-    WeightedTimedMovingAverage(Timing* timing, float duration = 5.0f);
+    WeightedTimedMovingAverage(TimeTracker* timing, float duration = 5.0f);
     
     void updatePerSecond(float value);
     void update(float value);
     float getValue() const;
     
 private:
-    Timing* _timing;
+    TimeTracker* _timeTracker;
     float _timeLastEntryMade;
-    float _value;
     float _duration;
+    float _value;
 };

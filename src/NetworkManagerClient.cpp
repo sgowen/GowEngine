@@ -18,7 +18,7 @@
 #include "ReplicationManagerClient.hpp"
 #include "WeightedTimedMovingAverage.hpp"
 #include "SocketAddress.hpp"
-#include "Timing.hpp"
+#include "TimeTracker.hpp"
 
 #include "StringUtil.hpp"
 #include "SocketAddressFactory.hpp"
@@ -193,7 +193,7 @@ EntityManager* NetworkManagerClient::getEntityManager()
 
 void NetworkManagerClient::processPacket(InputMemoryBitStream& inputStream, MachineAddress* fromAddress)
 {
-    _lastServerCommunicationTimestamp = _timing->getTime();
+    _lastServerCommunicationTimestamp = _timeTracker->_time;
     
     uint8_t packetType;
     inputStream.read(packetType);
@@ -223,7 +223,7 @@ void NetworkManagerClient::processPacket(InputMemoryBitStream& inputStream, Mach
 
 void NetworkManagerClient::handleNoResponse()
 {
-    float time = _timing->getTime();
+    float time = _timeTracker->_time;
     
     float timeout = _state == NWCS_DEFAULT ? NW_CONNECT_TO_SERVER_TIMEOUT : NW_SERVER_TIMEOUT;
     if (time > _lastServerCommunicationTimestamp + timeout)
@@ -244,7 +244,7 @@ void NetworkManagerClient::sendPacket(const OutputMemoryBitStream& outputStream)
 
 void NetworkManagerClient::updateSayingHello()
 {
-    float time = _timing->getTime();
+    float time = _timeTracker->_time;
     
     if (time > _timeOfLastHello + NW_CLIENT_TIME_BETWEEN_HELLOS)
     {
@@ -329,7 +329,7 @@ void NetworkManagerClient::readLastMoveProcessedOnServerTimestamp(InputMemoryBit
     {
         inputStream.read(_lastMoveProcessedByServerTimestamp);
         
-        float rtt = _timing->getTime() - _lastMoveProcessedByServerTimestamp;
+        float rtt = _timeTracker->_time - _lastMoveProcessedByServerTimestamp;
         _avgRoundTripTime->update(rtt);
         
         inputStream.read(_map);
@@ -406,7 +406,7 @@ void NetworkManagerClient::updateAddLocalPlayerRequest()
     {
         _isRequestingToDropLocalPlayer = 0;
         
-        float time = _timing->getTime();
+        float time = _timeTracker->_time;
         
         if (time > _timeOfLastHello + NW_CLIENT_TIME_BETWEEN_HELLOS)
         {
@@ -453,16 +453,16 @@ void NetworkManagerClient::updateNextIndex()
 }
 
 NetworkManagerClient::NetworkManagerClient(ClientHelper* clientHelper, HandleEntityCreatedFunc handleEntityCreatedFunc, HandleEntityDeletionFunc handleEntityDeletionFunc, RemoveProcessedMovesFunc removeProcessedMovesFunc, GetMoveListFunc getMoveListFunc, OnPlayerWelcomedFunc onPlayerWelcomedFunc) :
-_timing(static_cast<Timing*>(INSTANCE_MGR.get(INSK_TIMING_CLIENT))),
+_timeTracker(INSTANCE_MGR.get<TimeTracker>(INSK_TIMING_CLIENT)),
 _clientHelper(clientHelper),
 _removeProcessedMovesFunc(removeProcessedMovesFunc),
 _getMoveListFunc(getMoveListFunc),
 _onPlayerWelcomedFunc(onPlayerWelcomedFunc),
 _entityManager(new EntityManager(handleEntityCreatedFunc, handleEntityDeletionFunc)),
 _replicationManagerClient(new ReplicationManagerClient(_entityManager)),
-_avgRoundTripTime(new WeightedTimedMovingAverage(_timing, 1.f)),
+_avgRoundTripTime(new WeightedTimedMovingAverage(_timeTracker, 1.f)),
 _state(NWCS_DEFAULT),
-_deliveryNotificationManager(new DeliveryNotificationManager(_timing, true, false)),
+_deliveryNotificationManager(new DeliveryNotificationManager(_timeTracker, true, false)),
 _timeOfLastHello(0.0f),
 _lastMoveProcessedByServerTimestamp(0.0f),
 _lastServerCommunicationTimestamp(0),

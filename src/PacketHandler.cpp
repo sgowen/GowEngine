@@ -8,14 +8,14 @@
 
 #include "PacketHandler.hpp"
 
-#include "Timing.hpp"
+#include "TimeTracker.hpp"
 #include "WeightedTimedMovingAverage.hpp"
 #include "InputMemoryBitStream.hpp"
 #include "OutputMemoryBitStream.hpp"
 #include "MachineAddress.hpp"
 
-PacketHandler::PacketHandler(Timing* timing, bool isServer, ProcessPacketFunc processPacketFunc, HandleNoResponseFunc handleNoResponseFunc, HandleConnectionResetFunc handleConnectionResetFunc) :
-_timing(timing),
+PacketHandler::PacketHandler(TimeTracker* timing, bool isServer, ProcessPacketFunc processPacketFunc, HandleNoResponseFunc handleNoResponseFunc, HandleConnectionResetFunc handleConnectionResetFunc) :
+_timeTracker(timing),
 _processPacketFunc(processPacketFunc),
 _handleNoResponseFunc(handleNoResponseFunc),
 _handleConnectionResetFunc(handleConnectionResetFunc),

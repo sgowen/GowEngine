@@ -13,7 +13,7 @@
 #include <queue>
 #include <list>
 
-class Timing;
+class TimeTracker;
 class InputMemoryBitStream;
 class OutputMemoryBitStream;
 class MachineAddress;
@@ -25,7 +25,7 @@ typedef void (*HandleConnectionResetFunc)(MachineAddress* fromAddress);
 class PacketHandler
 {
 public:
-    PacketHandler(Timing* timing, bool isServer, ProcessPacketFunc processPacketFunc, HandleNoResponseFunc handleNoResponseFunc, HandleConnectionResetFunc handleConnectionResetFunc);
+    PacketHandler(TimeTracker* timing, bool isServer, ProcessPacketFunc processPacketFunc, HandleNoResponseFunc handleNoResponseFunc, HandleConnectionResetFunc handleConnectionResetFunc);
     virtual ~PacketHandler() {}
     
     virtual void sendPacket(const OutputMemoryBitStream& outputStream, MachineAddress* fromAddress) = 0;
@@ -35,7 +35,7 @@ public:
     const WeightedTimedMovingAverage& getBytesSentPerSecond() const;
     
 protected:
-    Timing* _timing;
+    TimeTracker* _timeTracker;
     ProcessPacketFunc _processPacketFunc;
     HandleNoResponseFunc _handleNoResponseFunc;
     HandleConnectionResetFunc _handleConnectionResetFunc;

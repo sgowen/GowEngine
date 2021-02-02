@@ -22,12 +22,6 @@
 
 #define MAX_SOUNDS_TO_PLAY_PER_FRAME 3
 
-GowAudioEngine& GowAudioEngine::getInstance()
-{
-    static GowAudioEngine ret = GowAudioEngine();
-    return ret;
-}
-
 void GowAudioEngine::createDeviceDependentResources()
 {
     _audioEngineHelper = AudioEngineHelperFactory::create();

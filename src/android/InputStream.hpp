@@ -13,7 +13,7 @@
 class InputStream
 {
 public:
-    InputStream(unsigned char *buff, int32_t len);
+    InputStream(uint8_t *buff, int32_t len);
     ~InputStream() {}
 
     int32_t read(void *buff, int32_t numBytes);
@@ -23,7 +23,7 @@ public:
     void setPos(int32_t pos);
 
 private:
-    unsigned char *_buffer;
+    uint8_t *_buffer;
     int32_t _bufferLen;
     int32_t _pos;
 };

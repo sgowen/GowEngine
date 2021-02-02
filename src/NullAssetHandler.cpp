@@ -8,7 +8,9 @@
 
 #include "NullAssetHandler.hpp"
 
+#include <stddef.h>
+
 FileData NullAssetHandler::loadAsset(const char* filePath)
 {
-    return FileData(0, (const char*)0, (const void*)0);
+    return FileData(0, NULL, NULL);
 }

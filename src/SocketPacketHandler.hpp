@@ -23,7 +23,7 @@ class MachineAddress;
 class SocketPacketHandler : public PacketHandler
 {
 public:
-    SocketPacketHandler(Timing* timing, bool isServer, uint16_t port, ProcessPacketFunc processPacketFunc, HandleNoResponseFunc handleNoResponseFunc, HandleConnectionResetFunc handleConnectionResetFunc);
+    SocketPacketHandler(TimeTracker* timing, bool isServer, uint16_t port, ProcessPacketFunc processPacketFunc, HandleNoResponseFunc handleNoResponseFunc, HandleConnectionResetFunc handleConnectionResetFunc);
     virtual ~SocketPacketHandler();
     
     virtual void sendPacket(const OutputMemoryBitStream& outputStream, MachineAddress* fromAddress);

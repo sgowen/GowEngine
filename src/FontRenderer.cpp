@@ -70,7 +70,7 @@ void FontRenderer::renderText(Shader& s, Texture& t, TextView& tv)
         return;
     }
     
-    unsigned long len = tv._text.length();
+    size_t len = tv._text.length();
     
     float x = tv._x;
     
@@ -86,9 +86,9 @@ void FontRenderer::renderText(Shader& s, Texture& t, TextView& tv)
     }
 
     _spriteBatcher.begin();
-    for (unsigned int i = 0; i < len; ++i)
+    for (size_t i = 0; i < len; ++i)
     {
-        int c = ((int)tv._text.at(i));
+        uint8_t c = ((uint8_t)tv._text.at(i));
 
         renderAsciiChar(c, x, tv._y, tv._glyphWidth, tv._glyphHeight);
 
@@ -103,7 +103,7 @@ void FontRenderer::renderText(Shader& s, Texture& t, TextAlignment alignment, st
     renderText(s, t, tv);
 }
 
-void FontRenderer::renderAsciiChar(int asciiChar, float x, float y, float glyphWidth, float glyphHeight)
+void FontRenderer::renderAsciiChar(uint8_t asciiChar, float x, float y, float glyphWidth, float glyphHeight)
 {
     assert(asciiChar >= 0 && asciiChar <= 175);
     

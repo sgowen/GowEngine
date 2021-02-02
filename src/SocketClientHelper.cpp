@@ -17,7 +17,7 @@
 #include "InstanceManager.hpp"
 
 SocketClientHelper::SocketClientHelper(std::string serverIPAddress, std::string name, uint16_t port, ProcessPacketFunc processPacketFunc, HandleNoResponseFunc handleNoResponseFunc, HandleConnectionResetFunc handleConnectionResetFunc) :
-ClientHelper(new SocketPacketHandler(static_cast<Timing*>(INSTANCE_MGR.get(INSK_TIMING_CLIENT)), false, port, processPacketFunc, handleNoResponseFunc, handleConnectionResetFunc)),
+ClientHelper(new SocketPacketHandler(INSTANCE_MGR.get<TimeTracker>(INSK_TIMING_CLIENT), false, port, processPacketFunc, handleNoResponseFunc, handleConnectionResetFunc)),
 _serverAddress(SocketAddressFactory::createIPv4FromString(serverIPAddress)),
 _name(name)
 {

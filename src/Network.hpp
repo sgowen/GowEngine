@@ -108,7 +108,7 @@ inline float hton_float(float value)
     union v
     {
         float f;
-        unsigned int i;
+        uint32_t i;
     };
 
     union v val;
@@ -124,7 +124,7 @@ inline float ntoh_float(float value)
     union v
     {
         float f;
-        unsigned int i;
+        uint32_t i;
     };
 
     union v val;

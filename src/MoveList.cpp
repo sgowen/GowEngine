@@ -9,7 +9,7 @@
 #include "MoveList.hpp"
 
 #include "InputState.hpp"
-#include "Timing.hpp"
+#include "TimeTracker.hpp"
 #include "StringUtil.hpp"
 
 MoveList::MoveList() :

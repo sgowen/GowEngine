@@ -8,9 +8,11 @@
 
 #pragma once
 
-typedef unsigned int RiffID;
-typedef int RiffInt32;
-typedef short RiffInt16;
+#include <stdint.h>
+
+typedef uint32_t RiffID;
+typedef int32_t RiffInt32;
+typedef int16_t RiffInt16;
 
 inline RiffID makeRiffID(char a, char b, char c, char d)
 {

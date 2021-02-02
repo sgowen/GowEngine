@@ -24,17 +24,11 @@
 
 #include <assert.h>
 
-EntityLayoutMapper& EntityLayoutMapper::getInstance()
-{
-    static EntityLayoutMapper ret = EntityLayoutMapper();
-    return ret;
-}
-
 void EntityLayoutMapper::initWithJSONFile(const char* filePath)
 {
     AssetHandler* ah = AssetHandlerFactory::create();
     FileData jsonData = ah->loadAsset(filePath);
-    initWithJSON(jsonData._data);
+    initWithJSON((const char*)jsonData._data);
     ah->releaseAsset(jsonData);
     AssetHandlerFactory::destroy(ah);
 }
@@ -88,7 +82,7 @@ void EntityLayoutMapper::loadEntityLayout(std::string filePath, EntityIDManager*
     
     AssetHandler* ah = AssetHandlerFactory::create();
     FileData jsonData = ah->loadAsset(filePath.c_str());
-    loadEntityLayout(jsonData._data);
+    loadEntityLayout((const char*)jsonData._data);
     ah->releaseAsset(jsonData);
     AssetHandlerFactory::destroy(ah);
 }
@@ -105,7 +99,7 @@ std::vector<MapDef>& EntityLayoutMapper::getMaps()
 
 void EntityLayoutMapper::loadEntityLayout(const char* data)
 {
-    _entityIDManager->reset();
+    _entityIDManager->resetStaticEntityID();
     
     using namespace rapidjson;
     

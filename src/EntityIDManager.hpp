@@ -16,8 +16,8 @@ public:
     EntityIDManager();
     ~EntityIDManager() {}
     
-    void reset();
     uint32_t getNextStaticEntityID();
+    void resetStaticEntityID();
     uint32_t getNextDynamicEntityID();
     
 private:

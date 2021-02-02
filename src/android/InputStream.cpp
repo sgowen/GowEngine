@@ -11,7 +11,7 @@
 #include <algorithm>
 #include <string.h>
 
-InputStream::InputStream(unsigned char *buff, int32_t len) :
+InputStream::InputStream(uint8_t *buff, int32_t len) :
 _buffer(buff),
 _bufferLen(len),
 _pos(0)

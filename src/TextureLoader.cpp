@@ -30,7 +30,7 @@ void TextureLoader::loadTextureData(Texture& t)
         stbi_convert_iphone_png_to_rgb(1);
     }
     
-    t._data = stbi_load_from_memory((unsigned char*) textureData._data, (int)textureData._length, &t._width, &t._height, &t._numChannels, 0);
+    t._data = stbi_load_from_memory(textureData._data, (int)textureData._length, &t._width, &t._height, &t._numChannels, 0);
     assert(t._data != NULL);
 
     ah->releaseAsset(textureData);

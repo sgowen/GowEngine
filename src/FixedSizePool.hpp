@@ -60,7 +60,7 @@ public:
         return _objects;
     }
     
-    unsigned long getBufferSize()
+    size_t getBufferSize()
     {
         return _objectsBuffer.size();
     }

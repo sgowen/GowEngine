@@ -84,9 +84,6 @@ public:
     ~Entity();
     
     void update();
-    void selfProcessPhysics();
-    void selfProcessCollisions(std::vector<Entity*>& entities);
-    void endInterpolation();
     bool shouldCollide(Entity* e, b2Fixture* fixtureA, b2Fixture* fixtureB);
     void handleBeginContact(Entity* e, b2Fixture* fixtureA, b2Fixture* fixtureB);
     void handleEndContact(Entity* e, b2Fixture* fixtureA, b2Fixture* fixtureB);

@@ -60,7 +60,11 @@ class EntityIDManager;
 class EntityLayoutMapper
 {
 public:
-    static EntityLayoutMapper& getInstance();
+    static EntityLayoutMapper& getInstance()
+    {
+        static EntityLayoutMapper ret = EntityLayoutMapper();
+        return ret;
+    }
     
     void initWithJSONFile(const char* filePath);
     void initWithJSON(const char* data);

@@ -8,7 +8,7 @@
 
 #include "SocketPacketHandler.hpp"
 
-#include "Timing.hpp"
+#include "TimeTracker.hpp"
 #include "OutputMemoryBitStream.hpp"
 #include "UDPSocket.hpp"
 #include "MachineAddress.hpp"
@@ -24,7 +24,7 @@
 #include <string.h>
 #include <assert.h>
 
-SocketPacketHandler::SocketPacketHandler(Timing* timing, bool isServer, uint16_t port, ProcessPacketFunc processPacketFunc, HandleNoResponseFunc handleNoResponseFunc, HandleConnectionResetFunc handleConnectionResetFunc) : PacketHandler(timing, isServer, processPacketFunc, handleNoResponseFunc, handleConnectionResetFunc),
+SocketPacketHandler::SocketPacketHandler(TimeTracker* timing, bool isServer, uint16_t port, ProcessPacketFunc processPacketFunc, HandleNoResponseFunc handleNoResponseFunc, HandleConnectionResetFunc handleConnectionResetFunc) : PacketHandler(timing, isServer, processPacketFunc, handleNoResponseFunc, handleConnectionResetFunc),
 _socketAddress(new SocketAddress(INADDR_ANY, port)),
 _socket(NULL),
 _isInitialized(false)
@@ -141,7 +141,7 @@ void SocketPacketHandler::readIncomingPacketsIntoQueue()
             //we'll pretend it wasn't received until simulated latency from now
             //this doesn't sim jitter, for that we would need to.....
 
-            float simulatedReceivedTime = _timing->getTime();
+            float simulatedReceivedTime = _timeTracker->_time;
             _packetQueue.push(ReceivedPacket(simulatedReceivedTime, inputStream, fromAddress));
         }
         else
@@ -162,7 +162,7 @@ void SocketPacketHandler::processQueuedPackets()
     while (!_packetQueue.empty())
     {
         ReceivedPacket& nextPacket = _packetQueue.front();
-        if (_timing->getTime() > nextPacket.getReceivedTime())
+        if (_timeTracker->_time > nextPacket.getReceivedTime())
         {
             _processPacketFunc(nextPacket.getPacketBuffer(), &nextPacket.getFromAddress());
             _packetQueue.pop();

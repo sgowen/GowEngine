@@ -55,7 +55,7 @@ public:
     void onGamepadInputStickRight(uint8_t index, float stickRightX, float stickRightY);
     void onGamepadInputTrigger(uint8_t index, float triggerLeft, float triggerRight);
     void onGamepadInputButton(uint8_t index, uint8_t gamepadEventType, uint8_t isPressed);
-    void onKeyboardInput(unsigned short key, bool isUp = false);
+    void onKeyboardInput(uint16_t key, bool isUp);
     void setRequestedHostAction(EngineRequestedHostAction value);
     StateMachine<Engine>& getStateMachine();
     EngineRequestedStateAction state();

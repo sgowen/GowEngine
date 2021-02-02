@@ -19,14 +19,20 @@
 
 #define INPUT_MGR InputManager::getInstance()
 
+#define NUM_SUPPORTED_GAMEPADS 16
+
 class InputManager
 {
 public:
-    static InputManager& getInstance();
+    static InputManager& getInstance()
+    {
+        static InputManager ret = InputManager();
+        return ret;
+    }
     
     void onCursorInput(CursorEventType type, float x, float y, bool isAlt = false);
-    void onGamepadInput(GamepadEventType type, uint8_t index, float x = 0, float y = 0);
-    void onKeyboardInput(uint16_t key, bool isUp = false);
+    void onGamepadInput(uint8_t button, uint8_t index, float x, float y = 0);
+    void onKeyboardInput(uint16_t key, bool isUp);
     void process();
     std::vector<CursorEvent*>& getCursorEvents();
     std::vector<GamepadEvent*>& getGamepadEvents();
@@ -35,19 +41,23 @@ public:
     Vector2& convert(Vector2& v);
     void setCursorSize(int cursorWidth, int cursorHeight);
     void setMatrixSize(float matrixWidth, float matrixHeight);
-    void setMaxNumPlayers(uint8_t maxNumPlayers);
     
 private:
     FixedSizePool<CursorEvent> _poolCursor;
     FixedSizePool<GamepadEvent> _poolGamepad;
     FixedSizePool<KeyboardEvent> _poolKeyboard;
-    std::map<unsigned short, bool> _lastKnownKeyStates;
+    std::vector<uint16_t> _supportedKeys;
+    std::vector<uint16_t> _numericalKeys;
+    std::map<uint16_t, bool> _lastKnownKeyStates;
+    std::map<uint8_t, bool> _lastKnownGamepadButtonStates[NUM_SUPPORTED_GAMEPADS];
     Vector2 _lastConvertedCursorPos;
     int _cursorWidth;
     int _cursorHeight;
     float _matrixWidth;
     float _matrixHeight;
-    uint8_t _maxNumPlayers;
+    
+    bool isKeySupported(uint16_t key);
+    bool isKeyNumerical(uint16_t key);
     
     InputManager();
     ~InputManager() {}

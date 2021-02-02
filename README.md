@@ -24,7 +24,7 @@ A basic no nonsense portable C++ 2D game engine, how bout that?
     * rapidjson for json parsing on all platforms
     * stb for image loading on all platforms
 * Will eventually:
-    * be configured to use CMake build system
+    * be configured to use CMake build system (but for now is actively developed as part of GowEngineDemo)
     * feature a memory tracker (using malloc and placement new operator)
 
 ### GowEngineDemo (separate repo)

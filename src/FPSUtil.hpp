@@ -13,7 +13,11 @@
 class FPSUtil
 {
 public:
-    static FPSUtil& getInstance();
+    static FPSUtil& getInstance()
+    {
+        static FPSUtil ret = FPSUtil();
+        return ret;
+    }
     
     void update(double deltaTime);
     int getFPS() const;

@@ -11,14 +11,33 @@
 #define INSTANCE_MGR (InstanceManager::getInstance())
 
 #include <map>
+#include <assert.h>
 
 class InstanceManager
 {
 public:
-    static InstanceManager& getInstance();
+    static InstanceManager& getInstance()
+    {
+        static InstanceManager ret = InstanceManager();
+        return ret;
+    }
     
-    void* get(uint32_t key);
-    void registerInstance(uint32_t key, void* instance);
+    template<typename T>
+    T* get(uint32_t key)
+    {
+        auto q = _instanceMap.find(key);
+        
+        assert(q != _instanceMap.end());
+        
+        void* ret = q->second;
+        
+        return static_cast<T*>(ret);
+    }
+    
+    void registerInstance(uint32_t key, void* instance)
+    {
+        _instanceMap[key] = instance;
+    }
     
 private:
     std::map<uint32_t, void*> _instanceMap;

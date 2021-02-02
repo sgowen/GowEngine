@@ -17,7 +17,7 @@
 class EntityManager;
 class ReplicationManagerServer;
 class MachineAddress;
-class Timing;
+class TimeTracker;
 
 class ClientProxy
 {
@@ -41,7 +41,7 @@ public:
     uint8_t getNumPlayers();
     
 private:
-    Timing* _timing;
+    TimeTracker* _timeTracker;
     DeliveryNotificationManager	_deliveryNotificationManager;
     ReplicationManagerServer* _replicationManagerServer;
     MachineAddress* _machineAddress;

@@ -14,8 +14,8 @@ enum CursorEventType
 {
     CUET_DOWN,
     CUET_DRAGGED,
-    CUET_MOVED,
     CUET_UP,
+    CUET_MOVED,
     CUET_SCROLL
 };
 
@@ -36,5 +36,20 @@ struct CursorEvent
     bool isPressed()
     {
         return _type == CUET_DOWN || _type == CUET_DRAGGED;
+    }
+    
+    bool isDown()
+    {
+        return _type == CUET_DOWN;
+    }
+    
+    bool isHeld()
+    {
+        return _type == CUET_DRAGGED;
+    }
+
+    bool isUp()
+    {
+        return _type == CUET_UP;
     }
 };

@@ -8,13 +8,15 @@
 
 #pragma once
 
+#include <stdint.h>
+
 struct FileData
 {
     const long _length;
-    const char* _data;
+    const uint8_t* _data;
     const void* _fileHandle;
     
-    FileData(const long dataLength, const char* data, const void* fileHandle) :
+    FileData(const long dataLength, const uint8_t* data, const void* fileHandle) :
     _length(dataLength),
     _data(data),
     _fileHandle(fileHandle)

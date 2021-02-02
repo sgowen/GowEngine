@@ -12,21 +12,20 @@
 
 #include "InputManager.hpp"
 #include "PlatformMacros.hpp"
-#include "Constants.hpp"
 #include "FPSUtil.hpp"
 
-Engine::Engine(EngineController& engineController) :
-_stateMachine(this),
+Engine::Engine(EngineController& ec) :
+_stateMachine(this, ec.getInitialState()),
 _requestedStateAction(ERSA_DEFAULT),
 _requestedHostAction(ERHA_DEFAULT),
-_frameRate(FRAME_RATE),
+_frameRate(ec.getFrameRate()),
 _stateTime(0),
 _screenWidth(0),
 _screenHeight(0),
 _cursorWidth(0),
 _cursorHeight(0)
 {
-    _stateMachine.setCurrentState(engineController.getInitialState());
+    // Empty
 }
 
 void Engine::createDeviceDependentResources()
@@ -113,25 +112,25 @@ void Engine::onCursorScrolled(float yoffset)
 
 void Engine::onGamepadInputStickLeft(uint8_t index, float stickLeftX, float stickLeftY)
 {
-    INPUT_MGR.onGamepadInput(GPET_STICK_LEFT, index, stickLeftX, stickLeftY);
+    INPUT_MGR.onGamepadInput(GPEB_STICK_LEFT, index, stickLeftX, stickLeftY);
 }
 
 void Engine::onGamepadInputStickRight(uint8_t index, float stickRightX, float stickRightY)
 {
-    INPUT_MGR.onGamepadInput(GPET_STICK_RIGHT, index, stickRightX, stickRightY);
+    INPUT_MGR.onGamepadInput(GPEB_STICK_RIGHT, index, stickRightX, stickRightY);
 }
 
 void Engine::onGamepadInputTrigger(uint8_t index, float triggerLeft, float triggerRight)
 {
-    INPUT_MGR.onGamepadInput(GPET_TRIGGER, index, triggerLeft, triggerRight);
+    INPUT_MGR.onGamepadInput(GPEB_TRIGGER, index, triggerLeft, triggerRight);
 }
 
-void Engine::onGamepadInputButton(uint8_t index, uint8_t gamepadEventType, uint8_t isPressed)
+void Engine::onGamepadInputButton(uint8_t index, uint8_t button, uint8_t isPressed)
 {
-    INPUT_MGR.onGamepadInput((GamepadEventType)gamepadEventType, index, isPressed);
+    INPUT_MGR.onGamepadInput(button, index, isPressed);
 }
 
-void Engine::onKeyboardInput(unsigned short key, bool isUp)
+void Engine::onKeyboardInput(uint16_t key, bool isUp)
 {
     INPUT_MGR.onKeyboardInput(key, isUp);
 }

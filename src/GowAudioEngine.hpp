@@ -39,7 +39,11 @@ class AudioEngineHelper;
 class GowAudioEngine
 {
 public:
-    static GowAudioEngine& getInstance();
+    static GowAudioEngine& getInstance()
+    {
+        static GowAudioEngine ret = GowAudioEngine();
+        return ret;
+    }
     
     void createDeviceDependentResources();
     void releaseDeviceDependentResources();

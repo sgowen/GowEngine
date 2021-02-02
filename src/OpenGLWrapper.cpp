@@ -19,14 +19,7 @@
 #include "Macros.hpp"
 #include "StringUtil.hpp"
 
-#define NUM_TEXTURE_SLOTS 2
-GLenum OpenGLWrapper::TEXTURE_SLOTS[NUM_TEXTURE_SLOTS] = {GL_TEXTURE0, GL_TEXTURE1};
-
-OpenGLWrapper& OpenGLWrapper::getInstance()
-{
-    static OpenGLWrapper ret = OpenGLWrapper();
-    return ret;
-}
+GLenum OpenGLWrapper::TEXTURE_SLOTS[NUM_SUPPORTED_TEXTURE_SLOTS] = {GL_TEXTURE0, GL_TEXTURE1, GL_TEXTURE2, GL_TEXTURE3};
 
 void OpenGLWrapper::enableBlending(bool srcAlpha)
 {
@@ -113,7 +106,7 @@ void OpenGLWrapper::bindTexture(Shader& s, std::string uniformName, GLuint index
 
 void OpenGLWrapper::bindTexture(Shader& s, std::string uniformName, GLuint index, GLuint texture)
 {
-    assert(index < NUM_TEXTURE_SLOTS);
+    assert(index < NUM_SUPPORTED_TEXTURE_SLOTS);
     assert(texture > 0);
     
     ShaderUniform& su = s._descriptor.uniform(uniformName);
@@ -127,7 +120,7 @@ void OpenGLWrapper::bindTexture(Shader& s, std::string uniformName, GLuint index
 
 void OpenGLWrapper::unbindTexture(GLuint index)
 {
-    assert(index < NUM_TEXTURE_SLOTS);
+    assert(index < NUM_SUPPORTED_TEXTURE_SLOTS);
     
     glActiveTexture(TEXTURE_SLOTS[index]);
     glBindTexture(GL_TEXTURE_2D, 0);
@@ -332,7 +325,7 @@ void OpenGLWrapper::unloadTexture(Texture& t)
     t._texture = 0;
 }
 
-void OpenGLWrapper::loadShader(Shader& s, const char* vertexShaderSrc, const long vertexShaderSrcLength, const char* fragmentShaderSrc, const long fragmentShaderSrcLength)
+void OpenGLWrapper::loadShader(Shader& s, const uint8_t* vertexShaderSrc, const long vertexShaderSrcLength, const uint8_t* fragmentShaderSrc, const long fragmentShaderSrcLength)
 {
     s._program = loadShader(vertexShaderSrc, vertexShaderSrcLength, fragmentShaderSrc, fragmentShaderSrcLength);
     
@@ -366,7 +359,7 @@ void OpenGLWrapper::unloadShader(Shader& s)
     s._program = 0;
 }
 
-GLuint OpenGLWrapper::loadTexture(int width, int height, unsigned char* data, GLint filterMin, GLint filterMag, bool mipmap)
+GLuint OpenGLWrapper::loadTexture(int width, int height, uint8_t* data, GLint filterMin, GLint filterMag, bool mipmap)
 {
     assert(width > 0);
     assert(height > 0);
@@ -405,7 +398,7 @@ void OpenGLWrapper::unloadTexture(GLuint texture)
     glDeleteTextures(1, &texture);
 }
 
-GLuint OpenGLWrapper::loadShader(const char* vertexShaderSrc, const long vertexShaderSrcLength, const char* fragmentShaderSrc, const long fragmentShaderSrcLength)
+GLuint OpenGLWrapper::loadShader(const uint8_t* vertexShaderSrc, const long vertexShaderSrcLength, const uint8_t* fragmentShaderSrc, const long fragmentShaderSrcLength)
 {
     assert(vertexShaderSrc != NULL);
     assert(vertexShaderSrcLength > 0);
@@ -446,7 +439,7 @@ void OpenGLWrapper::unloadShader(GLuint program)
     glDeleteProgram(program);
 }
 
-GLuint OpenGLWrapper::compileShader(const GLenum type, const char* source, const GLint length)
+GLuint OpenGLWrapper::compileShader(const GLenum type, const uint8_t* source, const GLint length)
 {
     assert(source != NULL);
     assert(length > 0);

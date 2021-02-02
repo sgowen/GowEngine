@@ -216,7 +216,7 @@ int GlfwMain::exec(EngineController& engineController, const char* windowTitle)
         {
             int j, axis_count, button_count;
             const float* axes;
-            const unsigned char* buttons;
+            const uint8_t* buttons;
 
             axes = glfwGetJoystickAxes(joysticks[i], &axis_count);
             buttons = glfwGetJoystickButtons(joysticks[i], &button_count);

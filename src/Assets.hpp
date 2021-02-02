@@ -19,7 +19,11 @@
 class Assets
 {
 public:
-	static Assets& getInstance();
+	static Assets& getInstance()
+    {
+        static Assets ret = Assets();
+        return ret;
+    }
     
     void initWithJSONFile(const char* filePath);
     void initWithJSON(const char* json);

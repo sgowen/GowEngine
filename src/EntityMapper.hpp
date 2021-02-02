@@ -26,7 +26,11 @@ typedef EntityNetworkController* (*EntityNetworkControllerCreationFunc)(Entity* 
 class EntityMapper
 {
 public:
-    static EntityMapper& getInstance();
+    static EntityMapper& getInstance()
+    {
+        static EntityMapper ret = EntityMapper();
+        return ret;
+    }
     
     void initWithJSONFile(const char* filePath);
     void initWithJSON(const char* json);

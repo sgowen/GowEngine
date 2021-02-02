@@ -11,7 +11,7 @@
 #include "TransmissionData.hpp"
 #include "DeliveryNotificationManager.hpp"
 
-#include "Timing.hpp"
+#include "TimeTracker.hpp"
 
 InFlightPacket::InFlightPacket(uint16_t sequenceNumber, float timeDispatched) :
 _sequenceNumber(sequenceNumber),

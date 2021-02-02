@@ -24,7 +24,7 @@ class MoveList;
 class ReplicationManagerClient;
 class WeightedTimedMovingAverage;
 class SocketAddress;
-class Timing;
+class TimeTracker;
 
 #define NW_MGR_CLIENT (NetworkManagerClient::getInstance())
 
@@ -72,7 +72,7 @@ public:
 private:
     static NetworkManagerClient* s_instance;
     
-    Timing* _timing;
+    TimeTracker* _timeTracker;
     ClientHelper* _clientHelper;
     RemoveProcessedMovesFunc _removeProcessedMovesFunc;
     GetMoveListFunc _getMoveListFunc;

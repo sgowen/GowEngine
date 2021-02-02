@@ -21,7 +21,7 @@ void Config::initWithJSONFile(const char* filePath)
 {
     AssetHandler* ah = AssetHandlerFactory::create();
     FileData jsonData = ah->loadAsset(filePath);
-    initWithJSON(jsonData._data);
+    initWithJSON((const char*)jsonData._data);
     ah->releaseAsset(jsonData);
     AssetHandlerFactory::destroy(ah);
 }

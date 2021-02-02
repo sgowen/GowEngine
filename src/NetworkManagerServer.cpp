@@ -18,7 +18,7 @@
 #include "ClientProxy.hpp"
 #include "InputState.hpp"
 #include "Entity.hpp"
-#include "Timing.hpp"
+#include "TimeTracker.hpp"
 #include "PlatformMacros.hpp"
 
 #include "StringUtil.hpp"
@@ -85,7 +85,7 @@ void NetworkManagerServer::processIncomingPackets()
     /// Check for disconnects
     std::vector<ClientProxy*> clientsToDC;
     
-    float minAllowedLastPacketFromClientTime = _timing->getTime() - NW_CLIENT_TIMEOUT;
+    float minAllowedLastPacketFromClientTime = _timeTracker->_time - NW_CLIENT_TIMEOUT;
     for (const auto& pair: _addressHashToClientMap)
     {
         if (pair.second->getLastPacketFromClientTime() < minAllowedLastPacketFromClientTime)
@@ -108,7 +108,7 @@ void NetworkManagerServer::sendOutgoingPackets()
     {
         ClientProxy* clientProxy = it->second;
         //process any timed out packets while we're going through the list
-        clientProxy->getDeliveryNotificationManager().processTimedOutPackets(_timing->getTime());
+        clientProxy->getDeliveryNotificationManager().processTimedOutPackets(_timeTracker->_time);
         
         if (clientProxy->isLastMoveTimestampDirty())
         {
@@ -338,27 +338,28 @@ void NetworkManagerServer::handlePacketFromNewClient(InputMemoryBitStream& input
             if (NW_MGR_CLIENT->getPlayerName().compare(name) != 0)
             {
                 // The server host MUST be the first client to join
+                // TODO, this doesn't apply for dedicated servers, which I aim to support eventually
                 return;
             }
         }
         
-        ClientProxy* newClientProxy = new ClientProxy(_entityManager, fromAddress, name, _nextPlayerID);
-        _addressHashToClientMap[fromAddress->getHash()] = newClientProxy;
-        _playerIDToClientMap[newClientProxy->getPlayerID()] = newClientProxy;
+        ClientProxy* cp = new ClientProxy(_entityManager, fromAddress, name, _nextPlayerID);
+        _addressHashToClientMap[fromAddress->getHash()] = cp;
+        _playerIDToClientMap[cp->getPlayerID()] = cp;
         
-        uint8_t playerID = newClientProxy->getPlayerID();
-        std::string playerName = newClientProxy->getName();
+        uint8_t playerID = cp->getPlayerID();
+        std::string playerName = cp->getName();
         
         // tell the server about this client
         _handleNewClientFunc(playerID, playerName);
         
         //and welcome the client...
-        sendWelcomePacket(newClientProxy);
+        sendWelcomePacket(cp);
         
         // and now init the replication manager with everything we know about!
         for (const auto& pair: _entityManager->getMap())
         {
-            newClientProxy->getReplicationManagerServer()->replicateCreate(pair.first, ALL_DIRTY_STATE);
+            cp->getReplicationManagerServer()->replicateCreate(pair.first, ALL_DIRTY_STATE);
         }
         
         updateNextPlayerID();
@@ -649,7 +650,7 @@ _handleLostClientFunc(handleLostClientFunc),
 _inputStateCreationFunc(inputStateCreationFunc),
 _inputStateReleaseFunc(inputStateReleaseFunc),
 _entityManager(new EntityManager(NULL, NULL)),
-_timing(static_cast<Timing*>(INSTANCE_MGR.get(INSK_TIMING_SERVER))),
+_timeTracker(INSTANCE_MGR.get<TimeTracker>(INSK_TIMING_SERVER)),
 _nextPlayerID(1),
 _map(0)
 {

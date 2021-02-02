@@ -11,13 +11,13 @@
 #include "EntityManager.hpp"
 #include "ReplicationManagerServer.hpp"
 #include "MachineAddress.hpp"
-#include "Timing.hpp"
+#include "TimeTracker.hpp"
 
 #include "InstanceManager.hpp"
 
 ClientProxy::ClientProxy(EntityManager* entityManager, MachineAddress* machineAddress, const std::string& name, uint8_t playerID) :
-_timing(static_cast<Timing*>(INSTANCE_MGR.get(INSK_TIMING_SERVER))),
-_deliveryNotificationManager(DeliveryNotificationManager(_timing, false, true)),
+_timeTracker(INSTANCE_MGR.get<TimeTracker>(INSK_TIMING_SERVER)),
+_deliveryNotificationManager(DeliveryNotificationManager(_timeTracker, false, true)),
 _replicationManagerServer(new ReplicationManagerServer(entityManager)),
 _machineAddress(machineAddress->createNewCopy()),
 _name(name),
@@ -51,7 +51,7 @@ const std::string& ClientProxy::getName() const
 
 void ClientProxy::updateLastPacketTime()
 {
-    _lastPacketFromClientTime = _timing->getTime();
+    _lastPacketFromClientTime = _timeTracker->_time;
 }
 
 float ClientProxy::getLastPacketFromClientTime() const

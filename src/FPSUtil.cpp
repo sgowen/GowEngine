@@ -8,12 +8,6 @@
 
 #include "FPSUtil.hpp"
 
-FPSUtil& FPSUtil::getInstance()
-{
-    static FPSUtil ret = FPSUtil();
-    return ret;
-}
-
 void FPSUtil::update(double deltaTime)
 {
     _stateTime += deltaTime;

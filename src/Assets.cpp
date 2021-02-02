@@ -17,17 +17,11 @@
 
 #include <rapidjson/document.h>
 
-Assets& Assets::getInstance()
-{
-    static Assets ret = Assets();
-    return ret;
-}
-
 void Assets::initWithJSONFile(const char* filePath)
 {
     AssetHandler* ah = AssetHandlerFactory::create();
     FileData jsonData = ah->loadAsset(filePath);
-    initWithJSON(jsonData._data);
+    initWithJSON((const char*)jsonData._data);
     ah->releaseAsset(jsonData);
     AssetHandlerFactory::destroy(ah);
 }

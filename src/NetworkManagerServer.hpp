@@ -23,7 +23,7 @@ class MachineAddress;
 class ClientProxy;
 class InputState;
 class Entity;
-class Timing;
+class TimeTracker;
 
 #define NW_MGR_SERVER (NetworkManagerServer::getInstance())
 
@@ -73,7 +73,7 @@ private:
     InputStateCreationFunc _inputStateCreationFunc;
     InputStateReleaseFunc _inputStateReleaseFunc;
     EntityManager* _entityManager;
-    Timing* _timing;
+    TimeTracker* _timeTracker;
     Pool<ReplicationManagerTransmissionData> _replicationManagerTransmissionDatas;
     std::map<size_t, ClientProxy*> _addressHashToClientMap;
     std::map<int, ClientProxy*> _playerIDToClientMap;

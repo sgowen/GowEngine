@@ -16,6 +16,7 @@ class EngineController
 {
 public:
     virtual State<Engine>* getInitialState() = 0;
+    virtual double getFrameRate() { return (1.0 / 60.0); } // default is 60 FPS
     
 protected:
     EngineController() {}

@@ -10,40 +10,49 @@
 
 #include <stdint.h>
 
+enum GamepadEventButtons
+{
+    GPEB_BUTTON_X = 0,
+    GPEB_BUTTON_A = 1,
+    GPEB_BUTTON_B = 2,
+    GPEB_BUTTON_Y = 3,
+    GPEB_BUMPER_LEFT = 4,
+    GPEB_BUMPER_RIGHT = 5,
+    GPEB_UNKNOWN_6 = 6,
+    GPEB_UNKNOWN_7 = 7,
+    GPEB_BUTTON_SELECT = 8,
+    GPEB_BUTTON_START = 9,
+    GPEB_UNKNOWN_10 = 10,
+    GPEB_UNKNOWN_11 = 11,
+    GPEB_UNKNOWN_12 = 12,
+    GPEB_UNKNOWN_13 = 13,
+    GPEB_D_PAD_UP = 14,
+    GPEB_D_PAD_RIGHT = 15,
+    GPEB_D_PAD_DOWN = 16,
+    GPEB_D_PAD_LEFT = 17,
+    GPEB_STICK_LEFT,
+    GPEB_STICK_RIGHT,
+    GPEB_TRIGGER
+};
+
 enum GamepadEventType
 {
-    GPET_BUTTON_X = 0,
-    GPET_BUTTON_A = 1,
-    GPET_BUTTON_B = 2,
-    GPET_BUTTON_Y = 3,
-    GPET_BUMPER_LEFT = 4,
-    GPET_BUMPER_RIGHT = 5,
-    GPET_UNKNOWN_6 = 6,
-    GPET_UNKNOWN_7 = 7,
-    GPET_BUTTON_SELECT = 8,
-    GPET_BUTTON_START = 9,
-    GPET_UNKNOWN_10 = 10,
-    GPET_UNKNOWN_11 = 11,
-    GPET_UNKNOWN_12 = 12,
-    GPET_UNKNOWN_13 = 13,
-    GPET_D_PAD_UP = 14,
-    GPET_D_PAD_RIGHT = 15,
-    GPET_D_PAD_DOWN = 16,
-    GPET_D_PAD_LEFT = 17,
-    GPET_STICK_LEFT,
-    GPET_STICK_RIGHT,
-    GPET_TRIGGER
+    GPET_DOWN,
+    GPET_HELD,
+    GPET_UP
 };
 
 struct GamepadEvent
 {
     GamepadEventType _type;
+    uint8_t _button;
     uint8_t _index;
     float _x;
     float _y;
     
-    GamepadEvent(GamepadEventType type = GPET_D_PAD_RIGHT, uint8_t index = 0, float x = 0, float y = 0) :
+    GamepadEvent(GamepadEventType type = GPET_DOWN, uint8_t button = GPEB_BUTTON_X, uint8_t index = 0, float x = 0, float y = 0) :
     _type(type),
+    _button(button),
     _index(index),
     _x(x),
     _y(y)
@@ -53,6 +62,21 @@ struct GamepadEvent
     
     bool isPressed()
     {
-        return _x > 0;
+        return _type == GPET_DOWN || _type == GPET_HELD;
+    }
+    
+    bool isDown()
+    {
+        return _type == GPET_DOWN;
+    }
+    
+    bool isHeld()
+    {
+        return _type == GPET_HELD;
+    }
+
+    bool isUp()
+    {
+        return _type == GPET_UP;
     }
 };

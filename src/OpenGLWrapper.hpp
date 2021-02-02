@@ -46,15 +46,20 @@ struct Texture;
 #define NUM_VERTICES_PER_TRIANGLE 3
 #define NUM_VERTICES_PER_RECTANGLE 4
 #define NUM_INDICES_PER_RECTANGLE 6
+#define NUM_SUPPORTED_TEXTURE_SLOTS 4
 
 #define OGL OpenGLWrapper::getInstance()
 
 class OpenGLWrapper
 {
 public:
-    static GLenum TEXTURE_SLOTS[2];
+    static GLenum TEXTURE_SLOTS[NUM_SUPPORTED_TEXTURE_SLOTS];
 
-    static OpenGLWrapper& getInstance();
+    static OpenGLWrapper& getInstance()
+    {
+        static OpenGLWrapper ret = OpenGLWrapper();
+        return ret;
+    }
 
     void enableBlending(bool srcAlpha);
     void disableBlending();
@@ -85,15 +90,15 @@ public:
     void unloadFramebuffer(Framebuffer& fb);
     void loadTexture(Texture& t);
     void unloadTexture(Texture& t);
-    void loadShader(Shader& s, const char* vertexShaderSrc, const long vertexShaderSrcLength, const char* fragmentShaderSrc, const long fragmentShaderSrcLength);
+    void loadShader(Shader& s, const uint8_t* vertexShaderSrc, const long vertexShaderSrcLength, const uint8_t* fragmentShaderSrc, const long fragmentShaderSrcLength);
     void unloadShader(Shader& s);
 
 private:
-    GLuint loadTexture(int width, int height, unsigned char* data, GLint filterMin, GLint filterMag, bool mipmap);
+    GLuint loadTexture(int width, int height, uint8_t* data, GLint filterMin, GLint filterMag, bool mipmap);
     void unloadTexture(GLuint texture);
-    GLuint loadShader(const char* vertexShaderSrc, const long vertexShaderSrcLength, const char* fragmentShaderSrc, const long fragmentShaderSrcLength);
+    GLuint loadShader(const uint8_t* vertexShaderSrc, const long vertexShaderSrcLength, const uint8_t* fragmentShaderSrc, const long fragmentShaderSrcLength);
     void unloadShader(GLuint program);
-    GLuint compileShader(const GLenum type, const char* source, const GLint length);
+    GLuint compileShader(const GLenum type, const uint8_t* source, const GLint length);
 
     OpenGLWrapper() {}
     ~OpenGLWrapper() {}

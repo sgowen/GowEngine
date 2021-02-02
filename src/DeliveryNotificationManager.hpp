@@ -14,14 +14,14 @@
 #include <deque>
 #include <stdint.h>
 
-class Timing;
+class TimeTracker;
 class OutputMemoryBitStream;
 class InputMemoryBitStream;
 
 class DeliveryNotificationManager
 {
 public:
-    DeliveryNotificationManager(Timing* timing, bool shouldSendAcks, bool shouldProcessAcks);
+    DeliveryNotificationManager(TimeTracker* timing, bool shouldSendAcks, bool shouldProcessAcks);
     ~DeliveryNotificationManager();
     
     InFlightPacket* writeState(OutputMemoryBitStream& outputStream);
@@ -33,7 +33,7 @@ public:
     const std::deque<InFlightPacket>& getInFlightPackets() const;
     
 private:
-    Timing* _timing;
+    TimeTracker* _timeTracker;
     bool _shouldSendAcks;
     bool _shouldProcessAcks;
     std::deque<InFlightPacket> _inFlightPackets;
