@@ -12,16 +12,6 @@
 
 #include "SimpleMultiPlayer.hpp"
 
-void AndroidAudioEngineHelper::pause()
-{
-    _simpleMultiPlayer->teardownAudioStream();
-}
-
-void AndroidAudioEngineHelper::resume()
-{
-    _simpleMultiPlayer->startStream();
-}
-
 SoundWrapper* AndroidAudioEngineHelper::loadSound(uint16_t soundID, const char *filePath, int numInstances)
 {
     return new AndroidSoundWrapper(_simpleMultiPlayer, soundID, filePath, numInstances);
@@ -41,6 +31,7 @@ _simpleMultiPlayer(new SimpleMultiPlayer())
 
 AndroidAudioEngineHelper::~AndroidAudioEngineHelper()
 {
+    _simpleMultiPlayer->teardownAudioStream();
     _simpleMultiPlayer->unloadSampleData();
     
     delete _simpleMultiPlayer;

@@ -10,14 +10,13 @@
 
 #include <assert.h>
 
-TextureDescriptor::TextureDescriptor(std::string name, std::string normalMapName, std::string filePath, std::string filterMin, std::string filterMag, bool mipMap, int layer) :
+TextureDescriptor::TextureDescriptor(std::string name, std::string normalMapName, std::string filePath, std::string filterMin, std::string filterMag, bool mipMap) :
 _name(name),
 _normalMapName(normalMapName),
 _filePath(filePath),
 _filterMin(filterMin),
 _filterMag(filterMag),
-_mipMap(mipMap),
-_layer(layer)
+_mipMap(mipMap)
 {
     // Empty
 }

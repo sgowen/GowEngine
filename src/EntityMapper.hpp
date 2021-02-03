@@ -38,8 +38,8 @@ public:
     Entity* createEntity(EntityInstanceDef* eid, bool isServer);
     Entity* createEntityFromDef(EntityDef* entityDef, EntityInstanceDef* eid, bool isServer);
     EntityDef* getEntityDef(uint32_t fourCCName);
-    void registerFunction(std::string name, EntityControllerCreationFunc func);
-    void registerFunction(std::string name, EntityNetworkControllerCreationFunc func);
+    void registerEntityController(std::string name, EntityControllerCreationFunc func);
+    void registerEntityNetworkController(std::string name, EntityNetworkControllerCreationFunc func);
     EntityController* createEntityController(EntityDef& ed, Entity* e);
     EntityNetworkController* createEntityNetworkController(EntityDef& ed, Entity* e);
     const std::vector<EntityDef*>& getEntityDescriptors();

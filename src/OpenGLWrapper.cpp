@@ -264,13 +264,16 @@ void OpenGLWrapper::unloadBuffer(GLuint& buffer)
     buffer = 0;
 }
 
-void OpenGLWrapper::loadFramebuffer(Framebuffer& fb, GLint filterMin, GLint filterMag)
+void OpenGLWrapper::loadFramebuffer(Framebuffer& fb, bool sharp)
 {
     GLuint texture;
     GLuint fbo;
     
     GLint currentFBO;
     glGetIntegerv(GL_FRAMEBUFFER_BINDING, &currentFBO);
+    
+    GLint filterMin = sharp ? GL_NEAREST : GL_LINEAR;
+    GLint filterMag = sharp ? GL_NEAREST : GL_LINEAR;
     
     texture = loadTexture(fb._width, fb._height, NULL, filterMin, filterMag, false);
     
@@ -308,13 +311,13 @@ void OpenGLWrapper::loadTexture(Texture& t)
     GLint filterMin;
     if (mipmap)
     {
-        filterMin = t._descriptor._filterMin == "NEAREST" ? GL_LINEAR_MIPMAP_NEAREST : GL_LINEAR_MIPMAP_LINEAR;
+        filterMin = t._descriptor._filterMin == "SHARP" ? GL_LINEAR_MIPMAP_NEAREST : GL_LINEAR_MIPMAP_LINEAR;
     }
     else
     {
-        filterMin = t._descriptor._filterMin == "NEAREST" ? GL_NEAREST : GL_LINEAR;
+        filterMin = t._descriptor._filterMin == "SHARP" ? GL_NEAREST : GL_LINEAR;
     }
-    GLint filterMag = t._descriptor._filterMag == "NEAREST" ? GL_NEAREST : GL_LINEAR;
+    GLint filterMag = t._descriptor._filterMag == "SHARP" ? GL_NEAREST : GL_LINEAR;
     
     t._texture = loadTexture(t._width, t._height, t._data, filterMin, filterMag, mipmap);
 }

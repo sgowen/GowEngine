@@ -292,7 +292,10 @@ void GowAudioEngine::pauseAllSounds()
         std::vector<Sound *> sounds = (*i).second->getSounds();
         for (std::vector<Sound *>::iterator i = sounds.begin(); i != sounds.end(); ++i)
         {
-            _soundsToPause.push_back((*i));
+            if ((*i)->isPlaying())
+            {
+                _soundsToPause.push_back((*i));
+            }
         }
     }
 }
@@ -309,7 +312,10 @@ void GowAudioEngine::resumeAllSounds()
         std::vector<Sound *> sounds = (*i).second->getSounds();
         for (std::vector<Sound *>::iterator i = sounds.begin(); i != sounds.end(); ++i)
         {
-            _soundsToResume.push_back((*i));
+            if ((*i)->isPaused())
+            {
+                _soundsToResume.push_back((*i));
+            }
         }
     }
 }

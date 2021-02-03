@@ -24,7 +24,7 @@ NSMutableArray* gSounds = nil;
 
 - (id)initWithSoundPath:(NSString *)path;
 
-- (void)play:(float)volume isLooping:(bool)isLooping;
+- (void)play:(bool)isLooping;
 - (void)stop;
 - (void)pause;
 - (void)resume;
@@ -48,9 +48,9 @@ NSMutableArray* gSounds = nil;
     return self;
 }
 
-- (void)play:(float)volume isLooping:(bool)isLooping
+- (void)play:(bool)isLooping
 {
-    mSoundSource = [gChannel play:mBuffer gain:volume pitch:1.0f pan:0.0f loop:isLooping];
+    mSoundSource = [gChannel play:mBuffer loop:isLooping];
 }
 
 - (void)stop
@@ -88,6 +88,11 @@ NSMutableArray* gSounds = nil;
 - (bool)isPlaying
 {
     return mSoundSource && [mSoundSource playing];
+}
+
+- (bool)isLooping
+{
+    return mSoundSource && [mSoundSource looping];
 }
 
 @end
@@ -172,11 +177,11 @@ int loadSound(const char* pathCString)
     return ret;
 }
 
-void playSound(int bufferIndex, float volume, bool isLooping)
+void playSound(int bufferIndex, bool isLooping)
 {
     ObjectALSoundBufferWrapper* sound = [gSounds objectAtIndex:bufferIndex];
     
-    [sound play:volume isLooping:isLooping];
+    [sound play:isLooping];
 }
 
 void stopSound(int bufferIndex)
@@ -214,6 +219,13 @@ bool isSoundPlaying(int bufferIndex)
     return [sound isPlaying];
 }
 
+bool isSoundLooping(int bufferIndex)
+{
+    ObjectALSoundBufferWrapper* sound = [gSounds objectAtIndex:bufferIndex];
+    
+    return [sound isLooping];
+}
+
 void loadMusic(const char* pathCString)
 {
     NSString *path = [[NSString alloc] initWithCString:pathCString encoding:NSASCIIStringEncoding];
@@ -221,10 +233,9 @@ void loadMusic(const char* pathCString)
     [gMusicTrack preloadFile:path];
 }
 
-void playMusic(bool isLooping, float volume)
+void playMusic(bool isLooping)
 {
     [gMusicTrack setNumberOfLoops:isLooping ? -1 : 0];
-    [gMusicTrack setVolume:volume];
     
     [gMusicTrack play];
 }
@@ -252,6 +263,11 @@ void resumeMusic()
 bool isMusicPlaying()
 {
     return [gMusicTrack playing];
+}
+
+bool isMusicLooping()
+{
+    return [gMusicTrack numberOfLoops] == -1;
 }
 
 bool isMusicLoaded()

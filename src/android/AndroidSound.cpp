@@ -17,15 +17,13 @@
 #include "WavStreamReader.hpp"
 #include "SampleBuffer.hpp"
 #include "SampleSource.hpp"
+#include "StringUtil.hpp"
 
 #include <assert.h>
 
 AndroidSound::AndroidSound(SimpleMultiPlayer* simpleMultiPlayer, uint16_t soundID, const char *filePath, float volume) : Sound(soundID),
 _simpleMultiPlayer(simpleMultiPlayer),
-_volume(volume),
-_oboeSoundIndex(0),
-_isLooping(false),
-_isPaused(false)
+_oboeSoundIndex(0)
 {
     AssetHandler* ah = AssetHandlerFactory::create();
     
@@ -36,6 +34,11 @@ _isPaused(false)
     reader.parse();
 
     bool isFormatValid = reader.getNumChannels() == 1;
+    if (!isFormatValid)
+    {
+        LOG("%s is in an invalid format!", filePath);
+    }
+
     assert(isFormatValid);
 
     SampleBuffer* sampleBuffer = new SampleBuffer();
@@ -43,27 +46,20 @@ _isPaused(false)
 
     SampleSource* source = new SampleSource(sampleBuffer, 0);
     _oboeSoundIndex = _simpleMultiPlayer->addSampleSource(source, sampleBuffer);
-    
+
     AssetHandlerFactory::destroy(ah);
-    
-    assert(isFormatValid);
 }
 
 void AndroidSound::play(bool isLooping)
 {
-    _isLooping = isLooping;
-    _isPaused = false;
-
     _simpleMultiPlayer->play(_oboeSoundIndex, isLooping);
 }
 
 void AndroidSound::resume()
 {
-    if (_isPaused)
+    if (isPaused())
     {
         _simpleMultiPlayer->resume(_oboeSoundIndex);
-
-        _isPaused = false;
     }
 }
 
@@ -72,37 +68,30 @@ void AndroidSound::pause()
     if (isPlaying())
     {
         _simpleMultiPlayer->pause(_oboeSoundIndex);
-
-        _isPaused = true;
     }
 }
 
 void AndroidSound::stop()
 {
-    _isLooping = false;
-    _isPaused = false;
-
     _simpleMultiPlayer->stop(_oboeSoundIndex);
 }
 
 void AndroidSound::setVolume(float volume)
 {
-    _volume = volume;
-
     _simpleMultiPlayer->setGain(_oboeSoundIndex, volume);
 }
 
 bool AndroidSound::isLooping()
 {
-    return _isLooping;
+    return _simpleMultiPlayer->isLooping(_oboeSoundIndex);
 }
 
 bool AndroidSound::isPlaying()
 {
-    return !_isPaused;
+    return _simpleMultiPlayer->isPlaying(_oboeSoundIndex);
 }
 
 bool AndroidSound::isPaused()
 {
-    return _isPaused;
+    return _simpleMultiPlayer->isPaused(_oboeSoundIndex);
 }

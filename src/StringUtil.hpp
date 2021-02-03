@@ -39,7 +39,7 @@
     #define OUT_Z_ARRAY
 #endif
 
-#define LOG(...) StringUtil::log(__VA_ARGS__);
+#define LOG(...) StringUtil::log(__VA_ARGS__)
 
 class StringUtil
 {

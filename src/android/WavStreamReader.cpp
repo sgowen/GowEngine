@@ -13,13 +13,10 @@
 #include "WavFmtChunkHeader.hpp"
 #include "WavChunkHeader.hpp"
 #include "GowUtil.hpp"
+#include "StringUtil.hpp"
 
 #include <algorithm>
 #include <string.h>
-
-#include <android/log.h>
-
-static const char *TAG = "WavStreamReader";
 
 WavStreamReader::WavStreamReader(InputStream* inputStream) :
 _inputStream(inputStream),
@@ -27,7 +24,7 @@ _wavChunk(0),
 _fmtChunk(0),
 _dataChunk(0),
 _audioDataStartPos(-1),
-_chunkMap(new std::map<RiffID, WavChunkHeader *>())
+_chunkMap(new std::map<RiffID, WavChunkHeader*>())
 {
     // Empty
 }
@@ -51,7 +48,7 @@ void WavStreamReader::parse()
         }
 
         char *tagStr = (char *) &tag;
-        __android_log_print(ANDROID_LOG_INFO, TAG, "[%c%c%c%c]", tagStr[0], tagStr[1], tagStr[2], tagStr[3]);
+        LOG("WavStreamReader [%c%c%c%c]", tagStr[0], tagStr[1], tagStr[2], tagStr[3]);
 
         WavChunkHeader *chunk = 0;
         if (tag == WavRIFFChunkHeader::RIFFID_RIFF)
@@ -98,7 +95,7 @@ void WavStreamReader::positionToAudio()
 
 int WavStreamReader::getDataFloat(float *buff, int numFrames)
 {
-    __android_log_print(ANDROID_LOG_INFO, TAG, "getData(%d)", numFrames);
+    LOG("WavStreamReader getData(%d)", numFrames);
 
     if (_dataChunk == 0 || _fmtChunk == 0)
     {
@@ -120,7 +117,7 @@ int WavStreamReader::getDataFloat(float *buff, int numFrames)
     while (framesLeft > 0)
     {
         int framesThisRead = std::min(framesLeft, 128);
-        __android_log_print(ANDROID_LOG_INFO, TAG, "read(%d)", framesThisRead);
+        LOG("WavStreamReader read(%d)", framesThisRead);
         int numFramesRead = _inputStream->read(readBuff, framesThisRead * sizeof(short) * numChans) / (sizeof(short) * numChans);
         totalFramesRead += numFramesRead;
 
@@ -138,7 +135,7 @@ int WavStreamReader::getDataFloat(float *buff, int numFrames)
     }
     delete[] readBuff;
 
-    __android_log_print(ANDROID_LOG_INFO, TAG, "  returns:%d", totalFramesRead);
+    LOG("WavStreamReader getDataFloat returns:%d", totalFramesRead);
     
     return totalFramesRead;
 }

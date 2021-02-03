@@ -10,10 +10,7 @@
 
 #include "SampleSource.hpp"
 #include "SampleBuffer.hpp"
-
-#include <android/log.h>
-
-static const char* TAG = "SimpleMultiPlayer";
+#include "StringUtil.hpp"
 
 using namespace oboe;
 
@@ -32,11 +29,11 @@ DataCallbackResult SimpleMultiPlayer::onAudioReady(AudioStream *oboeStream, void
     StreamState streamState = oboeStream->getState();
     if (streamState != StreamState::Open && streamState != StreamState::Started)
     {
-        __android_log_print(ANDROID_LOG_ERROR, TAG, "  streamState:%d", streamState);
+        LOG("SimpleMultiPlayer streamState: %d", streamState);
     }
     if (streamState == StreamState::Disconnected)
     {
-        __android_log_print(ANDROID_LOG_ERROR, TAG, "  streamState::Disconnected");
+        LOG("SimpleMultiPlayer streamState::Disconnected");
     }
 
     memset(audioData, 0, numFrames * _channelCount * sizeof(float));
@@ -54,7 +51,7 @@ DataCallbackResult SimpleMultiPlayer::onAudioReady(AudioStream *oboeStream, void
 
 void SimpleMultiPlayer::onErrorAfterClose(AudioStream *oboeStream, Result error)
 {
-    __android_log_print(ANDROID_LOG_INFO, TAG, "==== onErrorAfterClose() error:%d", error);
+    LOG("SimpleMultiPlayer ==== onErrorAfterClose() error:%d", error);
 
     resetAll();
     if (openStream() && startStream())
@@ -65,12 +62,12 @@ void SimpleMultiPlayer::onErrorAfterClose(AudioStream *oboeStream, Result error)
 
 void SimpleMultiPlayer::onErrorBeforeClose(AudioStream *, Result error)
 {
-    __android_log_print(ANDROID_LOG_INFO, TAG, "==== onErrorBeforeClose() error:%d", error);
+    LOG("SimpleMultiPlayer ==== onErrorBeforeClose() error:%d", error);
 }
 
 void SimpleMultiPlayer::setupAudioStream(int32_t channelCount)
 {
-    __android_log_print(ANDROID_LOG_INFO, TAG, "setupAudioStream()");
+    LOG("SimpleMultiPlayer setupAudioStream()");
     _channelCount = channelCount;
 
     openStream();
@@ -78,7 +75,7 @@ void SimpleMultiPlayer::setupAudioStream(int32_t channelCount)
 
 void SimpleMultiPlayer::teardownAudioStream()
 {
-    __android_log_print(ANDROID_LOG_INFO, TAG, "teardownAudioStream()");
+    LOG("SimpleMultiPlayer teardownAudioStream()");
     // tear down the player
     if (_audioStream != NULL)
     {
@@ -90,7 +87,7 @@ void SimpleMultiPlayer::teardownAudioStream()
 
 bool SimpleMultiPlayer::openStream()
 {
-    __android_log_print(ANDROID_LOG_INFO, TAG, "openStream()");
+    LOG("SimpleMultiPlayer openStream()");
 
     // Create an audio stream
     AudioStreamBuilder builder;
@@ -104,7 +101,7 @@ bool SimpleMultiPlayer::openStream()
     Result result = builder.openStream(_audioStream);
     if (result != Result::OK)
     {
-        __android_log_print(ANDROID_LOG_ERROR, TAG, "openStream failed. Error: %s", convertToText(result));
+        LOG("SimpleMultiPlayer openStream failed. Error: %s", convertToText(result));
         return false;
     }
 
@@ -114,7 +111,7 @@ bool SimpleMultiPlayer::openStream()
     result = _audioStream->setBufferSizeInFrames(_audioStream->getFramesPerBurst() * kBufferSizeInBursts);
     if (result != Result::OK)
     {
-        __android_log_print(ANDROID_LOG_WARN, TAG, "setBufferSizeInFrames failed. Error: %s", convertToText(result));
+        LOG("SimpleMultiPlayer setBufferSizeInFrames failed. Error: %s", convertToText(result));
     }
 
     _sampleRate = _audioStream->getSampleRate();
@@ -127,7 +124,7 @@ bool SimpleMultiPlayer::startStream()
     Result result = _audioStream->requestStart();
     if (result != Result::OK)
     {
-        __android_log_print(ANDROID_LOG_ERROR, TAG, "requestStart failed. Error: %s", convertToText(result));
+        LOG("SimpleMultiPlayer requestStart failed. Error: %s", convertToText(result));
         return false;
     }
 
@@ -151,7 +148,7 @@ int32_t SimpleMultiPlayer::addSampleSource(SampleSource* source, SampleBuffer* b
 
 void SimpleMultiPlayer::unloadSampleData()
 {
-    __android_log_print(ANDROID_LOG_INFO, TAG, "unloadSampleData()");
+    LOG("SimpleMultiPlayer unloadSampleData()");
     resetAll();
 
     for (int32_t bufferIndex = 0; bufferIndex < _numSampleBuffers; bufferIndex++)
@@ -171,6 +168,21 @@ void SimpleMultiPlayer::play(int32_t index, bool isLooping)
     assert(index < _numSampleBuffers);
     
     _sampleSources[index]->setPlayMode(isLooping);
+}
+
+bool SimpleMultiPlayer::isPlaying(int32_t index)
+{
+    return _sampleSources[index]->isPlaying();
+}
+
+bool SimpleMultiPlayer::isPaused(int32_t index)
+{
+    return _sampleSources[index]->isPaused();
+}
+
+bool SimpleMultiPlayer::isLooping(int32_t index)
+{
+    return _sampleSources[index]->isLooping();
 }
 
 void SimpleMultiPlayer::pause(int32_t index)

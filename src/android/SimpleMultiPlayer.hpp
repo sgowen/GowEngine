@@ -33,6 +33,9 @@ public:
     int32_t addSampleSource(SampleSource* source, SampleBuffer* buffer);
     void unloadSampleData();
     void play(int32_t index, bool isLooping);
+    bool isPlaying(int32_t index);
+    bool isPaused(int32_t index);
+    bool isLooping(int32_t index);
     void pause(int32_t index);
     void resume(int32_t index);
     void stop(int32_t index);

@@ -1,5 +1,5 @@
 //
-//  DirectXSound.hpp
+//  WindowsSound.hpp
 //  GowEngine
 //
 //  Created by Stephen Gowen on 3/10/17.
@@ -14,11 +14,11 @@
 
 #include <memory>
 
-class DirectXSound : public Sound
+class WindowsSound : public Sound
 {
 public:
-    DirectXSound(uint16_t soundID, DirectX::SoundEffect& sound, float volume = 1.0f);
-    virtual ~DirectXSound();
+    WindowsSound(uint16_t soundID, Windows::SoundEffect& sound, float volume = 1.0f);
+    virtual ~WindowsSound();
 
     virtual void play(bool isLooping = false);
     virtual void resume();
@@ -30,7 +30,5 @@ public:
     virtual bool isPaused();
 
 private:
-    std::unique_ptr<DirectX::SoundEffectInstance> _soundEffectInstance;
-    bool _isLooping;
-    bool _isPaused;
+    std::unique_ptr<Windows::SoundEffectInstance> _soundEffectInstance;
 };

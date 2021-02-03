@@ -8,50 +8,39 @@
 
 #include "NullSound.hpp"
 
-NullSound::NullSound(uint16_t soundID, const char *path, float volume) : Sound(soundID),
-_volume(volume),
-_isLooping(false),
-_isPaused(false)
+NullSound::NullSound(uint16_t soundID, const char *path, float volume) : Sound(soundID)
 {
     // Empty
 }
 
 void NullSound::play(bool isLooping)
 {
-    _isLooping = isLooping;
-    _isPaused = false;
+    // Empty
 }
 
 void NullSound::resume()
 {
-    if (_isPaused)
-    {
-        _isPaused = false;
-    }
+    // Empty
 }
 
 void NullSound::pause()
 {
-    if (isPlaying())
-    {
-        _isPaused = true;
-    }
+    // Empty
 }
 
 void NullSound::stop()
 {
-    _isLooping = false;
-    _isPaused = false;
+    // Empty
 }
 
 void NullSound::setVolume(float volume)
 {
-    _volume = volume;
+    // Empty
 }
 
 bool NullSound::isLooping()
 {
-    return _isLooping;
+    return false;
 }
 
 bool NullSound::isPlaying()
@@ -61,5 +50,5 @@ bool NullSound::isPlaying()
 
 bool NullSound::isPaused()
 {
-    return _isPaused;
+    return false;
 }

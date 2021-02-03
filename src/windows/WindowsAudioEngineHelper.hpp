@@ -1,5 +1,5 @@
 //
-//  DirectXAudioEngineHelper.hpp
+//  WindowsAudioEngineHelper.hpp
 //  GowEngine
 //
 //  Created by Stephen Gowen on 2/25/17.
@@ -14,7 +14,7 @@
 
 #include <memory>
 
-class DirectXAudioEngineHelper : public AudioEngineHelper
+class WindowsAudioEngineHelper : public AudioEngineHelper
 {
     friend class AudioEngineHelperFactory;
     
@@ -25,10 +25,10 @@ public:
     virtual SoundWrapper* loadMusic(const char* filePath);
 
 private:
-    std::unique_ptr<DirectX::AudioEngine> _audioEngine;
+    std::unique_ptr<Windows::AudioEngine> _audioEngine;
     
-    DirectXAudioEngineHelper();
-    virtual ~DirectXAudioEngineHelper();
-    DirectXAudioEngineHelper(const DirectXAudioEngineHelper&);
-    DirectXAudioEngineHelper& operator=(const DirectXAudioEngineHelper&);
+    WindowsAudioEngineHelper();
+    virtual ~WindowsAudioEngineHelper();
+    WindowsAudioEngineHelper(const WindowsAudioEngineHelper&);
+    WindowsAudioEngineHelper& operator=(const WindowsAudioEngineHelper&);
 };

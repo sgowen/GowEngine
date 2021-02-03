@@ -55,6 +55,7 @@ struct EntityDef
     uint32_t _ID;
     uint32_t _key;
     std::string _controller;
+    std::string _networkController;
     std::map<int, std::string> _textureMappings;
     std::map<int, int> _soundMappings;
     std::map<int, std::vector<int> > _soundCollectionMappings;

@@ -86,7 +86,7 @@ public:
     GLuint loadVertexBuffer(size_t size);
     GLuint loadVertexBuffer(size_t size, const void* data);
     void unloadBuffer(GLuint& buffer);
-    void loadFramebuffer(Framebuffer& fb, GLint filterMin = GL_LINEAR, GLint filterMag = GL_LINEAR);
+    void loadFramebuffer(Framebuffer& fb, bool sharp = false);
     void unloadFramebuffer(Framebuffer& fb);
     void loadTexture(Texture& t);
     void unloadTexture(Texture& t);

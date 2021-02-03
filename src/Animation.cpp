@@ -12,7 +12,7 @@
 
 #include <assert.h>
 
-Animation::Animation(int x, int y, int regionWidth, int regionHeight, int animationWidth, int animationHeight, int textureWidth, int textureHeight, bool isLooping, int firstLoopingFrame, int xPadding, int yPadding, std::vector<uint16_t> frameTimes, int layer) :
+Animation::Animation(int x, int y, int regionWidth, int regionHeight, int animationWidth, int animationHeight, int textureWidth, int textureHeight, bool isLooping, int firstLoopingFrame, int xPadding, int yPadding, std::vector<uint16_t> frameTimes) :
 _isLooping(isLooping),
 _firstLoopingFrame(firstLoopingFrame),
 _frameTimes(frameTimes),
@@ -33,7 +33,7 @@ _cycleTime(0)
     {
         for (int i = x; i < right; i += regionWidth + xPadding)
         {
-            _textureRegions.emplace_back(i, j, regionWidth, regionHeight, textureWidth, textureHeight, layer);
+            _textureRegions.emplace_back(i, j, regionWidth, regionHeight, textureWidth, textureHeight);
 
             if (_textureRegions.size() == numFrames)
             {

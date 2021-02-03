@@ -16,7 +16,7 @@
 class JNIAndroidAssetHandler
 {
 public:
-    static void create(JNIEnv *env, jobject assetManager);
+    static void create(void* data1, void* data2);
     static JNIAndroidAssetHandler* getInstance();
     static void destroy();
     

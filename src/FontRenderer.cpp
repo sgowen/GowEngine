@@ -25,7 +25,7 @@ _matrixHeight(1)
 
 	for (int i = 0; i < 176; ++i)
 	{
-		_glyphs.emplace_back(x, y, glyphWidth, glyphHeight, textureWidth, textureHeight,0);
+		_glyphs.emplace_back(x, y, glyphWidth, glyphHeight, textureWidth, textureHeight);
 
 		x += glyphWidth;
 

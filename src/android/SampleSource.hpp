@@ -28,6 +28,7 @@ public:
     void setResumeMode();
     void setStopMode();
     bool isPlaying();
+    bool isPaused();
     bool isLooping();
     void setPan(float pan);
     float getPan();

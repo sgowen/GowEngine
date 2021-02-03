@@ -12,9 +12,6 @@
 
 AppleSound::AppleSound(uint16_t soundID, const char *filePath, float volume) : Sound(soundID),
 _objectALSoundIndex(-1),
-_volume(volume),
-_isLooping(false),
-_isPaused(false),
 _isMusic(soundID == 1337)
 {
     if (_isMusic)
@@ -41,24 +38,21 @@ AppleSound::~AppleSound()
 
 void AppleSound::play(bool isLooping)
 {
-    _isLooping = isLooping;
-    _isPaused = false;
-    
     if (_isMusic)
     {
         stopMusic();
-        playMusic(isLooping, _volume);
+        playMusic(isLooping);
     }
     else
     {
         stopSound(_objectALSoundIndex);
-        playSound(_objectALSoundIndex, _volume, _isLooping);
+        playSound(_objectALSoundIndex, isLooping);
     }
 }
 
 void AppleSound::resume()
 {
-    if (_isPaused)
+    if (isPaused())
     {
         if (_isMusic)
         {
@@ -68,8 +62,6 @@ void AppleSound::resume()
         {
             resumeSound(_objectALSoundIndex);
         }
-        
-        _isPaused = false;
     }
 }
 
@@ -85,16 +77,11 @@ void AppleSound::pause()
         {
             pauseSound(_objectALSoundIndex);
         }
-        
-        _isPaused = true;
     }
 }
 
 void AppleSound::stop()
 {
-    _isLooping = false;
-    _isPaused = false;
-    
     if (_isMusic)
     {
         stopMusic();
@@ -107,8 +94,6 @@ void AppleSound::stop()
 
 void AppleSound::setVolume(float volume)
 {
-    _volume = volume;
-    
     if (_isMusic)
     {
         setMusicVolume(volume);
@@ -121,7 +106,14 @@ void AppleSound::setVolume(float volume)
 
 bool AppleSound::isLooping()
 {
-    return _isLooping;
+    if (_isMusic)
+    {
+        return isMusicLooping();
+    }
+    else
+    {
+        return isSoundLooping(_objectALSoundIndex);
+    }
 }
 
 bool AppleSound::isPlaying()
@@ -138,5 +130,5 @@ bool AppleSound::isPlaying()
 
 bool AppleSound::isPaused()
 {
-    return _isPaused;
+    return !isPlaying();
 }

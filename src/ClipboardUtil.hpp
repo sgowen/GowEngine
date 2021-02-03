@@ -28,6 +28,13 @@ public:
         return ret;
     }
     
+    void init(void* data)
+    {
+#if IS_DESKTOP
+        initWithWindow(static_cast<GLFWwindow*>(data));
+#endif
+    }
+    
     const char* getClipboardString()
     {
 #if IS_DESKTOP
@@ -38,18 +45,16 @@ public:
 #endif
     }
     
-    void init(void* window)
-    {
-        assert(window != NULL);
-
-#if IS_DESKTOP
-        _window = static_cast<GLFWwindow*>(window);
-#endif
-    }
-    
 private:
 #if IS_DESKTOP
     GLFWwindow* _window;
+    
+    void initWithWindow(GLFWwindow* window)
+    {
+        assert(window != NULL);
+
+        _window = window;
+    }
 #endif
     
     ClipboardUtil() {}

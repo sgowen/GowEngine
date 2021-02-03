@@ -23,9 +23,8 @@ public:
     const std::string _filterMin;
     const std::string _filterMag;
     const bool _mipMap;
-    const int _layer;
     
-    TextureDescriptor(std::string name, std::string normalMapName, std::string filePath, std::string filterMin, std::string filterMag, bool mipMap, int layer);
+    TextureDescriptor(std::string name, std::string normalMapName, std::string filePath, std::string filterMin, std::string filterMag, bool mipMap);
     
     TextureRegion& textureRegion(std::string key, uint16_t stateTime);
     TextureRegion& textureRegion(std::string key);

@@ -12,10 +12,7 @@
 
 #include <AL/alut.h>
 
-LinuxSound::LinuxSound(uint16_t soundID, const char *filePath, float volume) : Sound(soundID),
-_volume(volume),
-_isLooping(false),
-_isPaused(false)
+LinuxSound::LinuxSound(uint16_t soundID, const char *filePath, float volume) : Sound(soundID)
 {
     alGenBuffers(1, &buf);
     alGenSources(1, &src);
@@ -24,7 +21,7 @@ _isPaused(false)
     assert(buf != AL_NONE);
 
     alSourcei(src, AL_BUFFER, buf);
-    alSourcei(src, AL_LOOPING, _isLooping ? AL_TRUE : AL_FALSE);
+    alSourcei(src, AL_LOOPING, AL_FALSE);
 }
 
 LinuxSound::~LinuxSound()
@@ -35,21 +32,16 @@ LinuxSound::~LinuxSound()
 
 void LinuxSound::play(bool isLooping)
 {
-    _isLooping = isLooping;
-    _isPaused = false;
-
-    alSourcei(src, AL_LOOPING, _isLooping ? AL_TRUE : AL_FALSE);
+    alSourcei(src, AL_LOOPING, isLooping ? AL_TRUE : AL_FALSE);
 
     alSourcePlay(src);
 }
 
 void LinuxSound::resume()
 {
-    if (_isPaused)
+    if (isPaused())
     {
         alSourcePlay(src);
-
-        _isPaused = false;
     }
 }
 
@@ -58,29 +50,25 @@ void LinuxSound::pause()
     if (isPlaying())
     {
         alSourcePause(src);
-
-        _isPaused = true;
     }
 }
 
 void LinuxSound::stop()
 {
-    _isLooping = false;
-    _isPaused = false;
-
     alSourceStop(src);
 }
 
 void LinuxSound::setVolume(float volume)
 {
-    _volume = volume;
-
-    alSourcef(src, AL_GAIN, _volume);
+    alSourcef(src, AL_GAIN, volume);
 }
 
 bool LinuxSound::isLooping()
 {
-    return _isLooping;
+    ALint isLooping;
+    alGetSourcei(src, AL_LOOPING, &isLooping);
+    
+    return isLooping;
 }
 
 bool LinuxSound::isPlaying()
@@ -93,5 +81,5 @@ bool LinuxSound::isPlaying()
 
 bool LinuxSound::isPaused()
 {
-    return _isPaused;
+    return !isPlaying();
 }

@@ -30,7 +30,4 @@ public:
 private:
     ALuint buf;
     ALuint src;
-    float _volume;
-    bool _isLooping;
-    bool _isPaused;
 };

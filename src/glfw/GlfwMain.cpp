@@ -116,8 +116,6 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 
 int GlfwMain::exec(EngineController& engineController, const char* windowTitle)
 {
-    _engine = new Engine(engineController);
-    
     memset(joysticks, 0, sizeof(joysticks));
 
     GLFWwindow* window;
@@ -185,11 +183,11 @@ int GlfwMain::exec(EngineController& engineController, const char* windowTitle)
 #if IS_LINUX
     glewInit();
 #endif
-
-    double lastTime = 0;
     
+    _engine = new Engine(engineController);
     _engine->createDeviceDependentResources(window);
 
+    double lastTime = 0;
     int glWidth = 0, glHeight = 0;
 
     while (!glfwWindowShouldClose(window))

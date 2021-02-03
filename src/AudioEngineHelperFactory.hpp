@@ -17,7 +17,7 @@
 #elif IS_LINUX
     #include "linux/LinuxAudioEngineHelper.hpp"
 #elif IS_WINDOWS
-    #include "windows/DirectXAudioEngineHelper.hpp"
+    #include "windows/WindowsAudioEngineHelper.hpp"
 #else
     #include "NullAudioEngineHelper.hpp"
 #endif
@@ -37,7 +37,7 @@ public:
 #elif IS_LINUX
         return new LinuxAudioEngineHelper();
 #elif IS_WINDOWS
-        return new DirectXAudioEngineHelper();
+        return new WindowsAudioEngineHelper();
 #else
         return new NullAudioEngineHelper();
 #endif

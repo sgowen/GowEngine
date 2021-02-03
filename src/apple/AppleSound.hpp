@@ -27,8 +27,5 @@ public:
 
 private:
     int _objectALSoundIndex;
-    float _volume;
-    bool _isLooping;
-    bool _isPaused;
     bool _isMusic;
 };

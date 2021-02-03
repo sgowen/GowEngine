@@ -73,7 +73,8 @@ void SampleSource::mixAudio(float* outBuff, int numChannels, int numFrames, bool
 void SampleSource::setPlayMode(bool isLooping)
 {
     _isLooping = isLooping;
-    _curFrameIndex = 0; _isPlaying = true;
+    _curFrameIndex = 0;
+    _isPlaying = true;
 }
 
 void SampleSource::setPauseMode()
@@ -88,12 +89,19 @@ void SampleSource::setResumeMode()
 
 void SampleSource::setStopMode()
 {
-    _isPlaying = false; _curFrameIndex = 0;
+    _isLooping = false;
+    _isPlaying = false;
+    _curFrameIndex = 0;
 }
 
 bool SampleSource::isPlaying()
 {
     return _isPlaying;
+}
+
+bool SampleSource::isPaused()
+{
+    return !_isPlaying && _curFrameIndex > 0;
 }
 
 bool SampleSource::isLooping()

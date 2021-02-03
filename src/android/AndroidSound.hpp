@@ -29,9 +29,5 @@ public:
 
 private:
     SimpleMultiPlayer* _simpleMultiPlayer;
-    
-    float _volume;
     int _oboeSoundIndex;
-    bool _isLooping;
-    bool _isPaused;
 };

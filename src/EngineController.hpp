@@ -9,6 +9,7 @@
 #pragma once
 
 #include "StateMachine.hpp"
+#include "PlatformMacros.hpp"
 
 class Engine;
 
@@ -16,9 +17,13 @@ class EngineController
 {
 public:
     virtual State<Engine>* getInitialState() = 0;
-    virtual double getFrameRate() { return (1.0 / 60.0); } // default is 60 FPS
+    virtual double getFrameRate();
     
 protected:
-    EngineController() {}
-    virtual ~EngineController() {}
+#if IS_ANDROID
+    EngineController(void* data1, void* data2);
+#else
+    EngineController(void* data1 = NULL, void* data2 = NULL);
+#endif
+    virtual ~EngineController();
 };

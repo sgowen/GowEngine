@@ -24,9 +24,4 @@ public:
     virtual bool isLooping();
     virtual bool isPlaying();
     virtual bool isPaused();
-
-private:
-    float _volume;
-    bool _isLooping;
-    bool _isPaused;
 };

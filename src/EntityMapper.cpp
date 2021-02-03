@@ -59,7 +59,8 @@ void EntityMapper::initWithJSON(const char* json)
         entry->_key = key;
         entry->_name = RapidJSONUtil::getString(iv, "name");
         entry->_keyName = keyStr;
-        entry->_controller = RapidJSONUtil::getString(iv, "controller", "Entity");
+        entry->_controller = RapidJSONUtil::getString(iv, "entityController", "Entity");
+        entry->_networkController = RapidJSONUtil::getString(iv, "entityNetworkController", "Entity");
         
         if (iv.HasMember("textureMappings"))
         {
@@ -202,14 +203,14 @@ EntityDef* EntityMapper::getEntityDef(uint32_t fourCCName)
     return ret;
 }
 
-void EntityMapper::registerFunction(std::string name, EntityControllerCreationFunc func)
+void EntityMapper::registerEntityController(std::string name, EntityControllerCreationFunc func)
 {
     assert(func);
     
     _entityControllerCreationFunctionMap[name] = func;
 }
 
-void EntityMapper::registerFunction(std::string name, EntityNetworkControllerCreationFunc func)
+void EntityMapper::registerEntityNetworkController(std::string name, EntityNetworkControllerCreationFunc func)
 {
     assert(func);
     
@@ -219,17 +220,15 @@ void EntityMapper::registerFunction(std::string name, EntityNetworkControllerCre
 EntityController* EntityMapper::createEntityController(EntityDef& ed, Entity* e)
 {
     EntityControllerCreationFunc func = _entityControllerCreationFunctionMap[ed._controller];
-    
-    assert(func);
+    assert(func != NULL);
     
     return func(e);
 }
 
 EntityNetworkController* EntityMapper::createEntityNetworkController(EntityDef& ed, Entity* e)
 {
-    EntityNetworkControllerCreationFunc func = _entityNetworkControllerCreationFunctionMap[ed._controller];
-    
-    assert(func);
+    EntityNetworkControllerCreationFunc func = _entityNetworkControllerCreationFunctionMap[ed._networkController];
+    assert(func != NULL);
     
     return func(e, ed._server);
 }
@@ -251,8 +250,8 @@ const std::map<std::string, EntityNetworkControllerCreationFunc>& EntityMapper::
 
 EntityMapper::EntityMapper()
 {
-    registerFunction("Entity", EntityController::create);
-    registerFunction("Entity", EntityNetworkController::create);
+    registerEntityController("Entity", EntityController::create);
+    registerEntityNetworkController("Entity", EntityNetworkController::create);
 }
 
 EntityMapper::~EntityMapper()

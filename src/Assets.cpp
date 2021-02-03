@@ -50,6 +50,7 @@ void Assets::initWithJSON(const char* json)
         Value& v = d["sounds"];
         assert(v.IsArray());
         
+        std::vector<uint16_t> soundIDsAdded;
         for (SizeType i = 0; i < v.Size(); ++i)
         {
             const Value& iv = v[i];
@@ -59,7 +60,10 @@ void Assets::initWithJSON(const char* json)
             std::string filePath = RapidJSONUtil::getString(iv, "filePath");
             int numInstances = RapidJSONUtil::getInteger(iv, "numInstances");
             
+            assert(std::find(soundIDsAdded.begin(), soundIDsAdded.end(), soundID) == soundIDsAdded.end());
+            
             _soundDescriptors.emplace_back(soundID, filePath, numInstances);
+            soundIDsAdded.emplace_back(soundID);
         }
     }
     
@@ -129,12 +133,13 @@ void Assets::initWithJSON(const char* json)
             std::string name = RapidJSONUtil::getString(iv, "name");
             std::string normalMapName = RapidJSONUtil::getString(iv, "normalMapName");
             std::string filePath = RapidJSONUtil::getString(iv, "filePath");
-            std::string filterMin = RapidJSONUtil::getString(iv, "filterMin", "NEAREST");
-            std::string filterMag = RapidJSONUtil::getString(iv, "filterMag", "NEAREST");
+            std::string filterMin = RapidJSONUtil::getString(iv, "filterMin", "SHARP");
+            assert(filterMin == "SHARP" || filterMin == "SMOOTH");
+            std::string filterMag = RapidJSONUtil::getString(iv, "filterMag", "SHARP");
+            assert(filterMag == "SHARP" || filterMag == "SMOOTH");
             bool mipMap = RapidJSONUtil::getBool(iv, "mipMap", true);
-            int layer = RapidJSONUtil::getInteger(iv, "layer");
             
-            _textureDescriptors.emplace_back(name, normalMapName, filePath, filterMin, filterMag, mipMap, layer);
+            _textureDescriptors.emplace_back(name, normalMapName, filePath, filterMin, filterMag, mipMap);
             
             if (iv.HasMember("mappings"))
             {
@@ -203,14 +208,14 @@ void Assets::initWithJSON(const char* json)
                             animationHeight = RapidJSONUtil::getInteger(iv, "animationHeight");
                         }
                         
-                        animations.insert({key, Animation(x, y, regionWidth, regionHeight, animationWidth, animationHeight, textureWidth, textureHeight, looping, firstLoopingFrame, xPadding, yPadding, frameTimes, layer)});
+                        animations.insert({key, Animation(x, y, regionWidth, regionHeight, animationWidth, animationHeight, textureWidth, textureHeight, looping, firstLoopingFrame, xPadding, yPadding, frameTimes)});
                     }
                     else
                     {
                         auto q = textureRegions.find(key);
                         assert(q == textureRegions.end());
                         
-                        textureRegions.insert({key, TextureRegion(x, y, regionWidth, regionHeight, textureWidth, textureHeight, layer)});
+                        textureRegions.insert({key, TextureRegion(x, y, regionWidth, regionHeight, textureWidth, textureHeight)});
                     }
                 }
             }

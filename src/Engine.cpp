@@ -13,11 +13,6 @@
 #include "InputManager.hpp"
 #include "FPSUtil.hpp"
 #include "ClipboardUtil.hpp"
-#include "PlatformMacros.hpp"
-
-#if IS_ANDROID
-    #include "android/JNIAndroidAssetHandler.hpp"
-#endif
 
 Engine::Engine(EngineController& ec) :
 _stateMachine(this, ec.getInitialState()),
@@ -35,11 +30,7 @@ _cursorHeight(0)
 
 void Engine::createDeviceDependentResources(void* data)
 {
-//#if IS_DESKTOP
     CLIPBOARD_UTIL.init(data);
-//#elif IS_ANDROID
-//    JNIAndroidAssetHandler::create(data);
-//#endif
     
     execute(ERSA_CREATE_RESOURCES);
 }
@@ -59,10 +50,6 @@ void Engine::onWindowSizeChanged(int screenWidth, int screenHeight, int cursorWi
 void Engine::releaseDeviceDependentResources()
 {
     execute(ERSA_RELEASE_RESOURCES);
-    
-#if IS_ANDROID
-//    JNIAndroidAssetHandler::destroy();
-#endif
 }
 
 void Engine::onResume()
