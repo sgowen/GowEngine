@@ -14,6 +14,7 @@
 #include "RapidJSONUtil.hpp"
 
 #include <assert.h>
+#include <algorithm>
 
 #include <rapidjson/document.h>
 

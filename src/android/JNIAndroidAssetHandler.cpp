@@ -46,7 +46,7 @@ FileData JNIAndroidAssetHandler::loadAsset(const char* filePath)
     AAsset *asset = AAssetManager_open(_assetManager, filePath, AASSET_MODE_STREAMING);
     if (asset == NULL)
     {
-        LOG("Unable to load %s from assets", filePath);
+        LOG("Unable to load %s from AssetManager", filePath);
     }
     assert(asset != NULL);
     

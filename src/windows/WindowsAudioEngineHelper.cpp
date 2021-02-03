@@ -35,7 +35,7 @@ SoundWrapper* WindowsAudioEngineHelper::loadMusic(const char* filePath)
 
 WindowsAudioEngineHelper::WindowsAudioEngineHelper() : AudioEngineHelper()
 {
-	using namespace Windows;
+	using namespace DirectX;
 
     AUDIO_ENGINE_FLAGS eflags = AudioEngine_Default;
 #if IS_DEBUG

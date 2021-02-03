@@ -58,7 +58,7 @@ FileData WindowsAssetHandler::loadAsset(const char* filePath)
 
 	delete[] name;
 
-	return FileData(blob->size(), (const char*)blob->data(), (const void*)blob);
+	return FileData(blob->size(), blob->data(), (const void*)blob);
 }
 
 void WindowsAssetHandler::releaseAsset(const FileData& fileData)

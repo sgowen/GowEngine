@@ -15,6 +15,7 @@
 #include "ClientProxy.hpp"
 #include "OutputMemoryBitStream.hpp"
 #include "InstanceManager.hpp"
+#include "TimeTracker.hpp"
 
 SocketServerHelper::SocketServerHelper(uint16_t port, uint8_t maxNumPlayers, ProcessPacketFunc processPacketFunc, HandleNoResponseFunc handleNoResponseFunc, HandleConnectionResetFunc handleConnectionResetFunc, GetClientProxyFunc getClientProxyFunc, HandleClientDisconnectedFunc handleClientDisconnectedFunc) : ServerHelper(maxNumPlayers, new SocketPacketHandler(INSTANCE_MGR.get<TimeTracker>(INSK_TIMING_SERVER), true, port, processPacketFunc, handleNoResponseFunc, handleConnectionResetFunc), getClientProxyFunc, handleClientDisconnectedFunc)
 {

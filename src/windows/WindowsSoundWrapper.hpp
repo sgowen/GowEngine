@@ -17,9 +17,9 @@
 class WindowsSoundWrapper : public SoundWrapper
 {
 public:
-    WindowsSoundWrapper(uint16_t soundID, const char *filePath, Windows::AudioEngine* audioEngine, int numInstances = 1);
+    WindowsSoundWrapper(uint16_t soundID, const char *filePath, DirectX::AudioEngine* audioEngine, int numInstances = 1);
     virtual ~WindowsSoundWrapper();
     
 private:
-    std::unique_ptr<Windows::SoundEffect> _sound;
+    std::unique_ptr<DirectX::SoundEffect> _sound;
 };

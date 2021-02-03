@@ -25,7 +25,7 @@ public:
     virtual SoundWrapper* loadMusic(const char* filePath);
 
 private:
-    std::unique_ptr<Windows::AudioEngine> _audioEngine;
+    std::unique_ptr<DirectX::AudioEngine> _audioEngine;
     
     WindowsAudioEngineHelper();
     virtual ~WindowsAudioEngineHelper();

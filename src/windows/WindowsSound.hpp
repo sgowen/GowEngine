@@ -17,7 +17,7 @@
 class WindowsSound : public Sound
 {
 public:
-    WindowsSound(uint16_t soundID, Windows::SoundEffect& sound, float volume = 1.0f);
+    WindowsSound(uint16_t soundID, DirectX::SoundEffect& sound, float volume = 1.0f);
     virtual ~WindowsSound();
 
     virtual void play(bool isLooping = false);
@@ -30,5 +30,5 @@ public:
     virtual bool isPaused();
 
 private:
-    std::unique_ptr<Windows::SoundEffectInstance> _soundEffectInstance;
+    std::unique_ptr<DirectX::SoundEffectInstance> _soundEffectInstance;
 };
