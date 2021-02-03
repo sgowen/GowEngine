@@ -8,10 +8,7 @@
 
 #pragma once
 
-#define GOW_KEY_SPACE_BAR 0x0020
-#define GOW_KEY_ASCII_COMMA 0x002C
-#define GOW_KEY_ASCII_PERIOD 0x002E
-#define GOW_KEY_ZERO 0x0030
+#define GOW_KEY_0 0x0030
 #define GOW_KEY_1 0x0031
 #define GOW_KEY_2 0x0032
 #define GOW_KEY_3 0x0033
@@ -21,7 +18,6 @@
 #define GOW_KEY_7 0x0037
 #define GOW_KEY_8 0x0038
 #define GOW_KEY_9 0x0039
-#define GOW_KEY_COLON 0x003A
 #define GOW_KEY_A 0x0041
 #define GOW_KEY_B 0x0042
 #define GOW_KEY_C 0x0043
@@ -48,13 +44,14 @@
 #define GOW_KEY_X 0x0058
 #define GOW_KEY_Y 0x0059
 #define GOW_KEY_Z 0x005A
+#define GOW_KEY_SPACE_BAR 0x0020
+#define GOW_KEY_COMMA 0x002C
+#define GOW_KEY_PERIOD 0x002E
 #define GOW_KEY_CTRL 341
 #define GOW_KEY_CMD 343
 #define GOW_KEY_DELETE 0x007F
 #define GOW_KEY_BACK_SPACE 0x0103
 #define GOW_KEY_ESCAPE 0x0100
-#define GOW_KEY_PERIOD GOW_KEY_ASCII_PERIOD
-#define GOW_KEY_COMMA GOW_KEY_ASCII_COMMA
 #define GOW_KEY_ARROW_LEFT 0x0107
 #define GOW_KEY_ARROW_UP 0x0109
 #define GOW_KEY_ARROW_RIGHT 0x0106
@@ -72,11 +69,13 @@ struct KeyboardEvent
 {
     KeyboardEventType _type;
     uint16_t _key;
+    bool _isChar;
     bool _isNumerical;
     
-    KeyboardEvent(KeyboardEventType type = KBET_DOWN, uint16_t key = 0, bool isNumerical = false) :
+    KeyboardEvent(KeyboardEventType type = KBET_DOWN, uint16_t key = 0, bool isChar = false, bool isNumerical = false) :
     _type(type),
     _key(key),
+    _isChar(isChar),
     _isNumerical(isNumerical)
     {
         // Empty

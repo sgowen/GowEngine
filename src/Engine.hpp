@@ -38,7 +38,7 @@ public:
     Engine(EngineController& engineController);
     ~Engine() {}
     
-    void createDeviceDependentResources();
+    void createDeviceDependentResources(void* data = NULL);
     void onWindowSizeChanged(int screenWidth, int screenHeight, int cursorWidth = 0, int cursorHeight = 0);
     void releaseDeviceDependentResources();
     void onResume();

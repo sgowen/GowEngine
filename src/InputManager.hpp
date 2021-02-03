@@ -46,8 +46,9 @@ private:
     FixedSizePool<CursorEvent> _poolCursor;
     FixedSizePool<GamepadEvent> _poolGamepad;
     FixedSizePool<KeyboardEvent> _poolKeyboard;
-    std::vector<uint16_t> _supportedKeys;
     std::vector<uint16_t> _numericalKeys;
+    std::vector<uint16_t> _textKeys;
+    std::vector<uint16_t> _supportedKeys;
     std::map<uint16_t, bool> _lastKnownKeyStates;
     std::map<uint8_t, bool> _lastKnownGamepadButtonStates[NUM_SUPPORTED_GAMEPADS];
     Vector2 _lastConvertedCursorPos;
@@ -56,8 +57,9 @@ private:
     float _matrixWidth;
     float _matrixHeight;
     
-    bool isKeySupported(uint16_t key);
     bool isKeyNumerical(uint16_t key);
+    bool isKeySuitableForTextInput(uint16_t key);
+    bool isKeySupported(uint16_t key);
     
     InputManager();
     ~InputManager() {}

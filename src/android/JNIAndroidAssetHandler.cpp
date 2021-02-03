@@ -41,7 +41,7 @@ FileData JNIAndroidAssetHandler::loadAsset(const char* filePath)
     AAsset *asset = AAssetManager_open(_assetManager, filePath, AASSET_MODE_STREAMING);
     assert(asset != NULL);
     
-    return FileData(AAsset_getLength(asset), static_cast<const char*>(AAsset_getBuffer(asset)), asset);
+    return FileData(AAsset_getLength(asset), static_cast<const uint8_t *>(AAsset_getBuffer(asset)), asset);
 }
 
 void JNIAndroidAssetHandler::releaseAsset(const FileData& fileData)

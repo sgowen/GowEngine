@@ -8,11 +8,51 @@
 
 #pragma once
 
-class AudioEngineHelper;
+#include "PlatformMacros.hpp"
+
+#if IS_APPLE
+    #include "apple/AppleAudioEngineHelper.hpp"
+#elif IS_ANDROID
+    #include "android/AndroidAudioEngineHelper.hpp"
+#elif IS_LINUX
+    #include "linux/LinuxAudioEngineHelper.hpp"
+#elif IS_WINDOWS
+    #include "windows/DirectXAudioEngineHelper.hpp"
+#else
+    #include "NullAudioEngineHelper.hpp"
+#endif
+
+#include <assert.h>
+#include <stdlib.h>
 
 class AudioEngineHelperFactory
 {
 public:
-    static AudioEngineHelper* create();
-    static void destroy(AudioEngineHelper* ah);
+    static AudioEngineHelper* create()
+    {
+#if IS_APPLE
+        return new AppleAudioEngineHelper();
+#elif IS_ANDROID
+        return new AndroidAudioEngineHelper();
+#elif IS_LINUX
+        return new LinuxAudioEngineHelper();
+#elif IS_WINDOWS
+        return new DirectXAudioEngineHelper();
+#else
+        return new NullAudioEngineHelper();
+#endif
+    }
+    
+    static void destroy(AudioEngineHelper* aeh)
+    {
+        assert(aeh != NULL);
+
+        delete aeh;
+    }
+    
+private:
+    AudioEngineHelperFactory();
+    ~AudioEngineHelperFactory();
+    AudioEngineHelperFactory(const AudioEngineHelperFactory&);
+    AudioEngineHelperFactory& operator=(const AudioEngineHelperFactory&);
 };

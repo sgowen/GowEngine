@@ -106,6 +106,7 @@ void InputManager::onKeyboardInput(uint16_t key, bool isUp)
     e->_key = key;
     e->_type = isUp ? KBET_UP : wasLastEventDown ? KBET_HELD : KBET_DOWN;
     e->_isNumerical = isKeyNumerical(key);
+    e->_isChar = isKeySuitableForTextInput(key);
     
     _poolKeyboard.add(e);
 }
@@ -155,17 +156,24 @@ void InputManager::setMatrixSize(float matrixWidth, float matrixHeight)
     _matrixHeight = matrixHeight;
 }
 
-bool InputManager::isKeySupported(uint16_t key)
-{
-    std::vector<uint16_t>& keys = _supportedKeys;
-
-    return std::find(keys.begin(), keys.end(), key) != keys.end();
-}
-
 bool InputManager::isKeyNumerical(uint16_t key)
 {
     std::vector<uint16_t>& keys = _numericalKeys;
     
+    return std::find(keys.begin(), keys.end(), key) != keys.end();
+}
+
+bool InputManager::isKeySuitableForTextInput(uint16_t key)
+{
+    std::vector<uint16_t>& keys = _textKeys;
+    
+    return std::find(keys.begin(), keys.end(), key) != keys.end();
+}
+
+bool InputManager::isKeySupported(uint16_t key)
+{
+    std::vector<uint16_t>& keys = _supportedKeys;
+
     return std::find(keys.begin(), keys.end(), key) != keys.end();
 }
 
@@ -179,60 +187,7 @@ _cursorHeight(1),
 _matrixWidth(1),
 _matrixHeight(1)
 {
-    _supportedKeys.push_back(GOW_KEY_BACK_SPACE);
-    _supportedKeys.push_back(GOW_KEY_CARRIAGE_RETURN);
-    _supportedKeys.push_back(GOW_KEY_ESCAPE);
-    _supportedKeys.push_back(GOW_KEY_SPACE_BAR);
-    _supportedKeys.push_back(GOW_KEY_ASCII_PERIOD);
-    _supportedKeys.push_back(GOW_KEY_ASCII_COMMA);
-    _supportedKeys.push_back(GOW_KEY_PERIOD);
-    _supportedKeys.push_back(GOW_KEY_COMMA);
-    _supportedKeys.push_back(GOW_KEY_ZERO);
-    _supportedKeys.push_back(GOW_KEY_1);
-    _supportedKeys.push_back(GOW_KEY_2);
-    _supportedKeys.push_back(GOW_KEY_3);
-    _supportedKeys.push_back(GOW_KEY_4);
-    _supportedKeys.push_back(GOW_KEY_5);
-    _supportedKeys.push_back(GOW_KEY_6);
-    _supportedKeys.push_back(GOW_KEY_7);
-    _supportedKeys.push_back(GOW_KEY_8);
-    _supportedKeys.push_back(GOW_KEY_9);
-    _supportedKeys.push_back(GOW_KEY_COLON);
-    _supportedKeys.push_back(GOW_KEY_A);
-    _supportedKeys.push_back(GOW_KEY_B);
-    _supportedKeys.push_back(GOW_KEY_C);
-    _supportedKeys.push_back(GOW_KEY_D);
-    _supportedKeys.push_back(GOW_KEY_E);
-    _supportedKeys.push_back(GOW_KEY_F);
-    _supportedKeys.push_back(GOW_KEY_G);
-    _supportedKeys.push_back(GOW_KEY_H);
-    _supportedKeys.push_back(GOW_KEY_I);
-    _supportedKeys.push_back(GOW_KEY_J);
-    _supportedKeys.push_back(GOW_KEY_K);
-    _supportedKeys.push_back(GOW_KEY_L);
-    _supportedKeys.push_back(GOW_KEY_M);
-    _supportedKeys.push_back(GOW_KEY_N);
-    _supportedKeys.push_back(GOW_KEY_O);
-    _supportedKeys.push_back(GOW_KEY_P);
-    _supportedKeys.push_back(GOW_KEY_Q);
-    _supportedKeys.push_back(GOW_KEY_R);
-    _supportedKeys.push_back(GOW_KEY_S);
-    _supportedKeys.push_back(GOW_KEY_T);
-    _supportedKeys.push_back(GOW_KEY_U);
-    _supportedKeys.push_back(GOW_KEY_V);
-    _supportedKeys.push_back(GOW_KEY_W);
-    _supportedKeys.push_back(GOW_KEY_X);
-    _supportedKeys.push_back(GOW_KEY_Y);
-    _supportedKeys.push_back(GOW_KEY_Z);
-    _supportedKeys.push_back(GOW_KEY_CTRL);
-    _supportedKeys.push_back(GOW_KEY_CMD);
-    _supportedKeys.push_back(GOW_KEY_DELETE);
-    _supportedKeys.push_back(GOW_KEY_ARROW_UP);
-    _supportedKeys.push_back(GOW_KEY_ARROW_DOWN);
-    _supportedKeys.push_back(GOW_KEY_ARROW_LEFT);
-    _supportedKeys.push_back(GOW_KEY_ARROW_RIGHT);
-    
-    _numericalKeys.push_back(GOW_KEY_ZERO);
+    _numericalKeys.push_back(GOW_KEY_0);
     _numericalKeys.push_back(GOW_KEY_1);
     _numericalKeys.push_back(GOW_KEY_2);
     _numericalKeys.push_back(GOW_KEY_3);
@@ -242,4 +197,47 @@ _matrixHeight(1)
     _numericalKeys.push_back(GOW_KEY_7);
     _numericalKeys.push_back(GOW_KEY_8);
     _numericalKeys.push_back(GOW_KEY_9);
+    
+    _textKeys.insert(std::end(_textKeys), std::begin(_numericalKeys), std::end(_numericalKeys));
+    _textKeys.push_back(GOW_KEY_A);
+    _textKeys.push_back(GOW_KEY_B);
+    _textKeys.push_back(GOW_KEY_C);
+    _textKeys.push_back(GOW_KEY_D);
+    _textKeys.push_back(GOW_KEY_E);
+    _textKeys.push_back(GOW_KEY_F);
+    _textKeys.push_back(GOW_KEY_G);
+    _textKeys.push_back(GOW_KEY_H);
+    _textKeys.push_back(GOW_KEY_I);
+    _textKeys.push_back(GOW_KEY_J);
+    _textKeys.push_back(GOW_KEY_K);
+    _textKeys.push_back(GOW_KEY_L);
+    _textKeys.push_back(GOW_KEY_M);
+    _textKeys.push_back(GOW_KEY_N);
+    _textKeys.push_back(GOW_KEY_O);
+    _textKeys.push_back(GOW_KEY_P);
+    _textKeys.push_back(GOW_KEY_Q);
+    _textKeys.push_back(GOW_KEY_R);
+    _textKeys.push_back(GOW_KEY_S);
+    _textKeys.push_back(GOW_KEY_T);
+    _textKeys.push_back(GOW_KEY_U);
+    _textKeys.push_back(GOW_KEY_V);
+    _textKeys.push_back(GOW_KEY_W);
+    _textKeys.push_back(GOW_KEY_X);
+    _textKeys.push_back(GOW_KEY_Y);
+    _textKeys.push_back(GOW_KEY_Z);
+    _textKeys.push_back(GOW_KEY_SPACE_BAR);
+    _textKeys.push_back(GOW_KEY_PERIOD);
+    _textKeys.push_back(GOW_KEY_COMMA);
+    
+    _supportedKeys.insert(std::end(_supportedKeys), std::begin(_textKeys), std::end(_textKeys));
+    _supportedKeys.push_back(GOW_KEY_BACK_SPACE);
+    _supportedKeys.push_back(GOW_KEY_CARRIAGE_RETURN);
+    _supportedKeys.push_back(GOW_KEY_ESCAPE);
+    _supportedKeys.push_back(GOW_KEY_CTRL);
+    _supportedKeys.push_back(GOW_KEY_CMD);
+    _supportedKeys.push_back(GOW_KEY_DELETE);
+    _supportedKeys.push_back(GOW_KEY_ARROW_UP);
+    _supportedKeys.push_back(GOW_KEY_ARROW_DOWN);
+    _supportedKeys.push_back(GOW_KEY_ARROW_LEFT);
+    _supportedKeys.push_back(GOW_KEY_ARROW_RIGHT);
 }

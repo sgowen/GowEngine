@@ -97,7 +97,7 @@ void mouse_button_callback(GLFWwindow* window, int button, int action, int mods)
     }
 }
 
-void mouse_cursor_pos_callback(GLFWwindow*, double x, double y)
+void mouse_cursor_pos_callback(GLFWwindow* window, double x, double y)
 {
     if (isDown)
     {
@@ -188,7 +188,7 @@ int GlfwMain::exec(EngineController& engineController, const char* windowTitle)
 
     double lastTime = 0;
     
-    _engine->createDeviceDependentResources();
+    _engine->createDeviceDependentResources(window);
 
     int glWidth = 0, glHeight = 0;
 
