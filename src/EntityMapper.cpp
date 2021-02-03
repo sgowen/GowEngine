@@ -182,7 +182,7 @@ Entity* EntityMapper::createEntityFromDef(EntityDef* entityDef, EntityInstanceDe
 {
     EntityDef ed = *entityDef;
     
-    ed._ID = eid->_entityID;
+    ed._entityID = eid->_entityID;
     ed._x = eid->_x;
     ed._y = eid->_y;
     ed._width = eid->_w > 0 ? eid->_w : entityDef->_width;

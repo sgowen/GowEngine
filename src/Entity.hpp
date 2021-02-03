@@ -52,7 +52,7 @@ struct EntityDef
 {
     std::string _name;
     std::string _keyName;
-    uint32_t _ID;
+    uint32_t _entityID;
     uint32_t _key;
     std::string _controller;
     std::string _networkController;
@@ -81,7 +81,7 @@ public:
         RSTF_STATE = 1 << 1
     };
     
-    Entity(EntityDef entityDef);
+    Entity(EntityDef ed);
     ~Entity();
     
     void update();

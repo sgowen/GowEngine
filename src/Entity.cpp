@@ -18,16 +18,16 @@
 #include "Rektangle.hpp"
 #include "OverlapTester.hpp"
 
-Entity::Entity(EntityDef entityDef) :
-_entityDef(entityDef),
-_controller(ENTITY_MAPPER.createEntityController(entityDef, this)),
-_networkController(ENTITY_MAPPER.createEntityNetworkController(entityDef, this)),
+Entity::Entity(EntityDef ed) :
+_entityDef(ed),
+_controller(ENTITY_MAPPER.createEntityController(ed, this)),
+_networkController(ENTITY_MAPPER.createEntityNetworkController(ed, this)),
 _body(NULL),
 _groundSensorFixture(NULL),
-_pose(entityDef._x, entityDef._y),
+_pose(ed._x, ed._y),
 _poseNetworkCache(_pose),
-_ID(entityDef._ID),
-_deadZoneY(-_entityDef._height / 2.0f),
+_ID(ed._entityID),
+_deadZoneY(-ed._height / 2.0f),
 _isRequestingDeletion(false),
 _isBodyFacingLeft(false)
 {
