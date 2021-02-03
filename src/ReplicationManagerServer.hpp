@@ -36,5 +36,4 @@ private:
     
     uint16_t writeCreateAction(OutputMemoryBitStream& outputStream, uint32_t networkID, uint16_t dirtyState);
     uint16_t writeUpdateAction(OutputMemoryBitStream& outputStream, uint32_t networkID, uint16_t dirtyState);
-    uint16_t writeDestroyAction(OutputMemoryBitStream& outputStream, uint32_t networkID, uint16_t dirtyState);
 };

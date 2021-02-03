@@ -314,7 +314,6 @@ void NetworkManagerClient::handleStatePacket(InputMemoryBitStream& inputStream)
     {
         readLastMoveProcessedOnServerTimestamp(inputStream);
         
-        //tell the replication manager to handle the rest...
         _replicationManagerClient->read(inputStream);
         
         _hasReceivedNewState = true;

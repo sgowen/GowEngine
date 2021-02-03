@@ -9,7 +9,6 @@
 #include "EntityController.hpp"
 
 #include "Entity.hpp"
-#include <box2d/box2d.h>
 
 IMPL_RTTI_NOPARENT(EntityController);
 IMPL_EntityController_create(EntityController);
