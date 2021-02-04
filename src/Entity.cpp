@@ -49,7 +49,7 @@ void Entity::update()
         requestDeletion();
     }
     
-    if (_entityDef._stateSensitive)
+    if (IS_BIT_SET(_entityDef._bodyFlags, BODF_DYNAMIC))
     {
         ++_state._stateTime;
     }
@@ -97,7 +97,6 @@ void Entity::initPhysics(b2World& world)
     bodyDef.position.Set(_pose._position.x, _pose._position.y);
     bodyDef.type = IS_BIT_SET(_entityDef._bodyFlags, BODF_STATIC) ? b2_staticBody : b2_dynamicBody;
     bodyDef.fixedRotation = IS_BIT_SET(_entityDef._bodyFlags, BODF_FIXED_ROTATION);
-    bodyDef.bullet = IS_BIT_SET(_entityDef._bodyFlags, BODF_BULLET);
     bodyDef.userData.pointer = (uintptr_t)this;
     _body = world.CreateBody(&bodyDef);
     

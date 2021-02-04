@@ -53,7 +53,7 @@ void EntityNetworkController::read(InputMemoryBitStream& ip)
         e._poseNetworkCache = e._pose;
     }
     
-    if (e._entityDef._stateSensitive)
+    if (IS_BIT_SET(e._entityDef._bodyFlags, BODF_DYNAMIC))
     {
         ip.read(stateBit);
         if (stateBit)
@@ -95,7 +95,7 @@ uint16_t EntityNetworkController::write(OutputMemoryBitStream& op, uint16_t dirt
         writtenState |= Entity::RSTF_POSE;
     }
     
-    if (e._entityDef._stateSensitive)
+    if (IS_BIT_SET(e._entityDef._bodyFlags, BODF_DYNAMIC))
     {
         bool state = IS_BIT_SET(dirtyState, Entity::RSTF_STATE);
         op.write(state);

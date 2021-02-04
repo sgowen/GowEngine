@@ -43,9 +43,8 @@ struct FixtureDef
 enum BodyFlags
 {
     BODF_STATIC =         1 << 0,
-    BODF_FIXED_ROTATION = 1 << 1,
-    BODF_BULLET =         1 << 2,
-    BODF_PLAYER =         1 << 3
+    BODF_DYNAMIC =        1 << 1,
+    BODF_FIXED_ROTATION = 1 << 2
 };
 
 struct EntityDef
@@ -65,7 +64,6 @@ struct EntityDef
     int _y;
     int _width;
     int _height;
-    bool _stateSensitive;
     bool _server;
 };
 

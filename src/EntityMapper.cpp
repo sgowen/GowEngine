@@ -160,7 +160,6 @@ void EntityMapper::initWithJSON(const char* json)
         entry->_bodyFlags = RapidJSONUtil::getInteger(iv, "bodyFlags");
         entry->_width = RapidJSONUtil::getInteger(iv, "width");
         entry->_height = RapidJSONUtil::getInteger(iv, "height");
-        entry->_stateSensitive = RapidJSONUtil::getBool(iv, "stateSensitive");
         
         _entityDescriptorsMap[key] = entry;
         _entityDescriptors.push_back(entry);
