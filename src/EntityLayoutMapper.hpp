@@ -81,9 +81,8 @@ private:
     std::vector<MapDef> _maps;
     std::map<uint32_t, std::string> _layouts;
     EntityLayoutDef _entityLayoutDef;
-    EntityIDManager* _entityIDManager;
     
-    void loadEntityLayout(const char* data);
+    void loadEntityLayout(const char* data, EntityIDManager* entityIDManager);
     FILE* openFile(const char* path, const char* mode);
     
     EntityLayoutMapper() {}

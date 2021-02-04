@@ -31,7 +31,8 @@ Entity* EntityManager::getEntityByID(uint32_t id) const
 
 void EntityManager::registerEntity(Entity* e)
 {
-    _entityMap.insert(std::make_pair(e->getID(), e));
+    uint32_t ID = e->getID();
+    _entityMap.insert(std::make_pair(ID, e));
     
     if (_handleEntityCreatedFunc)
     {

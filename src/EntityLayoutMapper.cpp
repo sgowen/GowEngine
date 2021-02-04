@@ -75,14 +75,11 @@ void EntityLayoutMapper::loadEntityLayout(uint32_t name, EntityIDManager* entity
 
 void EntityLayoutMapper::loadEntityLayout(std::string filePath, EntityIDManager* entityIDManager)
 {
-    assert(entityIDManager);
-    
-    _entityIDManager = entityIDManager;
-    _entityLayoutDef._entities.clear();
+    assert(entityIDManager != NULL);
     
     AssetHandler* ah = AssetHandlerFactory::create();
     FileData jsonData = ah->loadAsset(filePath.c_str());
-    loadEntityLayout((const char*)jsonData._data);
+    loadEntityLayout((const char*)jsonData._data, entityIDManager);
     ah->releaseAsset(jsonData);
     AssetHandlerFactory::destroy(ah);
 }
@@ -97,9 +94,11 @@ std::vector<MapDef>& EntityLayoutMapper::getMaps()
     return _maps;
 }
 
-void EntityLayoutMapper::loadEntityLayout(const char* data)
+void EntityLayoutMapper::loadEntityLayout(const char* data, EntityIDManager* entityIDManager)
 {
-    _entityIDManager->resetStaticEntityID();
+    _entityLayoutDef._entities.clear();
+    
+    entityIDManager->resetLayoutEntityID();
     
     using namespace rapidjson;
     
@@ -119,7 +118,7 @@ void EntityLayoutMapper::loadEntityLayout(const char* data)
             std::string keyStr = RapidJSONUtil::getString(iv, "key");
             uint32_t key = StringUtil::fourCharFromString(keyStr);
             
-            uint32_t ID = _entityIDManager->getNextStaticEntityID();
+            uint32_t ID = entityIDManager->getNextLayoutEntityID();
             uint32_t x = RapidJSONUtil::getUnsignedInteger(iv, "x");
             uint32_t y = RapidJSONUtil::getUnsignedInteger(iv, "y");
             uint32_t w = RapidJSONUtil::getUnsignedInteger(iv, "w");

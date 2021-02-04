@@ -10,33 +10,33 @@
 
 #include "MathUtil.hpp"
 
-#define  STATIC_ENTITY_ID_BEGIN 0x00000001u
-#define  STATIC_ENTITY_ID_END   0x000FFFFFu // 1048575 static (loaded from json) entities supported, which should be MORE than enough
-#define DYNAMIC_ENTITY_ID_BEGIN 0x00100000u
-#define DYNAMIC_ENTITY_ID_END   0xFFFFFFFFu
+#define  LAYOUT_ENTITY_ID_BEGIN 0x00000001u
+#define  LAYOUT_ENTITY_ID_END   0x000FFFFFu // 1048575 layout (loaded from json) entities supported, which should be MORE than enough
+#define NETWORK_ENTITY_ID_BEGIN 0x00100000u
+#define NETWORK_ENTITY_ID_END   0xFFFFFFFFu
 
 EntityIDManager::EntityIDManager() :
-_staticEntityID(STATIC_ENTITY_ID_BEGIN),
-_dynamicEntityID(DYNAMIC_ENTITY_ID_BEGIN)
+_nextLayoutEntityID(LAYOUT_ENTITY_ID_BEGIN),
+_nextNetworkEntityID(NETWORK_ENTITY_ID_BEGIN)
 {
     // Empty
 }
 
-uint32_t EntityIDManager::getNextStaticEntityID()
+uint32_t EntityIDManager::getNextLayoutEntityID()
 {
-    _staticEntityID = clamp(_staticEntityID + 1, STATIC_ENTITY_ID_BEGIN, STATIC_ENTITY_ID_END);
+    _nextLayoutEntityID = clamp(_nextLayoutEntityID + 1, LAYOUT_ENTITY_ID_BEGIN, LAYOUT_ENTITY_ID_END);
     
-    return _staticEntityID;
+    return _nextLayoutEntityID;
 }
 
-void EntityIDManager::resetStaticEntityID()
+void EntityIDManager::resetLayoutEntityID()
 {
-    _staticEntityID = STATIC_ENTITY_ID_BEGIN;
+    _nextLayoutEntityID = LAYOUT_ENTITY_ID_BEGIN;
 }
 
-uint32_t EntityIDManager::getNextDynamicEntityID()
+uint32_t EntityIDManager::getNextNetworkEntityID()
 {
-    _dynamicEntityID = clamp(_dynamicEntityID + 1, DYNAMIC_ENTITY_ID_BEGIN, DYNAMIC_ENTITY_ID_END);
+    _nextNetworkEntityID = clamp(_nextNetworkEntityID + 1, NETWORK_ENTITY_ID_BEGIN, NETWORK_ENTITY_ID_END);
     
-    return _dynamicEntityID;
+    return _nextNetworkEntityID;
 }

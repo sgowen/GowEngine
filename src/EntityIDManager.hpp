@@ -16,11 +16,11 @@ public:
     EntityIDManager();
     ~EntityIDManager() {}
     
-    uint32_t getNextStaticEntityID();
-    void resetStaticEntityID();
-    uint32_t getNextDynamicEntityID();
+    uint32_t getNextLayoutEntityID();
+    void resetLayoutEntityID();
+    uint32_t getNextNetworkEntityID();
     
 private:
-    uint32_t _staticEntityID;
-    uint32_t _dynamicEntityID;
+    uint32_t _nextLayoutEntityID;
+    uint32_t _nextNetworkEntityID;
 };
