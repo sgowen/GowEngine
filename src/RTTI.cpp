@@ -8,12 +8,12 @@
 
 #include "RTTI.hpp"
 
-RTTI::RTTI(const std::string& className) : _className(className), _pBaseRTTI(NULL)
+RTTI::RTTI(const std::string& className) : _className(className), _parentRTTI(NULL)
 {
     // Empty
 }
 
-RTTI::RTTI(const std::string& className, const RTTI& baseRTTI) : _className(className), _pBaseRTTI(&baseRTTI)
+RTTI::RTTI(const std::string& className, const RTTI& parentRTTI) : _className(className), _parentRTTI(&parentRTTI)
 {
     // Empty
 }
@@ -30,16 +30,16 @@ bool RTTI::isExactly(const RTTI& rtti) const
 
 bool RTTI::derivesFrom(const RTTI& rtti) const
 {
-    const RTTI * pCompare = this;
+    const RTTI* pRTTI = this;
     
-    while (pCompare)
+    while (pRTTI != NULL)
     {
-        if (pCompare == &rtti)
+        if (pRTTI == &rtti)
         {
             return true;
         }
         
-        pCompare = pCompare->_pBaseRTTI;
+        pRTTI = pRTTI->_parentRTTI;
     }
     
     return false;

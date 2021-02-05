@@ -37,21 +37,21 @@ struct Rektangle
     
     float left()
     {
-        return _lowerLeft.x();
+        return _lowerLeft._x;
     }
 
     float right()
     {
-        return _lowerLeft.x() + _width;
+        return _lowerLeft._x + _width;
     }
 
     float bottom()
     {
-        return _lowerLeft.y();
+        return _lowerLeft._y;
     }
 
     float top()
     {
-        return _lowerLeft.y() + _height;
+        return _lowerLeft._y + _height;
     }
 };

@@ -10,6 +10,8 @@
 
 #include <box2d/b2_math.h>
 
+#include "Vector2.hpp"
+
 #include <stdint.h>
 #include <string>
 #include <map>
@@ -32,8 +34,8 @@ enum FixtureFlags
 
 struct FixtureDef
 {
-    std::vector<b2Vec2> _vertices;
-    b2Vec2 _center;
+    std::vector<Vector2> _vertices;
+    Vector2 _center;
     float _restitution;
     float _density;
     float _friction;
@@ -57,7 +59,7 @@ struct EntityDef
     std::string _networkController;
     std::map<int, std::string> _textureMappings;
     std::map<int, int> _soundMappings;
-    std::map<int, std::vector<int> > _soundCollectionMappings;
+    std::map<int, std::vector<int> > _soundRandomMappings;
     std::vector<FixtureDef> _fixtures;
     int _bodyFlags;
     int _x;
@@ -71,6 +73,7 @@ class Entity
 {
     friend class EntityController;
     friend class EntityNetworkController;
+    friend class EntityPhysicsController;
     
 public:
     enum ReadStateFlag
@@ -95,10 +98,12 @@ public:
     EntityNetworkController* getNetworkController();
     uint16_t getStateTime();
     b2Body* getBody();
-    void setPosition(b2Vec2 position);
-    const b2Vec2& getPosition();
-    void setVelocity(b2Vec2 velocity);
-    const b2Vec2& getVelocity();
+    void setPosition(Vector2 position);
+    void setPosition(float x, float y);
+    const Vector2& getPosition();
+    void setVelocity(Vector2 velocity);
+    void setVelocity(float x, float y);
+    const Vector2& getVelocity();
     float getWidth();
     float getHeight();
     void setAngle(float angle);
@@ -116,34 +121,35 @@ public:
     
     struct Pose
     {
-        b2Vec2 _velocity;
-        b2Vec2 _position;
+        Vector2 _velocity;
+        Vector2 _position;
         float _angle;
         uint8_t _numGroundContacts;
         bool _isFacingLeft;
         
-        Pose(float x, float y)
+        Pose(float x, float y) :
+        _velocity(VECTOR2_ZERO),
+        _position(x, y),
+        _angle(0),
+        _numGroundContacts(0),
+        _isFacingLeft(false)
         {
-            _velocity = b2Vec2_zero;
-            _position = b2Vec2(x, y);
-            _angle = 0;
-            _numGroundContacts = 0;
-            _isFacingLeft = false;
+            // Empty
         }
         
-        friend bool operator==(Pose& lhs, Pose& rhs)
+        friend bool operator==(Pose& a, Pose& b)
         {
             return
-            lhs._velocity          == rhs._velocity &&
-            lhs._position          == rhs._position &&
-            lhs._angle             == rhs._angle &&
-            lhs._numGroundContacts == rhs._numGroundContacts &&
-            lhs._isFacingLeft      == rhs._isFacingLeft;
+            a._velocity          == b._velocity &&
+            a._position          == b._position &&
+            a._angle             == b._angle &&
+            a._numGroundContacts == b._numGroundContacts &&
+            a._isFacingLeft      == b._isFacingLeft;
         }
         
-        friend bool operator!=(Pose& lhs, Pose& rhs)
+        friend bool operator!=(Pose& a, Pose& b)
         {
-            return !(lhs == rhs);
+            return !(a == b);
         }
     };
     Pose& pose();
@@ -162,17 +168,17 @@ public:
             _stateFlags = 0;
         }
         
-        friend bool operator==(State& lhs, State& rhs)
+        friend bool operator==(State& a, State& b)
         {
             return
-            lhs._stateTime         == rhs._stateTime &&
-            lhs._state             == rhs._state &&
-            lhs._stateFlags        == rhs._stateFlags;
+            a._stateTime         == b._stateTime &&
+            a._state             == b._state &&
+            a._stateFlags        == b._stateFlags;
         }
         
-        friend bool operator!=(State& lhs, State& rhs)
+        friend bool operator!=(State& a, State& b)
         {
-            return !(lhs == rhs);
+            return !(a == b);
         }
     };
     State& state();
@@ -190,7 +196,6 @@ private:
     State _state;
     State _stateNetworkCache;
     const uint32_t _ID;
-    float _deadZoneY;
     bool _isRequestingDeletion;
     bool _isBodyFacingLeft;
     

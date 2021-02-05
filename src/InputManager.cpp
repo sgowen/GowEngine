@@ -140,7 +140,7 @@ Vector2& InputManager::convert(CursorEvent* ce)
 
 Vector2& InputManager::convert(Vector2& v)
 {
-    _lastConvertedCursorPos.set((v.x() / _cursorWidth) * _matrixWidth, (1 - v.y() / _cursorHeight) * _matrixHeight);
+    _lastConvertedCursorPos.set((v._x / _cursorWidth) * _matrixWidth, (1 - v._y / _cursorHeight) * _matrixHeight);
     return _lastConvertedCursorPos;
 }
 

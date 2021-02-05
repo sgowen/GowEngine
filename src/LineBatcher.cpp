@@ -39,10 +39,10 @@ void LineBatcher::begin()
 
 void LineBatcher::addLine(Line& line)
 {
-    float oX = line._origin.x();
-    float oY = line._origin.y();
-    float eX = line._end.x();
-    float eY = line._end.y();
+    float oX = line._origin._x;
+    float oY = line._origin._y;
+    float eX = line._end._x;
+    float eY = line._end._y;
     
     addLine(oX, oY, eX, eY);
 }

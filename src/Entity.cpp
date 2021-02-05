@@ -27,7 +27,6 @@ _groundSensorFixture(NULL),
 _pose(ed._x, ed._y),
 _poseNetworkCache(_pose),
 _ID(ed._entityID),
-_deadZoneY(-ed._height / 2.0f),
 _isRequestingDeletion(false),
 _isBodyFacingLeft(false)
 {
@@ -43,11 +42,6 @@ Entity::~Entity()
 void Entity::update()
 {
     updatePoseFromBody();
-    
-    if (getPosition().y < _deadZoneY)
-    {
-        requestDeletion();
-    }
     
     if (IS_BIT_SET(_entityDef._bodyFlags, BODF_DYNAMIC))
     {
@@ -94,7 +88,7 @@ void Entity::initPhysics(b2World& world)
     assert(_body == NULL);
     
     b2BodyDef bodyDef;
-    bodyDef.position.Set(_pose._position.x, _pose._position.y);
+    bodyDef.position.Set(_pose._position._x, _pose._position._y);
     bodyDef.type = IS_BIT_SET(_entityDef._bodyFlags, BODF_STATIC) ? b2_staticBody : b2_dynamicBody;
     bodyDef.fixedRotation = IS_BIT_SET(_entityDef._bodyFlags, BODF_FIXED_ROTATION);
     bodyDef.userData.pointer = (uintptr_t)this;
@@ -121,8 +115,10 @@ void Entity::updatePoseFromBody()
         return;
     }
     
-    _pose._velocity = _body->GetLinearVelocity();
-    _pose._position = _body->GetPosition();
+    b2Vec2 bodyVelocity = _body->GetLinearVelocity();
+    b2Vec2 bodyPosition = _body->GetPosition();
+    _pose._velocity.set(bodyVelocity.x, bodyVelocity.y);
+    _pose._position.set(bodyPosition.x, bodyPosition.y);
     _pose._angle = _body->GetAngle();
 }
 
@@ -133,8 +129,11 @@ void Entity::updateBodyFromPose()
         return;
     }
     
-    _body->SetLinearVelocity(_pose._velocity);
-    _body->SetTransform(_pose._position, _pose._angle);
+    b2Vec2 bodyVelocity = b2Vec2(_pose._velocity._x, _pose._velocity._y);
+    b2Vec2 bodyPosition = b2Vec2(_pose._position._x, _pose._position._y);
+    
+    _body->SetLinearVelocity(bodyVelocity);
+    _body->SetTransform(bodyPosition, _pose._angle);
     
     if (_isBodyFacingLeft != _pose._isFacingLeft)
     {
@@ -169,26 +168,36 @@ b2Body* Entity::getBody()
     return _body;
 }
 
-void Entity::setPosition(b2Vec2 position)
+void Entity::setPosition(Vector2 position)
 {
-    _pose._position = position;
+    setPosition(position._x, position._y);
+}
+
+void Entity::setPosition(float x, float y)
+{
+    _pose._position.set(x, y);
     
     updateBodyFromPose();
 }
 
-const b2Vec2& Entity::getPosition()
+const Vector2& Entity::getPosition()
 {
     return _pose._position;
 }
 
-void Entity::setVelocity(b2Vec2 velocity)
+void Entity::setVelocity(Vector2 velocity)
 {
-    _pose._velocity = velocity;
+    setVelocity(velocity._x, velocity._y);
+}
+
+void Entity::setVelocity(float x, float y)
+{
+    _pose._velocity.set(x, y);
     
     updateBodyFromPose();
 }
 
-const b2Vec2& Entity::getVelocity()
+const Vector2& Entity::getVelocity()
 {
     return _pose._velocity;
 }
@@ -266,8 +275,8 @@ int Entity::getSoundMapping(int state)
     }
     
     {
-        auto q = _entityDef._soundCollectionMappings.find(state);
-        if (q != _entityDef._soundCollectionMappings.end())
+        auto q = _entityDef._soundRandomMappings.find(state);
+        if (q != _entityDef._soundRandomMappings.end())
         {
             std::vector<int> soundCollection = q->second;
             
@@ -312,7 +321,7 @@ void Entity::createFixtures()
         FixtureDef def = *i;
         if (_isBodyFacingLeft)
         {
-            def._center.x = -def._center.x;
+            def._center._x = -def._center._x;
         }
         
         b2Shape* shape;
@@ -320,8 +329,8 @@ void Entity::createFixtures()
         b2CircleShape circleShape;
         if (IS_BIT_SET(def._flags, FIXF_CIRCLE))
         {
-            circleShape.m_p.Set(def._center.x * _entityDef._width, def._center.y * _entityDef._height);
-            circleShape.m_radius = def._vertices[0].x * _entityDef._width;
+            circleShape.m_p.Set(def._center._x * _entityDef._width, def._center._y * _entityDef._height);
+            circleShape.m_radius = def._vertices[0]._x * _entityDef._width;
             
             shape = &circleShape;
         }
@@ -329,22 +338,25 @@ void Entity::createFixtures()
         {
             if (IS_BIT_SET(def._flags, FIXF_BOX))
             {
-                float wFactor = _entityDef._width * def._vertices[0].x;
-                float hFactor = _entityDef._height * def._vertices[0].y;
-                def._center.Set(def._center.x * _entityDef._width, def._center.y * _entityDef._height);
+                float wFactor = _entityDef._width * def._vertices[0]._x;
+                float hFactor = _entityDef._height * def._vertices[0]._y;
+                def._center.set(def._center._x * _entityDef._width, def._center._y * _entityDef._height);
                 
-                polygonShape.SetAsBox(wFactor, hFactor, def._center, 0);
+                b2Vec2 center = b2Vec2(def._center._x, def._center._y);
+                polygonShape.SetAsBox(wFactor, hFactor, center, 0);
             }
             else
             {
-                for (std::vector<b2Vec2>::iterator i = def._vertices.begin(); i != def._vertices.end(); ++i)
+                std::vector<b2Vec2> bodyVertices;
+                for (std::vector<Vector2>::iterator i = def._vertices.begin(); i != def._vertices.end(); ++i)
                 {
-                    b2Vec2& vertex = (*i);
-                    vertex.Set(vertex.x * _entityDef._width, vertex.y * _entityDef._height);
+                    Vector2& vertex = (*i);
+                    vertex.set(vertex._x * _entityDef._width, vertex._y * _entityDef._height);
+                    bodyVertices.emplace_back(vertex._x, vertex._y);
                 }
                 
-                int count = static_cast<int>(def._vertices.size());
-                polygonShape.Set(&def._vertices[0], count);
+                int count = static_cast<int>(bodyVertices.size());
+                polygonShape.Set(&bodyVertices[0], count);
             }
             shape = &polygonShape;
         }

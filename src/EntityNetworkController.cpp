@@ -33,8 +33,8 @@ void EntityNetworkController::read(InputMemoryBitStream& ip)
     ip.read(stateBit);
     if (stateBit)
     {
-        MemoryBitStreamUtil::read(ip, e._pose._velocity.x, e._pose._velocity.y);
-        MemoryBitStreamUtil::read(ip, e._pose._position.x, e._pose._position.y);
+        MemoryBitStreamUtil::read(ip, e._pose._velocity._x, e._pose._velocity._y);
+        MemoryBitStreamUtil::read(ip, e._pose._position._x, e._pose._position._y);
         
         if (!e.isFixedRotation())
         {
@@ -77,8 +77,8 @@ uint16_t EntityNetworkController::write(OutputMemoryBitStream& op, uint16_t dirt
     op.write(pose);
     if (pose)
     {
-        MemoryBitStreamUtil::write(op, e._pose._velocity.x, e._pose._velocity.y);
-        MemoryBitStreamUtil::write(op, e._pose._position.x, e._pose._position.y);
+        MemoryBitStreamUtil::write(op, e._pose._velocity._x, e._pose._velocity._y);
+        MemoryBitStreamUtil::write(op, e._pose._position._x, e._pose._position._y);
         
         if (!e.isFixedRotation())
         {

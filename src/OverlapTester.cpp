@@ -77,23 +77,23 @@ bool OverlapTester::doRektanglesOverlap(Rektangle& r1, Rektangle& r2)
 
 bool OverlapTester::overlapCircleRektangle(Circle& c, Rektangle& r)
 {
-    float closestX = c._center.x();
-    float closestY = c._center.y();
+    float closestX = c._center._x;
+    float closestY = c._center._y;
     
-    if (c._center.x() < r.left())
+    if (c._center._x < r.left())
     {
         closestX = r.left();
     }
-    else if (c._center.x() > r.left() + r._width)
+    else if (c._center._x > r.left() + r._width)
     {
         closestX = r.left() + r._width;
     }
     
-    if (c._center.y() < r.bottom())
+    if (c._center._y < r.bottom())
     {
         closestY = r.bottom();
     }
-    else if (c._center.y() > r.top())
+    else if (c._center._y > r.top())
     {
         closestY = r.top();
     }
@@ -108,7 +108,7 @@ bool OverlapTester::doesRektangleOverlapTriangle(Rektangle& r, Triangle& t)
 
 bool OverlapTester::isPointInRektangle(Vector2 p, Rektangle& r)
 {
-    return isPointInRektangle(p.x(), p.y(), r);
+    return isPointInRektangle(p._x, p._y, r);
 }
 
 bool OverlapTester::isPointInRektangle(float x, float y, Rektangle& r)
@@ -123,14 +123,14 @@ bool OverlapTester::isPointInCircle(Vector2& p, Circle& c)
 
 bool OverlapTester::isPointInTriangle(Vector2& p, Triangle& tr)
 {
-    float pX = p.x();
-    float pY = p.y();
-    float p0X = tr.getPointA().x();
-    float p0Y = tr.getPointA().y();
-    float p1X = tr.getPointB().x();
-    float p1Y = tr.getPointB().y();
-    float p2X = tr.getPointC().x();
-    float p2Y = tr.getPointC().y();
+    float pX = p._x;
+    float pY = p._y;
+    float p0X = tr.getPointA()._x;
+    float p0Y = tr.getPointA()._y;
+    float p1X = tr.getPointB()._x;
+    float p1Y = tr.getPointB()._y;
+    float p2X = tr.getPointC()._x;
+    float p2Y = tr.getPointC()._y;
     
     /* Calculate area of triangle ABC */
     float a = calcAreaOfTriangle(p0X, p0Y, p1X, p1Y, p2X, p2Y);
@@ -152,12 +152,12 @@ bool OverlapTester::isPointInTriangle(Vector2& p, Triangle& tr)
 
 bool OverlapTester::doLineAndRektangleOverlap(Line& l, Rektangle& r)
 {
-    if (doLinesIntersect(l._origin.x(), l._origin.y(), l._end.x(), l._end.y(), r.left(), r.bottom() + r._height / 2, r.left() + r._width, r.bottom() + r._height / 2))
+    if (doLinesIntersect(l._origin._x, l._origin._y, l._end._x, l._end._y, r.left(), r.bottom() + r._height / 2, r.left() + r._width, r.bottom() + r._height / 2))
     {
         return true;
     }
     
-    if (doLinesIntersect(l._origin.x(), l._origin.y(), l._end.x(), l._end.y(), r.left() + r._width / 2, r.bottom(), r.left() + r._width / 2, r.top()))
+    if (doLinesIntersect(l._origin._x, l._origin._y, l._end._x, l._end._y, r.left() + r._width / 2, r.bottom(), r.left() + r._width / 2, r.top()))
     {
         return true;
     }

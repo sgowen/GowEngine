@@ -8,15 +8,15 @@
 
 #pragma once
 
-#define DECL_EntityController_create \
-public: \
+#define DECL_EntityController_create         \
+public:                                      \
     static EntityController* create(Entity* e)
 
-#define IMPL_EntityController_create(name) \
-EntityController* name::create(Entity* e)  \
-{                                          \
-    return new name(e);                    \
-}                                          \
+#define IMPL_EntityController_create(name)   \
+EntityController* name::create(Entity* e)    \
+{                                            \
+    return new name(e);                      \
+}                                            \
 
 #include <vector>
 #include <string>

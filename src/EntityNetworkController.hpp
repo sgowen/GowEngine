@@ -10,15 +10,15 @@
 
 #include <stdint.h>
 
-#define DECL_EntityNetworkController_create \
-public: \
+#define DECL_EntityNetworkController_create                        \
+public:                                                            \
     static EntityNetworkController* create(Entity* e, bool isServer)
 
-#define IMPL_EntityNetworkController_create(name)                \
-EntityNetworkController* name::create(Entity* e, bool isServer)  \
-{                                                                \
-    return new name(e, isServer);                                \
-}                                                                \
+#define IMPL_EntityNetworkController_create(name)                  \
+EntityNetworkController* name::create(Entity* e, bool isServer)    \
+{                                                                  \
+    return new name(e, isServer);                                  \
+}                                                                  \
 
 class Entity;
 class InputMemoryBitStream;

@@ -8,8 +8,6 @@
 
 #include "EngineController.hpp"
 
-#include "Engine.hpp"
-
 #if IS_ANDROID
     #include "android/JNIAndroidAssetHandler.hpp"
 #endif

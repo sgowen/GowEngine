@@ -68,9 +68,9 @@ void PolygonBatcher::addRektangle(float left, float bottom, float right, float t
 void PolygonBatcher::addTriangle(Triangle& t)
 {
     addTriangle(
-                t.getPointA().x(), t.getPointA().y(),
-                t.getPointB().x(), t.getPointB().y(),
-                t.getPointC().x(), t.getPointC().y()
+                t.getPointA()._x, t.getPointA()._y,
+                t.getPointB()._x, t.getPointB()._y,
+                t.getPointC()._x, t.getPointC()._y
                 );
 }
 

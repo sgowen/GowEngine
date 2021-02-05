@@ -95,9 +95,9 @@ void EntityMapper::initWithJSON(const char* json)
             }
         }
         
-        if (iv.HasMember("soundCollectionMappings"))
+        if (iv.HasMember("soundRandomMappings"))
         {
-            const Value& v = iv["soundCollectionMappings"];
+            const Value& v = iv["soundRandomMappings"];
             assert(v.IsObject());
             for (Value::ConstMemberIterator i = v.MemberBegin(); i != v.MemberEnd(); ++i)
             {
@@ -112,7 +112,7 @@ void EntityMapper::initWithJSON(const char* json)
                 }
                 std::string name = i->name.GetString();
                 int state = StringUtil::stringToNumber<int>(name);
-                entry->_soundCollectionMappings.insert(std::make_pair(state, soundCollection));
+                entry->_soundRandomMappings.insert(std::make_pair(state, soundCollection));
             }
         }
         
@@ -139,7 +139,7 @@ void EntityMapper::initWithJSON(const char* json)
                         assert(iiiv.IsObject());
                         float x = RapidJSONUtil::getFloat(iiiv, "x");
                         float y = RapidJSONUtil::getFloat(iiiv, "y");
-                        fixtureDef._vertices.push_back(b2Vec2(x, y));
+                        fixtureDef._vertices.emplace_back(x, y);
                     }
                 }
                 
@@ -152,7 +152,7 @@ void EntityMapper::initWithJSON(const char* json)
                     x = RapidJSONUtil::getFloat(iiv, "x");
                     y = RapidJSONUtil::getFloat(iiv, "y");
                 }
-                fixtureDef._center.Set(x, y);
+                fixtureDef._center.set(x, y);
                 
                 entry->_fixtures.push_back(fixtureDef);
             }

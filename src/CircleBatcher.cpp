@@ -44,7 +44,7 @@ void CircleBatcher::begin()
 
 void CircleBatcher::addCircle(Circle& c)
 {
-    addCircle(c._center.x(), c._center.y(), c._radius);
+    addCircle(c._center._x, c._center._y, c._radius);
 }
 
 void CircleBatcher::addCircle(float x, float y, float radius)
@@ -67,7 +67,7 @@ void CircleBatcher::addCircle(float x, float y, float radius)
 
 void CircleBatcher::addPartialCircle(Circle& c, int arcDegrees)
 {
-    addPartialCircle(c._center.x(), c._center.y(), c._radius, arcDegrees);
+    addPartialCircle(c._center._x, c._center._y, c._radius, arcDegrees);
 }
 
 void CircleBatcher::addPartialCircle(float x, float y, float radius, int arcDegrees)
