@@ -30,9 +30,9 @@ enum GamepadEventButtons
     GPEB_D_PAD_RIGHT = 15,
     GPEB_D_PAD_DOWN = 16,
     GPEB_D_PAD_LEFT = 17,
-    GPEB_STICK_LEFT,
-    GPEB_STICK_RIGHT,
-    GPEB_TRIGGER
+    GPEB_STICK_LEFT = 100,
+    GPEB_STICK_RIGHT = 101,
+    GPEB_TRIGGER = 102
 };
 
 enum GamepadEventType
