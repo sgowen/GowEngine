@@ -41,10 +41,7 @@ public:
     
     void free(T* object)
     {
-        if (std::find(_objects.begin(), _objects.end(), object) != _objects.end())
-        {
-            return;
-        }
+        assert(std::find(_objects.begin(), _objects.end(), object) == _objects.end());
         
         _objects.push_back(object);
     }
