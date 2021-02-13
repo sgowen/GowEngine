@@ -1,20 +1,20 @@
 //
-//  EntityBox2DPhysicsController.cpp
+//  Box2DEntityPhysicsController.cpp
 //  GowEngine
 //
 //  Created by Stephen Gowen on 2/04/21.
 //  Copyright © 2021 Stephen Gowen. All rights reserved.
 //
 
-#include "EntityBox2DPhysicsController.hpp"
+#include "Box2DEntityPhysicsController.hpp"
 
 #include "Entity.hpp"
 
 #include "Macros.hpp"
 
-IMPL_EntityPhysicsController_create(EntityBox2DPhysicsController)
+IMPL_EntityPhysicsController_create(Box2DEntityPhysicsController)
 
-EntityBox2DPhysicsController::EntityBox2DPhysicsController(Entity* e) : EntityPhysicsController(e),
+Box2DEntityPhysicsController::Box2DEntityPhysicsController(Entity* e) : EntityPhysicsController(e),
 _body(NULL),
 _groundSensorFixture(NULL),
 _bodyWidth(0),
@@ -24,7 +24,7 @@ _isBodyFacingLeft(false)
     // Empty
 }
 
-void EntityBox2DPhysicsController::updatePoseFromBody()
+void Box2DEntityPhysicsController::updatePoseFromBody()
 {
     if (_body == NULL)
     {
@@ -39,7 +39,7 @@ void EntityBox2DPhysicsController::updatePoseFromBody()
     _entity->setAngle(_body->GetAngle());
 }
 
-void EntityBox2DPhysicsController::updateBodyFromPose()
+void Box2DEntityPhysicsController::updateBodyFromPose()
 {
     if (_body == NULL)
     {
@@ -61,7 +61,7 @@ void EntityBox2DPhysicsController::updateBodyFromPose()
     }
 }
 
-bool EntityBox2DPhysicsController::shouldCollide(Entity *e, b2Fixture* fixtureA, b2Fixture* fixtureB)
+bool Box2DEntityPhysicsController::shouldCollide(Entity *e, b2Fixture* fixtureA, b2Fixture* fixtureB)
 {
     if (fixtureA == _groundSensorFixture)
     {
@@ -71,7 +71,7 @@ bool EntityBox2DPhysicsController::shouldCollide(Entity *e, b2Fixture* fixtureA,
     return false;
 }
 
-void EntityBox2DPhysicsController::handleBeginContact(Entity* e, b2Fixture* fixtureA, b2Fixture* fixtureB)
+void Box2DEntityPhysicsController::handleBeginContact(Entity* e, b2Fixture* fixtureA, b2Fixture* fixtureB)
 {
     if (fixtureA == _groundSensorFixture &&
         !fixtureB->IsSensor())
@@ -80,7 +80,7 @@ void EntityBox2DPhysicsController::handleBeginContact(Entity* e, b2Fixture* fixt
     }
 }
 
-void EntityBox2DPhysicsController::handleEndContact(Entity* e, b2Fixture* fixtureA, b2Fixture* fixtureB)
+void Box2DEntityPhysicsController::handleEndContact(Entity* e, b2Fixture* fixtureA, b2Fixture* fixtureB)
 {
     if (fixtureA == _groundSensorFixture &&
         !fixtureB->IsSensor())
@@ -89,7 +89,7 @@ void EntityBox2DPhysicsController::handleEndContact(Entity* e, b2Fixture* fixtur
     }
 }
 
-void EntityBox2DPhysicsController::initPhysics(b2World& world)
+void Box2DEntityPhysicsController::initPhysics(b2World& world)
 {
     assert(_body == NULL);
     
@@ -103,7 +103,7 @@ void EntityBox2DPhysicsController::initPhysics(b2World& world)
     createFixtures();
 }
 
-void EntityBox2DPhysicsController::deinitPhysics()
+void Box2DEntityPhysicsController::deinitPhysics()
 {
     assert(_body != NULL);
     
@@ -114,12 +114,12 @@ void EntityBox2DPhysicsController::deinitPhysics()
     _body = NULL;
 }
 
-b2Body* EntityBox2DPhysicsController::getBody()
+b2Body* Box2DEntityPhysicsController::getBody()
 {
     return _body;
 }
 
-void EntityBox2DPhysicsController::createFixtures()
+void Box2DEntityPhysicsController::createFixtures()
 {
     _isBodyFacingLeft = _entity->isFacingLeft();
     _bodyWidth = _entity->width();
@@ -189,7 +189,7 @@ void EntityBox2DPhysicsController::createFixtures()
     }
 }
 
-void EntityBox2DPhysicsController::destroyFixtures()
+void Box2DEntityPhysicsController::destroyFixtures()
 {
     for (std::vector<b2Fixture*>::iterator i = _fixtures.begin(); i != _fixtures.end(); )
     {

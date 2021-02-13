@@ -1,12 +1,12 @@
 //
-//  EntityTopDownPhysicsController.cpp
+//  TopDownEntityPhysicsController.cpp
 //  GowEngine
 //
 //  Created by Stephen Gowen on 2/04/21.
 //  Copyright © 2021 Stephen Gowen. All rights reserved.
 //
 
-#include "EntityTopDownPhysicsController.hpp"
+#include "TopDownEntityPhysicsController.hpp"
 
 #include "Entity.hpp"
 #include "TimeTracker.hpp"
@@ -14,26 +14,26 @@
 #include "OverlapTester.hpp"
 #include "EntityController.hpp"
 
-IMPL_EntityPhysicsController_create(EntityTopDownPhysicsController)
+IMPL_EntityPhysicsController_create(TopDownEntityPhysicsController)
 
-void EntityTopDownPhysicsController::updatePoseFromBody()
+void TopDownEntityPhysicsController::updatePoseFromBody()
 {
     // TODO
 }
 
-void EntityTopDownPhysicsController::updateBodyFromPose()
+void TopDownEntityPhysicsController::updateBodyFromPose()
 {
     // TODO
 }
 
-void EntityTopDownPhysicsController::processPhysics(TimeTracker* tt)
+void TopDownEntityPhysicsController::processPhysics(TimeTracker* tt)
 {
     Vector2 vel = _entity->pose()._velocity;
     vel *= tt->_frameRate;
     _entity->pose()._position += vel;
 }
 
-void EntityTopDownPhysicsController::processCollisions(TimeTracker* tt, std::vector<Entity*>& entities)
+void TopDownEntityPhysicsController::processCollisions(TimeTracker* tt, std::vector<Entity*>& entities)
 {
     float x = _entity->getPosition()._x;
     float y = _entity->getPosition()._y;
@@ -75,7 +75,7 @@ void EntityTopDownPhysicsController::processCollisions(TimeTracker* tt, std::vec
     }
 }
 
-void EntityTopDownPhysicsController::enforceBounds(Rektangle& bounds)
+void TopDownEntityPhysicsController::enforceBounds(Rektangle& bounds)
 {
     float x = _entity->getPosition()._x;
     float y = _entity->getPosition()._y;
