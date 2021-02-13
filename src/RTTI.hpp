@@ -18,7 +18,7 @@ public:
 
     const std::string& getClassName() const;
     bool isExactly(const RTTI& rtti) const;
-    bool derivesFrom(const RTTI& rtti) const;
+    bool isDerivedFrom(const RTTI& rtti) const;
 
 private:
     RTTI(const RTTI& obj);
@@ -28,15 +28,15 @@ private:
     const RTTI *_parentRTTI;
 };
 
-#define DECL_RTTI                                \
-public:                                          \
-    static const RTTI rtti;                      \
+#define DECL_RTTI                               \
+public:                                         \
+    static const RTTI rtti;                     \
     virtual const RTTI& getRTTI()
 
-#define IMPL_RTTI_NOPARENT(name)                 \
-    const RTTI name::rtti(#name);                \
+#define IMPL_RTTI_NOPARENT(name)                \
+    const RTTI name::rtti(#name);               \
     const RTTI& name::getRTTI() { return rtti; }
 
-#define IMPL_RTTI(name,parent)                   \
-    const RTTI name::rtti(#name, parent::rtti);  \
+#define IMPL_RTTI(name,parent)                  \
+    const RTTI name::rtti(#name, parent::rtti); \
     const RTTI& name::getRTTI() { return rtti; }

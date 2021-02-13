@@ -8,6 +8,8 @@
 
 #pragma once
 
+#include "Config.hpp"
+
 #include <stack>
 #include <assert.h>
 
@@ -15,7 +17,13 @@ template <class T>
 class State
 {
 public:
-    State() {}
+    Config _args;
+    
+    State() :
+    _args(Config::EMPTY)
+    {
+        // Empty
+    }
     virtual ~State() {}
     
     virtual void enter(T* owner) = 0;
@@ -43,20 +51,20 @@ public:
         }
     }
     
-    void changeState(State<T>* newState, bool overwrite = false)
+    void changeState(State<T>* state, Config args = Config::EMPTY)
     {
-        assert(newState != NULL);
+        assert(state != NULL);
         
         exit();
         
-        if (overwrite)
+        if (args.hasValue("overwrite") && args.getBool("overwrite"))
         {
             _states.pop();
         }
         
-        _states.push(newState);
+        _states.push(state);
         
-        enter();
+        enter(args);
     }
     
     void revertToPreviousState()
@@ -65,7 +73,7 @@ public:
         
         _states.pop();
         
-        enter();
+        revert();
     }
     
     State<T>* getCurrentState() const
@@ -78,7 +86,16 @@ private:
     
     std::stack<State<T>*> _states;
     
-    void enter()
+    void enter(Config args)
+    {
+        State<T>* currentState = getCurrentState();
+        assert(currentState != NULL);
+        
+        currentState->_args = args;
+        currentState->enter(_owner);
+    }
+    
+    void revert()
     {
         State<T>* currentState = getCurrentState();
         assert(currentState != NULL);

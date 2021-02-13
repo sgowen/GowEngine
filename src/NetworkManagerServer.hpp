@@ -9,43 +9,34 @@
 #pragma once
 
 #include "Pool.hpp"
+#include "EntityRegistry.hpp"
+#include "PacketHandler.hpp"
 
 #include <map>
 #include <string>
 
-class EntityManager;
 class ReplicationManagerTransmissionData;
-class ServerHelper;
 class InputMemoryBitStream;
 class OutputMemoryBitStream;
 class DeliveryNotificationManager;
-class MachineAddress;
+class SocketAddress;
 class ClientProxy;
 class InputState;
 class Entity;
-class TimeTracker;
 
-#define NW_MGR_SERVER (NetworkManagerServer::getInstance())
-
-#define NW_MGR_SERVER_CALLBACKS NetworkManagerServer::sProcessPacket, NetworkManagerServer::sHandleNoResponse, NetworkManagerServer::sHandleConnectionReset, NetworkManagerServer::sGetClientProxy, NetworkManagerServer::sHandleClientDisconnected
+#define NW_MGR_SRVR (NetworkManagerServer::getInstance())
 
 typedef void (*HandleNewClientFunc)(uint8_t playerID, std::string playerName);
-typedef void (*HandleLostClientFunc)(ClientProxy* clientProxy, uint8_t index);
+typedef void (*HandleLostClientFunc)(ClientProxy& cp, uint8_t index);
 typedef InputState* (*InputStateCreationFunc)();
 typedef void (*InputStateReleaseFunc)(InputState* inputState);
 
 class NetworkManagerServer
 {
 public:
-    static void create(ServerHelper* serverHelper, HandleNewClientFunc handleNewClientFunc, HandleLostClientFunc handleLostClientFunc, InputStateCreationFunc inputCreationFunc, InputStateReleaseFunc inputStateReleaseFunc);
+    static void create(uint16_t port, uint8_t maxNumPlayers, OnEntityRegisteredFunc oerf, OnEntityDeregisteredFunc oedf, HandleNewClientFunc hncf, HandleLostClientFunc hlcf, InputStateCreationFunc iscf, InputStateReleaseFunc isrf);
     static NetworkManagerServer* getInstance();
     static void destroy();
-    
-    static void sProcessPacket(InputMemoryBitStream& inputStream, MachineAddress* fromAddress);
-    static void sHandleNoResponse();
-    static void sHandleConnectionReset(MachineAddress* fromAddress);
-    static ClientProxy* sGetClientProxy(uint8_t playerID);
-    static void sHandleClientDisconnected(ClientProxy* clientProxy);
     
     void processIncomingPackets();
     void sendOutgoingPackets();
@@ -54,49 +45,47 @@ public:
     void setStateDirty(uint32_t networkID, uint16_t dirtyState);
     ClientProxy* getClientProxy(uint8_t playerID) const;
     int getMoveCount();
-    int getAverageMoveCount() const;
-    int getLowestNonHostMoveCount() const;
-    int getHostMoveCount() const;
+    int getAverageMoveCount();
+    int getLowestNonHostMoveCount();
+    int getHostMoveCount();
     uint8_t getNumClientsConnected();
-    MachineAddress* getServerAddress();
+    uint8_t getNumPlayersConnected();
+    SocketAddress& getServerAddress();
     bool isConnected();
-    ServerHelper* getServerHelper();
-    void setMap(uint32_t value);
-    EntityManager* getEntityManager();
+    EntityRegistry& getEntityRegistry();
+    void processPacket(InputMemoryBitStream& imbs, SocketAddress* fromAddress);
+    void handleNoResponse();
+    void handleConnectionReset(SocketAddress* fromAddress);
     
 private:
     static NetworkManagerServer* s_instance;
     
-    ServerHelper* _serverHelper;
+    PacketHandler _packetHandler;
     HandleNewClientFunc _handleNewClientFunc;
     HandleLostClientFunc _handleLostClientFunc;
     InputStateCreationFunc _inputStateCreationFunc;
     InputStateReleaseFunc _inputStateReleaseFunc;
-    EntityManager* _entityManager;
-    TimeTracker* _timeTracker;
-    Pool<ReplicationManagerTransmissionData> _replicationManagerTransmissionDatas;
-    std::map<size_t, ClientProxy*> _addressHashToClientMap;
+    EntityRegistry _entityRegistry;
+    Pool<ReplicationManagerTransmissionData> _poolRMTD;
+    std::map<uint64_t, ClientProxy> _addressHashToClientMap;
     std::map<int, ClientProxy*> _playerIDToClientMap;
     uint8_t _nextPlayerID;
-    uint32_t _map;
+    uint8_t _maxNumPlayers;
     
-    void processPacket(InputMemoryBitStream& inputStream, MachineAddress* fromAddress);
-    void handleNoResponse();
-    void handleConnectionReset(MachineAddress* fromAddress);
-    void sendPacket(const OutputMemoryBitStream& outputStream, MachineAddress* fromAddress);
-    void handlePacketFromNewClient(InputMemoryBitStream& inputStream, MachineAddress* fromAddress);
-    void processPacket(ClientProxy* clientProxy, InputMemoryBitStream& inputStream);
-    void sendWelcomePacket(ClientProxy* clientProxy);
-    void sendLocalPlayerAddedPacket(ClientProxy* clientProxy, uint8_t index);
-    void sendStatePacketToClient(ClientProxy* clientProxy);
-    void writeLastMoveTimestampIfDirty(OutputMemoryBitStream& outputStream, ClientProxy* clientProxy);
-    void handleInputPacket(ClientProxy* clientProxy, InputMemoryBitStream& inputStream);
-    void handleAddLocalPlayerPacket(ClientProxy* clientProxy, InputMemoryBitStream& inputStream);
-    void handleDropLocalPlayerPacket(ClientProxy* clientProxy, InputMemoryBitStream& inputStream);
-    void handleClientDisconnected(ClientProxy* clientProxy);
-    void updateNextPlayerID();
+    void sendPacket(const OutputMemoryBitStream& ombs, SocketAddress* fromAddress);
+    void handlePacketFromNewClient(InputMemoryBitStream& imbs, SocketAddress* fromAddress);
+    void processPacket(ClientProxy& cp, InputMemoryBitStream& imbs);
+    void sendWelcomePacket(ClientProxy& cp);
+    void sendLocalPlayerAddedPacket(ClientProxy& cp);
+    void sendStatePacketToClient(ClientProxy& cp);
+    void writeLastMoveTimestampIfDirty(OutputMemoryBitStream& ombs, ClientProxy& cp);
+    void handleInputPacket(ClientProxy& cp, InputMemoryBitStream& imbs);
+    void handleAddLocalPlayerPacket(ClientProxy& cp, InputMemoryBitStream& imbs);
+    void handleDropLocalPlayerPacket(ClientProxy& cp, InputMemoryBitStream& imbs);
+    void handleClientDisconnected(ClientProxy& cp);
+    void resetNextPlayerID();
     
-    NetworkManagerServer(ServerHelper* serverHelper, HandleNewClientFunc handleNewClientFunc, HandleLostClientFunc handleLostClientFunc, InputStateCreationFunc inputCreationFunc, InputStateReleaseFunc inputStateReleaseFunc);
+    NetworkManagerServer(uint16_t port, uint8_t maxNumPlayers, OnEntityRegisteredFunc oerf, OnEntityDeregisteredFunc oedf, HandleNewClientFunc hncf, HandleLostClientFunc hlcf, InputStateCreationFunc iscf, InputStateReleaseFunc isrf);
     ~NetworkManagerServer();
     NetworkManagerServer(const NetworkManagerServer&);
     NetworkManagerServer& operator=(const NetworkManagerServer&);

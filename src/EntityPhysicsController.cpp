@@ -10,7 +10,7 @@
 
 #include "Entity.hpp"
 
-IMPL_EntityPhysicsController_create(EntityPhysicsController);
+IMPL_EntityPhysicsController_create(EntityPhysicsController)
 
 EntityPhysicsController::EntityPhysicsController(Entity* e) :
 _entity(e)

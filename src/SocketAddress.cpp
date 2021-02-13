@@ -13,31 +13,31 @@
 
 #include <cstring>
 
-SocketAddress::SocketAddress(uint32_t address, uint16_t port) : MachineAddress()
+SocketAddress::SocketAddress(uint32_t address, uint16_t port)
 {
     getAsSockAddrIn()->sin_family = AF_INET;
     getIP4Ref() = htonl(address);
     getAsSockAddrIn()->sin_port = htons(port);
 }
 
-SocketAddress::SocketAddress(const sockaddr& socketAddress) : MachineAddress()
+SocketAddress::SocketAddress(const sockaddr& socketAddress)
 {
     memcpy(&_socketAddress, &socketAddress, sizeof(sockaddr));
 }
 
-SocketAddress::SocketAddress(sockaddr& socketAddress) : MachineAddress()
+SocketAddress::SocketAddress(sockaddr& socketAddress)
 {
     memcpy(&_socketAddress, &socketAddress, sizeof(sockaddr));
 }
 
-SocketAddress::SocketAddress() : MachineAddress()
+SocketAddress::SocketAddress()
 {
     getAsSockAddrIn()->sin_family = AF_INET;
     getIP4Ref() = INADDR_ANY;
     getAsSockAddrIn()->sin_port = 0;
 }
 
-MachineAddress* SocketAddress::createNewCopy()
+SocketAddress* SocketAddress::createNewCopy()
 {
     return new SocketAddress(_socketAddress);
 }

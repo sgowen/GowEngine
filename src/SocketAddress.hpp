@@ -8,13 +8,11 @@
 
 #pragma once
 
-#include "MachineAddress.hpp"
-
 #include "Network.hpp"
 
 #include <string>
 
-class SocketAddress : public MachineAddress
+class SocketAddress
 {
     friend class UDPSocket;
     
@@ -24,9 +22,9 @@ public:
     SocketAddress(sockaddr& socketAddress);
     SocketAddress();
     
-    virtual MachineAddress* createNewCopy();
-    virtual uint64_t getHash() const;
-    virtual std::string toString() const;
+    SocketAddress* createNewCopy();
+    uint64_t getHash() const;
+    std::string toString() const;
     
     bool operator==(const SocketAddress& other) const;
     uint32_t getSize() const;

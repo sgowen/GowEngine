@@ -15,8 +15,8 @@
 #include "StringUtil.hpp"
 #include "PlatformMacros.hpp"
 
-DeliveryNotificationManager::DeliveryNotificationManager(TimeTracker* timing, bool shouldSendAcks, bool shouldProcessAcks) :
-_timeTracker(timing),
+DeliveryNotificationManager::DeliveryNotificationManager(TimeTracker* tt, bool shouldSendAcks, bool shouldProcessAcks) :
+_timeTracker(tt),
 _shouldSendAcks(shouldSendAcks),
 _shouldProcessAcks(shouldProcessAcks),
 _nextOutgoingSequenceNumber(0),
@@ -40,31 +40,31 @@ DeliveryNotificationManager::~DeliveryNotificationManager()
     }
 }
 
-InFlightPacket* DeliveryNotificationManager::writeState(OutputMemoryBitStream& outputStream)
+InFlightPacket* DeliveryNotificationManager::writeState(OutputMemoryBitStream& ombs)
 {
-    InFlightPacket* toRet = writeSequenceNumber(outputStream);
+    InFlightPacket* ret = writeSequenceNumber(ombs);
     if (_shouldSendAcks)
     {
-        writeAckData(outputStream);
+        writeAckData(ombs);
     }
     
-    return toRet;
+    return ret;
 }
 
-bool DeliveryNotificationManager::readAndProcessState(InputMemoryBitStream& inputStream)
+bool DeliveryNotificationManager::readAndProcessState(InputMemoryBitStream& imbs)
 {
-    bool toRet = processSequenceNumber(inputStream);
+    bool ret = processSequenceNumber(imbs);
     if (_shouldProcessAcks)
     {
-        processAcks(inputStream);
+        processAcks(imbs);
     }
     
-    return toRet;
+    return ret;
 }
 
-void DeliveryNotificationManager::processTimedOutPackets(float frameStartTime)
+void DeliveryNotificationManager::processTimedOutPackets(float time)
 {
-    float timeoutTime = frameStartTime - NW_ACK_TIMEOUT;
+    float timeoutTime = time - NW_ACK_TIMEOUT;
     
     while (!_inFlightPackets.empty())
     {
@@ -105,11 +105,11 @@ const std::deque<InFlightPacket>& DeliveryNotificationManager::getInFlightPacket
     return _inFlightPackets;
 }
 
-InFlightPacket* DeliveryNotificationManager::writeSequenceNumber(OutputMemoryBitStream& outputStream)
+InFlightPacket* DeliveryNotificationManager::writeSequenceNumber(OutputMemoryBitStream& ombs)
 {
     //write the sequence number, but also create an inflight packet for this...
     uint16_t sequenceNumber = _nextOutgoingSequenceNumber++;
-    outputStream.write(sequenceNumber);
+    ombs.write(sequenceNumber);
     
     ++_dispatchedPacketCount;
     
@@ -125,7 +125,7 @@ InFlightPacket* DeliveryNotificationManager::writeSequenceNumber(OutputMemoryBit
     }
 }
 
-void DeliveryNotificationManager::writeAckData(OutputMemoryBitStream& outputStream)
+void DeliveryNotificationManager::writeAckData(OutputMemoryBitStream& ombs)
 {
     //we usually will only have one packet to ack
     //so we'll follow that with a 0 bit if that's the case
@@ -137,21 +137,21 @@ void DeliveryNotificationManager::writeAckData(OutputMemoryBitStream& outputStre
     //otherwise, write 0 bit
     bool hasAcks = (_pendingAcks.size() > 0);
     
-    outputStream.write(hasAcks);
+    ombs.write(hasAcks);
     if (hasAcks)
     {
         //note, we could write all the acks
-        _pendingAcks.front().write(outputStream);
+        _pendingAcks.front().write(ombs);
         _pendingAcks.pop_front();
     }
 }
 
 //returns wether to drop the packet- if sequence number is too low!
-bool DeliveryNotificationManager::processSequenceNumber(InputMemoryBitStream& inputStream)
+bool DeliveryNotificationManager::processSequenceNumber(InputMemoryBitStream& imbs)
 {
     uint16_t sequenceNumber;
     
-    inputStream.read(sequenceNumber);
+    imbs.read(sequenceNumber);
     if (sequenceNumber == _nextExpectedSequenceNumber)
     {
         _nextExpectedSequenceNumber = sequenceNumber + 1;
@@ -191,14 +191,14 @@ bool DeliveryNotificationManager::processSequenceNumber(InputMemoryBitStream& in
 
 //in each packet we can ack a range
 //anything in flight before the range will be considered nackd by the other side immediately
-void DeliveryNotificationManager::processAcks(InputMemoryBitStream& inputStream)
+void DeliveryNotificationManager::processAcks(InputMemoryBitStream& imbs)
 {
     bool hasAcks;
-    inputStream.read(hasAcks);
+    imbs.read(hasAcks);
     if (hasAcks)
     {
         AckRange ackRange;
-        ackRange.read(inputStream);
+        ackRange.read(imbs);
         
         //for each InfilghtPacket with a sequence number less than the start, handle delivery failure...
         uint16_t nextAckdSequenceNumber = ackRange.getStart();

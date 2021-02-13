@@ -28,7 +28,25 @@ void Box2DDebugRenderer::DrawPolygon(const b2Vec2* vertices, int32 vertexCount, 
 {
     Color c = Color(color.r, color.g, color.b, 0.3f);
     _boundsPolygonBatcher.begin();
-    _boundsPolygonBatcher.addPolygon(vertices, vertexCount);
+    if (vertexCount == 4)
+    {
+        float left = vertices[3].x;
+        float bottom = vertices[3].y;
+        float right = vertices[1].x;
+        float top = vertices[1].y;
+        _boundsPolygonBatcher.addRektangle(left, bottom, right, top);
+    }
+    else if (vertexCount == 3)
+    {
+        float leftX = vertices[2].x;
+        float leftY = vertices[2].y;
+        float topX = vertices[1].x;
+        float topY = vertices[1].y;
+        float rightX = vertices[0].x;
+        float rightY = vertices[0].y;
+        _boundsPolygonBatcher.addTriangle(leftX, leftY, topX, topY, rightX, rightY);
+    }
+    
     _boundsPolygonBatcher.end(*_shader, *_matrix, c);
 }
 
@@ -37,14 +55,48 @@ void Box2DDebugRenderer::DrawSolidPolygon(const b2Vec2* vertices, int32 vertexCo
     {
         Color c = Color(color.r, color.g, color.b, 0.3f);
         _fillPolygonBatcher.begin();
-        _fillPolygonBatcher.addPolygon(vertices, vertexCount);
+        if (vertexCount == 4)
+        {
+            float left = vertices[3].x;
+            float bottom = vertices[3].y;
+            float right = vertices[1].x;
+            float top = vertices[1].y;
+            _fillPolygonBatcher.addRektangle(left, bottom, right, top);
+        }
+        else if (vertexCount == 3)
+        {
+            float leftX = vertices[2].x;
+            float leftY = vertices[2].y;
+            float topX = vertices[1].x;
+            float topY = vertices[1].y;
+            float rightX = vertices[0].x;
+            float rightY = vertices[0].y;
+            _fillPolygonBatcher.addTriangle(leftX, leftY, topX, topY, rightX, rightY);
+        }
         _fillPolygonBatcher.end(*_shader, *_matrix, c);
     }
 
     {
         Color c = Color(1, 0, 0, 0.3f);
         _boundsPolygonBatcher.begin();
-        _boundsPolygonBatcher.addPolygon(vertices, vertexCount);
+        if (vertexCount == 4)
+        {
+            float left = vertices[3].x;
+            float bottom = vertices[3].y;
+            float right = vertices[1].x;
+            float top = vertices[1].y;
+            _boundsPolygonBatcher.addRektangle(left, bottom, right, top);
+        }
+        else if (vertexCount == 3)
+        {
+            float leftX = vertices[2].x;
+            float leftY = vertices[2].y;
+            float topX = vertices[1].x;
+            float topY = vertices[1].y;
+            float rightX = vertices[0].x;
+            float rightY = vertices[0].y;
+            _boundsPolygonBatcher.addTriangle(leftX, leftY, topX, topY, rightX, rightY);
+        }
         _boundsPolygonBatcher.end(*_shader, *_matrix, c);
     }
 }
@@ -67,17 +119,17 @@ void Box2DDebugRenderer::DrawSolidCircle(const b2Vec2& center, float radius, con
 
 void Box2DDebugRenderer::DrawSegment(const b2Vec2& p1, const b2Vec2& p2, const b2Color& color)
 {
-    // TODO
+    // Empty
 }
 
 void Box2DDebugRenderer::DrawTransform(const b2Transform& xf)
 {
-    // TODO
+    // Empty
 }
 
 void Box2DDebugRenderer::DrawPoint(const b2Vec2& p, float size, const b2Color& color)
 {
-    // TODO
+    // Empty
 }
 
 void Box2DDebugRenderer::createDeviceDependentResources()

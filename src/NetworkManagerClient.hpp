@@ -8,27 +8,24 @@
 
 #pragma once
 
-#include "EntityManager.hpp"
+#include "PacketHandler.hpp"
+#include "EntityRegistry.hpp"
+#include "DeliveryNotificationManager.hpp"
+#include "ReplicationManagerClient.hpp"
+#include "WeightedTimedMovingAverage.hpp"
 
 #include <map>
 #include <string>
 #include <vector>
 
-class ClientHelper;
 class InputMemoryBitStream;
 class OutputMemoryBitStream;
-class DeliveryNotificationManager;
-class MachineAddress;
+class SocketAddress;
 class Entity;
 class MoveList;
-class ReplicationManagerClient;
-class WeightedTimedMovingAverage;
 class SocketAddress;
-class TimeTracker;
 
-#define NW_MGR_CLIENT (NetworkManagerClient::getInstance())
-
-#define NW_MGR_CLIENT_CALLBACKS NetworkManagerClient::sProcessPacket, NetworkManagerClient::sHandleNoResponse, NetworkManagerClient::sHandleConnectionReset
+#define NW_MGR_CLNT (NetworkManagerClient::getInstance())
 
 typedef void (*RemoveProcessedMovesFunc)(float lastMoveProcessedByServerTimestamp);
 typedef MoveList& (*GetMoveListFunc)();
@@ -36,7 +33,6 @@ typedef void (*OnPlayerWelcomedFunc)(uint8_t playerID);
 
 enum NetworkClientState
 {
-    NWCS_DEFAULT,
     NWCS_SAYING_HELLO,
     NWCS_WELCOMED,
     NWCS_DISCONNECTED
@@ -45,13 +41,9 @@ enum NetworkClientState
 class NetworkManagerClient
 {
 public:
-    static void create(ClientHelper* clientHelper, HandleEntityCreatedFunc handleEntityCreatedFunc, HandleEntityDeletionFunc handleEntityDeletionFunc, RemoveProcessedMovesFunc removeProcessedMovesFunc, GetMoveListFunc getMoveListFunc, OnPlayerWelcomedFunc onPlayerWelcomedFunc);
+    static void create(std::string serverIPAddress, std::string username, uint16_t port, OnEntityRegisteredFunc oerf, OnEntityDeregisteredFunc oedf, RemoveProcessedMovesFunc rpmf, GetMoveListFunc gmlf, OnPlayerWelcomedFunc opwf);
     static NetworkManagerClient* getInstance();
     static void destroy();
-    
-    static void sProcessPacket(InputMemoryBitStream& inputStream, MachineAddress* fromAddress);
-    static void sHandleNoResponse();
-    static void sHandleConnectionReset(MachineAddress* fromAddress);
     
     void processIncomingPackets();
     void sendOutgoingPackets();
@@ -66,20 +58,24 @@ public:
     std::map<uint8_t, uint8_t>& getPlayerIDs();
     std::string& getPlayerName();
     NetworkClientState state() const;
-    uint32_t getMap();
-    EntityManager* getEntityManager();
+    bool isConnected();
+    EntityRegistry& getEntityRegistry();
+    void processPacket(InputMemoryBitStream& imbs, SocketAddress* fromAddress);
+    void handleNoResponse();
+    void handleConnectionReset(SocketAddress* fromAddress);
     
 private:
     static NetworkManagerClient* s_instance;
     
-    TimeTracker* _timeTracker;
-    ClientHelper* _clientHelper;
+    PacketHandler _packetHandler;
+    SocketAddress* _serverAddress;
+    std::string _username;
     RemoveProcessedMovesFunc _removeProcessedMovesFunc;
     GetMoveListFunc _getMoveListFunc;
     OnPlayerWelcomedFunc _onPlayerWelcomedFunc;
-    DeliveryNotificationManager* _deliveryNotificationManager;
-    EntityManager* _entityManager;
-    ReplicationManagerClient* _replicationManagerClient;
+    DeliveryNotificationManager _deliveryNotificationManager;
+    EntityRegistry _entityRegistry;
+    ReplicationManagerClient _replicationManagerClient;
     NetworkClientState _state;
     float _timeOfLastHello;
     std::map<uint8_t, uint8_t> _indexToPlayerIDMap;
@@ -87,29 +83,25 @@ private:
     float _frameRate;
     float _lastMoveProcessedByServerTimestamp;
     float _lastServerCommunicationTimestamp;
-    WeightedTimedMovingAverage* _avgRoundTripTime;
+    WeightedTimedMovingAverage _avgRoundTripTime;
     bool _isRequestingToAddLocalPlayer;
     uint8_t _isRequestingToDropLocalPlayer;
     bool _hasReceivedNewState;
-    uint32_t _map;
     
-    void processPacket(InputMemoryBitStream& inputStream, MachineAddress* fromAddress);
-    void handleNoResponse();
-    void handleConnectionReset(MachineAddress* fromAddress);
-    void sendPacket(const OutputMemoryBitStream& outputStream);
+    void sendPacket(const OutputMemoryBitStream& ombs);
     void updateSayingHello();
-    void handleWelcomePacket(InputMemoryBitStream& inputStream);
-    void handleLocalPlayerAddedPacket(InputMemoryBitStream& inputStream);
+    void handleWelcomePacket(InputMemoryBitStream& imbs);
+    void handleLocalPlayerAddedPacket(InputMemoryBitStream& imbs);
     void handleLocalPlayerDeniedPacket();
-    void handleStatePacket(InputMemoryBitStream& inputStream);
-    void readLastMoveProcessedOnServerTimestamp(InputMemoryBitStream& inputStream);
+    void handleStatePacket(InputMemoryBitStream& imbs);
+    void readLastMoveProcessedOnServerTimestamp(InputMemoryBitStream& imbs);
     void updateSendingInputPacket();
     void sendInputPacket();
     void updateAddLocalPlayerRequest();
     void updateDropLocalPlayerRequest();
     void updateNextIndex();
     
-    NetworkManagerClient(ClientHelper* clientHelper, HandleEntityCreatedFunc handleEntityCreatedFunc, HandleEntityDeletionFunc handleEntityDeletionFunc, RemoveProcessedMovesFunc removeProcessedMovesFunc, GetMoveListFunc getMoveListFunc, OnPlayerWelcomedFunc onPlayerWelcomedFunc);
+    NetworkManagerClient(std::string serverIPAddress, std::string username, uint16_t port, OnEntityRegisteredFunc oerf, OnEntityDeregisteredFunc oedf, RemoveProcessedMovesFunc rpmf, GetMoveListFunc gmlf, OnPlayerWelcomedFunc opwf);
     ~NetworkManagerClient();
     NetworkManagerClient(const NetworkManagerClient&);
     NetworkManagerClient& operator=(const NetworkManagerClient&);

@@ -9,29 +9,28 @@
 #pragma once
 
 #include "DeliveryNotificationManager.hpp"
+#include "ReplicationManagerServer.hpp"
 #include "MoveList.hpp"
 
 #include <string>
 #include <vector>
 
-class EntityManager;
-class ReplicationManagerServer;
-class MachineAddress;
-class TimeTracker;
+class EntityRegistry;
+class SocketAddress;
 
 class ClientProxy
 {
 public:
-    ClientProxy(EntityManager* entityManager, MachineAddress* machineAddress, const std::string& name, uint8_t playerID);
+    ClientProxy(EntityRegistry& entityRegistry, SocketAddress* socketAddress, std::string username, uint8_t playerID);
     ~ClientProxy();
     
-    MachineAddress* getMachineAddress() const;
+    SocketAddress* getSocketAddress() const;
     uint8_t getPlayerID(uint8_t index = 0) const;
-    const std::string& getName() const;
+    const std::string& getUsername() const;
     void updateLastPacketTime();
     float getLastPacketFromClientTime()	const;
     DeliveryNotificationManager& getDeliveryNotificationManager();
-    ReplicationManagerServer* getReplicationManagerServer();
+    ReplicationManagerServer& getReplicationManagerServer();
     MoveList& getUnprocessedMoveList();
     void setLastMoveTimestampDirty(bool isDirty);
     bool isLastMoveTimestampDirty() const;
@@ -41,11 +40,10 @@ public:
     uint8_t getNumPlayers();
     
 private:
-    TimeTracker* _timeTracker;
     DeliveryNotificationManager	_deliveryNotificationManager;
-    ReplicationManagerServer* _replicationManagerServer;
-    MachineAddress* _machineAddress;
-    std::string _name;
+    ReplicationManagerServer _replicationManagerServer;
+    SocketAddress* _socketAddress;
+    std::string _username;
     std::vector<uint8_t> _playerIDs;
     float _lastPacketFromClientTime;
     MoveList _unprocessedMoveList;

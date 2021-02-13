@@ -1,5 +1,5 @@
 //
-//  InstanceManager.hpp
+//  InstanceRegistry.hpp
 //  GowEngine
 //
 //  Created by Stephen Gowen on 3/28/18.
@@ -8,17 +8,17 @@
 
 #pragma once
 
-#define INSTANCE_MGR (InstanceManager::getInstance())
+#define INST_REG (InstanceRegistry::getInstance())
 
 #include <map>
 #include <assert.h>
 
-class InstanceManager
+class InstanceRegistry
 {
 public:
-    static InstanceManager& getInstance()
+    static InstanceRegistry& getInstance()
     {
-        static InstanceManager ret = InstanceManager();
+        static InstanceRegistry ret = InstanceRegistry();
         return ret;
     }
     
@@ -42,8 +42,8 @@ public:
 private:
     std::map<uint32_t, void*> _instanceMap;
     
-    InstanceManager() {}
-    ~InstanceManager() {}
-    InstanceManager(const InstanceManager&);
-    InstanceManager& operator=(const InstanceManager&);
+    InstanceRegistry() {}
+    ~InstanceRegistry() {}
+    InstanceRegistry(const InstanceRegistry&);
+    InstanceRegistry& operator=(const InstanceRegistry&);
 };

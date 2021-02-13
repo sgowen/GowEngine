@@ -28,7 +28,7 @@ bool RTTI::isExactly(const RTTI& rtti) const
     return (this == &rtti);
 }
 
-bool RTTI::derivesFrom(const RTTI& rtti) const
+bool RTTI::isDerivedFrom(const RTTI& rtti) const
 {
     const RTTI* pRTTI = this;
     

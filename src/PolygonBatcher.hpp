@@ -13,7 +13,7 @@
 #include <vector>
 #include <stdint.h>
 
-struct b2Vec2;
+struct Vector2;
 struct Color;
 struct Rektangle;
 struct Triangle;
@@ -32,7 +32,6 @@ public:
     void addRektangle(float left, float bottom, float right, float top);
     void addTriangle(Triangle& t);
     void addTriangle(float leftX, float leftY, float topX, float topY, float rightX, float rightY);
-    void addPolygon(const b2Vec2* vertices, int vertexCount);
     void end(Shader& s, mat4& matrix, const Color& c);
 
 private:

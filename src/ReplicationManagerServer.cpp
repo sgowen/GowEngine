@@ -8,48 +8,56 @@
 
 #include "ReplicationManagerServer.hpp"
 
-#include "EntityManager.hpp"
+#include "EntityRegistry.hpp"
 #include "OutputMemoryBitStream.hpp"
 #include "ReplicationManagerTransmissionData.hpp"
 
-#include "EntityManager.hpp"
+#include "EntityRegistry.hpp"
 #include "ReplicationAction.hpp"
 #include "Macros.hpp"
 #include "Entity.hpp"
 #include "EntityNetworkController.hpp"
 
-ReplicationManagerServer::ReplicationManagerServer(EntityManager* entityManager) :
-_entityManager(entityManager)
+ReplicationManagerServer::ReplicationManagerServer(EntityRegistry& entityRegistry) :
+_entityRegistry(entityRegistry)
 {
     // Empty
 }
 
 void ReplicationManagerServer::replicateCreate(uint32_t networkID, uint16_t initialDirtyState)
 {
-    _networkIDToReplicationCommand[networkID] = ReplicationCommand(initialDirtyState);
+    _networkIDToReplicationCommand.emplace(networkID, ReplicationCommand{initialDirtyState});
 }
 
 void ReplicationManagerServer::replicateDestroy(uint32_t networkID)
 {
+    assert(_networkIDToReplicationCommand.find(networkID) != _networkIDToReplicationCommand.end());
+    
     _networkIDToReplicationCommand[networkID].setDestroy();
 }
 
 void ReplicationManagerServer::removeFromReplication(uint32_t networkID)
 {
+    assert(_networkIDToReplicationCommand.find(networkID) != _networkIDToReplicationCommand.end());
+    
     _networkIDToReplicationCommand.erase(networkID);
 }
 
 void ReplicationManagerServer::setStateDirty(uint32_t networkID, uint16_t dirtyState)
 {
+    assert(_networkIDToReplicationCommand.find(networkID) != _networkIDToReplicationCommand.end());
+    
     _networkIDToReplicationCommand[networkID].addDirtyState(dirtyState);
 }
 
 void ReplicationManagerServer::handleCreateAckd(uint32_t networkID)
 {
+    assert(_networkIDToReplicationCommand.find(networkID) != _networkIDToReplicationCommand.end());
+    
     _networkIDToReplicationCommand[networkID].handleCreateAckd();
 }
 
-void ReplicationManagerServer::write(OutputMemoryBitStream& outputStream, ReplicationManagerTransmissionData* ioTransmissdata)
+void ReplicationManagerServer::write(OutputMemoryBitStream& ombs, ReplicationManagerTransmissionData* ioTransmissdata)
 {
     for (auto& pair: _networkIDToReplicationCommand)
     {
@@ -58,10 +66,10 @@ void ReplicationManagerServer::write(OutputMemoryBitStream& outputStream, Replic
         {
             uint32_t networkID = pair.first;
             
-            outputStream.write(networkID);
+            ombs.write(networkID);
             
             ReplicationAction action = replicationCommand.getAction();
-            outputStream.write<uint8_t, 2>(static_cast<uint8_t>(action));
+            ombs.write<uint8_t, 2>(static_cast<uint8_t>(action));
             
             uint16_t writtenState = 0;
             uint16_t dirtyState = replicationCommand.getDirtyState();
@@ -69,10 +77,10 @@ void ReplicationManagerServer::write(OutputMemoryBitStream& outputStream, Replic
             switch(action)
             {
                 case REPA_CREATE:
-                    writtenState = writeCreateAction(outputStream, networkID, dirtyState);
+                    writtenState = writeCreateAction(ombs, networkID, dirtyState);
                     break;
                 case REPA_UPDATE:
-                    writtenState = writeUpdateAction(outputStream, networkID, dirtyState);
+                    writtenState = writeUpdateAction(ombs, networkID, dirtyState);
                     break;
                 case REPA_DESTROY:
                     writtenState = dirtyState;
@@ -86,17 +94,20 @@ void ReplicationManagerServer::write(OutputMemoryBitStream& outputStream, Replic
     }
 }
 
-uint16_t ReplicationManagerServer::writeCreateAction(OutputMemoryBitStream& op, uint32_t networkID, uint16_t dirtyState)
+uint16_t ReplicationManagerServer::writeCreateAction(OutputMemoryBitStream& ombs, uint32_t networkID, uint16_t dirtyState)
 {
-    Entity* e = _entityManager->getEntityByID(networkID);
-    op.write(e->getEntityDef()._key);
+    Entity* e = _entityRegistry.getEntityByID(networkID);
+    assert(e != NULL);
     
-    return e->getNetworkController()->write(op, dirtyState);
+    ombs.write(e->entityDef()._key);
+    
+    return e->networkController()->write(ombs, dirtyState);
 }
 
-uint16_t ReplicationManagerServer::writeUpdateAction(OutputMemoryBitStream& op, uint32_t networkID, uint16_t dirtyState)
+uint16_t ReplicationManagerServer::writeUpdateAction(OutputMemoryBitStream& ombs, uint32_t networkID, uint16_t dirtyState)
 {
-    Entity* e = _entityManager->getEntityByID(networkID);
+    Entity* e = _entityRegistry.getEntityByID(networkID);
+    assert(e != NULL);
     
-    return e->getNetworkController()->write(op, dirtyState);
+    return e->networkController()->write(ombs, dirtyState);
 }

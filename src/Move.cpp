@@ -26,26 +26,26 @@ _timestamp(0)
     // Empty
 }
 
-void Move::write(OutputMemoryBitStream& outputStream) const
+void Move::write(OutputMemoryBitStream& ombs) const
 {
-    outputStream.write(_timestamp);
+    ombs.write(_timestamp);
     
-    _inputState->write(outputStream);
+    _inputState->write(ombs);
 }
 
-void Move::read(InputMemoryBitStream& inputStream)
+void Move::read(InputMemoryBitStream& imbs)
 {
-    inputStream.read(_timestamp);
+    imbs.read(_timestamp);
     
-    _inputState->read(inputStream);
+    _inputState->read(imbs);
 }
 
 bool Move::isEqual(const Move* move) const
 {
-    return _inputState->isEqual(move->getInputState());
+    return _inputState->isEqual(move->inputState());
 }
 
-InputState* Move::getInputState() const
+InputState* Move::inputState() const
 {
     return _inputState;
 }

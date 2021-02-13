@@ -10,6 +10,10 @@
 
 #include "StateMachine.hpp"
 #include "PlatformMacros.hpp"
+#include "EntityManager.hpp"
+
+#include <map>
+#include <string>
 
 class Engine;
 
@@ -20,6 +24,10 @@ public:
     virtual double getFrameRate();
     
 protected:
+    void registerControllers(std::map<std::string, EntityControllerCreationFunc>& config);
+    void configureForNetwork(std::map<std::string, EntityNetworkControllerCreationFunc>& config);
+    void registerPhysicsControllers(std::map<std::string, EntityPhysicsControllerCreationFunc>& config);
+    
 #if IS_ANDROID
     EngineController(void* data1, void* data2);
 #else

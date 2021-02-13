@@ -10,22 +10,24 @@
 
 #include "ReplicationManagerServer.hpp"
 
-#include "EntityManager.hpp"
+#include "EntityRegistry.hpp"
 #include "Entity.hpp"
 #include "ReplicationAction.hpp"
 #include "DeliveryNotificationManager.hpp"
 
 ReplicationManagerTransmissionData::ReplicationManagerTransmissionData() :
-_replicationManagerServer(NULL)
+_replicationManagerServer(NULL),
+_entityRegistry(NULL),
+_poolRMTD(NULL)
 {
     // Empty
 }
 
 void ReplicationManagerTransmissionData::free()
 {
-    if (_replicationManagerTransmissionDatas)
+    if (_poolRMTD != NULL)
     {
-        _replicationManagerTransmissionDatas->free(this);
+        _poolRMTD->free(this);
     }
 }
 
@@ -54,7 +56,7 @@ void ReplicationManagerTransmissionData::handleDeliveryFailure(DeliveryNotificat
 
 void ReplicationManagerTransmissionData::handleDeliverySuccess(DeliveryNotificationManager* dnm) const
 {
-    //run through the transmissions, if any are Destroyed then we can remove this network id from the map
+    //run through the transmissions, if any are Destroyed then we can remove this network ID from the map
     for (const ReplicationTransmission& rt: _transmissions)
     {
         switch(rt.getAction())
@@ -71,11 +73,11 @@ void ReplicationManagerTransmissionData::handleDeliverySuccess(DeliveryNotificat
     }
 }
 
-void ReplicationManagerTransmissionData::reset(ReplicationManagerServer* replicationManagerServer, EntityManager* entityManager, Pool<ReplicationManagerTransmissionData>* replicationManagerTransmissionDatas)
+void ReplicationManagerTransmissionData::reset(ReplicationManagerServer* replicationManagerServer, EntityRegistry* entityRegistry, Pool<ReplicationManagerTransmissionData>* poolRMTD)
 {
     _replicationManagerServer = replicationManagerServer;
-    _entityManager = entityManager;
-    _replicationManagerTransmissionDatas = replicationManagerTransmissionDatas;
+    _entityRegistry = entityRegistry;
+    _poolRMTD = poolRMTD;
     _transmissions.clear();
 }
 
@@ -86,11 +88,11 @@ void ReplicationManagerTransmissionData::addTransmission(uint32_t networkID, Rep
 
 void ReplicationManagerTransmissionData::handleCreateDeliveryFailure(uint32_t networkID) const
 {
-    assert(_replicationManagerServer);
-    assert(_entityManager);
+    assert(_replicationManagerServer != NULL);
+    assert(_entityRegistry != NULL);
     
     //does the object still exist? it might be dead, in which case we don't resend a create
-    Entity* e = _entityManager->getEntityByID(networkID);
+    Entity* e = _entityRegistry->getEntityByID(networkID);
     if (e != NULL)
     {
         _replicationManagerServer->replicateCreate(networkID, ALL_DIRTY_STATE);
@@ -99,11 +101,11 @@ void ReplicationManagerTransmissionData::handleCreateDeliveryFailure(uint32_t ne
 
 void ReplicationManagerTransmissionData::handleUpdateStateDeliveryFailure(uint32_t networkID, uint32_t state, DeliveryNotificationManager* dnm) const
 {
-    assert(_replicationManagerServer);
-    assert(_entityManager);
+    assert(_replicationManagerServer != NULL);
+    assert(_entityRegistry != NULL);
     
     //does the object still exist? it might be dead, in which case we don't resend an update
-    if (_entityManager->getEntityByID(networkID))
+    if (_entityRegistry->getEntityByID(networkID))
     {
         //look in all future in flight packets, in all transmissions
         //remove written state from dirty state

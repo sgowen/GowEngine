@@ -16,8 +16,8 @@ class OutputMemoryBitStream;
 class MemoryBitStreamUtil
 {
 public:
-    static void read(InputMemoryBitStream& ip, float& x, float& y);
-    static void write(OutputMemoryBitStream& op, float& x, float& y);
+    static void read(InputMemoryBitStream& imbs, float& x, float& y);
+    static void write(OutputMemoryBitStream& ombs, float& x, float& y);
     
 private:
     MemoryBitStreamUtil();

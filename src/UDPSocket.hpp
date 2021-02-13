@@ -15,9 +15,10 @@ class SocketAddress;
 class UDPSocket
 {
     friend class SocketUtil;
-    friend class SocketPacketHandler;
     
 public:
+    ~UDPSocket();
+    
     int bindSocket(const SocketAddress& toAddress);
     int sendToAddress(const void* toSend, int length, const SocketAddress& toAddress);
     int receiveFromAddress(void* toReceive, int maxLength, SocketAddress& fromAddress);
@@ -27,5 +28,4 @@ private:
     SOCKET _socket;
     
     UDPSocket(SOCKET socket);
-    ~UDPSocket();
 };

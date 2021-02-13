@@ -16,7 +16,7 @@
 #include <vector>
 
 class ReplicationManagerServer;
-class EntityManager;
+class EntityRegistry;
 
 class ReplicationManagerTransmissionData : public TransmissionData
 {
@@ -27,15 +27,15 @@ public:
     virtual void handleDeliveryFailure(DeliveryNotificationManager* dnm) const override;
     virtual void handleDeliverySuccess(DeliveryNotificationManager* dnm) const override;
     
-    void reset(ReplicationManagerServer* replicationManagerServer, EntityManager* entityManager, Pool<ReplicationManagerTransmissionData>* replicationManagerTransmissionDatas);
+    void reset(ReplicationManagerServer* replicationManagerServer, EntityRegistry* entityRegistry, Pool<ReplicationManagerTransmissionData>* poolRMTD);
     void addTransmission(uint32_t networkID, ReplicationAction ra, uint32_t state);
     
 private:
     class ReplicationTransmission;
     
     ReplicationManagerServer* _replicationManagerServer;
-    EntityManager* _entityManager;
-    Pool<ReplicationManagerTransmissionData>* _replicationManagerTransmissionDatas;
+    EntityRegistry* _entityRegistry;
+    Pool<ReplicationManagerTransmissionData>* _poolRMTD;
     std::vector<ReplicationTransmission> _transmissions;
     
     void handleCreateDeliveryFailure(uint32_t networkID) const;

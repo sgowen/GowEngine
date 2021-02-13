@@ -8,19 +8,17 @@
 
 #include "ClientProxy.hpp"
 
-#include "EntityManager.hpp"
-#include "ReplicationManagerServer.hpp"
-#include "MachineAddress.hpp"
+#include "EntityRegistry.hpp"
+#include "SocketAddress.hpp"
+
 #include "TimeTracker.hpp"
+#include "InstanceRegistry.hpp"
 
-#include "InstanceManager.hpp"
-
-ClientProxy::ClientProxy(EntityManager* entityManager, MachineAddress* machineAddress, const std::string& name, uint8_t playerID) :
-_timeTracker(INSTANCE_MGR.get<TimeTracker>(INSK_TIMING_SERVER)),
-_deliveryNotificationManager(DeliveryNotificationManager(_timeTracker, false, true)),
-_replicationManagerServer(new ReplicationManagerServer(entityManager)),
-_machineAddress(machineAddress->createNewCopy()),
-_name(name),
+ClientProxy::ClientProxy(EntityRegistry& entityRegistry, SocketAddress* socketAddress, std::string username, uint8_t playerID) :
+_deliveryNotificationManager(INST_REG.get<TimeTracker>(INSK_TIME_SRVR), false, true),
+_replicationManagerServer(entityRegistry),
+_socketAddress(socketAddress->createNewCopy()),
+_username(username),
 _lastPacketFromClientTime(0),
 _isLastMoveTimestampDirty(false)
 {
@@ -31,12 +29,12 @@ _isLastMoveTimestampDirty(false)
 
 ClientProxy::~ClientProxy()
 {
-    delete _machineAddress;
+    delete _socketAddress;
 }
 
-MachineAddress* ClientProxy::getMachineAddress() const
+SocketAddress* ClientProxy::getSocketAddress() const
 {
-    return _machineAddress;
+    return _socketAddress;
 }
 
 uint8_t ClientProxy::getPlayerID(uint8_t index) const
@@ -44,14 +42,14 @@ uint8_t ClientProxy::getPlayerID(uint8_t index) const
     return _playerIDs.size() > index ? _playerIDs[index] : NW_INPUT_UNASSIGNED;
 }
 
-const std::string& ClientProxy::getName() const
+const std::string& ClientProxy::getUsername() const
 {
-    return _name;
+    return _username;
 }
 
 void ClientProxy::updateLastPacketTime()
 {
-    _lastPacketFromClientTime = _timeTracker->_time;
+    _lastPacketFromClientTime = INST_REG.get<TimeTracker>(INSK_TIME_SRVR)->_time;
 }
 
 float ClientProxy::getLastPacketFromClientTime() const
@@ -64,7 +62,7 @@ DeliveryNotificationManager& ClientProxy::getDeliveryNotificationManager()
     return _deliveryNotificationManager;
 }
 
-ReplicationManagerServer* ClientProxy::getReplicationManagerServer()
+ReplicationManagerServer& ClientProxy::getReplicationManagerServer()
 {
     return _replicationManagerServer;
 }

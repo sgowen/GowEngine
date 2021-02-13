@@ -23,10 +23,10 @@ public:
     void reportError(const char* operationDesc);
     int getLastError();
     UDPSocket* createUDPSocket(SocketAddressFamily saf);
-    bool isInitialized();
+    bool isConnected();
     
 private:
-    bool _isInitialized;
+    bool _isConnected;
     
     SocketUtil();
     ~SocketUtil();

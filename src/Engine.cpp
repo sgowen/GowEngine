@@ -137,17 +137,22 @@ void Engine::onKeyboardInput(uint16_t key, bool isUp)
     INPUT_MGR.onKeyboardInput(key, isUp);
 }
 
+void Engine::changeState(State<Engine>* state, const Config& args)
+{
+    _stateMachine.changeState(state, args);
+}
+
+void Engine::revertToPreviousState()
+{
+    _stateMachine.revertToPreviousState();
+}
+
 void Engine::setRequestedHostAction(EngineRequestedHostAction value)
 {
     _requestedHostAction = value;
 }
 
-StateMachine<Engine>& Engine::getStateMachine()
-{
-    return _stateMachine;
-}
-
-EngineRequestedStateAction Engine::state()
+EngineRequestedStateAction Engine::requestedStateAction()
 {
     return _requestedStateAction;
 }

@@ -17,6 +17,8 @@
 
 #include <assert.h>
 
+const Config Config::EMPTY = Config();
+
 void Config::initWithJSONFile(const char* filePath)
 {
     AssetHandler* ah = AssetHandlerFactory::create();
@@ -50,47 +52,72 @@ void Config::clear()
     _keyValues.clear();
 }
 
+bool Config::hasValues()
+{
+    return _keyValues.size() > 0;
+}
+
+bool Config::hasValue(std::string key)
+{
+    std::string* val = findValue(key);
+    return val != NULL;
+}
+
 bool Config::getBool(std::string key)
 {
-    std::string val = findValue(key);
-    bool ret = StringUtil::stringToBool(val);
+    std::string* val = findValue(key);
+    assert(val != NULL);
+    bool ret = StringUtil::stringToBool(*val);
     return ret;
 }
 
 int Config::getInt(std::string key)
 {
-    std::string val = findValue(key);
-    int ret = StringUtil::stringToNumber<int>(val);
+    std::string* val = findValue(key);
+    assert(val != NULL);
+    int ret = StringUtil::stringToNumber<int>(*val);
     return ret;
 }
 
 float Config::getFloat(std::string key)
 {
-    std::string val = findValue(key);
-    float ret = StringUtil::stringToNumber<float>(val);
+    std::string* val = findValue(key);
+    assert(val != NULL);
+    float ret = StringUtil::stringToNumber<float>(*val);
     return ret;
 }
 
 double Config::getDouble(std::string key)
 {
-    std::string val = findValue(key);
-    double ret = StringUtil::stringToNumber<double>(val);
+    std::string* val = findValue(key);
+    assert(val != NULL);
+    double ret = StringUtil::stringToNumber<double>(*val);
     return ret;
 }
 
 std::string Config::getString(std::string key)
 {
-    return findValue(key);
+    std::string* val = findValue(key);
+    assert(val != NULL);
+    
+    std::string ret = *val;
+    return ret;
 }
 
-std::string Config::findValue(std::string key)
+std::map<std::string, std::string>& Config::getMap()
+{
+    return _keyValues;
+}
+
+std::string* Config::findValue(std::string key)
 {
     auto q = _keyValues.find(key);
 
     if (q != _keyValues.end())
     {
-        return q->second;
+        std::string& ret = q->second;
+        return &ret;
     }
 
-    return "";
+    return NULL;
 }

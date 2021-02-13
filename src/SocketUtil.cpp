@@ -22,7 +22,7 @@ SocketUtil& SocketUtil::getInstance()
 
 bool SocketUtil::init()
 {
-    if (_isInitialized)
+    if (_isConnected)
     {
         return true;
     }
@@ -30,16 +30,19 @@ bool SocketUtil::init()
 #if IS_WINDOWS
     WSADATA wsaData;
     int iResult = WSAStartup(MAKEWORD(2, 2), &wsaData);
-    if (iResult != NO_ERROR)
+    if (iResult == NO_ERROR)
+    {
+        _isConnected = true;
+    }
+    else
     {
         reportError("Starting Up");
-        return false;
     }
+#else
+    _isConnected = true;
 #endif
     
-    _isInitialized = true;
-    
-    return true;
+    return _isConnected;
 }
 
 void SocketUtil::reportError(const char* operationDesc)
@@ -91,14 +94,14 @@ UDPSocket* SocketUtil::createUDPSocket(SocketAddressFamily saf)
 }
 
 SocketUtil::SocketUtil() :
-_isInitialized(false)
+_isConnected(false)
 {
     // Empty
 }
 
 SocketUtil::~SocketUtil()
 {
-    if (_isInitialized)
+    if (_isConnected)
     {
 #if IS_WINDOWS
         WSACleanup();

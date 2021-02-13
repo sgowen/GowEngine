@@ -14,8 +14,9 @@
 
 #include "MemoryBitStreamUtil.hpp"
 #include "Macros.hpp"
+#include "EntityPhysicsController.hpp"
 
-IMPL_EntityNetworkController_create(EntityNetworkController);
+IMPL_EntityNetworkController_create(EntityNetworkController)
 
 EntityNetworkController::EntityNetworkController(Entity* e, bool isServer) :
 _entity(e),
@@ -24,73 +25,73 @@ _isServer(isServer)
     // Empty
 }
 
-void EntityNetworkController::read(InputMemoryBitStream& ip)
+void EntityNetworkController::read(InputMemoryBitStream& imbs)
 {
     Entity& e = *_entity;
     
     bool stateBit;
     
-    ip.read(stateBit);
+    imbs.read(stateBit);
     if (stateBit)
     {
-        MemoryBitStreamUtil::read(ip, e._pose._velocity._x, e._pose._velocity._y);
-        MemoryBitStreamUtil::read(ip, e._pose._position._x, e._pose._position._y);
+        MemoryBitStreamUtil::read(imbs, e._pose._velocity._x, e._pose._velocity._y);
+        MemoryBitStreamUtil::read(imbs, e._pose._position._x, e._pose._position._y);
         
-        if (!e.isFixedRotation())
+        imbs.read(e._pose._width);
+        imbs.read(e._pose._height);
+        
+        if (!IS_BIT_SET(e._entityDef._bodyFlags, BODF_FIXED_ROTATION))
         {
-            ip.read(e._pose._angle);
+            imbs.read(e._pose._angle);
         }
         
-        if (e._groundSensorFixture)
-        {
-            ip.read<uint8_t, 4>(e._pose._numGroundContacts);
-        }
+        imbs.read<uint8_t, 4>(e._pose._numGroundContacts);
         
-        ip.read(e._pose._isFacingLeft);
+        imbs.read(e._pose._isFacingLeft);
         
-        e.updateBodyFromPose();
+        e.physicsController()->updateBodyFromPose();
         
-        e._poseNetworkCache = e._pose;
+        e._poseCache = e._pose;
     }
     
     if (IS_BIT_SET(e._entityDef._bodyFlags, BODF_DYNAMIC))
     {
-        ip.read(stateBit);
+        imbs.read(stateBit);
         if (stateBit)
         {
-            ip.read(e._state._stateTime);
-            ip.read(e._state._state);
-            ip.read(e._state._stateFlags);
+            imbs.read(e._state._stateTime);
+            imbs.read(e._state._state);
+            imbs.read(e._state._stateFlags);
             
-            e._stateNetworkCache = e._state;
+            e._stateCache = e._state;
         }
     }
 }
 
-uint16_t EntityNetworkController::write(OutputMemoryBitStream& op, uint16_t dirtyState)
+uint16_t EntityNetworkController::write(OutputMemoryBitStream& ombs, uint16_t dirtyState)
 {
     Entity& e = *_entity;
     
     uint16_t writtenState = 0;
     
     bool pose = IS_BIT_SET(dirtyState, Entity::RSTF_POSE);
-    op.write(pose);
+    ombs.write(pose);
     if (pose)
     {
-        MemoryBitStreamUtil::write(op, e._pose._velocity._x, e._pose._velocity._y);
-        MemoryBitStreamUtil::write(op, e._pose._position._x, e._pose._position._y);
+        MemoryBitStreamUtil::write(ombs, e._pose._velocity._x, e._pose._velocity._y);
+        MemoryBitStreamUtil::write(ombs, e._pose._position._x, e._pose._position._y);
         
-        if (!e.isFixedRotation())
+        ombs.write(e._pose._width);
+        ombs.write(e._pose._height);
+        
+        if (!IS_BIT_SET(e._entityDef._bodyFlags, BODF_FIXED_ROTATION))
         {
-            op.write(e._pose._angle);
+            ombs.write(e._pose._angle);
         }
         
-        if (e._groundSensorFixture)
-        {
-            op.write<uint8_t, 4>(e._pose._numGroundContacts);
-        }
+        ombs.write<uint8_t, 4>(e._pose._numGroundContacts);
         
-        op.write(e._pose._isFacingLeft);
+        ombs.write(e._pose._isFacingLeft);
         
         writtenState |= Entity::RSTF_POSE;
     }
@@ -98,12 +99,12 @@ uint16_t EntityNetworkController::write(OutputMemoryBitStream& op, uint16_t dirt
     if (IS_BIT_SET(e._entityDef._bodyFlags, BODF_DYNAMIC))
     {
         bool state = IS_BIT_SET(dirtyState, Entity::RSTF_STATE);
-        op.write(state);
+        ombs.write(state);
         if (state)
         {
-            op.write(e._state._stateTime);
-            op.write(e._state._state);
-            op.write(e._state._stateFlags);
+            ombs.write(e._state._stateTime);
+            ombs.write(e._state._state);
+            ombs.write(e._state._stateFlags);
             
             writtenState |= Entity::RSTF_STATE;
         }
@@ -112,31 +113,31 @@ uint16_t EntityNetworkController::write(OutputMemoryBitStream& op, uint16_t dirt
     return writtenState;
 }
 
-void EntityNetworkController::recallNetworkCache()
+void EntityNetworkController::recallCache()
 {
     Entity& e = *_entity;
     
-    e._pose = e._poseNetworkCache;
-    e._state = e._stateNetworkCache;
+    e._pose = e._poseCache;
+    e._state = e._stateCache;
     
-    e.updateBodyFromPose();
+    e.physicsController()->updateBodyFromPose();
 }
 
-uint16_t EntityNetworkController::getDirtyState()
+uint16_t EntityNetworkController::refreshDirtyState()
 {
     uint16_t ret = 0;
     
     Entity& e = *_entity;
     
-    if (e._poseNetworkCache != e._pose)
+    if (e._poseCache != e._pose)
     {
-        e._poseNetworkCache = e._pose;
+        e._poseCache = e._pose;
         ret |= Entity::RSTF_POSE;
     }
     
-    if (e._stateNetworkCache != e._state)
+    if (e._stateCache != e._state)
     {
-        e._stateNetworkCache = e._state;
+        e._stateCache = e._state;
         ret |= Entity::RSTF_STATE;
     }
     

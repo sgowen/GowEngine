@@ -8,32 +8,28 @@
 
 #include "NetworkManagerClient.hpp"
 
-#include "SocketClientHelper.hpp"
 #include "InputMemoryBitStream.hpp"
 #include "OutputMemoryBitStream.hpp"
-#include "DeliveryNotificationManager.hpp"
-#include "MachineAddress.hpp"
+#include "SocketAddress.hpp"
 #include "Entity.hpp"
 #include "MoveList.hpp"
-#include "ReplicationManagerClient.hpp"
-#include "WeightedTimedMovingAverage.hpp"
 #include "SocketAddress.hpp"
 #include "TimeTracker.hpp"
 
 #include "StringUtil.hpp"
 #include "SocketAddressFactory.hpp"
 #include "Macros.hpp"
-#include "InstanceManager.hpp"
+#include "InstanceRegistry.hpp"
 
 #include <assert.h>
 
 NetworkManagerClient* NetworkManagerClient::s_instance = NULL;
 
-void NetworkManagerClient::create(ClientHelper* clientHelper, HandleEntityCreatedFunc handleEntityCreatedFunc, HandleEntityDeletionFunc handleEntityDeletionFunc, RemoveProcessedMovesFunc removeProcessedMovesFunc, GetMoveListFunc getMoveListFunc, OnPlayerWelcomedFunc onPlayerWelcomedFunc)
+void NetworkManagerClient::create(std::string serverIPAddress, std::string username, uint16_t port, OnEntityRegisteredFunc oerf, OnEntityDeregisteredFunc oedf, RemoveProcessedMovesFunc rpmf, GetMoveListFunc gmlf, OnPlayerWelcomedFunc opwf)
 {
-    assert(!s_instance);
+    assert(s_instance == NULL);
     
-    s_instance = new NetworkManagerClient(clientHelper, handleEntityCreatedFunc, handleEntityDeletionFunc, removeProcessedMovesFunc, getMoveListFunc, onPlayerWelcomedFunc);
+    s_instance = new NetworkManagerClient(serverIPAddress, username, port, oerf, oedf, rpmf, gmlf, opwf);
 }
 
 NetworkManagerClient * NetworkManagerClient::getInstance()
@@ -43,30 +39,15 @@ NetworkManagerClient * NetworkManagerClient::getInstance()
 
 void NetworkManagerClient::destroy()
 {
-    assert(s_instance);
+    assert(s_instance != NULL);
     
     delete s_instance;
     s_instance = NULL;
 }
 
-void NetworkManagerClient::sProcessPacket(InputMemoryBitStream& inputStream, MachineAddress* fromAddress)
-{
-    NW_MGR_CLIENT->processPacket(inputStream, static_cast<SocketAddress*>(fromAddress));
-}
-
-void NetworkManagerClient::sHandleNoResponse()
-{
-    NW_MGR_CLIENT->handleNoResponse();
-}
-
-void NetworkManagerClient::sHandleConnectionReset(MachineAddress* fromAddress)
-{
-    NW_MGR_CLIENT->handleConnectionReset(static_cast<SocketAddress*>(fromAddress));
-}
-
 void NetworkManagerClient::processIncomingPackets()
 {
-    _clientHelper->processIncomingPackets();
+    _packetHandler.processIncomingPackets();
 }
 
 void NetworkManagerClient::sendOutgoingPackets()
@@ -83,69 +64,46 @@ void NetworkManagerClient::sendOutgoingPackets()
             updateAddLocalPlayerRequest();
             updateDropLocalPlayerRequest();
             break;
-        case NWCS_DEFAULT:
-            _clientHelper->handleUninitialized();
-            break;
         case NWCS_DISCONNECTED:
+        default:
             break;
-    }
-    
-    if (_state != NWCS_DISCONNECTED)
-    {
-        int clientHelperState = _clientHelper->state();
-        if (clientHelperState == CLIENT_READY_TO_SAY_HELLO
-            && _state != NWCS_WELCOMED)
-        {
-            _state = NWCS_SAYING_HELLO;
-        }
-        else if (clientHelperState == CLIENT_AUTH_FAILED)
-        {
-            _state = NWCS_DISCONNECTED;
-        }
     }
 }
 
 void NetworkManagerClient::requestToAddLocalPlayer()
 {
     _isRequestingToAddLocalPlayer = true;
-    
     _isRequestingToDropLocalPlayer = 0;
 }
 
 void NetworkManagerClient::requestToDropLocalPlayer(uint8_t index)
 {
-    if (index < 1)
-    {
-        return;
-    }
-    
-    _isRequestingToDropLocalPlayer = index;
+    assert(index >= 1);
     
     _isRequestingToAddLocalPlayer = false;
-    
+    _isRequestingToDropLocalPlayer = index;
     _indexToPlayerIDMap.erase(index);
-    
     updateNextIndex();
 }
 
 const WeightedTimedMovingAverage& NetworkManagerClient::getBytesReceivedPerSecond() const
 {
-    return _clientHelper->getBytesReceivedPerSecond();
+    return _packetHandler.getBytesReceivedPerSecond();
 }
 
 const WeightedTimedMovingAverage& NetworkManagerClient::getBytesSentPerSecond() const
 {
-    return _clientHelper->getBytesSentPerSecond();
+    return _packetHandler.getBytesSentPerSecond();
 }
 
 const WeightedTimedMovingAverage& NetworkManagerClient::getAvgRoundTripTime() const
 {
-    return *_avgRoundTripTime;
+    return _avgRoundTripTime;
 }
 
 float NetworkManagerClient::getRoundTripTime() const
 {
-    return _avgRoundTripTime->getValue();
+    return _avgRoundTripTime.getValue();
 }
 
 bool NetworkManagerClient::isPlayerIDLocal(uint8_t playerID) const
@@ -173,7 +131,7 @@ std::map<uint8_t, uint8_t>& NetworkManagerClient::getPlayerIDs()
 
 std::string& NetworkManagerClient::getPlayerName()
 {
-    return _clientHelper->getName();
+    return _username;
 }
 
 NetworkClientState NetworkManagerClient::state() const
@@ -181,72 +139,80 @@ NetworkClientState NetworkManagerClient::state() const
     return _state;
 }
 
-uint32_t NetworkManagerClient::getMap()
+bool NetworkManagerClient::isConnected()
 {
-    return _map;
+    return _packetHandler.isConnected();
 }
 
-EntityManager* NetworkManagerClient::getEntityManager()
+EntityRegistry& NetworkManagerClient::getEntityRegistry()
 {
-    return _entityManager;
+    return _entityRegistry;
 }
 
-void NetworkManagerClient::processPacket(InputMemoryBitStream& inputStream, MachineAddress* fromAddress)
+void NetworkManagerClient::processPacket(InputMemoryBitStream& imbs, SocketAddress* fromAddress)
 {
-    _lastServerCommunicationTimestamp = _timeTracker->_time;
+    TimeTracker* tt = INST_REG.get<TimeTracker>(INSK_TIME_CLNT);
+    _lastServerCommunicationTimestamp = tt->_time;
     
     uint8_t packetType;
-    inputStream.read(packetType);
+    imbs.read(packetType);
     
     switch (packetType)
     {
         case NWPT_WELCOME:
-            handleWelcomePacket(inputStream);
+            handleWelcomePacket(imbs);
             break;
         case NWPT_LOCAL_PLAYER_ADDED:
-            handleLocalPlayerAddedPacket(inputStream);
+            handleLocalPlayerAddedPacket(imbs);
             break;
         case NWPT_LOCAL_PLAYER_DENIED:
             handleLocalPlayerDeniedPacket();
             break;
         case NWPT_STATE:
-            if (_deliveryNotificationManager->readAndProcessState(inputStream))
+            if (_deliveryNotificationManager.readAndProcessState(imbs))
             {
-                handleStatePacket(inputStream);
+                handleStatePacket(imbs);
             }
             break;
+        case NWPT_SRVR_EXIT:
+            LOG("Server has shut down");
+            _state = NWCS_DISCONNECTED;
+            break;
         default:
-            _clientHelper->processSpecialPacket(packetType, inputStream, fromAddress);
+            LOG("Unknown packet type received from %s", fromAddress->toString().c_str());
             break;
     }
 }
 
 void NetworkManagerClient::handleNoResponse()
 {
-    float time = _timeTracker->_time;
+    TimeTracker* tt = INST_REG.get<TimeTracker>(INSK_TIME_CLNT);
+    float time = tt->_time;
     
-    float timeout = _state == NWCS_DEFAULT ? NW_CONNECT_TO_SERVER_TIMEOUT : NW_SERVER_TIMEOUT;
-    if (time > _lastServerCommunicationTimestamp + timeout)
+    float timeout = NW_SRVR_TIMEOUT;
+    float dcTime = _lastServerCommunicationTimestamp + timeout;
+    if (time > dcTime)
     {
         _state = NWCS_DISCONNECTED;
     }
 }
 
-void NetworkManagerClient::handleConnectionReset(MachineAddress* fromAddress)
+void NetworkManagerClient::handleConnectionReset(SocketAddress* fromAddress)
 {
     UNUSED(fromAddress);
 }
 
-void NetworkManagerClient::sendPacket(const OutputMemoryBitStream& outputStream)
+void NetworkManagerClient::sendPacket(const OutputMemoryBitStream& ombs)
 {
-    _clientHelper->sendPacket(outputStream);
+    _packetHandler.sendPacket(ombs, _serverAddress);
 }
 
 void NetworkManagerClient::updateSayingHello()
 {
-    float time = _timeTracker->_time;
+    TimeTracker* tt = INST_REG.get<TimeTracker>(INSK_TIME_CLNT);
+    float time = tt->_time;
     
-    if (time > _timeOfLastHello + NW_CLIENT_TIME_BETWEEN_HELLOS)
+    if (time > _timeOfLastHello + NW_CLNT_TIME_BETWEEN_HELLOS)
     {
         OutputMemoryBitStream helloPacket;
         
@@ -259,46 +225,49 @@ void NetworkManagerClient::updateSayingHello()
     }
 }
 
-void NetworkManagerClient::handleWelcomePacket(InputMemoryBitStream& inputStream)
+void NetworkManagerClient::handleWelcomePacket(InputMemoryBitStream& imbs)
 {
-    if (_state == NWCS_SAYING_HELLO)
+    if (_state != NWCS_SAYING_HELLO)
     {
-        // if we got a player id, we've been welcomed!
-        uint8_t playerID;
-        inputStream.read<uint8_t, 3>(playerID);
-        
-        _state = NWCS_WELCOMED;
-        
-        _indexToPlayerIDMap.clear();
-        _indexToPlayerIDMap[_nextIndex] = playerID;
-        
-        LOG("'%s' was welcomed on client as player %d", getPlayerName().c_str(), playerID);
-        
-        _onPlayerWelcomedFunc(playerID);
-        
-        updateNextIndex();
+        return;
     }
+    
+    // if we got a player ID, we've been welcomed!
+    uint8_t playerID;
+    imbs.read<uint8_t, 3>(playerID);
+    
+    _state = NWCS_WELCOMED;
+    
+    _indexToPlayerIDMap.clear();
+    _indexToPlayerIDMap[_nextIndex] = playerID;
+    
+    LOG("'%s' was welcomed on client as player %d", getPlayerName().c_str(), playerID);
+    
+    _onPlayerWelcomedFunc(playerID);
+    
+    updateNextIndex();
 }
 
-void NetworkManagerClient::handleLocalPlayerAddedPacket(InputMemoryBitStream& inputStream)
+void NetworkManagerClient::handleLocalPlayerAddedPacket(InputMemoryBitStream& imbs)
 {
-    if (_state == NWCS_WELCOMED
-        && _isRequestingToAddLocalPlayer)
+    if (_state != NWCS_WELCOMED || !_isRequestingToAddLocalPlayer)
     {
-        // if we got a player id, our local player has been added!
-        uint8_t playerID;
-        inputStream.read(playerID);
-        
-        _indexToPlayerIDMap[_nextIndex] = playerID;
-        
-        LOG("'%s(%d)' was welcomed on client as player %d", getPlayerName().c_str(), _nextIndex, playerID);
-        
-        _isRequestingToAddLocalPlayer = false;
-        
-        _onPlayerWelcomedFunc(playerID);
-        
-        updateNextIndex();
+        return;
     }
+    
+    // if we got a player ID, our local player has been added!
+    uint8_t playerID;
+    imbs.read(playerID);
+    
+    _indexToPlayerIDMap[_nextIndex] = playerID;
+    
+    LOG("'%s(%d)' was welcomed on client as player %d", getPlayerName().c_str(), _nextIndex, playerID);
+    
+    _isRequestingToAddLocalPlayer = false;
+    
+    _onPlayerWelcomedFunc(playerID);
+    
+    updateNextIndex();
 }
 
 void NetworkManagerClient::handleLocalPlayerDeniedPacket()
@@ -308,30 +277,29 @@ void NetworkManagerClient::handleLocalPlayerDeniedPacket()
     _isRequestingToAddLocalPlayer = false;
 }
 
-void NetworkManagerClient::handleStatePacket(InputMemoryBitStream& inputStream)
+void NetworkManagerClient::handleStatePacket(InputMemoryBitStream& imbs)
 {
-    if (_state == NWCS_WELCOMED)
+    if (_state != NWCS_WELCOMED)
     {
-        readLastMoveProcessedOnServerTimestamp(inputStream);
-        
-        _replicationManagerClient->read(inputStream);
-        
-        _hasReceivedNewState = true;
+        return;
     }
+    
+    readLastMoveProcessedOnServerTimestamp(imbs);
+    _replicationManagerClient.read(imbs);
+    _hasReceivedNewState = true;
 }
 
-void NetworkManagerClient::readLastMoveProcessedOnServerTimestamp(InputMemoryBitStream& inputStream)
+void NetworkManagerClient::readLastMoveProcessedOnServerTimestamp(InputMemoryBitStream& imbs)
 {
     bool isTimestampDirty;
-    inputStream.read(isTimestampDirty);
+    imbs.read(isTimestampDirty);
     if (isTimestampDirty)
     {
-        inputStream.read(_lastMoveProcessedByServerTimestamp);
+        imbs.read(_lastMoveProcessedByServerTimestamp);
         
-        float rtt = _timeTracker->_time - _lastMoveProcessedByServerTimestamp;
-        _avgRoundTripTime->update(rtt);
-        
-        inputStream.read(_map);
+        TimeTracker* tt = INST_REG.get<TimeTracker>(INSK_TIME_CLNT);
+        float rtt = tt->_time - _lastMoveProcessedByServerTimestamp;
+        _avgRoundTripTime.update(rtt);
         
         _removeProcessedMovesFunc(_lastMoveProcessedByServerTimestamp);
     }
@@ -353,7 +321,7 @@ void NetworkManagerClient::sendInputPacket()
         
         inputPacket.write(static_cast<uint8_t>(NWPT_INPUT));
         
-        _deliveryNotificationManager->writeState(inputPacket);
+        _deliveryNotificationManager.writeState(inputPacket);
         
         // eventually write the 3 latest moves so they have 3 chances to get through...
         int moveCount = moveList.getNumMovesAfterTimestamp(_lastMoveProcessedByServerTimestamp);
@@ -373,22 +341,17 @@ void NetworkManagerClient::sendInputPacket()
         {
             bool needsToWriteMove = true;
             
-            if (referenceMove)
+            if (referenceMove != NULL && move->isEqual(referenceMove))
             {
-                if (move->isEqual(referenceMove))
-                {
-                    inputPacket.write(true);
-                    
-                    inputPacket.write(move->getTimestamp());
-                    
-                    needsToWriteMove = false;
-                }
+                inputPacket.write(true);
+                inputPacket.write(move->getTimestamp());
+                
+                needsToWriteMove = false;
             }
             
             if (needsToWriteMove)
             {
                 inputPacket.write(false);
-                
                 move->write(inputPacket);
                 
                 referenceMove = &(*move);
@@ -401,41 +364,44 @@ void NetworkManagerClient::sendInputPacket()
 
 void NetworkManagerClient::updateAddLocalPlayerRequest()
 {
-    if (_isRequestingToAddLocalPlayer)
+    if (!_isRequestingToAddLocalPlayer)
     {
-        _isRequestingToDropLocalPlayer = 0;
+        return;
+    }
+    
+    TimeTracker* tt = INST_REG.get<TimeTracker>(INSK_TIME_CLNT);
+    float time = tt->_time;
+    
+    if (time > _timeOfLastHello + NW_CLNT_TIME_BETWEEN_HELLOS)
+    {
+        OutputMemoryBitStream packet;
         
-        float time = _timeTracker->_time;
+        packet.write(static_cast<uint8_t>(NWPT_ADD_LOCAL_PLAYER));
+        packet.write(_nextIndex);
         
-        if (time > _timeOfLastHello + NW_CLIENT_TIME_BETWEEN_HELLOS)
-        {
-            OutputMemoryBitStream packet;
-            
-            packet.write(static_cast<uint8_t>(NWPT_ADD_LOCAL_PLAYER));
-            packet.write(_nextIndex);
-            
-            sendPacket(packet);
-            
-            _timeOfLastHello = time;
-        }
+        sendPacket(packet);
+        
+        _timeOfLastHello = time;
     }
 }
 
 void NetworkManagerClient::updateDropLocalPlayerRequest()
 {
-    if (_isRequestingToDropLocalPlayer > 0)
+    if (_isRequestingToDropLocalPlayer == 0)
     {
-        _isRequestingToAddLocalPlayer = false;
-        
-        OutputMemoryBitStream packet;
-        
-        packet.write(static_cast<uint8_t>(NWPT_DROP_LOCAL_PLAYER));
-        packet.write(_isRequestingToDropLocalPlayer);
-        
-        sendPacket(packet);
-        
-        _isRequestingToDropLocalPlayer = 0;
+        return;
     }
+    
+    _isRequestingToAddLocalPlayer = false;
+    
+    OutputMemoryBitStream packet;
+    
+    packet.write(static_cast<uint8_t>(NWPT_DROP_LOCAL_PLAYER));
+    packet.write(_isRequestingToDropLocalPlayer);
+    
+    sendPacket(packet);
+    
+    _isRequestingToDropLocalPlayer = 0;
 }
 
 void NetworkManagerClient::updateNextIndex()
@@ -451,17 +417,35 @@ void NetworkManagerClient::updateNextIndex()
     }
 }
 
-NetworkManagerClient::NetworkManagerClient(ClientHelper* clientHelper, HandleEntityCreatedFunc handleEntityCreatedFunc, HandleEntityDeletionFunc handleEntityDeletionFunc, RemoveProcessedMovesFunc removeProcessedMovesFunc, GetMoveListFunc getMoveListFunc, OnPlayerWelcomedFunc onPlayerWelcomedFunc) :
-_timeTracker(INSTANCE_MGR.get<TimeTracker>(INSK_TIMING_CLIENT)),
-_clientHelper(clientHelper),
-_removeProcessedMovesFunc(removeProcessedMovesFunc),
-_getMoveListFunc(getMoveListFunc),
-_onPlayerWelcomedFunc(onPlayerWelcomedFunc),
-_entityManager(new EntityManager(handleEntityCreatedFunc, handleEntityDeletionFunc)),
-_replicationManagerClient(new ReplicationManagerClient(_entityManager)),
-_avgRoundTripTime(new WeightedTimedMovingAverage(_timeTracker, 1.f)),
-_state(NWCS_DEFAULT),
-_deliveryNotificationManager(new DeliveryNotificationManager(_timeTracker, true, false)),
+void cb_client_processPacket(InputMemoryBitStream& imbs, SocketAddress* fromAddress)
+{
+    NW_MGR_CLNT->processPacket(imbs, fromAddress);
+}
+
+void cb_client_handleNoResponse()
+{
+    NW_MGR_CLNT->handleNoResponse();
+}
+
+void cb_client_handleConnectionReset(SocketAddress* fromAddress)
+{
+    NW_MGR_CLNT->handleConnectionReset(fromAddress);
+}
+
+#define PACKET_HANDLER_CBS cb_client_processPacket, cb_client_handleNoResponse, cb_client_handleConnectionReset
+
+NetworkManagerClient::NetworkManagerClient(std::string serverIPAddress, std::string username, uint16_t port, OnEntityRegisteredFunc oerf, OnEntityDeregisteredFunc oedf, RemoveProcessedMovesFunc rpmf, GetMoveListFunc gmlf, OnPlayerWelcomedFunc opwf) :
+_packetHandler(INST_REG.get<TimeTracker>(INSK_TIME_CLNT), false, port, PACKET_HANDLER_CBS),
+_serverAddress(SocketAddressFactory::createIPv4FromString(serverIPAddress)),
+_username(username),
+_removeProcessedMovesFunc(rpmf),
+_getMoveListFunc(gmlf),
+_onPlayerWelcomedFunc(opwf),
+_entityRegistry(oerf, oedf),
+_replicationManagerClient(_entityRegistry),
+_avgRoundTripTime(INST_REG.get<TimeTracker>(INSK_TIME_CLNT), 1.0f),
+_state(NWCS_SAYING_HELLO),
+_deliveryNotificationManager(INST_REG.get<TimeTracker>(INSK_TIME_CLNT), true, false),
 _timeOfLastHello(0.0f),
 _lastMoveProcessedByServerTimestamp(0.0f),
 _lastServerCommunicationTimestamp(0),
@@ -475,9 +459,7 @@ _hasReceivedNewState(false)
 
 NetworkManagerClient::~NetworkManagerClient()
 {
-    delete _clientHelper;
-    delete _entityManager;
-    delete _replicationManagerClient;
-    delete _avgRoundTripTime;
-    delete _deliveryNotificationManager;
+    OutputMemoryBitStream packet;
+    packet.write(static_cast<uint8_t>(NWPT_CLNT_EXIT));
+    sendPacket(packet);
 }

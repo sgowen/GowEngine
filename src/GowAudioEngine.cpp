@@ -193,7 +193,7 @@ void GowAudioEngine::playSound(uint16_t soundID, float volume, bool isLooping)
     
     SoundWrapper* soundWrapper = findSound(soundID);
     Sound* sound = soundWrapper->getSoundInstance();
-    float volumeClamped = clamp(volume, 0, 1);
+    float volumeClamped = CLAMP(volume, 0, 1);
     
     _soundsToPlay.push_back(sound);
     _soundsVolumes.push_back(volumeClamped);
@@ -356,7 +356,7 @@ void GowAudioEngine::setMusicVolume(float volume)
         return;
     }
     
-    _musicVolume = clamp(volume, 0, 1);
+    _musicVolume = CLAMP(volume, 0, 1);
     _musicStates.push_back(MUSS_SET_VOLUME);
 }
 

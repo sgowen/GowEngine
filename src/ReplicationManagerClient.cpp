@@ -8,80 +8,84 @@
 
 #include "ReplicationManagerClient.hpp"
 
-#include "EntityManager.hpp"
+#include "EntityRegistry.hpp"
 #include "InputMemoryBitStream.hpp"
 
-#include "EntityMapper.hpp"
+#include "EntityManager.hpp"
 #include "Entity.hpp"
-#include "EntityLayoutMapper.hpp"
+#include "EntityLayoutManager.hpp"
 #include "ReplicationAction.hpp"
 #include "EntityNetworkController.hpp"
 
 #include <cassert>
 
-ReplicationManagerClient::ReplicationManagerClient(EntityManager* entityManager) :
-_entityManager(entityManager)
+ReplicationManagerClient::ReplicationManagerClient(EntityRegistry& entityRegistry) :
+_entityRegistry(entityRegistry)
 {
     // Empty
 }
 
-void ReplicationManagerClient::read(InputMemoryBitStream& inputStream)
+void ReplicationManagerClient::read(InputMemoryBitStream& imbs)
 {
-    while (inputStream.getRemainingBitCount() >= 34)
+    while (imbs.getRemainingBitCount() >= 34)
     {
         uint32_t networkID;
-        inputStream.read(networkID);
+        imbs.read(networkID);
         
         uint8_t action;
-        inputStream.read<uint8_t, 2>(action);
+        imbs.read<uint8_t, 2>(action);
         
         switch(action)
         {
             case REPA_CREATE:
-                readAndDoCreateAction(inputStream, networkID);
+                readAndDoCreateAction(imbs, networkID);
                 break;
             case REPA_UPDATE:
-                readAndDoUpdateAction(inputStream, networkID);
+                readAndDoUpdateAction(imbs, networkID);
                 break;
             case REPA_DESTROY:
-                readAndDoDestroyAction(inputStream, networkID);
+                readAndDoDestroyAction(imbs, networkID);
                 break;
         }
     }
 }
 
-void ReplicationManagerClient::readAndDoCreateAction(InputMemoryBitStream& ip, uint32_t networkID)
+void ReplicationManagerClient::readAndDoCreateAction(InputMemoryBitStream& imbs, uint32_t networkID)
 {
     uint32_t fourCCName;
-    ip.read(fourCCName);
+    imbs.read(fourCCName);
     
-    Entity* e = _entityManager->getEntityByID(networkID);
+    bool isEntityNew = false;
+    Entity* e = _entityRegistry.getEntityByID(networkID);
     if (e == NULL)
     {
         EntityInstanceDef eid(networkID, fourCCName);
-        e = ENTITY_MAPPER.createEntity(&eid, false);
+        e = ENTITY_MGR.createEntity(eid, false);
         
-        _entityManager->registerEntity(e);
-        
-        assert(e->getEntityDef()._key == fourCCName);
+        isEntityNew = true;
     }
     
-    e->getNetworkController()->read(ip);
+    e->networkController()->read(imbs);
+    
+    if (isEntityNew)
+    {
+        _entityRegistry.registerEntity(e);
+    }
 }
 
-void ReplicationManagerClient::readAndDoUpdateAction(InputMemoryBitStream& ip, uint32_t networkID)
+void ReplicationManagerClient::readAndDoUpdateAction(InputMemoryBitStream& imbs, uint32_t networkID)
 {
-    Entity* e = _entityManager->getEntityByID(networkID);
+    Entity* e = _entityRegistry.getEntityByID(networkID);
     assert(e != NULL);
     
-    e->getNetworkController()->read(ip);
+    e->networkController()->read(imbs);
 }
 
-void ReplicationManagerClient::readAndDoDestroyAction(InputMemoryBitStream& ip, uint32_t networkID)
+void ReplicationManagerClient::readAndDoDestroyAction(InputMemoryBitStream& imbs, uint32_t networkID)
 {
-    Entity* e = _entityManager->getEntityByID(networkID);
+    Entity* e = _entityRegistry.getEntityByID(networkID);
     if (e != NULL)
     {
-        _entityManager->deregisterEntity(e);
+        _entityRegistry.deregisterEntity(e);
     }
 }

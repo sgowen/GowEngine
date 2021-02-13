@@ -9,6 +9,8 @@
 #pragma once
 
 #include "WeightedTimedMovingAverage.hpp"
+#include "InputMemoryBitStream.hpp"
+#include "SocketAddress.hpp"
 
 #include <queue>
 #include <list>
@@ -16,25 +18,47 @@
 class TimeTracker;
 class InputMemoryBitStream;
 class OutputMemoryBitStream;
-class MachineAddress;
+class SocketAddress;
+class UDPSocket;
 
-typedef void (*ProcessPacketFunc)(InputMemoryBitStream& inputStream, MachineAddress* fromAddress);
+typedef void (*ProcessPacketFunc)(InputMemoryBitStream& imbs, SocketAddress* fromAddress);
 typedef void (*HandleNoResponseFunc)();
-typedef void (*HandleConnectionResetFunc)(MachineAddress* fromAddress);
+typedef void (*HandleConnectionResetFunc)(SocketAddress* fromAddress);
 
 class PacketHandler
 {
 public:
-    PacketHandler(TimeTracker* timing, bool isServer, ProcessPacketFunc processPacketFunc, HandleNoResponseFunc handleNoResponseFunc, HandleConnectionResetFunc handleConnectionResetFunc);
-    virtual ~PacketHandler() {}
+    PacketHandler(TimeTracker* timing, bool isServer, uint16_t port, ProcessPacketFunc processPacketFunc, HandleNoResponseFunc handleNoResponseFunc, HandleConnectionResetFunc handleConnectionResetFunc);
+    ~PacketHandler();
     
-    virtual void sendPacket(const OutputMemoryBitStream& outputStream, MachineAddress* fromAddress) = 0;
+    void sendPacket(const OutputMemoryBitStream& ombs, SocketAddress* fromAddress);
+    bool isConnected();
+    SocketAddress& getSocketAddress();
     
     void processIncomingPackets();
     const WeightedTimedMovingAverage& getBytesReceivedPerSecond() const;
     const WeightedTimedMovingAverage& getBytesSentPerSecond() const;
     
-protected:
+private:
+    class ReceivedPacket
+    {
+    public:
+        ReceivedPacket(float receivedTime, InputMemoryBitStream& inputMemoryBitStream, SocketAddress fromAddress);
+        
+        SocketAddress& getFromAddress();
+        float getReceivedTime()    const;
+        InputMemoryBitStream& getPacketBuffer();
+        
+    private:
+        float _receivedTime;
+        InputMemoryBitStream _packetBuffer;
+        SocketAddress _fromAddress;
+    };
+    
+    UDPSocket* _socket;
+    SocketAddress _socketAddress;
+    std::queue<ReceivedPacket, std::list<ReceivedPacket> > _packetQueue;
+    bool _isConnected;
     TimeTracker* _timeTracker;
     ProcessPacketFunc _processPacketFunc;
     HandleNoResponseFunc _handleNoResponseFunc;
@@ -42,9 +66,8 @@ protected:
     int _bytesSentThisFrame;
     bool _isServer;
     
-    virtual void readIncomingPacketsIntoQueue() = 0;
-    virtual void processQueuedPackets() = 0;
-    
+    void readIncomingPacketsIntoQueue();
+    void processQueuedPackets();
     void updateBytesSentLastFrame();
     void updateBytesReceivedLastFrame(int totalReadByteCount);
     

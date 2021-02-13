@@ -19,10 +19,10 @@ public:
     Move(InputState* inputState);
     ~Move() {}
     
-    void write(OutputMemoryBitStream& outputStream) const;
-    void read(InputMemoryBitStream& inputStream);
+    void write(OutputMemoryBitStream& ombs) const;
+    void read(InputMemoryBitStream& imbs);
     bool isEqual(const Move* move) const;
-    InputState* getInputState() const;
+    InputState* inputState() const;
     float getTimestamp() const;
     void setTimestamp(float timeStamp);
     void copyInputState(InputState* inputState);

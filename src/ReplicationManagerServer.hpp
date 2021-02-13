@@ -14,26 +14,26 @@
 
 #include <map>
 
-class EntityManager;
+class EntityRegistry;
 class OutputMemoryBitStream;
 class ReplicationManagerTransmissionData;
 
 class ReplicationManagerServer
 {
 public:
-    ReplicationManagerServer(EntityManager* entityManager);
+    ReplicationManagerServer(EntityRegistry& entityRegistry);
     
     void replicateCreate(uint32_t networkID, uint16_t initialDirtyState);
     void replicateDestroy(uint32_t networkID);
     void setStateDirty(uint32_t networkID, uint16_t dirtyState);
     void handleCreateAckd(uint32_t networkID);
     void removeFromReplication(uint32_t networkID);
-    void write(OutputMemoryBitStream& outputStream, ReplicationManagerTransmissionData* ioTransmissdata);
+    void write(OutputMemoryBitStream& ombs, ReplicationManagerTransmissionData* ioTransmissdata);
     
 private:
-    EntityManager* _entityManager;
+    EntityRegistry& _entityRegistry;
     std::map<uint32_t, ReplicationCommand> _networkIDToReplicationCommand;
     
-    uint16_t writeCreateAction(OutputMemoryBitStream& outputStream, uint32_t networkID, uint16_t dirtyState);
-    uint16_t writeUpdateAction(OutputMemoryBitStream& outputStream, uint32_t networkID, uint16_t dirtyState);
+    uint16_t writeCreateAction(OutputMemoryBitStream& ombs, uint32_t networkID, uint16_t dirtyState);
+    uint16_t writeUpdateAction(OutputMemoryBitStream& ombs, uint32_t networkID, uint16_t dirtyState);
 };

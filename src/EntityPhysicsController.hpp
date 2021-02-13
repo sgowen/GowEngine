@@ -8,8 +8,6 @@
 
 #pragma once
 
-#include <stdint.h>
-
 #define DECL_EntityPhysicsController_create         \
 public:                                             \
     static EntityPhysicsController* create(Entity* e)
@@ -18,7 +16,7 @@ public:                                             \
 EntityPhysicsController* name::create(Entity* e)    \
 {                                                   \
     return new name(e);                             \
-}                                                   \
+}
 
 class Entity;
 
@@ -30,7 +28,8 @@ public:
     EntityPhysicsController(Entity* e);
     virtual ~EntityPhysicsController() {}
     
-//    virtual void read();
+    virtual void updatePoseFromBody() {}
+    virtual void updateBodyFromPose() {}
     
 protected:
     Entity* _entity;

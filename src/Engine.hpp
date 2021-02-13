@@ -31,6 +31,7 @@ enum EngineRequestedHostAction
 #include <stdint.h>
 
 class EngineController;
+class Config;
 
 class Engine
 {
@@ -56,9 +57,10 @@ public:
     void onGamepadInputTrigger(uint8_t index, float triggerLeft, float triggerRight);
     void onGamepadInputButton(uint8_t index, uint8_t gamepadEventType, uint8_t isPressed);
     void onKeyboardInput(uint16_t key, bool isUp);
+    void changeState(State<Engine>* state, const Config& args = Config::EMPTY);
+    void revertToPreviousState();
     void setRequestedHostAction(EngineRequestedHostAction value);
-    StateMachine<Engine>& getStateMachine();
-    EngineRequestedStateAction state();
+    EngineRequestedStateAction requestedStateAction();
     int screenWidth();
     int screenHeight();
     int cursorWidth();

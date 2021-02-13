@@ -8,7 +8,6 @@
 
 #include "PolygonBatcher.hpp"
 
-#include <box2d/b2_math.h>
 #include "Color.hpp"
 #include "Rektangle.hpp"
 #include "Triangle.hpp"
@@ -81,24 +80,6 @@ void PolygonBatcher::addTriangle(float leftX, float leftY, float topX, float top
     _triangleVertices.emplace_back(rightX, rightY);
 }
 
-void PolygonBatcher::addPolygon(const b2Vec2* vertices, int vertexCount)
-{
-    if (vertexCount == 4)
-    {
-		for (int i = (vertexCount - 1); i >= 0; --i)
-		{
-			_quadVertices.emplace_back(vertices[i].x, vertices[i].y);
-		}
-    }
-    else if (vertexCount == 3)
-    {
-		for (int i = (vertexCount - 1); i >= 0; --i)
-        {
-            _triangleVertices.emplace_back(vertices[i].x, vertices[i].y);
-        }
-    }
-}
-
 void PolygonBatcher::end(Shader& s, mat4& matrix, const Color& c)
 {
     if (!_quadVertices.empty())
@@ -139,7 +120,7 @@ void PolygonBatcher::end(Shader& s, mat4& matrix, const Color& c)
         }
         else
         {
-            // TODO, leaves out the last side for some reason, call drawIndexed instead?
+            // FIXME, leaves out the last side for some reason, call drawIndexed instead?
             OGL.draw(GL_LINE_STRIP, 0, (int)_triangleVertices.size());
         }
         

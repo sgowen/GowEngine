@@ -12,7 +12,6 @@
 
 #include <stdint.h>
 
-class ReplicationManagerTransmissionData;
 class OutputMemoryBitStream;
 class InputMemoryBitStream;
 

@@ -24,9 +24,9 @@ public:
     DeliveryNotificationManager(TimeTracker* timing, bool shouldSendAcks, bool shouldProcessAcks);
     ~DeliveryNotificationManager();
     
-    InFlightPacket* writeState(OutputMemoryBitStream& outputStream);
-    bool readAndProcessState(InputMemoryBitStream& inputStream);
-    void processTimedOutPackets(float frameStartTime);
+    InFlightPacket* writeState(OutputMemoryBitStream& ombs);
+    bool readAndProcessState(InputMemoryBitStream& imbs);
+    void processTimedOutPackets(float time);
     uint32_t getDroppedPacketCount() const;
     uint32_t getDeliveredPacketCount() const;
     uint32_t getDispatchedPacketCount() const;
@@ -44,10 +44,10 @@ private:
     uint32_t _droppedPacketCount;
     uint32_t _dispatchedPacketCount;
     
-    InFlightPacket* writeSequenceNumber(OutputMemoryBitStream& outputStream);
-    void writeAckData(OutputMemoryBitStream& outputStream);
-    bool processSequenceNumber(InputMemoryBitStream& inputStream);
-    void processAcks(InputMemoryBitStream& inputStream);
+    InFlightPacket* writeSequenceNumber(OutputMemoryBitStream& ombs);
+    void writeAckData(OutputMemoryBitStream& ombs);
+    bool processSequenceNumber(InputMemoryBitStream& imbs);
+    void processAcks(InputMemoryBitStream& imbs);
     void addPendingAck(uint16_t inSequenceNumber);
     void handlePacketDeliveryFailure(const InFlightPacket& inFlightPacket);
     void handlePacketDeliverySuccess(const InFlightPacket& inFlightPacket);

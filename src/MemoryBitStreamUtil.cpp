@@ -11,43 +11,43 @@
 #include "InputMemoryBitStream.hpp"
 #include "OutputMemoryBitStream.hpp"
 
-void MemoryBitStreamUtil::read(InputMemoryBitStream& ip, float& x, float& y)
+void MemoryBitStreamUtil::read(InputMemoryBitStream& imbs, float& x, float& y)
 {
     bool isZero;
-    ip.read(isZero);
+    imbs.read(isZero);
     if (isZero)
     {
         x = 0;
     }
     else
     {
-        ip.read(x);
+        imbs.read(x);
     }
     
-    ip.read(isZero);
+    imbs.read(isZero);
     if (isZero)
     {
         y = 0;
     }
     else
     {
-        ip.read(y);
+        imbs.read(y);
     }
 }
 
-void MemoryBitStreamUtil::write(OutputMemoryBitStream& op, float& x, float& y)
+void MemoryBitStreamUtil::write(OutputMemoryBitStream& ombs, float& x, float& y)
 {
     bool isZero = x == 0;
-    op.write(isZero);
+    ombs.write(isZero);
     if (!isZero)
     {
-        op.write(x);
+        ombs.write(x);
     }
     
     isZero = y == 0;
-    op.write(isZero);
+    ombs.write(isZero);
     if (!isZero)
     {
-        op.write(y);
+        ombs.write(y);
     }
 }

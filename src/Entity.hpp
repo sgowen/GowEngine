@@ -8,21 +8,13 @@
 
 #pragma once
 
-#include <box2d/b2_math.h>
-
+#include "EntityLayoutManager.hpp"
 #include "Vector2.hpp"
 
 #include <stdint.h>
 #include <string>
 #include <map>
 #include <vector>
-
-class EntityController;
-class EntityNetworkController;
-class b2World;
-class b2Body;
-class b2Fixture;
-class b2Contact;
 
 enum FixtureFlags
 {
@@ -51,23 +43,54 @@ enum BodyFlags
 
 struct EntityDef
 {
+    uint32_t _key;
     std::string _name;
     std::string _keyName;
-    uint32_t _entityID;
-    uint32_t _key;
     std::string _controller;
+    std::string _physicsController;
     std::string _networkController;
     std::map<int, std::string> _textureMappings;
     std::map<int, int> _soundMappings;
     std::map<int, std::vector<int> > _soundRandomMappings;
     std::vector<FixtureDef> _fixtures;
     int _bodyFlags;
-    int _x;
-    int _y;
     int _width;
     int _height;
-    bool _server;
+    
+    EntityDef(uint32_t key,
+              std::string name,
+              std::string keyName,
+              std::string controller,
+              std::string physicsController,
+              std::string networkController,
+              std::map<int, std::string> textureMappings,
+              std::map<int, int> soundMappings,
+              std::map<int, std::vector<int> > soundRandomMappings,
+              std::vector<FixtureDef> fixtures,
+              int bodyFlags,
+              int width,
+              int height) :
+    _key(key),
+    _name(name),
+    _keyName(keyName),
+    _controller(controller),
+    _physicsController(physicsController),
+    _networkController(networkController),
+    _textureMappings(textureMappings),
+    _soundMappings(soundMappings),
+    _soundRandomMappings(soundRandomMappings),
+    _fixtures(fixtures),
+    _bodyFlags(bodyFlags),
+    _width(width),
+    _height(height)
+    {
+        // Empty
+    }
 };
+
+class EntityController;
+class EntityPhysicsController;
+class EntityNetworkController;
 
 class Entity
 {
@@ -82,54 +105,21 @@ public:
         RSTF_STATE = 1 << 1
     };
     
-    Entity(EntityDef ed);
-    ~Entity();
-    
-    void update();
-    bool shouldCollide(Entity* e, b2Fixture* fixtureA, b2Fixture* fixtureB);
-    void handleBeginContact(Entity* e, b2Fixture* fixtureA, b2Fixture* fixtureB);
-    void handleEndContact(Entity* e, b2Fixture* fixtureA, b2Fixture* fixtureB);
-    void initPhysics(b2World& world);
-    void deinitPhysics();
-    void updatePoseFromBody();
-    void updateBodyFromPose();
-    EntityDef& getEntityDef();
-    EntityController* getController();
-    EntityNetworkController* getNetworkController();
-    uint16_t getStateTime();
-    b2Body* getBody();
-    void setPosition(Vector2 position);
-    void setPosition(float x, float y);
-    const Vector2& getPosition();
-    void setVelocity(Vector2 velocity);
-    void setVelocity(float x, float y);
-    const Vector2& getVelocity();
-    float getWidth();
-    float getHeight();
-    void setAngle(float angle);
-    float getAngle();
-    const uint32_t getID();
-    bool isGrounded();
-    void requestDeletion();
-    bool isRequestingDeletion();
-    bool isServer();
-    bool isFacingLeft();
-    std::string getTextureMapping();
-    std::string getTextureMapping(uint8_t state);
-    int getSoundMapping(int state);
-    bool isFixedRotation() const;
-    
     struct Pose
     {
         Vector2 _velocity;
         Vector2 _position;
+        uint8_t _width;
+        uint8_t _height;
         float _angle;
         uint8_t _numGroundContacts;
         bool _isFacingLeft;
         
-        Pose(float x, float y) :
+        Pose(float x, float y, float width, float height) :
         _velocity(VECTOR2_ZERO),
         _position(x, y),
+        _width(width),
+        _height(height),
         _angle(0),
         _numGroundContacts(0),
         _isFacingLeft(false)
@@ -142,6 +132,8 @@ public:
             return
             a._velocity          == b._velocity &&
             a._position          == b._position &&
+            a._width             == b._width &&
+            a._height            == b._height &&
             a._angle             == b._angle &&
             a._numGroundContacts == b._numGroundContacts &&
             a._isFacingLeft      == b._isFacingLeft;
@@ -153,7 +145,7 @@ public:
         }
     };
     Pose& pose();
-    Pose& poseNetworkCache();
+    Pose& poseCache();
     
     struct State
     {
@@ -182,23 +174,45 @@ public:
         }
     };
     State& state();
-    State& stateNetworkCache();
+    State& stateCache();
+    
+    Entity(EntityDef ed, EntityInstanceDef eid, bool isServer);
+    ~Entity();
+    
+    void update();
+    EntityDef& entityDef();
+    EntityController* controller();
+    EntityPhysicsController* physicsController();
+    EntityNetworkController* networkController();
+    uint16_t stateTime();
+    void setPosition(Vector2 position);
+    void setPosition(float x, float y);
+    const Vector2& getPosition();
+    void setVelocity(Vector2 velocity);
+    void setVelocity(float x, float y);
+    const Vector2& getVelocity();
+    float width();
+    float height();
+    void setAngle(float angle);
+    float getAngle();
+    const uint32_t getID();
+    bool isGrounded();
+    void requestDeletion();
+    bool isRequestingDeletion();
+    bool isFacingLeft();
+    std::string getTextureMapping();
+    std::string getTextureMapping(uint8_t state);
+    int getSoundMapping(int state);
     
 private:
     EntityDef _entityDef;
+    EntityInstanceDef _entityInstanceDef;
     EntityController* _controller;
+    EntityPhysicsController* _physicsController;
     EntityNetworkController* _networkController;
-    b2Body* _body;
-    std::vector<b2Fixture*> _fixtures;
-    b2Fixture* _groundSensorFixture;
     Pose _pose;
-    Pose _poseNetworkCache;
+    Pose _poseCache;
     State _state;
-    State _stateNetworkCache;
-    const uint32_t _ID;
+    State _stateCache;
     bool _isRequestingDeletion;
-    bool _isBodyFacingLeft;
-    
-    void createFixtures();
-    void destroyFixtures();
 };

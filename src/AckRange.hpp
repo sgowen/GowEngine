@@ -19,8 +19,8 @@ public:
     AckRange();
     AckRange(uint16_t start);
     
-    void write(OutputMemoryBitStream& outputStream) const;
-    void read(InputMemoryBitStream& inputStream);
+    void write(OutputMemoryBitStream& ombs) const;
+    void read(InputMemoryBitStream& imbs);
     bool extendIfShould(uint16_t inSequenceNumber);
     uint16_t getStart() const;
     uint32_t getCount() const;

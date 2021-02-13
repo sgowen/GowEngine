@@ -25,29 +25,29 @@ _count(1)
     // Empty
 }
 
-void AckRange::write(OutputMemoryBitStream& outputStream) const
+void AckRange::write(OutputMemoryBitStream& ombs) const
 {
-    outputStream.write(_start);
+    ombs.write(_start);
     bool hasCount = _count > 1;
-    outputStream.write(hasCount);
+    ombs.write(hasCount);
     if (hasCount)
     {
         //most you can ack is 255...
         uint32_t countMinusOne = _count - 1;
         uint8_t countToAck = countMinusOne > 255 ? 255 : static_cast<uint8_t>(countMinusOne);
-        outputStream.write(countToAck);
+        ombs.write(countToAck);
     }
 }
 
-void AckRange::read(InputMemoryBitStream& inputStream)
+void AckRange::read(InputMemoryBitStream& imbs)
 {
-    inputStream.read(_start);
+    imbs.read(_start);
     bool hasCount;
-    inputStream.read(hasCount);
+    imbs.read(hasCount);
     if (hasCount)
     {
         uint8_t countMinusOne;
-        inputStream.read(countMinusOne);
+        imbs.read(countMinusOne);
         _count = countMinusOne + 1;
     }
     else

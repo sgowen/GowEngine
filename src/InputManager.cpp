@@ -63,7 +63,7 @@ void InputManager::onGamepadInput(uint8_t button, uint8_t index, float x, float 
     
     float sanitizedX = sanitizeCloseToZeroValue(x);
     float sanitizedY = sanitizeCloseToZeroValue(y);
-    bool isUp = sanitizedX <= 0;
+    bool isUp = fabsf(sanitizedX) == 0;
     _lastKnownGamepadButtonStates[index][button] = isUp;
     
     GamepadEvent* e = _poolGamepad.newObject();

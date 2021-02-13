@@ -209,14 +209,20 @@ void Assets::initWithJSON(const char* json)
                             animationHeight = RapidJSONUtil::getInteger(iv, "animationHeight");
                         }
                         
-                        animations.insert({key, Animation(x, y, regionWidth, regionHeight, animationWidth, animationHeight, textureWidth, textureHeight, looping, firstLoopingFrame, xPadding, yPadding, frameTimes)});
+                        animations.emplace(std::piecewise_construct,
+                                           std::forward_as_tuple(key),
+                                           std::forward_as_tuple(x, y, regionWidth, regionHeight, animationWidth, animationHeight, textureWidth, textureHeight, looping, firstLoopingFrame, xPadding, yPadding, frameTimes)
+                                           );
                     }
                     else
                     {
                         auto q = textureRegions.find(key);
                         assert(q == textureRegions.end());
                         
-                        textureRegions.insert({key, TextureRegion(x, y, regionWidth, regionHeight, textureWidth, textureHeight)});
+                        textureRegions.emplace(std::piecewise_construct,
+                                               std::forward_as_tuple(key),
+                                               std::forward_as_tuple(x, y, regionWidth, regionHeight, textureWidth, textureHeight)
+                                               );
                     }
                 }
             }

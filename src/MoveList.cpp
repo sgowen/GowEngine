@@ -40,7 +40,7 @@ bool MoveList::addMoveIfNew(const Move& move)
     {
         _lastMoveTimestamp = timeStamp;
         
-        _moves.push_back(Move(move.getInputState(), timeStamp));
+        _moves.push_back(Move(move.inputState(), timeStamp));
         
         return true;
     }
@@ -57,7 +57,7 @@ void MoveList::removeProcessedMoves(float lastMoveProcessedOnServerTimestamp, In
 {
     while (!_moves.empty() && _moves.front().getTimestamp() <= lastMoveProcessedOnServerTimestamp)
     {
-        inputStateReleaseFunc(_moves.front().getInputState());
+        inputStateReleaseFunc(_moves.front().inputState());
 
         _moves.pop_front();
     }

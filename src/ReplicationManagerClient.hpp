@@ -10,20 +10,20 @@
 
 #include <stdint.h>
 
-class EntityManager;
+class EntityRegistry;
 class InputMemoryBitStream;
 
 class ReplicationManagerClient
 {
 public:
-    ReplicationManagerClient(EntityManager* entityManager);
+    ReplicationManagerClient(EntityRegistry& entityRegistry);
     
-    void read(InputMemoryBitStream& inputStream);
+    void read(InputMemoryBitStream& imbs);
     
 private:
-    EntityManager* _entityManager;
+    EntityRegistry& _entityRegistry;
     
-    void readAndDoCreateAction(InputMemoryBitStream& inputStream, uint32_t networkID);
-    void readAndDoUpdateAction(InputMemoryBitStream& inputStream, uint32_t networkID);
-    void readAndDoDestroyAction(InputMemoryBitStream& inputStream, uint32_t networkID);
+    void readAndDoCreateAction(InputMemoryBitStream& imbs, uint32_t networkID);
+    void readAndDoUpdateAction(InputMemoryBitStream& imbs, uint32_t networkID);
+    void readAndDoDestroyAction(InputMemoryBitStream& imbs, uint32_t networkID);
 };

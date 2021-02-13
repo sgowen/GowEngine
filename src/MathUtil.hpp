@@ -14,14 +14,10 @@
 
 #define MAX(a, b) (((a) > (b)) ? (a) : (b))
 #define MIN(a, b) (((a) < (b)) ? (a) : (b))
+#define CLAMP(x, lower, upper) (MIN(upper, MAX(x, lower)))
 
 #define DEGREES_TO_RADIANS(angle) ( (angle) / 180.0f * M_PI )
 #define RADIANS_TO_DEGREES(angle) ( (angle) / M_PI * 180.0f )
-
-inline float clamp(float x, float lower, float upper)
-{
-    return fminf(upper, fmaxf(x, lower));
-}
 
 inline bool areFloatsPracticallyEqual(float A, float B, float maxDiff = 0.000001f, float maxRelDiff = FLT_EPSILON)
 {
