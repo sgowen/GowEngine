@@ -13,15 +13,15 @@
 #include "StringUtil.hpp"
 
 MoveList::MoveList() :
-_lastMoveTimestamp(-1.0f),
-_lastProcessedMoveTimestamp(-1.0f)
+_lastMoveTimestamp(0),
+_lastProcessedMoveTimestamp(0)
 {
     // Empty
 }
 
-const Move& MoveList::addMove(InputState* inputState, float timestamp)
+const Move& MoveList::addMove(InputState* inputState, uint32_t timestamp)
 {
-    _moves.push_back(Move(inputState, timestamp));
+    _moves.emplace_back(inputState, timestamp);
     
     _lastMoveTimestamp = timestamp;
     
@@ -34,13 +34,13 @@ bool MoveList::addMoveIfNew(const Move& move)
     //so make sure it's new...
     
     //adjust the deltatime and then place!
-    float timeStamp = move.getTimestamp();
+    uint32_t timeStamp = move.getTimestamp();
     
     if (timeStamp > _lastMoveTimestamp)
     {
         _lastMoveTimestamp = timeStamp;
         
-        _moves.push_back(Move(move.inputState(), timeStamp));
+        _moves.emplace_back(move.inputState(), timeStamp);
         
         return true;
     }
@@ -53,7 +53,7 @@ void MoveList::markMoveAsProcessed(Move* move)
     _lastProcessedMoveTimestamp = move->getTimestamp();
 }
 
-void MoveList::removeProcessedMoves(float lastMoveProcessedOnServerTimestamp, InputStateReleaseFunc inputStateReleaseFunc)
+void MoveList::removeProcessedMoves(uint32_t lastMoveProcessedOnServerTimestamp, InputStateReleaseFunc inputStateReleaseFunc)
 {
     while (!_moves.empty() && _moves.front().getTimestamp() <= lastMoveProcessedOnServerTimestamp)
     {
@@ -63,12 +63,12 @@ void MoveList::removeProcessedMoves(float lastMoveProcessedOnServerTimestamp, In
     }
 }
 
-float MoveList::getLastMoveTimestamp() const
+uint32_t MoveList::getLastMoveTimestamp() const
 {
     return _lastMoveTimestamp;
 }
 
-float MoveList::getLastProcessedMoveTimestamp() const
+uint32_t MoveList::getLastProcessedMoveTimestamp() const
 {
     return _lastProcessedMoveTimestamp;
 }
@@ -93,7 +93,7 @@ int MoveList::getMoveCount() const
     return static_cast<int>(_moves.size());
 }
 
-int MoveList::getNumMovesAfterTimestamp(float lastMoveReceivedOnServerTimestamp) const
+int MoveList::getNumMovesAfterTimestamp(uint32_t lastMoveReceivedOnServerTimestamp) const
 {
     int ret = 0;
     

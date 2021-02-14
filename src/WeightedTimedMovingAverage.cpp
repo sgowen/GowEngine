@@ -14,9 +14,9 @@
 
 #include <assert.h>
 
-WeightedTimedMovingAverage::WeightedTimedMovingAverage(TimeTracker* timing, float duration) :
-_timeTracker(timing),
-_timeLastEntryMade(_timeTracker->_time),
+WeightedTimedMovingAverage::WeightedTimedMovingAverage(TimeTracker* tt, float duration) :
+_timeTracker(tt),
+_timeLastEntryMade(tt->realTime()),
 _duration(duration),
 _value(0.f)
 {
@@ -30,7 +30,7 @@ void WeightedTimedMovingAverage::updatePerSecond(float value)
         return;
     }
     
-    float time = _timeTracker->_time;
+    float time = _timeTracker->realTime();
     float timeSinceLastEntry = CLAMP(time - _timeLastEntryMade, 0, 10);
     
     float valueOverTime = value / timeSinceLastEntry;
@@ -54,7 +54,7 @@ void WeightedTimedMovingAverage::update(float value)
         return;
     }
     
-    float time = _timeTracker->_time;
+    float time = _timeTracker->realTime();
     float timeSinceLastEntry = CLAMP(time - _timeLastEntryMade, 0, 10);
     
     // now update our value by whatever amount of the duration that was..

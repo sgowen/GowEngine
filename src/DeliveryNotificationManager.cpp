@@ -62,9 +62,9 @@ bool DeliveryNotificationManager::readAndProcessState(InputMemoryBitStream& imbs
     return ret;
 }
 
-void DeliveryNotificationManager::processTimedOutPackets(float time)
+void DeliveryNotificationManager::processTimedOutPackets(uint32_t time)
 {
-    float timeoutTime = time - NW_ACK_TIMEOUT;
+    uint32_t timeoutTime = time - NW_ACK_TIMEOUT;
     
     while (!_inFlightPackets.empty())
     {
@@ -115,14 +115,12 @@ InFlightPacket* DeliveryNotificationManager::writeSequenceNumber(OutputMemoryBit
     
     if (_shouldProcessAcks)
     {
-        _inFlightPackets.push_back(InFlightPacket(sequenceNumber, _timeTracker->_time));
+        _inFlightPackets.emplace_back(sequenceNumber, _timeTracker->_time);
         
         return &_inFlightPackets.back();
     }
-    else
-    {
-        return NULL;
-    }
+    
+    return NULL;
 }
 
 void DeliveryNotificationManager::writeAckData(OutputMemoryBitStream& ombs)

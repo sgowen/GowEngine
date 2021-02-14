@@ -77,11 +77,11 @@ private:
     EntityRegistry _entityRegistry;
     ReplicationManagerClient _replicationManagerClient;
     NetworkClientState _state;
-    float _timeOfLastHello;
+    uint32_t _timeOfLastHello;
     std::map<uint8_t, uint8_t> _indexToPlayerIDMap;
     uint8_t _nextIndex;
-    float _lastMoveProcessedByServerTimestamp;
-    float _lastServerCommunicationTimestamp;
+    uint32_t _lastMoveProcessedByServerTimestamp;
+    uint32_t _lastServerCommunicationTimestamp;
     WeightedTimedMovingAverage _avgRoundTripTime;
     bool _isRequestingToAddLocalPlayer;
     uint8_t _isRequestingToDropLocalPlayer;

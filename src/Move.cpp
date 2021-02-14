@@ -12,7 +12,7 @@
 #include "OutputMemoryBitStream.hpp"
 #include "InputMemoryBitStream.hpp"
 
-Move::Move(InputState* inputState, float timestamp) :
+Move::Move(InputState* inputState, uint32_t timestamp) :
 _inputState(inputState),
 _timestamp(timestamp)
 {
@@ -50,12 +50,12 @@ InputState* Move::inputState() const
     return _inputState;
 }
 
-float Move::getTimestamp() const
+uint32_t Move::getTimestamp() const
 {
     return _timestamp;
 }
 
-void Move::setTimestamp(float timeStamp)
+void Move::setTimestamp(uint32_t timeStamp)
 {
     _timestamp = timeStamp;
 }

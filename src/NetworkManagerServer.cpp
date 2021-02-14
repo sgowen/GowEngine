@@ -59,7 +59,7 @@ void NetworkManagerServer::processIncomingPackets()
     std::vector<ClientProxy*> clientsToDC;
     
     TimeTracker* tt = INST_REG.get<TimeTracker>(INSK_TIME_SRVR);
-    float minAllowedLastPacketFromClientTime = tt->_time - NW_CLNT_TIMEOUT;
+    uint32_t minAllowedLastPacketFromClientTime = tt->_time < NW_CLNT_TIMEOUT ? 0 : tt->_time - NW_CLNT_TIMEOUT;
     for (auto& pair: _addressHashToClientMap)
     {
         if (pair.second.getLastPacketFromClientTime() < minAllowedLastPacketFromClientTime)
@@ -373,36 +373,28 @@ void NetworkManagerServer::sendWelcomePacket(ClientProxy& cp)
 
 void NetworkManagerServer::sendStatePacketToClient(ClientProxy& cp)
 {
-    OutputMemoryBitStream statePacket;
+    OutputMemoryBitStream ombs;
     
-    statePacket.write(static_cast<uint8_t>(NWPT_STATE));
+    ombs.write(static_cast<uint8_t>(NWPT_STATE));
     
-    InFlightPacket* ifp = cp.getDeliveryNotificationManager().writeState(statePacket);
+    InFlightPacket* ifp = cp.getDeliveryNotificationManager().writeState(ombs);
     
-    writeLastMoveTimestampIfDirty(statePacket, cp);
+    writeLastMoveTimestampIfDirty(ombs, cp);
     
     ReplicationManagerTransmissionData* rmtd = _poolRMTD.obtain();
     rmtd->reset(&cp.getReplicationManagerServer(), &_entityRegistry, &_poolRMTD);
     
-#if IS_DEBUG
-    LOG("Pre-State Outgoing packet Bit Length: %d \n", statePacket.getBitLength());
-#endif
+    cp.getReplicationManagerServer().write(ombs, rmtd);
     
-    cp.getReplicationManagerServer().write(statePacket, rmtd);
-    
-    TransmissionData* currentTransmissionData = ifp->getTransmissionData('RPLM');
-    if (currentTransmissionData)
+    TransmissionData* td = ifp->getTransmissionData('RPLM');
+    if (td != NULL)
     {
-        _poolRMTD.free(static_cast<ReplicationManagerTransmissionData*>(currentTransmissionData));
+        _poolRMTD.free(static_cast<ReplicationManagerTransmissionData*>(td));
     }
     
     ifp->setTransmissionData('RPLM', rmtd);
     
-#if IS_DEBUG
-    LOG("Post-State Outgoing packet Bit Length: %d \n", statePacket.getBitLength());
-#endif
-    
-    sendPacket(statePacket, cp.getSocketAddress());
+    sendPacket(ombs, cp.getSocketAddress());
 }
 
 void NetworkManagerServer::writeLastMoveTimestampIfDirty(OutputMemoryBitStream& ombs, ClientProxy& cp)
@@ -411,7 +403,7 @@ void NetworkManagerServer::writeLastMoveTimestampIfDirty(OutputMemoryBitStream& 
     ombs.write(isTimestampDirty);
     if (isTimestampDirty)
     {
-        float lastProcessedMoveTimestamp = cp.getUnprocessedMoveList().getLastProcessedMoveTimestamp();
+        uint32_t lastProcessedMoveTimestamp = cp.getUnprocessedMoveList().getLastProcessedMoveTimestamp();
         
         ombs.write(lastProcessedMoveTimestamp);
         
@@ -442,7 +434,7 @@ void NetworkManagerServer::handleInputPacket(ClientProxy& cp, InputMemoryBitStre
                 return;
             }
             
-            float timeStamp;
+            uint32_t timeStamp;
             imbs.read(timeStamp);
             move.setTimestamp(timeStamp);
             move.copyInputState(referenceInputState);

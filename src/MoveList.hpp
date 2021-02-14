@@ -21,24 +21,24 @@ class MoveList
 public:
     MoveList();
     
-    const Move& addMove(InputState* inputState, float timestamp);
+    const Move& addMove(InputState* inputState, uint32_t timestamp);
     bool addMoveIfNew(const Move& move);
     void markMoveAsProcessed(Move* move);
-    void removeProcessedMoves(float lastMoveProcessedOnServerTimestamp, InputStateReleaseFunc inputStateReleaseFunc);
-    float getLastMoveTimestamp() const;
-    float getLastProcessedMoveTimestamp() const;
+    void removeProcessedMoves(uint32_t lastMoveProcessedOnServerTimestamp, InputStateReleaseFunc inputStateReleaseFunc);
+    uint32_t getLastMoveTimestamp() const;
+    uint32_t getLastProcessedMoveTimestamp() const;
     const Move& getLatestMove() const;
     void clear();
     bool hasMoves() const;
     int getMoveCount() const;
-    int getNumMovesAfterTimestamp(float lastMoveReceivedOnServerTimestamp) const;
+    int getNumMovesAfterTimestamp(uint32_t lastMoveReceivedOnServerTimestamp) const;
     Move* getMoveAtIndex(int index);
     
     std::deque<Move>::const_iterator begin() const;
     std::deque<Move>::const_iterator end() const;
     
 private:
-    float _lastMoveTimestamp;
-    float _lastProcessedMoveTimestamp;
+    uint32_t _lastMoveTimestamp;
+    uint32_t _lastProcessedMoveTimestamp;
     std::deque<Move> _moves;
 };

@@ -187,9 +187,9 @@ void NetworkManagerClient::processPacket(InputMemoryBitStream& imbs, SocketAddre
 void NetworkManagerClient::handleNoResponse()
 {
     TimeTracker* tt = INST_REG.get<TimeTracker>(INSK_TIME_CLNT);
-    float time = tt->_time;
+    uint32_t time = tt->_time;
     
-    float timeout = NW_SRVR_TIMEOUT;
+    uint32_t timeout = NW_SRVR_TIMEOUT;
     float dcTime = _lastServerCommunicationTimestamp + timeout;
     if (time > dcTime)
     {
@@ -298,7 +298,7 @@ void NetworkManagerClient::readLastMoveProcessedOnServerTimestamp(InputMemoryBit
         imbs.read(_lastMoveProcessedByServerTimestamp);
         
         TimeTracker* tt = INST_REG.get<TimeTracker>(INSK_TIME_CLNT);
-        float rtt = tt->_time - _lastMoveProcessedByServerTimestamp;
+        float rtt = tt->realTime() - tt->realTime(_lastMoveProcessedByServerTimestamp);
         _avgRoundTripTime.update(rtt);
         
         _removeProcessedMovesFunc(_lastMoveProcessedByServerTimestamp);
@@ -446,8 +446,8 @@ _replicationManagerClient(_entityRegistry),
 _avgRoundTripTime(INST_REG.get<TimeTracker>(INSK_TIME_CLNT), 1.0f),
 _state(NWCS_SAYING_HELLO),
 _deliveryNotificationManager(INST_REG.get<TimeTracker>(INSK_TIME_CLNT), true, false),
-_timeOfLastHello(0.0f),
-_lastMoveProcessedByServerTimestamp(0.0f),
+_timeOfLastHello(0),
+_lastMoveProcessedByServerTimestamp(0),
 _lastServerCommunicationTimestamp(0),
 _isRequestingToAddLocalPlayer(false),
 _isRequestingToDropLocalPlayer(0),

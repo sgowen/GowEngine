@@ -28,7 +28,7 @@ public:
     uint8_t getPlayerID(uint8_t index = 0) const;
     const std::string& getUsername() const;
     void updateLastPacketTime();
-    float getLastPacketFromClientTime()	const;
+    uint32_t getLastPacketFromClientTime()	const;
     DeliveryNotificationManager& getDeliveryNotificationManager();
     ReplicationManagerServer& getReplicationManagerServer();
     MoveList& getUnprocessedMoveList();
@@ -45,7 +45,7 @@ private:
     SocketAddress* _socketAddress;
     std::string _username;
     std::vector<uint8_t> _playerIDs;
-    float _lastPacketFromClientTime;
+    uint32_t _lastPacketFromClientTime;
     MoveList _unprocessedMoveList;
     bool _isLastMoveTimestampDirty;
 };

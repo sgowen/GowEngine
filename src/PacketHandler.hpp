@@ -28,7 +28,7 @@ typedef void (*HandleConnectionResetFunc)(SocketAddress* fromAddress);
 class PacketHandler
 {
 public:
-    PacketHandler(TimeTracker* timing, bool isServer, uint16_t port, ProcessPacketFunc processPacketFunc, HandleNoResponseFunc handleNoResponseFunc, HandleConnectionResetFunc handleConnectionResetFunc);
+    PacketHandler(TimeTracker* tt, bool isServer, uint16_t port, ProcessPacketFunc processPacketFunc, HandleNoResponseFunc handleNoResponseFunc, HandleConnectionResetFunc handleConnectionResetFunc);
     ~PacketHandler();
     
     void sendPacket(const OutputMemoryBitStream& ombs, SocketAddress* fromAddress);
@@ -43,14 +43,14 @@ private:
     class ReceivedPacket
     {
     public:
-        ReceivedPacket(float receivedTime, InputMemoryBitStream& inputMemoryBitStream, SocketAddress fromAddress);
+        ReceivedPacket(uint32_t receivedTime, InputMemoryBitStream& inputMemoryBitStream, SocketAddress fromAddress);
         
         SocketAddress& getFromAddress();
-        float getReceivedTime()    const;
+        uint32_t getReceivedTime()    const;
         InputMemoryBitStream& getPacketBuffer();
         
     private:
-        float _receivedTime;
+        uint32_t _receivedTime;
         InputMemoryBitStream _packetBuffer;
         SocketAddress _fromAddress;
     };

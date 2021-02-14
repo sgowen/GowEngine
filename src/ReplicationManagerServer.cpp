@@ -61,20 +61,20 @@ void ReplicationManagerServer::write(OutputMemoryBitStream& ombs, ReplicationMan
 {
     for (auto& pair: _networkIDToReplicationCommand)
     {
-        ReplicationCommand& replicationCommand = pair.second;
-        if (replicationCommand.hasDirtyState())
+        ReplicationCommand& rc = pair.second;
+        if (rc.hasDirtyState())
         {
             uint32_t networkID = pair.first;
             
             ombs.write(networkID);
             
-            ReplicationAction action = replicationCommand.getAction();
-            ombs.write<uint8_t, 2>(static_cast<uint8_t>(action));
+            ReplicationAction ra = rc.getAction();
+            ombs.write<uint8_t, 2>(static_cast<uint8_t>(ra));
             
             uint16_t writtenState = 0;
-            uint16_t dirtyState = replicationCommand.getDirtyState();
+            uint16_t dirtyState = rc.getDirtyState();
             
-            switch(action)
+            switch(ra)
             {
                 case REPA_CREATE:
                     writtenState = writeCreateAction(ombs, networkID, dirtyState);
@@ -87,9 +87,9 @@ void ReplicationManagerServer::write(OutputMemoryBitStream& ombs, ReplicationMan
                     break;
             }
             
-            ioTransmissdata->addTransmission(networkID, action, writtenState);
+            ioTransmissdata->addTransmission(networkID, ra, writtenState);
             
-            replicationCommand.clearDirtyState(writtenState);
+            rc.clearDirtyState(writtenState);
         }
     }
 }

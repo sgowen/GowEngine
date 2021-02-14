@@ -8,10 +8,12 @@
 
 #pragma once
 
+#include <stdint.h>
+
 struct TimeTracker
 {
     double _frameRate;
-    double _time;
+    uint32_t _time;
     
     TimeTracker(double frameRate) :
     _frameRate(frameRate),
@@ -22,11 +24,21 @@ struct TimeTracker
 
     void onFrame()
     {
-        _time += _frameRate;
+        ++_time;
     }
 
     void reset()
     {
         _time = 0;
+    }
+    
+    float realTime()
+    {
+        return realTime(_time);
+    }
+    
+    float realTime(uint32_t time)
+    {
+        return time * _frameRate;
     }
 };

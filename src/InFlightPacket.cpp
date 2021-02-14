@@ -13,7 +13,7 @@
 
 #include "TimeTracker.hpp"
 
-InFlightPacket::InFlightPacket(uint16_t sequenceNumber, float timeDispatched) :
+InFlightPacket::InFlightPacket(uint16_t sequenceNumber, uint32_t timeDispatched) :
 _sequenceNumber(sequenceNumber),
 _timeDispatched(timeDispatched),
 _key(0)
@@ -23,13 +23,15 @@ _key(0)
 
 InFlightPacket::~InFlightPacket()
 {
-    if (_key > 0)
+    if (_key == 0)
     {
-        TransmissionData* transmissionData = getTransmissionData(_key);
-        if (transmissionData)
-        {
-            transmissionData->free();
-        }
+        return;
+    }
+    
+    TransmissionData* td = getTransmissionData(_key);
+    if (td != NULL)
+    {
+        td->free();
     }
 }
 
@@ -44,7 +46,7 @@ TransmissionData* InFlightPacket::getTransmissionData(int key) const
 {
     auto it = _transmissionDataMap.find(key);
     
-    return (it != _transmissionDataMap.end()) ? it->second : NULL;
+    return it != _transmissionDataMap.end() ? it->second : NULL;
 }
 
 uint16_t InFlightPacket::getSequenceNumber() const
@@ -52,7 +54,7 @@ uint16_t InFlightPacket::getSequenceNumber() const
     return _sequenceNumber;
 }
 
-float InFlightPacket::getTimeDispatched() const
+uint32_t InFlightPacket::getTimeDispatched() const
 {
     return _timeDispatched;
 }

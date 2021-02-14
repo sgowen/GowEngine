@@ -52,7 +52,7 @@ void ClientProxy::updateLastPacketTime()
     _lastPacketFromClientTime = INST_REG.get<TimeTracker>(INSK_TIME_SRVR)->_time;
 }
 
-float ClientProxy::getLastPacketFromClientTime() const
+uint32_t ClientProxy::getLastPacketFromClientTime() const
 {
     return _lastPacketFromClientTime;
 }

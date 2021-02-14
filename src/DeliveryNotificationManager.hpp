@@ -21,12 +21,12 @@ class InputMemoryBitStream;
 class DeliveryNotificationManager
 {
 public:
-    DeliveryNotificationManager(TimeTracker* timing, bool shouldSendAcks, bool shouldProcessAcks);
+    DeliveryNotificationManager(TimeTracker* tt, bool shouldSendAcks, bool shouldProcessAcks);
     ~DeliveryNotificationManager();
     
     InFlightPacket* writeState(OutputMemoryBitStream& ombs);
     bool readAndProcessState(InputMemoryBitStream& imbs);
-    void processTimedOutPackets(float time);
+    void processTimedOutPackets(uint32_t time);
     uint32_t getDroppedPacketCount() const;
     uint32_t getDeliveredPacketCount() const;
     uint32_t getDispatchedPacketCount() const;

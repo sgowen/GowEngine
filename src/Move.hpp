@@ -8,6 +8,8 @@
 
 #pragma once
 
+#include <stdint.h>
+
 class InputState;
 class OutputMemoryBitStream;
 class InputMemoryBitStream;
@@ -15,7 +17,7 @@ class InputMemoryBitStream;
 class Move
 {
 public:
-    Move(InputState* inputState, float timestamp);
+    Move(InputState* inputState, uint32_t timestamp);
     Move(InputState* inputState);
     ~Move() {}
     
@@ -23,11 +25,11 @@ public:
     void read(InputMemoryBitStream& imbs);
     bool isEqual(const Move* move) const;
     InputState* inputState() const;
-    float getTimestamp() const;
-    void setTimestamp(float timeStamp);
+    uint32_t getTimestamp() const;
+    void setTimestamp(uint32_t timeStamp);
     void copyInputState(InputState* inputState);
     
 private:
     InputState* _inputState;
-    float _timestamp;
+    uint32_t _timestamp;
 };

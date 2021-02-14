@@ -17,13 +17,13 @@
 #include "SocketUtil.hpp"
 #include "UDPSocket.hpp"
 
-PacketHandler::PacketHandler(TimeTracker* timing, bool isServer, uint16_t port, ProcessPacketFunc processPacketFunc, HandleNoResponseFunc handleNoResponseFunc, HandleConnectionResetFunc handleConnectionResetFunc) :
-_timeTracker(timing),
+PacketHandler::PacketHandler(TimeTracker* tt, bool isServer, uint16_t port, ProcessPacketFunc processPacketFunc, HandleNoResponseFunc handleNoResponseFunc, HandleConnectionResetFunc handleConnectionResetFunc) :
+_timeTracker(tt),
 _processPacketFunc(processPacketFunc),
 _handleNoResponseFunc(handleNoResponseFunc),
 _handleConnectionResetFunc(handleConnectionResetFunc),
-_bytesReceivedPerSecond(timing, 1.0f),
-_bytesSentPerSecond(timing, 1.0f),
+_bytesReceivedPerSecond(tt, 1.0f),
+_bytesSentPerSecond(tt, 1.0f),
 _bytesSentThisFrame(0),
 _isServer(isServer),
 _socket(NULL),
@@ -69,7 +69,7 @@ void PacketHandler::sendPacket(const OutputMemoryBitStream& ombs, SocketAddress*
     assert(_isConnected);
     
 #if IS_DEBUG
-    LOG("%s Outgoing packet Bit Length: %d", _isServer ? "Server" : "Client", ombs.getBitLength());
+    LOG("%s outgoing packet bit length: %d", _isServer ? "Server" : "Client", ombs.getBitLength());
 #endif
 
     int sentByteCount = _socket->sendToAddress(ombs.getBufferPtr(), ombs.getByteLength(), *fromAddress);
@@ -135,7 +135,7 @@ void PacketHandler::readIncomingPacketsIntoQueue()
             // this doesn't sim jitter, for that we would need to.....
 
             float simulatedReceivedTime = _timeTracker->_time;
-            _packetQueue.push(ReceivedPacket(simulatedReceivedTime, imbs, fromAddress));
+            _packetQueue.emplace(simulatedReceivedTime, imbs, fromAddress);
         }
         else
         {
@@ -192,7 +192,7 @@ void PacketHandler::updateBytesReceivedLastFrame(int totalReadByteCount)
     _bytesReceivedPerSecond.updatePerSecond(static_cast<float>(totalReadByteCount));
 }
 
-PacketHandler::ReceivedPacket::ReceivedPacket(float receivedTime, InputMemoryBitStream& imbs, SocketAddress fromAddress) :
+PacketHandler::ReceivedPacket::ReceivedPacket(uint32_t receivedTime, InputMemoryBitStream& imbs, SocketAddress fromAddress) :
 _receivedTime(receivedTime),
 _fromAddress(fromAddress),
 _packetBuffer(imbs)
@@ -205,7 +205,7 @@ SocketAddress& PacketHandler::ReceivedPacket::getFromAddress()
     return _fromAddress;
 }
 
-float PacketHandler::ReceivedPacket::getReceivedTime() const
+uint32_t PacketHandler::ReceivedPacket::getReceivedTime() const
 {
     return _receivedTime;
 }

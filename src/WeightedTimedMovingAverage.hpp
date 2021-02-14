@@ -13,7 +13,7 @@ class TimeTracker;
 class WeightedTimedMovingAverage
 {
 public:
-    WeightedTimedMovingAverage(TimeTracker* timing, float duration = 5.0f);
+    WeightedTimedMovingAverage(TimeTracker* tt, float duration = 5.0f);
     
     void updatePerSecond(float value);
     void update(float value);
