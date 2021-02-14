@@ -80,7 +80,6 @@ private:
     float _timeOfLastHello;
     std::map<uint8_t, uint8_t> _indexToPlayerIDMap;
     uint8_t _nextIndex;
-    float _frameRate;
     float _lastMoveProcessedByServerTimestamp;
     float _lastServerCommunicationTimestamp;
     WeightedTimedMovingAverage _avgRoundTripTime;
