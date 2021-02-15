@@ -9,7 +9,6 @@
 #include "ShaderLoader.hpp"
 
 #include "Shader.hpp"
-
 #include "AssetHandlerFactory.hpp"
 #include "AssetHandler.hpp"
 #include "FileData.hpp"

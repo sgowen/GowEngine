@@ -8,10 +8,10 @@
 
 #pragma once
 
-#include <box2d/b2_draw.h>
-
 #include "PolygonBatcher.hpp"
 #include "CircleBatcher.hpp"
+
+#include <box2d/b2_draw.h>
 
 struct Shader;
 class b2World;

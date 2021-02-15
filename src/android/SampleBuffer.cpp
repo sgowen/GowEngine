@@ -9,7 +9,6 @@
 #include "SampleBuffer.hpp"
 
 #include "WavStreamReader.hpp"
-
 #include "resampler/MultiChannelResampler.h"
 
 SampleBuffer::SampleBuffer() :

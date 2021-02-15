@@ -11,9 +11,7 @@
 #include "EntityRegistry.hpp"
 #include "OutputMemoryBitStream.hpp"
 #include "ReplicationManagerTransmissionData.hpp"
-
 #include "EntityRegistry.hpp"
-#include "ReplicationAction.hpp"
 #include "Macros.hpp"
 #include "Entity.hpp"
 #include "EntityNetworkController.hpp"
@@ -57,40 +55,42 @@ void ReplicationManagerServer::handleCreateAckd(uint32_t networkID)
     _networkIDToReplicationCommand[networkID].handleCreateAckd();
 }
 
-void ReplicationManagerServer::write(OutputMemoryBitStream& ombs, ReplicationManagerTransmissionData* ioTransmissdata)
+void ReplicationManagerServer::write(OutputMemoryBitStream& ombs, ReplicationManagerTransmissionData* rmtd)
 {
     for (auto& pair: _networkIDToReplicationCommand)
     {
         ReplicationCommand& rc = pair.second;
-        if (rc.hasDirtyState())
+        if (!rc.hasDirtyState())
         {
-            uint32_t networkID = pair.first;
-            
-            ombs.write(networkID);
-            
-            ReplicationAction ra = rc.getAction();
-            ombs.write<uint8_t, 2>(static_cast<uint8_t>(ra));
-            
-            uint16_t writtenState = 0;
-            uint16_t dirtyState = rc.getDirtyState();
-            
-            switch(ra)
-            {
-                case REPA_CREATE:
-                    writtenState = writeCreateAction(ombs, networkID, dirtyState);
-                    break;
-                case REPA_UPDATE:
-                    writtenState = writeUpdateAction(ombs, networkID, dirtyState);
-                    break;
-                case REPA_DESTROY:
-                    writtenState = dirtyState;
-                    break;
-            }
-            
-            ioTransmissdata->addTransmission(networkID, ra, writtenState);
-            
-            rc.clearDirtyState(writtenState);
+            continue;
         }
+        
+        uint32_t networkID = pair.first;
+        
+        ombs.write(networkID);
+        
+        ReplicationAction ra = rc.getAction();
+        ombs.write<uint8_t, 2>(static_cast<uint8_t>(ra));
+        
+        uint16_t writtenState = 0;
+        uint16_t dirtyState = rc.getDirtyState();
+        
+        switch (ra)
+        {
+            case REPA_CREATE:
+                writtenState = writeCreateAction(ombs, networkID, dirtyState);
+                break;
+            case REPA_UPDATE:
+                writtenState = writeUpdateAction(ombs, networkID, dirtyState);
+                break;
+            case REPA_DESTROY:
+                writtenState = dirtyState;
+                break;
+        }
+        
+        rmtd->addTransmission(networkID, ra, writtenState);
+        
+        rc.clearDirtyState(writtenState);
     }
 }
 

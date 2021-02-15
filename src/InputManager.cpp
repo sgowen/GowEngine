@@ -10,18 +10,9 @@
 
 #include "StringUtil.hpp"
 #include "PlatformMacros.hpp"
+#include "MathUtil.hpp"
 
 #include <algorithm>
-
-inline float sanitizeCloseToZeroValue(float x)
-{
-    if (x < 0.25f && x > -0.25f)
-    {
-        return 0.0f;
-    }
-    
-    return x;
-}
 
 void InputManager::onCursorInput(CursorEventType type, float x, float y, bool isAlt)
 {
@@ -61,8 +52,8 @@ void InputManager::onGamepadInput(uint8_t button, uint8_t index, float x, float 
         wasLastEventDown = !wasUp;
     }
     
-    float sanitizedX = sanitizeCloseToZeroValue(x);
-    float sanitizedY = sanitizeCloseToZeroValue(y);
+    float sanitizedX = sanitizeCloseToZeroValue(x, 0.25f);
+    float sanitizedY = sanitizeCloseToZeroValue(y, 0.25f);
     bool isUp = fabsf(sanitizedX) == 0;
     _lastKnownGamepadButtonStates[index][button] = isUp;
     

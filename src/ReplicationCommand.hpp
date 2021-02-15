@@ -8,9 +8,14 @@
 
 #pragma once
 
-#include "ReplicationAction.hpp"
-
 #include <stdint.h>
+
+enum ReplicationAction
+{
+    REPA_CREATE = 1,
+    REPA_UPDATE,
+    REPA_DESTROY
+};
 
 class OutputMemoryBitStream;
 class InputMemoryBitStream;

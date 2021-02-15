@@ -9,7 +9,6 @@
 #include "Box2DEntityPhysicsController.hpp"
 
 #include "Entity.hpp"
-
 #include "Macros.hpp"
 
 IMPL_EntityPhysicsController_create(Box2DEntityPhysicsController)

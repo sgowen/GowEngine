@@ -11,7 +11,6 @@
 #include "Color.hpp"
 #include "Line.hpp"
 #include "Shader.hpp"
-
 #include "OpenGLWrapper.hpp"
 
 #include <assert.h>

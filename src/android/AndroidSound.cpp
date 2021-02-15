@@ -9,7 +9,6 @@
 #include "AndroidSound.hpp"
 
 #include "SimpleMultiPlayer.hpp"
-
 #include "AssetHandler.hpp"
 #include "AssetHandlerFactory.hpp"
 #include "FileData.hpp"

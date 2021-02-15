@@ -9,7 +9,6 @@
 #include "WindowsSoundWrapper.hpp"
 
 #include "WindowsSound.hpp"
-
 #include "GowUtil.hpp"
 
 WindowsSoundWrapper::WindowsSoundWrapper(uint16_t soundID, const char *filePath, DirectX::AudioEngine* audioEngine, int numInstances) : SoundWrapper(soundID, numInstances)

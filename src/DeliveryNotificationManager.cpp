@@ -11,7 +11,6 @@
 #include "TimeTracker.hpp"
 #include "OutputMemoryBitStream.hpp"
 #include "InputMemoryBitStream.hpp"
-
 #include "StringUtil.hpp"
 #include "PlatformMacros.hpp"
 

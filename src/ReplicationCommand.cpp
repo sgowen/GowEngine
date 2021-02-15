@@ -58,7 +58,7 @@ uint16_t ReplicationCommand::getDirtyState() const
 
 void ReplicationCommand::clearDirtyState(uint16_t stateToClear)
 {
-    _dirtyState &= ~stateToClear;
+    _dirtyState = 0;
     
     if (_action == REPA_DESTROY)
     {

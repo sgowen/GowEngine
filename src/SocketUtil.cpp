@@ -9,7 +9,6 @@
 #include "SocketUtil.hpp"
 
 #include "UDPSocket.hpp"
-
 #include "Network.hpp"
 #include "StringUtil.hpp"
 #include "PlatformMacros.hpp"

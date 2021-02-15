@@ -11,7 +11,6 @@
 #include "Entity.hpp"
 #include "InputMemoryBitStream.hpp"
 #include "OutputMemoryBitStream.hpp"
-
 #include "MemoryBitStreamUtil.hpp"
 #include "Macros.hpp"
 #include "EntityPhysicsController.hpp"
@@ -36,9 +35,6 @@ void EntityNetworkController::read(InputMemoryBitStream& imbs)
     {
         MemoryBitStreamUtil::read(imbs, e._pose._velocity._x, e._pose._velocity._y);
         MemoryBitStreamUtil::read(imbs, e._pose._position._x, e._pose._position._y);
-        
-        imbs.read(e._pose._width);
-        imbs.read(e._pose._height);
         
         if (!IS_BIT_SET(e._entityDef._bodyFlags, BODF_FIXED_ROTATION))
         {
@@ -80,9 +76,6 @@ uint16_t EntityNetworkController::write(OutputMemoryBitStream& ombs, uint16_t di
     {
         MemoryBitStreamUtil::write(ombs, e._pose._velocity._x, e._pose._velocity._y);
         MemoryBitStreamUtil::write(ombs, e._pose._position._x, e._pose._position._y);
-        
-        ombs.write(e._pose._width);
-        ombs.write(e._pose._height);
         
         if (!IS_BIT_SET(e._entityDef._bodyFlags, BODF_FIXED_ROTATION))
         {

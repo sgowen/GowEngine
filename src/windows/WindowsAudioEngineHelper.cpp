@@ -9,7 +9,6 @@
 #include "WindowsAudioEngineHelper.hpp"
 
 #include "SoundWrapper.hpp"
-
 #include "WindowsSoundWrapper.hpp"
 #include "PlatformMacros.hpp"
 

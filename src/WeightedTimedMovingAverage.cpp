@@ -9,7 +9,6 @@
 #include "WeightedTimedMovingAverage.hpp"
 
 #include "TimeTracker.hpp"
-
 #include "MathUtil.hpp"
 
 #include <assert.h>

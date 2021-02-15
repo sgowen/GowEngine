@@ -13,7 +13,6 @@
 #include "EntityNetworkController.hpp"
 #include "EntityPhysicsController.hpp"
 #include "MathUtil.hpp"
-
 #include "EntityManager.hpp"
 #include "Macros.hpp"
 #include "Rektangle.hpp"
@@ -25,7 +24,7 @@ _entityInstanceDef(eid),
 _controller(ENTITY_MGR.createEntityController(ed, this)),
 _physicsController(ENTITY_MGR.createEntityPhysicsController(ed, this)),
 _networkController(ENTITY_MGR.createEntityNetworkController(ed, this, isServer)),
-_pose(eid._x, eid._y, ed._width, ed._height),
+_pose(eid._x, eid._y),
 _poseCache(_pose),
 _state(),
 _stateCache(_state),
@@ -56,6 +55,16 @@ void Entity::update()
     }
     
     _controller->update();
+}
+
+void Entity::message(uint16_t message, void* data)
+{
+    if (_isRequestingDeletion)
+    {
+        return;
+    }
+    
+    _controller->onMessage(message, data);
 }
 
 EntityDef& Entity::entityDef()
@@ -119,12 +128,12 @@ const Vector2& Entity::getVelocity()
 
 float Entity::width()
 {
-    return _pose._width;
+    return _entityDef._width;
 }
 
 float Entity::height()
 {
-    return _pose._height;
+    return _entityDef._height;
 }
 
 void Entity::setAngle(float angle)

@@ -11,7 +11,6 @@
 #include "TextureRegion.hpp"
 #include "Shader.hpp"
 #include "Texture.hpp"
-
 #include "OpenGLWrapper.hpp"
 #include "MathUtil.hpp"
 

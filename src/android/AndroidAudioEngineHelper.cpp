@@ -9,7 +9,6 @@
 #include "AndroidAudioEngineHelper.hpp"
 
 #include "AndroidSoundWrapper.hpp"
-
 #include "SimpleMultiPlayer.hpp"
 
 SoundWrapper* AndroidAudioEngineHelper::loadSound(uint16_t soundID, const char *filePath, int numInstances)

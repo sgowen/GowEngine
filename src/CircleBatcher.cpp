@@ -11,7 +11,6 @@
 #include "Circle.hpp"
 #include "Color.hpp"
 #include "Shader.hpp"
-
 #include "OpenGLWrapper.hpp"
 #include "MathUtil.hpp"
 

@@ -9,7 +9,6 @@
 #include "SocketAddressFactory.hpp"
 
 #include "SocketAddress.hpp"
-
 #include "SocketUtil.hpp"
 #include "StringUtil.hpp"
 

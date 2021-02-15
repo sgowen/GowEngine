@@ -15,7 +15,6 @@
 #include "MoveList.hpp"
 #include "SocketAddress.hpp"
 #include "TimeTracker.hpp"
-
 #include "StringUtil.hpp"
 #include "SocketAddressFactory.hpp"
 #include "Macros.hpp"
@@ -189,8 +188,7 @@ void NetworkManagerClient::handleNoResponse()
     TimeTracker* tt = INST_REG.get<TimeTracker>(INSK_TIME_CLNT);
     uint32_t time = tt->_time;
     
-    uint32_t timeout = NW_SRVR_TIMEOUT;
-    float dcTime = _lastServerCommunicationTimestamp + timeout;
+    float dcTime = _lastServerCommunicationTimestamp + NW_SRVR_TIMEOUT;
     if (time > dcTime)
     {
         _state = NWCS_DISCONNECTED;
@@ -285,7 +283,7 @@ void NetworkManagerClient::handleStatePacket(InputMemoryBitStream& imbs)
     }
     
     readLastMoveProcessedOnServerTimestamp(imbs);
-    _replicationManagerClient.read(imbs);
+    _replicationManagerClient.read(imbs, _entityRegistry);
     _hasReceivedNewState = true;
 }
 
@@ -442,7 +440,7 @@ _removeProcessedMovesFunc(rpmf),
 _getMoveListFunc(gmlf),
 _onPlayerWelcomedFunc(opwf),
 _entityRegistry(oerf, oedf),
-_replicationManagerClient(_entityRegistry),
+_replicationManagerClient(),
 _avgRoundTripTime(INST_REG.get<TimeTracker>(INSK_TIME_CLNT), 1.0f),
 _state(NWCS_SAYING_HELLO),
 _deliveryNotificationManager(INST_REG.get<TimeTracker>(INSK_TIME_CLNT), true, false),

@@ -9,7 +9,6 @@
 #include "LinuxAudioEngineHelper.hpp"
 
 #include "SoundWrapper.hpp"
-
 #include "LinuxSoundWrapper.hpp"
 
 #include <AL/alut.h>

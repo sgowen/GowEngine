@@ -9,10 +9,8 @@
 #include "ReplicationManagerTransmissionData.hpp"
 
 #include "ReplicationManagerServer.hpp"
-
 #include "EntityRegistry.hpp"
 #include "Entity.hpp"
-#include "ReplicationAction.hpp"
 #include "DeliveryNotificationManager.hpp"
 
 ReplicationManagerTransmissionData::ReplicationManagerTransmissionData() :
@@ -39,7 +37,7 @@ void ReplicationManagerTransmissionData::handleDeliveryFailure(DeliveryNotificat
         //is it a create? then we have to redo the create.
         uint32_t networkID = rt.getID();
         
-        switch(rt.getAction())
+        switch (rt.getAction())
         {
             case REPA_CREATE:
                 handleCreateDeliveryFailure(networkID);
@@ -59,7 +57,7 @@ void ReplicationManagerTransmissionData::handleDeliverySuccess(DeliveryNotificat
     //run through the transmissions, if any are Destroyed then we can remove this network ID from the map
     for (const ReplicationTransmission& rt: _transmissions)
     {
-        switch(rt.getAction())
+        switch (rt.getAction())
         {
             case REPA_CREATE:
                 handleCreateDeliverySuccess(rt.getID());
@@ -73,17 +71,17 @@ void ReplicationManagerTransmissionData::handleDeliverySuccess(DeliveryNotificat
     }
 }
 
-void ReplicationManagerTransmissionData::reset(ReplicationManagerServer* replicationManagerServer, EntityRegistry* entityRegistry, Pool<ReplicationManagerTransmissionData>* poolRMTD)
+void ReplicationManagerTransmissionData::reset(ReplicationManagerServer* rms, EntityRegistry* er, Pool<ReplicationManagerTransmissionData>* poolRMTD)
 {
-    _replicationManagerServer = replicationManagerServer;
-    _entityRegistry = entityRegistry;
+    _replicationManagerServer = rms;
+    _entityRegistry = er;
     _poolRMTD = poolRMTD;
     _transmissions.clear();
 }
 
 void ReplicationManagerTransmissionData::addTransmission(uint32_t networkID, ReplicationAction ra, uint32_t state)
 {
-    _transmissions.push_back(ReplicationTransmission(networkID, ra, state));
+    _transmissions.emplace_back(networkID, ra, state);
 }
 
 void ReplicationManagerTransmissionData::handleCreateDeliveryFailure(uint32_t networkID) const
@@ -120,7 +118,7 @@ void ReplicationManagerTransmissionData::handleUpdateStateDeliveryFailure(uint32
         }
         
         //if there's still any dirty state, mark it
-        if (state)
+        if (state > 0)
         {
             _replicationManagerServer->setStateDirty(networkID, state);
         }

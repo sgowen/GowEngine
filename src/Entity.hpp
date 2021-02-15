@@ -109,17 +109,13 @@ public:
     {
         Vector2 _velocity;
         Vector2 _position;
-        uint8_t _width;
-        uint8_t _height;
         float _angle;
         uint8_t _numGroundContacts;
         bool _isFacingLeft;
         
-        Pose(float x, float y, float width, float height) :
+        Pose(float x, float y) :
         _velocity(VECTOR2_ZERO),
         _position(x, y),
-        _width(width),
-        _height(height),
         _angle(0),
         _numGroundContacts(0),
         _isFacingLeft(false)
@@ -132,8 +128,6 @@ public:
             return
             a._velocity          == b._velocity &&
             a._position          == b._position &&
-            a._width             == b._width &&
-            a._height            == b._height &&
             a._angle             == b._angle &&
             a._numGroundContacts == b._numGroundContacts &&
             a._isFacingLeft      == b._isFacingLeft;
@@ -180,6 +174,7 @@ public:
     ~Entity();
     
     void update();
+    void message(uint16_t message, void* data = NULL);
     EntityDef& entityDef();
     EntityController* controller();
     EntityPhysicsController* physicsController();

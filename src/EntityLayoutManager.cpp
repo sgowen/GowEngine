@@ -10,7 +10,6 @@
 
 #include "Entity.hpp"
 #include "EntityIDManager.hpp"
-
 #include "StringUtil.hpp"
 #include "AssetHandlerFactory.hpp"
 #include "AssetHandler.hpp"

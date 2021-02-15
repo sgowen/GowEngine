@@ -16,14 +16,12 @@ class InputMemoryBitStream;
 class ReplicationManagerClient
 {
 public:
-    ReplicationManagerClient(EntityRegistry& entityRegistry);
+    ReplicationManagerClient() {}
     
-    void read(InputMemoryBitStream& imbs);
+    void read(InputMemoryBitStream& imbs, EntityRegistry& er);
     
 private:
-    EntityRegistry& _entityRegistry;
-    
-    void readAndDoCreateAction(InputMemoryBitStream& imbs, uint32_t networkID);
-    void readAndDoUpdateAction(InputMemoryBitStream& imbs, uint32_t networkID);
-    void readAndDoDestroyAction(InputMemoryBitStream& imbs, uint32_t networkID);
+    void readAndDoCreateAction(InputMemoryBitStream& imbs, EntityRegistry& er, uint32_t networkID);
+    void readAndDoUpdateAction(InputMemoryBitStream& imbs, EntityRegistry& er, uint32_t networkID);
+    void readAndDoDestroyAction(InputMemoryBitStream& imbs, EntityRegistry& er, uint32_t networkID);
 };

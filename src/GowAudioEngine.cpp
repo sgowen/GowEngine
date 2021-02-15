@@ -11,7 +11,6 @@
 #include "SoundWrapper.hpp"
 #include "Sound.hpp"
 #include "AudioEngineHelper.hpp"
-
 #include "AudioEngineHelperFactory.hpp"
 #include "MathUtil.hpp"
 #include "Assets.hpp"

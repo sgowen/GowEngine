@@ -10,7 +10,7 @@
 
 #include "TransmissionData.hpp"
 
-#include "ReplicationAction.hpp"
+#include "ReplicationCommand.hpp"
 #include "Pool.hpp"
 
 #include <vector>
@@ -27,7 +27,7 @@ public:
     virtual void handleDeliveryFailure(DeliveryNotificationManager* dnm) const override;
     virtual void handleDeliverySuccess(DeliveryNotificationManager* dnm) const override;
     
-    void reset(ReplicationManagerServer* replicationManagerServer, EntityRegistry* entityRegistry, Pool<ReplicationManagerTransmissionData>* poolRMTD);
+    void reset(ReplicationManagerServer* rms, EntityRegistry* er, Pool<ReplicationManagerTransmissionData>* poolRMTD);
     void addTransmission(uint32_t networkID, ReplicationAction ra, uint32_t state);
     
 private:

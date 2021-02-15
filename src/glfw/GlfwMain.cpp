@@ -10,8 +10,8 @@
 
 #include "Engine.hpp"
 #include "PlatformMacros.hpp"
-
 #include "OpenGLWrapper.hpp"
+
 #define GLFW_INCLUDE_NONE
 #include <GLFW/glfw3.h>
 

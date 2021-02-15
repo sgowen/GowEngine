@@ -13,7 +13,6 @@
 #include "Rektangle.hpp"
 #include "Triangle.hpp"
 #include "Line.hpp"
-
 #include "MathUtil.hpp"
 
 #include <stdio.h>

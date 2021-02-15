@@ -9,10 +9,8 @@
 #include "AppleAudioEngineHelper.hpp"
 
 #include "SoundWrapper.hpp"
-
 #include "AppleSoundWrapper.hpp"
 #include "ObjectALWrapper.hpp"
-
 #include "NSAppleAssetHandler.hpp"
 
 void AppleAudioEngineHelper::pause()

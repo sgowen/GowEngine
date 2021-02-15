@@ -8,11 +8,10 @@
 
 #include "Box2DDebugRenderer.hpp"
 
-#include "Shader.hpp"
-#include <box2d/box2d.h>
-
-#include "Shader.hpp"
 #include "Color.hpp"
+#include "Shader.hpp"
+
+#include <box2d/box2d.h>
 
 Box2DDebugRenderer::Box2DDebugRenderer(int maxBatchSize) :
 _fillPolygonBatcher(maxBatchSize, true),

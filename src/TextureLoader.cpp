@@ -9,7 +9,6 @@
 #include "TextureLoader.hpp"
 
 #include "Texture.hpp"
-
 #include "AssetHandlerFactory.hpp"
 #include "AssetHandler.hpp"
 #include "FileData.hpp"

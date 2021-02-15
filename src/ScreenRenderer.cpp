@@ -10,7 +10,6 @@
 
 #include "Shader.hpp"
 #include "Framebuffer.hpp"
-
 #include "ShaderInput.hpp"
 #include "OpenGLWrapper.hpp"
 #include "Color.hpp"

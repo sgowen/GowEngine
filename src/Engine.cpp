@@ -9,7 +9,6 @@
 #include "Engine.hpp"
 
 #include "EngineController.hpp"
-
 #include "InputManager.hpp"
 #include "FPSUtil.hpp"
 #include "ClipboardUtil.hpp"

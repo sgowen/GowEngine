@@ -12,7 +12,6 @@
 #include "Shader.hpp"
 #include "Texture.hpp"
 #include "Color.hpp"
-
 #include "ShaderAttribute.hpp"
 #include "ShaderUniform.hpp"
 #include "PlatformMacros.hpp"

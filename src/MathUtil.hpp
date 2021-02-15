@@ -19,6 +19,29 @@
 #define DEGREES_TO_RADIANS(angle) ( (angle) / 180.0f * M_PI )
 #define RADIANS_TO_DEGREES(angle) ( (angle) / M_PI * 180.0f )
 
+inline float sanitizeCloseToZeroValue(float x, float distanceFromZero)
+{
+    if (x < distanceFromZero && x > -distanceFromZero)
+    {
+        return 0.0f;
+    }
+    
+    return x;
+}
+
+inline void sanitizeCloseToZeroVector(float& x, float& y, float distanceFromZero)
+{
+    if (x < distanceFromZero && x > -distanceFromZero)
+    {
+        x = 0.0f;
+    }
+    
+    if (y < distanceFromZero && y > -distanceFromZero)
+    {
+        y = 0.0f;
+    }
+}
+
 inline bool areFloatsPracticallyEqual(float A, float B, float maxDiff = 0.000001f, float maxRelDiff = FLT_EPSILON)
 {
     // Check if the numbers are really close -- needed

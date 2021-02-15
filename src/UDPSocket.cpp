@@ -9,7 +9,6 @@
 #include "UDPSocket.hpp"
 
 #include "SocketAddress.hpp"
-
 #include "SocketUtil.hpp"
 #include "StringUtil.hpp"
 #include "PlatformMacros.hpp"
@@ -24,7 +23,7 @@ int UDPSocket::bindSocket(const SocketAddress& bindAddress)
         return SOCKET_UTIL.getLastError();
     }
     
-    return NO_ERROR;
+    return error;
 }
 
 int UDPSocket::sendToAddress(const void* toSend, int length, const SocketAddress& toAddress)

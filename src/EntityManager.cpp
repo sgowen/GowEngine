@@ -13,7 +13,6 @@
 #include "EntityController.hpp"
 #include "EntityPhysicsController.hpp"
 #include "EntityNetworkController.hpp"
-
 #include "EntityController.hpp"
 #include "StringUtil.hpp"
 #include "GowUtil.hpp"

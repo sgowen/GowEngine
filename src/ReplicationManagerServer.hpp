@@ -9,7 +9,6 @@
 #pragma once
 
 #include "Network.hpp"
-
 #include "ReplicationCommand.hpp"
 
 #include <map>
@@ -28,7 +27,7 @@ public:
     void setStateDirty(uint32_t networkID, uint16_t dirtyState);
     void handleCreateAckd(uint32_t networkID);
     void removeFromReplication(uint32_t networkID);
-    void write(OutputMemoryBitStream& ombs, ReplicationManagerTransmissionData* ioTransmissdata);
+    void write(OutputMemoryBitStream& ombs, ReplicationManagerTransmissionData* rmtd);
     
 private:
     EntityRegistry& _entityRegistry;

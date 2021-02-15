@@ -12,7 +12,6 @@
 #include "Rektangle.hpp"
 #include "Triangle.hpp"
 #include "Shader.hpp"
-
 #include "OpenGLWrapper.hpp"
 
 PolygonBatcher::PolygonBatcher(int maxBatchSize, bool isFill) :

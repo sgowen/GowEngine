@@ -10,7 +10,6 @@
 
 #include "EntityRegistry.hpp"
 #include "SocketAddress.hpp"
-
 #include "TimeTracker.hpp"
 #include "InstanceRegistry.hpp"
 

@@ -18,7 +18,6 @@
 #include "Entity.hpp"
 #include "TimeTracker.hpp"
 #include "PlatformMacros.hpp"
-
 #include "StringUtil.hpp"
 #include "EntityRegistry.hpp"
 #include "StringUtil.hpp"

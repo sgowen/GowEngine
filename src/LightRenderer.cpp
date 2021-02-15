@@ -10,7 +10,6 @@
 
 #include "Shader.hpp"
 #include "Texture.hpp"
-
 #include "OpenGLWrapper.hpp"
 
 #include <assert.h>

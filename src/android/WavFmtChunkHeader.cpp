@@ -10,8 +10,6 @@
 
 #include "InputStream.hpp"
 
-#include <android/log.h>
-
 const RiffID WavFmtChunkHeader::RIFFID_FMT = makeRiffID('f', 'm', 't', ' ');
 const short WavFmtChunkHeader::ENCODING_PCM = 1;
 const short WavFmtChunkHeader::ENCODING_ADPCM = 2;
