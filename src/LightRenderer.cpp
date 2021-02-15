@@ -10,6 +10,7 @@
 
 #include "Shader.hpp"
 #include "Texture.hpp"
+#include "Framebuffer.hpp"
 #include "OpenGLWrapper.hpp"
 
 #include <assert.h>
@@ -96,7 +97,7 @@ void LightRenderer::addLight(float lightPosX, float lightPosY, float lightPosZ, 
     _numLights[0] = ++_lightIndex;
 }
 
-void LightRenderer::render(Shader& s, mat4& matrix, uint32_t texture, uint32_t normalMap)
+void LightRenderer::render(Shader& s, mat4& matrix, Framebuffer& texture, Framebuffer& normalMap)
 {
     OGL.bindVertexBuffer(_vertexBuffer);
     OGL.bindShader(s);
@@ -106,8 +107,8 @@ void LightRenderer::render(Shader& s, mat4& matrix, uint32_t texture, uint32_t n
     OGL.bindFloat4(s, "u_AmbientColor", _ambientColor);
     OGL.bindFloat4(s, "u_Falloff", _fallOff);
     OGL.bindInt4(s, "u_NumLights", _numLights);
-    OGL.bindTexture(s, "u_Texture", 0, texture);
-    OGL.bindTexture(s, "u_NormalMap", 1, normalMap);
+    OGL.bindTexture(s, "u_Texture", 0, texture._texture);
+    OGL.bindTexture(s, "u_NormalMap", 1, normalMap._texture);
 
     OGL.drawIndexed(GL_TRIANGLES, _indexBuffer, 1);
 

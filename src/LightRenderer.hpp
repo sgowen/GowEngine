@@ -14,6 +14,7 @@
 
 struct Shader;
 struct Texture;
+struct Framebuffer;
 
 #define NUM_LIGHTS 12
 
@@ -29,7 +30,7 @@ public:
     void configAmbientLight(float r, float g, float b, float a);
     void configureFallOff(float x, float y, float z);
     void addLight(float lightPosX, float lightPosY, float lightPosZ, float lightColorR, float lightColorG, float lightColorB, float lightColorA);
-    void render(Shader& s, mat4& matrix, uint32_t texture, uint32_t normalMap);
+    void render(Shader& s, mat4& matrix, Framebuffer& texture, Framebuffer& normalMap);
     
 private:
     uint32_t _vertexBuffer;
