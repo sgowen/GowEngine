@@ -48,6 +48,8 @@ void NetworkManagerClient::destroy()
 
 void NetworkManagerClient::processIncomingPackets()
 {
+    _hasReceivedNewState = false;
+    
     _packetHandler.processIncomingPackets();
     
     TimeTracker* tt = INST_REG.get<TimeTracker>(INSK_TIME_CLNT);
@@ -62,8 +64,6 @@ void NetworkManagerClient::processIncomingPackets()
 
 void NetworkManagerClient::sendOutgoingPackets()
 {
-    _hasReceivedNewState = false;
-    
     switch (_state)
     {
         case NWCS_SAYING_HELLO:
@@ -304,11 +304,6 @@ void NetworkManagerClient::readLastMoveProcessedOnServerTimestamp(InputMemoryBit
 }
 
 void NetworkManagerClient::updateSendingInputPacket()
-{
-    sendInputPacket();
-}
-
-void NetworkManagerClient::sendInputPacket()
 {
     MoveList& moveList = _getMoveListFunc();
     if (!moveList.hasMoves())

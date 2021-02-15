@@ -93,7 +93,6 @@ private:
     void handleStatePacket(InputMemoryBitStream& imbs);
     void readLastMoveProcessedOnServerTimestamp(InputMemoryBitStream& imbs);
     void updateSendingInputPacket();
-    void sendInputPacket();
     void updateAddLocalPlayerRequest();
     void updateDropLocalPlayerRequest();
     void updateNextIndex();
