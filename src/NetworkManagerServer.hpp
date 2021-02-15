@@ -54,8 +54,6 @@ public:
     bool isConnected();
     EntityRegistry& getEntityRegistry();
     void processPacket(InputMemoryBitStream& imbs, SocketAddress* fromAddress);
-    void handleNoResponse();
-    void handleConnectionReset(SocketAddress* fromAddress);
     
 private:
     static NetworkManagerServer* s_instance;
@@ -72,6 +70,7 @@ private:
     uint8_t _nextPlayerID;
     uint8_t _maxNumPlayers;
     
+    void sendPacket(const OutputMemoryBitStream& ombs, SocketAddress* fromAddress);
     void handlePacketFromNewClient(InputMemoryBitStream& imbs, SocketAddress* fromAddress);
     void processPacket(ClientProxy& cp, InputMemoryBitStream& imbs);
     void sendWelcomePacket(ClientProxy& cp);

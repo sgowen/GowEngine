@@ -61,8 +61,6 @@ public:
     bool isConnected();
     EntityRegistry& getEntityRegistry();
     void processPacket(InputMemoryBitStream& imbs, SocketAddress* fromAddress);
-    void handleNoResponse();
-    void handleConnectionReset(SocketAddress* fromAddress);
     
 private:
     static NetworkManagerClient* s_instance;

@@ -247,6 +247,10 @@ EntityRegistry& NetworkManagerServer::getEntityRegistry()
 
 void NetworkManagerServer::processPacket(InputMemoryBitStream& imbs, SocketAddress* fromAddress)
 {
+#if IS_DEBUG
+    LOG("Server processPacket bit length: %d", imbs.getRemainingBitCount());
+#endif
+    
     auto it = _addressHashToClientMap.find(fromAddress->getHash());
     if (it == _addressHashToClientMap.end())
     {
@@ -267,27 +271,20 @@ void NetworkManagerServer::processPacket(InputMemoryBitStream& imbs, SocketAddre
     }
 }
 
-void NetworkManagerServer::handleNoResponse()
+void NetworkManagerServer::sendPacket(const OutputMemoryBitStream& ombs, SocketAddress* fromAddress)
 {
-    // Unused
-}
-
-void NetworkManagerServer::handleConnectionReset(SocketAddress* fromAddress)
-{
-    auto it = _addressHashToClientMap.find(fromAddress->getHash());
-    if (it == _addressHashToClientMap.end())
-    {
-        return;
-    }
+#if IS_DEBUG
+    LOG("Server outgoing packet bit length: %d", ombs.getBitLength());
+#endif
     
-    handleClientDisconnected(it->second);
+    _packetHandler.sendPacket(ombs, fromAddress);
 }
 
 void NetworkManagerServer::handlePacketFromNewClient(InputMemoryBitStream& imbs, SocketAddress* fromAddress)
 {
     // read the beginning- is it a hello?
     uint8_t packetType;
-    imbs.read(packetType);
+    imbs.read<uint8_t, 4>(packetType);
     if (packetType == NWPT_HELLO)
     {
         // read the name
@@ -324,11 +321,10 @@ void NetworkManagerServer::handlePacketFromNewClient(InputMemoryBitStream& imbs,
 
 void NetworkManagerServer::processPacket(ClientProxy& cp, InputMemoryBitStream& imbs)
 {
-    //remember we got a packet so we know not to disconnect for a bit
     cp.updateLastPacketTime();
     
     uint8_t packetType;
-    imbs.read(packetType);
+    imbs.read<uint8_t, 4>(packetType);
     
     switch (packetType)
     {
@@ -360,21 +356,18 @@ void NetworkManagerServer::processPacket(ClientProxy& cp, InputMemoryBitStream& 
 
 void NetworkManagerServer::sendWelcomePacket(ClientProxy& cp)
 {
-    OutputMemoryBitStream packet;
-    
-    packet.write(static_cast<uint8_t>(NWPT_WELCOME));
-    packet.write<uint8_t, 3>(cp.getPlayerID());
+    OutputMemoryBitStream ombs;
+    ombs.write<uint8_t, 4>(static_cast<uint8_t>(NWPT_WELCOME));
+    ombs.write<uint8_t, 3>(cp.getPlayerID());
+    sendPacket(ombs, cp.getSocketAddress());
     
     LOG("Server welcoming new client '%s' as player %d", cp.getUsername().c_str(), cp.getPlayerID());
-    
-    _packetHandler.sendPacket(packet, cp.getSocketAddress());
 }
 
 void NetworkManagerServer::sendStatePacketToClient(ClientProxy& cp)
 {
     OutputMemoryBitStream ombs;
-    
-    ombs.write(static_cast<uint8_t>(NWPT_STATE));
+    ombs.write<uint8_t, 4>(static_cast<uint8_t>(NWPT_STATE));
     
     InFlightPacket* ifp = cp.getDeliveryNotificationManager().writeState(ombs);
     
@@ -393,7 +386,7 @@ void NetworkManagerServer::sendStatePacketToClient(ClientProxy& cp)
     
     ifp->setTransmissionData('RPLM', rmtd);
     
-    _packetHandler.sendPacket(ombs, cp.getSocketAddress());
+    sendPacket(ombs, cp.getSocketAddress());
 }
 
 void NetworkManagerServer::writeLastMoveTimestampIfDirty(OutputMemoryBitStream& ombs, ClientProxy& cp)
@@ -487,10 +480,9 @@ void NetworkManagerServer::handleAddLocalPlayerPacket(ClientProxy& cp, InputMemo
     }
     else
     {
-        OutputMemoryBitStream packet;
-        packet.write(static_cast<uint8_t>(NWPT_LOCAL_PLAYER_DENIED));
-        
-        _packetHandler.sendPacket(packet, cp.getSocketAddress());
+        OutputMemoryBitStream ombs;
+        ombs.write<uint8_t, 4>(static_cast<uint8_t>(NWPT_LOCAL_PLAYER_DENIED));
+        sendPacket(ombs, cp.getSocketAddress());
     }
 }
 
@@ -499,16 +491,13 @@ void NetworkManagerServer::sendLocalPlayerAddedPacket(ClientProxy& cp)
     uint8_t index = cp.getNumPlayers() - 1;
     uint8_t playerID = cp.getPlayerID(index);
     
-    OutputMemoryBitStream packet;
-    
-    packet.write(static_cast<uint8_t>(NWPT_LOCAL_PLAYER_ADDED));
-    packet.write<uint8_t, 3>(playerID);
+    OutputMemoryBitStream ombs;
+    ombs.write<uint8_t, 4>(static_cast<uint8_t>(NWPT_LOCAL_PLAYER_ADDED));
+    ombs.write<uint8_t, 3>(playerID);
+    sendPacket(ombs, cp.getSocketAddress());
     
     std::string localPlayerName = StringUtil::format("%s(%d)", cp.getUsername().c_str(), index);
-    
     LOG("Server welcoming new client local player '%s' as player %d", localPlayerName.c_str(), playerID);
-    
-    _packetHandler.sendPacket(packet, cp.getSocketAddress());
 }
 
 void NetworkManagerServer::handleDropLocalPlayerPacket(ClientProxy& cp, InputMemoryBitStream& imbs)
@@ -570,20 +559,8 @@ void cb_server_processPacket(InputMemoryBitStream& imbs, SocketAddress* fromAddr
     NW_MGR_SRVR->processPacket(imbs, fromAddress);
 }
 
-void cb_server_handleNoResponse()
-{
-    NW_MGR_SRVR->handleNoResponse();
-}
-
-void cb_server_handleConnectionReset(SocketAddress* fromAddress)
-{
-    NW_MGR_SRVR->handleConnectionReset(fromAddress);
-}
-
-#define PACKET_HANDLER_CBS cb_server_processPacket, cb_server_handleNoResponse, cb_server_handleConnectionReset
-
 NetworkManagerServer::NetworkManagerServer(uint16_t port, uint8_t maxNumPlayers, OnEntityRegisteredFunc oerf, OnEntityDeregisteredFunc oedf, HandleNewClientFunc hncf, HandleLostClientFunc hlcf, InputStateCreationFunc iscf, InputStateReleaseFunc isrf) :
-_packetHandler(INST_REG.get<TimeTracker>(INSK_TIME_SRVR), true, port, PACKET_HANDLER_CBS),
+_packetHandler(INST_REG.get<TimeTracker>(INSK_TIME_SRVR), port, cb_server_processPacket),
 _handleNewClientFunc(hncf),
 _handleLostClientFunc(hlcf),
 _inputStateCreationFunc(iscf),
@@ -601,10 +578,9 @@ NetworkManagerServer::~NetworkManagerServer()
     {
         ClientProxy& cp = pair.second;
         
-        OutputMemoryBitStream packet;
-        packet.write(static_cast<uint8_t>(NWPT_SRVR_EXIT));
-        
-        _packetHandler.sendPacket(packet, cp.getSocketAddress());
+        OutputMemoryBitStream ombs;
+        ombs.write<uint8_t, 4>(static_cast<uint8_t>(NWPT_SRVR_EXIT));
+        sendPacket(ombs, cp.getSocketAddress());
     }
     
     _addressHashToClientMap.clear();

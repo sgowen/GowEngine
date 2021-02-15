@@ -49,6 +49,15 @@ void NetworkManagerClient::destroy()
 void NetworkManagerClient::processIncomingPackets()
 {
     _packetHandler.processIncomingPackets();
+    
+    TimeTracker* tt = INST_REG.get<TimeTracker>(INSK_TIME_CLNT);
+    uint32_t time = tt->_time;
+    
+    float dcTime = _lastServerCommunicationTimestamp + NW_SRVR_TIMEOUT;
+    if (time > dcTime)
+    {
+        _state = NWCS_DISCONNECTED;
+    }
 }
 
 void NetworkManagerClient::sendOutgoingPackets()
@@ -152,11 +161,15 @@ EntityRegistry& NetworkManagerClient::getEntityRegistry()
 
 void NetworkManagerClient::processPacket(InputMemoryBitStream& imbs, SocketAddress* fromAddress)
 {
+#if IS_DEBUG
+    LOG("Client processPacket bit length: %d", imbs.getRemainingBitCount());
+#endif
+    
     TimeTracker* tt = INST_REG.get<TimeTracker>(INSK_TIME_CLNT);
     _lastServerCommunicationTimestamp = tt->_time;
     
     uint8_t packetType;
-    imbs.read(packetType);
+    imbs.read<uint8_t, 4>(packetType);
     
     switch (packetType)
     {
@@ -185,25 +198,12 @@ void NetworkManagerClient::processPacket(InputMemoryBitStream& imbs, SocketAddre
     }
 }
 
-void NetworkManagerClient::handleNoResponse()
-{
-    TimeTracker* tt = INST_REG.get<TimeTracker>(INSK_TIME_CLNT);
-    uint32_t time = tt->_time;
-    
-    float dcTime = _lastServerCommunicationTimestamp + NW_SRVR_TIMEOUT;
-    if (time > dcTime)
-    {
-        _state = NWCS_DISCONNECTED;
-    }
-}
-
-void NetworkManagerClient::handleConnectionReset(SocketAddress* fromAddress)
-{
-    UNUSED(fromAddress);
-}
-
 void NetworkManagerClient::sendPacket(const OutputMemoryBitStream& ombs)
 {
+#if IS_DEBUG
+    LOG("Client outgoing packet bit length: %d", ombs.getBitLength());
+#endif
+    
     _packetHandler.sendPacket(ombs, _serverAddress);
 }
 
@@ -214,12 +214,10 @@ void NetworkManagerClient::updateSayingHello()
     
     if (time > _timeOfLastHello + NW_CLNT_TIME_BETWEEN_HELLOS)
     {
-        OutputMemoryBitStream helloPacket;
-        
-        helloPacket.write(static_cast<uint8_t>(NWPT_HELLO));
-        helloPacket.writeSmall(getPlayerName());
-        
-        sendPacket(helloPacket);
+        OutputMemoryBitStream ombs;
+        ombs.write<uint8_t, 4>(static_cast<uint8_t>(NWPT_HELLO));
+        ombs.writeSmall(getPlayerName());
+        sendPacket(ombs);
         
         _timeOfLastHello = time;
     }
@@ -317,11 +315,10 @@ void NetworkManagerClient::sendInputPacket()
     
     if (moveList.hasMoves())
     {
-        OutputMemoryBitStream inputPacket;
+        OutputMemoryBitStream ombs;
+        ombs.write<uint8_t, 4>(static_cast<uint8_t>(NWPT_INPUT));
         
-        inputPacket.write(static_cast<uint8_t>(NWPT_INPUT));
-        
-        _deliveryNotificationManager.writeState(inputPacket);
+        _deliveryNotificationManager.writeState(ombs);
         
         // eventually write the 3 latest moves so they have 3 chances to get through...
         int moveCount = moveList.getNumMovesAfterTimestamp(_lastMoveProcessedByServerTimestamp);
@@ -334,7 +331,7 @@ void NetworkManagerClient::sendInputPacket()
         std::deque<Move>::const_iterator move = moveList.begin() + firstMoveIndex;
         
         // only need 2 bits to write the move count, because it's 0-3
-        inputPacket.write<uint8_t, 2>(moveCount - firstMoveIndex);
+        ombs.write<uint8_t, 2>(moveCount - firstMoveIndex);
         
         const Move* referenceMove = NULL;
         for (; firstMoveIndex < moveCount; ++firstMoveIndex, ++move)
@@ -343,22 +340,22 @@ void NetworkManagerClient::sendInputPacket()
             
             if (referenceMove != NULL && move->isEqual(referenceMove))
             {
-                inputPacket.write(true);
-                inputPacket.write(move->getTimestamp());
+                ombs.write(true);
+                ombs.write(move->getTimestamp());
                 
                 needsToWriteMove = false;
             }
             
             if (needsToWriteMove)
             {
-                inputPacket.write(false);
-                move->write(inputPacket);
+                ombs.write(false);
+                move->write(ombs);
                 
                 referenceMove = &(*move);
             }
         }
         
-        sendPacket(inputPacket);
+        sendPacket(ombs);
     }
 }
 
@@ -374,12 +371,10 @@ void NetworkManagerClient::updateAddLocalPlayerRequest()
     
     if (time > _timeOfLastHello + NW_CLNT_TIME_BETWEEN_HELLOS)
     {
-        OutputMemoryBitStream packet;
-        
-        packet.write(static_cast<uint8_t>(NWPT_ADD_LOCAL_PLAYER));
-        packet.write(_nextIndex);
-        
-        sendPacket(packet);
+        OutputMemoryBitStream ombs;
+        ombs.write<uint8_t, 4>(static_cast<uint8_t>(NWPT_ADD_LOCAL_PLAYER));
+        ombs.write(_nextIndex);
+        sendPacket(ombs);
         
         _timeOfLastHello = time;
     }
@@ -394,12 +389,10 @@ void NetworkManagerClient::updateDropLocalPlayerRequest()
     
     _isRequestingToAddLocalPlayer = false;
     
-    OutputMemoryBitStream packet;
-    
-    packet.write(static_cast<uint8_t>(NWPT_DROP_LOCAL_PLAYER));
-    packet.write(_isRequestingToDropLocalPlayer);
-    
-    sendPacket(packet);
+    OutputMemoryBitStream ombs;
+    ombs.write<uint8_t, 4>(static_cast<uint8_t>(NWPT_DROP_LOCAL_PLAYER));
+    ombs.write(_isRequestingToDropLocalPlayer);
+    sendPacket(ombs);
     
     _isRequestingToDropLocalPlayer = 0;
 }
@@ -422,20 +415,8 @@ void cb_client_processPacket(InputMemoryBitStream& imbs, SocketAddress* fromAddr
     NW_MGR_CLNT->processPacket(imbs, fromAddress);
 }
 
-void cb_client_handleNoResponse()
-{
-    NW_MGR_CLNT->handleNoResponse();
-}
-
-void cb_client_handleConnectionReset(SocketAddress* fromAddress)
-{
-    NW_MGR_CLNT->handleConnectionReset(fromAddress);
-}
-
-#define PACKET_HANDLER_CBS cb_client_processPacket, cb_client_handleNoResponse, cb_client_handleConnectionReset
-
 NetworkManagerClient::NetworkManagerClient(std::string serverIPAddress, std::string username, uint16_t port, OnEntityRegisteredFunc oerf, OnEntityDeregisteredFunc oedf, RemoveProcessedMovesFunc rpmf, GetMoveListFunc gmlf, OnPlayerWelcomedFunc opwf) :
-_packetHandler(INST_REG.get<TimeTracker>(INSK_TIME_CLNT), false, port, PACKET_HANDLER_CBS),
+_packetHandler(INST_REG.get<TimeTracker>(INSK_TIME_CLNT), port, cb_client_processPacket),
 _serverAddress(SocketAddressFactory::createIPv4FromString(serverIPAddress)),
 _username(username),
 _removeProcessedMovesFunc(rpmf),
@@ -459,7 +440,7 @@ _hasReceivedNewState(false)
 
 NetworkManagerClient::~NetworkManagerClient()
 {
-    OutputMemoryBitStream packet;
-    packet.write(static_cast<uint8_t>(NWPT_CLNT_EXIT));
-    sendPacket(packet);
+    OutputMemoryBitStream ombs;
+    ombs.write<uint8_t, 4>(static_cast<uint8_t>(NWPT_CLNT_EXIT));
+    sendPacket(ombs);
 }

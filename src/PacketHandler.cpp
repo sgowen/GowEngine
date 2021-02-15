@@ -17,15 +17,12 @@
 #include "SocketUtil.hpp"
 #include "UDPSocket.hpp"
 
-PacketHandler::PacketHandler(TimeTracker* tt, bool isServer, uint16_t port, ProcessPacketFunc processPacketFunc, HandleNoResponseFunc handleNoResponseFunc, HandleConnectionResetFunc handleConnectionResetFunc) :
+PacketHandler::PacketHandler(TimeTracker* tt, uint16_t port, ProcessPacketFunc ppf) :
 _timeTracker(tt),
-_processPacketFunc(processPacketFunc),
-_handleNoResponseFunc(handleNoResponseFunc),
-_handleConnectionResetFunc(handleConnectionResetFunc),
+_processPacketFunc(ppf),
 _bytesReceivedPerSecond(tt, 1.0f),
 _bytesSentPerSecond(tt, 1.0f),
 _bytesSentThisFrame(0),
-_isServer(isServer),
 _socket(NULL),
 _socketAddress(INADDR_ANY, port),
 _isConnected(false)
@@ -35,16 +32,18 @@ _isConnected(false)
         return;
     }
 
+    LOG("Initializing PacketHandler at port %hu", port);
+    
     _socket = SOCKET_UTIL.createUDPSocket(INET);
     int bindSocketResult = _socket->bindSocket(_socketAddress);
-    if (bindSocketResult != NO_ERROR)
+    if (bindSocketResult == NO_ERROR)
+    {
+        _isConnected = _socket->setNonBlockingMode(true) == NO_ERROR;
+    }
+    else
     {
         LOG("bindSocket failed. Error code %d", bindSocketResult);
-        return;
     }
-
-    LOG("Initializing PacketHandler at port %hu", port);
-    _isConnected = _socket->setNonBlockingMode(true) == NO_ERROR;
 }
 
 PacketHandler::~PacketHandler()
@@ -58,21 +57,15 @@ PacketHandler::~PacketHandler()
 void PacketHandler::processIncomingPackets()
 {
     readIncomingPacketsIntoQueue();
-    
     processQueuedPackets();
-    
     updateBytesSentLastFrame();
 }
 
-void PacketHandler::sendPacket(const OutputMemoryBitStream& ombs, SocketAddress* fromAddress)
+void PacketHandler::sendPacket(const OutputMemoryBitStream& ombs, SocketAddress* toAddress)
 {
     assert(_isConnected);
-    
-#if IS_DEBUG
-    LOG("%s outgoing packet bit length: %d", _isServer ? "Server" : "Client", ombs.getBitLength());
-#endif
 
-    int sentByteCount = _socket->sendToAddress(ombs.getBufferPtr(), ombs.getByteLength(), *fromAddress);
+    int sentByteCount = _socket->sendToAddress(ombs.getBufferPtr(), ombs.getByteLength(), *toAddress);
     if (sentByteCount > 0)
     {
         _bytesSentThisFrame += sentByteCount;
@@ -99,7 +92,6 @@ void PacketHandler::readIncomingPacketsIntoQueue()
     InputMemoryBitStream imbs(packetMem, NW_MAX_PACKET_SIZE * 8);
     SocketAddress fromAddress;
 
-    // keep reading until we don't have anything to read (or we hit a max number that we'll process per frame)
     int receivedPacketCount = 0;
     int totalReadByteCount = 0;
 
@@ -111,13 +103,11 @@ void PacketHandler::readIncomingPacketsIntoQueue()
         if (readByteCount == 0)
         {
             // nothing to read
-            _handleNoResponseFunc();
             break;
         }
         else if (readByteCount == -WSAECONNRESET)
         {
-            // port closed on other end, so DC this person immediately
-            _handleConnectionResetFunc(&fromAddress);
+            // port closed on other end
         }
         else if (readByteCount > 0)
         {
@@ -125,21 +115,7 @@ void PacketHandler::readIncomingPacketsIntoQueue()
             ++receivedPacketCount;
             totalReadByteCount += readByteCount;
             
-#if IS_DEBUG
-            LOG("%s readByteCount: %d", _isServer ? "Server" : "Client", readByteCount);
-#endif
-
-            // we made it
-            // shove the packet into the queue and we'll handle it as soon as we should...
-            // we'll pretend it wasn't received until simulated latency from now
-            // this doesn't sim jitter, for that we would need to.....
-
-            float simulatedReceivedTime = _timeTracker->_time;
-            _packetQueue.emplace(simulatedReceivedTime, imbs, fromAddress);
-        }
-        else
-        {
-            // uhoh, error? exit or just keep going?
+            _packetQueue.emplace(_timeTracker->_time, imbs, fromAddress);
         }
     }
 
@@ -151,7 +127,6 @@ void PacketHandler::readIncomingPacketsIntoQueue()
 
 void PacketHandler::processQueuedPackets()
 {
-    // look at the front packet...
     while (!_packetQueue.empty())
     {
         ReceivedPacket& nextPacket = _packetQueue.front();
