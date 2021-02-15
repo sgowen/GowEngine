@@ -81,7 +81,6 @@ void NetworkManagerServer::processIncomingPackets()
 
 void NetworkManagerServer::sendOutgoingPackets()
 {
-    //let's send a client a state packet whenever their move has come in...
     for (auto& pair: _addressHashToClientMap)
     {
         ClientProxy& cp = pair.second;
