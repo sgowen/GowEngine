@@ -54,8 +54,7 @@ void NetworkManagerClient::processIncomingPackets()
     
     TimeTracker* tt = INST_REG.get<TimeTracker>(INSK_TIME_CLNT);
     uint32_t time = tt->_time;
-    
-    float dcTime = _lastServerCommunicationTimestamp + NW_SRVR_TIMEOUT;
+    uint32_t dcTime = _lastServerCommunicationTimestamp + NW_SRVR_TIMEOUT;
     if (time > dcTime)
     {
         _state = NWCS_DISCONNECTED;
