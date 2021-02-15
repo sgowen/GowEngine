@@ -33,8 +33,8 @@ void EntityNetworkController::read(InputMemoryBitStream& imbs)
     imbs.read(stateBit);
     if (stateBit)
     {
-        MemoryBitStreamUtil::read(imbs, e._pose._velocity._x, e._pose._velocity._y);
         MemoryBitStreamUtil::read(imbs, e._pose._position._x, e._pose._position._y);
+        MemoryBitStreamUtil::read(imbs, e._pose._velocity._x, e._pose._velocity._y);
         
         if (!IS_BIT_SET(e._entityDef._bodyFlags, BODF_FIXED_ROTATION))
         {
@@ -55,27 +55,27 @@ void EntityNetworkController::read(InputMemoryBitStream& imbs)
         imbs.read(stateBit);
         if (stateBit)
         {
-            imbs.read(e._state._stateTime);
             imbs.read(e._state._state);
             imbs.read(e._state._stateFlags);
+            imbs.read(e._state._stateTime);
             
             e._stateCache = e._state;
         }
     }
 }
 
-uint16_t EntityNetworkController::write(OutputMemoryBitStream& ombs, uint16_t dirtyState)
+uint8_t EntityNetworkController::write(OutputMemoryBitStream& ombs, uint8_t dirtyState)
 {
     Entity& e = *_entity;
     
-    uint16_t writtenState = 0;
+    uint8_t ret = 0;
     
     bool pose = IS_BIT_SET(dirtyState, Entity::RSTF_POSE);
     ombs.write(pose);
     if (pose)
     {
-        MemoryBitStreamUtil::write(ombs, e._pose._velocity._x, e._pose._velocity._y);
         MemoryBitStreamUtil::write(ombs, e._pose._position._x, e._pose._position._y);
+        MemoryBitStreamUtil::write(ombs, e._pose._velocity._x, e._pose._velocity._y);
         
         if (!IS_BIT_SET(e._entityDef._bodyFlags, BODF_FIXED_ROTATION))
         {
@@ -86,7 +86,7 @@ uint16_t EntityNetworkController::write(OutputMemoryBitStream& ombs, uint16_t di
         
         ombs.write(e._pose._isFacingLeft);
         
-        writtenState |= Entity::RSTF_POSE;
+        ret |= Entity::RSTF_POSE;
     }
     
     if (IS_BIT_SET(e._entityDef._bodyFlags, BODF_DYNAMIC))
@@ -95,15 +95,15 @@ uint16_t EntityNetworkController::write(OutputMemoryBitStream& ombs, uint16_t di
         ombs.write(state);
         if (state)
         {
-            ombs.write(e._state._stateTime);
             ombs.write(e._state._state);
             ombs.write(e._state._stateFlags);
+            ombs.write(e._state._stateTime);
             
-            writtenState |= Entity::RSTF_STATE;
+            ret |= Entity::RSTF_STATE;
         }
     }
     
-    return writtenState;
+    return ret;
 }
 
 void EntityNetworkController::recallCache()
@@ -116,9 +116,9 @@ void EntityNetworkController::recallCache()
     e.physicsController()->updateBodyFromPose();
 }
 
-uint16_t EntityNetworkController::refreshDirtyState()
+uint8_t EntityNetworkController::refreshDirtyState()
 {
-    uint16_t ret = 0;
+    uint8_t ret = 0;
     
     Entity& e = *_entity;
     

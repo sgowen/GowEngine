@@ -34,9 +34,9 @@ public:
     virtual ~EntityNetworkController() {}
     
     virtual void read(InputMemoryBitStream& imbs);
-    virtual uint16_t write(OutputMemoryBitStream& ombs, uint16_t dirtyState);
+    virtual uint8_t write(OutputMemoryBitStream& ombs, uint8_t dirtyState);
     virtual void recallCache();
-    virtual uint16_t refreshDirtyState();
+    virtual uint8_t refreshDirtyState();
     
     bool isServer();
     

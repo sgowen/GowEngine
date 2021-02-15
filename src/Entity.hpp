@@ -107,15 +107,15 @@ public:
     
     struct Pose
     {
-        Vector2 _velocity;
         Vector2 _position;
+        Vector2 _velocity;
         float _angle;
         uint8_t _numGroundContacts;
         bool _isFacingLeft;
         
         Pose(float x, float y) :
-        _velocity(VECTOR2_ZERO),
         _position(x, y),
+        _velocity(VECTOR2_ZERO),
         _angle(0),
         _numGroundContacts(0),
         _isFacingLeft(false)
@@ -126,8 +126,8 @@ public:
         friend bool operator==(Pose& a, Pose& b)
         {
             return
-            a._velocity          == b._velocity &&
             a._position          == b._position &&
+            a._velocity          == b._velocity &&
             a._angle             == b._angle &&
             a._numGroundContacts == b._numGroundContacts &&
             a._isFacingLeft      == b._isFacingLeft;
@@ -143,23 +143,23 @@ public:
     
     struct State
     {
-        uint16_t _stateTime;
         uint8_t _state;
         uint8_t _stateFlags;
+        uint16_t _stateTime;
         
         State()
         {
-            _stateTime = 0;
             _state = 0;
             _stateFlags = 0;
+            _stateTime = 0;
         }
         
         friend bool operator==(State& a, State& b)
         {
             return
-            a._stateTime         == b._stateTime &&
             a._state             == b._state &&
-            a._stateFlags        == b._stateFlags;
+            a._stateFlags        == b._stateFlags &&
+            a._stateTime         == b._stateTime;
         }
         
         friend bool operator!=(State& a, State& b)

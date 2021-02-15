@@ -42,7 +42,7 @@ public:
     void sendOutgoingPackets();
     void registerEntity(Entity* e);
     void deregisterEntity(Entity* e);
-    void setStateDirty(uint32_t networkID, uint16_t dirtyState);
+    void setStateDirty(uint32_t networkID, uint8_t dirtyState);
     ClientProxy* getClientProxy(uint8_t playerID) const;
     int getMoveCount();
     int getAverageMoveCount();

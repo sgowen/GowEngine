@@ -31,7 +31,6 @@ void ReplicationManagerTransmissionData::free()
 
 void ReplicationManagerTransmissionData::handleDeliveryFailure(DeliveryNotificationManager* dnm) const
 {
-    //run through the transmissions
     for (const ReplicationTransmission& rt: _transmissions)
     {
         //is it a create? then we have to redo the create.
@@ -43,7 +42,7 @@ void ReplicationManagerTransmissionData::handleDeliveryFailure(DeliveryNotificat
                 handleCreateDeliveryFailure(networkID);
                 break;
             case REPA_UPDATE:
-                handleUpdateStateDeliveryFailure(networkID, rt.state(), dnm);
+                handleUpdateStateDeliveryFailure(networkID, rt.dirtyState(), dnm);
                 break;
             case REPA_DESTROY:
                 handleDestroyDeliveryFailure(networkID);
@@ -54,7 +53,6 @@ void ReplicationManagerTransmissionData::handleDeliveryFailure(DeliveryNotificat
 
 void ReplicationManagerTransmissionData::handleDeliverySuccess(DeliveryNotificationManager* dnm) const
 {
-    //run through the transmissions, if any are Destroyed then we can remove this network ID from the map
     for (const ReplicationTransmission& rt: _transmissions)
     {
         switch (rt.getAction())
@@ -79,9 +77,9 @@ void ReplicationManagerTransmissionData::reset(ReplicationManagerServer* rms, En
     _transmissions.clear();
 }
 
-void ReplicationManagerTransmissionData::addTransmission(uint32_t networkID, ReplicationAction ra, uint32_t state)
+void ReplicationManagerTransmissionData::addTransmission(uint32_t networkID, ReplicationAction ra, uint8_t dirtyState)
 {
-    _transmissions.emplace_back(networkID, ra, state);
+    _transmissions.emplace_back(networkID, ra, dirtyState);
 }
 
 void ReplicationManagerTransmissionData::handleCreateDeliveryFailure(uint32_t networkID) const
@@ -97,13 +95,13 @@ void ReplicationManagerTransmissionData::handleCreateDeliveryFailure(uint32_t ne
     }
 }
 
-void ReplicationManagerTransmissionData::handleUpdateStateDeliveryFailure(uint32_t networkID, uint32_t state, DeliveryNotificationManager* dnm) const
+void ReplicationManagerTransmissionData::handleUpdateStateDeliveryFailure(uint32_t networkID, uint8_t dirtyState, DeliveryNotificationManager* dnm) const
 {
     assert(_replicationManagerServer != NULL);
     assert(_entityRegistry != NULL);
     
     //does the object still exist? it might be dead, in which case we don't resend an update
-    if (_entityRegistry->getEntityByID(networkID))
+    if (_entityRegistry->getEntityByID(networkID) != NULL)
     {
         //look in all future in flight packets, in all transmissions
         //remove written state from dirty state
@@ -113,14 +111,14 @@ void ReplicationManagerTransmissionData::handleUpdateStateDeliveryFailure(uint32
             
             for (const ReplicationTransmission& otherRT: rmtdp->_transmissions)
             {
-                state &= ~otherRT.state();
+                dirtyState &= ~otherRT.dirtyState();
             }
         }
         
         //if there's still any dirty state, mark it
-        if (state > 0)
+        if (dirtyState > 0)
         {
-            _replicationManagerServer->setStateDirty(networkID, state);
+            _replicationManagerServer->setStateDirty(networkID, dirtyState);
         }
     }
 }
@@ -141,10 +139,10 @@ void ReplicationManagerTransmissionData::handleDestroyDeliverySuccess(uint32_t n
     _replicationManagerServer->removeFromReplication(networkID);
 }
 
-ReplicationManagerTransmissionData::ReplicationTransmission::ReplicationTransmission(uint32_t networkID, ReplicationAction ra, uint32_t state) :
+ReplicationManagerTransmissionData::ReplicationTransmission::ReplicationTransmission(uint32_t networkID, ReplicationAction ra, uint8_t dirtyState) :
 _networkID(networkID),
 _action(ra),
-_state(state)
+_dirtyState(dirtyState)
 {
     // Empty
 }
@@ -159,7 +157,7 @@ ReplicationAction ReplicationManagerTransmissionData::ReplicationTransmission::g
     return _action;
 }
 
-uint32_t ReplicationManagerTransmissionData::ReplicationTransmission::state() const
+uint8_t ReplicationManagerTransmissionData::ReplicationTransmission::dirtyState() const
 {
-    return _state;
+    return _dirtyState;
 }

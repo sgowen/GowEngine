@@ -24,17 +24,17 @@ class ReplicationCommand
 {
 public:
     ReplicationCommand();
-    ReplicationCommand(uint16_t initialDirtyState);
+    ReplicationCommand(uint8_t initialDirtyState);
     
     void handleCreateAckd();
-    void addDirtyState(uint16_t state);
+    void addDirtyState(uint8_t dirtyState);
     void setDestroy();
     bool hasDirtyState() const;
     ReplicationAction getAction() const;
-    uint16_t getDirtyState() const;
-    void clearDirtyState(uint16_t stateToClear);
+    uint8_t getDirtyState() const;
+    void clearDirtyState();
     
 private:
     ReplicationAction _action;
-    uint16_t _dirtyState;
+    uint8_t _dirtyState;
 };

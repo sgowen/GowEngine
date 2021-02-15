@@ -28,7 +28,7 @@ public:
     virtual void handleDeliverySuccess(DeliveryNotificationManager* dnm) const override;
     
     void reset(ReplicationManagerServer* rms, EntityRegistry* er, Pool<ReplicationManagerTransmissionData>* poolRMTD);
-    void addTransmission(uint32_t networkID, ReplicationAction ra, uint32_t state);
+    void addTransmission(uint32_t networkID, ReplicationAction ra, uint8_t dirtyState);
     
 private:
     class ReplicationTransmission;
@@ -39,7 +39,7 @@ private:
     std::vector<ReplicationTransmission> _transmissions;
     
     void handleCreateDeliveryFailure(uint32_t networkID) const;
-    void handleUpdateStateDeliveryFailure(uint32_t networkID, uint32_t state, DeliveryNotificationManager* dnm) const;
+    void handleUpdateStateDeliveryFailure(uint32_t networkID, uint8_t dirtyState, DeliveryNotificationManager* dnm) const;
     void handleDestroyDeliveryFailure(uint32_t networkID) const;
     void handleCreateDeliverySuccess(uint32_t networkID) const;
     void handleDestroyDeliverySuccess(uint32_t networkID) const;
@@ -47,15 +47,15 @@ private:
     class ReplicationTransmission
     {
     public:
-        ReplicationTransmission(uint32_t networkID, ReplicationAction ra, uint32_t state);
+        ReplicationTransmission(uint32_t networkID, ReplicationAction ra, uint8_t dirtyState);
         
         int getID() const;
         ReplicationAction getAction() const;
-        uint32_t state() const;
+        uint8_t dirtyState() const;
         
     private:
         int _networkID;
         ReplicationAction _action;
-        uint32_t _state;
+        uint8_t _dirtyState;
     };
 };

@@ -15,7 +15,7 @@ _dirtyState(0)
     // Empty
 }
 
-ReplicationCommand::ReplicationCommand(uint16_t initialDirtyState) :
+ReplicationCommand::ReplicationCommand(uint8_t initialDirtyState) :
 _action(REPA_CREATE),
 _dirtyState(initialDirtyState)
 {
@@ -31,9 +31,9 @@ void ReplicationCommand::handleCreateAckd()
     }
 }
 
-void ReplicationCommand::addDirtyState(uint16_t state)
+void ReplicationCommand::addDirtyState(uint8_t dirtyState)
 {
-    _dirtyState |= state;
+    _dirtyState |= dirtyState;
 }
 
 void ReplicationCommand::setDestroy()
@@ -51,12 +51,12 @@ ReplicationAction ReplicationCommand::getAction() const
     return _action;
 }
 
-uint16_t ReplicationCommand::getDirtyState() const
+uint8_t ReplicationCommand::getDirtyState() const
 {
     return _dirtyState;
 }
 
-void ReplicationCommand::clearDirtyState(uint16_t stateToClear)
+void ReplicationCommand::clearDirtyState()
 {
     _dirtyState = 0;
     

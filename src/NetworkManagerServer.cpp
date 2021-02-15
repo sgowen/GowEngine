@@ -110,7 +110,7 @@ void NetworkManagerServer::deregisterEntity(Entity* e)
     _entityRegistry.deregisterEntity(e);
 }
 
-void NetworkManagerServer::setStateDirty(uint32_t networkID, uint16_t dirtyState)
+void NetworkManagerServer::setStateDirty(uint32_t networkID, uint8_t dirtyState)
 {
     assert(dirtyState > 0);
     
@@ -388,7 +388,7 @@ void NetworkManagerServer::sendStatePacketToClient(ClientProxy& cp)
     TransmissionData* td = ifp->getTransmissionData('RPLM');
     if (td != NULL)
     {
-        _poolRMTD.free(static_cast<ReplicationManagerTransmissionData*>(td));
+        td->free();
     }
     
     ifp->setTransmissionData('RPLM', rmtd);
