@@ -283,11 +283,6 @@ void NetworkManagerServer::handleConnectionReset(SocketAddress* fromAddress)
     handleClientDisconnected(it->second);
 }
 
-void NetworkManagerServer::sendPacket(const OutputMemoryBitStream& ombs, SocketAddress* fromAddress)
-{
-    _packetHandler.sendPacket(ombs, fromAddress);
-}
-
 void NetworkManagerServer::handlePacketFromNewClient(InputMemoryBitStream& imbs, SocketAddress* fromAddress)
 {
     // read the beginning- is it a hello?
@@ -372,7 +367,7 @@ void NetworkManagerServer::sendWelcomePacket(ClientProxy& cp)
     
     LOG("Server welcoming new client '%s' as player %d", cp.getUsername().c_str(), cp.getPlayerID());
     
-    sendPacket(packet, cp.getSocketAddress());
+    _packetHandler.sendPacket(packet, cp.getSocketAddress());
 }
 
 void NetworkManagerServer::sendStatePacketToClient(ClientProxy& cp)
@@ -398,7 +393,7 @@ void NetworkManagerServer::sendStatePacketToClient(ClientProxy& cp)
     
     ifp->setTransmissionData('RPLM', rmtd);
     
-    sendPacket(ombs, cp.getSocketAddress());
+    _packetHandler.sendPacket(ombs, cp.getSocketAddress());
 }
 
 void NetworkManagerServer::writeLastMoveTimestampIfDirty(OutputMemoryBitStream& ombs, ClientProxy& cp)
@@ -495,7 +490,7 @@ void NetworkManagerServer::handleAddLocalPlayerPacket(ClientProxy& cp, InputMemo
         OutputMemoryBitStream packet;
         packet.write(static_cast<uint8_t>(NWPT_LOCAL_PLAYER_DENIED));
         
-        sendPacket(packet, cp.getSocketAddress());
+        _packetHandler.sendPacket(packet, cp.getSocketAddress());
     }
 }
 
@@ -513,7 +508,7 @@ void NetworkManagerServer::sendLocalPlayerAddedPacket(ClientProxy& cp)
     
     LOG("Server welcoming new client local player '%s' as player %d", localPlayerName.c_str(), playerID);
     
-    sendPacket(packet, cp.getSocketAddress());
+    _packetHandler.sendPacket(packet, cp.getSocketAddress());
 }
 
 void NetworkManagerServer::handleDropLocalPlayerPacket(ClientProxy& cp, InputMemoryBitStream& imbs)
@@ -609,7 +604,7 @@ NetworkManagerServer::~NetworkManagerServer()
         OutputMemoryBitStream packet;
         packet.write(static_cast<uint8_t>(NWPT_SRVR_EXIT));
         
-        sendPacket(packet, cp.getSocketAddress());
+        _packetHandler.sendPacket(packet, cp.getSocketAddress());
     }
     
     _addressHashToClientMap.clear();
