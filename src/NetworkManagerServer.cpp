@@ -26,6 +26,7 @@
 #include "ReplicationManagerServer.hpp"
 #include "InstanceRegistry.hpp"
 #include "SocketAddress.hpp"
+#include "EntityIDManager.hpp"
 
 #include <assert.h>
 
@@ -34,6 +35,10 @@ NetworkManagerServer* NetworkManagerServer::s_instance = NULL;
 void NetworkManagerServer::create(uint16_t port, uint8_t maxNumPlayers, OnEntityRegisteredFunc oerf, OnEntityDeregisteredFunc oedf, HandleNewClientFunc hncf, HandleLostClientFunc hlcf, InputStateCreationFunc iscf, InputStateReleaseFunc isrf)
 {
     assert(s_instance == NULL);
+    
+    INST_REG.get<TimeTracker>(INSK_TIME_SRVR)->reset();
+    INST_REG.get<EntityIDManager>(INSK_EID_SRVR)->resetNextNetworkEntityID();
+    INST_REG.get<EntityIDManager>(INSK_EID_SRVR)->resetNextPlayerEntityID();
     
     s_instance = new NetworkManagerServer(port, maxNumPlayers, oerf, oedf, hncf, hlcf, iscf, isrf);
 }

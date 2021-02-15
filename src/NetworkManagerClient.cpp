@@ -28,6 +28,8 @@ void NetworkManagerClient::create(std::string serverIPAddress, std::string usern
 {
     assert(s_instance == NULL);
     
+    INST_REG.get<TimeTracker>(INSK_TIME_CLNT)->reset();
+    
     s_instance = new NetworkManagerClient(serverIPAddress, username, port, oerf, oedf, rpmf, gmlf, opwf);
 }
 
