@@ -310,53 +310,53 @@ void NetworkManagerClient::updateSendingInputPacket()
 
 void NetworkManagerClient::sendInputPacket()
 {
-    //only send if there's any input to sent!
     MoveList& moveList = _getMoveListFunc();
-    
-    if (moveList.hasMoves())
+    if (!moveList.hasMoves())
     {
-        OutputMemoryBitStream ombs;
-        ombs.write<uint8_t, 4>(static_cast<uint8_t>(NWPT_INPUT));
-        
-        _deliveryNotificationManager.writeState(ombs);
-        
-        // eventually write the 3 latest moves so they have 3 chances to get through...
-        int moveCount = moveList.getNumMovesAfterTimestamp(_lastMoveProcessedByServerTimestamp);
-        int firstMoveIndex = moveCount - 3;
-        if (firstMoveIndex < 0)
-        {
-            firstMoveIndex = 0;
-        }
-        
-        std::deque<Move>::const_iterator move = moveList.begin() + firstMoveIndex;
-        
-        // only need 2 bits to write the move count, because it's 0-3
-        ombs.write<uint8_t, 2>(moveCount - firstMoveIndex);
-        
-        const Move* referenceMove = NULL;
-        for (; firstMoveIndex < moveCount; ++firstMoveIndex, ++move)
-        {
-            bool needsToWriteMove = true;
-            
-            if (referenceMove != NULL && move->isEqual(referenceMove))
-            {
-                ombs.write(true);
-                ombs.write(move->getTimestamp());
-                
-                needsToWriteMove = false;
-            }
-            
-            if (needsToWriteMove)
-            {
-                ombs.write(false);
-                move->write(ombs);
-                
-                referenceMove = &(*move);
-            }
-        }
-        
-        sendPacket(ombs);
+        return;
     }
+    
+    OutputMemoryBitStream ombs;
+    ombs.write<uint8_t, 4>(static_cast<uint8_t>(NWPT_INPUT));
+    
+    _deliveryNotificationManager.writeState(ombs);
+    
+    // eventually write the 3 latest moves so they have 3 chances to get through...
+    int moveCount = moveList.getNumMovesAfterTimestamp(_lastMoveProcessedByServerTimestamp);
+    int firstMoveIndex = moveCount - 3;
+    if (firstMoveIndex < 0)
+    {
+        firstMoveIndex = 0;
+    }
+    
+    std::deque<Move>::const_iterator move = moveList.begin() + firstMoveIndex;
+    
+    // only need 2 bits to write the move count, because it's 0-3
+    ombs.write<uint8_t, 2>(moveCount - firstMoveIndex);
+    
+    const Move* referenceMove = NULL;
+    for (; firstMoveIndex < moveCount; ++firstMoveIndex, ++move)
+    {
+        bool needsToWriteMove = true;
+        
+        if (referenceMove != NULL && move->isEqual(referenceMove))
+        {
+            ombs.write(true);
+            ombs.write(move->getTimestamp());
+            
+            needsToWriteMove = false;
+        }
+        
+        if (needsToWriteMove)
+        {
+            ombs.write(false);
+            move->write(ombs);
+            
+            referenceMove = &(*move);
+        }
+    }
+    
+    sendPacket(ombs);
 }
 
 void NetworkManagerClient::updateAddLocalPlayerRequest()
