@@ -26,7 +26,7 @@ class Entity;
 
 #define NW_MGR_SRVR (NetworkManagerServer::getInstance())
 
-typedef void (*HandleNewClientFunc)(uint8_t playerID, std::string playerName);
+typedef void (*HandleNewClientFunc)(std::string username, uint8_t playerID);
 typedef void (*HandleLostClientFunc)(ClientProxy& cp, uint8_t index);
 typedef InputState* (*InputStateCreationFunc)();
 typedef void (*InputStateReleaseFunc)(InputState* inputState);

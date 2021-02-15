@@ -298,12 +298,12 @@ void NetworkManagerServer::handlePacketFromNewClient(InputMemoryBitStream& imbs,
                   std::forward_as_tuple(fromAddress->getHash()),
                   std::forward_as_tuple(_entityRegistry, fromAddress, name, _nextPlayerID));
         ClientProxy& cp = _addressHashToClientMap.at(fromAddress->getHash());
+        std::string username = cp.getUsername();
         uint8_t playerID = cp.getPlayerID();
-        std::string playerName = cp.getUsername();
         _playerIDToClientMap[playerID] = &cp;
         
         // tell the server about this client
-        _handleNewClientFunc(playerID, playerName);
+        _handleNewClientFunc(username, playerID);
         
         //and welcome the client...
         sendWelcomePacket(cp);
@@ -469,8 +469,7 @@ void NetworkManagerServer::handleAddLocalPlayerPacket(ClientProxy& cp, InputMemo
         uint8_t playerID = cp.getPlayerID(requestedIndex);
         if (playerID == NW_INPUT_UNASSIGNED)
         {
-            std::string localPlayerName = StringUtil::format("%s(%d)", cp.getUsername().c_str(), requestedIndex);
-            
+            std::string localUsername = StringUtil::format("%s(%d)", cp.getUsername().c_str(), requestedIndex);
             uint8_t playerID = _nextPlayerID;
             
             cp.onLocalPlayerAdded(playerID);
@@ -478,7 +477,7 @@ void NetworkManagerServer::handleAddLocalPlayerPacket(ClientProxy& cp, InputMemo
             _playerIDToClientMap[playerID] = &cp;
             
             // tell the server about this client
-            _handleNewClientFunc(playerID, localPlayerName);
+            _handleNewClientFunc(localUsername, playerID);
             
             resetNextPlayerID();
         }
