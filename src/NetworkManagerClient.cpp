@@ -319,49 +319,49 @@ void NetworkManagerClient::readLastMoveProcessedOnServerTimestamp(InputMemoryBit
 void NetworkManagerClient::updateSendingInputPacket()
 {
     MoveList& moveList = _getMoveListFunc();
-    if (!moveList.hasMoves())
-    {
-        return;
-    }
     
     OutputMemoryBitStream ombs;
     ombs.write<uint8_t, 4>(static_cast<uint8_t>(NWPT_INPUT));
     
     _deliveryNotificationManager.writeState(ombs);
     
-    // eventually write the 30 latest moves so they have 30 chances to get through...
-    int moveCount = moveList.getNumMovesAfterTimestamp(_lastMoveProcessedByServerTimestamp);
-    int firstMoveIndex = moveCount - 30;
-    if (firstMoveIndex < 0)
+    ombs.write(moveList.hasMoves());
+    if (moveList.hasMoves())
     {
-        firstMoveIndex = 0;
-    }
-    
-    std::deque<Move>::const_iterator move = moveList.begin() + firstMoveIndex;
-    
-    // only need 5 bits to write the move count, because it's 0-30
-    ombs.write<uint8_t, 5>(moveCount - firstMoveIndex);
-    
-    const Move* referenceMove = NULL;
-    for (; firstMoveIndex < moveCount; ++firstMoveIndex, ++move)
-    {
-        bool needsToWriteMove = true;
-        
-        if (referenceMove != NULL && move->isEqual(referenceMove))
+        // eventually write the 30 latest moves so they have 30 chances to get through...
+        int moveCount = moveList.getNumMovesAfterTimestamp(_lastMoveProcessedByServerTimestamp);
+        int firstMoveIndex = moveCount - 30;
+        if (firstMoveIndex < 0)
         {
-            ombs.write(true);
-            ombs.write(move->getTimestamp());
-            ombs.write(move->getIndex());
-            
-            needsToWriteMove = false;
+            firstMoveIndex = 0;
         }
         
-        if (needsToWriteMove)
+        std::deque<Move>::const_iterator move = moveList.begin() + firstMoveIndex;
+        
+        // only need 5 bits to write the move count, because it's 0-30
+        ombs.write<uint8_t, 5>(moveCount - firstMoveIndex);
+        
+        const Move* referenceMove = NULL;
+        for (; firstMoveIndex < moveCount; ++firstMoveIndex, ++move)
         {
-            ombs.write(false);
-            move->write(ombs);
+            bool needsToWriteMove = true;
             
-            referenceMove = &(*move);
+            if (referenceMove != NULL && move->isEqual(referenceMove))
+            {
+                ombs.write(true);
+                ombs.write(move->getTimestamp());
+                ombs.write(move->getIndex());
+                
+                needsToWriteMove = false;
+            }
+            
+            if (needsToWriteMove)
+            {
+                ombs.write(false);
+                move->write(ombs);
+                
+                referenceMove = &(*move);
+            }
         }
     }
     

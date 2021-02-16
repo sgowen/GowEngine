@@ -353,6 +353,13 @@ void NetworkManagerServer::handleInputPacket(ClientProxy& cp, InputMemoryBitStre
         return;
     }
     
+    bool hasMoves;
+    imbs.read(hasMoves);
+    if (!hasMoves)
+    {
+        return;
+    }
+    
     uint8_t moveCount = 0;
     imbs.read<uint8_t, 5>(moveCount);
     
@@ -479,14 +486,14 @@ void NetworkManagerServer::handleClientDisconnected(ClientProxy& cp)
 {
     LOG("Client is leaving the server");
     
+    _handleLostClientFunc(cp, 0);
+    
     for (uint8_t i = 0; i < cp.getNumPlayers(); ++i)
     {
         _playerIDToClientMap.erase(cp.getPlayerID(i));
     }
     
     _addressHashToClientMap.erase(cp.getSocketAddress()->getHash());
-    
-    _handleLostClientFunc(cp, 0);
     
     resetNextPlayerID();
 }
