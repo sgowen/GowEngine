@@ -38,7 +38,10 @@ int UDPSocket::sendToAddress(const void* toSend, int length, const SocketAddress
         //we'll return error as negative number to indicate less than requested amount of bytes sent...
         SOCKET_UTIL.reportError("UDPSocket::sendToAddress");
         
-        LOG("Error UDPSocket::sendToAddress %s", toAddress.toString().c_str());
+        if (SOCKET_UTIL.isLoggingEnabled())
+        {
+            LOG("Error UDPSocket::sendToAddress %s", toAddress.toString().c_str());
+        }
         
         return -SOCKET_UTIL.getLastError();
     }
@@ -73,7 +76,10 @@ int UDPSocket::receiveFromAddress(void* toReceive, int maxLength, SocketAddress&
         {
             //this can happen if a client closed and we haven't DC'd yet.
             //this is the ICMP message being sent back saying the port on that computer is closed
-            LOG("Connection reset from %s", fromAddress.toString().c_str());
+            if (SOCKET_UTIL.isLoggingEnabled())
+            {
+                LOG("Connection reset from %s", fromAddress.toString().c_str());
+            }
             
             return -WSAECONNRESET;
         }

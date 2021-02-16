@@ -29,9 +29,9 @@ public:
     PacketHandler(TimeTracker* tt, uint16_t port, ProcessPacketFunc ppf);
     ~PacketHandler();
     
+    int connect();
     void processIncomingPackets();
     void sendPacket(const OutputMemoryBitStream& ombs, SocketAddress* toAddress);
-    bool isConnected();
     SocketAddress& getSocketAddress();
     const WeightedTimedMovingAverage& getBytesReceivedPerSecond() const;
     const WeightedTimedMovingAverage& getBytesSentPerSecond() const;
@@ -42,7 +42,6 @@ private:
     UDPSocket* _socket;
     SocketAddress _socketAddress;
     std::queue<ReceivedPacket, std::list<ReceivedPacket> > _packetQueue;
-    bool _isConnected;
     TimeTracker* _timeTracker;
     ProcessPacketFunc _processPacketFunc;
     int _bytesSentThisFrame;

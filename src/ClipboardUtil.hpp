@@ -11,7 +11,6 @@
 #include "PlatformMacros.hpp"
 
 #if IS_DESKTOP
-    #define GLFW_INCLUDE_NONE
     #include <GLFW/glfw3.h>
 #else
     // Empty till we add support for mobile

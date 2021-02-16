@@ -22,7 +22,6 @@ class DeliveryNotificationManager
 {
 public:
     DeliveryNotificationManager(TimeTracker* tt, bool shouldSendAcks, bool shouldProcessAcks);
-    ~DeliveryNotificationManager();
     
     InFlightPacket* writeState(OutputMemoryBitStream& ombs);
     bool readAndProcessState(InputMemoryBitStream& imbs);
@@ -31,6 +30,7 @@ public:
     uint32_t getDeliveredPacketCount() const;
     uint32_t getDispatchedPacketCount() const;
     const std::deque<InFlightPacket>& getInFlightPackets() const;
+    void logStats();
     
 private:
     TimeTracker* _timeTracker;

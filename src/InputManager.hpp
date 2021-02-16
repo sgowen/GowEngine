@@ -41,6 +41,7 @@ public:
     Vector2& convert(Vector2& v);
     void setCursorSize(int cursorWidth, int cursorHeight);
     void setMatrixSize(float matrixWidth, float matrixHeight);
+    void setLoggingEnabled(bool isLoggingEnabled);
     
 private:
     FixedSizePool<CursorEvent> _poolCursor;
@@ -56,6 +57,7 @@ private:
     int _cursorHeight;
     float _matrixWidth;
     float _matrixHeight;
+    bool _isLoggingEnabled;
     
     bool isKeyNumerical(uint16_t key);
     bool isKeySuitableForTextInput(uint16_t key);

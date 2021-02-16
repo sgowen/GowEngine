@@ -48,7 +48,7 @@ public:
     uint8_t getNumClientsConnected();
     uint8_t getNumPlayersConnected();
     SocketAddress& getServerAddress();
-    bool isConnected();
+    bool connect();
     EntityRegistry& getEntityRegistry();
     void processPacket(InputMemoryBitStream& imbs, SocketAddress* fromAddress);
     void onMoveProcessed();
@@ -69,6 +69,7 @@ private:
     uint8_t _nextPlayerID;
     uint8_t _maxNumPlayers;
     uint32_t _numMovesProcessed;
+    uint16_t _port;
     
     void sendPacket(const OutputMemoryBitStream& ombs, SocketAddress* fromAddress);
     void handlePacketFromNewClient(InputMemoryBitStream& imbs, SocketAddress* fromAddress);
@@ -76,7 +77,6 @@ private:
     void sendWelcomePacket(ClientProxy& cp);
     void sendLocalPlayerAddedPacket(ClientProxy& cp);
     void sendStatePacketToClient(ClientProxy& cp);
-    void writeLastMoveTimestampIfDirty(OutputMemoryBitStream& ombs, ClientProxy& cp);
     void handleInputPacket(ClientProxy& cp, InputMemoryBitStream& imbs);
     void handleAddLocalPlayerPacket(ClientProxy& cp, InputMemoryBitStream& imbs);
     void handleDropLocalPlayerPacket(ClientProxy& cp, InputMemoryBitStream& imbs);

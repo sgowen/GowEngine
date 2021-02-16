@@ -16,9 +16,10 @@
 
 void InputManager::onCursorInput(CursorEventType type, float x, float y, bool isAlt)
 {
-#if IS_DEBUG
-    LOG("onCursorInput %d", type);
-#endif
+    if (_isLoggingEnabled)
+    {
+        LOG("onCursorInput %d %f %f %d", type, x, y, isAlt);
+    }
     
     CursorEvent* e = _poolCursor.newObject();
     e->_type = type;
@@ -30,15 +31,17 @@ void InputManager::onCursorInput(CursorEventType type, float x, float y, bool is
 
 void InputManager::onGamepadInput(uint8_t button, uint8_t index, float x, float y)
 {
-#if IS_DEBUG
-    LOG("onGamepadInput %d", button);
-#endif
+    if (_isLoggingEnabled)
+    {
+        LOG("onGamepadInput %d %d %f %f", button, index, x, y);
+    }
     
     if (index >= NUM_SUPPORTED_GAMEPADS)
     {
-#if IS_DEBUG
-    LOG("Only %d gamepads supported!", NUM_SUPPORTED_GAMEPADS);
-#endif
+        if (_isLoggingEnabled)
+        {
+            LOG("Only %d gamepads supported!", NUM_SUPPORTED_GAMEPADS);
+        }
         return;
     }
     
@@ -69,15 +72,17 @@ void InputManager::onGamepadInput(uint8_t button, uint8_t index, float x, float 
 
 void InputManager::onKeyboardInput(uint16_t key, bool isUp)
 {
-#if IS_DEBUG
-    LOG("onKeyboardInput %d", key);
-#endif
+    if (_isLoggingEnabled)
+    {
+        LOG("onKeyboardInput %d %d", key, isUp);
+    }
     
     if (!isKeySupported(key))
     {
-#if IS_DEBUG
-    LOG("Key not supported %d", key);
-#endif
+        if (_isLoggingEnabled)
+        {
+            LOG("Key not supported %d", key);
+        }
         return;
     }
     
@@ -147,6 +152,11 @@ void InputManager::setMatrixSize(float matrixWidth, float matrixHeight)
     _matrixHeight = matrixHeight;
 }
 
+void InputManager::setLoggingEnabled(bool loggingEnabled)
+{
+    _isLoggingEnabled = loggingEnabled;
+}
+
 bool InputManager::isKeyNumerical(uint16_t key)
 {
     std::vector<uint16_t>& keys = _numericalKeys;
@@ -176,7 +186,8 @@ _lastConvertedCursorPos(),
 _cursorWidth(1),
 _cursorHeight(1),
 _matrixWidth(1),
-_matrixHeight(1)
+_matrixHeight(1),
+_isLoggingEnabled(false)
 {
     _numericalKeys.push_back(GOW_KEY_0);
     _numericalKeys.push_back(GOW_KEY_1);

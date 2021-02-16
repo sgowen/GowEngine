@@ -27,6 +27,7 @@
 #include "InstanceRegistry.hpp"
 #include "SocketAddress.hpp"
 #include "EntityIDManager.hpp"
+#include "SocketUtil.hpp"
 
 #include <assert.h>
 
@@ -169,9 +170,21 @@ SocketAddress& NetworkManagerServer::getServerAddress()
     return _packetHandler.getSocketAddress();
 }
 
-bool NetworkManagerServer::isConnected()
+bool NetworkManagerServer::connect()
 {
-    return _packetHandler.isConnected();
+    if (SOCKET_UTIL.isLoggingEnabled())
+    {
+        LOG("Server Initializing PacketHandler at port %hu", _port);
+    }
+    
+    int error = _packetHandler.connect();
+    if (error != NO_ERROR &&
+        SOCKET_UTIL.isLoggingEnabled())
+    {
+        LOG("Server connect failed. Error code %d", error);
+    }
+    
+    return error == NO_ERROR;
 }
 
 EntityRegistry& NetworkManagerServer::getEntityRegistry()
@@ -181,22 +194,29 @@ EntityRegistry& NetworkManagerServer::getEntityRegistry()
 
 void NetworkManagerServer::processPacket(InputMemoryBitStream& imbs, SocketAddress* fromAddress)
 {
-#if IS_DEBUG
-    LOG("Server processPacket bit length: %d", imbs.getRemainingBitCount());
-#endif
+    if (SOCKET_UTIL.isLoggingEnabled())
+    {
+        LOG("Server processPacket bit length: %d", imbs.getRemainingBitCount());
+    }
     
     auto it = _addressHashToClientMap.find(fromAddress->getHash());
     if (it == _addressHashToClientMap.end())
     {
         if (_playerIDToClientMap.size() < _maxNumPlayers)
         {
-            LOG("New Client with %s", fromAddress->toString().c_str());
+            if (SOCKET_UTIL.isLoggingEnabled())
+            {
+                LOG("Server is processing new client from %s", fromAddress->toString().c_str());
+            }
             
             handlePacketFromNewClient(imbs, fromAddress);
         }
         else
         {
-            LOG("Server is at max capacity, blocking new client...");
+            if (SOCKET_UTIL.isLoggingEnabled())
+            {
+                LOG("Server is at max capacity, blocking new client...");
+            }
         }
     }
     else
@@ -217,9 +237,10 @@ uint32_t NetworkManagerServer::getNumMovesProcessed()
 
 void NetworkManagerServer::sendPacket(const OutputMemoryBitStream& ombs, SocketAddress* fromAddress)
 {
-#if IS_DEBUG
-    LOG("Server outgoing packet bit length: %d", ombs.getBitLength());
-#endif
+    if (SOCKET_UTIL.isLoggingEnabled())
+    {
+        LOG("Server    sendPacket bit length: %d", ombs.getBitLength());
+    }
     
     _packetHandler.sendPacket(ombs, fromAddress);
 }
@@ -259,7 +280,10 @@ void NetworkManagerServer::handlePacketFromNewClient(InputMemoryBitStream& imbs,
     }
     else
     {
-        LOG("Unknown packet type received from %s", fromAddress->toString().c_str());
+        if (SOCKET_UTIL.isLoggingEnabled())
+        {
+            LOG("Unknown packet type received from %s", fromAddress->toString().c_str());
+        }
     }
 }
 
@@ -290,7 +314,10 @@ void NetworkManagerServer::processPacket(ClientProxy& cp, InputMemoryBitStream& 
             handleClientDisconnected(cp);
             break;
         default:
-            LOG("Unknown packet type received from %s", cp.getSocketAddress()->toString().c_str());
+            if (SOCKET_UTIL.isLoggingEnabled())
+            {
+                LOG("Unknown packet type received from %s", cp.getSocketAddress()->toString().c_str());
+            }
             break;
     }
 }
@@ -302,7 +329,10 @@ void NetworkManagerServer::sendWelcomePacket(ClientProxy& cp)
     ombs.write<uint8_t, 3>(cp.getPlayerID());
     sendPacket(ombs, cp.getSocketAddress());
     
-    LOG("Server welcoming new client '%s' as player %d", cp.getUsername().c_str(), cp.getPlayerID());
+    if (SOCKET_UTIL.isLoggingEnabled())
+    {
+        LOG("Server welcoming new client '%s' as player %d", cp.getUsername().c_str(), cp.getPlayerID());
+    }
 }
 
 void NetworkManagerServer::sendStatePacketToClient(ClientProxy& cp)
@@ -314,7 +344,14 @@ void NetworkManagerServer::sendStatePacketToClient(ClientProxy& cp)
     
     InFlightPacket* ifp = cp.getDeliveryNotificationManager().writeState(ombs);
     
-    writeLastMoveTimestampIfDirty(ombs, cp);
+    bool isTimestampDirty = cp.isLastMoveTimestampDirty();
+    ombs.write(isTimestampDirty);
+    if (isTimestampDirty)
+    {
+        uint32_t lastProcessedMoveTimestamp = cp.getUnprocessedMoveList().getLastProcessedMoveTimestamp();
+        ombs.write(lastProcessedMoveTimestamp);
+        cp.setLastMoveTimestampDirty(false);
+    }
     
     ReplicationManagerTransmissionData* rmtd = _poolRMTD.obtain();
     rmtd->reset(&cp.getReplicationManagerServer(), &_entityRegistry, &_poolRMTD);
@@ -332,20 +369,6 @@ void NetworkManagerServer::sendStatePacketToClient(ClientProxy& cp)
     sendPacket(ombs, cp.getSocketAddress());
 }
 
-void NetworkManagerServer::writeLastMoveTimestampIfDirty(OutputMemoryBitStream& ombs, ClientProxy& cp)
-{
-    bool isTimestampDirty = cp.isLastMoveTimestampDirty();
-    ombs.write(isTimestampDirty);
-    if (isTimestampDirty)
-    {
-        uint32_t lastProcessedMoveTimestamp = cp.getUnprocessedMoveList().getLastProcessedMoveTimestamp();
-        
-        ombs.write(lastProcessedMoveTimestamp);
-        
-        cp.setLastMoveTimestampDirty(false);
-    }
-}
-
 void NetworkManagerServer::handleInputPacket(ClientProxy& cp, InputMemoryBitStream& imbs)
 {
     if (!cp.getDeliveryNotificationManager().readAndProcessState(imbs))
@@ -361,7 +384,7 @@ void NetworkManagerServer::handleInputPacket(ClientProxy& cp, InputMemoryBitStre
     }
     
     uint8_t moveCount = 0;
-    imbs.read<uint8_t, 5>(moveCount);
+    imbs.read<uint8_t, 4>(moveCount);
     
 	InputState* referenceInputState = NULL;
 	bool isRefInputStateOrphaned = false;
@@ -374,12 +397,7 @@ void NetworkManagerServer::handleInputPacket(ClientProxy& cp, InputMemoryBitStre
         imbs.read(isCopy);
         if (isCopy)
         {
-            if (referenceInputState == NULL)
-            {
-                LOG("Unexpected Network State!");
-                
-                return;
-            }
+            assert(referenceInputState != NULL);
             
             uint32_t timeStamp;
             imbs.read(timeStamp);
@@ -455,7 +473,10 @@ void NetworkManagerServer::sendLocalPlayerAddedPacket(ClientProxy& cp)
     sendPacket(ombs, cp.getSocketAddress());
     
     std::string localPlayerName = StringUtil::format("%s(%d)", cp.getUsername().c_str(), index);
-    LOG("Server welcoming new client local player '%s' as player %d", localPlayerName.c_str(), playerID);
+    if (SOCKET_UTIL.isLoggingEnabled())
+    {
+        LOG("Server welcoming new client local player '%s' as player %d", localPlayerName.c_str(), playerID);
+    }
 }
 
 void NetworkManagerServer::handleDropLocalPlayerPacket(ClientProxy& cp, InputMemoryBitStream& imbs)
@@ -484,7 +505,10 @@ void NetworkManagerServer::handleDropLocalPlayerPacket(ClientProxy& cp, InputMem
 
 void NetworkManagerServer::handleClientDisconnected(ClientProxy& cp)
 {
-    LOG("Client is leaving the server");
+    if (SOCKET_UTIL.isLoggingEnabled())
+    {
+        LOG("Client is leaving the server");
+    }
     
     _handleLostClientFunc(cp, 0);
     
@@ -508,8 +532,6 @@ void NetworkManagerServer::resetNextPlayerID()
             ++_nextPlayerID;
         }
     }
-    
-    LOG("_nextPlayerID: %d", _nextPlayerID);
 }
 
 void cb_server_processPacket(InputMemoryBitStream& imbs, SocketAddress* fromAddress)
@@ -526,7 +548,8 @@ _inputStateReleaseFunc(isrf),
 _entityRegistry(oerf, oedf),
 _nextPlayerID(1),
 _maxNumPlayers(maxNumPlayers),
-_numMovesProcessed(0)
+_numMovesProcessed(0),
+_port(port)
 {
     // Empty
 }

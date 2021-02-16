@@ -46,6 +46,11 @@ bool SocketUtil::init()
 
 void SocketUtil::reportError(const char* operationDesc)
 {
+    if (!_isLoggingEnabled)
+    {
+        return;
+    }
+    
 #if IS_WINDOWS
     LPVOID lpMsgBuf;
     DWORD errorNum = getLastError();
@@ -92,8 +97,19 @@ UDPSocket* SocketUtil::createUDPSocket(SocketAddressFamily saf)
     }
 }
 
+void SocketUtil::setLoggingEnabled(bool isLoggingEnabled)
+{
+    _isLoggingEnabled = isLoggingEnabled;
+}
+
+bool SocketUtil::isLoggingEnabled()
+{
+    return _isLoggingEnabled;
+}
+
 SocketUtil::SocketUtil() :
-_isConnected(false)
+_isConnected(false),
+_isLoggingEnabled(false)
 {
     // Empty
 }

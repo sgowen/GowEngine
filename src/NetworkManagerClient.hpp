@@ -58,7 +58,7 @@ public:
     std::map<uint8_t, uint8_t>& getPlayerIDs();
     std::string& getPlayerName();
     NetworkClientState state() const;
-    bool isConnected();
+    bool connect();
     EntityRegistry& getEntityRegistry();
     void processPacket(InputMemoryBitStream& imbs, SocketAddress* fromAddress);
     void onMoveProcessed();
@@ -87,6 +87,7 @@ private:
     uint8_t _isRequestingToDropLocalPlayer;
     bool _hasReceivedNewState;
     uint32_t _numMovesProcessed;
+    uint16_t _port;
     
     void sendPacket(const OutputMemoryBitStream& ombs);
     void updateSayingHello();
@@ -94,7 +95,6 @@ private:
     void handleLocalPlayerAddedPacket(InputMemoryBitStream& imbs);
     void handleLocalPlayerDeniedPacket();
     void handleStatePacket(InputMemoryBitStream& imbs);
-    void readLastMoveProcessedOnServerTimestamp(InputMemoryBitStream& imbs);
     void updateSendingInputPacket();
     void updateAddLocalPlayerRequest();
     void updateDropLocalPlayerRequest();

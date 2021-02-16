@@ -27,7 +27,6 @@ SocketAddress* SocketAddressFactory::createIPv4FromString(const std::string& val
     else
     {
         host = value;
-        LOG("Using default port of 0, is that what you want?");
         service = "0";
     }
     

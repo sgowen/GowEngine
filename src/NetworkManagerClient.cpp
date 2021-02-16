@@ -19,6 +19,7 @@
 #include "SocketAddressFactory.hpp"
 #include "Macros.hpp"
 #include "InstanceRegistry.hpp"
+#include "SocketUtil.hpp"
 
 #include <assert.h>
 
@@ -148,9 +149,21 @@ NetworkClientState NetworkManagerClient::state() const
     return _state;
 }
 
-bool NetworkManagerClient::isConnected()
+bool NetworkManagerClient::connect()
 {
-    return _packetHandler.isConnected();
+    if (SOCKET_UTIL.isLoggingEnabled())
+    {
+        LOG("Client Initializing PacketHandler at port %hu", _port);
+    }
+    
+    int error = _packetHandler.connect();
+    if (error != NO_ERROR &&
+        SOCKET_UTIL.isLoggingEnabled())
+    {
+        LOG("Client connect failed. Error code %d", error);
+    }
+    
+    return error == NO_ERROR;
 }
 
 EntityRegistry& NetworkManagerClient::getEntityRegistry()
@@ -160,9 +173,10 @@ EntityRegistry& NetworkManagerClient::getEntityRegistry()
 
 void NetworkManagerClient::processPacket(InputMemoryBitStream& imbs, SocketAddress* fromAddress)
 {
-#if IS_DEBUG
-    LOG("Client processPacket bit length: %d", imbs.getRemainingBitCount());
-#endif
+    if (SOCKET_UTIL.isLoggingEnabled())
+    {
+        LOG("Client processPacket bit length: %d", imbs.getRemainingBitCount());
+    }
     
     TimeTracker* tt = INST_REG.get<TimeTracker>(INSK_TIME_CLNT);
     _lastServerCommunicationTimestamp = tt->_time;
@@ -185,11 +199,17 @@ void NetworkManagerClient::processPacket(InputMemoryBitStream& imbs, SocketAddre
             handleStatePacket(imbs);
             break;
         case NWPT_SRVR_EXIT:
-            LOG("Server has shut down");
+            if (SOCKET_UTIL.isLoggingEnabled())
+            {
+                LOG("Server has shut down");
+            }
             _state = NWCS_DISCONNECTED;
             break;
         default:
-            LOG("Unknown packet type received from %s", fromAddress->toString().c_str());
+            if (SOCKET_UTIL.isLoggingEnabled())
+            {
+                LOG("Unknown packet type received from %s", fromAddress->toString().c_str());
+            }
             break;
     }
 }
@@ -206,9 +226,10 @@ uint32_t NetworkManagerClient::getNumMovesProcessed()
 
 void NetworkManagerClient::sendPacket(const OutputMemoryBitStream& ombs)
 {
-#if IS_DEBUG
-    LOG("Client outgoing packet bit length: %d", ombs.getBitLength());
-#endif
+    if (SOCKET_UTIL.isLoggingEnabled())
+    {
+        LOG("Client    sendPacket bit length: %d", ombs.getBitLength());
+    }
     
     _packetHandler.sendPacket(ombs, _serverAddress);
 }
@@ -245,7 +266,10 @@ void NetworkManagerClient::handleWelcomePacket(InputMemoryBitStream& imbs)
     _indexToPlayerIDMap.clear();
     _indexToPlayerIDMap[_nextIndex] = playerID;
     
-    LOG("'%s' was welcomed on client as player %d", getPlayerName().c_str(), playerID);
+    if (SOCKET_UTIL.isLoggingEnabled())
+    {
+        LOG("Client '%s' was welcomed as player %d", getPlayerName().c_str(), playerID);
+    }
     
     _onPlayerWelcomedFunc(playerID);
     
@@ -265,7 +289,10 @@ void NetworkManagerClient::handleLocalPlayerAddedPacket(InputMemoryBitStream& im
     
     _indexToPlayerIDMap[_nextIndex] = playerID;
     
-    LOG("'%s(%d)' was welcomed on client as player %d", getPlayerName().c_str(), _nextIndex, playerID);
+    if (SOCKET_UTIL.isLoggingEnabled())
+    {
+        LOG("'%s(%d)' was welcomed on client as player %d", getPlayerName().c_str(), _nextIndex, playerID);
+    }
     
     _isRequestingToAddLocalPlayer = false;
     
@@ -276,7 +303,10 @@ void NetworkManagerClient::handleLocalPlayerAddedPacket(InputMemoryBitStream& im
 
 void NetworkManagerClient::handleLocalPlayerDeniedPacket()
 {
-    LOG("'%s(%d)' was denied on client...", getPlayerName().c_str(), _nextIndex);
+    if (SOCKET_UTIL.isLoggingEnabled())
+    {
+        LOG("'%s(%d)' was denied on client...", getPlayerName().c_str(), _nextIndex);
+    }
     
     _isRequestingToAddLocalPlayer = false;
 }
@@ -295,13 +325,6 @@ void NetworkManagerClient::handleStatePacket(InputMemoryBitStream& imbs)
         return;
     }
     
-    readLastMoveProcessedOnServerTimestamp(imbs);
-    _replicationManagerClient.read(imbs, _entityRegistry);
-    _hasReceivedNewState = true;
-}
-
-void NetworkManagerClient::readLastMoveProcessedOnServerTimestamp(InputMemoryBitStream& imbs)
-{
     bool isTimestampDirty;
     imbs.read(isTimestampDirty);
     if (isTimestampDirty)
@@ -314,6 +337,9 @@ void NetworkManagerClient::readLastMoveProcessedOnServerTimestamp(InputMemoryBit
         
         _removeProcessedMovesFunc(_lastMoveProcessedByServerTimestamp);
     }
+    
+    _replicationManagerClient.read(imbs, _entityRegistry);
+    _hasReceivedNewState = true;
 }
 
 void NetworkManagerClient::updateSendingInputPacket()
@@ -328,9 +354,8 @@ void NetworkManagerClient::updateSendingInputPacket()
     ombs.write(moveList.hasMoves());
     if (moveList.hasMoves())
     {
-        // eventually write the 30 latest moves so they have 30 chances to get through...
         int moveCount = moveList.getNumMovesAfterTimestamp(_lastMoveProcessedByServerTimestamp);
-        int firstMoveIndex = moveCount - 30;
+        int firstMoveIndex = moveCount - NW_CLNT_MAX_NUM_MOVES;
         if (firstMoveIndex < 0)
         {
             firstMoveIndex = 0;
@@ -338,8 +363,7 @@ void NetworkManagerClient::updateSendingInputPacket()
         
         std::deque<Move>::const_iterator move = moveList.begin() + firstMoveIndex;
         
-        // only need 5 bits to write the move count, because it's 0-30
-        ombs.write<uint8_t, 5>(moveCount - firstMoveIndex);
+        ombs.write<uint8_t, 4>(moveCount - firstMoveIndex);
         
         const Move* referenceMove = NULL;
         for (; firstMoveIndex < moveCount; ++firstMoveIndex, ++move)
@@ -362,6 +386,13 @@ void NetworkManagerClient::updateSendingInputPacket()
                 
                 referenceMove = &(*move);
             }
+        }
+    }
+    else
+    {
+        if (SOCKET_UTIL.isLoggingEnabled())
+        {
+            LOG("Client has no moves this frame");
         }
     }
     
@@ -443,7 +474,8 @@ _isRequestingToAddLocalPlayer(false),
 _isRequestingToDropLocalPlayer(0),
 _nextIndex(0),
 _hasReceivedNewState(false),
-_numMovesProcessed(0)
+_numMovesProcessed(0),
+_port(port)
 {
     // Empty
 }
@@ -453,4 +485,9 @@ NetworkManagerClient::~NetworkManagerClient()
     OutputMemoryBitStream ombs;
     ombs.write<uint8_t, 4>(static_cast<uint8_t>(NWPT_CLNT_EXIT));
     sendPacket(ombs);
+    
+    if (SOCKET_UTIL.isLoggingEnabled())
+    {
+        _deliveryNotificationManager.logStats();
+    }
 }

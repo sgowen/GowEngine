@@ -24,26 +24,9 @@ _bytesReceivedPerSecond(tt, 1.0f),
 _bytesSentPerSecond(tt, 1.0f),
 _bytesSentThisFrame(0),
 _socket(NULL),
-_socketAddress(INADDR_ANY, port),
-_isConnected(false)
+_socketAddress(INADDR_ANY, port)
 {
-    if (!SOCKET_UTIL.init())
-    {
-        return;
-    }
-
-    LOG("Initializing PacketHandler at port %hu", port);
-    
-    _socket = SOCKET_UTIL.createUDPSocket(INET);
-    int bindSocketResult = _socket->bindSocket(_socketAddress);
-    if (bindSocketResult == NO_ERROR)
-    {
-        _isConnected = _socket->setNonBlockingMode(true) == NO_ERROR;
-    }
-    else
-    {
-        LOG("bindSocket failed. Error code %d", bindSocketResult);
-    }
+    // Empty
 }
 
 PacketHandler::~PacketHandler()
@@ -52,6 +35,23 @@ PacketHandler::~PacketHandler()
     {
         delete _socket;
     }
+}
+
+int PacketHandler::connect()
+{
+    if (!SOCKET_UTIL.init())
+    {
+        return NO_ERROR;
+    }
+    
+    _socket = SOCKET_UTIL.createUDPSocket(INET);
+    int bindSocketRet = _socket->bindSocket(_socketAddress);
+    if (bindSocketRet != NO_ERROR)
+    {
+        return bindSocketRet;
+    }
+    
+    return _socket->setNonBlockingMode(true);
 }
 
 void PacketHandler::processIncomingPackets()
@@ -63,18 +63,11 @@ void PacketHandler::processIncomingPackets()
 
 void PacketHandler::sendPacket(const OutputMemoryBitStream& ombs, SocketAddress* toAddress)
 {
-    assert(_isConnected);
-
     int sentByteCount = _socket->sendToAddress(ombs.getBufferPtr(), ombs.getByteLength(), *toAddress);
     if (sentByteCount > 0)
     {
         _bytesSentThisFrame += sentByteCount;
     }
-}
-
-bool PacketHandler::isConnected()
-{
-    return _isConnected;
 }
 
 SocketAddress& PacketHandler::getSocketAddress()
@@ -84,8 +77,6 @@ SocketAddress& PacketHandler::getSocketAddress()
 
 void PacketHandler::readIncomingPacketsIntoQueue()
 {
-    assert(_isConnected);
-
     static char packetMem[NW_MAX_PACKET_SIZE];
     bzero(packetMem, NW_MAX_PACKET_SIZE);
 

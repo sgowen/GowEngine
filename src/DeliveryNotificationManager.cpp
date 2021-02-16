@@ -27,18 +27,6 @@ _dispatchedPacketCount(0)
     // Empty
 }
 
-DeliveryNotificationManager::~DeliveryNotificationManager()
-{
-    if (_dispatchedPacketCount > 0 && _shouldProcessAcks)
-    {
-#if IS_DEBUG
-        LOG("DeliveryNotificationManager destructor. Delivery rate %d%%, Drop rate %d%%",
-            (100 * _deliveredPacketCount) / _dispatchedPacketCount,
-            (100 * _droppedPacketCount) / _dispatchedPacketCount);
-#endif
-    }
-}
-
 InFlightPacket* DeliveryNotificationManager::writeState(OutputMemoryBitStream& ombs)
 {
     InFlightPacket* ret = writeSequenceNumber(ombs);
@@ -102,6 +90,16 @@ uint32_t DeliveryNotificationManager::getDispatchedPacketCount() const
 const std::deque<InFlightPacket>& DeliveryNotificationManager::getInFlightPackets() const
 {
     return _inFlightPackets;
+}
+
+void DeliveryNotificationManager::logStats()
+{
+    if (_dispatchedPacketCount > 0 && _shouldProcessAcks)
+    {
+        LOG("DeliveryNotificationManager stats: delivery rate %d%%, drop rate %d%%",
+            (100 * _deliveredPacketCount) / _dispatchedPacketCount,
+            (100 * _droppedPacketCount) / _dispatchedPacketCount);
+    }
 }
 
 InFlightPacket* DeliveryNotificationManager::writeSequenceNumber(OutputMemoryBitStream& ombs)
