@@ -1,12 +1,12 @@
 //
-//  NetworkManagerClient.cpp
+//  NetworkClient.cpp
 //  GowEngine
 //
 //  Created by Stephen Gowen on 5/15/17.
 //  Copyright © 2021 Stephen Gowen. All rights reserved.
 //
 
-#include "NetworkManagerClient.hpp"
+#include "NetworkClient.hpp"
 
 #include "InputMemoryBitStream.hpp"
 #include "OutputMemoryBitStream.hpp"
@@ -23,23 +23,23 @@
 
 #include <assert.h>
 
-NetworkManagerClient* NetworkManagerClient::s_instance = NULL;
+NetworkClient* NetworkClient::s_instance = NULL;
 
-void NetworkManagerClient::create(std::string serverIPAddress, std::string username, uint16_t port, OnEntityRegisteredFunc oerf, OnEntityDeregisteredFunc oedf, RemoveProcessedMovesFunc rpmf, GetMoveListFunc gmlf, OnPlayerWelcomedFunc opwf)
+void NetworkClient::create(std::string serverIPAddress, std::string username, uint16_t port, OnEntityRegisteredFunc oerf, OnEntityDeregisteredFunc oedf, RemoveProcessedMovesFunc rpmf, GetMoveListFunc gmlf, OnPlayerWelcomedFunc opwf)
 {
     assert(s_instance == NULL);
     
     INST_REG.get<TimeTracker>(INSK_TIME_CLNT)->reset();
     
-    s_instance = new NetworkManagerClient(serverIPAddress, username, port, oerf, oedf, rpmf, gmlf, opwf);
+    s_instance = new NetworkClient(serverIPAddress, username, port, oerf, oedf, rpmf, gmlf, opwf);
 }
 
-NetworkManagerClient * NetworkManagerClient::getInstance()
+NetworkClient * NetworkClient::getInstance()
 {
     return s_instance;
 }
 
-void NetworkManagerClient::destroy()
+void NetworkClient::destroy()
 {
     assert(s_instance != NULL);
     
@@ -47,7 +47,7 @@ void NetworkManagerClient::destroy()
     s_instance = NULL;
 }
 
-void NetworkManagerClient::processIncomingPackets()
+void NetworkClient::processIncomingPackets()
 {
     _hasReceivedNewState = false;
     
@@ -62,7 +62,7 @@ void NetworkManagerClient::processIncomingPackets()
     }
 }
 
-void NetworkManagerClient::sendOutgoingPackets()
+void NetworkClient::sendOutgoingPackets()
 {
     switch (_state)
     {
@@ -80,13 +80,13 @@ void NetworkManagerClient::sendOutgoingPackets()
     }
 }
 
-void NetworkManagerClient::requestToAddLocalPlayer()
+void NetworkClient::requestToAddLocalPlayer()
 {
     _isRequestingToAddLocalPlayer = true;
     _isRequestingToDropLocalPlayer = 0;
 }
 
-void NetworkManagerClient::requestToDropLocalPlayer(uint8_t index)
+void NetworkClient::requestToDropLocalPlayer(uint8_t index)
 {
     assert(index >= 1);
     
@@ -96,27 +96,27 @@ void NetworkManagerClient::requestToDropLocalPlayer(uint8_t index)
     updateNextIndex();
 }
 
-const WeightedTimedMovingAverage& NetworkManagerClient::getBytesReceivedPerSecond() const
+const WeightedTimedMovingAverage& NetworkClient::getBytesReceivedPerSecond() const
 {
     return _packetHandler.getBytesReceivedPerSecond();
 }
 
-const WeightedTimedMovingAverage& NetworkManagerClient::getBytesSentPerSecond() const
+const WeightedTimedMovingAverage& NetworkClient::getBytesSentPerSecond() const
 {
     return _packetHandler.getBytesSentPerSecond();
 }
 
-const WeightedTimedMovingAverage& NetworkManagerClient::getAvgRoundTripTime() const
+const WeightedTimedMovingAverage& NetworkClient::getAvgRoundTripTime() const
 {
     return _avgRoundTripTime;
 }
 
-float NetworkManagerClient::getRoundTripTime() const
+float NetworkClient::getRoundTripTime() const
 {
     return _avgRoundTripTime.getValue();
 }
 
-bool NetworkManagerClient::isPlayerIDLocal(uint8_t playerID) const
+bool NetworkClient::isPlayerIDLocal(uint8_t playerID) const
 {
     for (auto const& entry : _indexToPlayerIDMap)
     {
@@ -129,27 +129,27 @@ bool NetworkManagerClient::isPlayerIDLocal(uint8_t playerID) const
     return false;
 }
 
-bool NetworkManagerClient::hasReceivedNewState()
+bool NetworkClient::hasReceivedNewState()
 {
     return _hasReceivedNewState;
 }
 
-std::map<uint8_t, uint8_t>& NetworkManagerClient::getPlayerIDs()
+std::map<uint8_t, uint8_t>& NetworkClient::getPlayerIDs()
 {
     return _indexToPlayerIDMap;
 }
 
-std::string& NetworkManagerClient::getPlayerName()
+std::string& NetworkClient::getPlayerName()
 {
     return _username;
 }
 
-NetworkClientState NetworkManagerClient::state() const
+NetworkClientState NetworkClient::state() const
 {
     return _state;
 }
 
-bool NetworkManagerClient::connect()
+bool NetworkClient::connect()
 {
     if (SOCKET_UTIL.isLoggingEnabled())
     {
@@ -166,12 +166,12 @@ bool NetworkManagerClient::connect()
     return error == NO_ERROR;
 }
 
-EntityRegistry& NetworkManagerClient::getEntityRegistry()
+EntityRegistry& NetworkClient::getEntityRegistry()
 {
     return _entityRegistry;
 }
 
-void NetworkManagerClient::processPacket(InputMemoryBitStream& imbs, SocketAddress* fromAddress)
+void NetworkClient::processPacket(InputMemoryBitStream& imbs, SocketAddress* fromAddress)
 {
     if (SOCKET_UTIL.isLoggingEnabled())
     {
@@ -214,17 +214,17 @@ void NetworkManagerClient::processPacket(InputMemoryBitStream& imbs, SocketAddre
     }
 }
 
-void NetworkManagerClient::onMoveProcessed()
+void NetworkClient::onMoveProcessed()
 {
     ++_numMovesProcessed;
 }
 
-uint32_t NetworkManagerClient::getNumMovesProcessed()
+uint32_t NetworkClient::getNumMovesProcessed()
 {
     return _numMovesProcessed;
 }
 
-void NetworkManagerClient::sendPacket(const OutputMemoryBitStream& ombs)
+void NetworkClient::sendPacket(const OutputMemoryBitStream& ombs)
 {
     if (SOCKET_UTIL.isLoggingEnabled())
     {
@@ -234,7 +234,7 @@ void NetworkManagerClient::sendPacket(const OutputMemoryBitStream& ombs)
     _packetHandler.sendPacket(ombs, _serverAddress);
 }
 
-void NetworkManagerClient::updateSayingHello()
+void NetworkClient::updateSayingHello()
 {
     TimeTracker* tt = INST_REG.get<TimeTracker>(INSK_TIME_CLNT);
     float time = tt->_time;
@@ -250,7 +250,7 @@ void NetworkManagerClient::updateSayingHello()
     }
 }
 
-void NetworkManagerClient::handleWelcomePacket(InputMemoryBitStream& imbs)
+void NetworkClient::handleWelcomePacket(InputMemoryBitStream& imbs)
 {
     if (_state != NWCS_SAYING_HELLO)
     {
@@ -276,7 +276,7 @@ void NetworkManagerClient::handleWelcomePacket(InputMemoryBitStream& imbs)
     updateNextIndex();
 }
 
-void NetworkManagerClient::handleLocalPlayerAddedPacket(InputMemoryBitStream& imbs)
+void NetworkClient::handleLocalPlayerAddedPacket(InputMemoryBitStream& imbs)
 {
     if (_state != NWCS_WELCOMED || !_isRequestingToAddLocalPlayer)
     {
@@ -301,7 +301,7 @@ void NetworkManagerClient::handleLocalPlayerAddedPacket(InputMemoryBitStream& im
     updateNextIndex();
 }
 
-void NetworkManagerClient::handleLocalPlayerDeniedPacket()
+void NetworkClient::handleLocalPlayerDeniedPacket()
 {
     if (SOCKET_UTIL.isLoggingEnabled())
     {
@@ -311,7 +311,7 @@ void NetworkManagerClient::handleLocalPlayerDeniedPacket()
     _isRequestingToAddLocalPlayer = false;
 }
 
-void NetworkManagerClient::handleStatePacket(InputMemoryBitStream& imbs)
+void NetworkClient::handleStatePacket(InputMemoryBitStream& imbs)
 {
     if (_state != NWCS_WELCOMED)
     {
@@ -342,7 +342,7 @@ void NetworkManagerClient::handleStatePacket(InputMemoryBitStream& imbs)
     _hasReceivedNewState = true;
 }
 
-void NetworkManagerClient::updateSendingInputPacket()
+void NetworkClient::updateSendingInputPacket()
 {
     MoveList& moveList = _getMoveListFunc();
     
@@ -389,7 +389,7 @@ void NetworkManagerClient::updateSendingInputPacket()
     sendPacket(ombs);
 }
 
-void NetworkManagerClient::updateAddLocalPlayerRequest()
+void NetworkClient::updateAddLocalPlayerRequest()
 {
     if (!_isRequestingToAddLocalPlayer)
     {
@@ -410,7 +410,7 @@ void NetworkManagerClient::updateAddLocalPlayerRequest()
     }
 }
 
-void NetworkManagerClient::updateDropLocalPlayerRequest()
+void NetworkClient::updateDropLocalPlayerRequest()
 {
     if (_isRequestingToDropLocalPlayer == 0)
     {
@@ -427,7 +427,7 @@ void NetworkManagerClient::updateDropLocalPlayerRequest()
     _isRequestingToDropLocalPlayer = 0;
 }
 
-void NetworkManagerClient::updateNextIndex()
+void NetworkClient::updateNextIndex()
 {
     // Find the next available Player ID
     _nextIndex = 0;
@@ -442,10 +442,10 @@ void NetworkManagerClient::updateNextIndex()
 
 void cb_client_processPacket(InputMemoryBitStream& imbs, SocketAddress* fromAddress)
 {
-    NW_MGR_CLNT->processPacket(imbs, fromAddress);
+    NW_CLNT->processPacket(imbs, fromAddress);
 }
 
-NetworkManagerClient::NetworkManagerClient(std::string serverIPAddress, std::string username, uint16_t port, OnEntityRegisteredFunc oerf, OnEntityDeregisteredFunc oedf, RemoveProcessedMovesFunc rpmf, GetMoveListFunc gmlf, OnPlayerWelcomedFunc opwf) :
+NetworkClient::NetworkClient(std::string serverIPAddress, std::string username, uint16_t port, OnEntityRegisteredFunc oerf, OnEntityDeregisteredFunc oedf, RemoveProcessedMovesFunc rpmf, GetMoveListFunc gmlf, OnPlayerWelcomedFunc opwf) :
 _packetHandler(INST_REG.get<TimeTracker>(INSK_TIME_CLNT), port, cb_client_processPacket),
 _serverAddress(SocketAddressFactory::createIPv4FromString(serverIPAddress)),
 _username(username),
@@ -470,7 +470,7 @@ _port(port)
     // Empty
 }
 
-NetworkManagerClient::~NetworkManagerClient()
+NetworkClient::~NetworkClient()
 {
     OutputMemoryBitStream ombs;
     ombs.write<uint8_t, 4>(static_cast<uint8_t>(NWPT_CLNT_EXIT));

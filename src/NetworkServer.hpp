@@ -1,5 +1,5 @@
 //
-//  NetworkManagerServer.hpp
+//  NetworkServer.hpp
 //  GowEngine
 //
 //  Created by Stephen Gowen on 5/15/17.
@@ -24,18 +24,18 @@ class ClientProxy;
 class InputState;
 class Entity;
 
-#define NW_MGR_SRVR (NetworkManagerServer::getInstance())
+#define NW_SRVR (NetworkServer::getInstance())
 
 typedef void (*HandleNewClientFunc)(std::string username, uint8_t playerID);
-typedef void (*HandleLostClientFunc)(ClientProxy& cp, uint8_t index);
+typedef void (*HandleLostClientFunc)(ClientProxy& cp, uint8_t localPlayerIndex);
 typedef InputState* (*InputStateCreationFunc)();
 typedef void (*InputStateReleaseFunc)(InputState* inputState);
 
-class NetworkManagerServer
+class NetworkServer
 {
 public:
     static void create(uint16_t port, uint8_t maxNumPlayers, OnEntityRegisteredFunc oerf, OnEntityDeregisteredFunc oedf, HandleNewClientFunc hncf, HandleLostClientFunc hlcf, InputStateCreationFunc iscf, InputStateReleaseFunc isrf);
-    static NetworkManagerServer* getInstance();
+    static NetworkServer* getInstance();
     static void destroy();
     
     void processIncomingPackets();
@@ -55,7 +55,7 @@ public:
     uint32_t getNumMovesProcessed();
     
 private:
-    static NetworkManagerServer* s_instance;
+    static NetworkServer* s_instance;
     
     PacketHandler _packetHandler;
     HandleNewClientFunc _handleNewClientFunc;
@@ -83,8 +83,8 @@ private:
     void handleClientDisconnected(ClientProxy& cp);
     void resetNextPlayerID();
     
-    NetworkManagerServer(uint16_t port, uint8_t maxNumPlayers, OnEntityRegisteredFunc oerf, OnEntityDeregisteredFunc oedf, HandleNewClientFunc hncf, HandleLostClientFunc hlcf, InputStateCreationFunc iscf, InputStateReleaseFunc isrf);
-    ~NetworkManagerServer();
-    NetworkManagerServer(const NetworkManagerServer&);
-    NetworkManagerServer& operator=(const NetworkManagerServer&);
+    NetworkServer(uint16_t port, uint8_t maxNumPlayers, OnEntityRegisteredFunc oerf, OnEntityDeregisteredFunc oedf, HandleNewClientFunc hncf, HandleLostClientFunc hlcf, InputStateCreationFunc iscf, InputStateReleaseFunc isrf);
+    ~NetworkServer();
+    NetworkServer(const NetworkServer&);
+    NetworkServer& operator=(const NetworkServer&);
 };

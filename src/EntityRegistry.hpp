@@ -24,7 +24,6 @@ public:
     Entity* getEntityByID(uint32_t id) const;
     void registerEntity(Entity* e);
     void deregisterEntity(Entity* e);
-    void setEntityID(uint32_t value);
     std::map<uint32_t, Entity*>& getMap();
     
 private:

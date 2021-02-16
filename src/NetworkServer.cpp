@@ -1,12 +1,12 @@
 //
-//  NetworkManagerServer.cpp
+//  NetworkServer.cpp
 //  GowEngine
 //
 //  Created by Stephen Gowen on 5/15/17.
 //  Copyright © 2021 Stephen Gowen. All rights reserved.
 //
 
-#include "NetworkManagerServer.hpp"
+#include "NetworkServer.hpp"
 
 #include "ReplicationManagerTransmissionData.hpp"
 #include "InputMemoryBitStream.hpp"
@@ -22,7 +22,7 @@
 #include "EntityRegistry.hpp"
 #include "StringUtil.hpp"
 #include "GowUtil.hpp"
-#include "NetworkManagerClient.hpp"
+#include "NetworkClient.hpp"
 #include "ReplicationManagerServer.hpp"
 #include "InstanceRegistry.hpp"
 #include "SocketAddress.hpp"
@@ -31,9 +31,9 @@
 
 #include <assert.h>
 
-NetworkManagerServer* NetworkManagerServer::s_instance = NULL;
+NetworkServer* NetworkServer::s_instance = NULL;
 
-void NetworkManagerServer::create(uint16_t port, uint8_t maxNumPlayers, OnEntityRegisteredFunc oerf, OnEntityDeregisteredFunc oedf, HandleNewClientFunc hncf, HandleLostClientFunc hlcf, InputStateCreationFunc iscf, InputStateReleaseFunc isrf)
+void NetworkServer::create(uint16_t port, uint8_t maxNumPlayers, OnEntityRegisteredFunc oerf, OnEntityDeregisteredFunc oedf, HandleNewClientFunc hncf, HandleLostClientFunc hlcf, InputStateCreationFunc iscf, InputStateReleaseFunc isrf)
 {
     assert(s_instance == NULL);
     
@@ -41,15 +41,15 @@ void NetworkManagerServer::create(uint16_t port, uint8_t maxNumPlayers, OnEntity
     INST_REG.get<EntityIDManager>(INSK_EID_SRVR)->resetNextNetworkEntityID();
     INST_REG.get<EntityIDManager>(INSK_EID_SRVR)->resetNextPlayerEntityID();
     
-    s_instance = new NetworkManagerServer(port, maxNumPlayers, oerf, oedf, hncf, hlcf, iscf, isrf);
+    s_instance = new NetworkServer(port, maxNumPlayers, oerf, oedf, hncf, hlcf, iscf, isrf);
 }
 
-NetworkManagerServer * NetworkManagerServer::getInstance()
+NetworkServer * NetworkServer::getInstance()
 {
     return s_instance;
 }
 
-void NetworkManagerServer::destroy()
+void NetworkServer::destroy()
 {
     assert(s_instance != NULL);
     
@@ -57,7 +57,7 @@ void NetworkManagerServer::destroy()
     s_instance = NULL;
 }
 
-void NetworkManagerServer::processIncomingPackets()
+void NetworkServer::processIncomingPackets()
 {
     _packetHandler.processIncomingPackets();
     
@@ -80,7 +80,7 @@ void NetworkManagerServer::processIncomingPackets()
     }
 }
 
-void NetworkManagerServer::sendOutgoingPackets()
+void NetworkServer::sendOutgoingPackets()
 {
     for (auto& pair: _addressHashToClientMap)
     {
@@ -92,7 +92,7 @@ void NetworkManagerServer::sendOutgoingPackets()
     }
 }
 
-void NetworkManagerServer::registerEntity(Entity* e)
+void NetworkServer::registerEntity(Entity* e)
 {
     for (auto& pair: _addressHashToClientMap)
     {
@@ -102,7 +102,7 @@ void NetworkManagerServer::registerEntity(Entity* e)
     _entityRegistry.registerEntity(e);
 }
 
-void NetworkManagerServer::deregisterEntity(Entity* e)
+void NetworkServer::deregisterEntity(Entity* e)
 {
     for (auto& pair: _addressHashToClientMap)
     {
@@ -112,7 +112,7 @@ void NetworkManagerServer::deregisterEntity(Entity* e)
     _entityRegistry.deregisterEntity(e);
 }
 
-void NetworkManagerServer::setStateDirty(uint32_t networkID, uint8_t dirtyState)
+void NetworkServer::setStateDirty(uint32_t networkID, uint8_t dirtyState)
 {
     assert(dirtyState > 0);
     
@@ -122,7 +122,7 @@ void NetworkManagerServer::setStateDirty(uint32_t networkID, uint8_t dirtyState)
     }
 }
 
-ClientProxy* NetworkManagerServer::getClientProxy(uint8_t playerID) const
+ClientProxy* NetworkServer::getClientProxy(uint8_t playerID) const
 {
     auto it = _playerIDToClientMap.find(playerID);
     if (it != _playerIDToClientMap.end())
@@ -133,7 +133,7 @@ ClientProxy* NetworkManagerServer::getClientProxy(uint8_t playerID) const
     return NULL;
 }
 
-int NetworkManagerServer::getMoveCount()
+int NetworkServer::getMoveCount()
 {
     int ret = 0;
     
@@ -155,22 +155,22 @@ int NetworkManagerServer::getMoveCount()
     return ret;
 }
 
-uint8_t NetworkManagerServer::getNumClientsConnected()
+uint8_t NetworkServer::getNumClientsConnected()
 {
     return static_cast<uint8_t>(_addressHashToClientMap.size());
 }
 
-uint8_t NetworkManagerServer::getNumPlayersConnected()
+uint8_t NetworkServer::getNumPlayersConnected()
 {
     return static_cast<uint8_t>(_playerIDToClientMap.size());
 }
 
-SocketAddress& NetworkManagerServer::getServerAddress()
+SocketAddress& NetworkServer::getServerAddress()
 {
     return _packetHandler.getSocketAddress();
 }
 
-bool NetworkManagerServer::connect()
+bool NetworkServer::connect()
 {
     if (SOCKET_UTIL.isLoggingEnabled())
     {
@@ -187,12 +187,12 @@ bool NetworkManagerServer::connect()
     return error == NO_ERROR;
 }
 
-EntityRegistry& NetworkManagerServer::getEntityRegistry()
+EntityRegistry& NetworkServer::getEntityRegistry()
 {
     return _entityRegistry;
 }
 
-void NetworkManagerServer::processPacket(InputMemoryBitStream& imbs, SocketAddress* fromAddress)
+void NetworkServer::processPacket(InputMemoryBitStream& imbs, SocketAddress* fromAddress)
 {
     if (SOCKET_UTIL.isLoggingEnabled())
     {
@@ -225,17 +225,17 @@ void NetworkManagerServer::processPacket(InputMemoryBitStream& imbs, SocketAddre
     }
 }
 
-void NetworkManagerServer::onMoveProcessed()
+void NetworkServer::onMoveProcessed()
 {
     ++_numMovesProcessed;
 }
 
-uint32_t NetworkManagerServer::getNumMovesProcessed()
+uint32_t NetworkServer::getNumMovesProcessed()
 {
     return _numMovesProcessed;
 }
 
-void NetworkManagerServer::sendPacket(const OutputMemoryBitStream& ombs, SocketAddress* fromAddress)
+void NetworkServer::sendPacket(const OutputMemoryBitStream& ombs, SocketAddress* fromAddress)
 {
     if (SOCKET_UTIL.isLoggingEnabled())
     {
@@ -245,7 +245,7 @@ void NetworkManagerServer::sendPacket(const OutputMemoryBitStream& ombs, SocketA
     _packetHandler.sendPacket(ombs, fromAddress);
 }
 
-void NetworkManagerServer::handlePacketFromNewClient(InputMemoryBitStream& imbs, SocketAddress* fromAddress)
+void NetworkServer::handlePacketFromNewClient(InputMemoryBitStream& imbs, SocketAddress* fromAddress)
 {
     // read the beginning- is it a hello?
     uint8_t packetType;
@@ -287,7 +287,7 @@ void NetworkManagerServer::handlePacketFromNewClient(InputMemoryBitStream& imbs,
     }
 }
 
-void NetworkManagerServer::processPacket(ClientProxy& cp, InputMemoryBitStream& imbs)
+void NetworkServer::processPacket(ClientProxy& cp, InputMemoryBitStream& imbs)
 {
     cp.updateLastPacketTime();
     
@@ -322,7 +322,7 @@ void NetworkManagerServer::processPacket(ClientProxy& cp, InputMemoryBitStream& 
     }
 }
 
-void NetworkManagerServer::sendWelcomePacket(ClientProxy& cp)
+void NetworkServer::sendWelcomePacket(ClientProxy& cp)
 {
     OutputMemoryBitStream ombs;
     ombs.write<uint8_t, 4>(static_cast<uint8_t>(NWPT_WELCOME));
@@ -335,7 +335,7 @@ void NetworkManagerServer::sendWelcomePacket(ClientProxy& cp)
     }
 }
 
-void NetworkManagerServer::sendStatePacketToClient(ClientProxy& cp)
+void NetworkServer::sendStatePacketToClient(ClientProxy& cp)
 {
     OutputMemoryBitStream ombs;
     ombs.write<uint8_t, 4>(static_cast<uint8_t>(NWPT_STATE));
@@ -369,7 +369,7 @@ void NetworkManagerServer::sendStatePacketToClient(ClientProxy& cp)
     sendPacket(ombs, cp.getSocketAddress());
 }
 
-void NetworkManagerServer::handleInputPacket(ClientProxy& cp, InputMemoryBitStream& imbs)
+void NetworkServer::handleInputPacket(ClientProxy& cp, InputMemoryBitStream& imbs)
 {
     if (!cp.getDeliveryNotificationManager().readAndProcessState(imbs))
     {
@@ -427,7 +427,7 @@ void NetworkManagerServer::handleInputPacket(ClientProxy& cp, InputMemoryBitStre
     }
 }
 
-void NetworkManagerServer::handleAddLocalPlayerPacket(ClientProxy& cp, InputMemoryBitStream& imbs)
+void NetworkServer::handleAddLocalPlayerPacket(ClientProxy& cp, InputMemoryBitStream& imbs)
 {
     if (_playerIDToClientMap.size() < _maxNumPlayers)
     {
@@ -462,7 +462,7 @@ void NetworkManagerServer::handleAddLocalPlayerPacket(ClientProxy& cp, InputMemo
     }
 }
 
-void NetworkManagerServer::sendLocalPlayerAddedPacket(ClientProxy& cp)
+void NetworkServer::sendLocalPlayerAddedPacket(ClientProxy& cp)
 {
     uint8_t index = cp.getNumPlayers() - 1;
     uint8_t playerID = cp.getPlayerID(index);
@@ -479,16 +479,16 @@ void NetworkManagerServer::sendLocalPlayerAddedPacket(ClientProxy& cp)
     }
 }
 
-void NetworkManagerServer::handleDropLocalPlayerPacket(ClientProxy& cp, InputMemoryBitStream& imbs)
+void NetworkServer::handleDropLocalPlayerPacket(ClientProxy& cp, InputMemoryBitStream& imbs)
 {
     // read the index to drop
-    uint8_t index;
-    imbs.read(index);
+    uint8_t localPlayerIndex;
+    imbs.read(localPlayerIndex);
     
     // If the primary player on this client wants to drop, a disconnect request should be fired off instead of a drop
-    assert(index >= 1);
+    assert(localPlayerIndex >= 1);
     
-    uint8_t playerID = cp.getPlayerID(index);
+    uint8_t playerID = cp.getPlayerID(localPlayerIndex);
     if (playerID == NW_INPUT_UNASSIGNED)
     {
         return;
@@ -496,33 +496,33 @@ void NetworkManagerServer::handleDropLocalPlayerPacket(ClientProxy& cp, InputMem
     
     _playerIDToClientMap.erase(playerID);
     
-    _handleLostClientFunc(cp, index);
+    _handleLostClientFunc(cp, localPlayerIndex);
     
     cp.onLocalPlayerRemoved(playerID);
     
     resetNextPlayerID();
 }
 
-void NetworkManagerServer::handleClientDisconnected(ClientProxy& cp)
+void NetworkServer::handleClientDisconnected(ClientProxy& cp)
 {
     if (SOCKET_UTIL.isLoggingEnabled())
     {
         LOG("Client is leaving the server");
     }
     
-    _handleLostClientFunc(cp, 0);
-    
     for (uint8_t i = 0; i < cp.getNumPlayers(); ++i)
     {
         _playerIDToClientMap.erase(cp.getPlayerID(i));
     }
+    
+    _handleLostClientFunc(cp, 0);
     
     _addressHashToClientMap.erase(cp.getSocketAddress()->getHash());
     
     resetNextPlayerID();
 }
 
-void NetworkManagerServer::resetNextPlayerID()
+void NetworkServer::resetNextPlayerID()
 {
     _nextPlayerID = 1;
     for (auto& pair : _playerIDToClientMap)
@@ -536,10 +536,10 @@ void NetworkManagerServer::resetNextPlayerID()
 
 void cb_server_processPacket(InputMemoryBitStream& imbs, SocketAddress* fromAddress)
 {
-    NW_MGR_SRVR->processPacket(imbs, fromAddress);
+    NW_SRVR->processPacket(imbs, fromAddress);
 }
 
-NetworkManagerServer::NetworkManagerServer(uint16_t port, uint8_t maxNumPlayers, OnEntityRegisteredFunc oerf, OnEntityDeregisteredFunc oedf, HandleNewClientFunc hncf, HandleLostClientFunc hlcf, InputStateCreationFunc iscf, InputStateReleaseFunc isrf) :
+NetworkServer::NetworkServer(uint16_t port, uint8_t maxNumPlayers, OnEntityRegisteredFunc oerf, OnEntityDeregisteredFunc oedf, HandleNewClientFunc hncf, HandleLostClientFunc hlcf, InputStateCreationFunc iscf, InputStateReleaseFunc isrf) :
 _packetHandler(INST_REG.get<TimeTracker>(INSK_TIME_SRVR), port, cb_server_processPacket),
 _handleNewClientFunc(hncf),
 _handleLostClientFunc(hlcf),
@@ -554,7 +554,7 @@ _port(port)
     // Empty
 }
 
-NetworkManagerServer::~NetworkManagerServer()
+NetworkServer::~NetworkServer()
 {
     for (auto& pair : _addressHashToClientMap)
     {

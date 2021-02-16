@@ -1,5 +1,5 @@
 //
-//  NetworkManagerClient.hpp
+//  NetworkClient.hpp
 //  GowEngine
 //
 //  Created by Stephen Gowen on 5/15/17.
@@ -25,7 +25,7 @@ class Entity;
 class MoveList;
 class SocketAddress;
 
-#define NW_MGR_CLNT (NetworkManagerClient::getInstance())
+#define NW_CLNT (NetworkClient::getInstance())
 
 typedef void (*RemoveProcessedMovesFunc)(float lastMoveProcessedByServerTimestamp);
 typedef MoveList& (*GetMoveListFunc)();
@@ -38,11 +38,11 @@ enum NetworkClientState
     NWCS_DISCONNECTED
 };
 
-class NetworkManagerClient
+class NetworkClient
 {
 public:
     static void create(std::string serverIPAddress, std::string username, uint16_t port, OnEntityRegisteredFunc oerf, OnEntityDeregisteredFunc oedf, RemoveProcessedMovesFunc rpmf, GetMoveListFunc gmlf, OnPlayerWelcomedFunc opwf);
-    static NetworkManagerClient* getInstance();
+    static NetworkClient* getInstance();
     static void destroy();
     
     void processIncomingPackets();
@@ -65,7 +65,7 @@ public:
     uint32_t getNumMovesProcessed();
     
 private:
-    static NetworkManagerClient* s_instance;
+    static NetworkClient* s_instance;
     
     PacketHandler _packetHandler;
     SocketAddress* _serverAddress;
@@ -100,8 +100,8 @@ private:
     void updateDropLocalPlayerRequest();
     void updateNextIndex();
     
-    NetworkManagerClient(std::string serverIPAddress, std::string username, uint16_t port, OnEntityRegisteredFunc oerf, OnEntityDeregisteredFunc oedf, RemoveProcessedMovesFunc rpmf, GetMoveListFunc gmlf, OnPlayerWelcomedFunc opwf);
-    ~NetworkManagerClient();
-    NetworkManagerClient(const NetworkManagerClient&);
-    NetworkManagerClient& operator=(const NetworkManagerClient&);
+    NetworkClient(std::string serverIPAddress, std::string username, uint16_t port, OnEntityRegisteredFunc oerf, OnEntityDeregisteredFunc oedf, RemoveProcessedMovesFunc rpmf, GetMoveListFunc gmlf, OnPlayerWelcomedFunc opwf);
+    ~NetworkClient();
+    NetworkClient(const NetworkClient&);
+    NetworkClient& operator=(const NetworkClient&);
 };
