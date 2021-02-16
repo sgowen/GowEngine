@@ -355,36 +355,26 @@ void NetworkManagerClient::updateSendingInputPacket()
     if (moveList.hasMoves())
     {
         int moveCount = moveList.getNumMovesAfterTimestamp(_lastMoveProcessedByServerTimestamp);
-        int firstMoveIndex = moveCount - NW_CLNT_MAX_NUM_MOVES;
-        if (firstMoveIndex < 0)
+        assert(moveCount <= NW_CLNT_MAX_NUM_MOVES);
+        ombs.write<uint8_t, 4>(moveCount);
+        
+        std::deque<Move>::const_iterator moveItr = moveList.begin();
+        
+        const Move* moveToCopy = NULL;
+        for (int i = 0; i < moveCount; ++i, ++moveItr)
         {
-            firstMoveIndex = 0;
-        }
-        
-        std::deque<Move>::const_iterator move = moveList.begin() + firstMoveIndex;
-        
-        ombs.write<uint8_t, 4>(moveCount - firstMoveIndex);
-        
-        const Move* referenceMove = NULL;
-        for (; firstMoveIndex < moveCount; ++firstMoveIndex, ++move)
-        {
-            bool needsToWriteMove = true;
-            
-            if (referenceMove != NULL && move->isEqual(referenceMove))
+            if (moveToCopy != NULL && moveItr->isEqual(moveToCopy))
             {
                 ombs.write(true);
-                ombs.write(move->getTimestamp());
-                ombs.write(move->getIndex());
-                
-                needsToWriteMove = false;
+                ombs.write(moveItr->getTimestamp());
+                ombs.write(moveItr->getIndex());
             }
-            
-            if (needsToWriteMove)
+            else
             {
                 ombs.write(false);
-                move->write(ombs);
+                moveItr->write(ombs);
                 
-                referenceMove = &(*move);
+                moveToCopy = &(*moveItr);
             }
         }
     }
