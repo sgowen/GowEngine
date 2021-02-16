@@ -21,13 +21,12 @@ class MoveList
 public:
     MoveList();
     
-    const Move& addMove(InputState* inputState, uint32_t timestamp);
+    const Move& addMove(InputState* inputState, uint32_t timestamp, uint32_t index);
     bool addMoveIfNew(const Move& move);
     void markMoveAsProcessed(Move* move);
     void removeProcessedMoves(uint32_t lastMoveProcessedOnServerTimestamp, InputStateReleaseFunc inputStateReleaseFunc);
     uint32_t getLastMoveTimestamp() const;
     uint32_t getLastProcessedMoveTimestamp() const;
-    const Move& getLatestMove() const;
     void clear();
     bool hasMoves() const;
     int getMoveCount() const;

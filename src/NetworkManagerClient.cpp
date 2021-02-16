@@ -182,10 +182,7 @@ void NetworkManagerClient::processPacket(InputMemoryBitStream& imbs, SocketAddre
             handleLocalPlayerDeniedPacket();
             break;
         case NWPT_STATE:
-            if (_deliveryNotificationManager.readAndProcessState(imbs))
-            {
-                handleStatePacket(imbs);
-            }
+            handleStatePacket(imbs);
             break;
         case NWPT_SRVR_EXIT:
             LOG("Server has shut down");
@@ -195,6 +192,16 @@ void NetworkManagerClient::processPacket(InputMemoryBitStream& imbs, SocketAddre
             LOG("Unknown packet type received from %s", fromAddress->toString().c_str());
             break;
     }
+}
+
+void NetworkManagerClient::onMoveProcessed()
+{
+    ++_numMovesProcessed;
+}
+
+uint32_t NetworkManagerClient::getNumMovesProcessed()
+{
+    return _numMovesProcessed;
 }
 
 void NetworkManagerClient::sendPacket(const OutputMemoryBitStream& ombs)
@@ -281,6 +288,13 @@ void NetworkManagerClient::handleStatePacket(InputMemoryBitStream& imbs)
         return;
     }
     
+    imbs.read(_numMovesProcessed);
+    
+    if (!_deliveryNotificationManager.readAndProcessState(imbs))
+    {
+        return;
+    }
+    
     readLastMoveProcessedOnServerTimestamp(imbs);
     _replicationManagerClient.read(imbs, _entityRegistry);
     _hasReceivedNewState = true;
@@ -315,9 +329,9 @@ void NetworkManagerClient::updateSendingInputPacket()
     
     _deliveryNotificationManager.writeState(ombs);
     
-    // eventually write the 3 latest moves so they have 3 chances to get through...
+    // eventually write the 30 latest moves so they have 30 chances to get through...
     int moveCount = moveList.getNumMovesAfterTimestamp(_lastMoveProcessedByServerTimestamp);
-    int firstMoveIndex = moveCount - 3;
+    int firstMoveIndex = moveCount - 30;
     if (firstMoveIndex < 0)
     {
         firstMoveIndex = 0;
@@ -325,8 +339,8 @@ void NetworkManagerClient::updateSendingInputPacket()
     
     std::deque<Move>::const_iterator move = moveList.begin() + firstMoveIndex;
     
-    // only need 2 bits to write the move count, because it's 0-3
-    ombs.write<uint8_t, 2>(moveCount - firstMoveIndex);
+    // only need 5 bits to write the move count, because it's 0-30
+    ombs.write<uint8_t, 5>(moveCount - firstMoveIndex);
     
     const Move* referenceMove = NULL;
     for (; firstMoveIndex < moveCount; ++firstMoveIndex, ++move)
@@ -337,6 +351,7 @@ void NetworkManagerClient::updateSendingInputPacket()
         {
             ombs.write(true);
             ombs.write(move->getTimestamp());
+            ombs.write(move->getIndex());
             
             needsToWriteMove = false;
         }
@@ -427,7 +442,8 @@ _lastServerCommunicationTimestamp(0),
 _isRequestingToAddLocalPlayer(false),
 _isRequestingToDropLocalPlayer(0),
 _nextIndex(0),
-_hasReceivedNewState(false)
+_hasReceivedNewState(false),
+_numMovesProcessed(0)
 {
     // Empty
 }

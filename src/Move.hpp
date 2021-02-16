@@ -17,7 +17,7 @@ class InputMemoryBitStream;
 class Move
 {
 public:
-    Move(InputState* inputState, uint32_t timestamp);
+    Move(InputState* inputState, uint32_t timestamp, uint32_t index);
     Move(InputState* inputState);
     ~Move() {}
     
@@ -27,9 +27,12 @@ public:
     InputState* inputState() const;
     uint32_t getTimestamp() const;
     void setTimestamp(uint32_t timeStamp);
+    uint32_t getIndex() const;
+    void setIndex(uint32_t index);
     void copyInputState(InputState* inputState);
     
 private:
     InputState* _inputState;
     uint32_t _timestamp;
+    uint32_t _index;
 };

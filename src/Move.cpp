@@ -12,16 +12,18 @@
 #include "OutputMemoryBitStream.hpp"
 #include "InputMemoryBitStream.hpp"
 
-Move::Move(InputState* inputState, uint32_t timestamp) :
+Move::Move(InputState* inputState, uint32_t timestamp, uint32_t index) :
 _inputState(inputState),
-_timestamp(timestamp)
+_timestamp(timestamp),
+_index(index)
 {
     // Empty
 }
 
 Move::Move(InputState* inputState) :
 _inputState(inputState),
-_timestamp(0)
+_timestamp(0),
+_index(0)
 {
     // Empty
 }
@@ -29,6 +31,7 @@ _timestamp(0)
 void Move::write(OutputMemoryBitStream& ombs) const
 {
     ombs.write(_timestamp);
+    ombs.write(_index);
     
     _inputState->write(ombs);
 }
@@ -36,6 +39,7 @@ void Move::write(OutputMemoryBitStream& ombs) const
 void Move::read(InputMemoryBitStream& imbs)
 {
     imbs.read(_timestamp);
+    imbs.read(_index);
     
     _inputState->read(imbs);
 }
@@ -58,6 +62,16 @@ uint32_t Move::getTimestamp() const
 void Move::setTimestamp(uint32_t timeStamp)
 {
     _timestamp = timeStamp;
+}
+
+uint32_t Move::getIndex() const
+{
+    return _index;
+}
+
+void Move::setIndex(uint32_t index)
+{
+    _index = index;
 }
 
 void Move::copyInputState(InputState* inputState)

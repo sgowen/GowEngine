@@ -61,6 +61,8 @@ public:
     bool isConnected();
     EntityRegistry& getEntityRegistry();
     void processPacket(InputMemoryBitStream& imbs, SocketAddress* fromAddress);
+    void onMoveProcessed();
+    uint32_t getNumMovesProcessed();
     
 private:
     static NetworkManagerClient* s_instance;
@@ -84,6 +86,7 @@ private:
     bool _isRequestingToAddLocalPlayer;
     uint8_t _isRequestingToDropLocalPlayer;
     bool _hasReceivedNewState;
+    uint32_t _numMovesProcessed;
     
     void sendPacket(const OutputMemoryBitStream& ombs);
     void updateSayingHello();

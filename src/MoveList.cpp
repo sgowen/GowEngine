@@ -19,9 +19,9 @@ _lastProcessedMoveTimestamp(0)
     // Empty
 }
 
-const Move& MoveList::addMove(InputState* inputState, uint32_t timestamp)
+const Move& MoveList::addMove(InputState* inputState, uint32_t timestamp, uint32_t index)
 {
-    _moves.emplace_back(inputState, timestamp);
+    _moves.emplace_back(inputState, timestamp, index);
     
     _lastMoveTimestamp = timestamp;
     
@@ -35,12 +35,13 @@ bool MoveList::addMoveIfNew(const Move& move)
     
     //adjust the deltatime and then place!
     uint32_t timeStamp = move.getTimestamp();
+    uint32_t index = move.getIndex();
     
     if (timeStamp > _lastMoveTimestamp)
     {
         _lastMoveTimestamp = timeStamp;
         
-        _moves.emplace_back(move.inputState(), timeStamp);
+        _moves.emplace_back(move.inputState(), timeStamp, index);
         
         return true;
     }
@@ -71,11 +72,6 @@ uint32_t MoveList::getLastMoveTimestamp() const
 uint32_t MoveList::getLastProcessedMoveTimestamp() const
 {
     return _lastProcessedMoveTimestamp;
-}
-
-const Move& MoveList::getLatestMove() const
-{
-    return _moves.back();
 }
 
 void MoveList::clear()

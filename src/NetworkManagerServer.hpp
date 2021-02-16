@@ -44,13 +44,15 @@ public:
     void deregisterEntity(Entity* e);
     void setStateDirty(uint32_t networkID, uint8_t dirtyState);
     ClientProxy* getClientProxy(uint8_t playerID) const;
-    int getHostMoveCount();
+    int getMoveCount();
     uint8_t getNumClientsConnected();
     uint8_t getNumPlayersConnected();
     SocketAddress& getServerAddress();
     bool isConnected();
     EntityRegistry& getEntityRegistry();
     void processPacket(InputMemoryBitStream& imbs, SocketAddress* fromAddress);
+    void onMoveProcessed();
+    uint32_t getNumMovesProcessed();
     
 private:
     static NetworkManagerServer* s_instance;
@@ -66,6 +68,7 @@ private:
     std::map<int, ClientProxy*> _playerIDToClientMap;
     uint8_t _nextPlayerID;
     uint8_t _maxNumPlayers;
+    uint32_t _numMovesProcessed;
     
     void sendPacket(const OutputMemoryBitStream& ombs, SocketAddress* fromAddress);
     void handlePacketFromNewClient(InputMemoryBitStream& imbs, SocketAddress* fromAddress);

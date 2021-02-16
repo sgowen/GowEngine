@@ -87,10 +87,7 @@ void NetworkManagerServer::sendOutgoingPackets()
         TimeTracker* tt = INST_REG.get<TimeTracker>(INSK_TIME_SRVR);
         cp.getDeliveryNotificationManager().processTimedOutPackets(tt->_time);
         
-        if (cp.isLastMoveTimestampDirty())
-        {
-            sendStatePacketToClient(cp);
-        }
+        sendStatePacketToClient(cp);
     }
 }
 
@@ -135,7 +132,7 @@ ClientProxy* NetworkManagerServer::getClientProxy(uint8_t playerID) const
     return NULL;
 }
 
-int NetworkManagerServer::getHostMoveCount()
+int NetworkManagerServer::getMoveCount()
 {
     int ret = 0;
     
@@ -143,6 +140,15 @@ int NetworkManagerServer::getHostMoveCount()
     if (cp != NULL)
     {
         ret = cp->getUnprocessedMoveList().getMoveCount();
+    }
+    
+    for (auto& pair : _playerIDToClientMap)
+    {
+        int moveCount = pair.second->getUnprocessedMoveList().getMoveCount();
+        if (moveCount < ret)
+        {
+            ret = moveCount;
+        }
     }
     
     return ret;
@@ -197,6 +203,16 @@ void NetworkManagerServer::processPacket(InputMemoryBitStream& imbs, SocketAddre
     {
         processPacket((*it).second, imbs);
     }
+}
+
+void NetworkManagerServer::onMoveProcessed()
+{
+    ++_numMovesProcessed;
+}
+
+uint32_t NetworkManagerServer::getNumMovesProcessed()
+{
+    return _numMovesProcessed;
 }
 
 void NetworkManagerServer::sendPacket(const OutputMemoryBitStream& ombs, SocketAddress* fromAddress)
@@ -262,10 +278,7 @@ void NetworkManagerServer::processPacket(ClientProxy& cp, InputMemoryBitStream& 
             sendWelcomePacket(cp);
             break;
         case NWPT_INPUT:
-            if (cp.getDeliveryNotificationManager().readAndProcessState(imbs))
-            {
-                handleInputPacket(cp, imbs);
-            }
+            handleInputPacket(cp, imbs);
             break;
         case NWPT_ADD_LOCAL_PLAYER:
             handleAddLocalPlayerPacket(cp, imbs);
@@ -296,6 +309,8 @@ void NetworkManagerServer::sendStatePacketToClient(ClientProxy& cp)
 {
     OutputMemoryBitStream ombs;
     ombs.write<uint8_t, 4>(static_cast<uint8_t>(NWPT_STATE));
+    
+    ombs.write(_numMovesProcessed);
     
     InFlightPacket* ifp = cp.getDeliveryNotificationManager().writeState(ombs);
     
@@ -333,8 +348,13 @@ void NetworkManagerServer::writeLastMoveTimestampIfDirty(OutputMemoryBitStream& 
 
 void NetworkManagerServer::handleInputPacket(ClientProxy& cp, InputMemoryBitStream& imbs)
 {
+    if (!cp.getDeliveryNotificationManager().readAndProcessState(imbs))
+    {
+        return;
+    }
+    
     uint8_t moveCount = 0;
-    imbs.read<uint8_t, 2>(moveCount);
+    imbs.read<uint8_t, 5>(moveCount);
     
 	InputState* referenceInputState = NULL;
 	bool isRefInputStateOrphaned = false;
@@ -357,6 +377,9 @@ void NetworkManagerServer::handleInputPacket(ClientProxy& cp, InputMemoryBitStre
             uint32_t timeStamp;
             imbs.read(timeStamp);
             move.setTimestamp(timeStamp);
+            uint32_t index;
+            imbs.read(index);
+            move.setIndex(index);
             move.copyInputState(referenceInputState);
         }
         else
@@ -495,7 +518,8 @@ _inputStateCreationFunc(iscf),
 _inputStateReleaseFunc(isrf),
 _entityRegistry(oerf, oedf),
 _nextPlayerID(1),
-_maxNumPlayers(maxNumPlayers)
+_maxNumPlayers(maxNumPlayers),
+_numMovesProcessed(0)
 {
     // Empty
 }
