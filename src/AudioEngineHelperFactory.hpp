@@ -19,7 +19,7 @@
 #elif IS_WINDOWS
     #include "windows/WindowsAudioEngineHelper.hpp"
 #else
-    #include "NullAudioEngineHelper.hpp"
+    #error Need to add AudioEngineHelper implementation
 #endif
 
 #include <assert.h>
@@ -39,7 +39,7 @@ public:
 #elif IS_WINDOWS
         return new WindowsAudioEngineHelper();
 #else
-        return new NullAudioEngineHelper();
+        #error Need to add AudioEngineHelper implementation
 #endif
     }
     

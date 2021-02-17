@@ -19,7 +19,7 @@
 #elif IS_WINDOWS
     #include "windows/WindowsAssetHandler.hpp"
 #else
-    #include "NullAssetHandler.hpp"
+    #error Need to add AssetHandler implementation
 #endif
 
 #include <assert.h>
@@ -39,7 +39,7 @@ public:
 #elif IS_WINDOWS
         return new WindowsAssetHandler();
 #else
-        return new NullAssetHandler();
+        #error Need to add AssetHandler implementation
 #endif
     }
     
