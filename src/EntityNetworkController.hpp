@@ -8,29 +8,20 @@
 
 #pragma once
 
+#include "Macros.hpp"
+
 #include <stdint.h>
 
-#define DECL_EntityNetworkController_create                        \
-public:                                                            \
-    static EntityNetworkController* create(Entity* e, bool isServer)
-
-#define IMPL_EntityNetworkController_create(name)                  \
-EntityNetworkController* name::create(Entity* e, bool isServer)    \
-{                                                                  \
-    return new name(e, isServer);                                  \
-}
-
 class Entity;
-class EntityController;
 class InputMemoryBitStream;
 class OutputMemoryBitStream;
 
 class EntityNetworkController
 {
-    DECL_EntityNetworkController_create;
+    DECL_EntityController_create(EntityNetworkController);
     
 public:
-    EntityNetworkController(Entity* e, bool isServer);
+    EntityNetworkController(Entity* e);
     virtual ~EntityNetworkController() {}
     
     virtual void read(InputMemoryBitStream& imbs);
@@ -38,9 +29,6 @@ public:
     virtual void recallCache();
     virtual uint8_t refreshDirtyState();
     
-    bool isServer();
-    
 protected:
     Entity* _entity;
-    bool _isServer;
 };

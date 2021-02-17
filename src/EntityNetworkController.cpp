@@ -15,11 +15,10 @@
 #include "Macros.hpp"
 #include "EntityPhysicsController.hpp"
 
-IMPL_EntityNetworkController_create(EntityNetworkController)
+IMPL_EntityController_create(EntityNetworkController, EntityNetworkController)
 
-EntityNetworkController::EntityNetworkController(Entity* e, bool isServer) :
-_entity(e),
-_isServer(isServer)
+EntityNetworkController::EntityNetworkController(Entity* e) :
+_entity(e)
 {
     // Empty
 }
@@ -44,8 +43,6 @@ void EntityNetworkController::read(InputMemoryBitStream& imbs)
         imbs.read<uint8_t, 4>(e._pose._numGroundContacts);
         
         imbs.read(e._pose._isFacingLeft);
-        
-        e.physicsController()->updateBodyFromPose();
         
         e._poseCache = e._pose;
     }
@@ -135,9 +132,4 @@ uint8_t EntityNetworkController::refreshDirtyState()
     }
     
     return ret;
-}
-
-bool EntityNetworkController::isServer()
-{
-    return _isServer;
 }

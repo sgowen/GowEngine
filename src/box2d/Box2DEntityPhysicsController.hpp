@@ -18,7 +18,7 @@ class Entity;
 
 class Box2DEntityPhysicsController : public EntityPhysicsController
 {
-    DECL_EntityPhysicsController_create;
+    DECL_EntityController_create(EntityPhysicsController);
     
 public:
     Box2DEntityPhysicsController(Entity* e);

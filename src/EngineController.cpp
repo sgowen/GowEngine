@@ -42,11 +42,15 @@ void EngineController::configureForNetwork(std::map<std::string, EntityNetworkCo
     static TimeTracker TIMC(getFrameRate());
     static EntityIDManager EIMS;
     static EntityIDManager EIMC;
+    static EntityLayoutManager ELMS(true);
+    static EntityLayoutManager ELMC(false);
     
     INST_REG.registerInstance(INSK_TIME_SRVR, &TIMS);
     INST_REG.registerInstance(INSK_TIME_CLNT, &TIMC);
     INST_REG.registerInstance(INSK_EID_SRVR, &EIMS);
     INST_REG.registerInstance(INSK_EID_CLNT, &EIMC);
+    INST_REG.registerInstance(INSK_ELM_SRVR, &ELMS);
+    INST_REG.registerInstance(INSK_ELM_CLNT, &ELMC);
 }
 
 void EngineController::registerPhysicsControllers(std::map<std::string, EntityPhysicsControllerCreationFunc>& config)
@@ -54,6 +58,14 @@ void EngineController::registerPhysicsControllers(std::map<std::string, EntityPh
     for (auto& pair: config)
     {
         ENTITY_MGR.registerPhysicsController(pair.first, pair.second);
+    }
+}
+
+void EngineController::registerRenderControllers(std::map<std::string, EntityRenderControllerCreationFunc>& config)
+{
+    for (auto& pair: config)
+    {
+        ENTITY_MGR.registerRenderController(pair.first, pair.second);
     }
 }
     

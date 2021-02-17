@@ -27,6 +27,7 @@ protected:
     void registerControllers(std::map<std::string, EntityControllerCreationFunc>& config);
     void configureForNetwork(std::map<std::string, EntityNetworkControllerCreationFunc>& config);
     void registerPhysicsControllers(std::map<std::string, EntityPhysicsControllerCreationFunc>& config);
+    void registerRenderControllers(std::map<std::string, EntityRenderControllerCreationFunc>& config);
     
 #if IS_ANDROID
     EngineController(void* data1, void* data2);

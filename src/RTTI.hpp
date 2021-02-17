@@ -28,10 +28,15 @@ private:
     const RTTI *_parentRTTI;
 };
 
-#define DECL_RTTI                               \
+#define DECL_RTTI_NOPARENT                      \
 public:                                         \
     static const RTTI rtti;                     \
     virtual const RTTI& getRTTI()
+
+#define DECL_RTTI                               \
+public:                                         \
+    static const RTTI rtti;                     \
+    virtual const RTTI& getRTTI() override
 
 #define IMPL_RTTI_NOPARENT(name)                \
     const RTTI name::rtti(#name);               \

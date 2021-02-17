@@ -18,16 +18,20 @@ struct Rektangle;
 
 class TopDownEntityPhysicsController : public EntityPhysicsController
 {
-    DECL_EntityPhysicsController_create;
+    DECL_RTTI;
+    DECL_EntityController_create(EntityPhysicsController);
     
 public:
     TopDownEntityPhysicsController(Entity* e) : EntityPhysicsController(e) {}
     virtual ~TopDownEntityPhysicsController() {}
     
-    virtual void updatePoseFromBody();
-    virtual void updateBodyFromPose();
+    virtual void updatePoseFromBody() override;
+    virtual void updateBodyFromPose() override;
     
     void processPhysics(TimeTracker* tt);
-    void processCollisions(TimeTracker* tt, std::vector<Entity*>& entities);
+    void processCollisions(std::vector<Entity*>& entities);
     void enforceBounds(Rektangle& bounds);
+    
+protected:
+    virtual void onCollision(Entity* e) {}
 };

@@ -12,18 +12,20 @@
 #include "EntityController.hpp"
 #include "EntityNetworkController.hpp"
 #include "EntityPhysicsController.hpp"
+#include "EntityRenderController.hpp"
 #include "MathUtil.hpp"
 #include "EntityManager.hpp"
 #include "Macros.hpp"
 #include "Rektangle.hpp"
 #include "OverlapTester.hpp"
 
-Entity::Entity(EntityDef ed, EntityInstanceDef eid, bool isServer) :
+Entity::Entity(EntityDef ed, EntityInstanceDef eid) :
 _entityDef(ed),
 _entityInstanceDef(eid),
 _controller(ENTITY_MGR.createEntityController(ed, this)),
+_networkController(ENTITY_MGR.createEntityNetworkController(ed, this)),
 _physicsController(ENTITY_MGR.createEntityPhysicsController(ed, this)),
-_networkController(ENTITY_MGR.createEntityNetworkController(ed, this, isServer)),
+_renderController(ENTITY_MGR.createEntityRenderController(ed, this)),
 _pose(eid._x, eid._y),
 _poseCache(_pose),
 _state(),
@@ -38,6 +40,7 @@ Entity::~Entity()
     delete _controller;
     delete _networkController;
     delete _physicsController;
+    delete _renderController;
 }
 
 void Entity::update()
@@ -72,21 +75,6 @@ EntityDef& Entity::entityDef()
     return _entityDef;
 }
 
-EntityController* Entity::controller()
-{
-    return _controller;
-}
-
-EntityPhysicsController* Entity::physicsController()
-{
-    return _physicsController;
-}
-
-EntityNetworkController* Entity::networkController()
-{
-    return _networkController;
-}
-
 uint16_t Entity::stateTime()
 {
     return _state._stateTime;
@@ -104,7 +92,7 @@ void Entity::setPosition(float x, float y)
     _physicsController->updateBodyFromPose();
 }
 
-const Vector2& Entity::getPosition()
+Vector2& Entity::getPosition()
 {
     return _pose._position;
 }
@@ -121,7 +109,7 @@ void Entity::setVelocity(float x, float y)
     _physicsController->updateBodyFromPose();
 }
 
-const Vector2& Entity::getVelocity()
+Vector2& Entity::getVelocity()
 {
     return _pose._velocity;
 }
@@ -158,6 +146,12 @@ bool Entity::isGrounded()
 
 void Entity::requestDeletion()
 {
+    if (!isServer())
+    {
+        // Only the server can directly delete entities
+        return;
+    }
+    
     _isRequestingDeletion = true;
 }
 
@@ -169,44 +163,6 @@ bool Entity::isRequestingDeletion()
 bool Entity::isFacingLeft()
 {
     return _pose._isFacingLeft;
-}
-
-std::string Entity::getTextureMapping()
-{
-    return getTextureMapping(_state._state);
-}
-
-std::string Entity::getTextureMapping(uint8_t state)
-{
-    auto q = _entityDef._textureMappings.find(state);
-    
-    if (q != _entityDef._textureMappings.end())
-    {
-        return q->second;
-    }
-    
-    return _controller->getTextureMapping();
-}
-
-int Entity::getSoundMapping(int state)
-{
-    auto q1 = _entityDef._soundMappings.find(state);
-    if (q1 != _entityDef._soundMappings.end())
-    {
-        return q1->second;
-    }
-    
-    auto q2 = _entityDef._soundRandomMappings.find(state);
-    if (q2 != _entityDef._soundRandomMappings.end())
-    {
-        std::vector<int> soundCollection = q2->second;
-        
-        int index = rand() % soundCollection.size();
-        return soundCollection[index];
-    }
-    
-    // No sound for this state
-    return 0;
 }
 
 Entity::Pose& Entity::pose()
@@ -227,4 +183,9 @@ Entity::State& Entity::state()
 Entity::State& Entity::stateCache()
 {
     return _stateCache;
+}
+
+bool Entity::isServer()
+{
+    return _entityInstanceDef._isServer;
 }

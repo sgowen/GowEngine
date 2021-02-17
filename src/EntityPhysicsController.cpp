@@ -10,7 +10,8 @@
 
 #include "Entity.hpp"
 
-IMPL_EntityPhysicsController_create(EntityPhysicsController)
+IMPL_RTTI_NOPARENT(EntityPhysicsController)
+IMPL_EntityController_create(EntityPhysicsController, EntityPhysicsController)
 
 EntityPhysicsController::EntityPhysicsController(Entity* e) :
 _entity(e)

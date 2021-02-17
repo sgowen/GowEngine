@@ -11,7 +11,7 @@
 #include "Entity.hpp"
 #include "Macros.hpp"
 
-IMPL_EntityPhysicsController_create(Box2DEntityPhysicsController)
+IMPL_EntityController_create(Box2DEntityPhysicsController, EntityPhysicsController)
 
 Box2DEntityPhysicsController::Box2DEntityPhysicsController(Entity* e) : EntityPhysicsController(e),
 _body(NULL),

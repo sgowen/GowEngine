@@ -17,11 +17,19 @@
 #include "PlatformMacros.hpp"
 #include "Macros.hpp"
 #include "RapidJSONUtil.hpp"
+#include "InstanceRegistry.hpp"
+#include "Network.hpp"
 
 #include <rapidjson/document.h>
 #include <rapidjson/prettywriter.h>
 
 #include <assert.h>
+
+EntityLayoutManager::EntityLayoutManager(bool isServer) :
+_isServer(isServer)
+{
+    // Empty
+}
 
 void EntityLayoutManager::initWithJSONFile(const char* filePath)
 {
@@ -34,7 +42,7 @@ void EntityLayoutManager::initWithJSONFile(const char* filePath)
 
 void EntityLayoutManager::initWithJSON(const char* data)
 {
-    clear();
+    _entityLayoutMap.clear();
     
     using namespace rapidjson;
     
@@ -58,13 +66,9 @@ void EntityLayoutManager::initWithJSON(const char* data)
     }
 }
 
-void EntityLayoutManager::clear()
+void EntityLayoutManager::loadEntityLayout(EntityLayoutDef& eld)
 {
-    _entityLayoutMap.clear();
-}
-
-void EntityLayoutManager::loadEntityLayout(EntityLayoutDef& eld, EntityIDManager* eidm)
-{
+    EntityIDManager* eidm = INST_REG.get<EntityIDManager>(_isServer ? INSK_EID_SRVR : INSK_EID_CLNT);
     assert(eidm != NULL);
     
     AssetHandler* ah = AssetHandlerFactory::create();
@@ -92,7 +96,7 @@ void EntityLayoutManager::loadEntityLayout(EntityLayoutDef& eld, EntityIDManager
             uint32_t x = RapidJSONUtil::getUnsignedInteger(iv, "x");
             uint32_t y = RapidJSONUtil::getUnsignedInteger(iv, "y");
             
-            eld._entities.emplace_back(eidm->getNextLayoutEntityID(), StringUtil::fourCharFromString(key), x, y);
+            eld._entities.emplace_back(eidm->getNextLayoutEntityID(), StringUtil::fourCharFromString(key), x, y, _isServer);
         }
     }
     
@@ -112,7 +116,7 @@ void EntityLayoutManager::loadEntityLayout(EntityLayoutDef& eld, EntityIDManager
             uint32_t x = RapidJSONUtil::getUnsignedInteger(iv, "x");
             uint32_t y = RapidJSONUtil::getUnsignedInteger(iv, "y");
             
-            eld._entitiesNetwork.emplace_back(eidm->getNextNetworkEntityID(), StringUtil::fourCharFromString(key), x, y);
+            eld._entitiesNetwork.emplace_back(eidm->getNextNetworkEntityID(), StringUtil::fourCharFromString(key), x, y, _isServer);
         }
     }
     

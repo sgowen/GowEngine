@@ -13,8 +13,10 @@
 #include "Rektangle.hpp"
 #include "OverlapTester.hpp"
 #include "EntityController.hpp"
+#include "MathUtil.hpp"
 
-IMPL_EntityPhysicsController_create(TopDownEntityPhysicsController)
+IMPL_RTTI(TopDownEntityPhysicsController, EntityPhysicsController)
+IMPL_EntityController_create(TopDownEntityPhysicsController, EntityPhysicsController)
 
 void TopDownEntityPhysicsController::updatePoseFromBody()
 {
@@ -28,12 +30,14 @@ void TopDownEntityPhysicsController::updateBodyFromPose()
 
 void TopDownEntityPhysicsController::processPhysics(TimeTracker* tt)
 {
-    Vector2 vel = _entity->pose()._velocity;
-    vel *= tt->_frameRate;
-    _entity->pose()._position += vel;
+    Vector2& vel = _entity->pose()._velocity;
+    _entity->pose()._position += vel * tt->_frameRate;
+    
+    vel *= 0.9f;
+    sanitizeCloseToZeroVector(vel._x, vel._y, 0.01f);
 }
 
-void TopDownEntityPhysicsController::processCollisions(TimeTracker* tt, std::vector<Entity*>& entities)
+void TopDownEntityPhysicsController::processCollisions(std::vector<Entity*>& entities)
 {
     float x = _entity->getPosition()._x;
     float y = _entity->getPosition()._y;
@@ -61,15 +65,15 @@ void TopDownEntityPhysicsController::processCollisions(TimeTracker* tt, std::vec
                 bounds.top() >= boundsToTest.bottom() ||
                 bounds.bottom() <= boundsToTest.top())
             {
-                Vector2 vel = _entity->getVelocity();
-                vel *= tt->_frameRate;
-                Vector2 pos = _entity->getPosition();
-                pos -= vel;
-                _entity->setPosition(pos);
+//                Vector2 vel = _entity->getVelocity();
+//                vel *= tt->_frameRate;
+//                Vector2 pos = _entity->getPosition();
+//                pos -= vel;
+//                _entity->setPosition(pos);
             }
             
-            _entity->controller()->onCollision(e);
-            e->controller()->onCollision(_entity);
+            onCollision(e);
+            static_cast<TopDownEntityPhysicsController*>(e->physicsController())->onCollision(_entity);
             break;
         }
     }

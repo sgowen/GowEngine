@@ -8,8 +8,9 @@
 
 #pragma once
 
-#include "PolygonBatcher.hpp"
 #include "CircleBatcher.hpp"
+#include "RektangleBatcher.hpp"
+#include "TriangleBatcher.hpp"
 
 #include <box2d/b2_draw.h>
 
@@ -49,9 +50,11 @@ public:
     void render(Shader* shader, mat4* matrix, b2World* world);
     
 private:
-    PolygonBatcher _fillPolygonBatcher;
-    PolygonBatcher _boundsPolygonBatcher;
     CircleBatcher _circleBatcher;
+    RektangleBatcher _fillRektangleBatcher;
+    RektangleBatcher _boundsRektangleBatcher;
+    TriangleBatcher _fillTriangleBatcher;
+    TriangleBatcher _boundsTriangleBatcher;
     Shader* _shader;
     mat4* _matrix;
 };

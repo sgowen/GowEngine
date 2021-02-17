@@ -11,8 +11,9 @@
 #include "Entity.hpp"
 #include "EntityLayoutManager.hpp"
 #include "EntityController.hpp"
-#include "EntityPhysicsController.hpp"
 #include "EntityNetworkController.hpp"
+#include "EntityPhysicsController.hpp"
+#include "EntityRenderController.hpp"
 #include "EntityController.hpp"
 #include "StringUtil.hpp"
 #include "GowUtil.hpp"
@@ -36,7 +37,7 @@ void EntityManager::initWithJSONFile(const char* filePath)
 
 void EntityManager::initWithJSON(const char* json)
 {
-    clear();
+    _entityDescriptorsMap.clear();
     
     using namespace rapidjson;
     
@@ -59,8 +60,9 @@ void EntityManager::initWithJSON(const char* json)
         std::string controller = RapidJSONUtil::getString(iv, "controller", "Entity");
         std::string networkController = RapidJSONUtil::getString(iv, "networkController", "Entity");
         std::string physicsController = RapidJSONUtil::getString(iv, "physicsController", "Entity");
+        std::string renderController = RapidJSONUtil::getString(iv, "renderController", "Entity");
         
-        std::map<int, std::string> textureMappings;
+        std::map<uint8_t, std::string> textureMappings;
         if (iv.HasMember("textureMappings"))
         {
             const Value& v = iv["textureMappings"];
@@ -68,20 +70,21 @@ void EntityManager::initWithJSON(const char* json)
             for (Value::ConstMemberIterator i = v.MemberBegin(); i != v.MemberEnd(); ++i)
             {
                 std::string name = i->name.GetString();
-                int state = StringUtil::stringToNumber<int>(name);
+                uint8_t state = StringUtil::stringToNumber<uint8_t>(name);
                 std::string value = i->value.GetString();
                 textureMappings.insert(std::make_pair(state, value));
             }
         }
-        else
+        else if (iv.HasMember("textureMapping"))
         {
             const Value& v = iv["textureMapping"];
             assert(v.IsString());
+            uint8_t state = 0;
             std::string value = v.GetString();
-            textureMappings.insert(std::make_pair(0, value));
+            textureMappings.insert(std::make_pair(state, value));
         }
         
-        std::map<int, int> soundMappings;
+        std::map<uint8_t, uint16_t> soundMappings;
         if (iv.HasMember("soundMappings"))
         {
             const Value& v = iv["soundMappings"];
@@ -89,13 +92,14 @@ void EntityManager::initWithJSON(const char* json)
             for (Value::ConstMemberIterator i = v.MemberBegin(); i != v.MemberEnd(); ++i)
             {
                 std::string name = i->name.GetString();
-                int state = StringUtil::stringToNumber<int>(name);
-                int soundID = i->value.GetInt();
+                uint8_t state = StringUtil::stringToNumber<uint8_t>(name);
+                assert(i->value.IsUint());
+                uint16_t soundID = i->value.GetUint();
                 soundMappings.insert(std::make_pair(state, soundID));
             }
         }
         
-        std::map<int, std::vector<int> > soundRandomMappings;
+        std::map<uint8_t, std::vector<uint16_t> > soundRandomMappings;
         if (iv.HasMember("soundRandomMappings"))
         {
             const Value& v = iv["soundRandomMappings"];
@@ -104,15 +108,15 @@ void EntityManager::initWithJSON(const char* json)
             {
                 assert(i->value.IsArray());
                 const Value& array = i->value.GetArray();
-                std::vector<int> soundCollection;
+                std::vector<uint16_t> soundCollection;
                 for (SizeType i = 0; i < array.Size(); ++i)
                 {
                     const Value& iv = array[i];
-                    assert(iv.IsInt());
-                    soundCollection.push_back(iv.GetInt());
+                    assert(iv.IsUint());
+                    soundCollection.push_back(iv.GetUint());
                 }
                 std::string name = i->name.GetString();
-                int state = StringUtil::stringToNumber<int>(name);
+                uint8_t state = StringUtil::stringToNumber<uint8_t>(name);
                 soundRandomMappings.insert(std::make_pair(state, soundCollection));
             }
         }
@@ -163,72 +167,33 @@ void EntityManager::initWithJSON(const char* json)
         int width = RapidJSONUtil::getInteger(iv, "width");
         int height = RapidJSONUtil::getInteger(iv, "height");
         
-        _entityDescriptorsMap.emplace(key, EntityDef{key, name, keyName, controller, physicsController, networkController, textureMappings, soundMappings, soundRandomMappings, fixtures, bodyFlags, width, height});
+        _entityDescriptorsMap.emplace(key, EntityDef{key, name, keyName, controller, networkController, physicsController, renderController, textureMappings, soundMappings, soundRandomMappings, fixtures, bodyFlags, width, height});
     }
 }
 
-void EntityManager::clear()
-{
-    _entityDescriptorsMap.clear();
-}
-
-Entity* EntityManager::createEntity(EntityInstanceDef& eid, bool isServer)
+Entity* EntityManager::createEntity(EntityInstanceDef& eid)
 {
     EntityDef& ed = getEntityDef(eid._key);
-    return new Entity(ed, eid, isServer);
+    return new Entity(ed, eid);
 }
 
 EntityDef& EntityManager::getEntityDef(uint32_t fourCCName)
 {
     auto q = _entityDescriptorsMap.find(fourCCName);
-    
     assert(q != _entityDescriptorsMap.end());
-    
     return q->second;
 }
 
 void EntityManager::registerController(std::string name, EntityControllerCreationFunc func)
 {
     assert(func != NULL);
-    
     _entityControllerCreationFunctionMap[name] = func;
-}
-
-void EntityManager::registerNetworkController(std::string name, EntityNetworkControllerCreationFunc func)
-{
-    assert(func != NULL);
-    
-    _entityNetworkControllerCreationFunctionMap[name] = func;
-}
-
-void EntityManager::registerPhysicsController(std::string name, EntityPhysicsControllerCreationFunc func)
-{
-    assert(func != NULL);
-    
-    _entityPhysicsControllerCreationFunctionMap[name] = func;
 }
 
 EntityController* EntityManager::createEntityController(EntityDef& ed, Entity* e)
 {
     EntityControllerCreationFunc func = _entityControllerCreationFunctionMap[ed._controller];
     assert(func != NULL);
-    
-    return func(e);
-}
-
-EntityNetworkController* EntityManager::createEntityNetworkController(EntityDef& ed, Entity* e, bool isServer)
-{
-    EntityNetworkControllerCreationFunc func = _entityNetworkControllerCreationFunctionMap[ed._networkController];
-    assert(func != NULL);
-    
-    return func(e, isServer);
-}
-
-EntityPhysicsController* EntityManager::createEntityPhysicsController(EntityDef& ed, Entity* e)
-{
-    EntityPhysicsControllerCreationFunc func = _entityPhysicsControllerCreationFunctionMap[ed._physicsController];
-    assert(func != NULL);
-    
     return func(e);
 }
 
@@ -237,9 +202,35 @@ const std::map<std::string, EntityControllerCreationFunc>& EntityManager::getEnt
     return _entityControllerCreationFunctionMap;
 }
 
+void EntityManager::registerNetworkController(std::string name, EntityNetworkControllerCreationFunc func)
+{
+    assert(func != NULL);
+    _entityNetworkControllerCreationFunctionMap[name] = func;
+}
+
+EntityNetworkController* EntityManager::createEntityNetworkController(EntityDef& ed, Entity* e)
+{
+    EntityNetworkControllerCreationFunc func = _entityNetworkControllerCreationFunctionMap[ed._networkController];
+    assert(func != NULL);
+    return func(e);
+}
+
 const std::map<std::string, EntityNetworkControllerCreationFunc>& EntityManager::getEntityNetworkControllerMap()
 {
     return _entityNetworkControllerCreationFunctionMap;
+}
+
+void EntityManager::registerPhysicsController(std::string name, EntityPhysicsControllerCreationFunc func)
+{
+    assert(func != NULL);
+    _entityPhysicsControllerCreationFunctionMap[name] = func;
+}
+
+EntityPhysicsController* EntityManager::createEntityPhysicsController(EntityDef& ed, Entity* e)
+{
+    EntityPhysicsControllerCreationFunc func = _entityPhysicsControllerCreationFunctionMap[ed._physicsController];
+    assert(func != NULL);
+    return func(e);
 }
 
 const std::map<std::string, EntityPhysicsControllerCreationFunc>& EntityManager::getEntityPhysicsControllerMap()
@@ -247,9 +238,28 @@ const std::map<std::string, EntityPhysicsControllerCreationFunc>& EntityManager:
     return _entityPhysicsControllerCreationFunctionMap;
 }
 
+void EntityManager::registerRenderController(std::string name, EntityRenderControllerCreationFunc func)
+{
+    assert(func != NULL);
+    _entityRenderControllerCreationFunctionMap[name] = func;
+}
+
+EntityRenderController* EntityManager::createEntityRenderController(EntityDef& ed, Entity* e)
+{
+    EntityRenderControllerCreationFunc func = _entityRenderControllerCreationFunctionMap[ed._renderController];
+    assert(func != NULL);
+    return func(e);
+}
+
+const std::map<std::string, EntityRenderControllerCreationFunc>& EntityManager::getEntityRenderControllerMap()
+{
+    return _entityRenderControllerCreationFunctionMap;
+}
+
 EntityManager::EntityManager()
 {
     registerController("Entity", EntityController::create);
     registerNetworkController("Entity", EntityNetworkController::create);
     registerPhysicsController("Entity", EntityPhysicsController::create);
+    registerRenderController("Entity", EntityRenderController::create);
 }

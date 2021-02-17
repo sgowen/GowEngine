@@ -1,12 +1,12 @@
 //
-//  FontRenderer.cpp
+//  FontBatcher.cpp
 //  GowEngine
 //
 //  Created by Stephen Gowen on 2/22/14.
 //  Copyright © 2021 Stephen Gowen. All rights reserved.
 //
 
-#include "FontRenderer.hpp"
+#include "FontBatcher.hpp"
 
 #include "Shader.hpp"
 #include "Texture.hpp"
@@ -14,7 +14,7 @@
 
 #include <assert.h>
 
-FontRenderer::FontRenderer(int maxBatchSize, int offsetX, int offsetY, int glyphsPerRow, int glyphWidth, int glyphHeight, int textureWidth, int textureHeight) :
+FontBatcher::FontBatcher(int maxBatchSize, int offsetX, int offsetY, int glyphsPerRow, int glyphWidth, int glyphHeight, int textureWidth, int textureHeight) :
 _spriteBatcher(maxBatchSize),
 _glyphWidthToHeightRatio(glyphHeight / (float)glyphWidth),
 _matrixWidth(1),
@@ -37,17 +37,17 @@ _matrixHeight(1)
 	}
 }
 
-void FontRenderer::createDeviceDependentResources()
+void FontBatcher::createDeviceDependentResources()
 {
     _spriteBatcher.createDeviceDependentResources();
 }
 
-void FontRenderer::releaseDeviceDependentResources()
+void FontBatcher::releaseDeviceDependentResources()
 {
     _spriteBatcher.releaseDeviceDependentResources();
 }
 
-void FontRenderer::setMatrixSize(float matrixWidth, float matrixHeight)
+void FontBatcher::setMatrixSize(float matrixWidth, float matrixHeight)
 {
     mat4_identity(_matrix);
     mat4_ortho(_matrix, 0, matrixWidth, 0, matrixHeight, -1, 1);
@@ -55,7 +55,7 @@ void FontRenderer::setMatrixSize(float matrixWidth, float matrixHeight)
     _matrixHeight = matrixHeight;
 }
 
-void FontRenderer::configure(TextView& tv, float xWeight, float yWeight, float glyphWidthWeight)
+void FontBatcher::configure(TextView& tv, float xWeight, float yWeight, float glyphWidthWeight)
 {
     tv._x = _matrixWidth * xWeight;
     tv._y = _matrixHeight * yWeight;
@@ -63,7 +63,12 @@ void FontRenderer::configure(TextView& tv, float xWeight, float yWeight, float g
     tv._glyphHeight = tv._glyphWidth * _glyphWidthToHeightRatio;
 }
 
-void FontRenderer::renderText(Shader& s, Texture& t, TextView& tv)
+void FontBatcher::begin()
+{
+    _spriteBatcher.begin();
+}
+
+void FontBatcher::addText(TextView& tv)
 {
     if (tv._visibility == TEXV_HIDDEN)
     {
@@ -85,27 +90,24 @@ void FontRenderer::renderText(Shader& s, Texture& t, TextView& tv)
         x -= (len - 1) * tv._glyphWidth;
     }
 
-    _spriteBatcher.begin();
     for (size_t i = 0; i < len; ++i)
     {
         uint8_t c = ((uint8_t)tv._text.at(i));
 
-        renderAsciiChar(c, x, tv._y, tv._glyphWidth, tv._glyphHeight);
+        assert(c >= 0 && c <= 175);
+        _spriteBatcher.addSprite(_glyphs[c], x, tv._y, tv._glyphWidth, tv._glyphHeight);
 
         x += tv._glyphWidth;
     }
-    _spriteBatcher.end(s, _matrix, t);
 }
 
-void FontRenderer::renderText(Shader& s, Texture& t, TextAlignment alignment, std::string text, float x, float y, float glyphWidth, float glyphHeight)
+void FontBatcher::addText(TextAlignment alignment, std::string text, float x, float y, float glyphWidth, float glyphHeight)
 {
     TextView tv(alignment, text, TEXV_VISIBLE, x, y, glyphWidth, glyphHeight);
-    renderText(s, t, tv);
+    addText(tv);
 }
 
-void FontRenderer::renderAsciiChar(uint8_t asciiChar, float x, float y, float glyphWidth, float glyphHeight)
+void FontBatcher::end(Shader& s, Texture& t)
 {
-    assert(asciiChar >= 0 && asciiChar <= 175);
-    
-    _spriteBatcher.addSprite(_glyphs[asciiChar], x, y, glyphWidth, glyphHeight);
+    _spriteBatcher.end(s, _matrix, t);
 }

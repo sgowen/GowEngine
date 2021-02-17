@@ -53,8 +53,8 @@ void ReplicationManagerClient::readAndDoCreateAction(InputMemoryBitStream& imbs,
     Entity* e = er.getEntityByID(networkID);
     if (e == NULL)
     {
-        EntityInstanceDef eid(networkID, fourCCName);
-        e = ENTITY_MGR.createEntity(eid, false);
+        EntityInstanceDef eid(networkID, fourCCName, 0, 0, false);
+        e = ENTITY_MGR.createEntity(eid);
         
         isEntityNew = true;
     }

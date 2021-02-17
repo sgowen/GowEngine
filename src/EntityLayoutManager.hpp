@@ -18,12 +18,14 @@ struct EntityInstanceDef
     uint32_t _key;
     uint32_t _x;
     uint32_t _y;
+    bool _isServer;
     
-    EntityInstanceDef(uint32_t ID, uint32_t key, uint32_t x = 0, uint32_t y = 0) :
+    EntityInstanceDef(uint32_t ID, uint32_t key, uint32_t x, uint32_t y, bool isServer) :
     _ID(ID),
     _key(key),
     _x(x),
-    _y(y)
+    _y(y),
+    _isServer(isServer)
     {
         // Empty
     }
@@ -48,32 +50,22 @@ struct EntityLayoutDef
 
 class EntityIDManager;
 
-#define ENTITY_LAYOUT_MGR EntityLayoutManager::getInstance()
-
 class EntityLayoutManager
 {
 public:
-    static EntityLayoutManager& getInstance()
-    {
-        static EntityLayoutManager ret = EntityLayoutManager();
-        return ret;
-    }
+    EntityLayoutManager(bool isServer);
+    ~EntityLayoutManager() {}
     
     void initWithJSONFile(const char* filePath);
     void initWithJSON(const char* data);
-    void clear();
-    void loadEntityLayout(EntityLayoutDef& eld, EntityIDManager* entityIDManager);
+    void loadEntityLayout(EntityLayoutDef& eld);
     void saveEntityLayout(EntityLayoutDef& eld);
     std::map<uint32_t, EntityLayoutDef>& getEntityLayouts();
     EntityLayoutDef& findEntityLayoutDef(uint32_t key);
     
 private:
     std::map<uint32_t, EntityLayoutDef> _entityLayoutMap;
+    bool _isServer;
     
     FILE* openFile(const char* path, const char* mode);
-    
-    EntityLayoutManager() {}
-    ~EntityLayoutManager() {}
-    EntityLayoutManager(const EntityLayoutManager&);
-    EntityLayoutManager& operator=(const EntityLayoutManager&);
 };

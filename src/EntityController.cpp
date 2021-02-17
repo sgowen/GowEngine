@@ -11,7 +11,7 @@
 #include "Entity.hpp"
 
 IMPL_RTTI_NOPARENT(EntityController)
-IMPL_EntityController_create(EntityController)
+IMPL_EntityController_create(EntityController, EntityController)
 
 EntityController::EntityController(Entity* e) :
 _entity(e)

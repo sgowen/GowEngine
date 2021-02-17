@@ -16,12 +16,14 @@
 
 struct EntityInstanceDef;
 class EntityController;
-class EntityPhysicsController;
 class EntityNetworkController;
+class EntityPhysicsController;
+class EntityRenderController;
 
 typedef EntityController* (*EntityControllerCreationFunc)(Entity* e);
+typedef EntityNetworkController* (*EntityNetworkControllerCreationFunc)(Entity* e);
 typedef EntityPhysicsController* (*EntityPhysicsControllerCreationFunc)(Entity* e);
-typedef EntityNetworkController* (*EntityNetworkControllerCreationFunc)(Entity* e, bool isServer);
+typedef EntityRenderController* (*EntityRenderControllerCreationFunc)(Entity* e);
 
 #define ENTITY_MGR EntityManager::getInstance()
 
@@ -36,29 +38,31 @@ public:
     
     void initWithJSONFile(const char* filePath);
     void initWithJSON(const char* json);
-    
-    void clear();
-    
-    Entity* createEntity(EntityInstanceDef& eid, bool isServer);
+    Entity* createEntity(EntityInstanceDef& eid);
     EntityDef& getEntityDef(uint32_t fourCCName);
     
     void registerController(std::string name, EntityControllerCreationFunc func);
-    void registerNetworkController(std::string name, EntityNetworkControllerCreationFunc func);
-    void registerPhysicsController(std::string name, EntityPhysicsControllerCreationFunc func);
-    
     EntityController* createEntityController(EntityDef& ed, Entity* e);
-    EntityNetworkController* createEntityNetworkController(EntityDef& ed, Entity* e, bool isServer);
-    EntityPhysicsController* createEntityPhysicsController(EntityDef& ed, Entity* e);
-    
     const std::map<std::string, EntityControllerCreationFunc>& getEntityControllerMap();
+    
+    void registerNetworkController(std::string name, EntityNetworkControllerCreationFunc func);
+    EntityNetworkController* createEntityNetworkController(EntityDef& ed, Entity* e);
     const std::map<std::string, EntityNetworkControllerCreationFunc>& getEntityNetworkControllerMap();
+    
+    void registerPhysicsController(std::string name, EntityPhysicsControllerCreationFunc func);
+    EntityPhysicsController* createEntityPhysicsController(EntityDef& ed, Entity* e);
     const std::map<std::string, EntityPhysicsControllerCreationFunc>& getEntityPhysicsControllerMap();
+    
+    void registerRenderController(std::string name, EntityRenderControllerCreationFunc func);
+    EntityRenderController* createEntityRenderController(EntityDef& ed, Entity* e);
+    const std::map<std::string, EntityRenderControllerCreationFunc>& getEntityRenderControllerMap();
     
 private:
     std::map<uint32_t, EntityDef> _entityDescriptorsMap;
     std::map<std::string, EntityControllerCreationFunc> _entityControllerCreationFunctionMap;
     std::map<std::string, EntityNetworkControllerCreationFunc> _entityNetworkControllerCreationFunctionMap;
     std::map<std::string, EntityPhysicsControllerCreationFunc> _entityPhysicsControllerCreationFunctionMap;
+    std::map<std::string, EntityRenderControllerCreationFunc> _entityRenderControllerCreationFunctionMap;
     
     EntityManager();
     ~EntityManager() {}

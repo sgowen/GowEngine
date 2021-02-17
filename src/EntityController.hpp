@@ -8,28 +8,15 @@
 
 #pragma once
 
-#define DECL_EntityController_create         \
-public:                                      \
-    static EntityController* create(Entity* e)
-
-#define IMPL_EntityController_create(name)   \
-EntityController* name::create(Entity* e)    \
-{                                            \
-    return new name(e);                      \
-}
-
-#include <vector>
-#include <string>
-
 #include "RTTI.hpp"
+#include "Macros.hpp"
 
 class Entity;
-class b2Fixture;
 
 class EntityController
 {
-    DECL_RTTI;
-    DECL_EntityController_create;
+    DECL_RTTI_NOPARENT;
+    DECL_EntityController_create(EntityController);
     
 public:
     EntityController(Entity* e);
@@ -37,8 +24,6 @@ public:
     
     virtual void update() {}
     virtual void onMessage(uint16_t message, void* data = NULL) {}
-    virtual std::string getTextureMapping() { return ""; }
-    virtual void onCollision(Entity* e) {}
     
 protected:
     Entity* _entity;

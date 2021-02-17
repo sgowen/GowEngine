@@ -8,21 +8,15 @@
 
 #pragma once
 
-#define DECL_EntityPhysicsController_create         \
-public:                                             \
-    static EntityPhysicsController* create(Entity* e)
-
-#define IMPL_EntityPhysicsController_create(name)   \
-EntityPhysicsController* name::create(Entity* e)    \
-{                                                   \
-    return new name(e);                             \
-}
+#include "RTTI.hpp"
+#include "Macros.hpp"
 
 class Entity;
 
 class EntityPhysicsController
 {
-    DECL_EntityPhysicsController_create;
+    DECL_RTTI_NOPARENT;
+    DECL_EntityController_create(EntityPhysicsController);
     
 public:
     EntityPhysicsController(Entity* e);

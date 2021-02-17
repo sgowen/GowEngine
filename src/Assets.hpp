@@ -27,7 +27,6 @@ public:
     
     void initWithJSONFile(const char* filePath);
     void initWithJSON(const char* json);
-    void clear();
     TextureRegion& findTextureRegion(std::string key, uint16_t stateTime);
     TextureDescriptor& findTextureDescriptor(std::string key);
     std::vector<ShaderDescriptor>& getShaderDescriptors();

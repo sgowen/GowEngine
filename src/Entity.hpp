@@ -47,11 +47,12 @@ struct EntityDef
     std::string _name;
     std::string _keyName;
     std::string _controller;
-    std::string _physicsController;
     std::string _networkController;
-    std::map<int, std::string> _textureMappings;
-    std::map<int, int> _soundMappings;
-    std::map<int, std::vector<int> > _soundRandomMappings;
+    std::string _physicsController;
+    std::string _renderController;
+    std::map<uint8_t, std::string> _textureMappings;
+    std::map<uint8_t, uint16_t> _soundMappings;
+    std::map<uint8_t, std::vector<uint16_t> > _soundRandomMappings;
     std::vector<FixtureDef> _fixtures;
     int _bodyFlags;
     int _width;
@@ -61,11 +62,12 @@ struct EntityDef
               std::string name,
               std::string keyName,
               std::string controller,
-              std::string physicsController,
               std::string networkController,
-              std::map<int, std::string> textureMappings,
-              std::map<int, int> soundMappings,
-              std::map<int, std::vector<int> > soundRandomMappings,
+              std::string physicsController,
+              std::string renderController,
+              std::map<uint8_t, std::string> textureMappings,
+              std::map<uint8_t, uint16_t> soundMappings,
+              std::map<uint8_t, std::vector<uint16_t> > soundRandomMappings,
               std::vector<FixtureDef> fixtures,
               int bodyFlags,
               int width,
@@ -74,8 +76,9 @@ struct EntityDef
     _name(name),
     _keyName(keyName),
     _controller(controller),
-    _physicsController(physicsController),
     _networkController(networkController),
+    _physicsController(physicsController),
+    _renderController(renderController),
     _textureMappings(textureMappings),
     _soundMappings(soundMappings),
     _soundRandomMappings(soundRandomMappings),
@@ -89,16 +92,65 @@ struct EntityDef
 };
 
 class EntityController;
-class EntityPhysicsController;
 class EntityNetworkController;
+class EntityPhysicsController;
+class EntityRenderController;
 
 class Entity
 {
     friend class EntityController;
     friend class EntityNetworkController;
     friend class EntityPhysicsController;
+    friend class EntityRenderController;
     
 public:
+    Entity(EntityDef ed, EntityInstanceDef eid);
+    ~Entity();
+    
+    void update();
+    void message(uint16_t message, void* data = NULL);
+    uint16_t stateTime();
+    void setPosition(Vector2 position);
+    void setPosition(float x, float y);
+    Vector2& getPosition();
+    void setVelocity(Vector2 velocity);
+    void setVelocity(float x, float y);
+    Vector2& getVelocity();
+    float width();
+    float height();
+    void setAngle(float angle);
+    float getAngle();
+    const uint32_t getID();
+    bool isGrounded();
+    bool isFacingLeft();
+    bool isServer();
+    
+    EntityDef& entityDef();
+    
+    template<typename T = EntityController>
+    T* controller()
+    {
+        return static_cast<T*>(_controller);
+    }
+    
+    template<typename T = EntityNetworkController>
+    T* networkController()
+    {
+        return static_cast<T*>(_networkController);
+    }
+
+    template<typename T = EntityPhysicsController>
+    T* physicsController()
+    {
+        return static_cast<T*>(_physicsController);
+    }
+    
+    template<typename T = EntityRenderController>
+    T* renderController()
+    {
+        return static_cast<T*>(_renderController);
+    }
+    
     enum ReadStateFlag
     {
         RSTF_POSE =  1 << 0,
@@ -170,41 +222,16 @@ public:
     State& state();
     State& stateCache();
     
-    Entity(EntityDef ed, EntityInstanceDef eid, bool isServer);
-    ~Entity();
-    
-    void update();
-    void message(uint16_t message, void* data = NULL);
-    EntityDef& entityDef();
-    EntityController* controller();
-    EntityPhysicsController* physicsController();
-    EntityNetworkController* networkController();
-    uint16_t stateTime();
-    void setPosition(Vector2 position);
-    void setPosition(float x, float y);
-    const Vector2& getPosition();
-    void setVelocity(Vector2 velocity);
-    void setVelocity(float x, float y);
-    const Vector2& getVelocity();
-    float width();
-    float height();
-    void setAngle(float angle);
-    float getAngle();
-    const uint32_t getID();
-    bool isGrounded();
     void requestDeletion();
     bool isRequestingDeletion();
-    bool isFacingLeft();
-    std::string getTextureMapping();
-    std::string getTextureMapping(uint8_t state);
-    int getSoundMapping(int state);
     
 private:
     EntityDef _entityDef;
     EntityInstanceDef _entityInstanceDef;
     EntityController* _controller;
-    EntityPhysicsController* _physicsController;
     EntityNetworkController* _networkController;
+    EntityPhysicsController* _physicsController;
+    EntityRenderController* _renderController;
     Pose _pose;
     Pose _poseCache;
     State _state;

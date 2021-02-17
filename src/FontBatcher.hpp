@@ -1,5 +1,5 @@
 //
-//  FontRenderer.hpp
+//  FontBatcher.hpp
 //  GowEngine
 //
 //  Created by Stephen Gowen on 2/22/14.
@@ -20,19 +20,20 @@ struct Shader;
 struct Texture;
 struct TextureRegion;
 
-class FontRenderer
+class FontBatcher
 {
 public:
-	FontRenderer(int maxBatchSize, int offsetX, int offsetY, int glyphsPerRow, int glyphWidth, int glyphHeight, int textureWidth, int textureHeight);
-    ~FontRenderer() {}
+	FontBatcher(int maxBatchSize, int offsetX, int offsetY, int glyphsPerRow, int glyphWidth, int glyphHeight, int textureWidth, int textureHeight);
+    ~FontBatcher() {}
     
     void createDeviceDependentResources();
     void releaseDeviceDependentResources();
     void setMatrixSize(float matrixWidth, float matrixHeight);
     void configure(TextView& tv, float xWeight, float yWeight, float glyphWidthWeight);
-    void renderText(Shader& s, Texture& t, TextView& tv);
-	void renderText(Shader& s, Texture& t, TextAlignment textAlignment, std::string text, float x, float y, float glyphWidth, float glyphHeight);
-    void renderAsciiChar(uint8_t asciiChar, float x, float y, float glyphWidth, float glyphHeight);
+    void begin();
+    void addText(TextView& tv);
+	void addText(TextAlignment textAlignment, std::string text, float x, float y, float glyphWidth, float glyphHeight);
+    void end(Shader& s, Texture& t);
 
 private:
     SpriteBatcher _spriteBatcher;
