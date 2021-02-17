@@ -18,11 +18,13 @@
 #include <assert.h>
 
 #define DEGREE_SPACING 6
+#define NUM_VERTICES_PER_FULL_CIRCLE 360 / DEGREE_SPACING
 
 CircleBatcher::CircleBatcher(int maxBatchSize) :
+_maxBatchSize(maxBatchSize),
 _vertexBuffer(0)
 {
-    _vertices.reserve(maxBatchSize * NUM_VERTICES_PER_RECTANGLE);
+    _vertices.reserve(_maxBatchSize * NUM_VERTICES_PER_FULL_CIRCLE);
 }
 
 void CircleBatcher::createDeviceDependentResources()
@@ -48,6 +50,8 @@ void CircleBatcher::addCircle(Circle& c)
 
 void CircleBatcher::addCircle(float x, float y, float radius)
 {
+    assert((_vertices.size() / NUM_VERTICES_PER_FULL_CIRCLE) < _maxBatchSize);
+    
     size_t numExistingPoints = _vertices.size();
     
     for (int i = 0; i <= 360; i += DEGREE_SPACING)
@@ -71,6 +75,8 @@ void CircleBatcher::addPartialCircle(Circle& c, int arcDegrees)
 
 void CircleBatcher::addPartialCircle(float x, float y, float radius, int arcDegrees)
 {
+    assert((_vertices.size() / NUM_VERTICES_PER_FULL_CIRCLE) < _maxBatchSize);
+    
     size_t numExistingPoints = _vertices.size();
     
     for (int i = 90; i < (450 - arcDegrees); i += DEGREE_SPACING)

@@ -41,6 +41,8 @@ void SpriteBatcher::begin()
 
 void SpriteBatcher::addSprite(TextureRegion& tr, float x, float y, float width, float height, float angle, bool flipX)
 {
+    assert((_vertices.size() / NUM_VERTICES_PER_RECTANGLE) < _maxBatchSize);
+    
     float halfWidth = width / 2;
     float halfHeight = height / 2;
     

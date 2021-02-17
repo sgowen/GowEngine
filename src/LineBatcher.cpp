@@ -16,9 +16,10 @@
 #include <assert.h>
 
 LineBatcher::LineBatcher(int maxBatchSize) :
+_maxBatchSize(maxBatchSize),
 _vertexBuffer(0)
 {
-    _vertices.reserve(maxBatchSize * NUM_VERTICES_PER_LINE);
+    _vertices.reserve(_maxBatchSize * NUM_VERTICES_PER_LINE);
 }
 
 void LineBatcher::createDeviceDependentResources()
@@ -48,6 +49,8 @@ void LineBatcher::addLine(Line& line)
 
 void LineBatcher::addLine(float oX, float oY, float eX, float eY)
 {
+    assert((_vertices.size() / NUM_VERTICES_PER_LINE) < _maxBatchSize);
+    
     _vertices.emplace_back(oX, oY);
     _vertices.emplace_back(eX, eY);
 }

@@ -31,6 +31,7 @@ public:
     void end(Shader& s, mat4& matrix, const Color& c);
 
 private:
+    int _maxBatchSize;
     std::vector<VERTEX_2D> _vertices;
     uint32_t _vertexBuffer;
 };

@@ -21,8 +21,8 @@ _quadVertexBuffer(0),
 _quadIndexBuffer(0),
 _triangleVertexBuffer(0)
 {
-    _quadVertices.reserve(maxBatchSize * NUM_VERTICES_PER_RECTANGLE);
-    _triangleVertices.resize(maxBatchSize * NUM_VERTICES_PER_TRIANGLE);
+    _quadVertices.reserve(_maxBatchSize * NUM_VERTICES_PER_RECTANGLE);
+    _triangleVertices.resize(_maxBatchSize * NUM_VERTICES_PER_TRIANGLE);
 }
 
 void PolygonBatcher::createDeviceDependentResources()
@@ -57,6 +57,8 @@ void PolygonBatcher::addRektangle(Rektangle& r)
 
 void PolygonBatcher::addRektangle(float left, float bottom, float right, float top)
 {
+    assert((_quadVertices.size() / NUM_VERTICES_PER_RECTANGLE) < _maxBatchSize);
+    
     _quadVertices.emplace_back(left, bottom);
     _quadVertices.emplace_back(left, top);
     _quadVertices.emplace_back(right, top);
@@ -74,6 +76,8 @@ void PolygonBatcher::addTriangle(Triangle& t)
 
 void PolygonBatcher::addTriangle(float leftX, float leftY, float topX, float topY, float rightX, float rightY)
 {
+    assert((_triangleVertices.size() / NUM_VERTICES_PER_TRIANGLE) < _maxBatchSize);
+    
     _triangleVertices.emplace_back(leftX, leftY);
     _triangleVertices.emplace_back(topX, topY);
     _triangleVertices.emplace_back(rightX, rightY);
