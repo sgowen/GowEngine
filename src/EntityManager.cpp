@@ -70,7 +70,8 @@ void EntityManager::initWithJSON(const char* json)
             for (Value::ConstMemberIterator i = v.MemberBegin(); i != v.MemberEnd(); ++i)
             {
                 std::string name = i->name.GetString();
-                uint8_t state = StringUtil::stringToNumber<uint8_t>(name);
+                int nameVal = StringUtil::stringToNumber<int>(name);
+                uint8_t state = nameVal;
                 std::string value = i->value.GetString();
                 textureMappings.insert(std::make_pair(state, value));
             }
@@ -92,7 +93,8 @@ void EntityManager::initWithJSON(const char* json)
             for (Value::ConstMemberIterator i = v.MemberBegin(); i != v.MemberEnd(); ++i)
             {
                 std::string name = i->name.GetString();
-                uint8_t state = StringUtil::stringToNumber<uint8_t>(name);
+                int nameVal = StringUtil::stringToNumber<int>(name);
+                uint8_t state = nameVal;
                 assert(i->value.IsUint());
                 uint16_t soundID = i->value.GetUint();
                 soundMappings.insert(std::make_pair(state, soundID));
@@ -116,7 +118,8 @@ void EntityManager::initWithJSON(const char* json)
                     soundCollection.push_back(iv.GetUint());
                 }
                 std::string name = i->name.GetString();
-                uint8_t state = StringUtil::stringToNumber<uint8_t>(name);
+                int nameVal = StringUtil::stringToNumber<int>(name);
+                uint8_t state = nameVal;
                 soundRandomMappings.insert(std::make_pair(state, soundCollection));
             }
         }
