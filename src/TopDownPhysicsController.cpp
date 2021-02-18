@@ -1,12 +1,12 @@
 //
-//  TopDownEntityPhysicsController.cpp
+//  TopDownPhysicsController.cpp
 //  GowEngine
 //
 //  Created by Stephen Gowen on 2/04/21.
 //  Copyright © 2021 Stephen Gowen. All rights reserved.
 //
 
-#include "TopDownEntityPhysicsController.hpp"
+#include "TopDownPhysicsController.hpp"
 
 #include "Entity.hpp"
 #include "TimeTracker.hpp"
@@ -15,20 +15,20 @@
 #include "EntityController.hpp"
 #include "MathUtil.hpp"
 
-IMPL_RTTI(TopDownEntityPhysicsController, EntityPhysicsController)
-IMPL_EntityController_create(TopDownEntityPhysicsController, EntityPhysicsController)
+IMPL_RTTI(TopDownPhysicsController, EntityPhysicsController)
+IMPL_EntityController_create(TopDownPhysicsController, EntityPhysicsController)
 
-void TopDownEntityPhysicsController::updatePoseFromBody()
+void TopDownPhysicsController::updatePoseFromBody()
 {
     // TODO
 }
 
-void TopDownEntityPhysicsController::updateBodyFromPose()
+void TopDownPhysicsController::updateBodyFromPose()
 {
     // TODO
 }
 
-void TopDownEntityPhysicsController::processPhysics(TimeTracker* tt)
+void TopDownPhysicsController::processPhysics(TimeTracker* tt)
 {
     Vector2& vel = _entity->pose()._velocity;
     _entity->pose()._position += vel * tt->_frameRate;
@@ -37,7 +37,7 @@ void TopDownEntityPhysicsController::processPhysics(TimeTracker* tt)
     sanitizeCloseToZeroVector(vel._x, vel._y, 0.01f);
 }
 
-void TopDownEntityPhysicsController::processCollisions(std::vector<Entity*>& entities)
+void TopDownPhysicsController::processCollisions(std::vector<Entity*>& entities)
 {
     float x = _entity->getPosition()._x;
     float y = _entity->getPosition()._y;
@@ -73,13 +73,13 @@ void TopDownEntityPhysicsController::processCollisions(std::vector<Entity*>& ent
             }
             
             onCollision(e);
-            static_cast<TopDownEntityPhysicsController*>(e->physicsController())->onCollision(_entity);
+            static_cast<TopDownPhysicsController*>(e->physicsController())->onCollision(_entity);
             break;
         }
     }
 }
 
-void TopDownEntityPhysicsController::enforceBounds(Rektangle& bounds)
+void TopDownPhysicsController::enforceBounds(Rektangle& bounds)
 {
     float x = _entity->getPosition()._x;
     float y = _entity->getPosition()._y;

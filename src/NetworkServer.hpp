@@ -53,6 +53,7 @@ public:
     void processPacket(InputMemoryBitStream& imbs, SocketAddress* fromAddress);
     void onMoveProcessed();
     uint32_t getNumMovesProcessed();
+    const std::map<int, ClientProxy*>& playerIDToClientMap();
     
 private:
     static NetworkServer* s_instance;

@@ -14,6 +14,7 @@
 #include "MemoryBitStreamUtil.hpp"
 #include "Macros.hpp"
 #include "EntityPhysicsController.hpp"
+#include "Box2DPhysicsController.hpp"
 
 IMPL_EntityController_create(EntityNetworkController, EntityNetworkController)
 
@@ -33,16 +34,22 @@ void EntityNetworkController::read(InputMemoryBitStream& imbs)
     if (stateBit)
     {
         MemoryBitStreamUtil::read(imbs, e._pose._position._x, e._pose._position._y);
-        MemoryBitStreamUtil::read(imbs, e._pose._velocity._x, e._pose._velocity._y);
+        
+        if (IS_BIT_SET(e._entityDef._bodyFlags, BODF_DYNAMIC))
+        {
+            MemoryBitStreamUtil::read(imbs, e._pose._velocity._x, e._pose._velocity._y);
+        }
         
         if (!IS_BIT_SET(e._entityDef._bodyFlags, BODF_FIXED_ROTATION))
         {
             imbs.read(e._pose._angle);
         }
         
-        imbs.read<uint8_t, 4>(e._pose._numGroundContacts);
-        
-        imbs.read(e._pose._isFacingLeft);
+        if (e.physicsController()->getRTTI().isDerivedFrom(Box2DPhysicsController::rtti))
+        {
+            imbs.read<uint8_t, 4>(e._pose._numGroundContacts);
+            imbs.read(e._pose._isFacingLeft);
+        }
         
         e._poseCache = e._pose;
     }
@@ -72,16 +79,22 @@ uint8_t EntityNetworkController::write(OutputMemoryBitStream& ombs, uint8_t dirt
     if (pose)
     {
         MemoryBitStreamUtil::write(ombs, e._pose._position._x, e._pose._position._y);
-        MemoryBitStreamUtil::write(ombs, e._pose._velocity._x, e._pose._velocity._y);
+        
+        if (IS_BIT_SET(e._entityDef._bodyFlags, BODF_DYNAMIC))
+        {
+            MemoryBitStreamUtil::write(ombs, e._pose._velocity._x, e._pose._velocity._y);
+        }
         
         if (!IS_BIT_SET(e._entityDef._bodyFlags, BODF_FIXED_ROTATION))
         {
             ombs.write(e._pose._angle);
         }
         
-        ombs.write<uint8_t, 4>(e._pose._numGroundContacts);
-        
-        ombs.write(e._pose._isFacingLeft);
+        if (e.physicsController()->getRTTI().isDerivedFrom(Box2DPhysicsController::rtti))
+        {
+            ombs.write<uint8_t, 4>(e._pose._numGroundContacts);
+            ombs.write(e._pose._isFacingLeft);
+        }
         
         ret |= Entity::RSTF_POSE;
     }

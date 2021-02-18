@@ -1,5 +1,5 @@
 //
-//  Box2DEntityPhysicsController.hpp
+//  Box2DPhysicsController.hpp
 //  GowEngine
 //
 //  Created by Stephen Gowen on 2/04/21.
@@ -16,13 +16,13 @@
 
 class Entity;
 
-class Box2DEntityPhysicsController : public EntityPhysicsController
+class Box2DPhysicsController : public EntityPhysicsController
 {
     DECL_EntityController_create(EntityPhysicsController);
     
 public:
-    Box2DEntityPhysicsController(Entity* e);
-    virtual ~Box2DEntityPhysicsController() {}
+    Box2DPhysicsController(Entity* e);
+    virtual ~Box2DPhysicsController() {}
     
     virtual void updatePoseFromBody();
     virtual void updateBodyFromPose();

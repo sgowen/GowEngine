@@ -1,5 +1,5 @@
 //
-//  TopDownEntityPhysicsController.hpp
+//  TopDownPhysicsController.hpp
 //  GowEngine
 //
 //  Created by Stephen Gowen on 2/04/21.
@@ -16,14 +16,14 @@ class Entity;
 class TimeTracker;
 struct Rektangle;
 
-class TopDownEntityPhysicsController : public EntityPhysicsController
+class TopDownPhysicsController : public EntityPhysicsController
 {
     DECL_RTTI;
     DECL_EntityController_create(EntityPhysicsController);
     
 public:
-    TopDownEntityPhysicsController(Entity* e) : EntityPhysicsController(e) {}
-    virtual ~TopDownEntityPhysicsController() {}
+    TopDownPhysicsController(Entity* e) : EntityPhysicsController(e) {}
+    virtual ~TopDownPhysicsController() {}
     
     virtual void updatePoseFromBody() override;
     virtual void updateBodyFromPose() override;

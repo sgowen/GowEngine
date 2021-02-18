@@ -135,24 +135,54 @@ ClientProxy* NetworkServer::getClientProxy(uint8_t playerID) const
 
 int NetworkServer::getMoveCount()
 {
-    int ret = 0;
+    int lowestMoveCount = 0;
     
     ClientProxy* cp = getClientProxy(1);
     if (cp != NULL)
     {
-        ret = cp->getUnprocessedMoveList().getMoveCount();
+        lowestMoveCount = cp->getUnprocessedMoveList().getMoveCount();
     }
     
     for (auto& pair : _playerIDToClientMap)
     {
         int moveCount = pair.second->getUnprocessedMoveList().getMoveCount();
-        if (moveCount < ret)
+        if (moveCount < lowestMoveCount)
         {
-            ret = moveCount;
+            lowestMoveCount = moveCount;
         }
     }
     
-    return ret;
+    uint32_t expectedMoveIndex = getNumMovesProcessed();
+    int validMoveCount = 0;
+    for (int i = 0; i < lowestMoveCount; ++i)
+    {
+        bool isMoveValid = true;
+        for (auto& pair : _playerIDToClientMap)
+        {
+            ClientProxy* cp = pair.second;
+            assert(cp != NULL);
+
+            MoveList& ml = cp->getUnprocessedMoveList();
+            Move* m = ml.getMoveAtIndex(i);
+            assert(m != NULL);
+
+            if (expectedMoveIndex != m->getIndex())
+            {
+                isMoveValid = false;
+                break;
+            }
+        }
+
+        if (isMoveValid)
+        {
+            ++validMoveCount;
+            ++expectedMoveIndex;
+        }
+    }
+    
+    assert(lowestMoveCount == validMoveCount);
+    
+    return validMoveCount;
 }
 
 uint8_t NetworkServer::getNumClientsConnected()
@@ -233,6 +263,11 @@ void NetworkServer::onMoveProcessed()
 uint32_t NetworkServer::getNumMovesProcessed()
 {
     return _numMovesProcessed;
+}
+
+const std::map<int, ClientProxy*>& NetworkServer::playerIDToClientMap()
+{
+    return _playerIDToClientMap;
 }
 
 void NetworkServer::sendPacket(const OutputMemoryBitStream& ombs, SocketAddress* fromAddress)
