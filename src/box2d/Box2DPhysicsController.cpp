@@ -33,9 +33,9 @@ void Box2DPhysicsController::updatePoseFromBody()
     b2Vec2 bodyVelocity = _body->GetLinearVelocity();
     b2Vec2 bodyPosition = _body->GetPosition();
     
-    _entity->setVelocity(bodyVelocity.x, bodyVelocity.y);
-    _entity->setPosition(bodyPosition.x, bodyPosition.y);
-    _entity->setAngle(_body->GetAngle());
+    _entity->pose()._velocity.set(bodyVelocity.x, bodyVelocity.y);
+    _entity->pose()._position.set(bodyPosition.x, bodyPosition.y);
+    _entity->pose()._angle = _body->GetAngle();
 }
 
 void Box2DPhysicsController::updateBodyFromPose()
@@ -45,11 +45,11 @@ void Box2DPhysicsController::updateBodyFromPose()
         return;
     }
     
-    b2Vec2 bodyVelocity = b2Vec2(_entity->getVelocity()._x, _entity->getVelocity()._y);
-    b2Vec2 bodyPosition = b2Vec2(_entity->getPosition()._x, _entity->getPosition()._y);
+    b2Vec2 bodyVelocity = b2Vec2(_entity->velocity()._x, _entity->velocity()._y);
+    b2Vec2 bodyPosition = b2Vec2(_entity->position()._x, _entity->position()._y);
     
     _body->SetLinearVelocity(bodyVelocity);
-    _body->SetTransform(bodyPosition, _entity->getAngle());
+    _body->SetTransform(bodyPosition, _entity->angle());
     
     if (_isBodyFacingLeft != _entity->isFacingLeft() ||
         _bodyWidth != _entity->width() ||
@@ -93,7 +93,7 @@ void Box2DPhysicsController::initPhysics(b2World& world)
     assert(_body == NULL);
     
     b2BodyDef bodyDef;
-    bodyDef.position.Set(_entity->getPosition()._x, _entity->getPosition()._y);
+    bodyDef.position.Set(_entity->position()._x, _entity->position()._y);
     bodyDef.type = IS_BIT_SET(_entity->entityDef()._bodyFlags, BODF_STATIC) ? b2_staticBody : b2_dynamicBody;
     bodyDef.fixedRotation = IS_BIT_SET(_entity->entityDef()._bodyFlags, BODF_FIXED_ROTATION);
     bodyDef.userData.pointer = (uintptr_t)this;

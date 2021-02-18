@@ -80,36 +80,12 @@ uint16_t Entity::stateTime()
     return _state._stateTime;
 }
 
-void Entity::setPosition(Vector2 position)
-{
-    setPosition(position._x, position._y);
-}
-
-void Entity::setPosition(float x, float y)
-{
-    _pose._position.set(x, y);
-    
-    _physicsController->updateBodyFromPose();
-}
-
-Vector2& Entity::getPosition()
+Vector2& Entity::position()
 {
     return _pose._position;
 }
 
-void Entity::setVelocity(Vector2 velocity)
-{
-    setVelocity(velocity._x, velocity._y);
-}
-
-void Entity::setVelocity(float x, float y)
-{
-    _pose._velocity.set(x, y);
-    
-    _physicsController->updateBodyFromPose();
-}
-
-Vector2& Entity::getVelocity()
+Vector2& Entity::velocity()
 {
     return _pose._velocity;
 }
@@ -124,12 +100,7 @@ float Entity::height()
     return _entityDef._height;
 }
 
-void Entity::setAngle(float angle)
-{
-    _pose._angle = angle;
-}
-
-float Entity::getAngle()
+float Entity::angle()
 {
     return _pose._angle;
 }

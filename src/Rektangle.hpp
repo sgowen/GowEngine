@@ -39,6 +39,11 @@ struct Rektangle
     {
         return _lowerLeft._x;
     }
+    
+    float centerX()
+    {
+        return _lowerLeft._x + _width / 2;
+    }
 
     float right()
     {
@@ -48,6 +53,11 @@ struct Rektangle
     float bottom()
     {
         return _lowerLeft._y;
+    }
+    
+    float centerY()
+    {
+        return _lowerLeft._y + _height / 2;
     }
 
     float top()

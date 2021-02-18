@@ -139,6 +139,7 @@ void EntityManager::initWithJSON(const char* json)
                 fixtureDef._friction = RapidJSONUtil::getFloat(iv, "friction");
                 fixtureDef._flags = RapidJSONUtil::getInteger(iv, "flags");
                 
+                if (iv.HasMember("vertices"))
                 {
                     const Value& iiv = iv["vertices"];
                     assert(iiv.IsArray());

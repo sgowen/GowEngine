@@ -26,7 +26,7 @@ void EntityRenderController::addSprite(SpriteBatcher& sb)
     Entity& e = *_entity;
     TextureRegion tr = ASSETS.findTextureRegion(getTextureMapping(), e.stateTime());
     
-    sb.addSprite(tr, e.getPosition()._x, e.getPosition()._y, e.width(), e.height(), e.getAngle(), e.isFacingLeft());
+    sb.addSprite(tr, e.position()._x, e.position()._y, e.width(), e.height(), e.angle(), e.isFacingLeft());
 }
 
 std::string EntityRenderController::getTextureMapping()
