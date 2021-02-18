@@ -63,9 +63,11 @@ void TopDownPhysicsController::updateBodyFromPose()
     float h = _entity->height();
     
     // TODO, hit box generation needs to come from fixture data entities.json
-    _boundingBox->_lowerLeft.set(x - w / 2, y - h / 2);
-    _boundingBox->_width = w;
-    _boundingBox->_height = h;
+    
+    bool useInset = false;//_entity->entityDef()._fixtures[0]._flags == 1;
+    _boundingBox->_lowerLeft.set(x - w * (useInset ? 0.4f : 0.5f), y - h * (useInset ? 0.4f : 0.5f));
+    _boundingBox->_width = w * (useInset ? 0.8f : 1.0f);
+    _boundingBox->_height = h * (useInset ? 0.8f : 1.0f);
     
     updateBounds();
 }
