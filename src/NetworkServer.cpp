@@ -255,9 +255,9 @@ void NetworkServer::processPacket(InputMemoryBitStream& imbs, SocketAddress* fro
     }
 }
 
-void NetworkServer::onMoveProcessed()
+void NetworkServer::onMovesProcessed(uint8_t moveCount)
 {
-    ++_numMovesProcessed;
+    _numMovesProcessed += moveCount;
 }
 
 uint32_t NetworkServer::getNumMovesProcessed()

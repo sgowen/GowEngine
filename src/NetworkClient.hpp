@@ -45,7 +45,7 @@ public:
     static NetworkClient* getInstance();
     static void destroy();
     
-    void processIncomingPackets();
+    NetworkClientState processIncomingPackets();
     void sendOutgoingPackets();
     void requestToAddLocalPlayer();
     void requestToDropLocalPlayer(uint8_t index);

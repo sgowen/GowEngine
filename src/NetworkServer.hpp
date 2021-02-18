@@ -51,7 +51,7 @@ public:
     bool connect();
     EntityRegistry& getEntityRegistry();
     void processPacket(InputMemoryBitStream& imbs, SocketAddress* fromAddress);
-    void onMoveProcessed();
+    void onMovesProcessed(uint8_t moveCount);
     uint32_t getNumMovesProcessed();
     const std::map<int, ClientProxy*>& playerIDToClientMap();
     

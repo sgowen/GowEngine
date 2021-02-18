@@ -47,7 +47,7 @@ void NetworkClient::destroy()
     s_instance = NULL;
 }
 
-void NetworkClient::processIncomingPackets()
+NetworkClientState NetworkClient::processIncomingPackets()
 {
     _hasReceivedNewState = false;
     
@@ -60,6 +60,8 @@ void NetworkClient::processIncomingPackets()
     {
         _state = NWCS_DISCONNECTED;
     }
+    
+    return _state;
 }
 
 void NetworkClient::sendOutgoingPackets()
@@ -344,13 +346,12 @@ void NetworkClient::handleStatePacket(InputMemoryBitStream& imbs)
 
 void NetworkClient::updateSendingInputPacket()
 {
-    MoveList& moveList = _getMoveListFunc();
-    
     OutputMemoryBitStream ombs;
     ombs.write<uint8_t, 4>(static_cast<uint8_t>(NWPT_INPUT));
     
     _deliveryNotificationManager.writeState(ombs);
     
+    MoveList& moveList = _getMoveListFunc();
     ombs.write(moveList.hasMoves());
     if (moveList.hasMoves())
     {
@@ -376,13 +377,6 @@ void NetworkClient::updateSendingInputPacket()
                 
                 moveToCopy = &(*moveItr);
             }
-        }
-    }
-    else
-    {
-        if (SOCKET_UTIL.isLoggingEnabled())
-        {
-            LOG("Client has no moves this frame");
         }
     }
     
