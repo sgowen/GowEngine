@@ -60,14 +60,14 @@ void Entity::update()
     _controller->update();
 }
 
-void Entity::message(uint16_t message, void* data)
+void Entity::message(uint16_t message)
 {
     if (_isRequestingDeletion)
     {
         return;
     }
     
-    _controller->onMessage(message, data);
+    _controller->onMessage(message);
 }
 
 EntityDef& Entity::entityDef()

@@ -23,7 +23,7 @@ public:
     virtual ~EntityController() {}
     
     virtual void update() {}
-    virtual void onMessage(uint16_t message, void* data = NULL) {}
+    virtual void onMessage(uint16_t message) {}
     
 protected:
     Entity* _entity;

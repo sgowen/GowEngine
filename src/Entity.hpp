@@ -113,7 +113,7 @@ public:
     ~Entity();
     
     void update();
-    void message(uint16_t message, void* data = NULL);
+    void message(uint16_t message);
     uint16_t stateTime();
     Vector2& position();
     Vector2& velocity();

@@ -34,11 +34,7 @@ void EntityNetworkController::read(InputMemoryBitStream& imbs)
     if (stateBit)
     {
         MemoryBitStreamUtil::read(imbs, e._pose._position._x, e._pose._position._y);
-        
-        if (e.isDynamic())
-        {
-            MemoryBitStreamUtil::read(imbs, e._pose._velocity._x, e._pose._velocity._y);
-        }
+        MemoryBitStreamUtil::read(imbs, e._pose._velocity._x, e._pose._velocity._y);
         
         if (!e.isFixedRotation())
         {
@@ -56,17 +52,14 @@ void EntityNetworkController::read(InputMemoryBitStream& imbs)
         e._poseCache = e._pose;
     }
     
-    if (e.isDynamic())
+    imbs.read(stateBit);
+    if (stateBit)
     {
-        imbs.read(stateBit);
-        if (stateBit)
-        {
-            imbs.read(e._state._state);
-            imbs.read(e._state._stateFlags);
-            imbs.read(e._state._stateTime);
-            
-            e._stateCache = e._state;
-        }
+        imbs.read(e._state._state);
+        imbs.read(e._state._stateFlags);
+        imbs.read(e._state._stateTime);
+        
+        e._stateCache = e._state;
     }
 }
 
@@ -81,11 +74,7 @@ uint8_t EntityNetworkController::write(OutputMemoryBitStream& ombs, uint8_t dirt
     if (pose)
     {
         MemoryBitStreamUtil::write(ombs, e._pose._position._x, e._pose._position._y);
-        
-        if (e.isDynamic())
-        {
-            MemoryBitStreamUtil::write(ombs, e._pose._velocity._x, e._pose._velocity._y);
-        }
+        MemoryBitStreamUtil::write(ombs, e._pose._velocity._x, e._pose._velocity._y);
         
         if (!e.isFixedRotation())
         {
@@ -103,18 +92,15 @@ uint8_t EntityNetworkController::write(OutputMemoryBitStream& ombs, uint8_t dirt
         ret |= Entity::RSTF_POSE;
     }
     
-    if (e.isDynamic())
+    bool state = IS_BIT_SET(dirtyState, Entity::RSTF_STATE);
+    ombs.write(state);
+    if (state)
     {
-        bool state = IS_BIT_SET(dirtyState, Entity::RSTF_STATE);
-        ombs.write(state);
-        if (state)
-        {
-            ombs.write(e._state._state);
-            ombs.write(e._state._stateFlags);
-            ombs.write(e._state._stateTime);
-            
-            ret |= Entity::RSTF_STATE;
-        }
+        ombs.write(e._state._state);
+        ombs.write(e._state._stateFlags);
+        ombs.write(e._state._stateTime);
+        
+        ret |= Entity::RSTF_STATE;
     }
     
     return ret;
