@@ -467,9 +467,9 @@ GLuint OpenGLWrapper::compileShader(const GLenum type, const uint8_t* source, co
         glDeleteShader(ret);
 
         free(errorLog);
-        
-        assert(false);
     }
+    
+    assert(compileStatus == GL_TRUE);
 
     return ret;
 }

@@ -39,12 +39,9 @@ std::string EntityRenderController::getTextureMapping(uint8_t state)
 {
     Entity& e = *_entity;
     auto q = e.entityDef()._textureMappings.find(state);
-    if (q != e.entityDef()._textureMappings.end())
-    {
-        return q->second;
-    }
+    assert (q != e.entityDef()._textureMappings.end());
     
-    assert(false);
+    return q->second;
 }
 
 uint16_t EntityRenderController::getSoundMapping(uint8_t state)

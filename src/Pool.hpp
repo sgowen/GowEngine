@@ -10,6 +10,7 @@
 
 #include "GowUtil.hpp"
 
+#include <assert.h>
 #include <vector>
 #include <algorithm>
 

@@ -13,6 +13,8 @@
 #include "Entity.hpp"
 #include "DeliveryNotificationManager.hpp"
 
+#include <assert.h>
+
 ReplicationManagerTransmissionData::ReplicationManagerTransmissionData() :
 _replicationManagerServer(NULL),
 _entityRegistry(NULL),

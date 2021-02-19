@@ -16,6 +16,8 @@
 #include "Entity.hpp"
 #include "EntityNetworkController.hpp"
 
+#include <assert.h>
+
 ReplicationManagerServer::ReplicationManagerServer(EntityRegistry& entityRegistry) :
 _entityRegistry(entityRegistry)
 {

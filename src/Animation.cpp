@@ -90,6 +90,5 @@ uint16_t Animation::getFrameIndex(uint16_t stateTime)
         stateTime -= frameTime;
     }
 
-    assert(false);
     return 0;
 }

@@ -184,14 +184,10 @@ std::map<uint32_t, EntityLayoutDef>& EntityLayoutManager::getEntityLayouts()
 EntityLayoutDef& EntityLayoutManager::findEntityLayoutDef(uint32_t key)
 {
     auto q = _entityLayoutMap.find(key);
-    if (q != _entityLayoutMap.end())
-    {
-        EntityLayoutDef& eld = q->second;
 
-        return eld;
-    }
-    
-    assert(false);
+    assert(q != _entityLayoutMap.end());
+
+    return q->second;
 }
 
 FILE* EntityLayoutManager::openFile(const char* path, const char* mode)

@@ -234,6 +234,8 @@ void Assets::initWithJSON(const char* json)
 
 TextureRegion& Assets::findTextureRegion(std::string key, uint16_t stateTime)
 {
+    TextureRegion* ret = NULL;
+    
     std::vector<TextureDescriptor>& tds = getTextureDescriptors();
     for (TextureDescriptor& td : tds)
     {
@@ -242,9 +244,8 @@ TextureRegion& Assets::findTextureRegion(std::string key, uint16_t stateTime)
             auto q = textureRegions.find(key);
             if (q != textureRegions.end())
             {
-                TextureRegion& tr = q->second;
-
-                return tr;
+                ret = &q->second;
+                break;
             }
         }
         
@@ -253,18 +254,20 @@ TextureRegion& Assets::findTextureRegion(std::string key, uint16_t stateTime)
             auto q = animations.find(key);
             if (q != animations.end())
             {
-                Animation& a = q->second;
-
-                return a.getTextureRegion(stateTime);
+                ret = &q->second.getTextureRegion(stateTime);
             }
         }
     }
     
-    assert(false);
+    assert(ret != NULL);
+    
+    return *ret;
 }
 
 TextureDescriptor& Assets::findTextureDescriptor(std::string key)
 {
+    TextureDescriptor* ret = NULL;
+    
     std::vector<TextureDescriptor>& tds = getTextureDescriptors();
     for (TextureDescriptor& td : tds)
     {
@@ -273,7 +276,7 @@ TextureDescriptor& Assets::findTextureDescriptor(std::string key)
             auto q = textureRegions.find(key);
             if (q != textureRegions.end())
             {
-                return td;
+                ret = &td;
             }
         }
         
@@ -282,12 +285,14 @@ TextureDescriptor& Assets::findTextureDescriptor(std::string key)
             auto q = animations.find(key);
             if (q != animations.end())
             {
-                return td;
+                ret = &td;
             }
         }
     }
     
-    assert(false);
+    assert(ret != NULL);
+    
+    return *ret;
 }
 
 std::vector<ShaderDescriptor>& Assets::getShaderDescriptors()

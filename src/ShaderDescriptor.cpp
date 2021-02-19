@@ -28,13 +28,18 @@ std::vector<ShaderAttribute>& ShaderDescriptor::getAttributes()
 
 ShaderUniform& ShaderDescriptor::uniform(std::string name)
 {
+    ShaderUniform* ret = NULL;
+    
     for (auto& su : _uniforms)
     {
         if (su._name == name)
         {
-            return su;
+            ret = &su;
+            break;
         }
     }
     
-    assert(false);
+    assert(ret != NULL);
+    
+    return *ret;
 }

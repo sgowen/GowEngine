@@ -14,7 +14,7 @@
 #include "MemoryBitStreamUtil.hpp"
 #include "Macros.hpp"
 #include "EntityPhysicsController.hpp"
-#include "Box2DPhysicsController.hpp"
+#include "box2d/Box2DPhysicsController.hpp"
 
 IMPL_EntityController_create(EntityNetworkController, EntityNetworkController)
 
