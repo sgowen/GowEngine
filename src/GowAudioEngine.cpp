@@ -190,11 +190,16 @@ void GowAudioEngine::playSound(uint16_t soundID, float volume, bool isLooping)
         return;
     }
     
-    SoundWrapper* soundWrapper = findSound(soundID);
-    Sound* sound = soundWrapper->getSoundInstance();
+    SoundWrapper* sw = findSound(soundID);
+    if (sw == NULL)
+    {
+        return;
+    }
+    
+    Sound* s = sw->getSoundInstance();
     float volumeClamped = CLAMP(volume, 0, 1);
     
-    _soundsToPlay.push_back(sound);
+    _soundsToPlay.push_back(s);
     _soundsVolumes.push_back(volumeClamped);
     _soundsLooping.push_back(isLooping);
 }
@@ -206,14 +211,18 @@ void GowAudioEngine::stopSound(uint16_t soundID)
         return;
     }
     
-    SoundWrapper* soundWrapper = findSound(soundID);
-    
-    for (int j = 0; j < soundWrapper->getNumInstances(); ++j)
+    SoundWrapper* sw = findSound(soundID);
+    if (sw == NULL)
     {
-        Sound* sound = soundWrapper->getSoundInstance();
-        if (sound->isPlaying())
+        return;
+    }
+    
+    for (int j = 0; j < sw->getNumInstances(); ++j)
+    {
+        Sound* s = sw->getSoundInstance();
+        if (s->isPlaying())
         {
-            _soundsToStop.push_back(sound);
+            _soundsToStop.push_back(s);
             
             return;
         }
@@ -227,14 +236,18 @@ void GowAudioEngine::pauseSound(uint16_t soundID)
         return;
     }
     
-    SoundWrapper* soundWrapper = findSound(soundID);
-    
-    for (int j = 0; j < soundWrapper->getNumInstances(); ++j)
+    SoundWrapper* sw = findSound(soundID);
+    if (sw == NULL)
     {
-        Sound* sound = soundWrapper->getSoundInstance();
-        if (sound->isPlaying())
+        return;
+    }
+    
+    for (int j = 0; j < sw->getNumInstances(); ++j)
+    {
+        Sound* s = sw->getSoundInstance();
+        if (s->isPlaying())
         {
-            _soundsToPause.push_back(sound);
+            _soundsToPause.push_back(s);
             
             return;
         }
@@ -248,14 +261,18 @@ void GowAudioEngine::resumeSound(uint16_t soundID)
         return;
     }
     
-    SoundWrapper* soundWrapper = findSound(soundID);
-    
-    for (int j = 0; j < soundWrapper->getNumInstances(); ++j)
+    SoundWrapper* sw = findSound(soundID);
+    if (sw == NULL)
     {
-        Sound* sound = soundWrapper->getSoundInstance();
-        if (sound->isPaused())
+        return;
+    }
+    
+    for (int j = 0; j < sw->getNumInstances(); ++j)
+    {
+        Sound* s = sw->getSoundInstance();
+        if (s->isPaused())
         {
-            _soundsToResume.push_back(sound);
+            _soundsToResume.push_back(s);
             
             return;
         }
@@ -440,13 +457,15 @@ void GowAudioEngine::setSoundsDisabled(bool value)
 
 SoundWrapper* GowAudioEngine::findSound(uint16_t soundID)
 {
+    SoundWrapper* ret = NULL;
+    
     auto q = _sounds.find(soundID);
+    if (q != _sounds.end())
+    {
+        ret = q->second;
+    }
     
-    assert(q != _sounds.end());
-    
-    SoundWrapper* sound = q->second;
-    
-    return sound;
+    return ret;
 }
 
 GowAudioEngine::GowAudioEngine() :
