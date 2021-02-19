@@ -38,7 +38,7 @@ public:
     
     void initWithJSONFile(const char* filePath);
     void initWithJSON(const char* json);
-    Entity* createEntity(EntityInstanceDef& eid);
+    Entity* createEntity(EntityInstanceDef eid);
     EntityDef& getEntityDef(uint32_t fourCCName);
     
     void registerController(std::string name, EntityControllerCreationFunc func);

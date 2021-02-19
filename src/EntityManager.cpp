@@ -175,7 +175,7 @@ void EntityManager::initWithJSON(const char* json)
     }
 }
 
-Entity* EntityManager::createEntity(EntityInstanceDef& eid)
+Entity* EntityManager::createEntity(EntityInstanceDef eid)
 {
     EntityDef& ed = getEntityDef(eid._key);
     return new Entity(ed, eid);
