@@ -14,7 +14,7 @@
 #include "MemoryBitStreamUtil.hpp"
 #include "Macros.hpp"
 #include "EntityPhysicsController.hpp"
-#include "box2d/Box2DPhysicsController.hpp"
+#include "TopDownPhysicsController.hpp"
 
 IMPL_EntityController_create(EntityNetworkController, EntityNetworkController)
 
@@ -45,7 +45,7 @@ void EntityNetworkController::read(InputMemoryBitStream& imbs)
             imbs.read(e._pose._angle);
         }
         
-        if (e.physicsController()->getRTTI().isDerivedFrom(Box2DPhysicsController::rtti))
+        if (!e.physicsController()->getRTTI().isDerivedFrom(TopDownPhysicsController::rtti))
         {
             imbs.read<uint8_t, 4>(e._pose._numGroundContacts);
             imbs.read(e._pose._isFacingLeft);
@@ -90,7 +90,7 @@ uint8_t EntityNetworkController::write(OutputMemoryBitStream& ombs, uint8_t dirt
             ombs.write(e._pose._angle);
         }
         
-        if (e.physicsController()->getRTTI().isDerivedFrom(Box2DPhysicsController::rtti))
+        if (!e.physicsController()->getRTTI().isDerivedFrom(TopDownPhysicsController::rtti))
         {
             ombs.write<uint8_t, 4>(e._pose._numGroundContacts);
             ombs.write(e._pose._isFacingLeft);
