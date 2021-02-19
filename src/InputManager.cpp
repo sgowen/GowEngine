@@ -16,26 +16,21 @@
 
 void InputManager::onCursorInput(CursorEventType type, float x, float y, bool isAlt)
 {
-    if (_isLoggingEnabled)
-    {
-        LOG("onCursorInput %d %f %f %d", type, x, y, isAlt);
-    }
-    
     CursorEvent* e = _poolCursor.newObject();
     e->_type = type;
     e->_pos.set(x, y);
     e->_isAlt = isAlt;
     
     _poolCursor.add(e);
+    
+    if (_isLoggingEnabled)
+    {
+        LOG("onCursorInput %d %f %f %d", type, x, y, isAlt);
+    }
 }
 
 void InputManager::onGamepadInput(uint8_t button, uint8_t index, float x, float y)
 {
-    if (_isLoggingEnabled)
-    {
-        LOG("onGamepadInput %d %d %f %f", button, index, x, y);
-    }
-    
     if (index >= NUM_SUPPORTED_GAMEPADS)
     {
         if (_isLoggingEnabled)
@@ -45,38 +40,42 @@ void InputManager::onGamepadInput(uint8_t button, uint8_t index, float x, float 
         return;
     }
     
-    bool wasLastEventDown = false;
+    bool wasLastEventUp = false;
     
     auto q = _lastKnownGamepadButtonStates[index].find(button);
-    
     if (q != _lastKnownGamepadButtonStates[index].end())
     {
         bool wasUp = q->second;
-        wasLastEventDown = !wasUp;
+        wasLastEventUp = wasUp;
     }
     
     float sanitizedX = sanitizeCloseToZeroValue(x, 0.25f);
     float sanitizedY = sanitizeCloseToZeroValue(y, 0.25f);
-    bool isUp = fabsf(sanitizedX) == 0;
+    bool isUp = fabsf(sanitizedX) == 0 && fabsf(sanitizedY) == 0;
     _lastKnownGamepadButtonStates[index][button] = isUp;
     
+    if (wasLastEventUp && isUp)
+    {
+        return;
+    }
+    
     GamepadEvent* e = _poolGamepad.newObject();
-    e->_type = isUp ? GPET_UP : wasLastEventDown ? GPET_HELD : GPET_DOWN;
+    e->_type = isUp ? GPET_UP : wasLastEventUp ? GPET_DOWN : GPET_HELD;
     e->_button = button;
     e->_index = index;
     e->_x = sanitizedX;
     e->_y = sanitizedY;
     
     _poolGamepad.add(e);
+    
+    if (_isLoggingEnabled)
+    {
+        LOG("onGamepadInput %d %d %f %f", button, index, x, y);
+    }
 }
 
 void InputManager::onKeyboardInput(uint16_t key, bool isUp)
 {
-    if (_isLoggingEnabled)
-    {
-        LOG("onKeyboardInput %d %d", key, isUp);
-    }
-    
     if (!isKeySupported(key))
     {
         if (_isLoggingEnabled)
@@ -105,6 +104,11 @@ void InputManager::onKeyboardInput(uint16_t key, bool isUp)
     e->_isChar = isKeySuitableForTextInput(key);
     
     _poolKeyboard.add(e);
+    
+    if (_isLoggingEnabled)
+    {
+        LOG("onKeyboardInput %d %d", key, isUp);
+    }
 }
 
 void InputManager::process()
