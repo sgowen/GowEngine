@@ -43,7 +43,6 @@ void EntityManager::initWithJSON(const char* json)
     
     Document d;
     d.Parse<kParseStopWhenDoneFlag>(json);
-    
     assert(d.IsObject());
     for (Value::ConstMemberIterator i = d.MemberBegin(); i != d.MemberEnd(); ++i)
     {
@@ -70,7 +69,7 @@ void EntityManager::initWithJSON(const char* json)
             for (Value::ConstMemberIterator i = v.MemberBegin(); i != v.MemberEnd(); ++i)
             {
                 std::string name = i->name.GetString();
-                int nameVal = StringUtil::stringToNumber<int>(name);
+                uint32_t nameVal = StringUtil::stringToNumber<uint32_t>(name);
                 uint8_t state = nameVal;
                 std::string value = i->value.GetString();
                 textureMappings.insert(std::make_pair(state, value));
@@ -93,7 +92,7 @@ void EntityManager::initWithJSON(const char* json)
             for (Value::ConstMemberIterator i = v.MemberBegin(); i != v.MemberEnd(); ++i)
             {
                 std::string name = i->name.GetString();
-                int nameVal = StringUtil::stringToNumber<int>(name);
+                uint32_t nameVal = StringUtil::stringToNumber<uint32_t>(name);
                 uint8_t state = nameVal;
                 assert(i->value.IsUint());
                 uint16_t soundID = i->value.GetUint();
@@ -118,7 +117,7 @@ void EntityManager::initWithJSON(const char* json)
                     soundCollection.push_back(iv.GetUint());
                 }
                 std::string name = i->name.GetString();
-                int nameVal = StringUtil::stringToNumber<int>(name);
+                uint32_t nameVal = StringUtil::stringToNumber<uint32_t>(name);
                 uint8_t state = nameVal;
                 soundRandomMappings.insert(std::make_pair(state, soundCollection));
             }
@@ -137,7 +136,7 @@ void EntityManager::initWithJSON(const char* json)
                 fixtureDef._restitution = RapidJSONUtil::getFloat(iv, "restitution");
                 fixtureDef._density = RapidJSONUtil::getFloat(iv, "density");
                 fixtureDef._friction = RapidJSONUtil::getFloat(iv, "friction");
-                fixtureDef._flags = RapidJSONUtil::getInteger(iv, "flags");
+                fixtureDef._flags = RapidJSONUtil::getInt(iv, "flags");
                 
                 if (iv.HasMember("vertices"))
                 {
@@ -167,11 +166,26 @@ void EntityManager::initWithJSON(const char* json)
                 fixtures.push_back(fixtureDef);
             }
         }
-        int bodyFlags = RapidJSONUtil::getInteger(iv, "bodyFlags");
-        int width = RapidJSONUtil::getInteger(iv, "width");
-        int height = RapidJSONUtil::getInteger(iv, "height");
+        uint8_t bodyFlags = RapidJSONUtil::getUInt(iv, "bodyFlags");
+        uint8_t width = RapidJSONUtil::getUInt(iv, "width");
+        uint8_t height = RapidJSONUtil::getUInt(iv, "height");
         
-        _entityDescriptorsMap.emplace(key, EntityDef{key, name, keyName, controller, networkController, physicsController, renderController, textureMappings, soundMappings, soundRandomMappings, fixtures, bodyFlags, width, height});
+        Config cfg;
+        if (iv.HasMember("data"))
+        {
+            std::map<std::string, std::string> keyValues;
+            const Value& v = iv["data"];
+            assert(v.IsObject());
+            for (Value::ConstMemberIterator i = v.MemberBegin(); i != v.MemberEnd(); ++i)
+            {
+                assert(i->value.IsString());
+                
+                keyValues[i->name.GetString()] = i->value.GetString();
+            }
+            cfg.initWithKeyValues(keyValues);
+        }
+        
+        _entityDescriptorsMap.emplace(key, EntityDef{key, name, keyName, controller, networkController, physicsController, renderController, textureMappings, soundMappings, soundRandomMappings, fixtures, bodyFlags, width, height, cfg});
     }
 }
 

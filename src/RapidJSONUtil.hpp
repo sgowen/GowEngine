@@ -16,7 +16,6 @@
 class RapidJSONUtil
 {
 public:
-    // TODO, convert to template method, see OutputMemoryBitStream
     static std::string getString(const rapidjson::Value& v, const char* name, std::string defaultValue = "")
     {
         return v.HasMember(name) ? v[name].GetString() : defaultValue;
@@ -27,12 +26,12 @@ public:
         return v.HasMember(name) ? v[name].GetFloat() : defaultValue;
     }
     
-    static int getInteger(const rapidjson::Value& v, const char* name, int defaultValue = 0)
+    static int getInt(const rapidjson::Value& v, const char* name, int defaultValue = 0)
     {
         return v.HasMember(name) ? v[name].GetInt() : defaultValue;
     }
     
-    static uint32_t getUnsignedInteger(const rapidjson::Value& v, const char* name, uint32_t defaultValue = 0)
+    static uint32_t getUInt(const rapidjson::Value& v, const char* name, uint32_t defaultValue = 0)
     {
         return v.HasMember(name) ? v[name].GetUint() : defaultValue;
     }

@@ -94,8 +94,8 @@ void Box2DPhysicsController::initPhysics(b2World& world)
     
     b2BodyDef bodyDef;
     bodyDef.position.Set(_entity->position()._x, _entity->position()._y);
-    bodyDef.type = IS_BIT_SET(_entity->entityDef()._bodyFlags, BODF_STATIC) ? b2_staticBody : b2_dynamicBody;
-    bodyDef.fixedRotation = IS_BIT_SET(_entity->entityDef()._bodyFlags, BODF_FIXED_ROTATION);
+    bodyDef.type = _entity->isStatic() ? b2_staticBody : b2_dynamicBody;
+    bodyDef.fixedRotation = _entity->isFixedRotation();
     bodyDef.userData.pointer = (uintptr_t)this;
     _body = world.CreateBody(&bodyDef);
     

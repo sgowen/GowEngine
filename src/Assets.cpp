@@ -59,9 +59,9 @@ void Assets::initWithJSON(const char* json)
             const Value& iv = v[i];
             assert(iv.IsObject());
             
-            uint16_t soundID = RapidJSONUtil::getInteger(iv, "soundID");
+            uint16_t soundID = RapidJSONUtil::getUInt(iv, "soundID");
             std::string filePath = RapidJSONUtil::getString(iv, "filePath");
-            int numInstances = RapidJSONUtil::getInteger(iv, "numInstances");
+            uint8_t numInstances = RapidJSONUtil::getUInt(iv, "numInstances");
             
             assert(std::find(soundIDsAdded.begin(), soundIDsAdded.end(), soundID) == soundIDsAdded.end());
             
@@ -115,7 +115,7 @@ void Assets::initWithJSON(const char* json)
                     const Value& iv = v[i];
                     std::string name = RapidJSONUtil::getString(iv, "name");
                     std::string type = RapidJSONUtil::getString(iv, "type");
-                    int count = RapidJSONUtil::getInteger(iv, "count", 1);
+                    int count = RapidJSONUtil::getInt(iv, "count", 1);
                     
                     attributes.emplace_back(name, type, count);
                 }
@@ -146,8 +146,8 @@ void Assets::initWithJSON(const char* json)
             
             if (iv.HasMember("mappings"))
             {
-                int textureWidth = RapidJSONUtil::getInteger(iv, "textureWidth", 2048);
-                int textureHeight = RapidJSONUtil::getInteger(iv, "textureHeight", 2048);
+                int textureWidth = RapidJSONUtil::getInt(iv, "textureWidth", 2048);
+                int textureHeight = RapidJSONUtil::getInt(iv, "textureHeight", 2048);
                 
                 TextureDescriptor& td = _textureDescriptors.back();
                 std::map<std::string, Animation>& animations = td.getAnimations();
@@ -161,17 +161,17 @@ void Assets::initWithJSON(const char* json)
                     assert(iv.IsObject());
                     
                     std::string key = i->name.GetString();
-                    int x = RapidJSONUtil::getInteger(iv, "x");
-                    int y = RapidJSONUtil::getInteger(iv, "y");
-                    int regionWidth = RapidJSONUtil::getInteger(iv, "regionWidth");
-                    int regionHeight = RapidJSONUtil::getInteger(iv, "regionHeight");
+                    int x = RapidJSONUtil::getInt(iv, "x");
+                    int y = RapidJSONUtil::getInt(iv, "y");
+                    int regionWidth = RapidJSONUtil::getInt(iv, "regionWidth");
+                    int regionHeight = RapidJSONUtil::getInt(iv, "regionHeight");
                     
                     if (iv.HasMember("frameTimes") || iv.HasMember("frameTime"))
                     {
                         bool looping = RapidJSONUtil::getBool(iv, "looping", true);
-                        int firstLoopingFrame = RapidJSONUtil::getInteger(iv, "firstLoopingFrame");
-                        int xPadding = RapidJSONUtil::getInteger(iv, "xPadding");
-                        int yPadding = RapidJSONUtil::getInteger(iv, "yPadding");
+                        int firstLoopingFrame = RapidJSONUtil::getInt(iv, "firstLoopingFrame");
+                        int xPadding = RapidJSONUtil::getInt(iv, "xPadding");
+                        int yPadding = RapidJSONUtil::getInt(iv, "yPadding");
                         
                         auto q = animations.find(key);
                         assert(q == animations.end());
@@ -193,8 +193,8 @@ void Assets::initWithJSON(const char* json)
                         }
                         else
                         {
-                            uint16_t frameTime = RapidJSONUtil::getInteger(iv, "frameTime");
-                            numFrames = RapidJSONUtil::getInteger(iv, "numFrames");
+                            uint16_t frameTime = RapidJSONUtil::getUInt(iv, "frameTime");
+                            numFrames = RapidJSONUtil::getInt(iv, "numFrames");
                             
                             frameTimes.reserve(numFrames);
                             for (int i = 0; i < numFrames; ++i)
@@ -207,8 +207,8 @@ void Assets::initWithJSON(const char* json)
                         int animationHeight = regionHeight;
                         if (iv.HasMember("animationWidth") && iv.HasMember("animationHeight"))
                         {
-                            animationWidth = RapidJSONUtil::getInteger(iv, "animationWidth");
-                            animationHeight = RapidJSONUtil::getInteger(iv, "animationHeight");
+                            animationWidth = RapidJSONUtil::getInt(iv, "animationWidth");
+                            animationHeight = RapidJSONUtil::getInt(iv, "animationHeight");
                         }
                         
                         animations.emplace(std::piecewise_construct,

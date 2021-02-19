@@ -52,7 +52,7 @@ void Entity::update()
     
     _physicsController->updatePoseFromBody();
     
-    if (IS_BIT_SET(_entityDef._bodyFlags, BODF_DYNAMIC))
+    if (isDynamic())
     {
         ++_state._stateTime;
     }
@@ -134,6 +134,36 @@ bool Entity::isRequestingDeletion()
 bool Entity::isFacingLeft()
 {
     return _pose._isFacingLeft;
+}
+
+bool Entity::isBody()
+{
+    return _entityDef._bodyFlags > 0;
+}
+
+bool Entity::isLayer()
+{
+    return !isBody();
+}
+
+bool Entity::isStatic()
+{
+    return IS_BIT_SET(_entityDef._bodyFlags, BODF_STATIC);
+}
+
+bool Entity::isDynamic()
+{
+    return IS_BIT_SET(_entityDef._bodyFlags, BODF_DYNAMIC);
+}
+
+bool Entity::isPlayer()
+{
+    return IS_BIT_SET(_entityDef._bodyFlags, BODF_PLAYER);
+}
+
+bool Entity::isFixedRotation()
+{
+    return IS_BIT_SET(_entityDef._bodyFlags, BODF_FIXED_ROTATION);
 }
 
 Entity::Pose& Entity::pose()

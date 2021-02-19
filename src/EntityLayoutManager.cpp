@@ -93,8 +93,8 @@ void EntityLayoutManager::loadEntityLayout(EntityLayoutDef& eld)
             assert(iv.IsObject());
             
             std::string key = RapidJSONUtil::getString(iv, "key");
-            uint32_t x = RapidJSONUtil::getUnsignedInteger(iv, "x");
-            uint32_t y = RapidJSONUtil::getUnsignedInteger(iv, "y");
+            uint32_t x = RapidJSONUtil::getUInt(iv, "x");
+            uint32_t y = RapidJSONUtil::getUInt(iv, "y");
             
             eld._entities.emplace_back(eidm->getNextLayoutEntityID(), StringUtil::fourCharFromString(key), x, y, _isServer);
         }
@@ -113,8 +113,8 @@ void EntityLayoutManager::loadEntityLayout(EntityLayoutDef& eld)
             assert(iv.IsObject());
             
             std::string key = RapidJSONUtil::getString(iv, "key");
-            uint32_t x = RapidJSONUtil::getUnsignedInteger(iv, "x");
-            uint32_t y = RapidJSONUtil::getUnsignedInteger(iv, "y");
+            uint32_t x = RapidJSONUtil::getUInt(iv, "x");
+            uint32_t y = RapidJSONUtil::getUInt(iv, "y");
             
             eld._entitiesNetwork.emplace_back(eidm->getNextNetworkEntityID(), StringUtil::fourCharFromString(key), x, y, _isServer);
         }

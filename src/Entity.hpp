@@ -10,6 +10,7 @@
 
 #include "EntityLayoutManager.hpp"
 #include "Vector2.hpp"
+#include "Config.hpp"
 
 #include <stdint.h>
 #include <string>
@@ -38,7 +39,8 @@ enum BodyFlags
 {
     BODF_STATIC =         1 << 0,
     BODF_DYNAMIC =        1 << 1,
-    BODF_FIXED_ROTATION = 1 << 2
+    BODF_FIXED_ROTATION = 1 << 2,
+    BODF_PLAYER         = 1 << 3
 };
 
 struct EntityDef
@@ -54,9 +56,10 @@ struct EntityDef
     std::map<uint8_t, uint16_t> _soundMappings;
     std::map<uint8_t, std::vector<uint16_t> > _soundRandomMappings;
     std::vector<FixtureDef> _fixtures;
-    int _bodyFlags;
-    int _width;
-    int _height;
+    uint8_t _bodyFlags;
+    uint8_t _width;
+    uint8_t _height;
+    Config _data;
     
     EntityDef(uint32_t key,
               std::string name,
@@ -69,9 +72,10 @@ struct EntityDef
               std::map<uint8_t, uint16_t> soundMappings,
               std::map<uint8_t, std::vector<uint16_t> > soundRandomMappings,
               std::vector<FixtureDef> fixtures,
-              int bodyFlags,
-              int width,
-              int height) :
+              uint8_t bodyFlags,
+              uint8_t width,
+              uint8_t height,
+              Config data) :
     _key(key),
     _name(name),
     _keyName(keyName),
@@ -85,7 +89,8 @@ struct EntityDef
     _fixtures(fixtures),
     _bodyFlags(bodyFlags),
     _width(width),
-    _height(height)
+    _height(height),
+    _data(data)
     {
         // Empty
     }
@@ -118,6 +123,12 @@ public:
     const uint32_t getID();
     bool isGrounded();
     bool isFacingLeft();
+    bool isBody();
+    bool isLayer();
+    bool isStatic();
+    bool isDynamic();
+    bool isPlayer();
+    bool isFixedRotation();
     bool isServer();
     
     EntityDef& entityDef();

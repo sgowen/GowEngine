@@ -30,15 +30,13 @@ void Config::initWithJSONFile(const char* filePath)
 
 void Config::initWithJSON(const char* json)
 {
-    clear();
+    _keyValues.clear();
     
     using namespace rapidjson;
     
     Document d;
     d.Parse<kParseStopWhenDoneFlag>(json);
-    
     assert(d.IsObject());
-    
     for (Value::ConstMemberIterator i = d.MemberBegin(); i != d.MemberEnd(); ++i)
     {
         assert(i->value.IsString());
@@ -47,9 +45,9 @@ void Config::initWithJSON(const char* json)
     }
 }
 
-void Config::clear()
+void Config::initWithKeyValues(std::map<std::string, std::string> keyValues)
 {
-    _keyValues.clear();
+    _keyValues = keyValues;
 }
 
 bool Config::hasValues()
@@ -71,11 +69,19 @@ bool Config::getBool(std::string key)
     return ret;
 }
 
-int Config::getInt(std::string key)
+int32_t Config::getInt(std::string key)
 {
     std::string* val = findValue(key);
     assert(val != NULL);
-    int ret = StringUtil::stringToNumber<int>(*val);
+    int32_t ret = StringUtil::stringToNumber<int32_t>(*val);
+    return ret;
+}
+
+uint32_t Config::getUInt(std::string key)
+{
+    std::string* val = findValue(key);
+    assert(val != NULL);
+    uint32_t ret = StringUtil::stringToNumber<uint32_t>(*val);
     return ret;
 }
 

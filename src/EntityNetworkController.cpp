@@ -35,18 +35,20 @@ void EntityNetworkController::read(InputMemoryBitStream& imbs)
     {
         MemoryBitStreamUtil::read(imbs, e._pose._position._x, e._pose._position._y);
         
-        if (IS_BIT_SET(e._entityDef._bodyFlags, BODF_DYNAMIC))
+        if (e.isDynamic())
         {
             MemoryBitStreamUtil::read(imbs, e._pose._velocity._x, e._pose._velocity._y);
         }
         
-        if (!IS_BIT_SET(e._entityDef._bodyFlags, BODF_FIXED_ROTATION))
+        if (!e.isFixedRotation())
         {
             imbs.read(e._pose._angle);
         }
         
         if (!e.physicsController()->getRTTI().isDerivedFrom(TopDownPhysicsController::rtti))
         {
+            // FIXME, this is a hacky way to determine
+            // that we are using the Box2D physics controller
             imbs.read<uint8_t, 4>(e._pose._numGroundContacts);
             imbs.read(e._pose._isFacingLeft);
         }
@@ -54,7 +56,7 @@ void EntityNetworkController::read(InputMemoryBitStream& imbs)
         e._poseCache = e._pose;
     }
     
-    if (IS_BIT_SET(e._entityDef._bodyFlags, BODF_DYNAMIC))
+    if (e.isDynamic())
     {
         imbs.read(stateBit);
         if (stateBit)
@@ -80,18 +82,20 @@ uint8_t EntityNetworkController::write(OutputMemoryBitStream& ombs, uint8_t dirt
     {
         MemoryBitStreamUtil::write(ombs, e._pose._position._x, e._pose._position._y);
         
-        if (IS_BIT_SET(e._entityDef._bodyFlags, BODF_DYNAMIC))
+        if (e.isDynamic())
         {
             MemoryBitStreamUtil::write(ombs, e._pose._velocity._x, e._pose._velocity._y);
         }
         
-        if (!IS_BIT_SET(e._entityDef._bodyFlags, BODF_FIXED_ROTATION))
+        if (!e.isFixedRotation())
         {
             ombs.write(e._pose._angle);
         }
         
         if (!e.physicsController()->getRTTI().isDerivedFrom(TopDownPhysicsController::rtti))
         {
+            // FIXME, this is a hacky way to determine
+            // that we are using the Box2D physics controller
             ombs.write<uint8_t, 4>(e._pose._numGroundContacts);
             ombs.write(e._pose._isFacingLeft);
         }
@@ -99,7 +103,7 @@ uint8_t EntityNetworkController::write(OutputMemoryBitStream& ombs, uint8_t dirt
         ret |= Entity::RSTF_POSE;
     }
     
-    if (IS_BIT_SET(e._entityDef._bodyFlags, BODF_DYNAMIC))
+    if (e.isDynamic())
     {
         bool state = IS_BIT_SET(dirtyState, Entity::RSTF_STATE);
         ombs.write(state);
