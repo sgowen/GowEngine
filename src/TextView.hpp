@@ -12,36 +12,33 @@
 
 enum TextAlignment
 {
-    TEXA_LEFT,
+    TEXA_LEFT = 0,
     TEXA_CENTER,
     TEXA_RIGHT
 };
 
 enum TextVisibility
 {
-    TEXV_VISIBLE,
-    TEXV_HIDDEN
+    TEXV_HIDDEN = 0,
+    TEXV_VISIBLE
 };
 
 struct TextView
 {
-    TextAlignment _alignment;
     std::string _text;
+    TextAlignment _alignment;
+    float _xWeight;
+    float _yWeight;
+    float _glyphWidthWeight;
     TextVisibility _visibility;
-    bool _hidden;
-    float _x;
-    float _y;
-    float _glyphWidth;
-    float _glyphHeight;
     
-    TextView(TextAlignment alignment = TEXA_LEFT, std::string text = "", TextVisibility visibility = TEXV_VISIBLE, float x = 0, float y = 0, float glyphWidth = 1, float glyphHeight = 1) :
-    _alignment(alignment),
+    TextView(std::string text, TextAlignment ta, float xWeight, float yWeight, float glyphWidthWeight) :
+    _alignment(ta),
     _text(text),
-    _visibility(visibility),
-    _x(x),
-    _y(y),
-    _glyphWidth(glyphWidth),
-    _glyphHeight(glyphHeight)
+    _xWeight(xWeight),
+    _yWeight(yWeight),
+    _glyphWidthWeight(glyphWidthWeight),
+    _visibility(TEXV_VISIBLE)
     {
         // Empty
     }

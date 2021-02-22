@@ -31,7 +31,7 @@ void ScreenRenderer::createDeviceDependentResources()
     _indexBuffer = OGL.loadRektangleIndexBuffer(1);
 }
 
-void ScreenRenderer::onWindowSizeChanged(int screenWidth, int screenHeight)
+void ScreenRenderer::onWindowSizeChanged(uint16_t screenWidth, uint16_t screenHeight)
 {
     _screenWidth = screenWidth;
     _screenHeight = screenHeight;

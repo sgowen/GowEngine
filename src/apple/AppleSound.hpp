@@ -26,6 +26,5 @@ public:
     virtual bool isPaused();
 
 private:
-    int _objectALSoundIndex;
     bool _isMusic;
 };

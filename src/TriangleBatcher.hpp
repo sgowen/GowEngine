@@ -22,7 +22,6 @@ class TriangleBatcher
 {
 public:
     TriangleBatcher(int maxBatchSize, bool isFill);
-    ~TriangleBatcher() {}
 
     void createDeviceDependentResources();
     void releaseDeviceDependentResources();

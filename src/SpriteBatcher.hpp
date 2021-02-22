@@ -10,11 +10,11 @@
 
 #include "ShaderInput.hpp"
 #include "Color.hpp"
+#include "TextureRegion.hpp"
 
 #include <stdint.h>
 #include <vector>
 
-struct TextureRegion;
 struct Shader;
 struct Texture;
 
@@ -22,7 +22,6 @@ class SpriteBatcher
 {
 public:
     SpriteBatcher(int maxBatchSize);
-    ~SpriteBatcher() {}
 
     void createDeviceDependentResources();
     void releaseDeviceDependentResources();

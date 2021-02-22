@@ -12,36 +12,37 @@
 
 #include <AL/alut.h>
 
-LinuxSound::LinuxSound(uint16_t soundID, const char *filePath, float volume) : Sound(soundID)
+LinuxSound::LinuxSound(uint16_t soundID, const char *filePath, float volume) : Sound(soundID),
+_buf(0),
+_src(0)
 {
-    alGenBuffers(1, &buf);
-    alGenSources(1, &src);
-    buf = alutCreateBufferFromFile(filePath);
-
-    assert(buf != AL_NONE);
-
-    alSourcei(src, AL_BUFFER, buf);
-    alSourcei(src, AL_LOOPING, AL_FALSE);
+    alGenSources(1, &_src);
+    _buf = alutCreateBufferFromFile(filePath);
+    assert(_buf != AL_NONE);
+    alSourcei(_src, AL_BUFFER, _buf);
+    alSourcei(_src, AL_LOOPING, AL_FALSE);
 }
 
 LinuxSound::~LinuxSound()
 {
-    alDeleteBuffers(1, &buf);
-    alDeleteSources(1, &src);
+    stop();
+    
+    alDeleteBuffers(1, &_buf);
+    alDeleteSources(1, &_src);
 }
 
 void LinuxSound::play(bool isLooping)
 {
-    alSourcei(src, AL_LOOPING, isLooping ? AL_TRUE : AL_FALSE);
+    alSourcei(_src, AL_LOOPING, isLooping ? AL_TRUE : AL_FALSE);
 
-    alSourcePlay(src);
+    alSourcePlay(_src);
 }
 
 void LinuxSound::resume()
 {
     if (isPaused())
     {
-        alSourcePlay(src);
+        alSourcePlay(_src);
     }
 }
 
@@ -49,24 +50,24 @@ void LinuxSound::pause()
 {
     if (isPlaying())
     {
-        alSourcePause(src);
+        alSourcePause(_src);
     }
 }
 
 void LinuxSound::stop()
 {
-    alSourceStop(src);
+    alSourceStop(_src);
 }
 
 void LinuxSound::setVolume(float volume)
 {
-    alSourcef(src, AL_GAIN, volume);
+    alSourcef(_src, AL_GAIN, volume);
 }
 
 bool LinuxSound::isLooping()
 {
     ALint isLooping;
-    alGetSourcei(src, AL_LOOPING, &isLooping);
+    alGetSourcei(_src, AL_LOOPING, &isLooping);
     
     return isLooping;
 }
@@ -74,7 +75,7 @@ bool LinuxSound::isLooping()
 bool LinuxSound::isPlaying()
 {
     ALint state;
-    alGetSourcei(src, AL_SOURCE_STATE, &state);
+    alGetSourcei(_src, AL_SOURCE_STATE, &state);
 
     return state == AL_PLAYING;
 }

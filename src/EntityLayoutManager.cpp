@@ -70,6 +70,10 @@ void EntityLayoutManager::loadEntityLayout(EntityLayoutDef& eld)
 {
     EntityIDManager* eidm = INST_REG.get<EntityIDManager>(_isServer ? INSK_EID_SRVR : INSK_EID_CLNT);
     assert(eidm != NULL);
+    eidm->resetNextLayoutEntityID();
+    
+    eld._entities.clear();
+    eld._entitiesNetwork.clear();
     
     AssetHandler* ah = AssetHandlerFactory::create();
     FileData jsonData = ah->loadAsset(eld._filePath.c_str());
@@ -81,12 +85,9 @@ void EntityLayoutManager::loadEntityLayout(EntityLayoutDef& eld)
     
     if (d.HasMember("entities"))
     {
-        eld._entities.clear();
-        eidm->resetNextLayoutEntityID();
-        
         Value& v = d["entities"];
-        
         assert(v.IsArray());
+        
         for (SizeType i = 0; i < v.Size(); ++i)
         {
             const Value& iv = v[i];
@@ -102,11 +103,9 @@ void EntityLayoutManager::loadEntityLayout(EntityLayoutDef& eld)
     
     if (d.HasMember("entitiesNetwork"))
     {
-        eld._entitiesNetwork.clear();
-        
         Value& v = d["entitiesNetwork"];
-        
         assert(v.IsArray());
+        
         for (SizeType i = 0; i < v.Size(); ++i)
         {
             const Value& iv = v[i];

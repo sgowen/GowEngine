@@ -9,13 +9,11 @@
 #include "TextureManager.hpp"
 
 #include "TextureDescriptor.hpp"
-#include "Assets.hpp"
 
-void TextureManager::createDeviceDependentResources()
+void TextureManager::loadTextures(std::vector<TextureDescriptor>& tds)
 {
     assert(_textures.size() == 0);
     
-    std::vector<TextureDescriptor>& tds = ASSETS.getTextureDescriptors();
     for (auto& td : tds)
     {
         _textures.insert({td._name, Texture(td)});
@@ -31,7 +29,7 @@ void TextureManager::createDeviceDependentResources()
     }
 }
 
-void TextureManager::releaseDeviceDependentResources()
+void TextureManager::unloadTextures(std::vector<TextureDescriptor>& tds)
 {
     for (std::map<std::string, Texture>::iterator i = _textures.begin(); i != _textures.end(); ++i)
     {
@@ -43,8 +41,6 @@ void TextureManager::releaseDeviceDependentResources()
 Texture& TextureManager::texture(std::string name)
 {
     auto q = _textures.find(name);
-    
     assert(q != _textures.end());
-    
     return q->second;
 }

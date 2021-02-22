@@ -17,8 +17,8 @@ class AudioEngineHelper
     friend class AudioEngineHelperFactory;
     
 public:
-    virtual void pause() = 0;
-    virtual void resume() = 0;
+    virtual void pause() {}
+    virtual void resume() {}
     virtual SoundWrapper* loadSound(uint16_t soundID, const char *path, int numInstances = 1) = 0;
     virtual SoundWrapper* loadMusic(const char* path) = 0;
     

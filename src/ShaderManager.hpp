@@ -16,12 +16,9 @@
 
 class ShaderManager
 {
-public:
-    ShaderManager() {}
-    ~ShaderManager() {}
-    
-    void createDeviceDependentResources();
-    void releaseDeviceDependentResources();
+public:    
+    void loadShaders(std::vector<ShaderDescriptor>& sds);
+    void unloadShaders(std::vector<ShaderDescriptor>& sds);
     Shader& shader(std::string name);
     
 private:

@@ -263,7 +263,7 @@ void OpenGLWrapper::unloadBuffer(GLuint& buffer)
     buffer = 0;
 }
 
-void OpenGLWrapper::loadFramebuffer(Framebuffer& fb, bool sharp)
+void OpenGLWrapper::loadFramebuffer(Framebuffer& fb)
 {
     GLuint texture;
     GLuint fbo;
@@ -271,10 +271,7 @@ void OpenGLWrapper::loadFramebuffer(Framebuffer& fb, bool sharp)
     GLint currentFBO;
     glGetIntegerv(GL_FRAMEBUFFER_BINDING, &currentFBO);
     
-    GLint filterMin = sharp ? GL_NEAREST : GL_LINEAR;
-    GLint filterMag = sharp ? GL_NEAREST : GL_LINEAR;
-    
-    texture = loadTexture(fb._width, fb._height, NULL, filterMin, filterMag, false);
+    texture = loadTexture(fb._width, fb._height, NULL, fb._filterMin, fb._filterMag, false);
     
     glGenFramebuffers(1, &fbo);
     glBindFramebuffer(GL_FRAMEBUFFER, fbo);
@@ -305,20 +302,7 @@ void OpenGLWrapper::loadTexture(Texture& t)
 {
     assert(t._data != NULL);
     
-    bool mipmap = t._descriptor._mipMap;
-    
-    GLint filterMin;
-    if (mipmap)
-    {
-        filterMin = t._descriptor._filterMin == "SHARP" ? GL_LINEAR_MIPMAP_NEAREST : GL_LINEAR_MIPMAP_LINEAR;
-    }
-    else
-    {
-        filterMin = t._descriptor._filterMin == "SHARP" ? GL_NEAREST : GL_LINEAR;
-    }
-    GLint filterMag = t._descriptor._filterMag == "SHARP" ? GL_NEAREST : GL_LINEAR;
-    
-    t._texture = loadTexture(t._width, t._height, t._data, filterMin, filterMag, mipmap);
+    t._texture = loadTexture(t._width, t._height, t._data, t._descriptor._filterMin, t._descriptor._filterMag, t._descriptor._mipMap);
 }
 
 void OpenGLWrapper::unloadTexture(Texture& t)
@@ -361,7 +345,7 @@ void OpenGLWrapper::unloadShader(Shader& s)
     s._program = 0;
 }
 
-GLuint OpenGLWrapper::loadTexture(int width, int height, uint8_t* data, GLint filterMin, GLint filterMag, bool mipmap)
+GLuint OpenGLWrapper::loadTexture(int width, int height, uint8_t* data, std::string filterMin, std::string filterMag, bool mipmap)
 {
     assert(width > 0);
     assert(height > 0);
@@ -375,8 +359,9 @@ GLuint OpenGLWrapper::loadTexture(int width, int height, uint8_t* data, GLint fi
 
     glBindTexture(GL_TEXTURE_2D, ret);
     
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, filterMin);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, filterMag);
+    bool filterMinSharp = filterMin == "SHARP";
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, mipmap ? (filterMinSharp ? GL_LINEAR_MIPMAP_NEAREST : GL_LINEAR_MIPMAP_LINEAR) : (filterMinSharp ? GL_NEAREST : GL_LINEAR));
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, filterMag == "SHARP" ? GL_NEAREST : GL_LINEAR);
     
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);

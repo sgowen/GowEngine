@@ -11,40 +11,49 @@
 #include "Shader.hpp"
 #include "Texture.hpp"
 #include "TextureRegion.hpp"
+#include "ResourceManager.hpp"
 
 #include <assert.h>
 
-FontBatcher::FontBatcher(int maxBatchSize, int offsetX, int offsetY, int glyphsPerRow, int glyphWidth, int glyphHeight, int textureWidth, int textureHeight) :
+FontBatcher::FontBatcher(int maxBatchSize, std::string textureName, int glyphsPerRow, int glyphWidth, int glyphHeight) :
 _spriteBatcher(maxBatchSize),
-_glyphWidthToHeightRatio(glyphHeight / (float)glyphWidth),
+_textureName(textureName),
+_glyphsPerRow(glyphsPerRow),
+_glyphWidth(glyphWidth),
+_glyphHeight(glyphHeight),
+_glyphWidthToHeightRatio(_glyphHeight / (float)_glyphWidth),
 _matrixWidth(1),
 _matrixHeight(1)
 {
-	int x = offsetX;
-	int y = offsetY;
-
-	for (int i = 0; i < 176; ++i)
-	{
-		_glyphs.emplace_back(x, y, glyphWidth, glyphHeight, textureWidth, textureHeight);
-
-		x += glyphWidth;
-
-		if (x == offsetX + glyphsPerRow * glyphWidth)
-		{
-			x = offsetX;
-			y += glyphHeight;
-		}
-	}
+    // Empty
 }
 
 void FontBatcher::createDeviceDependentResources()
 {
     _spriteBatcher.createDeviceDependentResources();
+    
+    Texture& t = RES_MGR.texture(_textureName);
+    int x = 0;
+    int y = 0;
+    for (int i = 0; i < 176; ++i)
+    {
+        _glyphs.emplace_back(x, y, _glyphWidth, _glyphHeight, t._width, t._height);
+
+        x += _glyphWidth;
+
+        if (x == _glyphsPerRow * _glyphWidth)
+        {
+            x = 0;
+            y += _glyphHeight;
+        }
+    }
 }
 
 void FontBatcher::releaseDeviceDependentResources()
 {
     _spriteBatcher.releaseDeviceDependentResources();
+    
+    _glyphs.clear();
 }
 
 void FontBatcher::setMatrixSize(float matrixWidth, float matrixHeight)
@@ -53,14 +62,6 @@ void FontBatcher::setMatrixSize(float matrixWidth, float matrixHeight)
     mat4_ortho(_matrix, 0, matrixWidth, 0, matrixHeight, -1, 1);
     _matrixWidth = matrixWidth;
     _matrixHeight = matrixHeight;
-}
-
-void FontBatcher::configure(TextView& tv, float xWeight, float yWeight, float glyphWidthWeight)
-{
-    tv._x = _matrixWidth * xWeight;
-    tv._y = _matrixHeight * yWeight;
-    tv._glyphWidth = _matrixWidth * glyphWidthWeight;
-    tv._glyphHeight = tv._glyphWidth * _glyphWidthToHeightRatio;
 }
 
 void FontBatcher::begin()
@@ -77,17 +78,20 @@ void FontBatcher::addText(TextView& tv)
     
     size_t len = tv._text.length();
     
-    float x = tv._x;
+    float x = _matrixWidth * tv._xWeight;
+    float y = _matrixHeight * tv._yWeight;
+    float glyphWidth = _matrixWidth * tv._glyphWidthWeight;
+    float glyphHeight = glyphWidth * _glyphWidthToHeightRatio;
     
     if (tv._alignment == TEXA_CENTER)
     {
-        float result = tv._glyphWidth / 2;
+        float result = glyphWidth / 2;
         x -= len * result;
-        x += tv._glyphWidth / 2;
+        x += glyphWidth / 2;
     }
     else if (tv._alignment == TEXA_RIGHT)
     {
-        x -= (len - 1) * tv._glyphWidth;
+        x -= (len - 1) * glyphWidth;
     }
 
     for (size_t i = 0; i < len; ++i)
@@ -95,19 +99,20 @@ void FontBatcher::addText(TextView& tv)
         uint8_t c = ((uint8_t)tv._text.at(i));
 
         assert(c >= 0 && c <= 175);
-        _spriteBatcher.addSprite(_glyphs[c], x, tv._y, tv._glyphWidth, tv._glyphHeight);
+        _spriteBatcher.addSprite(_glyphs[c], x, y, glyphWidth, glyphHeight);
 
-        x += tv._glyphWidth;
+        x += glyphWidth;
     }
 }
 
-void FontBatcher::addText(TextAlignment alignment, std::string text, float x, float y, float glyphWidth, float glyphHeight)
+void FontBatcher::addText(std::string text, TextAlignment alignment, float xWeight, float yWeight, float glyphWidthWeight)
 {
-    TextView tv(alignment, text, TEXV_VISIBLE, x, y, glyphWidth, glyphHeight);
+    TextView tv(text, alignment, xWeight, yWeight, glyphWidthWeight);
     addText(tv);
 }
 
-void FontBatcher::end(Shader& s, Texture& t)
+void FontBatcher::end(Shader& s)
 {
+    Texture& t = RES_MGR.texture(_textureName);
     _spriteBatcher.end(s, _matrix, t);
 }

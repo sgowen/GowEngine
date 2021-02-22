@@ -54,7 +54,6 @@ class EntityLayoutManager
 {
 public:
     EntityLayoutManager(bool isServer);
-    ~EntityLayoutManager() {}
     
     void initWithJSONFile(const char* filePath);
     void initWithJSON(const char* data);

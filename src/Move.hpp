@@ -19,7 +19,6 @@ class Move
 public:
     Move(InputState* inputState, uint32_t timestamp, uint32_t index);
     Move(InputState* inputState);
-    ~Move() {}
     
     void write(OutputMemoryBitStream& ombs) const;
     void read(InputMemoryBitStream& imbs);

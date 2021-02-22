@@ -23,21 +23,23 @@ struct TextureRegion;
 class FontBatcher
 {
 public:
-	FontBatcher(int maxBatchSize, int offsetX, int offsetY, int glyphsPerRow, int glyphWidth, int glyphHeight, int textureWidth, int textureHeight);
-    ~FontBatcher() {}
+	FontBatcher(int maxBatchSize, std::string textureName, int glyphsPerRow, int glyphWidth, int glyphHeight);
     
     void createDeviceDependentResources();
     void releaseDeviceDependentResources();
     void setMatrixSize(float matrixWidth, float matrixHeight);
-    void configure(TextView& tv, float xWeight, float yWeight, float glyphWidthWeight);
     void begin();
     void addText(TextView& tv);
-	void addText(TextAlignment textAlignment, std::string text, float x, float y, float glyphWidth, float glyphHeight);
-    void end(Shader& s, Texture& t);
+	void addText(std::string text, TextAlignment alignment, float xWeight, float yWeight, float glyphWidthWeight);
+    void end(Shader& s);
 
 private:
     SpriteBatcher _spriteBatcher;
+    std::string _textureName;
     std::vector<TextureRegion> _glyphs;
+    int _glyphsPerRow;
+    int _glyphWidth;
+    int _glyphHeight;
     float _glyphWidthToHeightRatio;
     mat4 _matrix;
     float _matrixWidth;

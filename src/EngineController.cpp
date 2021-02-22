@@ -23,15 +23,17 @@ double EngineController::getFrameRate()
     return (1.0 / 60.0);
 }
 
-void EngineController::registerControllers(std::map<std::string, EntityControllerCreationFunc>& config)
+void EngineController::registerControllers(std::map<std::string, EntityControllerCreationFunc>& config, std::string entityManagerFilePath)
 {
+    ENTITY_MGR.initWithJSONFile(entityManagerFilePath.c_str());
+    
     for (auto& pair: config)
     {
         ENTITY_MGR.registerController(pair.first, pair.second);
     }
 }
 
-void EngineController::configureForNetwork(std::map<std::string, EntityNetworkControllerCreationFunc>& config)
+void EngineController::configureForNetwork(std::map<std::string, EntityNetworkControllerCreationFunc>& config, std::string entityLayoutManagerFilePath)
 {
     for (auto& pair: config)
     {
@@ -44,6 +46,8 @@ void EngineController::configureForNetwork(std::map<std::string, EntityNetworkCo
     static EntityIDManager EIMC;
     static EntityLayoutManager ELMS(true);
     static EntityLayoutManager ELMC(false);
+    ELMS.initWithJSONFile(entityLayoutManagerFilePath.c_str());
+    ELMC.initWithJSONFile(entityLayoutManagerFilePath.c_str());
     
     INST_REG.registerInstance(INSK_TIME_SRVR, &TIMS);
     INST_REG.registerInstance(INSK_TIME_CLNT, &TIMC);

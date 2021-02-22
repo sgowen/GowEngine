@@ -11,6 +11,7 @@
 #include "SampleSource.hpp"
 #include "SampleBuffer.hpp"
 #include "StringUtil.hpp"
+#include "GowUtil.hpp"
 
 using namespace oboe;
 
@@ -18,8 +19,7 @@ constexpr int32_t kBufferSizeInBursts = 2; // Use 2 bursts as the buffer size (d
 
 SimpleMultiPlayer::SimpleMultiPlayer() :
 _channelCount(0),
-_outputReset(false),
-_numSampleBuffers(0)
+_outputReset(false)
 {
     // Empty
 }
@@ -38,12 +38,9 @@ DataCallbackResult SimpleMultiPlayer::onAudioReady(AudioStream *oboeStream, void
 
     memset(audioData, 0, numFrames * _channelCount * sizeof(float));
 
-    for (int32_t index = 0; index < _numSampleBuffers; index++)
+    for (auto& pair: _sampleSources)
     {
-        if (_sampleSources[index]->isPlaying())
-        {
-            _sampleSources[index]->mixAudio((float*)audioData, _channelCount, numFrames, _sampleSources[index]->isLooping());
-        }
+        pair.second->mixAudio((float*)audioData, _channelCount, numFrames, pair.second->isLooping());
     }
 
     return DataCallbackResult::Continue;
@@ -67,7 +64,6 @@ void SimpleMultiPlayer::onErrorBeforeClose(AudioStream *, Result error)
 
 void SimpleMultiPlayer::setupAudioStream(int32_t channelCount)
 {
-    LOG("SimpleMultiPlayer setupAudioStream()");
     _channelCount = channelCount;
 
     openStream();
@@ -75,7 +71,6 @@ void SimpleMultiPlayer::setupAudioStream(int32_t channelCount)
 
 void SimpleMultiPlayer::teardownAudioStream()
 {
-    LOG("SimpleMultiPlayer teardownAudioStream()");
     // tear down the player
     if (_audioStream != NULL)
     {
@@ -87,8 +82,6 @@ void SimpleMultiPlayer::teardownAudioStream()
 
 bool SimpleMultiPlayer::openStream()
 {
-    LOG("SimpleMultiPlayer openStream()");
-
     // Create an audio stream
     AudioStreamBuilder builder;
     builder.setChannelCount(_channelCount);
@@ -136,81 +129,88 @@ int SimpleMultiPlayer::getSampleRate()
     return _sampleRate;
 }
 
-int32_t SimpleMultiPlayer::addSampleSource(SampleSource* source, SampleBuffer* buffer)
+void SimpleMultiPlayer::addSampleSource(uint16_t soundID, SampleSource* source)
 {
-    buffer->resampleData(_sampleRate);
+    source->buffer()->resampleData(_sampleRate);
 
-    _sampleBuffers.push_back(buffer);
-    _sampleSources.push_back(source);
-    
-    return _numSampleBuffers++;
+    _sampleSources.emplace(soundID, source);
+}
+
+void SimpleMultiPlayer::unloadSampleSource(uint16_t soundID)
+{
+    auto q = _sampleSources.find(soundID);
+    assert(q != _sampleSources.end());
+    delete q->second;
+    _sampleSources.erase(q);
 }
 
 void SimpleMultiPlayer::unloadSampleData()
 {
-    LOG("SimpleMultiPlayer unloadSampleData()");
     resetAll();
-
-    for (int32_t bufferIndex = 0; bufferIndex < _numSampleBuffers; bufferIndex++)
-    {
-        delete _sampleBuffers[bufferIndex];
-        delete _sampleSources[bufferIndex];
-    }
-
-    _sampleBuffers.clear();
-    _sampleSources.clear();
-
-    _numSampleBuffers = 0;
+    GowUtil::cleanUpMapOfPointers(_sampleSources);
 }
 
-void SimpleMultiPlayer::play(int32_t index, bool isLooping)
+void SimpleMultiPlayer::play(uint16_t soundID, bool isLooping)
 {
-    assert(index < _numSampleBuffers);
+    auto q = _sampleSources.find(soundID);
+    assert(q != _sampleSources.end());
     
-    _sampleSources[index]->setPlayMode(isLooping);
+    q->second->setPlayMode(isLooping);
 }
 
-bool SimpleMultiPlayer::isPlaying(int32_t index)
+bool SimpleMultiPlayer::isPlaying(uint16_t soundID)
 {
-    return _sampleSources[index]->isPlaying();
-}
-
-bool SimpleMultiPlayer::isPaused(int32_t index)
-{
-    return _sampleSources[index]->isPaused();
-}
-
-bool SimpleMultiPlayer::isLooping(int32_t index)
-{
-    return _sampleSources[index]->isLooping();
-}
-
-void SimpleMultiPlayer::pause(int32_t index)
-{
-    assert(index < _numSampleBuffers);
+    auto q = _sampleSources.find(soundID);
+    assert(q != _sampleSources.end());
     
-    _sampleSources[index]->setPauseMode();
+    return q->second->isPlaying();
 }
 
-void SimpleMultiPlayer::resume(int32_t index)
+bool SimpleMultiPlayer::isPaused(uint16_t soundID)
 {
-    assert(index < _numSampleBuffers);
+    auto q = _sampleSources.find(soundID);
+    assert(q != _sampleSources.end());
     
-    _sampleSources[index]->setResumeMode();
+    return q->second->isPaused();
 }
 
-void SimpleMultiPlayer::stop(int32_t index)
+bool SimpleMultiPlayer::isLooping(uint16_t soundID)
 {
-    assert(index < _numSampleBuffers);
+    auto q = _sampleSources.find(soundID);
+    assert(q != _sampleSources.end());
     
-    _sampleSources[index]->setStopMode();
+    return q->second->isLooping();
+}
+
+void SimpleMultiPlayer::pause(uint16_t soundID)
+{
+    auto q = _sampleSources.find(soundID);
+    assert(q != _sampleSources.end());
+    
+    q->second->setPauseMode();
+}
+
+void SimpleMultiPlayer::resume(uint16_t soundID)
+{
+    auto q = _sampleSources.find(soundID);
+    assert(q != _sampleSources.end());
+    
+    q->second->setResumeMode();
+}
+
+void SimpleMultiPlayer::stop(uint16_t soundID)
+{
+    auto q = _sampleSources.find(soundID);
+    assert(q != _sampleSources.end());
+    
+    q->second->setStopMode();
 }
 
 void SimpleMultiPlayer::resetAll()
 {
-    for (int32_t bufferIndex = 0; bufferIndex < _numSampleBuffers; bufferIndex++)
+    for (auto& pair: _sampleSources)
     {
-        _sampleSources[bufferIndex]->setStopMode();
+        pair.second->setStopMode();
     }
 }
 
@@ -224,22 +224,34 @@ void SimpleMultiPlayer::clearOutputReset()
     _outputReset = false;
 }
 
-void SimpleMultiPlayer::setPan(int index, float pan)
+void SimpleMultiPlayer::setPan(uint16_t soundID, float pan)
 {
-    _sampleSources[index]->setPan(pan);
+    auto q = _sampleSources.find(soundID);
+    assert(q != _sampleSources.end());
+    
+    q->second->setPan(pan);
 }
 
-float SimpleMultiPlayer::getPan(int index)
+float SimpleMultiPlayer::getPan(uint16_t soundID)
 {
-    return _sampleSources[index]->getPan();
+    auto q = _sampleSources.find(soundID);
+    assert(q != _sampleSources.end());
+    
+    return q->second->getPan();
 }
 
-void SimpleMultiPlayer::setGain(int index, float gain)
+void SimpleMultiPlayer::setGain(uint16_t soundID, float gain)
 {
-    _sampleSources[index]->setGain(gain);
+    auto q = _sampleSources.find(soundID);
+    assert(q != _sampleSources.end());
+    
+    q->second->setGain(gain);
 }
 
-float SimpleMultiPlayer::getGain(int index)
+float SimpleMultiPlayer::getGain(uint16_t soundID)
 {
-    return _sampleSources[index]->getGain();
+    auto q = _sampleSources.find(soundID);
+    assert(q != _sampleSources.end());
+    
+    return q->second->getGain();
 }

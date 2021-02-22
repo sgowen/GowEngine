@@ -17,11 +17,8 @@
 class TextureManager
 {
 public:
-    TextureManager() {}
-    ~TextureManager() {}
-    
-    void createDeviceDependentResources();
-    void releaseDeviceDependentResources();
+    void loadTextures(std::vector<TextureDescriptor>& tds);
+    void unloadTextures(std::vector<TextureDescriptor>& tds);
     Texture& texture(std::string name);
     
 private:

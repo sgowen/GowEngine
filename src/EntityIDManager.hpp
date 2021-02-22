@@ -14,7 +14,6 @@ class EntityIDManager
 {
 public:
     EntityIDManager();
-    ~EntityIDManager() {}
     
     uint32_t getNextLayoutEntityID();
     void resetNextLayoutEntityID();
@@ -26,5 +25,5 @@ public:
 private:
     uint32_t _nextLayoutEntityID;
     uint32_t _nextNetworkEntityID;
-    uint32_t _nextPlayerEntityID; // players spawn independently of map loading, so keep track separately
+    uint32_t _nextPlayerEntityID;
 };

@@ -21,8 +21,7 @@
 #include <assert.h>
 
 AndroidSound::AndroidSound(SimpleMultiPlayer* simpleMultiPlayer, uint16_t soundID, const char *filePath, float volume) : Sound(soundID),
-_simpleMultiPlayer(simpleMultiPlayer),
-_oboeSoundIndex(0)
+_simpleMultiPlayer(simpleMultiPlayer)
 {
     AssetHandler* ah = AssetHandlerFactory::create();
     
@@ -44,21 +43,28 @@ _oboeSoundIndex(0)
     sampleBuffer->loadSampleData(&reader);
 
     SampleSource* source = new SampleSource(sampleBuffer, 0);
-    _oboeSoundIndex = _simpleMultiPlayer->addSampleSource(source, sampleBuffer);
+    _simpleMultiPlayer->addSampleSource(soundID, source);
 
     AssetHandlerFactory::destroy(ah);
 }
 
+AndroidSound::~AndroidSound()
+{
+    stop();
+    
+    _simpleMultiPlayer->unloadSampleSource(_soundID);
+}
+
 void AndroidSound::play(bool isLooping)
 {
-    _simpleMultiPlayer->play(_oboeSoundIndex, isLooping);
+    _simpleMultiPlayer->play(_soundID, isLooping);
 }
 
 void AndroidSound::resume()
 {
     if (isPaused())
     {
-        _simpleMultiPlayer->resume(_oboeSoundIndex);
+        _simpleMultiPlayer->resume(_soundID);
     }
 }
 
@@ -66,31 +72,31 @@ void AndroidSound::pause()
 {
     if (isPlaying())
     {
-        _simpleMultiPlayer->pause(_oboeSoundIndex);
+        _simpleMultiPlayer->pause(_soundID);
     }
 }
 
 void AndroidSound::stop()
 {
-    _simpleMultiPlayer->stop(_oboeSoundIndex);
+    _simpleMultiPlayer->stop(_soundID);
 }
 
 void AndroidSound::setVolume(float volume)
 {
-    _simpleMultiPlayer->setGain(_oboeSoundIndex, volume);
+    _simpleMultiPlayer->setGain(_soundID, volume);
 }
 
 bool AndroidSound::isLooping()
 {
-    return _simpleMultiPlayer->isLooping(_oboeSoundIndex);
+    return _simpleMultiPlayer->isLooping(_soundID);
 }
 
 bool AndroidSound::isPlaying()
 {
-    return _simpleMultiPlayer->isPlaying(_oboeSoundIndex);
+    return _simpleMultiPlayer->isPlaying(_soundID);
 }
 
 bool AndroidSound::isPaused()
 {
-    return _simpleMultiPlayer->isPaused(_oboeSoundIndex);
+    return _simpleMultiPlayer->isPaused(_soundID);
 }

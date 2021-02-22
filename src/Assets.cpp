@@ -232,7 +232,7 @@ void Assets::initWithJSON(const char* json)
     }
 }
 
-TextureRegion& Assets::findTextureRegion(std::string key, uint16_t stateTime)
+TextureRegion* Assets::findTextureRegion(std::string key, uint16_t stateTime)
 {
     TextureRegion* ret = NULL;
     
@@ -255,44 +255,12 @@ TextureRegion& Assets::findTextureRegion(std::string key, uint16_t stateTime)
             if (q != animations.end())
             {
                 ret = &q->second.getTextureRegion(stateTime);
+                break;
             }
         }
     }
     
-    assert(ret != NULL);
-    
-    return *ret;
-}
-
-TextureDescriptor& Assets::findTextureDescriptor(std::string key)
-{
-    TextureDescriptor* ret = NULL;
-    
-    std::vector<TextureDescriptor>& tds = getTextureDescriptors();
-    for (TextureDescriptor& td : tds)
-    {
-        {
-            std::map<std::string, TextureRegion>& textureRegions = td.getTextureRegions();
-            auto q = textureRegions.find(key);
-            if (q != textureRegions.end())
-            {
-                ret = &td;
-            }
-        }
-        
-        {
-            std::map<std::string, Animation>& animations = td.getAnimations();
-            auto q = animations.find(key);
-            if (q != animations.end())
-            {
-                ret = &td;
-            }
-        }
-    }
-    
-    assert(ret != NULL);
-    
-    return *ret;
+    return ret;
 }
 
 std::vector<ShaderDescriptor>& Assets::getShaderDescriptors()

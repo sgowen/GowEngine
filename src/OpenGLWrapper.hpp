@@ -86,7 +86,7 @@ public:
     GLuint loadVertexBuffer(size_t size);
     GLuint loadVertexBuffer(size_t size, const void* data);
     void unloadBuffer(GLuint& buffer);
-    void loadFramebuffer(Framebuffer& fb, bool sharp = false);
+    void loadFramebuffer(Framebuffer& fb);
     void unloadFramebuffer(Framebuffer& fb);
     void loadTexture(Texture& t);
     void unloadTexture(Texture& t);
@@ -94,7 +94,7 @@ public:
     void unloadShader(Shader& s);
 
 private:
-    GLuint loadTexture(int width, int height, uint8_t* data, GLint filterMin, GLint filterMag, bool mipmap);
+    GLuint loadTexture(int width, int height, uint8_t* data, std::string filterMin, std::string filterMag, bool mipmap);
     void unloadTexture(GLuint texture);
     GLuint loadShader(const uint8_t* vertexShaderSrc, const long vertexShaderSrcLength, const uint8_t* fragmentShaderSrc, const long fragmentShaderSrcLength);
     void unloadShader(GLuint program);

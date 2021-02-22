@@ -17,8 +17,6 @@ class AndroidAudioEngineHelper : public AudioEngineHelper
     friend class AudioEngineHelperFactory;
     
 public:
-    virtual void pause() {}
-    virtual void resume() {}
     virtual SoundWrapper* loadSound(uint16_t soundID, const char *filePath, int numInstances = 1);
     virtual SoundWrapper* loadMusic(const char* filePath);
     

@@ -9,16 +9,12 @@
 #include "ShaderManager.hpp"
 
 #include "ShaderDescriptor.hpp"
-#include "Assets.hpp"
 
-void ShaderManager::createDeviceDependentResources()
+void ShaderManager::loadShaders(std::vector<ShaderDescriptor>& sds)
 {
-    assert(_shaders.size() == 0);
-    
-    std::vector<ShaderDescriptor>& sds = ASSETS.getShaderDescriptors();
     for (auto& sd : sds)
     {
-        _shaders.insert({sd._name, Shader(sd)});
+        _shaders.emplace(sd._name, Shader{sd});
     }
     
     for (std::map<std::string, Shader>::iterator i = _shaders.begin(); i != _shaders.end(); ++i)
@@ -27,7 +23,7 @@ void ShaderManager::createDeviceDependentResources()
     }
 }
 
-void ShaderManager::releaseDeviceDependentResources()
+void ShaderManager::unloadShaders(std::vector<ShaderDescriptor>& sds)
 {
     for (std::map<std::string, Shader>::iterator i = _shaders.begin(); i != _shaders.end(); ++i)
     {
@@ -40,8 +36,6 @@ void ShaderManager::releaseDeviceDependentResources()
 Shader& ShaderManager::shader(std::string name)
 {
     auto q = _shaders.find(name);
-    
     assert(q != _shaders.end());
-    
     return q->second;
 }

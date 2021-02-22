@@ -22,7 +22,6 @@ class LightRenderer
 {
 public:
     LightRenderer();
-    ~LightRenderer() {}
     
     void createDeviceDependentResources();
     void releaseDeviceDependentResources();

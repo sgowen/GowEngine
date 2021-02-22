@@ -24,8 +24,8 @@ public:
     virtual double getFrameRate();
     
 protected:
-    void registerControllers(std::map<std::string, EntityControllerCreationFunc>& config);
-    void configureForNetwork(std::map<std::string, EntityNetworkControllerCreationFunc>& config);
+    void registerControllers(std::map<std::string, EntityControllerCreationFunc>& config, std::string entityManagerFilePath);
+    void configureForNetwork(std::map<std::string, EntityNetworkControllerCreationFunc>& config, std::string entityLayoutManagerFilePath);
     void registerPhysicsControllers(std::map<std::string, EntityPhysicsControllerCreationFunc>& config);
     void registerRenderControllers(std::map<std::string, EntityRenderControllerCreationFunc>& config);
     

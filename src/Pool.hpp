@@ -17,9 +17,7 @@
 template <typename T>
 class Pool
 {
-public:
-    Pool() {}
-    
+public:    
     ~Pool()
     {
         GowUtil::cleanUpVectorOfPointers(_objects);

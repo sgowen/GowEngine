@@ -49,7 +49,6 @@ public:
     void initPhysics();
     void processPhysics(TimeTracker* tt);
     void processCollisions(std::vector<Entity*>& entities);
-    void enforceBounds(Rektangle& bounds);
     Rektangle* boundingBox();
     
 protected:

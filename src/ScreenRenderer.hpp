@@ -17,10 +17,9 @@ class ScreenRenderer
 {
 public:
     ScreenRenderer();
-    ~ScreenRenderer() {}
     
     void createDeviceDependentResources();
-    void onWindowSizeChanged(int screenWidth, int screenHeight);
+    void onWindowSizeChanged(uint16_t screenWidth, uint16_t screenHeight);
     void releaseDeviceDependentResources();
     void renderToScreen(Shader& s, Framebuffer& fb);
     void renderFramebuffer(Shader& s, Framebuffer& fb);

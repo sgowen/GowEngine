@@ -10,7 +10,7 @@
 
 #include <oboe/Oboe.h>
 
-#include <vector>
+#include <map>
 
 class SampleSource;
 class SampleBuffer;
@@ -19,7 +19,6 @@ class SimpleMultiPlayer : public oboe::AudioStreamCallback
 {
 public:
     SimpleMultiPlayer();
-    ~SimpleMultiPlayer() {}
 
     virtual oboe::DataCallbackResult onAudioReady(oboe::AudioStream *oboeStream, void *audioData, int32_t numFrames) override;
     virtual void onErrorAfterClose(oboe::AudioStream *oboeStream, oboe::Result error) override;
@@ -30,29 +29,28 @@ public:
     bool openStream();
     bool startStream();
     int getSampleRate();
-    int32_t addSampleSource(SampleSource* source, SampleBuffer* buffer);
+    void addSampleSource(uint16_t soundID, SampleSource* source);
+    void unloadSampleSource(uint16_t soundID);
     void unloadSampleData();
-    void play(int32_t index, bool isLooping);
-    bool isPlaying(int32_t index);
-    bool isPaused(int32_t index);
-    bool isLooping(int32_t index);
-    void pause(int32_t index);
-    void resume(int32_t index);
-    void stop(int32_t index);
+    void play(uint16_t soundID, bool isLooping);
+    bool isPlaying(uint16_t soundID);
+    bool isPaused(uint16_t soundID);
+    bool isLooping(uint16_t soundID);
+    void pause(uint16_t soundID);
+    void resume(uint16_t soundID);
+    void stop(uint16_t soundID);
     void resetAll();
     bool getOutputReset();
     void clearOutputReset();
-    void setPan(int index, float pan);
-    float getPan(int index);
-    void setGain(int index, float gain);
-    float getGain(int index);
+    void setPan(uint16_t soundID, float pan);
+    float getPan(uint16_t soundID);
+    void setGain(uint16_t soundID, float gain);
+    float getGain(uint16_t soundID);
 
 private:
     std::shared_ptr<oboe::AudioStream> _audioStream;
     int32_t _channelCount;
     int32_t _sampleRate;
-    int32_t _numSampleBuffers;
-    std::vector<SampleBuffer*> _sampleBuffers;
-    std::vector<SampleSource*> _sampleSources;
+    std::map<int, SampleSource*> _sampleSources;
     bool _outputReset;
 };

@@ -30,6 +30,7 @@ enum MusicState
     MUSS_PLAY_LOOP
 };
 
+struct SoundDescriptor;
 class SoundWrapper;
 class Sound;
 class AudioEngineHelper;
@@ -47,10 +48,13 @@ public:
     
     void createDeviceDependentResources();
     void releaseDeviceDependentResources();
+    void loadSounds(std::vector<SoundDescriptor>& soundDescriptors);
+    void unloadSounds(std::vector<SoundDescriptor>& soundDescriptors);
     void render();
     void pause();
     void resume();
     void loadSound(uint16_t soundID, const char *path, int numInstances = 1);
+    void unloadSound(uint16_t soundID);
     void playSound(uint16_t soundID, float volume = 1.0f, bool isLooping = false);
     void stopSound(uint16_t soundID);
     void pauseSound(uint16_t soundID);
@@ -59,6 +63,7 @@ public:
     void pauseAllSounds();
     void resumeAllSounds();
     void loadMusic(const char *path);
+    void unloadMusic();
     void playMusic(bool isLooping = true, float volume = 1.0f);
     void setMusicVolume(float volume);
     void stopMusic();

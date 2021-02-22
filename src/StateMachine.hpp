@@ -41,8 +41,6 @@ public:
         _states.push(initialState);
     }
     
-    ~StateMachine() {}
-    
     void execute() const
     {
         if (_states.size() > 0)

@@ -17,7 +17,6 @@ class Animation
 {
 public:
     Animation(int x, int y, int regionWidth, int regionHeight, int animationWidth, int animationHeight, int textureWidth, int textureHeight, bool looping, int firstLoopingFrame, int xPadding, int yPadding, std::vector<uint16_t> frameTimes);
-    ~Animation() {}
 
     TextureRegion& getTextureRegion(uint16_t stateTime);
     TextureRegion& getTextureRegionAtKeyFrame(uint16_t frameIndex);

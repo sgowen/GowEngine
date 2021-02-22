@@ -22,7 +22,6 @@ class RektangleBatcher
 {
 public:
     RektangleBatcher(int maxBatchSize, bool isFill);
-    ~RektangleBatcher() {}
 
     void createDeviceDependentResources();
     void releaseDeviceDependentResources();

@@ -21,7 +21,6 @@ class CircleBatcher
 {
 public:
     CircleBatcher(int maxBatchSize);
-    ~CircleBatcher() {}
 
     void createDeviceDependentResources();
     void releaseDeviceDependentResources();

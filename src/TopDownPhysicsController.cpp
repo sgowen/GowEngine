@@ -153,35 +153,6 @@ void TopDownPhysicsController::processCollisions(std::vector<Entity*>& entities)
     }
 }
 
-void TopDownPhysicsController::enforceBounds(Rektangle& bounds)
-{
-    if (_boundingBox == NULL ||
-        _bounds == NULL)
-    {
-        return;
-    }
-    
-    if (_boundingBox->right() > bounds.right())
-    {
-        _boundingBox->_lowerLeft.sub(_boundingBox->right() - bounds.right(), 0);
-    }
-    else if (_boundingBox->left() < bounds.left())
-    {
-        _boundingBox->_lowerLeft.add(bounds.left() - _boundingBox->left(), 0);
-    }
-    
-    if (_boundingBox->top() > bounds.top())
-    {
-        _boundingBox->_lowerLeft.sub(0, _boundingBox->top() - bounds.top());
-    }
-    else if (_boundingBox->bottom() < bounds.bottom())
-    {
-        _boundingBox->_lowerLeft.add(0, bounds.bottom() - _boundingBox->bottom());
-    }
-    
-    updateBounds();
-}
-
 Rektangle* TopDownPhysicsController::boundingBox()
 {
     return _boundingBox;

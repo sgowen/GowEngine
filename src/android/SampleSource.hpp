@@ -20,7 +20,7 @@ public:
     static constexpr float PAN_CENTER = 0.0f;
 
     SampleSource(SampleBuffer* sampleBuffer, float pan);
-    virtual ~SampleSource() {}
+    virtual ~SampleSource();
     
     void mixAudio(float* outBuff, int numChannels, int numFrames, bool isLooping = false);
     void setPlayMode(bool isLooping);
@@ -34,6 +34,7 @@ public:
     float getPan();
     void setGain(float gain);
     float getGain();
+    SampleBuffer* buffer();
 
 protected:
     SampleBuffer* _sampleBuffer;

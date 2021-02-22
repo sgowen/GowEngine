@@ -19,7 +19,6 @@ class EntityRegistry
 {
 public:
     EntityRegistry(OnEntityRegisteredFunc oerf, OnEntityDeregisteredFunc oedf);
-    ~EntityRegistry() {}
     
     Entity* getEntityByID(uint32_t id) const;
     void registerEntity(Entity* e);

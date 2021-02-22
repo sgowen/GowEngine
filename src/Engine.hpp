@@ -37,10 +37,9 @@ class Engine
 {
 public:
     Engine(EngineController& engineController);
-    ~Engine() {}
     
     void createDeviceDependentResources(void* data = NULL);
-    void onWindowSizeChanged(int screenWidth, int screenHeight, int cursorWidth = 0, int cursorHeight = 0);
+    void onWindowSizeChanged(uint16_t screenWidth, uint16_t screenHeight, uint16_t cursorWidth = 0, uint16_t cursorHeight = 0);
     void releaseDeviceDependentResources();
     void onResume();
     void onPause();
@@ -61,10 +60,10 @@ public:
     void revertToPreviousState();
     void setRequestedHostAction(EngineRequestedHostAction value);
     EngineRequestedStateAction requestedStateAction();
-    int screenWidth();
-    int screenHeight();
-    int cursorWidth();
-    int cursorHeight();
+    uint16_t screenWidth();
+    uint16_t screenHeight();
+    uint16_t cursorWidth();
+    uint16_t cursorHeight();
     
 private:
     StateMachine<Engine> _stateMachine;
@@ -72,10 +71,10 @@ private:
     EngineRequestedHostAction _requestedHostAction;
     double _frameRate;
     double _stateTime;
-    int _screenWidth;
-    int _screenHeight;
-    int _cursorWidth;
-    int _cursorHeight;
+    uint16_t _screenWidth;
+    uint16_t _screenHeight;
+    uint16_t _cursorWidth;
+    uint16_t _cursorHeight;
     
     void execute(EngineRequestedStateAction ersa);
 };

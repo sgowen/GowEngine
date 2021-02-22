@@ -14,7 +14,7 @@ ALDevice* gDevice = nil;
 ALContext* gContext = nil;
 ALChannelSource* gChannel = nil;
 OALAudioTrack* gMusicTrack = nil;
-NSMutableArray* gSounds = nil;
+NSMutableDictionary* gSounds = nil;
 
 @interface ObjectALSoundBufferWrapper : NSObject
 {
@@ -128,7 +128,7 @@ void initObjectAL()
     
     gMusicTrack = [OALAudioTrack track];
     
-    gSounds = [[NSMutableArray alloc] init];
+    gSounds = [[NSMutableDictionary alloc] init];
 }
 
 void deinitObjectAL()
@@ -166,62 +166,63 @@ void resumeObjectAL()
     gMusicTrack.paused = NO;
 }
 
-int loadSound(const char* pathCString)
+void loadSound(int bufferIndex, const char* pathCString)
 {
-    NSString *path = [[NSString alloc] initWithCString:pathCString encoding:NSASCIIStringEncoding];
+    NSString* path = [[NSString alloc] initWithCString:pathCString encoding:NSASCIIStringEncoding];
     
-    int ret = (int) [gSounds count];
-    
-    [gSounds addObject:[[ObjectALSoundBufferWrapper alloc] initWithSoundPath:path]];
-    
-    return ret;
+    [gSounds setObject:[[ObjectALSoundBufferWrapper alloc] initWithSoundPath:path] forKey:[NSNumber numberWithInt:bufferIndex]];
+}
+
+void unloadSound(int bufferIndex)
+{
+    [gSounds removeObjectForKey:[NSNumber numberWithInt:bufferIndex]];
 }
 
 void playSound(int bufferIndex, bool isLooping)
 {
-    ObjectALSoundBufferWrapper* sound = [gSounds objectAtIndex:bufferIndex];
+    ObjectALSoundBufferWrapper* sound = [gSounds objectForKey:[NSNumber numberWithInt:bufferIndex]];
     
     [sound play:isLooping];
 }
 
 void stopSound(int bufferIndex)
 {
-    ObjectALSoundBufferWrapper* sound = [gSounds objectAtIndex:bufferIndex];
+    ObjectALSoundBufferWrapper* sound = [gSounds objectForKey:[NSNumber numberWithInt:bufferIndex]];
     
     [sound stop];
 }
 
 void pauseSound(int bufferIndex)
 {
-    ObjectALSoundBufferWrapper* sound = [gSounds objectAtIndex:bufferIndex];
+    ObjectALSoundBufferWrapper* sound = [gSounds objectForKey:[NSNumber numberWithInt:bufferIndex]];
     
     [sound pause];
 }
 
 void resumeSound(int bufferIndex)
 {
-    ObjectALSoundBufferWrapper* sound = [gSounds objectAtIndex:bufferIndex];
+    ObjectALSoundBufferWrapper* sound = [gSounds objectForKey:[NSNumber numberWithInt:bufferIndex]];
     
     [sound resume];
 }
 
 void setSoundVolume(int bufferIndex, float volume)
 {
-    ObjectALSoundBufferWrapper* sound = [gSounds objectAtIndex:bufferIndex];
+    ObjectALSoundBufferWrapper* sound = [gSounds objectForKey:[NSNumber numberWithInt:bufferIndex]];
     
     [sound setVolume:volume];
 }
 
 bool isSoundPlaying(int bufferIndex)
 {
-    ObjectALSoundBufferWrapper* sound = [gSounds objectAtIndex:bufferIndex];
+    ObjectALSoundBufferWrapper* sound = [gSounds objectForKey:[NSNumber numberWithInt:bufferIndex]];
     
     return [sound isPlaying];
 }
 
 bool isSoundLooping(int bufferIndex)
 {
-    ObjectALSoundBufferWrapper* sound = [gSounds objectAtIndex:bufferIndex];
+    ObjectALSoundBufferWrapper* sound = [gSounds objectForKey:[NSNumber numberWithInt:bufferIndex]];
     
     return [sound isLooping];
 }
@@ -231,6 +232,11 @@ void loadMusic(const char* pathCString)
     NSString *path = [[NSString alloc] initWithCString:pathCString encoding:NSASCIIStringEncoding];
     
     [gMusicTrack preloadFile:path];
+}
+
+void unloadMusic()
+{
+    [gMusicTrack clear];
 }
 
 void playMusic(bool isLooping)
@@ -273,9 +279,4 @@ bool isMusicLooping()
 bool isMusicLoaded()
 {
     return [gMusicTrack preloaded];
-}
-
-void unloadMusic()
-{
-    [gMusicTrack clear];
 }

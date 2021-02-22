@@ -15,7 +15,7 @@ WindowsSound::WindowsSound(uint16_t soundID, DirectX::SoundEffect& sound, float 
 
 WindowsSound::~WindowsSound()
 {
-    _soundEffectInstance->Pause();
+    stop();
     
     _soundEffectInstance.reset();
 }

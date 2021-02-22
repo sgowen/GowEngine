@@ -28,6 +28,6 @@ public:
     virtual bool isPaused();
 
 private:
-    ALuint buf;
-    ALuint src;
+    ALuint _buf;
+    ALuint _src;
 };

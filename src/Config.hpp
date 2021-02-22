@@ -16,9 +16,6 @@ class Config
 public:
     static const Config EMPTY;
     
-    Config() {}
-    ~Config() {}
-    
     void initWithJSONFile(const char* filePath);
     void initWithJSON(const char* json);
     void initWithKeyValues(std::map<std::string, std::string> keyValues);

@@ -15,9 +15,7 @@ class InputMemoryBitStream;
 
 class ReplicationManagerClient
 {
-public:
-    ReplicationManagerClient() {}
-    
+public:    
     void read(InputMemoryBitStream& imbs, EntityRegistry& er);
     
 private:

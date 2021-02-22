@@ -34,7 +34,7 @@ void Engine::createDeviceDependentResources(void* data)
     execute(ERSA_CREATE_RESOURCES);
 }
 
-void Engine::onWindowSizeChanged(int screenWidth, int screenHeight, int cursorWidth, int cursorHeight)
+void Engine::onWindowSizeChanged(uint16_t screenWidth, uint16_t screenHeight, uint16_t cursorWidth, uint16_t cursorHeight)
 {
     _screenWidth = screenWidth;
     _screenHeight = screenHeight;
@@ -156,22 +156,22 @@ EngineRequestedStateAction Engine::requestedStateAction()
     return _requestedStateAction;
 }
 
-int Engine::screenWidth()
+uint16_t Engine::screenWidth()
 {
     return _screenWidth;
 }
 
-int Engine::screenHeight()
+uint16_t Engine::screenHeight()
 {
     return _screenHeight;
 }
 
-int Engine::cursorWidth()
+uint16_t Engine::cursorWidth()
 {
     return _cursorWidth;
 }
 
-int Engine::cursorHeight()
+uint16_t Engine::cursorHeight()
 {
     return _cursorHeight;
 }

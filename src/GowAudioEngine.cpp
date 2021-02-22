@@ -25,20 +25,6 @@ void GowAudioEngine::createDeviceDependentResources()
 {
     _audioEngineHelper = AudioEngineHelperFactory::create();
     _state = GAES_DEFAULT;
-    
-    std::vector<SoundDescriptor>& soundDescriptors = ASSETS.getSoundDescriptors();
-    for (SoundDescriptor& sd : soundDescriptors)
-    {
-        uint16_t soundID = sd._soundID;
-        if (soundID == 1337)
-        {
-            loadMusic(sd._filePath.c_str());
-        }
-        else
-        {
-            loadSound(soundID, sd._filePath.c_str(), sd._numInstances);
-        }
-    }
 }
 
 void GowAudioEngine::releaseDeviceDependentResources()
@@ -54,7 +40,6 @@ void GowAudioEngine::releaseDeviceDependentResources()
     
     if (_music != NULL)
     {
-        _music->getSoundInstance()->stop();
         delete _music;
         _music = NULL;
     }
@@ -62,6 +47,38 @@ void GowAudioEngine::releaseDeviceDependentResources()
     _musicStates.clear();
     
     AudioEngineHelperFactory::destroy(_audioEngineHelper);
+}
+
+void GowAudioEngine::loadSounds(std::vector<SoundDescriptor>& soundDescriptors)
+{
+    for (SoundDescriptor& sd : soundDescriptors)
+    {
+        uint16_t soundID = sd._soundID;
+        if (soundID == 1337)
+        {
+            loadMusic(sd._filePath.c_str());
+        }
+        else
+        {
+            loadSound(soundID, sd._filePath.c_str(), sd._numInstances);
+        }
+    }
+}
+
+void GowAudioEngine::unloadSounds(std::vector<SoundDescriptor>& soundDescriptors)
+{
+    for (SoundDescriptor& sd : soundDescriptors)
+    {
+        uint16_t soundID = sd._soundID;
+        if (soundID == 1337)
+        {
+            unloadMusic();
+        }
+        else
+        {
+            unloadSound(soundID);
+        }
+    }
 }
 
 void GowAudioEngine::render()
@@ -177,8 +194,18 @@ void GowAudioEngine::resume()
 
 void GowAudioEngine::loadSound(uint16_t soundID, const char *path, int numInstances)
 {
-    SoundWrapper* sound = _audioEngineHelper->loadSound(soundID, path, numInstances);
-    _sounds.insert(std::make_pair(soundID, sound));
+    assert(_sounds.find(soundID) == _sounds.end());
+    
+    SoundWrapper* sw = _audioEngineHelper->loadSound(soundID, path, numInstances);
+    _sounds.insert(std::make_pair(soundID, sw));
+}
+
+void GowAudioEngine::unloadSound(uint16_t soundID)
+{
+    auto q = _sounds.find(soundID);
+    assert(q != _sounds.end());
+    delete q->second;
+    _sounds.erase(q);
 }
 
 void GowAudioEngine::playSound(uint16_t soundID, float volume, bool isLooping)
@@ -338,19 +365,20 @@ void GowAudioEngine::resumeAllSounds()
 
 void GowAudioEngine::loadMusic(const char *path)
 {
-    if (_isMusicDisabled)
+    unloadMusic();
+    
+    _music = _audioEngineHelper->loadMusic(path);
+}
+
+void GowAudioEngine::unloadMusic()
+{
+    if (_music == NULL)
     {
         return;
     }
     
-    if (_music != NULL)
-    {
-        _music->getSoundInstance()->stop();
-        delete _music;
-        _music = NULL;
-    }
-    
-    _music = _audioEngineHelper->loadMusic(path);
+    delete _music;
+    _music = NULL;
 }
 
 void GowAudioEngine::playMusic(bool isLooping, float volume)

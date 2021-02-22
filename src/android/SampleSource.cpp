@@ -22,6 +22,11 @@ _gain(1.0f)
     setPan(pan);
 }
 
+SampleSource::~SampleSource()
+{
+    delete _sampleBuffer;
+}
+
 void SampleSource::mixAudio(float* outBuff, int numChannels, int numFrames, bool isLooping)
 {
     int32_t numSampleFrames = _sampleBuffer->getNumSampleFrames();
@@ -140,6 +145,11 @@ void SampleSource::setGain(float gain)
 float SampleSource::getGain()
 {
     return _gain;
+}
+
+SampleBuffer* SampleSource::buffer()
+{
+    return _sampleBuffer;
 }
 
 void SampleSource::calcGainFactors()
