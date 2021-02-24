@@ -10,10 +10,10 @@
 
 #include "AppleSound.hpp"
 
-AppleSoundWrapper::AppleSoundWrapper(uint16_t soundID, const char *filePath, int numInstances) : SoundWrapper(soundID, numInstances)
+AppleSoundWrapper::AppleSoundWrapper(const char *filePath, bool isMusic, uint8_t numInstances) : SoundWrapper(numInstances)
 {
     for (int i = 0; i < _numInstances; ++i)
     {
-        _sounds.push_back(new AppleSound(soundID, filePath));
+        _sounds.push_back(new AppleSound(filePath, isMusic));
     }
 }

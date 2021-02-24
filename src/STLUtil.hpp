@@ -1,5 +1,5 @@
 //
-//  GowUtil.hpp
+//  STLUtil.hpp
 //  GowEngine
 //
 //  Created by Stephen Gowen on 1/14/17.
@@ -11,7 +11,7 @@
 #include <vector>
 #include <map>
 
-class GowUtil
+class STLUtil
 {
 public:
     template<typename T>
@@ -37,8 +37,8 @@ public:
     }
     
 private:
-    GowUtil();
-    ~GowUtil();
-    GowUtil(const GowUtil&);
-    GowUtil& operator=(const GowUtil&);
+    STLUtil();
+    ~STLUtil();
+    STLUtil(const STLUtil&);
+    STLUtil& operator=(const STLUtil&);
 };

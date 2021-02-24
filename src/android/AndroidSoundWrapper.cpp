@@ -11,10 +11,10 @@
 #include "SimpleMultiPlayer.hpp"
 #include "AndroidSound.hpp"
 
-AndroidSoundWrapper::AndroidSoundWrapper(SimpleMultiPlayer* simpleMultiPlayer, uint16_t soundID, const char *filePath, int numInstances) : SoundWrapper(soundID, numInstances)
+AndroidSoundWrapper::AndroidSoundWrapper(SimpleMultiPlayer* simpleMultiPlayer, const char *filePath, uint8_t numInstances) : SoundWrapper(numInstances)
 {
     for (int i = 0; i < _numInstances; ++i)
     {
-        _sounds.push_back(new AndroidSound(simpleMultiPlayer, soundID, filePath));
+        _sounds.push_back(new AndroidSound(simpleMultiPlayer, filePath));
     }
 }

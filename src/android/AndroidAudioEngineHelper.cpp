@@ -11,14 +11,14 @@
 #include "AndroidSoundWrapper.hpp"
 #include "SimpleMultiPlayer.hpp"
 
-SoundWrapper* AndroidAudioEngineHelper::loadSound(uint16_t soundID, const char *filePath, int numInstances)
+SoundWrapper* AndroidAudioEngineHelper::loadSound(const char *filePath, uint8_t numInstances)
 {
-    return new AndroidSoundWrapper(_simpleMultiPlayer, soundID, filePath, numInstances);
+    return new AndroidSoundWrapper(_simpleMultiPlayer, filePath, numInstances);
 }
 
 SoundWrapper* AndroidAudioEngineHelper::loadMusic(const char* filePath)
 {
-    return loadSound(1337, filePath);
+    return loadSound(filePath);
 }
 
 AndroidAudioEngineHelper::AndroidAudioEngineHelper() : AudioEngineHelper(),

@@ -15,10 +15,16 @@ class LinuxAudioEngineHelper : public AudioEngineHelper
     friend class AudioEngineHelperFactory;
     
 public:
-    virtual SoundWrapper* loadSound(uint16_t soundID, const char *filePath, int numInstances = 1);
+    virtual SoundWrapper* loadSound(const char *filePath, uint8_t numInstances = 1);
     virtual SoundWrapper* loadMusic(const char* filePath);
 
 private:
+    static AudioEngineHelper* getInstance()
+    {
+        static LinuxAudioEngineHelper ret = LinuxAudioEngineHelper();
+        return &ret;
+    }
+    
     LinuxAudioEngineHelper();
     ~LinuxAudioEngineHelper();
     LinuxAudioEngineHelper(const LinuxAudioEngineHelper&);

@@ -21,7 +21,7 @@
 #include "StringUtil.hpp"
 #include "EntityRegistry.hpp"
 #include "StringUtil.hpp"
-#include "GowUtil.hpp"
+#include "STLUtil.hpp"
 #include "NetworkClient.hpp"
 #include "ReplicationManagerServer.hpp"
 #include "InstanceRegistry.hpp"

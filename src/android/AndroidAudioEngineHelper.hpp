@@ -17,10 +17,16 @@ class AndroidAudioEngineHelper : public AudioEngineHelper
     friend class AudioEngineHelperFactory;
     
 public:
-    virtual SoundWrapper* loadSound(uint16_t soundID, const char *filePath, int numInstances = 1);
+    virtual SoundWrapper* loadSound(const char *filePath, uint8_t numInstances = 1);
     virtual SoundWrapper* loadMusic(const char* filePath);
     
 private:
+    static AudioEngineHelper* getInstance()
+    {
+        static AndroidAudioEngineHelper ret = AndroidAudioEngineHelper();
+        return &ret;
+    }
+    
     SimpleMultiPlayer* _simpleMultiPlayer;
     
     AndroidAudioEngineHelper();

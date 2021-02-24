@@ -12,7 +12,7 @@
 #include "WavRIFFChunkHeader.hpp"
 #include "WavFmtChunkHeader.hpp"
 #include "WavChunkHeader.hpp"
-#include "GowUtil.hpp"
+#include "STLUtil.hpp"
 #include "StringUtil.hpp"
 
 #include <algorithm>
@@ -31,7 +31,7 @@ _chunkMap(new std::map<RiffID, WavChunkHeader*>())
 
 WavStreamReader::~WavStreamReader()
 {
-    GowUtil::cleanUpMapOfPointers(*_chunkMap);
+    STLUtil::cleanUpMapOfPointers(*_chunkMap);
     delete _chunkMap;
 }
 

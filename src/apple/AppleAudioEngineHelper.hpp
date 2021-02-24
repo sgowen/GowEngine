@@ -15,12 +15,18 @@ class AppleAudioEngineHelper : public AudioEngineHelper
     friend class AudioEngineHelperFactory;
     
 public:
+    virtual SoundWrapper* loadSound(const char *filePath, uint8_t numInstances = 1);
+    virtual SoundWrapper* loadMusic(const char* filePath);
     virtual void pause();
     virtual void resume();
-    virtual SoundWrapper* loadSound(uint16_t soundID, const char *filePath, int numInstances = 1);
-    virtual SoundWrapper* loadMusic(const char* filePath);
 
 private:
+    static AudioEngineHelper* getInstance()
+    {
+        static AppleAudioEngineHelper ret = AppleAudioEngineHelper();
+        return &ret;
+    }
+    
     AppleAudioEngineHelper();
     virtual ~AppleAudioEngineHelper();
     AppleAudioEngineHelper(const AppleAudioEngineHelper&);

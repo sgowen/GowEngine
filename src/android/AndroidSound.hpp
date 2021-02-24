@@ -15,10 +15,10 @@ class SimpleMultiPlayer;
 class AndroidSound : public Sound
 {
 public:
-    AndroidSound(SimpleMultiPlayer* simpleMultiPlayer, uint16_t soundID, const char *filePath, float volume = 1.0f);
+    AndroidSound(SimpleMultiPlayer* simpleMultiPlayer, const char *filePath, float volume = 1.0f);
     virtual ~AndroidSound();
 
-    virtual void play(bool isLooping = false);
+    virtual void play();
     virtual void resume();
     virtual void pause();
     virtual void stop();
@@ -29,4 +29,5 @@ public:
 
 private:
     SimpleMultiPlayer* _simpleMultiPlayer;
+    uint32_t _sampleSourceKey;
 };

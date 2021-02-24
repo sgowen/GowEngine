@@ -50,24 +50,17 @@ void ResourceManager::deregisterAssets(std::string assetsFilePath)
 
 Shader& ResourceManager::shader(std::string name)
 {
-    Shader* ret = NULL;
-    for (auto& pair : _assets)
-    {
-        // TODO
-    }
-    
-    return *ret;
+    return _shaderMgr.shader(name);
+}
+
+SoundWrapper* ResourceManager::sound(uint16_t soundID)
+{
+    return _soundMgr.sound(soundID);
 }
 
 Texture& ResourceManager::texture(std::string name)
 {
-    Texture* ret = NULL;
-    for (auto& pair : _assets)
-    {
-        // TODO
-    }
-    
-    return *ret;
+    return _textureMgr.texture(name);
 }
 
 TextureRegion& ResourceManager::findTextureRegion(std::string key, uint16_t stateTime)
@@ -90,19 +83,22 @@ TextureRegion& ResourceManager::findTextureRegion(std::string key, uint16_t stat
 
 void ResourceManager::loadAssets(Assets& a)
 {
-    _shaderManager.loadShaders(a.getShaderDescriptors());
-    _textureManager.loadTextures(a.getTextureDescriptors());
+    _shaderMgr.loadShaders(a.getShaderDescriptors());
+    _soundMgr.loadSounds(a.getSoundDescriptors());
+    _textureMgr.loadTextures(a.getTextureDescriptors());
 }
 
 void ResourceManager::unloadAssets(Assets& a)
 {
-    _shaderManager.unloadShaders(a.getShaderDescriptors());
-    _textureManager.unloadTextures(a.getTextureDescriptors());
+    _shaderMgr.unloadShaders(a.getShaderDescriptors());
+    _soundMgr.unloadSounds(a.getSoundDescriptors());
+    _textureMgr.unloadTextures(a.getTextureDescriptors());
 }
 
 ResourceManager::ResourceManager() :
-_shaderManager(),
-_textureManager()
+_shaderMgr(),
+_soundMgr(),
+_textureMgr()
 {
     // Empty
 }

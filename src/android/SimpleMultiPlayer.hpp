@@ -29,23 +29,23 @@ public:
     bool openStream();
     bool startStream();
     int getSampleRate();
-    void addSampleSource(uint16_t soundID, SampleSource* source);
-    void unloadSampleSource(uint16_t soundID);
+    uint32_t addSampleSource(SampleSource* source);
+    void unloadSampleSource(uint32_t key);
     void unloadSampleData();
-    void play(uint16_t soundID, bool isLooping);
-    bool isPlaying(uint16_t soundID);
-    bool isPaused(uint16_t soundID);
-    bool isLooping(uint16_t soundID);
-    void pause(uint16_t soundID);
-    void resume(uint16_t soundID);
-    void stop(uint16_t soundID);
+    void play(uint32_t key, bool isLooping);
+    bool isPlaying(uint32_t key);
+    bool isPaused(uint32_t key);
+    bool isLooping(uint32_t key);
+    void pause(uint32_t key);
+    void resume(uint32_t key);
+    void stop(uint32_t key);
     void resetAll();
     bool getOutputReset();
     void clearOutputReset();
-    void setPan(uint16_t soundID, float pan);
-    float getPan(uint16_t soundID);
-    void setGain(uint16_t soundID, float gain);
-    float getGain(uint16_t soundID);
+    void setPan(uint32_t key, float pan);
+    float getPan(uint32_t key);
+    void setGain(uint32_t key, float gain);
+    float getGain(uint32_t key);
 
 private:
     std::shared_ptr<oboe::AudioStream> _audioStream;
@@ -53,4 +53,7 @@ private:
     int32_t _sampleRate;
     std::map<int, SampleSource*> _sampleSources;
     bool _outputReset;
+    uint32_t _sampleSourceKey;
+    
+    SampleSource* sampleSource(uint32_t key);
 };

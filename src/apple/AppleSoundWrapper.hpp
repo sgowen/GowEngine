@@ -13,6 +13,6 @@
 class AppleSoundWrapper : public SoundWrapper
 {
 public:
-    AppleSoundWrapper(uint16_t soundID, const char *filePath, int numInstances = 1);
+    AppleSoundWrapper(const char *filePath, bool isMusic, uint8_t numInstances = 1);
     virtual ~AppleSoundWrapper() {}
 };

@@ -17,12 +17,36 @@ class AudioEngineHelper
     friend class AudioEngineHelperFactory;
     
 public:
+    virtual SoundWrapper* loadSound(const char *path, uint8_t numInstances = 1) = 0;
+    virtual SoundWrapper* loadMusic(const char* path) = 0;
     virtual void pause() {}
     virtual void resume() {}
-    virtual SoundWrapper* loadSound(uint16_t soundID, const char *path, int numInstances = 1) = 0;
-    virtual SoundWrapper* loadMusic(const char* path) = 0;
+    
+    bool isMusicDisabled()
+    {
+        return _musicDisabled;
+    }
+
+    void setMusicDisabled(bool value)
+    {
+        _musicDisabled = value;
+    }
+
+    bool areSoundsDisabled()
+    {
+        return _soundsDisabled;
+    }
+
+    void setSoundsDisabled(bool value)
+    {
+        _soundsDisabled = value;
+    }
     
 protected:
     AudioEngineHelper() {}
     virtual ~AudioEngineHelper() {}
+    
+private:
+    bool _musicDisabled;
+    bool _soundsDisabled;
 };

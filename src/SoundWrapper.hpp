@@ -16,18 +16,26 @@ class Sound;
 class SoundWrapper
 {
 public:
-    SoundWrapper(uint16_t soundID, int numInstances = 1);
+    SoundWrapper(uint8_t numInstances = 1);
     virtual ~SoundWrapper();
 
-    Sound* getSoundInstance();
+    void play();
+    void resume();
+    void pause();
+    void stop();
+    void setVolume(float volume);
+    bool isLooping();
+    bool isPlaying();
+    bool isPaused();
+    void setLooping(bool isLooping);
+    Sound* nextSoundInstance();
+    Sound* soundInstance(uint8_t soundIndex);
+    Sound* soundInstance();
     std::vector<Sound *> getSounds();
-    int getSoundIndex();
-    int getSoundID();
-    int getNumInstances();
+    uint8_t numInstances();
 
 protected:
     std::vector<Sound *> _sounds;
-    int _soundIndex;
-    int _soundID;
-    int _numInstances;
+    uint8_t _soundIndex;
+    uint8_t _numInstances;
 };

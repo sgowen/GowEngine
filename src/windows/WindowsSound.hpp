@@ -17,10 +17,10 @@
 class WindowsSound : public Sound
 {
 public:
-    WindowsSound(uint16_t soundID, DirectX::SoundEffect& sound, float volume = 1.0f);
+    WindowsSound(DirectX::SoundEffect& sound, float volume = 1.0f);
     virtual ~WindowsSound();
 
-    virtual void play(bool isLooping = false);
+    virtual void play();
     virtual void resume();
     virtual void pause();
     virtual void stop();

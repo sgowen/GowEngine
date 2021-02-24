@@ -16,7 +16,7 @@
 #include "EntityRenderController.hpp"
 #include "EntityController.hpp"
 #include "StringUtil.hpp"
-#include "GowUtil.hpp"
+#include "STLUtil.hpp"
 #include "AssetHandlerFactory.hpp"
 #include "AssetHandler.hpp"
 #include "FileData.hpp"
@@ -72,7 +72,7 @@ void EntityManager::initWithJSON(const char* json)
                 uint32_t nameVal = StringUtil::stringToNumber<uint32_t>(name);
                 uint8_t state = nameVal;
                 std::string value = i->value.GetString();
-                textureMappings.insert(std::make_pair(state, value));
+                textureMappings.emplace(state, value);
             }
         }
         else if (iv.HasMember("textureMapping"))
@@ -81,7 +81,7 @@ void EntityManager::initWithJSON(const char* json)
             assert(v.IsString());
             uint8_t state = 0;
             std::string value = v.GetString();
-            textureMappings.insert(std::make_pair(state, value));
+            textureMappings.emplace(state, value);
         }
         
         std::map<uint8_t, uint16_t> soundMappings;
@@ -96,7 +96,7 @@ void EntityManager::initWithJSON(const char* json)
                 uint8_t state = nameVal;
                 assert(i->value.IsUint());
                 uint16_t soundID = i->value.GetUint();
-                soundMappings.insert(std::make_pair(state, soundID));
+                soundMappings.emplace(state, soundID);
             }
         }
         
@@ -119,7 +119,7 @@ void EntityManager::initWithJSON(const char* json)
                 std::string name = i->name.GetString();
                 uint32_t nameVal = StringUtil::stringToNumber<uint32_t>(name);
                 uint8_t state = nameVal;
-                soundRandomMappings.insert(std::make_pair(state, soundCollection));
+                soundRandomMappings.emplace(state, soundCollection);
             }
         }
         

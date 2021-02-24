@@ -25,29 +25,24 @@
 #include <assert.h>
 #include <stdlib.h>
 
+#define AUDIO_ENGINE_HELPER AudioEngineHelperFactory::getInstance()
+
 class AudioEngineHelperFactory
 {
 public:
-    static AudioEngineHelper* create()
+    static AudioEngineHelper* getInstance()
     {
 #if IS_APPLE
-        return new AppleAudioEngineHelper();
+        return AppleAudioEngineHelper::getInstance();
 #elif IS_ANDROID
-        return new AndroidAudioEngineHelper();
+        return AndroidAudioEngineHelper::getInstance();
 #elif IS_LINUX
-        return new LinuxAudioEngineHelper();
+        return LinuxAudioEngineHelper::getInstance();
 #elif IS_WINDOWS
-        return new WindowsAudioEngineHelper();
+        return WindowsAudioEngineHelper::getInstance();
 #else
         #error Need to add AudioEngineHelper implementation
 #endif
-    }
-    
-    static void destroy(AudioEngineHelper* aeh)
-    {
-        assert(aeh != NULL);
-
-        delete aeh;
     }
     
 private:

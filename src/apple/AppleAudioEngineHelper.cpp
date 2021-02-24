@@ -13,6 +13,20 @@
 #include "ObjectALWrapper.hpp"
 #include "NSAppleAssetHandler.hpp"
 
+SoundWrapper* AppleAudioEngineHelper::loadSound(const char *filePath, uint8_t numInstances)
+{
+	const char* bundlePath = getBundlePath(filePath);
+    
+    return new AppleSoundWrapper(bundlePath, false, numInstances);
+}
+
+SoundWrapper* AppleAudioEngineHelper::loadMusic(const char* filePath)
+{
+    const char* bundlePath = getBundlePath(filePath);
+    
+    return new AppleSoundWrapper(bundlePath, true);
+}
+
 void AppleAudioEngineHelper::pause()
 {
     pauseObjectAL();
@@ -21,18 +35,6 @@ void AppleAudioEngineHelper::pause()
 void AppleAudioEngineHelper::resume()
 {
     resumeObjectAL();
-}
-
-SoundWrapper* AppleAudioEngineHelper::loadSound(uint16_t soundID, const char *filePath, int numInstances)
-{
-	const char* bundlePath = getBundlePath(filePath);
-    
-    return new AppleSoundWrapper(soundID, bundlePath, numInstances);
-}
-
-SoundWrapper* AppleAudioEngineHelper::loadMusic(const char* filePath)
-{
-    return loadSound(1337, filePath);
 }
 
 AppleAudioEngineHelper::AppleAudioEngineHelper() : AudioEngineHelper()

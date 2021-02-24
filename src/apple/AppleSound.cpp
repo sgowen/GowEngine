@@ -10,16 +10,16 @@
 
 #include "ObjectALWrapper.hpp"
 
-AppleSound::AppleSound(uint16_t soundID, const char *filePath, float volume) : Sound(soundID),
-_isMusic(soundID == 1337)
+AppleSound::AppleSound(const char *filePath, bool isMusic, float volume) : Sound(),
+_bufferKey(0)
 {
-    if (_isMusic)
+    if (isMusic)
     {
         loadMusic(filePath);
     }
     else
     {
-        loadSound(soundID, filePath);
+        _bufferKey = loadSound(filePath);
     }
 }
 
@@ -27,27 +27,27 @@ AppleSound::~AppleSound()
 {
     stop();
     
-    if (_isMusic)
+    if (_bufferKey > 0)
+    {
+        unloadSound(_bufferKey);
+    }
+    else
     {
         unloadMusic();
     }
-    else
-    {
-        unloadSound(_soundID);
-    }
 }
 
-void AppleSound::play(bool isLooping)
+void AppleSound::play()
 {
-    if (_isMusic)
+    if (_bufferKey > 0)
     {
-        stopMusic();
-        playMusic(isLooping);
+        stopSound(_bufferKey);
+        playSound(_bufferKey, _isLooping);
     }
     else
     {
-        stopSound(_soundID);
-        playSound(_soundID, isLooping);
+        stopMusic();
+        playMusic(_isLooping);
     }
 }
 
@@ -55,13 +55,13 @@ void AppleSound::resume()
 {
     if (isPaused())
     {
-        if (_isMusic)
+        if (_bufferKey > 0)
         {
-            resumeMusic();
+            resumeSound(_bufferKey);
         }
         else
         {
-            resumeSound(_soundID);
+            resumeMusic();
         }
     }
 }
@@ -70,62 +70,62 @@ void AppleSound::pause()
 {
     if (isPlaying())
     {
-        if (_isMusic)
+        if (_bufferKey > 0)
         {
-            pauseMusic();
+            pauseSound(_bufferKey);
         }
         else
         {
-            pauseSound(_soundID);
+            pauseMusic();
         }
     }
 }
 
 void AppleSound::stop()
 {
-    if (_isMusic)
+    if (_bufferKey > 0)
     {
-        stopMusic();
+        stopSound(_bufferKey);
     }
     else
     {
-        stopSound(_soundID);
+        stopMusic();
     }
 }
 
 void AppleSound::setVolume(float volume)
 {
-    if (_isMusic)
+    if (_bufferKey > 0)
     {
-        setMusicVolume(volume);
+        setSoundVolume(_bufferKey, volume);
     }
     else
     {
-        setSoundVolume(_soundID, volume);
+        setMusicVolume(volume);
     }
 }
 
 bool AppleSound::isLooping()
 {
-    if (_isMusic)
+    if (_bufferKey > 0)
     {
-        return isMusicLooping();
+        return isSoundLooping(_bufferKey);
     }
     else
     {
-        return isSoundLooping(_soundID);
+        return isMusicLooping();
     }
 }
 
 bool AppleSound::isPlaying()
 {
-    if (_isMusic)
+    if (_bufferKey > 0)
     {
-        return isMusicPlaying();
+        return isSoundPlaying(_bufferKey);
     }
     else
     {
-        return isSoundPlaying(_soundID);
+        return isMusicPlaying();
     }
 }
 

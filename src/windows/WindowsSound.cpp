@@ -8,7 +8,7 @@
 
 #include "WindowsSound.hpp"
 
-WindowsSound::WindowsSound(uint16_t soundID, DirectX::SoundEffect& sound, float volume) : Sound(soundID)
+WindowsSound::WindowsSound(DirectX::SoundEffect& sound, float volume) : Sound()
 {
     _soundEffectInstance = sound.CreateInstance();
 }
@@ -20,10 +20,10 @@ WindowsSound::~WindowsSound()
     _soundEffectInstance.reset();
 }
 
-void WindowsSound::play(bool isLooping)
+void WindowsSound::play()
 {
 	_soundEffectInstance->Stop();
-    _soundEffectInstance->Play(isLooping);
+    _soundEffectInstance->Play(_isLooping);
 }
 
 void WindowsSound::resume()

@@ -11,6 +11,7 @@
 #include "TextureDescriptor.hpp"
 #include "Assets.hpp"
 #include "ShaderManager.hpp"
+#include "SoundManager.hpp"
 #include "TextureManager.hpp"
 
 #include <map>
@@ -31,13 +32,15 @@ public:
     void registerAssets(std::string assetsFilePath);
     void deregisterAssets(std::string assetsFilePath);
     Shader& shader(std::string name);
+    SoundWrapper* sound(uint16_t soundID);
     Texture& texture(std::string name);
     TextureRegion& findTextureRegion(std::string key, uint16_t stateTime = 0);
 
 private:
     std::map<std::string, Assets> _assets;
-    ShaderManager _shaderManager;
-    TextureManager _textureManager;
+    ShaderManager _shaderMgr;
+    SoundManager _soundMgr;
+    TextureManager _textureMgr;
     
     void loadAssets(Assets& a);
     void unloadAssets(Assets& a);

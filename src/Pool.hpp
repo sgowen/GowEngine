@@ -8,7 +8,7 @@
 
 #pragma once
 
-#include "GowUtil.hpp"
+#include "STLUtil.hpp"
 
 #include <assert.h>
 #include <vector>
@@ -20,7 +20,7 @@ class Pool
 public:    
     ~Pool()
     {
-        GowUtil::cleanUpVectorOfPointers(_objects);
+        STLUtil::cleanUpVectorOfPointers(_objects);
     }
     
     T* obtain()

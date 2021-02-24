@@ -13,10 +13,10 @@
 class AppleSound : public Sound
 {
 public:
-    AppleSound(uint16_t soundID, const char *filePath, float volume = 1.0f);
+    AppleSound(const char *filePath, bool isMusic, float volume = 1.0f);
     virtual ~AppleSound();
 
-    virtual void play(bool isLooping = false);
+    virtual void play();
     virtual void resume();
     virtual void pause();
     virtual void stop();
@@ -26,5 +26,5 @@ public:
     virtual bool isPaused();
 
 private:
-    bool _isMusic;
+    uint32_t _bufferKey;
 };

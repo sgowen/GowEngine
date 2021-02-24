@@ -14,9 +14,9 @@
 #include <AL/alut.h>
 #include <stdio.h>
 
-SoundWrapper* LinuxAudioEngineHelper::loadSound(uint16_t soundID, const char *filePath, int numInstances)
+SoundWrapper* LinuxAudioEngineHelper::loadSound(const char *filePath, uint8_t numInstances)
 {
-    return new LinuxSoundWrapper(soundID, filePath, numInstances);
+    return new LinuxSoundWrapper(filePath, numInstances);
 }
 
 SoundWrapper* LinuxAudioEngineHelper::loadMusic(const char* filePath)

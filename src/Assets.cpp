@@ -38,6 +38,7 @@ void Assets::initWithJSON(const char* json)
     Document d;
     d.Parse<kParseStopWhenDoneFlag>(json);
     
+    std::vector<uint16_t> soundIDsAdded;
     if (d.HasMember("music"))
     {
         Value& v = d["music"];
@@ -45,7 +46,9 @@ void Assets::initWithJSON(const char* json)
         assert(v.IsObject());
         std::string filePath = RapidJSONUtil::getString(v, "filePath");
         
-        _soundDescriptors.emplace_back(1337, filePath, 1);
+        uint16_t soundID = 1337;
+        _soundDescriptors.emplace_back(soundID, filePath, 1);
+        soundIDsAdded.emplace_back(soundID);
     }
     
     if (d.HasMember("sounds"))
@@ -53,7 +56,6 @@ void Assets::initWithJSON(const char* json)
         Value& v = d["sounds"];
         assert(v.IsArray());
         
-        std::vector<uint16_t> soundIDsAdded;
         for (SizeType i = 0; i < v.Size(); ++i)
         {
             const Value& iv = v[i];
@@ -168,13 +170,13 @@ void Assets::initWithJSON(const char* json)
                     
                     if (iv.HasMember("frameTimes") || iv.HasMember("frameTime"))
                     {
+                        auto q = animations.find(key);
+                        assert(q == animations.end());
+                        
                         bool looping = RapidJSONUtil::getBool(iv, "looping", true);
                         int firstLoopingFrame = RapidJSONUtil::getInt(iv, "firstLoopingFrame");
                         int xPadding = RapidJSONUtil::getInt(iv, "xPadding");
                         int yPadding = RapidJSONUtil::getInt(iv, "yPadding");
-                        
-                        auto q = animations.find(key);
-                        assert(q == animations.end());
                         
                         std::vector<uint16_t> frameTimes;
                         int numFrames;

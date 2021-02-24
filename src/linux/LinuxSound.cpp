@@ -12,7 +12,7 @@
 
 #include <AL/alut.h>
 
-LinuxSound::LinuxSound(uint16_t soundID, const char *filePath, float volume) : Sound(soundID),
+LinuxSound::LinuxSound(const char *filePath, float volume) : Sound(),
 _buf(0),
 _src(0)
 {
@@ -31,9 +31,9 @@ LinuxSound::~LinuxSound()
     alDeleteSources(1, &_src);
 }
 
-void LinuxSound::play(bool isLooping)
+void LinuxSound::play()
 {
-    alSourcei(_src, AL_LOOPING, isLooping ? AL_TRUE : AL_FALSE);
+    alSourcei(_src, AL_LOOPING, _isLooping ? AL_TRUE : AL_FALSE);
 
     alSourcePlay(_src);
 }

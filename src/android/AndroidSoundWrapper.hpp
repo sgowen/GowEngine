@@ -15,6 +15,6 @@ class SimpleMultiPlayer;
 class AndroidSoundWrapper : public SoundWrapper
 {
 public:
-    AndroidSoundWrapper(SimpleMultiPlayer* simpleMultiPlayer, uint16_t soundID, const char *filePath, int numInstances = 1);
+    AndroidSoundWrapper(SimpleMultiPlayer* simpleMultiPlayer, const char *filePath, uint8_t numInstances = 1);
     virtual ~AndroidSoundWrapper() {}
 };

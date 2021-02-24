@@ -19,12 +19,18 @@ class WindowsAudioEngineHelper : public AudioEngineHelper
     friend class AudioEngineHelperFactory;
     
 public:
+    virtual SoundWrapper* loadSound(const char *filePath, uint8_t numInstances = 1);
+    virtual SoundWrapper* loadMusic(const char* filePath);
     virtual void pause();
     virtual void resume();
-    virtual SoundWrapper* loadSound(uint16_t soundID, const char *filePath, int numInstances = 1);
-    virtual SoundWrapper* loadMusic(const char* filePath);
 
 private:
+    static AudioEngineHelper* getInstance()
+    {
+        static WindowsAudioEngineHelper ret = WindowsAudioEngineHelper();
+        return &ret;
+    }
+    
     std::unique_ptr<DirectX::AudioEngine> _audioEngine;
     
     WindowsAudioEngineHelper();

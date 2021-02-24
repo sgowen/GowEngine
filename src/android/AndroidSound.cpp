@@ -20,8 +20,9 @@
 
 #include <assert.h>
 
-AndroidSound::AndroidSound(SimpleMultiPlayer* simpleMultiPlayer, uint16_t soundID, const char *filePath, float volume) : Sound(soundID),
-_simpleMultiPlayer(simpleMultiPlayer)
+AndroidSound::AndroidSound(SimpleMultiPlayer* simpleMultiPlayer, const char *filePath, float volume) : Sound(),
+_simpleMultiPlayer(simpleMultiPlayer),
+_sampleSourceKey(0)
 {
     AssetHandler* ah = AssetHandlerFactory::create();
     
@@ -43,7 +44,7 @@ _simpleMultiPlayer(simpleMultiPlayer)
     sampleBuffer->loadSampleData(&reader);
 
     SampleSource* source = new SampleSource(sampleBuffer, 0);
-    _simpleMultiPlayer->addSampleSource(soundID, source);
+    _sampleSourceKey = _simpleMultiPlayer->addSampleSource(source);
 
     AssetHandlerFactory::destroy(ah);
 }
@@ -52,19 +53,19 @@ AndroidSound::~AndroidSound()
 {
     stop();
     
-    _simpleMultiPlayer->unloadSampleSource(_soundID);
+    _simpleMultiPlayer->unloadSampleSource(_sampleSourceKey);
 }
 
-void AndroidSound::play(bool isLooping)
+void AndroidSound::play()
 {
-    _simpleMultiPlayer->play(_soundID, isLooping);
+    _simpleMultiPlayer->play(_sampleSourceKey, _isLooping);
 }
 
 void AndroidSound::resume()
 {
     if (isPaused())
     {
-        _simpleMultiPlayer->resume(_soundID);
+        _simpleMultiPlayer->resume(_sampleSourceKey);
     }
 }
 
@@ -72,31 +73,31 @@ void AndroidSound::pause()
 {
     if (isPlaying())
     {
-        _simpleMultiPlayer->pause(_soundID);
+        _simpleMultiPlayer->pause(_sampleSourceKey);
     }
 }
 
 void AndroidSound::stop()
 {
-    _simpleMultiPlayer->stop(_soundID);
+    _simpleMultiPlayer->stop(_sampleSourceKey);
 }
 
 void AndroidSound::setVolume(float volume)
 {
-    _simpleMultiPlayer->setGain(_soundID, volume);
+    _simpleMultiPlayer->setGain(_sampleSourceKey, volume);
 }
 
 bool AndroidSound::isLooping()
 {
-    return _simpleMultiPlayer->isLooping(_soundID);
+    return _simpleMultiPlayer->isLooping(_sampleSourceKey);
 }
 
 bool AndroidSound::isPlaying()
 {
-    return _simpleMultiPlayer->isPlaying(_soundID);
+    return _simpleMultiPlayer->isPlaying(_sampleSourceKey);
 }
 
 bool AndroidSound::isPaused()
 {
-    return _simpleMultiPlayer->isPaused(_soundID);
+    return _simpleMultiPlayer->isPaused(_sampleSourceKey);
 }

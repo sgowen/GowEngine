@@ -9,26 +9,26 @@
 #include "WindowsSoundWrapper.hpp"
 
 #include "WindowsSound.hpp"
-#include "GowUtil.hpp"
+#include "STLUtil.hpp"
 
-WindowsSoundWrapper::WindowsSoundWrapper(uint16_t soundID, const char *filePath, DirectX::AudioEngine* audioEngine, int numInstances) : SoundWrapper(soundID, numInstances)
+WindowsSoundWrapper::WindowsSoundWrapper(const char *filePath, DirectX::AudioEngine* audioEngine, uint8_t numInstances) : SoundWrapper(numInstances)
 {
-    wchar_t* wString = new wchar_t[4096];
-    MultiByteToWideChar(CP_ACP, 0, filePath, -1, wString, 4096);
+    wchar_t* wFilePath = new wchar_t[4096];
+    MultiByteToWideChar(CP_ACP, 0, filePath, -1, wFilePath, 4096);
     
-    _sound = std::make_unique<DirectX::SoundEffect>(audioEngine, wString);
+    _sound = std::make_unique<DirectX::SoundEffect>(audioEngine, wFilePath);
     
-    delete wString;
+    delete wFilePath;
     
     for (int i = 0; i < _numInstances; ++i)
     {
-        _sounds.push_back(new WindowsSound(soundID, *_sound));
+        _sounds.push_back(new WindowsSound(*_sound));
     }
 }
 
 WindowsSoundWrapper::~WindowsSoundWrapper()
 {
-	GowUtil::cleanUpVectorOfPointers(_sounds);
+	STLUtil::cleanUpVectorOfPointers(_sounds);
 
     if (_sound)
     {

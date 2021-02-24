@@ -11,7 +11,7 @@
 #include "SampleSource.hpp"
 #include "SampleBuffer.hpp"
 #include "StringUtil.hpp"
-#include "GowUtil.hpp"
+#include "STLUtil.hpp"
 
 using namespace oboe;
 
@@ -19,7 +19,8 @@ constexpr int32_t kBufferSizeInBursts = 2; // Use 2 bursts as the buffer size (d
 
 SimpleMultiPlayer::SimpleMultiPlayer() :
 _channelCount(0),
-_outputReset(false)
+_outputReset(false),
+_sampleSourceKey(1)
 {
     // Empty
 }
@@ -129,16 +130,18 @@ int SimpleMultiPlayer::getSampleRate()
     return _sampleRate;
 }
 
-void SimpleMultiPlayer::addSampleSource(uint16_t soundID, SampleSource* source)
+uint32_t SimpleMultiPlayer::addSampleSource(SampleSource* source)
 {
     source->buffer()->resampleData(_sampleRate);
-
-    _sampleSources.emplace(soundID, source);
+    
+    _sampleSources.emplace(_sampleSourceKey, source);
+    
+    return _sampleSourceKey++;
 }
 
-void SimpleMultiPlayer::unloadSampleSource(uint16_t soundID)
+void SimpleMultiPlayer::unloadSampleSource(uint32_t key)
 {
-    auto q = _sampleSources.find(soundID);
+    auto q = _sampleSources.find(key);
     assert(q != _sampleSources.end());
     delete q->second;
     _sampleSources.erase(q);
@@ -147,63 +150,42 @@ void SimpleMultiPlayer::unloadSampleSource(uint16_t soundID)
 void SimpleMultiPlayer::unloadSampleData()
 {
     resetAll();
-    GowUtil::cleanUpMapOfPointers(_sampleSources);
+    STLUtil::cleanUpMapOfPointers(_sampleSources);
 }
 
-void SimpleMultiPlayer::play(uint16_t soundID, bool isLooping)
+void SimpleMultiPlayer::play(uint32_t key, bool isLooping)
 {
-    auto q = _sampleSources.find(soundID);
-    assert(q != _sampleSources.end());
-    
-    q->second->setPlayMode(isLooping);
+    sampleSource(key)->setPlayMode(isLooping);
 }
 
-bool SimpleMultiPlayer::isPlaying(uint16_t soundID)
+bool SimpleMultiPlayer::isPlaying(uint32_t key)
 {
-    auto q = _sampleSources.find(soundID);
-    assert(q != _sampleSources.end());
-    
-    return q->second->isPlaying();
+    sampleSource(key)->isPlaying();
 }
 
-bool SimpleMultiPlayer::isPaused(uint16_t soundID)
+bool SimpleMultiPlayer::isPaused(uint32_t key)
 {
-    auto q = _sampleSources.find(soundID);
-    assert(q != _sampleSources.end());
-    
-    return q->second->isPaused();
+    sampleSource(key)->isPaused();
 }
 
-bool SimpleMultiPlayer::isLooping(uint16_t soundID)
+bool SimpleMultiPlayer::isLooping(uint32_t key)
 {
-    auto q = _sampleSources.find(soundID);
-    assert(q != _sampleSources.end());
-    
-    return q->second->isLooping();
+    sampleSource(key)->isLooping();
 }
 
-void SimpleMultiPlayer::pause(uint16_t soundID)
+void SimpleMultiPlayer::pause(uint32_t key)
 {
-    auto q = _sampleSources.find(soundID);
-    assert(q != _sampleSources.end());
-    
-    q->second->setPauseMode();
+    sampleSource(key)->setPauseMode();
 }
 
-void SimpleMultiPlayer::resume(uint16_t soundID)
+void SimpleMultiPlayer::resume(uint32_t key)
 {
-    auto q = _sampleSources.find(soundID);
-    assert(q != _sampleSources.end());
-    
-    q->second->setResumeMode();
+    sampleSource(key)->setResumeMode();
 }
 
-void SimpleMultiPlayer::stop(uint16_t soundID)
+void SimpleMultiPlayer::stop(uint32_t key)
 {
-    auto q = _sampleSources.find(soundID);
-    assert(q != _sampleSources.end());
-    
-    q->second->setStopMode();
+    sampleSource(key)->setStopMode();
 }
 
 void SimpleMultiPlayer::resetAll()
@@ -224,34 +206,30 @@ void SimpleMultiPlayer::clearOutputReset()
     _outputReset = false;
 }
 
-void SimpleMultiPlayer::setPan(uint16_t soundID, float pan)
+void SimpleMultiPlayer::setPan(uint32_t key, float pan)
 {
-    auto q = _sampleSources.find(soundID);
-    assert(q != _sampleSources.end());
-    
-    q->second->setPan(pan);
+    sampleSource(key)->setPan(pan);
 }
 
-float SimpleMultiPlayer::getPan(uint16_t soundID)
+float SimpleMultiPlayer::getPan(uint32_t key)
 {
-    auto q = _sampleSources.find(soundID);
-    assert(q != _sampleSources.end());
-    
-    return q->second->getPan();
+    return sampleSource(key)->getPan();
 }
 
-void SimpleMultiPlayer::setGain(uint16_t soundID, float gain)
+void SimpleMultiPlayer::setGain(uint32_t key, float gain)
 {
-    auto q = _sampleSources.find(soundID);
-    assert(q != _sampleSources.end());
-    
-    q->second->setGain(gain);
+    sampleSource(key)->setGain(gain);
 }
 
-float SimpleMultiPlayer::getGain(uint16_t soundID)
+float SimpleMultiPlayer::getGain(uint32_t key)
 {
-    auto q = _sampleSources.find(soundID);
+    return sampleSource(key)->getGain();
+}
+
+SampleSource* SimpleMultiPlayer::sampleSource(uint32_t key)
+{
+    auto q = _sampleSources.find(key);
     assert(q != _sampleSources.end());
     
-    return q->second->getGain();
+    return q->second;
 }

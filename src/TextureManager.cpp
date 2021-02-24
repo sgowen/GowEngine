@@ -16,7 +16,7 @@ void TextureManager::loadTextures(std::vector<TextureDescriptor>& tds)
     
     for (auto& td : tds)
     {
-        _textures.insert({td._name, Texture(td)});
+        _textures.emplace(td._name, Texture{td});
     }
     
     for (std::map<std::string, Texture>::iterator i = _textures.begin(); i != _textures.end(); ++i)

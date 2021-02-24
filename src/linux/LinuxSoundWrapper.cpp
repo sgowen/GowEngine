@@ -10,10 +10,10 @@
 
 #include "LinuxSound.hpp"
 
-LinuxSoundWrapper::LinuxSoundWrapper(uint16_t soundID, const char *filePath, int numInstances) : SoundWrapper(soundID, numInstances)
+LinuxSoundWrapper::LinuxSoundWrapper(const char *filePath, uint8_t numInstances) : SoundWrapper(numInstances)
 {
     for (int i = 0; i < _numInstances; ++i)
     {
-        _sounds.push_back(new LinuxSound(soundID, filePath));
+        _sounds.push_back(new LinuxSound(filePath));
     }
 }

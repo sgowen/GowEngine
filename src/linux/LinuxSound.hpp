@@ -15,10 +15,10 @@
 class LinuxSound : public Sound
 {
 public:
-    LinuxSound(uint16_t soundID, const char *filePath, float volume = 1.0f);
+    LinuxSound(const char *filePath, float volume = 1.0f);
     virtual ~LinuxSound();
 
-    virtual void play(bool isLooping = false);
+    virtual void play();
     virtual void resume();
     virtual void pause();
     virtual void stop();
