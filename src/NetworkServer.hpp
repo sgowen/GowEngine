@@ -15,7 +15,7 @@
 #include <map>
 #include <string>
 
-class ReplicationManagerTransmissionData;
+class ReplicationTransmissionData;
 class InputMemoryBitStream;
 class OutputMemoryBitStream;
 class DeliveryNotificationManager;
@@ -69,7 +69,7 @@ private:
     InputStateCreationFunc _inputStateCreationFunc;
     InputStateReleaseFunc _inputStateReleaseFunc;
     EntityRegistry _entityRegistry;
-    Pool<ReplicationManagerTransmissionData> _poolRMTD;
+    Pool<ReplicationTransmissionData> _poolRMTD;
     std::map<uint64_t, ClientProxy> _addressHashToClientMap;
     std::map<int, ClientProxy*> _playerIDToClientMap;
     uint8_t _nextPlayerID;

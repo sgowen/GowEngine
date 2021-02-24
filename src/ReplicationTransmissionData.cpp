@@ -1,12 +1,12 @@
 //
-//  ReplicationManagerTransmissionData.cpp
+//  ReplicationTransmissionData.cpp
 //  GowEngine
 //
 //  Created by Stephen Gowen on 5/15/17.
 //  Copyright © 2021 Stephen Gowen. All rights reserved.
 //
 
-#include "ReplicationManagerTransmissionData.hpp"
+#include "ReplicationTransmissionData.hpp"
 
 #include "ReplicationManagerServer.hpp"
 #include "EntityRegistry.hpp"
@@ -15,7 +15,7 @@
 
 #include <assert.h>
 
-ReplicationManagerTransmissionData::ReplicationManagerTransmissionData() :
+ReplicationTransmissionData::ReplicationTransmissionData() :
 _replicationManagerServer(NULL),
 _entityRegistry(NULL),
 _poolRMTD(NULL)
@@ -23,7 +23,7 @@ _poolRMTD(NULL)
     // Empty
 }
 
-void ReplicationManagerTransmissionData::free()
+void ReplicationTransmissionData::free()
 {
     if (_poolRMTD != NULL)
     {
@@ -31,7 +31,7 @@ void ReplicationManagerTransmissionData::free()
     }
 }
 
-void ReplicationManagerTransmissionData::handleDeliveryFailure(DeliveryNotificationManager* dnm) const
+void ReplicationTransmissionData::handleDeliveryFailure(DeliveryNotificationManager* dnm) const
 {
     for (const ReplicationTransmission& rt: _transmissions)
     {
@@ -53,7 +53,7 @@ void ReplicationManagerTransmissionData::handleDeliveryFailure(DeliveryNotificat
     }
 }
 
-void ReplicationManagerTransmissionData::handleDeliverySuccess(DeliveryNotificationManager* dnm) const
+void ReplicationTransmissionData::handleDeliverySuccess(DeliveryNotificationManager* dnm) const
 {
     for (const ReplicationTransmission& rt: _transmissions)
     {
@@ -71,7 +71,7 @@ void ReplicationManagerTransmissionData::handleDeliverySuccess(DeliveryNotificat
     }
 }
 
-void ReplicationManagerTransmissionData::reset(ReplicationManagerServer* rms, EntityRegistry* er, Pool<ReplicationManagerTransmissionData>* poolRMTD)
+void ReplicationTransmissionData::reset(ReplicationManagerServer* rms, EntityRegistry* er, Pool<ReplicationTransmissionData>* poolRMTD)
 {
     _replicationManagerServer = rms;
     _entityRegistry = er;
@@ -79,12 +79,12 @@ void ReplicationManagerTransmissionData::reset(ReplicationManagerServer* rms, En
     _transmissions.clear();
 }
 
-void ReplicationManagerTransmissionData::addTransmission(uint32_t networkID, ReplicationAction ra, uint8_t dirtyState)
+void ReplicationTransmissionData::addTransmission(uint32_t networkID, ReplicationAction ra, uint8_t dirtyState)
 {
     _transmissions.emplace_back(networkID, ra, dirtyState);
 }
 
-void ReplicationManagerTransmissionData::handleCreateDeliveryFailure(uint32_t networkID) const
+void ReplicationTransmissionData::handleCreateDeliveryFailure(uint32_t networkID) const
 {
     assert(_replicationManagerServer != NULL);
     assert(_entityRegistry != NULL);
@@ -97,7 +97,7 @@ void ReplicationManagerTransmissionData::handleCreateDeliveryFailure(uint32_t ne
     }
 }
 
-void ReplicationManagerTransmissionData::handleUpdateStateDeliveryFailure(uint32_t networkID, uint8_t dirtyState, DeliveryNotificationManager* dnm) const
+void ReplicationTransmissionData::handleUpdateStateDeliveryFailure(uint32_t networkID, uint8_t dirtyState, DeliveryNotificationManager* dnm) const
 {
     assert(_replicationManagerServer != NULL);
     assert(_entityRegistry != NULL);
@@ -109,9 +109,9 @@ void ReplicationManagerTransmissionData::handleUpdateStateDeliveryFailure(uint32
         //remove written state from dirty state
         for (const auto& inFlightPacket: dnm->getInFlightPackets())
         {
-            ReplicationManagerTransmissionData* rmtdp = static_cast<ReplicationManagerTransmissionData*>(inFlightPacket.getTransmissionData('RPLM'));
+            ReplicationTransmissionData* rtd = static_cast<ReplicationTransmissionData*>(inFlightPacket.getTransmissionData('RPLM'));
             
-            for (const ReplicationTransmission& otherRT: rmtdp->_transmissions)
+            for (const ReplicationTransmission& otherRT: rtd->_transmissions)
             {
                 dirtyState &= ~otherRT.dirtyState();
             }
@@ -125,23 +125,23 @@ void ReplicationManagerTransmissionData::handleUpdateStateDeliveryFailure(uint32
     }
 }
 
-void ReplicationManagerTransmissionData::handleDestroyDeliveryFailure(uint32_t networkID) const
+void ReplicationTransmissionData::handleDestroyDeliveryFailure(uint32_t networkID) const
 {
     _replicationManagerServer->replicateDestroy(networkID);
 }
 
-void ReplicationManagerTransmissionData::handleCreateDeliverySuccess(uint32_t networkID) const
+void ReplicationTransmissionData::handleCreateDeliverySuccess(uint32_t networkID) const
 {
     //we've received an ack for the create, so we can start sending as only an update
     _replicationManagerServer->handleCreateAckd(networkID);
 }
 
-void ReplicationManagerTransmissionData::handleDestroyDeliverySuccess(uint32_t networkID) const
+void ReplicationTransmissionData::handleDestroyDeliverySuccess(uint32_t networkID) const
 {
     _replicationManagerServer->removeFromReplication(networkID);
 }
 
-ReplicationManagerTransmissionData::ReplicationTransmission::ReplicationTransmission(uint32_t networkID, ReplicationAction ra, uint8_t dirtyState) :
+ReplicationTransmissionData::ReplicationTransmission::ReplicationTransmission(uint32_t networkID, ReplicationAction ra, uint8_t dirtyState) :
 _networkID(networkID),
 _action(ra),
 _dirtyState(dirtyState)
@@ -149,17 +149,17 @@ _dirtyState(dirtyState)
     // Empty
 }
 
-int ReplicationManagerTransmissionData::ReplicationTransmission::getID() const
+int ReplicationTransmissionData::ReplicationTransmission::getID() const
 {
     return _networkID;
 }
 
-ReplicationAction ReplicationManagerTransmissionData::ReplicationTransmission::getAction() const
+ReplicationAction ReplicationTransmissionData::ReplicationTransmission::getAction() const
 {
     return _action;
 }
 
-uint8_t ReplicationManagerTransmissionData::ReplicationTransmission::dirtyState() const
+uint8_t ReplicationTransmissionData::ReplicationTransmission::dirtyState() const
 {
     return _dirtyState;
 }

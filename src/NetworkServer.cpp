@@ -8,7 +8,7 @@
 
 #include "NetworkServer.hpp"
 
-#include "ReplicationManagerTransmissionData.hpp"
+#include "ReplicationTransmissionData.hpp"
 #include "InputMemoryBitStream.hpp"
 #include "OutputMemoryBitStream.hpp"
 #include "DeliveryNotificationManager.hpp"
@@ -403,10 +403,10 @@ void NetworkServer::sendStatePacketToClient(ClientProxy& cp)
         cp.setLastMoveTimestampDirty(false);
     }
     
-    ReplicationManagerTransmissionData* rmtd = _poolRMTD.obtain();
-    rmtd->reset(&cp.getReplicationManagerServer(), &_entityRegistry, &_poolRMTD);
+    ReplicationTransmissionData* rtd = _poolRMTD.obtain();
+    rtd->reset(&cp.getReplicationManagerServer(), &_entityRegistry, &_poolRMTD);
     
-    cp.getReplicationManagerServer().write(ombs, rmtd);
+    cp.getReplicationManagerServer().write(ombs, rtd);
     
     TransmissionData* td = ifp->getTransmissionData('RPLM');
     if (td != NULL)
@@ -414,7 +414,7 @@ void NetworkServer::sendStatePacketToClient(ClientProxy& cp)
         td->free();
     }
     
-    ifp->setTransmissionData('RPLM', rmtd);
+    ifp->setTransmissionData('RPLM', rtd);
     
     sendPacket(ombs, cp.getSocketAddress());
 }

@@ -10,7 +10,7 @@
 
 #include "EntityRegistry.hpp"
 #include "OutputMemoryBitStream.hpp"
-#include "ReplicationManagerTransmissionData.hpp"
+#include "ReplicationTransmissionData.hpp"
 #include "EntityRegistry.hpp"
 #include "Macros.hpp"
 #include "Entity.hpp"
@@ -57,7 +57,7 @@ void ReplicationManagerServer::handleCreateAckd(uint32_t networkID)
     _networkIDToReplicationCommand[networkID].handleCreateAckd();
 }
 
-void ReplicationManagerServer::write(OutputMemoryBitStream& ombs, ReplicationManagerTransmissionData* rmtd)
+void ReplicationManagerServer::write(OutputMemoryBitStream& ombs, ReplicationTransmissionData* rtd)
 {
     for (auto& pair: _networkIDToReplicationCommand)
     {
@@ -89,7 +89,7 @@ void ReplicationManagerServer::write(OutputMemoryBitStream& ombs, ReplicationMan
                 break;
         }
         
-        rmtd->addTransmission(networkID, ra, writtenState);
+        rtd->addTransmission(networkID, ra, writtenState);
         
         rc.clearDirtyState();
     }

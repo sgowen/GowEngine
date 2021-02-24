@@ -15,7 +15,7 @@
 
 class EntityRegistry;
 class OutputMemoryBitStream;
-class ReplicationManagerTransmissionData;
+class ReplicationTransmissionData;
 
 class ReplicationManagerServer
 {
@@ -27,7 +27,7 @@ public:
     void setStateDirty(uint32_t networkID, uint8_t dirtyState);
     void handleCreateAckd(uint32_t networkID);
     void removeFromReplication(uint32_t networkID);
-    void write(OutputMemoryBitStream& ombs, ReplicationManagerTransmissionData* rmtd);
+    void write(OutputMemoryBitStream& ombs, ReplicationTransmissionData* rtd);
     
 private:
     EntityRegistry& _entityRegistry;

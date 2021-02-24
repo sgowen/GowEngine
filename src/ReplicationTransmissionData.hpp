@@ -1,5 +1,5 @@
 //
-//  ReplicationManagerTransmissionData.hpp
+//  ReplicationTransmissionData.hpp
 //  GowEngine
 //
 //  Created by Stephen Gowen on 5/15/17.
@@ -18,16 +18,16 @@
 class ReplicationManagerServer;
 class EntityRegistry;
 
-class ReplicationManagerTransmissionData : public TransmissionData
+class ReplicationTransmissionData : public TransmissionData
 {
 public:
-    ReplicationManagerTransmissionData();
+    ReplicationTransmissionData();
     
     virtual void free() override;
     virtual void handleDeliveryFailure(DeliveryNotificationManager* dnm) const override;
     virtual void handleDeliverySuccess(DeliveryNotificationManager* dnm) const override;
     
-    void reset(ReplicationManagerServer* rms, EntityRegistry* er, Pool<ReplicationManagerTransmissionData>* poolRMTD);
+    void reset(ReplicationManagerServer* rms, EntityRegistry* er, Pool<ReplicationTransmissionData>* poolRMTD);
     void addTransmission(uint32_t networkID, ReplicationAction ra, uint8_t dirtyState);
     
 private:
@@ -35,7 +35,7 @@ private:
     
     ReplicationManagerServer* _replicationManagerServer;
     EntityRegistry* _entityRegistry;
-    Pool<ReplicationManagerTransmissionData>* _poolRMTD;
+    Pool<ReplicationTransmissionData>* _poolRMTD;
     std::vector<ReplicationTransmission> _transmissions;
     
     void handleCreateDeliveryFailure(uint32_t networkID) const;
