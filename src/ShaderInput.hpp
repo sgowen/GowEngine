@@ -51,32 +51,3 @@ struct VERTEX_2D
         _xy[1] = 0;
     }
 };
-
-inline void mat4_identity(mat4& m)
-{
-    int i, j;
-    for (i = 0; i < 4; ++i)
-    {
-        for (j = 0; j < 4; ++j)
-        {
-            m[i][j] = i == j ? 1.f : 0.f;
-        }
-    }
-}
-
-inline void mat4_ortho(mat4& m, float l, float r, float b, float t, float n, float f)
-{
-    m[0][0] = 2.f / (r - l);
-    m[0][1] = m[0][2] = m[0][3] = 0.f;
-    
-    m[1][1] = 2.f / (t - b);
-    m[1][0] = m[1][2] = m[1][3] = 0.f;
-    
-    m[2][2] = -2.f / (f - n);
-    m[2][0] = m[2][1] = m[2][3] = 0.f;
-    
-    m[3][0] = -(r + l) / (r - l);
-    m[3][1] = -(t + b) / (t - b);
-    m[3][2] = -(f + n) / (f - n);
-    m[3][3] = 1.f;
-}

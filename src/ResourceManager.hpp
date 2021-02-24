@@ -32,7 +32,7 @@ public:
     void deregisterAssets(std::string assetsFilePath);
     Shader& shader(std::string name);
     Texture& texture(std::string name);
-    TextureRegion& findTextureRegion(std::string key, uint16_t stateTime);
+    TextureRegion& findTextureRegion(std::string key, uint16_t stateTime = 0);
 
 private:
     std::map<std::string, Assets> _assets;

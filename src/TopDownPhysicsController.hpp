@@ -34,6 +34,14 @@ struct Bounds
     }
 };
 
+enum EntityDirection
+{
+    EDIR_UP      = 0,
+    EDIR_DOWN    = 1,
+    EDIR_LEFT    = 2,
+    EDIR_RIGHT   = 3
+};
+
 class TopDownPhysicsController : public EntityPhysicsController
 {
     DECL_RTTI;
@@ -49,6 +57,7 @@ public:
     void initPhysics();
     void processPhysics(TimeTracker* tt);
     void processCollisions(std::vector<Entity*>& entities);
+    void push(int dir, float force);
     Rektangle* boundingBox();
     
 protected:

@@ -22,7 +22,7 @@ void TextureLoader::loadTextureData(Texture& t)
 {
     AssetHandler* ah = AssetHandlerFactory::create();
     
-    const FileData textureData = ah->loadAsset(t._descriptor._filePath.c_str());
+    const FileData textureData = ah->loadAsset(t._desc._filePath.c_str());
     
     if (IS_IOS)
     {

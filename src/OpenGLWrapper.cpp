@@ -39,7 +39,7 @@ void OpenGLWrapper::bindShader(Shader& s)
     
     glUseProgram(s._program);
     
-    std::vector<ShaderAttribute>& attributes = s._descriptor.getAttributes();
+    std::vector<ShaderAttribute>& attributes = s._desc.getAttributes();
     for (const auto& sa : attributes)
     {
         glEnableVertexAttribArray(sa._location);
@@ -49,7 +49,7 @@ void OpenGLWrapper::bindShader(Shader& s)
 
 void OpenGLWrapper::unbindShader(Shader& s)
 {
-    std::vector<ShaderAttribute>& attributes = s._descriptor.getAttributes();
+    std::vector<ShaderAttribute>& attributes = s._desc.getAttributes();
     for (const auto& sa : attributes)
     {
         glDisableVertexAttribArray(sa._location);
@@ -60,7 +60,7 @@ void OpenGLWrapper::unbindShader(Shader& s)
 
 void OpenGLWrapper::bindMatrix(Shader& s, std::string uniformName, mat4& matrix)
 {
-    ShaderUniform& su = s._descriptor.uniform(uniformName);
+    ShaderUniform& su = s._desc.uniform(uniformName);
     assert(su._type == "mat4");
     
     glUniformMatrix4fv(su._location, 1, GL_FALSE, (GLfloat*)matrix);
@@ -68,7 +68,7 @@ void OpenGLWrapper::bindMatrix(Shader& s, std::string uniformName, mat4& matrix)
 
 void OpenGLWrapper::bindColor(Shader& s, std::string uniformName, const Color& c)
 {
-    ShaderUniform& su = s._descriptor.uniform(uniformName);
+    ShaderUniform& su = s._desc.uniform(uniformName);
     assert(su._type == "vec4");
     
     glUniform4f(su._location, c._red, c._green, c._blue, c._alpha);
@@ -76,7 +76,7 @@ void OpenGLWrapper::bindColor(Shader& s, std::string uniformName, const Color& c
 
 void OpenGLWrapper::bindInt4(Shader& s, std::string uniformName, ivec4& value)
 {
-    ShaderUniform& su = s._descriptor.uniform(uniformName);
+    ShaderUniform& su = s._desc.uniform(uniformName);
     assert(su._type == "ivec4");
     
     glUniform4i(su._location, value[0], value[1], value[2], value[3]);
@@ -84,7 +84,7 @@ void OpenGLWrapper::bindInt4(Shader& s, std::string uniformName, ivec4& value)
 
 void OpenGLWrapper::bindFloat4(Shader& s, std::string uniformName, vec4& value)
 {
-    ShaderUniform& su = s._descriptor.uniform(uniformName);
+    ShaderUniform& su = s._desc.uniform(uniformName);
     assert(su._type == "vec4");
     
     glUniform4f(su._location, value[0], value[1], value[2], value[3]);
@@ -92,7 +92,7 @@ void OpenGLWrapper::bindFloat4(Shader& s, std::string uniformName, vec4& value)
 
 void OpenGLWrapper::bindFloat4Array(Shader& s, std::string uniformName, int count, vec4* value)
 {
-    ShaderUniform& su = s._descriptor.uniform(uniformName);
+    ShaderUniform& su = s._desc.uniform(uniformName);
     assert(su._type == "vec4");
     
     glUniform4fv(su._location, count, (const GLfloat*)value);
@@ -108,7 +108,7 @@ void OpenGLWrapper::bindTexture(Shader& s, std::string uniformName, GLuint index
     assert(index < NUM_SUPPORTED_TEXTURE_SLOTS);
     assert(texture > 0);
     
-    ShaderUniform& su = s._descriptor.uniform(uniformName);
+    ShaderUniform& su = s._desc.uniform(uniformName);
     assert(su._type == "sampler2D");
     
     glActiveTexture(TEXTURE_SLOTS[index]);
@@ -157,7 +157,7 @@ void OpenGLWrapper::bindScreenFramebuffer(GLsizei width, GLsizei height, const C
     bindFramebuffer(fb);
 }
 
-void OpenGLWrapper::bindFramebuffer(Framebuffer& fb, const Color& clearColor)
+void OpenGLWrapper::bindFramebuffer(Framebuffer& fb, const Color& c)
 {
     assert(fb._width > 0);
     assert(fb._height > 0);
@@ -168,7 +168,7 @@ void OpenGLWrapper::bindFramebuffer(Framebuffer& fb, const Color& clearColor)
     glScissor(0, 0, fb._width, fb._height);
     glEnable(GL_SCISSOR_TEST);
     
-    clearFramebuffer(clearColor);
+    clearFramebuffer(c);
 }
 
 void OpenGLWrapper::clearFramebuffer(const Color& c)
@@ -302,7 +302,7 @@ void OpenGLWrapper::loadTexture(Texture& t)
 {
     assert(t._data != NULL);
     
-    t._texture = loadTexture(t._width, t._height, t._data, t._descriptor._filterMin, t._descriptor._filterMag, t._descriptor._mipMap);
+    t._texture = loadTexture(t._width, t._height, t._data, t._desc._filterMin, t._desc._filterMag, t._desc._mipMap);
 }
 
 void OpenGLWrapper::unloadTexture(Texture& t)
@@ -315,7 +315,7 @@ void OpenGLWrapper::loadShader(Shader& s, const uint8_t* vertexShaderSrc, const 
 {
     s._program = loadShader(vertexShaderSrc, vertexShaderSrcLength, fragmentShaderSrc, fragmentShaderSrcLength);
     
-    std::vector<ShaderUniform>& uniforms = s._descriptor.getUniforms();
+    std::vector<ShaderUniform>& uniforms = s._desc.getUniforms();
     for (auto& su : uniforms)
     {
         su._location = glGetUniformLocation(s._program, su._name.c_str());
@@ -324,7 +324,7 @@ void OpenGLWrapper::loadShader(Shader& s, const uint8_t* vertexShaderSrc, const 
     size_t offset = 0;
     uint32_t totalSize = 0;
     
-    std::vector<ShaderAttribute>& attributes = s._descriptor.getAttributes();
+    std::vector<ShaderAttribute>& attributes = s._desc.getAttributes();
     for (auto& sa : attributes)
     {
         sa._offset = offset * sizeof(GL_FLOAT);
@@ -360,8 +360,9 @@ GLuint OpenGLWrapper::loadTexture(int width, int height, uint8_t* data, std::str
     glBindTexture(GL_TEXTURE_2D, ret);
     
     bool filterMinSharp = filterMin == "SHARP";
+    bool filterMagSharp = filterMag == "SHARP";
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, mipmap ? (filterMinSharp ? GL_LINEAR_MIPMAP_NEAREST : GL_LINEAR_MIPMAP_LINEAR) : (filterMinSharp ? GL_NEAREST : GL_LINEAR));
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, filterMag == "SHARP" ? GL_NEAREST : GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, filterMagSharp ? GL_NEAREST : GL_LINEAR);
     
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);

@@ -21,7 +21,7 @@ class Assets
 public:
 	void initWithJSONFile(const char* filePath);
     void initWithJSON(const char* json);
-    TextureRegion* findTextureRegion(std::string key, uint16_t stateTime);
+    TextureRegion* findTextureRegion(std::string key, uint16_t stateTime = 0);
     std::vector<ShaderDescriptor>& getShaderDescriptors();
     std::vector<SoundDescriptor>& getSoundDescriptors();
     std::vector<TextureDescriptor>& getTextureDescriptors();

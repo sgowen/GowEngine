@@ -30,7 +30,7 @@ struct TextView
     float _xWeight;
     float _yWeight;
     float _glyphWidthWeight;
-    TextVisibility _visibility;
+    uint8_t _visibility;
     
     TextView(std::string text, TextAlignment ta, float xWeight, float yWeight, float glyphWidthWeight) :
     _alignment(ta),

@@ -77,8 +77,8 @@ public:
     void bindVertexBuffer(GLuint buffer, size_t size, const void* data);
     void unbindVertexBuffer();
     void bindScreenFramebuffer(GLsizei width, GLsizei height, const Color& clearColor = Color::CLEAR);
-    void bindFramebuffer(Framebuffer& fb, const Color& clearColor = Color::CLEAR);
-    void clearFramebuffer(const Color& c);
+    void bindFramebuffer(Framebuffer& fb, const Color& c = Color::CLEAR);
+    void clearFramebuffer(const Color& c = Color::CLEAR);
     void clearFramebuffer(float red, float green, float blue, float alpha);
     void draw(GLenum mode, uint32_t first, uint32_t count);
     void drawIndexed(GLenum mode, GLuint indexBuffer, uint32_t count, size_t first = 0);

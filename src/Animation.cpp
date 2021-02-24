@@ -22,7 +22,6 @@ _cycleTime(0)
     {
         _cycleTime += frameTime;
     }
-
     assert(_cycleTime > 0);
 
     const int numFrames = static_cast<int>(_frameTimes.size());
@@ -43,19 +42,17 @@ _cycleTime(0)
     }
 }
 
-TextureRegion& Animation::getTextureRegion(uint16_t stateTime)
+TextureRegion& Animation::textureRegion(uint16_t stateTime)
 {
-	int frameIndex = getFrameIndex(stateTime);
-
-	return getTextureRegionAtKeyFrame(frameIndex);
+    return textureRegionAtKeyFrame(frameIndex(stateTime));
 }
 
-TextureRegion& Animation::getTextureRegionAtKeyFrame(uint16_t frameIndex)
+TextureRegion& Animation::textureRegionAtKeyFrame(uint16_t frameIndex)
 {
 	return _textureRegions.at(frameIndex);
 }
 
-uint16_t Animation::getFrameIndex(uint16_t stateTime)
+uint16_t Animation::frameIndex(uint16_t stateTime)
 {
     if (stateTime >= _cycleTime)
     {

@@ -42,6 +42,7 @@ public:
     void sendOutgoingPackets();
     void registerEntity(Entity* e);
     void deregisterEntity(Entity* e);
+    void deregisterAllEntities();
     void setStateDirty(uint32_t networkID, uint8_t dirtyState);
     ClientProxy* getClientProxy(uint8_t playerID) const;
     int getMoveCount();
@@ -49,6 +50,8 @@ public:
     uint8_t getNumPlayersConnected();
     SocketAddress& getServerAddress();
     bool connect();
+    void onEntityRegistered(Entity* e);
+    void onEntityDeregistered(Entity* e);
     EntityRegistry& getEntityRegistry();
     void processPacket(InputMemoryBitStream& imbs, SocketAddress* fromAddress);
     void onMovesProcessed(uint8_t moveCount);
@@ -59,6 +62,8 @@ private:
     static NetworkServer* s_instance;
     
     PacketHandler _packetHandler;
+    OnEntityRegisteredFunc _onEntityRegisteredFunc;
+    OnEntityDeregisteredFunc _onEntityDeregisteredFunc;
     HandleNewClientFunc _handleNewClientFunc;
     HandleLostClientFunc _handleLostClientFunc;
     InputStateCreationFunc _inputStateCreationFunc;

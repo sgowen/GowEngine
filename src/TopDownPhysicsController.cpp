@@ -153,6 +153,27 @@ void TopDownPhysicsController::processCollisions(std::vector<Entity*>& entities)
     }
 }
 
+void TopDownPhysicsController::push(int dir, float force)
+{    
+    switch (dir)
+    {
+        case EDIR_UP:
+            _entity->velocity()._y = force;
+            break;
+        case EDIR_DOWN:
+            _entity->velocity()._y = -force;
+            break;
+        case EDIR_LEFT:
+            _entity->velocity()._x = -force;
+            break;
+        case EDIR_RIGHT:
+            _entity->velocity()._x = force;
+            break;
+        default:
+            break;
+    }
+}
+
 Rektangle* TopDownPhysicsController::boundingBox()
 {
     return _boundingBox;

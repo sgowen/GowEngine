@@ -56,10 +56,10 @@ void EntityManager::initWithJSON(const char* json)
         
         std::string name = RapidJSONUtil::getString(iv, "name");
         std::string keyName = keyStr;
-        std::string controller = RapidJSONUtil::getString(iv, "controller", "Entity");
-        std::string networkController = RapidJSONUtil::getString(iv, "networkController", "Entity");
-        std::string physicsController = RapidJSONUtil::getString(iv, "physicsController", "Entity");
-        std::string renderController = RapidJSONUtil::getString(iv, "renderController", "Entity");
+        std::string controller = RapidJSONUtil::getString(iv, "controller", "Default");
+        std::string networkController = RapidJSONUtil::getString(iv, "networkController", "Default");
+        std::string physicsController = RapidJSONUtil::getString(iv, "physicsController", "Default");
+        std::string renderController = RapidJSONUtil::getString(iv, "renderController", "Default");
         
         std::map<uint8_t, std::string> textureMappings;
         if (iv.HasMember("textureMappings"))
@@ -276,8 +276,8 @@ const std::map<std::string, EntityRenderControllerCreationFunc>& EntityManager::
 
 EntityManager::EntityManager()
 {
-    registerController("Entity", EntityController::create);
-    registerNetworkController("Entity", EntityNetworkController::create);
-    registerPhysicsController("Entity", EntityPhysicsController::create);
-    registerRenderController("Entity", EntityRenderController::create);
+    registerController("Default", EntityController::create);
+    registerNetworkController("Default", EntityNetworkController::create);
+    registerPhysicsController("Default", EntityPhysicsController::create);
+    registerRenderController("Default", EntityRenderController::create);
 }

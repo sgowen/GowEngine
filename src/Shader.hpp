@@ -12,11 +12,11 @@
 
 struct Shader
 {
-    ShaderDescriptor _descriptor;
+    ShaderDescriptor _desc;
     uint32_t _program;
     
-    Shader(ShaderDescriptor sd) :
-    _descriptor(sd),
+    Shader(ShaderDescriptor desc) :
+    _desc(desc),
     _program(0)
     {
         // Empty

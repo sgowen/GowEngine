@@ -12,15 +12,15 @@
 
 struct Texture
 {
-    TextureDescriptor _descriptor;
+    TextureDescriptor _desc;
     int _width;
     int _height;
     int _numChannels;
     uint8_t* _data;
     uint32_t _texture;
     
-    Texture(TextureDescriptor td) :
-    _descriptor(td),
+    Texture(TextureDescriptor desc) :
+    _desc(desc),
     _width(0),
     _height(0),
     _numChannels(0),

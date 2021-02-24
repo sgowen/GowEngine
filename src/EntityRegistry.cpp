@@ -43,6 +43,18 @@ void EntityRegistry::deregisterEntity(Entity* e)
     _onEntityDeregisteredFunc(e);
 }
 
+void EntityRegistry::deregisterAll()
+{
+    for (auto i = _entityMap.begin(); i != _entityMap.end(); )
+    {
+        Entity* e = i->second;
+        
+        i = _entityMap.erase(i);
+        
+        _onEntityDeregisteredFunc(e);
+    }
+}
+
 std::map<uint32_t, Entity*>& EntityRegistry::getMap()
 {
     return _entityMap;

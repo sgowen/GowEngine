@@ -150,8 +150,8 @@ void Assets::initWithJSON(const char* json)
                 int textureHeight = RapidJSONUtil::getInt(iv, "textureHeight", 2048);
                 
                 TextureDescriptor& td = _textureDescriptors.back();
-                std::map<std::string, Animation>& animations = td.getAnimations();
-                std::map<std::string, TextureRegion>& textureRegions = td.getTextureRegions();
+                std::map<std::string, Animation>& animations = td._animations;
+                std::map<std::string, TextureRegion>& textureRegions = td._textureRegions;
                 
                 const Value& v = iv["mappings"];
                 assert(v.IsObject());
@@ -239,24 +239,10 @@ TextureRegion* Assets::findTextureRegion(std::string key, uint16_t stateTime)
     std::vector<TextureDescriptor>& tds = getTextureDescriptors();
     for (TextureDescriptor& td : tds)
     {
+        ret = td.textureRegion(key, stateTime);
+        if (ret != NULL)
         {
-            std::map<std::string, TextureRegion>& textureRegions = td.getTextureRegions();
-            auto q = textureRegions.find(key);
-            if (q != textureRegions.end())
-            {
-                ret = &q->second;
-                break;
-            }
-        }
-        
-        {
-            std::map<std::string, Animation>& animations = td.getAnimations();
-            auto q = animations.find(key);
-            if (q != animations.end())
-            {
-                ret = &q->second.getTextureRegion(stateTime);
-                break;
-            }
+            break;
         }
     }
     

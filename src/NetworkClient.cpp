@@ -466,6 +466,8 @@ _port(port)
 
 NetworkClient::~NetworkClient()
 {
+    _entityRegistry.deregisterAll();
+    
     OutputMemoryBitStream ombs;
     ombs.write<uint8_t, 4>(static_cast<uint8_t>(NWPT_CLNT_EXIT));
     sendPacket(ombs);

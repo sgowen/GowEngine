@@ -23,6 +23,7 @@ public:
     Entity* getEntityByID(uint32_t id) const;
     void registerEntity(Entity* e);
     void deregisterEntity(Entity* e);
+    void deregisterAll();
     std::map<uint32_t, Entity*>& getMap();
     
 private:

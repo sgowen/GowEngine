@@ -94,22 +94,17 @@ void NetworkServer::sendOutgoingPackets()
 
 void NetworkServer::registerEntity(Entity* e)
 {
-    for (auto& pair: _addressHashToClientMap)
-    {
-        pair.second.getReplicationManagerServer().replicateCreate(e->getID(), ALL_DIRTY_STATE);
-    }
-    
     _entityRegistry.registerEntity(e);
 }
 
 void NetworkServer::deregisterEntity(Entity* e)
 {
-    for (auto& pair: _addressHashToClientMap)
-    {
-        pair.second.getReplicationManagerServer().replicateDestroy(e->getID());
-    }
-    
     _entityRegistry.deregisterEntity(e);
+}
+
+void NetworkServer::deregisterAllEntities()
+{
+    _entityRegistry.deregisterAll();
 }
 
 void NetworkServer::setStateDirty(uint32_t networkID, uint8_t dirtyState)
@@ -215,6 +210,26 @@ bool NetworkServer::connect()
     }
     
     return error == NO_ERROR;
+}
+
+void NetworkServer::onEntityRegistered(Entity* e)
+{
+    for (auto& pair: _addressHashToClientMap)
+    {
+        pair.second.getReplicationManagerServer().replicateCreate(e->getID(), ALL_DIRTY_STATE);
+    }
+    
+    _onEntityRegisteredFunc(e);
+}
+
+void NetworkServer::onEntityDeregistered(Entity* e)
+{
+    for (auto& pair: _addressHashToClientMap)
+    {
+        pair.second.getReplicationManagerServer().replicateDestroy(e->getID());
+    }
+    
+    _onEntityDeregisteredFunc(e);
 }
 
 EntityRegistry& NetworkServer::getEntityRegistry()
@@ -555,6 +570,11 @@ void NetworkServer::handleClientDisconnected(ClientProxy& cp)
     _addressHashToClientMap.erase(cp.getSocketAddress()->getHash());
     
     resetNextPlayerID();
+    
+    if (getNumClientsConnected() == 0)
+    {
+        deregisterAllEntities();
+    }
 }
 
 void NetworkServer::resetNextPlayerID()
@@ -569,18 +589,30 @@ void NetworkServer::resetNextPlayerID()
     }
 }
 
-void cb_server_processPacket(InputMemoryBitStream& imbs, SocketAddress* fromAddress)
+void cb_nw_srvr_processPacket(InputMemoryBitStream& imbs, SocketAddress* fromAddress)
 {
     NW_SRVR->processPacket(imbs, fromAddress);
 }
 
+void cb_nw_srvr_onEntityRegistered(Entity* e)
+{
+    NW_SRVR->onEntityRegistered(e);
+}
+
+void cb_nw_srvr_onEntityDeregistered(Entity* e)
+{
+    NW_SRVR->onEntityDeregistered(e);
+}
+
 NetworkServer::NetworkServer(uint16_t port, uint8_t maxNumPlayers, OnEntityRegisteredFunc oerf, OnEntityDeregisteredFunc oedf, HandleNewClientFunc hncf, HandleLostClientFunc hlcf, InputStateCreationFunc iscf, InputStateReleaseFunc isrf) :
-_packetHandler(INST_REG.get<TimeTracker>(INSK_TIME_SRVR), port, cb_server_processPacket),
+_packetHandler(INST_REG.get<TimeTracker>(INSK_TIME_SRVR), port, cb_nw_srvr_processPacket),
+_onEntityRegisteredFunc(oerf),
+_onEntityDeregisteredFunc(oedf),
 _handleNewClientFunc(hncf),
 _handleLostClientFunc(hlcf),
 _inputStateCreationFunc(iscf),
 _inputStateReleaseFunc(isrf),
-_entityRegistry(oerf, oedf),
+_entityRegistry(cb_nw_srvr_onEntityRegistered, cb_nw_srvr_onEntityDeregistered),
 _nextPlayerID(1),
 _maxNumPlayers(maxNumPlayers),
 _numMovesProcessed(0),
@@ -602,4 +634,6 @@ NetworkServer::~NetworkServer()
     
     _addressHashToClientMap.clear();
     _playerIDToClientMap.clear();
+    
+    deregisterAllEntities();
 }

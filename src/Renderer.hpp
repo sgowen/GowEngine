@@ -8,9 +8,9 @@
 
 #pragma once
 
-#include "ShaderInput.hpp"
 #include "FontBatcher.hpp"
 #include "Framebuffer.hpp"
+#include "Matrix.hpp"
 #include "RektangleBatcher.hpp"
 #include "TriangleBatcher.hpp"
 #include "CircleBatcher.hpp"
@@ -32,16 +32,31 @@ public:
     void createDeviceDependentResources();
     void onWindowSizeChanged(uint16_t screenWidth, uint16_t screenHeight);
     void releaseDeviceDependentResources();
-    void updateMatrix(std::string key, float l, float r, float b, float t, float n = -1, float f = 1);
-    void addEntitiesToSpritesBatcher(std::string key, std::vector<Entity*>& entities);
-    void renderToScreen(std::string framebufferKey, std::string shader = "framebuffer");
+    void bindFramebuffer(std::string framebufferKey = "main", bool enableBlending = true);
+    void clearFramebuffer(const Color& c = Color::CLEAR);
+    void updateMatrix(float l, float r, float b, float t, std::string matrixKey = "main", float n = -1, float f = 1);
+    void renderSprite(std::string textureKey, std::string textureRegionKey, float x, float y, float width, float height, float angle = 0, bool flipX = false, std::string matrixKey = "main", std::string shaderKey = "texture", std::string spriteBatcherKey = "main");
+    void spriteBatcherBeginBatch(std::string spriteBatcherKey = "main");
+    void spriteBatcherAddEntities(std::vector<Entity*>& entities, std::string spriteBatcherKey = "main");
+    void spriteBatcherEndBatch(std::string textureKey, std::string matrixKey = "main", std::string shaderKey = "texture", std::string spriteBatcherKey = "main");
+    void renderText(std::string fontBatcherKey = "main", std::string shaderKey = "texture");
+    void renderToScreen(std::string framebufferKey = "main", std::string shaderKey = "framebuffer");
+    
+    CircleBatcher& circleBatcher(std::string key = "main");
+    FontBatcher& fontBatcher(std::string key = "main");
+    Framebuffer& framebuffer(std::string key = "main");
+    Matrix& matrix(std::string key = "main");
+    RektangleBatcher& rektangleBatcher(std::string key = "main");
+    SpriteBatcher& spriteBatcher(std::string key = "main");
+    TextView& textView(std::string key = "main");
+    TriangleBatcher& triangleBatcher(std::string key = "main");
     
 private:
     ScreenRenderer _screenRenderer;
     std::map<std::string, CircleBatcher> _circleBatchers;
     std::map<std::string, FontBatcher> _fontBatchers;
     std::map<std::string, Framebuffer> _framebuffers;
-    std::map<std::string, mat4> _matrices;
+    std::map<std::string, Matrix> _matrices;
     std::map<std::string, RektangleBatcher> _rektangleBatchers;
     std::map<std::string, SpriteBatcher> _spriteBatchers;
     std::map<std::string, TextView> _textViews;

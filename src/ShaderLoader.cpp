@@ -18,8 +18,8 @@ void ShaderLoader::loadShader(Shader& s)
 {
     AssetHandler* ah = AssetHandlerFactory::create();
     
-    const FileData vertexShaderSrc = ah->loadAsset(s._descriptor._vertexShaderFilePath.c_str());
-    const FileData fragmentShaderSrc = ah->loadAsset(s._descriptor._fragmentShaderFilePath.c_str());
+    const FileData vertexShaderSrc = ah->loadAsset(s._desc._vertexShaderFilePath.c_str());
+    const FileData fragmentShaderSrc = ah->loadAsset(s._desc._fragmentShaderFilePath.c_str());
 
     OGL.loadShader(s, vertexShaderSrc._data, vertexShaderSrc._length, fragmentShaderSrc._data, fragmentShaderSrc._length);
 
