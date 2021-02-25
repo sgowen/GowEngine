@@ -40,13 +40,13 @@ struct TextureDescriptor
     {
         TextureRegion* ret = NULL;
         
-        auto& qt = _textureRegions.find(key);
+        const auto& qt = _textureRegions.find(key);
         if (qt != _textureRegions.end())
         {
             ret = &qt->second;
         }
         
-        auto& qa = _animations.find(key);
+        const auto& qa = _animations.find(key);
         if (qa != _animations.end())
         {
             ret = &qa->second.textureRegion(stateTime);

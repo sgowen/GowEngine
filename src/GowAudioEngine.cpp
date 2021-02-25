@@ -16,6 +16,7 @@
 #include "Assets.hpp"
 #include "SoundDescriptor.hpp"
 #include "STLUtil.hpp"
+#include "AssetManager.hpp"
 
 #include <assert.h>
 
@@ -64,13 +65,13 @@ void GowAudioEngine::resume()
 
 void GowAudioEngine::playSound(uint16_t soundID, float volume, bool isLooping)
 {
-    if (_soundsDisabled ||
+    if (AUDIO_ENGINE_HELPER.areSoundsDisabled() ||
         _soundsToPlay.size() >= MAX_SOUNDS_TO_PLAY_PER_FRAME)
     {
         return;
     }
     
-    SoundWrapper* sw = sound(soundID);
+    SoundWrapper* sw = ASSETS.sound(soundID);
     if (sw == NULL)
     {
         return;
@@ -85,12 +86,12 @@ void GowAudioEngine::playSound(uint16_t soundID, float volume, bool isLooping)
 
 void GowAudioEngine::stopSound(uint16_t soundID)
 {
-    if (_soundsDisabled)
+    if (AUDIO_ENGINE_HELPER.areSoundsDisabled())
     {
         return;
     }
     
-    SoundWrapper* sw = sound(soundID);
+    SoundWrapper* sw = ASSETS.sound(soundID);
     if (sw == NULL)
     {
         return;
@@ -105,12 +106,12 @@ void GowAudioEngine::stopSound(uint16_t soundID)
 
 void GowAudioEngine::pauseSound(uint16_t soundID)
 {
-    if (_soundsDisabled)
+    if (AUDIO_ENGINE_HELPER.areSoundsDisabled())
     {
         return;
     }
     
-    SoundWrapper* sw = sound(soundID);
+    SoundWrapper* sw = ASSETS.sound(soundID);
     if (sw == NULL)
     {
         return;
@@ -125,12 +126,12 @@ void GowAudioEngine::pauseSound(uint16_t soundID)
 
 void GowAudioEngine::resumeSound(uint16_t soundID)
 {
-    if (_soundsDisabled)
+    if (AUDIO_ENGINE_HELPER.areSoundsDisabled())
     {
         return;
     }
     
-    SoundWrapper* sw = sound(soundID);
+    SoundWrapper* sw = ASSETS.sound(soundID);
     if (sw == NULL)
     {
         return;
@@ -145,7 +146,7 @@ void GowAudioEngine::resumeSound(uint16_t soundID)
 
 void GowAudioEngine::stopAllSounds()
 {
-    if (_soundsDisabled)
+    if (AUDIO_ENGINE_HELPER.areSoundsDisabled())
     {
         return;
     }
@@ -162,7 +163,7 @@ void GowAudioEngine::stopAllSounds()
 
 void GowAudioEngine::pauseAllSounds()
 {
-    if (_soundsDisabled)
+    if (AUDIO_ENGINE_HELPER.areSoundsDisabled())
     {
         return;
     }
@@ -182,7 +183,7 @@ void GowAudioEngine::pauseAllSounds()
 
 void GowAudioEngine::resumeAllSounds()
 {
-    if (_soundsDisabled)
+    if (AUDIO_ENGINE_HELPER.areSoundsDisabled())
     {
         return;
     }
@@ -202,68 +203,75 @@ void GowAudioEngine::resumeAllSounds()
 
 void GowAudioEngine::playMusic(float volume, bool isLooping)
 {
-    if (_musicDisabled || _music == NULL)
+    SoundWrapper* music = ASSETS.music();
+    if (AUDIO_ENGINE_HELPER.isMusicDisabled() ||
+        music == NULL)
     {
         return;
     }
     
-    _music->setVolume(CLAMP(volume, 0, 1));
-    _music->setLooping(isLooping);
+    music->setVolume(CLAMP(volume, 0, 1));
+    music->setLooping(isLooping);
     
-    _soundsToPlay.push_back(_music->soundInstance());
+    _soundsToPlay.push_back(music->soundInstance());
 }
 
 void GowAudioEngine::setMusicVolume(float volume)
 {
-    if (_musicDisabled || _music == NULL)
+    SoundWrapper* music = ASSETS.music();
+    if (AUDIO_ENGINE_HELPER.isMusicDisabled() ||
+        music == NULL)
     {
         return;
     }
     
-    _music->setVolume(CLAMP(volume, 0, 1));
+    music->setVolume(CLAMP(volume, 0, 1));
 }
 
 void GowAudioEngine::stopMusic()
 {
-    if (_musicDisabled || _music == NULL)
+    SoundWrapper* music = ASSETS.music();
+    if (AUDIO_ENGINE_HELPER.isMusicDisabled() ||
+        music == NULL)
     {
         return;
     }
     
-    _soundsToStop.push_back(_music->soundInstance());
+    _soundsToStop.push_back(music->soundInstance());
 }
 
 void GowAudioEngine::pauseMusic()
 {
-    if (_musicDisabled || _music == NULL)
+    SoundWrapper* music = ASSETS.music();
+    if (AUDIO_ENGINE_HELPER.isMusicDisabled() ||
+        music == NULL)
     {
         return;
     }
     
-    _soundsToPause.push_back(_music->soundInstance());
+    _soundsToPause.push_back(music->soundInstance());
 }
 
 void GowAudioEngine::resumeMusic()
 {
-    if (_musicDisabled || _music == NULL)
+    SoundWrapper* music = ASSETS.music();
+    if (AUDIO_ENGINE_HELPER.isMusicDisabled() ||
+        music == NULL)
     {
         return;
     }
     
-    _soundsToResume.push_back(_music->soundInstance());
+    _soundsToResume.push_back(music->soundInstance());
 }
 
 bool GowAudioEngine::isMusicPlaying()
 {
-    if (_musicDisabled || _music == NULL)
+    SoundWrapper* music = ASSETS.music();
+    if (AUDIO_ENGINE_HELPER.isMusicDisabled() ||
+        music == NULL)
     {
         return false;
     }
     
-    return _music->isPlaying();
-}
-
-bool GowAudioEngine::isMusicLoaded()
-{
-    return _music != NULL;
+    return music->isPlaying();
 }

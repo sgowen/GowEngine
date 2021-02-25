@@ -56,6 +56,11 @@ SoundWrapper* SoundManager::sound(uint16_t soundID)
     return ret;
 }
 
+SoundWrapper* SoundManager::music()
+{
+    return _music;
+}
+
 void SoundManager::loadSound(uint16_t soundID, const char *path, uint8_t numInstances)
 {
     assert(_sounds.find(soundID) == _sounds.end());

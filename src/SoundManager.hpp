@@ -21,6 +21,7 @@ public:
     void loadSounds(std::vector<SoundDescriptor>& soundDescriptors);
     void unloadSounds(std::vector<SoundDescriptor>& soundDescriptors);
     SoundWrapper* sound(uint16_t soundID);
+    SoundWrapper* music();
     
 private:
     std::map<uint16_t, SoundWrapper*> _sounds;

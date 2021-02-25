@@ -33,6 +33,7 @@ public:
     void deregisterAssets(std::string assetsFilePath);
     Shader& shader(std::string name);
     SoundWrapper* sound(uint16_t soundID);
+    SoundWrapper* music();
     Texture& texture(std::string name);
     TextureRegion& findTextureRegion(std::string key, uint16_t stateTime = 0);
 
@@ -41,9 +42,6 @@ private:
     ShaderManager _shaderMgr;
     SoundManager _soundMgr;
     TextureManager _textureMgr;
-    
-    void loadAssets(Assets& a);
-    void unloadAssets(Assets& a);
     
     AssetManager();
     ~AssetManager() {}

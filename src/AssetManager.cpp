@@ -19,7 +19,9 @@ void AssetManager::createDeviceDependentResources()
     for (auto& pair : _assets)
     {
         Assets& a = pair.second;
-        loadAssets(a);
+        _shaderMgr.loadShaders(a.getShaderDescriptors());
+        _soundMgr.loadSounds(a.getSoundDescriptors());
+        _textureMgr.loadTextures(a.getTextureDescriptors());
     }
 }
 
@@ -28,14 +30,15 @@ void AssetManager::releaseDeviceDependentResources()
     for (auto& pair : _assets)
     {
         Assets& a = pair.second;
-        unloadAssets(a);
+        _shaderMgr.unloadShaders(a.getShaderDescriptors());
+        _soundMgr.unloadSounds(a.getSoundDescriptors());
+        _textureMgr.unloadTextures(a.getTextureDescriptors());
     }
 }
 
 void AssetManager::registerAssets(std::string assetsFilePath)
 {
     assert(_assets.find(assetsFilePath) == _assets.end());
-    
     _assets.emplace(assetsFilePath, Assets{});
 }
 
@@ -43,8 +46,6 @@ void AssetManager::deregisterAssets(std::string assetsFilePath)
 {
     auto q = _assets.find(assetsFilePath);
     assert(q != _assets.end());
-    
-    unloadAssets(q->second);
     _assets.erase(q);
 }
 
@@ -56,6 +57,11 @@ Shader& AssetManager::shader(std::string name)
 SoundWrapper* AssetManager::sound(uint16_t soundID)
 {
     return _soundMgr.sound(soundID);
+}
+
+SoundWrapper* AssetManager::music()
+{
+    return _soundMgr.music();
 }
 
 Texture& AssetManager::texture(std::string name)
@@ -79,20 +85,6 @@ TextureRegion& AssetManager::findTextureRegion(std::string key, uint16_t stateTi
     assert(ret != NULL);
     
     return *ret;
-}
-
-void AssetManager::loadAssets(Assets& a)
-{
-    _shaderMgr.loadShaders(a.getShaderDescriptors());
-    _soundMgr.loadSounds(a.getSoundDescriptors());
-    _textureMgr.loadTextures(a.getTextureDescriptors());
-}
-
-void AssetManager::unloadAssets(Assets& a)
-{
-    _shaderMgr.unloadShaders(a.getShaderDescriptors());
-    _soundMgr.unloadSounds(a.getSoundDescriptors());
-    _textureMgr.unloadTextures(a.getTextureDescriptors());
 }
 
 AssetManager::AssetManager() :
