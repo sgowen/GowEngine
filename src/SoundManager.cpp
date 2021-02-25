@@ -60,7 +60,7 @@ void SoundManager::loadSound(uint16_t soundID, const char *path, uint8_t numInst
 {
     assert(_sounds.find(soundID) == _sounds.end());
     
-    SoundWrapper* sw = AUDIO_ENGINE_HELPER->loadSound(path, numInstances);
+    SoundWrapper* sw = AUDIO_ENGINE_HELPER.loadSound(path, numInstances);
     _sounds.emplace(soundID, sw);
 }
 
@@ -76,7 +76,7 @@ void SoundManager::loadMusic(const char *path)
 {
     unloadMusic();
     
-    _music = AUDIO_ENGINE_HELPER->loadMusic(path);
+    _music = AUDIO_ENGINE_HELPER.loadMusic(path);
 }
 
 void SoundManager::unloadMusic()

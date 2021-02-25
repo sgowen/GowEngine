@@ -149,7 +149,7 @@ void OpenGLWrapper::bindScreenFramebuffer(GLsizei width, GLsizei height, const C
     Framebuffer fb(width, height);
     
 #if IS_IOS
-    fb._fbo = 1;
+    fb._fbo = 1; // wtf?
 #else
     fb._fbo = 0;
 #endif

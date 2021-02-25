@@ -30,7 +30,7 @@
 class AudioEngineHelperFactory
 {
 public:
-    static AudioEngineHelper* getInstance()
+    static AudioEngineHelper& getInstance()
     {
 #if IS_APPLE
         return AppleAudioEngineHelper::getInstance();

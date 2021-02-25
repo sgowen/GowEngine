@@ -27,7 +27,7 @@ public:
     void releaseDeviceDependentResources();
     void begin();
     void addSprite(TextureRegion& tr, float x, float y, float width, float height, float angle = 0, bool flipX = false);
-    void end(Shader& s, mat4& matrix, Texture& t, const Color& colorFactor = Color::WHITE);
+    void end(Shader& s, mat4& matrix, Texture& t, const Color& colorFactor = Color::ONE);
 
 private:
     int _maxBatchSize;

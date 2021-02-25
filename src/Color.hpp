@@ -17,6 +17,7 @@
 #define COLOR_HALF 0.5f, 0.5f, 0.5f, 0.5f
 #define COLOR_DIM 0.1f, 0.1f, 0.1f, 0.9f
 #define COLOR_DOUBLE 2.0f, 2.0f, 2.0f, 1.0f
+#define COLOR_ONE 1.0f, 1.0f, 1.0f, 1.0f
 
 struct Color
 {
@@ -29,6 +30,7 @@ struct Color
     static const Color HALF;
     static const Color DIM;
     static const Color DOUBLE;
+    static const Color ONE;
     
     float _red;
     float _green;

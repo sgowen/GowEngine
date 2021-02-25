@@ -17,3 +17,4 @@ const Color Color::BLUE = Color(COLOR_BLUE);
 const Color Color::HALF = Color(COLOR_HALF);
 const Color Color::DIM = Color(COLOR_DIM);
 const Color Color::DOUBLE = Color(COLOR_DOUBLE);
+const Color Color::ONE = Color(COLOR_ONE);

@@ -1,12 +1,12 @@
 //
-//  ResourceManager.cpp
+//  AssetManager.cpp
 //  GowEngine
 //
 //  Created by Stephen Gowen on 4/23/20.
 //  Copyright © 2021 Stephen Gowen. All rights reserved.
 //
 
-#include "ResourceManager.hpp"
+#include "AssetManager.hpp"
 
 #include "Assets.hpp"
 #include "ShaderManager.hpp"
@@ -14,7 +14,7 @@
 
 #include <assert.h>
 
-void ResourceManager::createDeviceDependentResources()
+void AssetManager::createDeviceDependentResources()
 {
     for (auto& pair : _assets)
     {
@@ -23,7 +23,7 @@ void ResourceManager::createDeviceDependentResources()
     }
 }
 
-void ResourceManager::releaseDeviceDependentResources()
+void AssetManager::releaseDeviceDependentResources()
 {
     for (auto& pair : _assets)
     {
@@ -32,14 +32,14 @@ void ResourceManager::releaseDeviceDependentResources()
     }
 }
 
-void ResourceManager::registerAssets(std::string assetsFilePath)
+void AssetManager::registerAssets(std::string assetsFilePath)
 {
     assert(_assets.find(assetsFilePath) == _assets.end());
     
     _assets.emplace(assetsFilePath, Assets{});
 }
 
-void ResourceManager::deregisterAssets(std::string assetsFilePath)
+void AssetManager::deregisterAssets(std::string assetsFilePath)
 {
     auto q = _assets.find(assetsFilePath);
     assert(q != _assets.end());
@@ -48,22 +48,22 @@ void ResourceManager::deregisterAssets(std::string assetsFilePath)
     _assets.erase(q);
 }
 
-Shader& ResourceManager::shader(std::string name)
+Shader& AssetManager::shader(std::string name)
 {
     return _shaderMgr.shader(name);
 }
 
-SoundWrapper* ResourceManager::sound(uint16_t soundID)
+SoundWrapper* AssetManager::sound(uint16_t soundID)
 {
     return _soundMgr.sound(soundID);
 }
 
-Texture& ResourceManager::texture(std::string name)
+Texture& AssetManager::texture(std::string name)
 {
     return _textureMgr.texture(name);
 }
 
-TextureRegion& ResourceManager::findTextureRegion(std::string key, uint16_t stateTime)
+TextureRegion& AssetManager::findTextureRegion(std::string key, uint16_t stateTime)
 {
     TextureRegion* ret = NULL;
     
@@ -81,21 +81,21 @@ TextureRegion& ResourceManager::findTextureRegion(std::string key, uint16_t stat
     return *ret;
 }
 
-void ResourceManager::loadAssets(Assets& a)
+void AssetManager::loadAssets(Assets& a)
 {
     _shaderMgr.loadShaders(a.getShaderDescriptors());
     _soundMgr.loadSounds(a.getSoundDescriptors());
     _textureMgr.loadTextures(a.getTextureDescriptors());
 }
 
-void ResourceManager::unloadAssets(Assets& a)
+void AssetManager::unloadAssets(Assets& a)
 {
     _shaderMgr.unloadShaders(a.getShaderDescriptors());
     _soundMgr.unloadSounds(a.getSoundDescriptors());
     _textureMgr.unloadTextures(a.getTextureDescriptors());
 }
 
-ResourceManager::ResourceManager() :
+AssetManager::AssetManager() :
 _shaderMgr(),
 _soundMgr(),
 _textureMgr()

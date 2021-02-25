@@ -14,7 +14,7 @@
 #include "AssetHandler.hpp"
 #include "FileData.hpp"
 #include "RapidJSONUtil.hpp"
-#include "ResourceManager.hpp"
+#include "AssetManager.hpp"
 #include "OpenGLWrapper.hpp"
 
 #include <assert.h>
@@ -76,20 +76,39 @@ void Renderer::updateMatrix(float l, float r, float b, float t, std::string matr
     m.ortho(l, r, b, t, n, f);
 }
 
+void Renderer::rektangleBatcherBegin(std::string rektangleBatcherKey)
+{
+    rektangleBatcher(rektangleBatcherKey).begin();
+}
+
+void Renderer::rektangleBatcherAddRektangle(Rektangle& r, std::string rektangleBatcherKey)
+{
+    rektangleBatcher(rektangleBatcherKey).addRektangle(r);
+}
+
+void Renderer::rektangleBatcherEnd(const Color& c, std::string matrixKey, std::string shaderKey, std::string rektangleBatcherKey)
+{
+    RektangleBatcher& rb = rektangleBatcher(rektangleBatcherKey);
+    Matrix& m = matrix(matrixKey);
+    Shader& s = ASSETS.shader(shaderKey);
+    
+    rb.end(s, m._matrix, c);
+}
+
 void Renderer::renderSprite(std::string textureKey, std::string textureRegionKey, float x, float y, float width, float height, float angle, bool flipX, std::string matrixKey, std::string shaderKey, std::string spriteBatcherKey)
 {
     SpriteBatcher& sb = spriteBatcher(spriteBatcherKey);
     Matrix& m = matrix(matrixKey);
-    Shader& s = RES_MGR.shader(shaderKey);
-    Texture& t = RES_MGR.texture(textureKey);
-    TextureRegion& tr = RES_MGR.findTextureRegion(textureRegionKey);
+    Shader& s = ASSETS.shader(shaderKey);
+    Texture& t = ASSETS.texture(textureKey);
+    TextureRegion& tr = ASSETS.findTextureRegion(textureRegionKey);
     
     sb.begin();
     sb.addSprite(tr, x, y, width, height, angle, flipX);
     sb.end(s, m._matrix, t);
 }
 
-void Renderer::spriteBatcherBeginBatch(std::string spriteBatcherKey)
+void Renderer::spriteBatcherBegin(std::string spriteBatcherKey)
 {
     spriteBatcher(spriteBatcherKey).begin();
 }
@@ -103,20 +122,38 @@ void Renderer::spriteBatcherAddEntities(std::vector<Entity*>& entities, std::str
     }
 }
 
-void Renderer::spriteBatcherEndBatch(std::string textureKey, std::string matrixKey, std::string shaderKey, std::string spriteBatcherKey)
+void Renderer::spriteBatcherEnd(std::string textureKey, std::string matrixKey, std::string shaderKey, std::string spriteBatcherKey, const Color& colorFactor)
 {
     SpriteBatcher& sb = spriteBatcher(spriteBatcherKey);
     Matrix& m = matrix(matrixKey);
-    Shader& s = RES_MGR.shader(shaderKey);
-    Texture& t = RES_MGR.texture(textureKey);
+    Shader& s = ASSETS.shader(shaderKey);
+    Texture& t = ASSETS.texture(textureKey);
     
-    sb.end(s, m._matrix, t);
+    sb.end(s, m._matrix, t, colorFactor);
+}
+
+void Renderer::setTextVisible(std::string textViewKey, bool isVisible)
+{
+    textView(textViewKey)._visibility = isVisible ? TEXV_VISIBLE : TEXV_HIDDEN;
+}
+
+void Renderer::setText(std::string textViewKey, std::string text)
+{
+    textView(textViewKey)._text = text;
+}
+
+void Renderer::hideAllText()
+{
+    for (auto& pair : _textViews)
+    {
+        pair.second._visibility = TEXV_HIDDEN;
+    }
 }
 
 void Renderer::renderText(std::string fontBatcherKey, std::string shaderKey)
 {
     FontBatcher& fb = fontBatcher(fontBatcherKey);
-    Shader& s = RES_MGR.shader(shaderKey);
+    Shader& s = ASSETS.shader(shaderKey);
     fb.begin();
     for (auto& pair : _textViews)
     {
@@ -127,7 +164,7 @@ void Renderer::renderText(std::string fontBatcherKey, std::string shaderKey)
 
 void Renderer::renderToScreen(std::string framebufferKey, std::string shaderKey)
 {
-    Shader& s = RES_MGR.shader(shaderKey);
+    Shader& s = ASSETS.shader(shaderKey);
     _screenRenderer.renderToScreen(s, framebuffer(framebufferKey));
 }
 

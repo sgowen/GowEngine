@@ -10,7 +10,7 @@
 
 #include "Entity.hpp"
 #include "SpriteBatcher.hpp"
-#include "ResourceManager.hpp"
+#include "AssetManager.hpp"
 
 IMPL_RTTI_NOPARENT(EntityRenderController)
 IMPL_EntityController_create(EntityRenderController, EntityRenderController)
@@ -24,7 +24,7 @@ _entity(e)
 void EntityRenderController::addSprite(SpriteBatcher& sb)
 {
     Entity& e = *_entity;
-    TextureRegion tr = RES_MGR.findTextureRegion(getTextureMapping(), e.stateTime());
+    TextureRegion tr = ASSETS.findTextureRegion(getTextureMapping(), e.stateTime());
     
     sb.addSprite(tr, e.position()._x, e.position()._y, e.width(), e.height(), e.angle(), e.isFacingLeft());
 }

@@ -21,10 +21,10 @@ public:
     virtual void resume();
 
 private:
-    static AudioEngineHelper* getInstance()
+    static AudioEngineHelper& getInstance()
     {
         static AppleAudioEngineHelper ret = AppleAudioEngineHelper();
-        return &ret;
+        return ret;
     }
     
     AppleAudioEngineHelper();

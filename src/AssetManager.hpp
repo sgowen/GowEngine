@@ -1,5 +1,5 @@
 //
-//  ResourceManager.hpp
+//  AssetManager.hpp
 //  GowEngine
 //
 //  Created by Stephen Gowen on 4/23/20.
@@ -16,14 +16,14 @@
 
 #include <map>
 
-#define RES_MGR ResourceManager::getInstance()
+#define ASSETS AssetManager::getInstance()
 
-class ResourceManager
+class AssetManager
 {
 public:
-	static ResourceManager& getInstance()
+	static AssetManager& getInstance()
     {
-        static ResourceManager ret = ResourceManager();
+        static AssetManager ret = AssetManager();
         return ret;
     }
     
@@ -45,8 +45,8 @@ private:
     void loadAssets(Assets& a);
     void unloadAssets(Assets& a);
     
-    ResourceManager();
-    ~ResourceManager() {}
-    ResourceManager(const ResourceManager&);
-    ResourceManager& operator=(const ResourceManager&);
+    AssetManager();
+    ~AssetManager() {}
+    AssetManager(const AssetManager&);
+    AssetManager& operator=(const AssetManager&);
 };

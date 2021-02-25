@@ -30,8 +30,5 @@ WindowsSoundWrapper::~WindowsSoundWrapper()
 {
 	STLUtil::cleanUpVectorOfPointers(_sounds);
 
-    if (_sound)
-    {
-        _sound.reset();
-    }
+    _sound.reset();
 }

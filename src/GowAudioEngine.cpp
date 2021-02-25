@@ -52,12 +52,12 @@ void GowAudioEngine::pause()
 {
     pauseMusic();
     pauseAllSounds();
-    AUDIO_ENGINE_HELPER->pause();
+    AUDIO_ENGINE_HELPER.pause();
 }
 
 void GowAudioEngine::resume()
 {
-    AUDIO_ENGINE_HELPER->resume();
+    AUDIO_ENGINE_HELPER.resume();
     resumeMusic();
     resumeAllSounds();
 }

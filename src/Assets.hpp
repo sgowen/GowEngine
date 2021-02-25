@@ -16,7 +16,7 @@
 
 class Assets
 {
-    friend class ResourceManager;
+    friend class AssetManager;
     
 public:
 	void initWithJSONFile(const char* filePath);

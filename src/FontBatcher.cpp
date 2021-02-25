@@ -11,7 +11,7 @@
 #include "Shader.hpp"
 #include "Texture.hpp"
 #include "TextureRegion.hpp"
-#include "ResourceManager.hpp"
+#include "AssetManager.hpp"
 
 #include <assert.h>
 
@@ -32,7 +32,7 @@ void FontBatcher::createDeviceDependentResources()
 {
     _spriteBatcher.createDeviceDependentResources();
     
-    Texture& t = RES_MGR.texture(_textureName);
+    Texture& t = ASSETS.texture(_textureName);
     int x = 0;
     int y = 0;
     for (int i = 0; i < 176; ++i)
@@ -113,6 +113,6 @@ void FontBatcher::addText(std::string text, TextAlignment alignment, float xWeig
 
 void FontBatcher::end(Shader& s)
 {
-    Texture& t = RES_MGR.texture(_textureName);
+    Texture& t = ASSETS.texture(_textureName);
     _spriteBatcher.end(s, _matrix, t);
 }
