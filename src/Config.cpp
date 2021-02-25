@@ -57,13 +57,13 @@ bool Config::hasValues()
 
 bool Config::hasValue(std::string key)
 {
-    std::string* val = findValue(key);
+    std::string* val = value(key);
     return val != NULL;
 }
 
 bool Config::getBool(std::string key)
 {
-    std::string* val = findValue(key);
+    std::string* val = value(key);
     assert(val != NULL);
     bool ret = StringUtil::stringToBool(*val);
     return ret;
@@ -71,7 +71,7 @@ bool Config::getBool(std::string key)
 
 int32_t Config::getInt(std::string key)
 {
-    std::string* val = findValue(key);
+    std::string* val = value(key);
     assert(val != NULL);
     int32_t ret = StringUtil::stringToNumber<int32_t>(*val);
     return ret;
@@ -79,7 +79,7 @@ int32_t Config::getInt(std::string key)
 
 uint32_t Config::getUInt(std::string key)
 {
-    std::string* val = findValue(key);
+    std::string* val = value(key);
     assert(val != NULL);
     uint32_t ret = StringUtil::stringToNumber<uint32_t>(*val);
     return ret;
@@ -87,7 +87,7 @@ uint32_t Config::getUInt(std::string key)
 
 float Config::getFloat(std::string key)
 {
-    std::string* val = findValue(key);
+    std::string* val = value(key);
     assert(val != NULL);
     float ret = StringUtil::stringToNumber<float>(*val);
     return ret;
@@ -95,7 +95,7 @@ float Config::getFloat(std::string key)
 
 double Config::getDouble(std::string key)
 {
-    std::string* val = findValue(key);
+    std::string* val = value(key);
     assert(val != NULL);
     double ret = StringUtil::stringToNumber<double>(*val);
     return ret;
@@ -103,19 +103,19 @@ double Config::getDouble(std::string key)
 
 std::string Config::getString(std::string key)
 {
-    std::string* val = findValue(key);
+    std::string* val = value(key);
     assert(val != NULL);
     
     std::string ret = *val;
     return ret;
 }
 
-std::map<std::string, std::string>& Config::getMap()
+void Config::putString(std::string key, std::string value)
 {
-    return _keyValues;
+    _keyValues.emplace(key, value);
 }
 
-std::string* Config::findValue(std::string key)
+std::string* Config::value(std::string key)
 {
     auto q = _keyValues.find(key);
 

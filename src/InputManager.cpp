@@ -236,6 +236,7 @@ _isLoggingEnabled(false)
     _textKeys.push_back(GOW_KEY_COMMA);
     
     _supportedKeys.insert(std::end(_supportedKeys), std::begin(_textKeys), std::end(_textKeys));
+    _supportedKeys.push_back(GOW_KEY_NEW_LINE);
     _supportedKeys.push_back(GOW_KEY_BACK_SPACE);
     _supportedKeys.push_back(GOW_KEY_CARRIAGE_RETURN);
     _supportedKeys.push_back(GOW_KEY_ESCAPE);

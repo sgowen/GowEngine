@@ -44,6 +44,7 @@
 #define GOW_KEY_X 0x0058
 #define GOW_KEY_Y 0x0059
 #define GOW_KEY_Z 0x005A
+#define GOW_KEY_NEW_LINE 0x0A
 #define GOW_KEY_SPACE_BAR 0x0020
 #define GOW_KEY_COMMA 0x002C
 #define GOW_KEY_PERIOD 0x002E

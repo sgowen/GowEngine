@@ -24,7 +24,7 @@ _entity(e)
 void EntityRenderController::addSprite(SpriteBatcher& sb)
 {
     Entity& e = *_entity;
-    TextureRegion tr = ASSETS.findTextureRegion(getTextureMapping(), e.stateTime());
+    TextureRegion tr = ASSETS.textureRegion(getTextureMapping(), e.stateTime());
     
     sb.addSprite(tr, e.position()._x, e.position()._y, e.width(), e.height(), e.angle(), e.isFacingLeft());
 }

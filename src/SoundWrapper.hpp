@@ -31,7 +31,7 @@ public:
     Sound* nextSoundInstance();
     Sound* soundInstance(uint8_t soundIndex);
     Sound* soundInstance();
-    std::vector<Sound *> getSounds();
+    std::vector<Sound *>& getSounds();
     uint8_t numInstances();
 
 protected:

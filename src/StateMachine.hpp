@@ -13,6 +13,8 @@
 #include <stack>
 #include <assert.h>
 
+#define ARG_OVERWRITE_STATE "ARG_OVERWRITE_STATE"
+
 template <class T>
 class State
 {
@@ -55,7 +57,7 @@ public:
         
         exit();
         
-        if (args.hasValue("overwrite") && args.getBool("overwrite"))
+        if (args.hasValue(ARG_OVERWRITE_STATE) && args.getBool(ARG_OVERWRITE_STATE))
         {
             _states.pop();
         }

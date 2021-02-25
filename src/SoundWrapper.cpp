@@ -91,7 +91,7 @@ Sound* SoundWrapper::soundInstance()
     return soundInstance(_soundIndex);
 }
 
-std::vector<Sound *> SoundWrapper::getSounds()
+std::vector<Sound *>& SoundWrapper::getSounds()
 {
     return _sounds;
 }

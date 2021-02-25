@@ -20,7 +20,7 @@ class Engine;
 class EngineController
 {
 public:
-    virtual State<Engine>* getInitialState() = 0;
+    virtual State<Engine>& getInitialState() = 0;
     virtual double getFrameRate();
     
 protected:

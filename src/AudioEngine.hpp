@@ -1,5 +1,5 @@
 //
-//  GowAudioEngine.hpp
+//  AudioEngine.hpp
 //  GowEngine
 //
 //  Created by Stephen Gowen on 3/8/17.
@@ -8,25 +8,23 @@
 
 #pragma once
 
+#include <stdint.h>
 #include <vector>
-#include <string>
 
+class SoundWrapper;
 class Sound;
 
-#define GOW_AUDIO GowAudioEngine::getInstance()
-
-class GowAudioEngine
+class AudioEngine
 {
+    friend class AudioEngineFactory;
+    
 public:
-    static GowAudioEngine& getInstance()
-    {
-        static GowAudioEngine ret = GowAudioEngine();
-        return ret;
-    }
+    virtual SoundWrapper* loadSound(const char *path, uint8_t numInstances = 1) = 0;
+    virtual SoundWrapper* loadMusic(const char* path) = 0;
+    virtual void pause();
+    virtual void resume();
     
     void render();
-    void pause();
-    void resume();
     void playSound(uint16_t soundID, float volume = 1.0f, bool isLooping = false);
     void stopSound(uint16_t soundID);
     void pauseSound(uint16_t soundID);
@@ -40,17 +38,20 @@ public:
     void pauseMusic();
     void resumeMusic();
     bool isMusicPlaying();
-    bool isMusicLoaded();
-    void reset();
+    bool isMusicDisabled();
+    void setMusicDisabled(bool value);
+    bool areSoundsDisabled();
+    void setSoundsDisabled(bool value);
+    
+protected:
+    AudioEngine();
+    virtual ~AudioEngine() {}
     
 private:
+    bool _musicDisabled;
+    bool _soundsDisabled;
     std::vector<Sound*> _soundsToPlay;
     std::vector<Sound*> _soundsToStop;
     std::vector<Sound*> _soundsToPause;
     std::vector<Sound*> _soundsToResume;
-    
-    GowAudioEngine() {}
-    ~GowAudioEngine() {}
-    GowAudioEngine(const GowAudioEngine&);
-    GowAudioEngine& operator=(const GowAudioEngine&);
 };

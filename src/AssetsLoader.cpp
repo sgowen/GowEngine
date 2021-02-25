@@ -6,8 +6,9 @@
 //  Copyright © 2021 Stephen Gowen. All rights reserved.
 //
 
-#include "Assets.hpp"
+#include "AssetsLoader.hpp"
 
+#include "Assets.hpp"
 #include "AssetHandlerFactory.hpp"
 #include "AssetHandler.hpp"
 #include "FileData.hpp"
@@ -18,25 +19,26 @@
 
 #include <rapidjson/document.h>
 
-void Assets::initWithJSONFile(const char* filePath)
+Assets AssetsLoader::initWithJSONFile(const char* filePath)
 {
     AssetHandler* ah = AssetHandlerFactory::create();
     FileData jsonData = ah->loadAsset(filePath);
-    initWithJSON((const char*)jsonData._data);
+    Assets ret = initWithJSON((const char*)jsonData._data);
     ah->releaseAsset(jsonData);
     AssetHandlerFactory::destroy(ah);
+    
+    return ret;
 }
 
-void Assets::initWithJSON(const char* json)
+Assets AssetsLoader::initWithJSON(const char* json)
 {
-    _shaderDescriptors.clear();
-    _soundDescriptors.clear();
-    _textureDescriptors.clear();
+    Assets ret;
     
     using namespace rapidjson;
     
     Document d;
     d.Parse<kParseStopWhenDoneFlag>(json);
+    assert(d.IsObject());
     
     std::vector<uint16_t> soundIDsAdded;
     if (d.HasMember("music"))
@@ -47,7 +49,7 @@ void Assets::initWithJSON(const char* json)
         std::string filePath = RapidJSONUtil::getString(v, "filePath");
         
         uint16_t soundID = 1337;
-        _soundDescriptors.emplace_back(soundID, filePath, 1);
+        ret._soundDescriptors.emplace_back(soundID, filePath, 1);
         soundIDsAdded.emplace_back(soundID);
     }
     
@@ -67,7 +69,7 @@ void Assets::initWithJSON(const char* json)
             
             assert(std::find(soundIDsAdded.begin(), soundIDsAdded.end(), soundID) == soundIDsAdded.end());
             
-            _soundDescriptors.emplace_back(soundID, filePath, numInstances);
+            ret._soundDescriptors.emplace_back(soundID, filePath, numInstances);
             soundIDsAdded.emplace_back(soundID);
         }
     }
@@ -86,11 +88,11 @@ void Assets::initWithJSON(const char* json)
             std::string vertexShaderFilePath = RapidJSONUtil::getString(iv, "vertexShaderFilePath");
             std::string fragmentShaderFilePath = RapidJSONUtil::getString(iv, "fragmentShaderFilePath");
             
-            _shaderDescriptors.emplace_back(name, vertexShaderFilePath, fragmentShaderFilePath);
+            ret._shaderDescriptors.emplace_back(name, vertexShaderFilePath, fragmentShaderFilePath);
             
             if (iv.HasMember("uniforms"))
             {
-                ShaderDescriptor& sd = _shaderDescriptors.back();
+                ShaderDescriptor& sd = ret._shaderDescriptors.back();
                 std::vector<ShaderUniform>& uniforms = sd.getUniforms();
                 
                 const Value& v = iv["uniforms"];
@@ -107,7 +109,7 @@ void Assets::initWithJSON(const char* json)
             
             if (iv.HasMember("attributes"))
             {
-                ShaderDescriptor& sd = _shaderDescriptors.back();
+                ShaderDescriptor& sd = ret._shaderDescriptors.back();
                 std::vector<ShaderAttribute>& attributes = sd.getAttributes();
                 
                 const Value& v = iv["attributes"];
@@ -144,14 +146,14 @@ void Assets::initWithJSON(const char* json)
             assert(filterMag == "SHARP" || filterMag == "SMOOTH");
             bool mipMap = RapidJSONUtil::getBool(iv, "mipMap", true);
             
-            _textureDescriptors.emplace_back(name, normalMapName, filePath, filterMin, filterMag, mipMap);
+            ret._textureDescriptors.emplace_back(name, normalMapName, filePath, filterMin, filterMag, mipMap);
             
             if (iv.HasMember("mappings"))
             {
                 int textureWidth = RapidJSONUtil::getInt(iv, "textureWidth", 2048);
                 int textureHeight = RapidJSONUtil::getInt(iv, "textureHeight", 2048);
                 
-                TextureDescriptor& td = _textureDescriptors.back();
+                TextureDescriptor& td = ret._textureDescriptors.back();
                 std::map<std::string, Animation>& animations = td._animations;
                 std::map<std::string, TextureRegion>& textureRegions = td._textureRegions;
                 
@@ -232,36 +234,6 @@ void Assets::initWithJSON(const char* json)
             }
         }
     }
-}
-
-TextureRegion* Assets::findTextureRegion(std::string key, uint16_t stateTime)
-{
-    TextureRegion* ret = NULL;
-    
-    std::vector<TextureDescriptor>& tds = getTextureDescriptors();
-    for (TextureDescriptor& td : tds)
-    {
-        ret = td.textureRegion(key, stateTime);
-        if (ret != NULL)
-        {
-            break;
-        }
-    }
     
     return ret;
-}
-
-std::vector<ShaderDescriptor>& Assets::getShaderDescriptors()
-{
-    return _shaderDescriptors;
-}
-
-std::vector<SoundDescriptor>& Assets::getSoundDescriptors()
-{
-    return _soundDescriptors;
-}
-
-std::vector<TextureDescriptor>& Assets::getTextureDescriptors()
-{
-    return _textureDescriptors;
 }

@@ -1,5 +1,5 @@
 //
-//  WindowsAudioEngineHelper.hpp
+//  WindowsAudioEngine.hpp
 //  GowEngine
 //
 //  Created by Stephen Gowen on 2/25/17.
@@ -8,15 +8,15 @@
 
 #pragma once
 
-#include "AudioEngineHelper.hpp"
+#include "AudioEngine.hpp"
 
 #include "Audio.h"
 
 #include <memory>
 
-class WindowsAudioEngineHelper : public AudioEngineHelper
+class WindowsAudioEngine : public AudioEngine
 {
-    friend class AudioEngineHelperFactory;
+    friend class AudioEngineFactory;
     
 public:
     virtual SoundWrapper* loadSound(const char *filePath, uint8_t numInstances = 1);
@@ -25,16 +25,16 @@ public:
     virtual void resume();
 
 private:
-    static AudioEngineHelper* getInstance()
+    static AudioEngine* getInstance()
     {
-        static WindowsAudioEngineHelper ret = WindowsAudioEngineHelper();
+        static WindowsAudioEngine ret = WindowsAudioEngine();
         return &ret;
     }
     
     std::unique_ptr<DirectX::AudioEngine> _audioEngine;
     
-    WindowsAudioEngineHelper();
-    virtual ~WindowsAudioEngineHelper();
-    WindowsAudioEngineHelper(const WindowsAudioEngineHelper&);
-    WindowsAudioEngineHelper& operator=(const WindowsAudioEngineHelper&);
+    WindowsAudioEngine();
+    virtual ~WindowsAudioEngine();
+    WindowsAudioEngine(const WindowsAudioEngine&);
+    WindowsAudioEngine& operator=(const WindowsAudioEngine&);
 };

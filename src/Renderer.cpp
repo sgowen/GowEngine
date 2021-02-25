@@ -20,24 +20,8 @@
 #include <assert.h>
 #include <algorithm>
 
-#include <rapidjson/document.h>
-
 Renderer::Renderer() :
 _screenRenderer()
-{
-    // TODO
-}
-
-void Renderer::initWithJSONFile(const char* filePath)
-{
-    AssetHandler* ah = AssetHandlerFactory::create();
-    FileData jsonData = ah->loadAsset(filePath);
-    initWithJSON((const char*)jsonData._data);
-    ah->releaseAsset(jsonData);
-    AssetHandlerFactory::destroy(ah);
-}
-
-void Renderer::initWithJSON(const char* json)
 {
     // TODO
 }
@@ -69,7 +53,7 @@ void Renderer::clearFramebuffer(const Color& c)
     OGL.clearFramebuffer(c);
 }
 
-void Renderer::updateMatrix(float l, float r, float b, float t, std::string matrixKey, float n, float f)
+void Renderer::updateMatrix(float l, float r, float b, float t, float n, float f, std::string matrixKey)
 {
     Matrix& m = matrix(matrixKey);
     m.identity();
@@ -101,7 +85,7 @@ void Renderer::renderSprite(std::string textureKey, std::string textureRegionKey
     Matrix& m = matrix(matrixKey);
     Shader& s = ASSETS.shader(shaderKey);
     Texture& t = ASSETS.texture(textureKey);
-    TextureRegion& tr = ASSETS.findTextureRegion(textureRegionKey);
+    TextureRegion& tr = ASSETS.textureRegion(textureRegionKey);
     
     sb.begin();
     sb.addSprite(tr, x, y, width, height, angle, flipX);

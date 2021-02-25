@@ -16,6 +16,7 @@
 #include "TextView.hpp"
 #include "ShaderInput.hpp"
 
+class Renderer;
 struct Shader;
 struct Texture;
 struct TextureRegion;
@@ -23,25 +24,23 @@ struct TextureRegion;
 class FontBatcher
 {
 public:
-	FontBatcher(int maxBatchSize, std::string textureName, int glyphsPerRow, int glyphWidth, int glyphHeight);
+	FontBatcher(Renderer& r, int maxBatchSize, std::string matrixName, std::string textureName, int glyphsPerRow, int glyphWidth, int glyphHeight);
     
     void createDeviceDependentResources();
     void releaseDeviceDependentResources();
-    void setMatrixSize(float matrixWidth, float matrixHeight);
     void begin();
     void addText(TextView& tv);
 	void addText(std::string text, TextAlignment alignment, float xWeight, float yWeight, float glyphWidthWeight);
     void end(Shader& s);
 
 private:
+    Renderer& _renderer;
     SpriteBatcher _spriteBatcher;
+    std::string _matrixName;
     std::string _textureName;
     std::vector<TextureRegion> _glyphs;
     int _glyphsPerRow;
     int _glyphWidth;
     int _glyphHeight;
     float _glyphWidthToHeightRatio;
-    mat4 _matrix;
-    float _matrixWidth;
-    float _matrixHeight;
 };

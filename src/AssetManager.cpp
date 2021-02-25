@@ -19,9 +19,9 @@ void AssetManager::createDeviceDependentResources()
     for (auto& pair : _assets)
     {
         Assets& a = pair.second;
-        _shaderMgr.loadShaders(a.getShaderDescriptors());
-        _soundMgr.loadSounds(a.getSoundDescriptors());
-        _textureMgr.loadTextures(a.getTextureDescriptors());
+        _shaderMgr.loadShaders(a._shaderDescriptors);
+        _soundMgr.loadSounds(a._soundDescriptors);
+        _textureMgr.loadTextures(a._textureDescriptors);
     }
 }
 
@@ -30,21 +30,21 @@ void AssetManager::releaseDeviceDependentResources()
     for (auto& pair : _assets)
     {
         Assets& a = pair.second;
-        _shaderMgr.unloadShaders(a.getShaderDescriptors());
-        _soundMgr.unloadSounds(a.getSoundDescriptors());
-        _textureMgr.unloadTextures(a.getTextureDescriptors());
+        _shaderMgr.unloadShaders(a._shaderDescriptors);
+        _soundMgr.unloadSounds(a._soundDescriptors);
+        _textureMgr.unloadTextures(a._textureDescriptors);
     }
 }
 
-void AssetManager::registerAssets(std::string assetsFilePath)
+void AssetManager::registerAssets(std::string key, Assets a)
 {
-    assert(_assets.find(assetsFilePath) == _assets.end());
-    _assets.emplace(assetsFilePath, Assets{});
+    assert(_assets.find(key) == _assets.end());
+    _assets.emplace(key, a);
 }
 
-void AssetManager::deregisterAssets(std::string assetsFilePath)
+void AssetManager::deregisterAssets(std::string key)
 {
-    auto q = _assets.find(assetsFilePath);
+    auto q = _assets.find(key);
     assert(q != _assets.end());
     _assets.erase(q);
 }
@@ -59,6 +59,11 @@ SoundWrapper* AssetManager::sound(uint16_t soundID)
     return _soundMgr.sound(soundID);
 }
 
+std::map<uint16_t, SoundWrapper*>& AssetManager::sounds()
+{
+    return _soundMgr.sounds();
+}
+
 SoundWrapper* AssetManager::music()
 {
     return _soundMgr.music();
@@ -69,13 +74,13 @@ Texture& AssetManager::texture(std::string name)
     return _textureMgr.texture(name);
 }
 
-TextureRegion& AssetManager::findTextureRegion(std::string key, uint16_t stateTime)
+TextureRegion& AssetManager::textureRegion(std::string key, uint16_t stateTime)
 {
     TextureRegion* ret = NULL;
     
     for (auto& pair : _assets)
     {
-        ret = pair.second.findTextureRegion(key, stateTime);
+        ret = pair.second.textureRegion(key, stateTime);
         if (ret != NULL)
         {
             break;

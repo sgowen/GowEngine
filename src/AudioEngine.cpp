@@ -1,29 +1,27 @@
 //
-//  GowAudioEngine.cpp
+//  AudioEngine.cpp
 //  GowEngine
 //
-//  Created by Stephen Gowen on 3/8/17.
+//  Created by Stephen Gowen on 2/25/21.
 //  Copyright © 2021 Stephen Gowen. All rights reserved.
 //
 
-#include "GowAudioEngine.hpp"
+#include "AudioEngine.hpp"
 
 #include "SoundWrapper.hpp"
 #include "Sound.hpp"
-#include "AudioEngineHelper.hpp"
-#include "AudioEngineHelperFactory.hpp"
+#include "AudioEngine.hpp"
+#include "AudioEngineFactory.hpp"
 #include "MathUtil.hpp"
 #include "Assets.hpp"
 #include "SoundDescriptor.hpp"
 #include "STLUtil.hpp"
 #include "AssetManager.hpp"
 
-#include <assert.h>
+#define MAX_SOUNDS_TO_PLAY_PER_FRAME 4
 
-#define MAX_SOUNDS_TO_PLAY_PER_FRAME 3
-
-void GowAudioEngine::render()
-{    
+void AudioEngine::render()
+{
     for (Sound* s : _soundsToPlay)
     {
         s->play();
@@ -49,24 +47,21 @@ void GowAudioEngine::render()
     _soundsToResume.clear();
 }
 
-void GowAudioEngine::pause()
+void AudioEngine::pause()
 {
     pauseMusic();
     pauseAllSounds();
-    AUDIO_ENGINE_HELPER.pause();
 }
 
-void GowAudioEngine::resume()
+void AudioEngine::resume()
 {
-    AUDIO_ENGINE_HELPER.resume();
     resumeMusic();
     resumeAllSounds();
 }
 
-void GowAudioEngine::playSound(uint16_t soundID, float volume, bool isLooping)
+void AudioEngine::playSound(uint16_t soundID, float volume, bool isLooping)
 {
-    if (AUDIO_ENGINE_HELPER.areSoundsDisabled() ||
-        _soundsToPlay.size() >= MAX_SOUNDS_TO_PLAY_PER_FRAME)
+    if (_soundsDisabled || _soundsToPlay.size() >= MAX_SOUNDS_TO_PLAY_PER_FRAME)
     {
         return;
     }
@@ -84,9 +79,9 @@ void GowAudioEngine::playSound(uint16_t soundID, float volume, bool isLooping)
     _soundsToPlay.push_back(s);
 }
 
-void GowAudioEngine::stopSound(uint16_t soundID)
+void AudioEngine::stopSound(uint16_t soundID)
 {
-    if (AUDIO_ENGINE_HELPER.areSoundsDisabled())
+    if (_soundsDisabled)
     {
         return;
     }
@@ -104,9 +99,9 @@ void GowAudioEngine::stopSound(uint16_t soundID)
     }
 }
 
-void GowAudioEngine::pauseSound(uint16_t soundID)
+void AudioEngine::pauseSound(uint16_t soundID)
 {
-    if (AUDIO_ENGINE_HELPER.areSoundsDisabled())
+    if (_soundsDisabled)
     {
         return;
     }
@@ -124,9 +119,9 @@ void GowAudioEngine::pauseSound(uint16_t soundID)
     }
 }
 
-void GowAudioEngine::resumeSound(uint16_t soundID)
+void AudioEngine::resumeSound(uint16_t soundID)
 {
-    if (AUDIO_ENGINE_HELPER.areSoundsDisabled())
+    if (_soundsDisabled)
     {
         return;
     }
@@ -144,68 +139,67 @@ void GowAudioEngine::resumeSound(uint16_t soundID)
     }
 }
 
-void GowAudioEngine::stopAllSounds()
+void AudioEngine::stopAllSounds()
 {
-    if (AUDIO_ENGINE_HELPER.areSoundsDisabled())
+    if (_soundsDisabled)
     {
         return;
     }
     
-    for (std::map<uint16_t, SoundWrapper*>::iterator i = _sounds.begin(); i != _sounds.end(); ++i)
+    std::map<uint16_t, SoundWrapper*>& sounds = ASSETS.sounds();
+    for (auto& pair : sounds)
     {
-        std::vector<Sound *> sounds = (*i).second->getSounds();
-        for (std::vector<Sound *>::iterator i = sounds.begin(); i != sounds.end(); ++i)
+        for (auto* s : pair.second->getSounds())
         {
-            _soundsToStop.push_back((*i));
+            _soundsToStop.push_back(s);
         }
     }
 }
 
-void GowAudioEngine::pauseAllSounds()
+void AudioEngine::pauseAllSounds()
 {
-    if (AUDIO_ENGINE_HELPER.areSoundsDisabled())
+    if (_soundsDisabled)
     {
         return;
     }
     
-    for (std::map<uint16_t, SoundWrapper*>::iterator i = _sounds.begin(); i != _sounds.end(); ++i)
+    std::map<uint16_t, SoundWrapper*>& sounds = ASSETS.sounds();
+    for (auto& pair : sounds)
     {
-        std::vector<Sound *> sounds = (*i).second->getSounds();
-        for (std::vector<Sound *>::iterator i = sounds.begin(); i != sounds.end(); ++i)
+        for (auto* s : pair.second->getSounds())
         {
-            if ((*i)->isPlaying())
+            if (s->isPlaying())
             {
-                _soundsToPause.push_back((*i));
+                _soundsToPause.push_back(s);
             }
         }
     }
 }
 
-void GowAudioEngine::resumeAllSounds()
+void AudioEngine::resumeAllSounds()
 {
-    if (AUDIO_ENGINE_HELPER.areSoundsDisabled())
+    if (_soundsDisabled)
     {
         return;
     }
     
-    for (std::map<uint16_t, SoundWrapper*>::iterator i = _sounds.begin(); i != _sounds.end(); ++i)
+    std::map<uint16_t, SoundWrapper*>& sounds = ASSETS.sounds();
+    for (auto& pair : sounds)
     {
-        std::vector<Sound *> sounds = (*i).second->getSounds();
-        for (std::vector<Sound *>::iterator i = sounds.begin(); i != sounds.end(); ++i)
+        for (auto* s : pair.second->getSounds())
         {
-            if ((*i)->isPaused())
+            if (s->isPaused())
             {
-                _soundsToResume.push_back((*i));
+                _soundsToResume.push_back(s);
             }
         }
     }
 }
 
-void GowAudioEngine::playMusic(float volume, bool isLooping)
+void AudioEngine::playMusic(float volume, bool isLooping)
 {
     SoundWrapper* music = ASSETS.music();
-    if (AUDIO_ENGINE_HELPER.isMusicDisabled() ||
-        music == NULL)
+    if (_musicDisabled || music == NULL)
     {
         return;
     }
@@ -216,11 +210,10 @@ void GowAudioEngine::playMusic(float volume, bool isLooping)
     _soundsToPlay.push_back(music->soundInstance());
 }
 
-void GowAudioEngine::setMusicVolume(float volume)
+void AudioEngine::setMusicVolume(float volume)
 {
     SoundWrapper* music = ASSETS.music();
-    if (AUDIO_ENGINE_HELPER.isMusicDisabled() ||
-        music == NULL)
+    if (_musicDisabled || music == NULL)
     {
         return;
     }
@@ -228,11 +221,10 @@ void GowAudioEngine::setMusicVolume(float volume)
     music->setVolume(CLAMP(volume, 0, 1));
 }
 
-void GowAudioEngine::stopMusic()
+void AudioEngine::stopMusic()
 {
     SoundWrapper* music = ASSETS.music();
-    if (AUDIO_ENGINE_HELPER.isMusicDisabled() ||
-        music == NULL)
+    if (_musicDisabled || music == NULL)
     {
         return;
     }
@@ -240,11 +232,10 @@ void GowAudioEngine::stopMusic()
     _soundsToStop.push_back(music->soundInstance());
 }
 
-void GowAudioEngine::pauseMusic()
+void AudioEngine::pauseMusic()
 {
     SoundWrapper* music = ASSETS.music();
-    if (AUDIO_ENGINE_HELPER.isMusicDisabled() ||
-        music == NULL)
+    if (_musicDisabled || music == NULL)
     {
         return;
     }
@@ -252,11 +243,10 @@ void GowAudioEngine::pauseMusic()
     _soundsToPause.push_back(music->soundInstance());
 }
 
-void GowAudioEngine::resumeMusic()
+void AudioEngine::resumeMusic()
 {
     SoundWrapper* music = ASSETS.music();
-    if (AUDIO_ENGINE_HELPER.isMusicDisabled() ||
-        music == NULL)
+    if (_musicDisabled || music == NULL)
     {
         return;
     }
@@ -264,14 +254,41 @@ void GowAudioEngine::resumeMusic()
     _soundsToResume.push_back(music->soundInstance());
 }
 
-bool GowAudioEngine::isMusicPlaying()
+bool AudioEngine::isMusicPlaying()
 {
     SoundWrapper* music = ASSETS.music();
-    if (AUDIO_ENGINE_HELPER.isMusicDisabled() ||
+    if (isMusicDisabled() ||
         music == NULL)
     {
         return false;
     }
     
     return music->isPlaying();
+}
+
+bool AudioEngine::isMusicDisabled()
+{
+    return _musicDisabled;
+}
+
+void AudioEngine::setMusicDisabled(bool value)
+{
+    _musicDisabled = value;
+}
+
+bool AudioEngine::areSoundsDisabled()
+{
+    return _soundsDisabled;
+}
+
+void AudioEngine::setSoundsDisabled(bool value)
+{
+    _soundsDisabled = value;
+}
+
+AudioEngine::AudioEngine() :
+_musicDisabled(false),
+_soundsDisabled(false)
+{
+    // Empty
 }

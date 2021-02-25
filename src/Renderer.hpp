@@ -8,15 +8,15 @@
 
 #pragma once
 
+#include "CircleBatcher.hpp"
 #include "FontBatcher.hpp"
 #include "Framebuffer.hpp"
 #include "Matrix.hpp"
 #include "RektangleBatcher.hpp"
-#include "TriangleBatcher.hpp"
-#include "CircleBatcher.hpp"
-#include "ScreenRenderer.hpp"
 #include "SpriteBatcher.hpp"
 #include "TextView.hpp"
+#include "TriangleBatcher.hpp"
+#include "ScreenRenderer.hpp"
 
 #include <map>
 
@@ -24,17 +24,17 @@ class Entity;
 
 class Renderer
 {
+    friend class RendererLoader;
+    
 public:
     Renderer();
     
-    void initWithJSONFile(const char* filePath);
-    void initWithJSON(const char* json);
     void createDeviceDependentResources();
     void onWindowSizeChanged(uint16_t screenWidth, uint16_t screenHeight);
     void releaseDeviceDependentResources();
     void bindFramebuffer(std::string framebufferKey = "main", bool enableBlending = true);
     void clearFramebuffer(const Color& c = Color::CLEAR);
-    void updateMatrix(float l, float r, float b, float t, std::string matrixKey = "main", float n = -1, float f = 1);
+    void updateMatrix(float l, float r, float b, float t, float n = -1, float f = 1, std::string matrixKey = "main");
     void rektangleBatcherBegin(std::string rektangleBatcherKey = "main");
     void rektangleBatcherAddRektangle(Rektangle& r, std::string rektangleBatcherKey = "main");
     void rektangleBatcherEnd(const Color& c, std::string matrixKey = "main", std::string shaderKey = "geometry", std::string rektangleBatcherKey = "main");
@@ -58,7 +58,6 @@ public:
     TriangleBatcher& triangleBatcher(std::string key = "main");
     
 private:
-    ScreenRenderer _screenRenderer;
     std::map<std::string, CircleBatcher> _circleBatchers;
     std::map<std::string, FontBatcher> _fontBatchers;
     std::map<std::string, Framebuffer> _framebuffers;
@@ -67,4 +66,5 @@ private:
     std::map<std::string, SpriteBatcher> _spriteBatchers;
     std::map<std::string, TextView> _textViews;
     std::map<std::string, TriangleBatcher> _triangleBatchers;
+    ScreenRenderer _screenRenderer;
 };

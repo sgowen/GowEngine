@@ -38,4 +38,14 @@ struct MatrixDescriptor
     {
         // Empty
     }
+    
+    float width()
+    {
+        return _right - _left;
+    }
+    
+    float height()
+    {
+        return _top - _bottom;
+    }
 };

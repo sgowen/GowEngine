@@ -12,9 +12,11 @@
 #include "InputManager.hpp"
 #include "FPSUtil.hpp"
 #include "ClipboardUtil.hpp"
+#include "DefaultEngineState.hpp"
 
 Engine::Engine(EngineController& ec) :
-_stateMachine(this, ec.getInitialState()),
+_initialState(ec.getInitialState()),
+_stateMachine(this, &ENGINE_STATE_DEFAULT),
 _requestedStateAction(ERSA_DEFAULT),
 _requestedHostAction(ERHA_DEFAULT),
 _frameRate(ec.getFrameRate()),
@@ -51,14 +53,14 @@ void Engine::releaseDeviceDependentResources()
     execute(ERSA_RELEASE_RESOURCES);
 }
 
-void Engine::onResume()
-{
-    execute(ERSA_RESUME);
-}
-
 void Engine::onPause()
 {
     execute(ERSA_PAUSE);
+}
+
+void Engine::onResume()
+{
+    execute(ERSA_RESUME);
 }
 
 EngineRequestedHostAction Engine::update(double deltaTime)

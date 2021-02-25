@@ -27,10 +27,10 @@ public:
     float getFloat(std::string key);
     double getDouble(std::string key);
     std::string getString(std::string key);
-    std::map<std::string, std::string>& getMap();
+    void putString(std::string key, std::string value);
     
 private:
     std::map<std::string, std::string> _keyValues;
     
-    std::string* findValue(std::string key);
+    std::string* value(std::string key);
 };

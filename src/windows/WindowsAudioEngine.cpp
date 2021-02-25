@@ -1,38 +1,40 @@
 //
-//  WindowsAudioEngineHelper.cpp
+//  WindowsAudioEngine.cpp
 //  GowEngine
 //
 //  Created by Stephen Gowen on 2/25/17.
 //  Copyright © 2021 Stephen Gowen. All rights reserved.
 //
 
-#include "WindowsAudioEngineHelper.hpp"
+#include "WindowsAudioEngine.hpp"
 
 #include "SoundWrapper.hpp"
 #include "WindowsSoundWrapper.hpp"
 #include "PlatformMacros.hpp"
 
-SoundWrapper* WindowsAudioEngineHelper::loadSound(const char *filePath, uint8_t numInstances)
+SoundWrapper* WindowsAudioEngine::loadSound(const char *filePath, uint8_t numInstances)
 {
     return new WindowsSoundWrapper(filePath, _audioEngine.get(), numInstances);
 }
 
-SoundWrapper* WindowsAudioEngineHelper::loadMusic(const char* filePath)
+SoundWrapper* WindowsAudioEngine::loadMusic(const char* filePath)
 {
     return loadSound(1337, filePath);
 }
 
-void WindowsAudioEngineHelper::pause()
+void WindowsAudioEngine::pause()
 {
+    AudioEngine::pause();
     _audioEngine->Suspend();
 }
 
-void WindowsAudioEngineHelper::resume()
+void WindowsAudioEngine::resume()
 {
     _audioEngine->Resume();
+    AudioEngine::resume();
 }
 
-WindowsAudioEngineHelper::WindowsAudioEngineHelper() : AudioEngineHelper()
+WindowsAudioEngine::WindowsAudioEngine() : AudioEngine()
 {
 	using namespace DirectX;
 
@@ -43,7 +45,7 @@ WindowsAudioEngineHelper::WindowsAudioEngineHelper() : AudioEngineHelper()
     _audioEngine = std::make_unique<AudioEngine>(flags);
 }
 
-WindowsAudioEngineHelper::~WindowsAudioEngineHelper()
+WindowsAudioEngine::~WindowsAudioEngine()
 {
     _audioEngine->Suspend();
 }

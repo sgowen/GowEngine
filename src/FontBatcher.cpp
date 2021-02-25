@@ -8,22 +8,24 @@
 
 #include "FontBatcher.hpp"
 
+#include "Renderer.hpp"
 #include "Shader.hpp"
 #include "Texture.hpp"
 #include "TextureRegion.hpp"
 #include "AssetManager.hpp"
+#include "KeyboardEvent.hpp"
 
 #include <assert.h>
 
-FontBatcher::FontBatcher(int maxBatchSize, std::string textureName, int glyphsPerRow, int glyphWidth, int glyphHeight) :
+FontBatcher::FontBatcher(Renderer& r, int maxBatchSize, std::string matrixName, std::string textureName, int glyphsPerRow, int glyphWidth, int glyphHeight) :
+_renderer(r),
 _spriteBatcher(maxBatchSize),
+_matrixName(matrixName),
 _textureName(textureName),
 _glyphsPerRow(glyphsPerRow),
 _glyphWidth(glyphWidth),
 _glyphHeight(glyphHeight),
-_glyphWidthToHeightRatio(_glyphHeight / (float)_glyphWidth),
-_matrixWidth(1),
-_matrixHeight(1)
+_glyphWidthToHeightRatio(_glyphHeight / (float)_glyphWidth)
 {
     // Empty
 }
@@ -56,14 +58,6 @@ void FontBatcher::releaseDeviceDependentResources()
     _glyphs.clear();
 }
 
-void FontBatcher::setMatrixSize(float matrixWidth, float matrixHeight)
-{
-    mat4_identity(_matrix);
-    mat4_ortho(_matrix, 0, matrixWidth, 0, matrixHeight, -1, 1);
-    _matrixWidth = matrixWidth;
-    _matrixHeight = matrixHeight;
-}
-
 void FontBatcher::begin()
 {
     _spriteBatcher.begin();
@@ -78,9 +72,13 @@ void FontBatcher::addText(TextView& tv)
     
     size_t len = tv._text.length();
     
-    float x = _matrixWidth * tv._xWeight;
-    float y = _matrixHeight * tv._yWeight;
-    float glyphWidth = _matrixWidth * tv._glyphWidthWeight;
+    Matrix& m = _renderer.matrix(_matrixName);
+    float matrixWidth = m._desc.width();
+    float matrixHeight = m._desc.height();
+    
+    float x = matrixWidth * tv._xWeight;
+    float y = matrixHeight * tv._yWeight;
+    float glyphWidth = matrixWidth * tv._glyphWidthWeight;
     float glyphHeight = glyphWidth * _glyphWidthToHeightRatio;
     
     if (tv._alignment == TEXA_CENTER)
@@ -97,6 +95,12 @@ void FontBatcher::addText(TextView& tv)
     for (size_t i = 0; i < len; ++i)
     {
         uint8_t c = ((uint8_t)tv._text.at(i));
+        
+        if (c == GOW_KEY_NEW_LINE)
+        {
+            y += glyphHeight;
+            continue;
+        }
 
         assert(c >= 0 && c <= 175);
         _spriteBatcher.addSprite(_glyphs[c], x, y, glyphWidth, glyphHeight);
@@ -113,6 +117,7 @@ void FontBatcher::addText(std::string text, TextAlignment alignment, float xWeig
 
 void FontBatcher::end(Shader& s)
 {
+    Matrix& m = _renderer.matrix(_matrixName);
     Texture& t = ASSETS.texture(_textureName);
-    _spriteBatcher.end(s, _matrix, t);
+    _spriteBatcher.end(s, m._matrix, t);
 }

@@ -14,20 +14,26 @@
 
 #include <vector>
 
-class Assets
+struct Assets
 {
-    friend class AssetManager;
-    
-public:
-	void initWithJSONFile(const char* filePath);
-    void initWithJSON(const char* json);
-    TextureRegion* findTextureRegion(std::string key, uint16_t stateTime = 0);
-    std::vector<ShaderDescriptor>& getShaderDescriptors();
-    std::vector<SoundDescriptor>& getSoundDescriptors();
-    std::vector<TextureDescriptor>& getTextureDescriptors();
-
-private:
     std::vector<ShaderDescriptor> _shaderDescriptors;
     std::vector<SoundDescriptor> _soundDescriptors;
     std::vector<TextureDescriptor> _textureDescriptors;
+    
+    TextureRegion* textureRegion(std::string key, uint16_t stateTime)
+    {
+        TextureRegion* ret = NULL;
+        
+        std::vector<TextureDescriptor>& tds = _textureDescriptors;
+        for (TextureDescriptor& td : tds)
+        {
+            ret = td.textureRegion(key, stateTime);
+            if (ret != NULL)
+            {
+                break;
+            }
+        }
+        
+        return ret;
+    }
 };
