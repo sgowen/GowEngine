@@ -21,6 +21,8 @@
 
 #define NUM_SUPPORTED_GAMEPADS 16
 
+struct Matrix;
+
 class InputManager
 {
 public:
@@ -40,7 +42,7 @@ public:
     Vector2& convert(CursorEvent* ce);
     Vector2& convert(Vector2& v);
     void setCursorSize(int cursorWidth, int cursorHeight);
-    void setMatrixSize(float matrixWidth, float matrixHeight);
+    void setMatrix(Matrix* m);
     void setLoggingEnabled(bool isLoggingEnabled);
     
 private:
@@ -55,8 +57,7 @@ private:
     Vector2 _lastConvertedCursorPos;
     int _cursorWidth;
     int _cursorHeight;
-    float _matrixWidth;
-    float _matrixHeight;
+    Matrix* _matrix;
     bool _isLoggingEnabled;
     
     bool isKeyNumerical(uint16_t key);

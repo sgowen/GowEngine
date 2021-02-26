@@ -11,6 +11,7 @@
 #include "StringUtil.hpp"
 #include "PlatformMacros.hpp"
 #include "MathUtil.hpp"
+#include "Matrix.hpp"
 
 #include <algorithm>
 
@@ -140,7 +141,11 @@ Vector2& InputManager::convert(CursorEvent* ce)
 
 Vector2& InputManager::convert(Vector2& v)
 {
-    _lastConvertedCursorPos.set((v._x / _cursorWidth) * _matrixWidth, (1 - v._y / _cursorHeight) * _matrixHeight);
+    assert(_matrix != NULL);
+    
+    float w = _matrix->_desc.width();
+    float h = _matrix->_desc.height();
+    _lastConvertedCursorPos.set((v._x / _cursorWidth) * w, (1 - v._y / _cursorHeight) * h);
     return _lastConvertedCursorPos;
 }
 
@@ -150,10 +155,9 @@ void InputManager::setCursorSize(int cursorWidth, int cursorHeight)
     _cursorHeight = (float) cursorHeight;
 }
 
-void InputManager::setMatrixSize(float matrixWidth, float matrixHeight)
+void InputManager::setMatrix(Matrix* m)
 {
-    _matrixWidth = matrixWidth;
-    _matrixHeight = matrixHeight;
+    _matrix = m;
 }
 
 void InputManager::setLoggingEnabled(bool loggingEnabled)
@@ -189,8 +193,7 @@ _poolKeyboard(4096),
 _lastConvertedCursorPos(),
 _cursorWidth(1),
 _cursorHeight(1),
-_matrixWidth(1),
-_matrixHeight(1),
+_matrix(NULL),
 _isLoggingEnabled(false)
 {
     _numericalKeys.push_back(GOW_KEY_0);

@@ -574,6 +574,10 @@ void NetworkServer::handleClientDisconnected(ClientProxy& cp)
     if (getNumClientsConnected() == 0)
     {
         deregisterAllEntities();
+        
+        INST_REG.get<TimeTracker>(INSK_TIME_SRVR)->reset();
+        INST_REG.get<EntityIDManager>(INSK_EID_SRVR)->resetNextNetworkEntityID();
+        INST_REG.get<EntityIDManager>(INSK_EID_SRVR)->resetNextPlayerEntityID();
     }
 }
 
