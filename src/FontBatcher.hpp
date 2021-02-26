@@ -24,23 +24,22 @@ struct TextureRegion;
 class FontBatcher
 {
 public:
-	FontBatcher(Renderer& r, int maxBatchSize, std::string matrixName, std::string textureName, int glyphsPerRow, int glyphWidth, int glyphHeight);
+	FontBatcher(uint32_t maxBatchSize, std::string matrixName, std::string textureName, uint8_t glyphsPerRow, uint8_t glyphWidth, uint8_t glyphHeight);
     
     void createDeviceDependentResources();
     void releaseDeviceDependentResources();
     void begin();
-    void addText(TextView& tv);
-	void addText(std::string text, TextAlignment alignment, float xWeight, float yWeight, float glyphWidthWeight);
-    void end(Shader& s);
+    void addText(Renderer& r, TextView& tv);
+	void addText(Renderer& r, std::string text, TextAlignment alignment, float xWeight, float yWeight, float glyphWidthWeight);
+    void end(Renderer& r, Shader& s);
 
 private:
-    Renderer& _renderer;
     SpriteBatcher _spriteBatcher;
     std::string _matrixName;
     std::string _textureName;
     std::vector<TextureRegion> _glyphs;
-    int _glyphsPerRow;
-    int _glyphWidth;
-    int _glyphHeight;
+    uint8_t _glyphsPerRow;
+    uint8_t _glyphWidth;
+    uint8_t _glyphHeight;
     float _glyphWidthToHeightRatio;
 };

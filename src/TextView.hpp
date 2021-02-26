@@ -26,13 +26,13 @@ enum TextVisibility
 struct TextView
 {
     std::string _text;
-    TextAlignment _alignment;
+    uint8_t _alignment;
     float _xWeight;
     float _yWeight;
     float _glyphWidthWeight;
     uint8_t _visibility;
     
-    TextView(std::string text, TextAlignment ta, float xWeight, float yWeight, float glyphWidthWeight) :
+    TextView(std::string text, uint8_t ta, float xWeight, float yWeight, float glyphWidthWeight) :
     _alignment(ta),
     _text(text),
     _xWeight(xWeight),

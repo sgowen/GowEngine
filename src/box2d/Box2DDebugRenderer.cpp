@@ -13,7 +13,7 @@
 
 #include <box2d/box2d.h>
 
-Box2DDebugRenderer::Box2DDebugRenderer(int maxBatchSize) :
+Box2DDebugRenderer::Box2DDebugRenderer(uint32_t maxBatchSize) :
 _circleBatcher(maxBatchSize),
 _fillRektangleBatcher(maxBatchSize, true),
 _boundsRektangleBatcher(maxBatchSize, false),

@@ -13,7 +13,7 @@
 #include "Shader.hpp"
 #include "OpenGLWrapper.hpp"
 
-RektangleBatcher::RektangleBatcher(int maxBatchSize, bool isFill) :
+RektangleBatcher::RektangleBatcher(uint32_t maxBatchSize, bool isFill) :
 _maxBatchSize(maxBatchSize),
 _isFill(isFill),
 _vertexBuffer(0),

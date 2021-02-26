@@ -20,7 +20,7 @@ struct Shader;
 class CircleBatcher
 {
 public:
-    CircleBatcher(int maxBatchSize);
+    CircleBatcher(uint32_t maxBatchSize);
 
     void createDeviceDependentResources();
     void releaseDeviceDependentResources();
@@ -32,7 +32,7 @@ public:
     void end(Shader& s, mat4& matrix, const Color& c);
 
 private:
-    int _maxBatchSize;
+    uint32_t _maxBatchSize;
     std::vector<VERTEX_2D> _vertices;
     std::vector<size_t> _circles;
     uint32_t _vertexBuffer;

@@ -14,7 +14,7 @@
 #include "OpenGLWrapper.hpp"
 #include "MathUtil.hpp"
 
-SpriteBatcher::SpriteBatcher(int maxBatchSize) :
+SpriteBatcher::SpriteBatcher(uint32_t maxBatchSize) :
 _maxBatchSize(maxBatchSize),
 _vertexBuffer(0),
 _indexBuffer(0)

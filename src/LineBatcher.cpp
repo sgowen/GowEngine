@@ -15,7 +15,7 @@
 
 #include <assert.h>
 
-LineBatcher::LineBatcher(int maxBatchSize) :
+LineBatcher::LineBatcher(uint32_t maxBatchSize) :
 _maxBatchSize(maxBatchSize),
 _vertexBuffer(0)
 {

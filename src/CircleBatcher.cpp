@@ -20,7 +20,7 @@
 #define DEGREE_SPACING 6
 #define NUM_VERTICES_PER_FULL_CIRCLE 360 / DEGREE_SPACING
 
-CircleBatcher::CircleBatcher(int maxBatchSize) :
+CircleBatcher::CircleBatcher(uint32_t maxBatchSize) :
 _maxBatchSize(maxBatchSize),
 _vertexBuffer(0)
 {

@@ -28,7 +28,7 @@ struct MatrixDescriptor
         // Empty
     }
     
-    MatrixDescriptor(float width, float height) :
+    MatrixDescriptor(uint32_t width, uint32_t height) :
     _left(0),
     _right(width),
     _bottom(0),

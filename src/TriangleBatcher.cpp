@@ -13,7 +13,7 @@
 #include "Shader.hpp"
 #include "OpenGLWrapper.hpp"
 
-TriangleBatcher::TriangleBatcher(int maxBatchSize, bool isFill) :
+TriangleBatcher::TriangleBatcher(uint32_t maxBatchSize, bool isFill) :
 _maxBatchSize(maxBatchSize),
 _isFill(isFill),
 _vertexBuffer(0)

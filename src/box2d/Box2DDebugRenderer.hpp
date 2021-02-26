@@ -20,7 +20,7 @@ class b2World;
 class Box2DDebugRenderer : public b2Draw
 {
 public:
-    Box2DDebugRenderer(int maxBatchSize);
+    Box2DDebugRenderer(uint32_t maxBatchSize);
     virtual ~Box2DDebugRenderer() {}
     
     /// Draw a closed polygon provided in CCW order.

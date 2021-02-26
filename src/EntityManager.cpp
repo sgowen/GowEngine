@@ -44,6 +44,7 @@ void EntityManager::initWithJSON(const char* json)
     Document d;
     d.Parse<kParseStopWhenDoneFlag>(json);
     assert(d.IsObject());
+    
     for (Value::ConstMemberIterator i = d.MemberBegin(); i != d.MemberEnd(); ++i)
     {
         const Value& iv = i->value;

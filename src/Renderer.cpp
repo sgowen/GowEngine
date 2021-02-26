@@ -28,6 +28,36 @@ _screenRenderer()
 
 void Renderer::createDeviceDependentResources()
 {
+    for (auto& pair : _circleBatchers)
+    {
+        pair.second.createDeviceDependentResources();
+    }
+    
+    for (auto& pair : _fontBatchers)
+    {
+        pair.second.createDeviceDependentResources();
+    }
+    
+    for (auto& pair : _framebuffers)
+    {
+        OGL.loadFramebuffer(pair.second);
+    }
+    
+    for (auto& pair : _rektangleBatchers)
+    {
+        pair.second.createDeviceDependentResources();
+    }
+    
+    for (auto& pair : _spriteBatchers)
+    {
+        pair.second.createDeviceDependentResources();
+    }
+    
+    for (auto& pair : _triangleBatchers)
+    {
+        pair.second.createDeviceDependentResources();
+    }
+    
     _screenRenderer.createDeviceDependentResources();
 }
 
@@ -38,6 +68,36 @@ void Renderer::onWindowSizeChanged(uint16_t screenWidth, uint16_t screenHeight)
 
 void Renderer::releaseDeviceDependentResources()
 {
+    for (auto& pair : _circleBatchers)
+    {
+        pair.second.releaseDeviceDependentResources();
+    }
+    
+    for (auto& pair : _fontBatchers)
+    {
+        pair.second.releaseDeviceDependentResources();
+    }
+    
+    for (auto& pair : _framebuffers)
+    {
+        OGL.unloadFramebuffer(pair.second);
+    }
+    
+    for (auto& pair : _rektangleBatchers)
+    {
+        pair.second.releaseDeviceDependentResources();
+    }
+    
+    for (auto& pair : _spriteBatchers)
+    {
+        pair.second.releaseDeviceDependentResources();
+    }
+    
+    for (auto& pair : _triangleBatchers)
+    {
+        pair.second.releaseDeviceDependentResources();
+    }
+    
     _screenRenderer.releaseDeviceDependentResources();
 }
 
@@ -141,9 +201,9 @@ void Renderer::renderText(std::string fontBatcherKey, std::string shaderKey)
     fb.begin();
     for (auto& pair : _textViews)
     {
-        fb.addText(pair.second);
+        fb.addText(*this, pair.second);
     }
-    fb.end(s);
+    fb.end(*this, s);
 }
 
 void Renderer::renderToScreen(std::string framebufferKey, std::string shaderKey)

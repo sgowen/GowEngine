@@ -21,7 +21,7 @@ struct Texture;
 class SpriteBatcher
 {
 public:
-    SpriteBatcher(int maxBatchSize);
+    SpriteBatcher(uint32_t maxBatchSize);
 
     void createDeviceDependentResources();
     void releaseDeviceDependentResources();
@@ -30,7 +30,7 @@ public:
     void end(Shader& s, mat4& matrix, Texture& t, const Color& colorFactor = Color::ONE);
 
 private:
-    int _maxBatchSize;
+    uint32_t _maxBatchSize;
     std::vector<VERTEX_2D_TEXTURE> _vertices;
     uint32_t _vertexBuffer;
     uint32_t _indexBuffer;

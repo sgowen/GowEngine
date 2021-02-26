@@ -21,7 +21,7 @@ struct Shader;
 class TriangleBatcher
 {
 public:
-    TriangleBatcher(int maxBatchSize, bool isFill);
+    TriangleBatcher(uint32_t maxBatchSize, bool isFill);
 
     void createDeviceDependentResources();
     void releaseDeviceDependentResources();
@@ -31,7 +31,7 @@ public:
     void end(Shader& s, mat4& matrix, const Color& c);
 
 private:
-    int _maxBatchSize;
+    uint32_t _maxBatchSize;
     bool _isFill;
     uint32_t _vertexBuffer;
     std::vector<VERTEX_2D> _vertices;

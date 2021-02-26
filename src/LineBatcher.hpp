@@ -20,7 +20,7 @@ struct Shader;
 class LineBatcher
 {
 public:
-    LineBatcher(int maxBatchSize);
+    LineBatcher(uint32_t maxBatchSize);
 
     void createDeviceDependentResources();
     void releaseDeviceDependentResources();
@@ -30,7 +30,7 @@ public:
     void end(Shader& s, mat4& matrix, const Color& c);
 
 private:
-    int _maxBatchSize;
+    uint32_t _maxBatchSize;
     std::vector<VERTEX_2D> _vertices;
     uint32_t _vertexBuffer;
 };
