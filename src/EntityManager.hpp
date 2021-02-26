@@ -29,6 +29,8 @@ typedef EntityRenderController* (*EntityRenderControllerCreationFunc)(Entity* e)
 
 class EntityManager
 {
+    friend class EntityManagerLoader;
+    
 public:
     static EntityManager& getInstance()
     {
@@ -36,8 +38,6 @@ public:
         return ret;
     }
     
-    void initWithJSONFile(const char* filePath);
-    void initWithJSON(const char* json);
     Entity* createEntity(EntityInstanceDef eid);
     EntityDef& getEntityDef(uint32_t fourCCName);
     

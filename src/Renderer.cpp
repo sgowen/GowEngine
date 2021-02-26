@@ -13,7 +13,6 @@
 #include "AssetHandlerFactory.hpp"
 #include "AssetHandler.hpp"
 #include "FileData.hpp"
-#include "RapidJSONUtil.hpp"
 #include "AssetsManager.hpp"
 #include "OpenGLWrapper.hpp"
 

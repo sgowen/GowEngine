@@ -9,10 +9,10 @@
 #include "EngineState.hpp"
 
 #include "Engine.hpp"
-#include "AssetsLoader.hpp"
+#include "rapidjson/AssetsLoader.hpp"
+#include "rapidjson/RendererLoader.hpp"
 #include "AssetsManager.hpp"
 #include "AudioEngineFactory.hpp"
-#include "RendererLoader.hpp"
 
 void EngineState::enter(Engine* e)
 {

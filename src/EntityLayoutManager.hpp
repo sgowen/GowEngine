@@ -60,7 +60,7 @@ public:
     void loadEntityLayout(EntityLayoutDef& eld);
     void saveEntityLayout(EntityLayoutDef& eld);
     std::map<uint32_t, EntityLayoutDef>& getEntityLayouts();
-    EntityLayoutDef& findEntityLayoutDef(uint32_t key);
+    EntityLayoutDef& entityLayoutDef(uint32_t key);
     
 private:
     std::map<uint32_t, EntityLayoutDef> _entityLayoutMap;

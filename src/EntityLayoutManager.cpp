@@ -16,7 +16,7 @@
 #include "FileData.hpp"
 #include "PlatformMacros.hpp"
 #include "Macros.hpp"
-#include "RapidJSONUtil.hpp"
+#include "rapidjson/RapidJSONUtil.hpp"
 #include "InstanceRegistry.hpp"
 #include "Network.hpp"
 
@@ -180,10 +180,9 @@ std::map<uint32_t, EntityLayoutDef>& EntityLayoutManager::getEntityLayouts()
     return _entityLayoutMap;
 }
 
-EntityLayoutDef& EntityLayoutManager::findEntityLayoutDef(uint32_t key)
+EntityLayoutDef& EntityLayoutManager::entityLayoutDef(uint32_t key)
 {
     auto q = _entityLayoutMap.find(key);
-
     assert(q != _entityLayoutMap.end());
 
     return q->second;

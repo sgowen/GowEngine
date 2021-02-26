@@ -12,6 +12,7 @@
 #include "TimeTracker.hpp"
 #include "EntityIDManager.hpp"
 #include "InstanceRegistry.hpp"
+#include "rapidjson/EntityManagerLoader.hpp"
 
 #if IS_ANDROID
     #include "android/JNIAndroidAssetHandler.hpp"
@@ -25,7 +26,7 @@ double EngineController::getFrameRate()
 
 void EngineController::registerControllers(std::map<std::string, EntityControllerCreationFunc>& config, std::string entityManagerFilePath)
 {
-    ENTITY_MGR.initWithJSONFile(entityManagerFilePath.c_str());
+    EntityManagerLoader::initWithJSONFile(ENTITY_MGR, entityManagerFilePath.c_str());
     
     for (auto& pair: config)
     {
