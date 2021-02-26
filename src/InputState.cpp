@@ -30,6 +30,7 @@ void InputState::setMaxNumPlayers(uint8_t maxNumPlayers)
 
 void InputState::write(OutputMemoryBitStream& ombs) const
 {
+    ombs.write<uint8_t, 4>(_maxNumPlayers);
     for (uint8_t i = 0; i < _maxNumPlayers; ++i)
     {
         bool isInputAssigned = _playerInputStates[i]._playerID != NW_INPUT_UNASSIGNED;
@@ -43,6 +44,10 @@ void InputState::write(OutputMemoryBitStream& ombs) const
 
 void InputState::read(InputMemoryBitStream& imbs)
 {
+    uint8_t maxNumPlayers;
+    imbs.read<uint8_t, 4>(maxNumPlayers);
+    setMaxNumPlayers(maxNumPlayers);
+    
     for (uint8_t i = 0; i < _maxNumPlayers; ++i)
     {
         bool isInputAssigned;

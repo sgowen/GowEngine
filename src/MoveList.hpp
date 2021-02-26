@@ -14,7 +14,7 @@
 
 class InputState;
 
-typedef void (*InputStateReleaseFunc)(InputState* inputState);
+typedef void (*InputStateReleaseFunc)(InputState* is);
 
 class MoveList
 {
@@ -24,7 +24,8 @@ public:
     const Move& addMove(InputState* inputState, uint32_t timestamp, uint32_t index);
     bool addMoveIfNew(const Move& move);
     void markMoveAsProcessed(Move* move);
-    void removeProcessedMoves(uint32_t lastMoveProcessedOnServerTimestamp, InputStateReleaseFunc inputStateReleaseFunc);
+    void removeProcessedMoves(InputStateReleaseFunc isrf);
+    void removeProcessedMovesAtTimestamp(uint32_t lastMoveProcessedOnServerTimestamp, InputStateReleaseFunc isrf);
     uint32_t getLastMoveTimestamp() const;
     uint32_t getLastProcessedMoveTimestamp() const;
     void clear();

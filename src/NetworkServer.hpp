@@ -28,15 +28,18 @@ class Entity;
 
 typedef void (*HandleNewClientFunc)(std::string username, uint8_t playerID);
 typedef void (*HandleLostClientFunc)(ClientProxy& cp, uint8_t localPlayerIndex);
-typedef InputState* (*InputStateCreationFunc)();
-typedef void (*InputStateReleaseFunc)(InputState* inputState);
 
 class NetworkServer
 {
 public:
-    static void create(uint16_t port, uint8_t maxNumPlayers, OnEntityRegisteredFunc oerf, OnEntityDeregisteredFunc oedf, HandleNewClientFunc hncf, HandleLostClientFunc hlcf, InputStateCreationFunc iscf, InputStateReleaseFunc isrf);
+    static void create(uint16_t port, uint8_t maxNumPlayers, OnEntityRegisteredFunc oerf, OnEntityDeregisteredFunc oedf, HandleNewClientFunc hncf, HandleLostClientFunc hlcf);
     static NetworkServer* getInstance();
     static void destroy();
+    
+    static void cb_inputStateRelease(InputState* is)
+    {
+        s_instance->_poolInputState.free(is);
+    }
     
     void processIncomingPackets();
     void sendOutgoingPackets();
@@ -54,6 +57,7 @@ public:
     void onEntityDeregistered(Entity* e);
     EntityRegistry& getEntityRegistry();
     void processPacket(InputMemoryBitStream& imbs, SocketAddress* fromAddress);
+    void removeProcessedMovesForPlayer(uint8_t playerID);
     void onMovesProcessed(uint8_t moveCount);
     uint32_t getNumMovesProcessed();
     const std::map<int, ClientProxy*>& playerIDToClientMap();
@@ -66,10 +70,9 @@ private:
     OnEntityDeregisteredFunc _onEntityDeregisteredFunc;
     HandleNewClientFunc _handleNewClientFunc;
     HandleLostClientFunc _handleLostClientFunc;
-    InputStateCreationFunc _inputStateCreationFunc;
-    InputStateReleaseFunc _inputStateReleaseFunc;
     EntityRegistry _entityRegistry;
     Pool<ReplicationTransmissionData> _poolRMTD;
+    Pool<InputState> _poolInputState;
     std::map<uint64_t, ClientProxy> _addressHashToClientMap;
     std::map<int, ClientProxy*> _playerIDToClientMap;
     uint8_t _nextPlayerID;
@@ -89,7 +92,7 @@ private:
     void handleClientDisconnected(ClientProxy& cp);
     void resetNextPlayerID();
     
-    NetworkServer(uint16_t port, uint8_t maxNumPlayers, OnEntityRegisteredFunc oerf, OnEntityDeregisteredFunc oedf, HandleNewClientFunc hncf, HandleLostClientFunc hlcf, InputStateCreationFunc iscf, InputStateReleaseFunc isrf);
+    NetworkServer(uint16_t port, uint8_t maxNumPlayers, OnEntityRegisteredFunc oerf, OnEntityDeregisteredFunc oedf, HandleNewClientFunc hncf, HandleLostClientFunc hlcf);
     ~NetworkServer();
     NetworkServer(const NetworkServer&);
     NetworkServer& operator=(const NetworkServer&);

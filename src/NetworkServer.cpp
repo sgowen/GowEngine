@@ -33,7 +33,7 @@
 
 NetworkServer* NetworkServer::s_instance = NULL;
 
-void NetworkServer::create(uint16_t port, uint8_t maxNumPlayers, OnEntityRegisteredFunc oerf, OnEntityDeregisteredFunc oedf, HandleNewClientFunc hncf, HandleLostClientFunc hlcf, InputStateCreationFunc iscf, InputStateReleaseFunc isrf)
+void NetworkServer::create(uint16_t port, uint8_t maxNumPlayers, OnEntityRegisteredFunc oerf, OnEntityDeregisteredFunc oedf, HandleNewClientFunc hncf, HandleLostClientFunc hlcf)
 {
     assert(s_instance == NULL);
     
@@ -41,7 +41,7 @@ void NetworkServer::create(uint16_t port, uint8_t maxNumPlayers, OnEntityRegiste
     INST_REG.get<EntityIDManager>(INSK_EID_SRVR)->resetNextNetworkEntityID();
     INST_REG.get<EntityIDManager>(INSK_EID_SRVR)->resetNextPlayerEntityID();
     
-    s_instance = new NetworkServer(port, maxNumPlayers, oerf, oedf, hncf, hlcf, iscf, isrf);
+    s_instance = new NetworkServer(port, maxNumPlayers, oerf, oedf, hncf, hlcf);
 }
 
 NetworkServer * NetworkServer::getInstance()
@@ -270,6 +270,15 @@ void NetworkServer::processPacket(InputMemoryBitStream& imbs, SocketAddress* fro
     }
 }
 
+void NetworkServer::removeProcessedMovesForPlayer(uint8_t playerID)
+{
+    ClientProxy* cp = NW_SRVR->getClientProxy(playerID);
+    assert(cp != NULL);
+
+    MoveList& ml = cp->getUnprocessedMoveList();
+    ml.removeProcessedMoves(cb_inputStateRelease);
+}
+
 void NetworkServer::onMovesProcessed(uint8_t moveCount)
 {
     _numMovesProcessed += moveCount;
@@ -441,7 +450,9 @@ void NetworkServer::handleInputPacket(ClientProxy& cp, InputMemoryBitStream& imb
     
     for (; moveCount > 0; --moveCount)
     {
-        Move move = Move(_inputStateCreationFunc());
+        InputState* is = _poolInputState.obtain();
+        is->reset();
+        Move move = Move(is);
         
         bool isCopy;
         imbs.read(isCopy);
@@ -464,7 +475,7 @@ void NetworkServer::handleInputPacket(ClientProxy& cp, InputMemoryBitStream& imb
 
 		if (isRefInputStateOrphaned)
 		{
-            _inputStateReleaseFunc(referenceInputState);
+            cb_inputStateRelease(referenceInputState);
 		}
 
 		referenceInputState = move.inputState();
@@ -473,7 +484,7 @@ void NetworkServer::handleInputPacket(ClientProxy& cp, InputMemoryBitStream& imb
     
     if (isRefInputStateOrphaned)
     {
-        _inputStateReleaseFunc(referenceInputState);
+        cb_inputStateRelease(referenceInputState);
     }
 }
 
@@ -608,14 +619,12 @@ void cb_nw_srvr_onEntityDeregistered(Entity* e)
     NW_SRVR->onEntityDeregistered(e);
 }
 
-NetworkServer::NetworkServer(uint16_t port, uint8_t maxNumPlayers, OnEntityRegisteredFunc oerf, OnEntityDeregisteredFunc oedf, HandleNewClientFunc hncf, HandleLostClientFunc hlcf, InputStateCreationFunc iscf, InputStateReleaseFunc isrf) :
+NetworkServer::NetworkServer(uint16_t port, uint8_t maxNumPlayers, OnEntityRegisteredFunc oerf, OnEntityDeregisteredFunc oedf, HandleNewClientFunc hncf, HandleLostClientFunc hlcf) :
 _packetHandler(INST_REG.get<TimeTracker>(INSK_TIME_SRVR), port, cb_nw_srvr_processPacket),
 _onEntityRegisteredFunc(oerf),
 _onEntityDeregisteredFunc(oedf),
 _handleNewClientFunc(hncf),
 _handleLostClientFunc(hlcf),
-_inputStateCreationFunc(iscf),
-_inputStateReleaseFunc(isrf),
 _entityRegistry(cb_nw_srvr_onEntityRegistered, cb_nw_srvr_onEntityDeregistered),
 _nextPlayerID(1),
 _maxNumPlayers(maxNumPlayers),
