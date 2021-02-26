@@ -10,7 +10,7 @@
 
 #include "Engine.hpp"
 #include "AssetsLoader.hpp"
-#include "AssetManager.hpp"
+#include "AssetsManager.hpp"
 #include "AudioEngineFactory.hpp"
 #include "RendererLoader.hpp"
 

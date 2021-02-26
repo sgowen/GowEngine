@@ -1,12 +1,12 @@
 //
-//  AssetManager.cpp
+//  AssetsManager.cpp
 //  GowEngine
 //
 //  Created by Stephen Gowen on 4/23/20.
 //  Copyright © 2021 Stephen Gowen. All rights reserved.
 //
 
-#include "AssetManager.hpp"
+#include "AssetsManager.hpp"
 
 #include "Assets.hpp"
 #include "ShaderManager.hpp"
@@ -14,7 +14,7 @@
 
 #include <assert.h>
 
-void AssetManager::createDeviceDependentResources()
+void AssetsManager::createDeviceDependentResources()
 {
     for (auto& pair : _assets)
     {
@@ -25,7 +25,7 @@ void AssetManager::createDeviceDependentResources()
     }
 }
 
-void AssetManager::releaseDeviceDependentResources()
+void AssetsManager::releaseDeviceDependentResources()
 {
     for (auto& pair : _assets)
     {
@@ -36,45 +36,45 @@ void AssetManager::releaseDeviceDependentResources()
     }
 }
 
-void AssetManager::registerAssets(std::string key, Assets a)
+void AssetsManager::registerAssets(std::string key, Assets a)
 {
     assert(_assets.find(key) == _assets.end());
     _assets.emplace(key, a);
 }
 
-void AssetManager::deregisterAssets(std::string key)
+void AssetsManager::deregisterAssets(std::string key)
 {
     auto q = _assets.find(key);
     assert(q != _assets.end());
     _assets.erase(q);
 }
 
-Shader& AssetManager::shader(std::string name)
+Shader& AssetsManager::shader(std::string name)
 {
     return _shaderMgr.shader(name);
 }
 
-SoundWrapper* AssetManager::sound(uint16_t soundID)
+SoundWrapper* AssetsManager::sound(uint16_t soundID)
 {
     return _soundMgr.sound(soundID);
 }
 
-std::map<uint16_t, SoundWrapper*>& AssetManager::sounds()
+std::map<uint16_t, SoundWrapper*>& AssetsManager::sounds()
 {
     return _soundMgr.sounds();
 }
 
-SoundWrapper* AssetManager::music()
+SoundWrapper* AssetsManager::music()
 {
     return _soundMgr.music();
 }
 
-Texture& AssetManager::texture(std::string name)
+Texture& AssetsManager::texture(std::string name)
 {
     return _textureMgr.texture(name);
 }
 
-TextureRegion& AssetManager::textureRegion(std::string key, uint16_t stateTime)
+TextureRegion& AssetsManager::textureRegion(std::string key, uint16_t stateTime)
 {
     TextureRegion* ret = NULL;
     
@@ -92,7 +92,7 @@ TextureRegion& AssetManager::textureRegion(std::string key, uint16_t stateTime)
     return *ret;
 }
 
-AssetManager::AssetManager() :
+AssetsManager::AssetsManager() :
 _shaderMgr(),
 _soundMgr(),
 _textureMgr()

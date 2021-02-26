@@ -16,7 +16,7 @@
 #include "Assets.hpp"
 #include "SoundDescriptor.hpp"
 #include "STLUtil.hpp"
-#include "AssetManager.hpp"
+#include "AssetsManager.hpp"
 
 #define MAX_SOUNDS_TO_PLAY_PER_FRAME 4
 

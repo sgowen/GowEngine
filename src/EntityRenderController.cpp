@@ -10,7 +10,7 @@
 
 #include "Entity.hpp"
 #include "SpriteBatcher.hpp"
-#include "AssetManager.hpp"
+#include "AssetsManager.hpp"
 
 IMPL_RTTI_NOPARENT(EntityRenderController)
 IMPL_EntityController_create(EntityRenderController, EntityRenderController)

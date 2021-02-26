@@ -12,7 +12,7 @@
 #include "Shader.hpp"
 #include "Texture.hpp"
 #include "TextureRegion.hpp"
-#include "AssetManager.hpp"
+#include "AssetsManager.hpp"
 #include "KeyboardEvent.hpp"
 
 #include <assert.h>

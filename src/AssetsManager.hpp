@@ -1,5 +1,5 @@
 //
-//  AssetManager.hpp
+//  AssetsManager.hpp
 //  GowEngine
 //
 //  Created by Stephen Gowen on 4/23/20.
@@ -16,14 +16,14 @@
 
 #include <map>
 
-#define ASSETS AssetManager::getInstance()
+#define ASSETS AssetsManager::getInstance()
 
-class AssetManager
+class AssetsManager
 {
 public:
-	static AssetManager& getInstance()
+	static AssetsManager& getInstance()
     {
-        static AssetManager ret = AssetManager();
+        static AssetsManager ret = AssetsManager();
         return ret;
     }
     
@@ -44,8 +44,8 @@ private:
     SoundManager _soundMgr;
     TextureManager _textureMgr;
     
-    AssetManager();
-    ~AssetManager() {}
-    AssetManager(const AssetManager&);
-    AssetManager& operator=(const AssetManager&);
+    AssetsManager();
+    ~AssetsManager() {}
+    AssetsManager(const AssetsManager&);
+    AssetsManager& operator=(const AssetsManager&);
 };

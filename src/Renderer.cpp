@@ -14,7 +14,7 @@
 #include "AssetHandler.hpp"
 #include "FileData.hpp"
 #include "RapidJSONUtil.hpp"
-#include "AssetManager.hpp"
+#include "AssetsManager.hpp"
 #include "OpenGLWrapper.hpp"
 
 #include <assert.h>
