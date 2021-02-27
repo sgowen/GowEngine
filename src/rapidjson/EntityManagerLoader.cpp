@@ -173,16 +173,14 @@ void EntityManagerLoader::initWithJSON(EntityManager& em, const char* json)
         Config cfg;
         if (iv.HasMember("data"))
         {
-            std::map<std::string, std::string> keyValues;
             const Value& v = iv["data"];
             assert(v.IsObject());
             for (Value::ConstMemberIterator i = v.MemberBegin(); i != v.MemberEnd(); ++i)
             {
                 assert(i->value.IsString());
                 
-                keyValues[i->name.GetString()] = i->value.GetString();
+                cfg._keyValues[i->name.GetString()] = i->value.GetString();
             }
-            cfg.initWithKeyValues(keyValues);
         }
         
         em._entityDescriptorsMap.emplace(key, EntityDef{key, name, keyName, controller, networkController, physicsController, renderController, textureMappings, soundMappings, soundRandomMappings, fixtures, bodyFlags, width, height, cfg});

@@ -14,11 +14,6 @@
 
 const Config Config::EMPTY = Config();
 
-void Config::initWithKeyValues(std::map<std::string, std::string> keyValues)
-{
-    _keyValues = keyValues;
-}
-
 bool Config::hasValues()
 {
     return _keyValues.size() > 0;
@@ -52,6 +47,17 @@ uint32_t Config::getUInt(std::string key)
     assert(val != NULL);
     uint32_t ret = StringUtil::stringToNumber<uint32_t>(*val);
     return ret;
+}
+
+uint32_t Config::getUInt(std::string key, uint32_t defaultValue)
+{    
+    std::string* val = value(key);
+    if (val != NULL)
+    {
+        return StringUtil::stringToNumber<uint32_t>(*val);
+    }
+        
+    return defaultValue;
 }
 
 float Config::getFloat(std::string key)

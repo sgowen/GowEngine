@@ -48,19 +48,19 @@ public:
     }
 
     template<typename T>
-    static T stringToNumber(const std::string& str, T defVal = 0)
+    static T stringToNumber(const std::string& str, T defaultValue = 0)
     {
         std::stringstream ss(str);
         T value;
         if ((ss >> value).fail())
         {
-            return defVal;
+            return defaultValue;
         }
 
         return value;
     }
     
-    static bool stringToBool(const std::string& str, bool defVal = false)
+    static bool stringToBool(const std::string& str, bool defaultValue = false)
     {
         if (str == "true" || str == "yes" || str == "1")
         {
@@ -71,7 +71,7 @@ public:
             return false;
         }
         
-        return defVal;
+        return defaultValue;
     }
 
     template<size_t maxLenInChars>

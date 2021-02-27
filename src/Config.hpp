@@ -14,16 +14,17 @@
 class Config
 {
     friend class ConfigLoader;
+    friend class EntityManagerLoader;
     
 public:
     static const Config EMPTY;
     
-    void initWithKeyValues(std::map<std::string, std::string> keyValues);
     bool hasValues();
     bool hasValue(std::string key);
     bool getBool(std::string key);
     int32_t getInt(std::string key);
     uint32_t getUInt(std::string key);
+    uint32_t getUInt(std::string key, uint32_t defaultValue);
     float getFloat(std::string key);
     double getDouble(std::string key);
     std::string getString(std::string key);

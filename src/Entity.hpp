@@ -114,6 +114,7 @@ public:
     
     void update();
     void message(uint16_t message);
+    EntityDef& entityDef();
     uint16_t stateTime();
     Vector2& position();
     Vector2& velocity();
@@ -130,8 +131,6 @@ public:
     bool isPlayer();
     bool isFixedRotation();
     bool isServer();
-    
-    EntityDef& entityDef();
     
     template<typename T = EntityController>
     T* controller()
