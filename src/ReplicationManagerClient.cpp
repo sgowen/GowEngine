@@ -13,7 +13,7 @@
 #include "InputMemoryBitStream.hpp"
 #include "EntityManager.hpp"
 #include "Entity.hpp"
-#include "EntityLayoutManager.hpp"
+#include "EntityLayout.hpp"
 #include "EntityNetworkController.hpp"
 
 #include <cassert>

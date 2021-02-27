@@ -383,7 +383,7 @@ void NetworkServer::processPacket(ClientProxy& cp, InputMemoryBitStream& imbs)
 
 void NetworkServer::sendWelcomePacket(ClientProxy& cp)
 {
-    OutputMemoryBitStream ombs;
+    OutputMemoryBitStream ombs(1);
     ombs.write<uint8_t, 4>(static_cast<uint8_t>(NWPT_WELCOME));
     ombs.write<uint8_t, 3>(cp.getPlayerID());
     sendPacket(ombs, cp.getSocketAddress());
@@ -396,7 +396,7 @@ void NetworkServer::sendWelcomePacket(ClientProxy& cp)
 
 void NetworkServer::sendStatePacketToClient(ClientProxy& cp)
 {
-    OutputMemoryBitStream ombs;
+    OutputMemoryBitStream ombs(NW_MAX_PACKET_SIZE);
     ombs.write<uint8_t, 4>(static_cast<uint8_t>(NWPT_STATE));
     
     ombs.write(_numMovesProcessed);
@@ -517,7 +517,7 @@ void NetworkServer::handleAddLocalPlayerPacket(ClientProxy& cp, InputMemoryBitSt
     }
     else
     {
-        OutputMemoryBitStream ombs;
+        OutputMemoryBitStream ombs(1);
         ombs.write<uint8_t, 4>(static_cast<uint8_t>(NWPT_LOCAL_PLAYER_DENIED));
         sendPacket(ombs, cp.getSocketAddress());
     }
@@ -528,7 +528,7 @@ void NetworkServer::sendLocalPlayerAddedPacket(ClientProxy& cp)
     uint8_t index = cp.getNumPlayers() - 1;
     uint8_t playerID = cp.getPlayerID(index);
     
-    OutputMemoryBitStream ombs;
+    OutputMemoryBitStream ombs(1);
     ombs.write<uint8_t, 4>(static_cast<uint8_t>(NWPT_LOCAL_PLAYER_ADDED));
     ombs.write<uint8_t, 3>(playerID);
     sendPacket(ombs, cp.getSocketAddress());
@@ -640,7 +640,7 @@ NetworkServer::~NetworkServer()
     {
         ClientProxy& cp = pair.second;
         
-        OutputMemoryBitStream ombs;
+        OutputMemoryBitStream ombs(1);
         ombs.write<uint8_t, 4>(static_cast<uint8_t>(NWPT_SRVR_EXIT));
         sendPacket(ombs, cp.getSocketAddress());
     }

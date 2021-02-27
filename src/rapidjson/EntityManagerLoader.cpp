@@ -10,7 +10,7 @@
 
 #include "Entity.hpp"
 #include "EntityManager.hpp"
-#include "EntityLayoutManager.hpp"
+#include "EntityLayout.hpp"
 #include "EntityController.hpp"
 #include "EntityNetworkController.hpp"
 #include "EntityPhysicsController.hpp"

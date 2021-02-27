@@ -1,5 +1,5 @@
 //
-//  EntityLayoutManager.hpp
+//  EntityLayout.hpp
 //  GowEngine
 //
 //  Created by Stephen Gowen on 1/10/18.
@@ -48,23 +48,15 @@ struct EntityLayoutDef
     }
 };
 
-class EntityIDManager;
-
-class EntityLayoutManager
+struct EntityLayout
 {
-public:
-    EntityLayoutManager(bool isServer);
+    std::map<uint32_t, EntityLayoutDef> _entityLayouts;
     
-    void initWithJSONFile(const char* filePath);
-    void initWithJSON(const char* data);
-    void loadEntityLayout(EntityLayoutDef& eld);
-    void saveEntityLayout(EntityLayoutDef& eld);
-    std::map<uint32_t, EntityLayoutDef>& getEntityLayouts();
-    EntityLayoutDef& entityLayoutDef(uint32_t key);
-    
-private:
-    std::map<uint32_t, EntityLayoutDef> _entityLayoutMap;
-    bool _isServer;
-    
-    FILE* openFile(const char* path, const char* mode);
+    EntityLayoutDef& entityLayoutDef(uint32_t key)
+    {
+        auto q = _entityLayouts.find(key);
+        assert(q != _entityLayouts.end());
+
+        return q->second;
+    }
 };

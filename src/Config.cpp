@@ -8,42 +8,11 @@
 
 #include "Config.hpp"
 
-#include "AssetHandlerFactory.hpp"
-#include "AssetHandler.hpp"
-#include "FileData.hpp"
 #include "StringUtil.hpp"
-
-#include <rapidjson/document.h>
 
 #include <assert.h>
 
 const Config Config::EMPTY = Config();
-
-void Config::initWithJSONFile(const char* filePath)
-{
-    AssetHandler* ah = AssetHandlerFactory::create();
-    FileData jsonData = ah->loadAsset(filePath);
-    initWithJSON((const char*)jsonData._data);
-    ah->releaseAsset(jsonData);
-    AssetHandlerFactory::destroy(ah);
-}
-
-void Config::initWithJSON(const char* json)
-{
-    _keyValues.clear();
-    
-    using namespace rapidjson;
-    
-    Document d;
-    d.Parse<kParseStopWhenDoneFlag>(json);
-    assert(d.IsObject());
-    for (Value::ConstMemberIterator i = d.MemberBegin(); i != d.MemberEnd(); ++i)
-    {
-        assert(i->value.IsString());
-        
-        _keyValues[i->name.GetString()] = i->value.GetString();
-    }
-}
 
 void Config::initWithKeyValues(std::map<std::string, std::string> keyValues)
 {

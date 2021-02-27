@@ -8,7 +8,7 @@
 
 #pragma once
 
-#include "EntityLayoutManager.hpp"
+#include "EntityLayout.hpp"
 #include "Vector2.hpp"
 #include "Config.hpp"
 

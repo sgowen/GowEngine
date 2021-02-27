@@ -17,7 +17,7 @@
 class OutputMemoryBitStream
 {
 public:
-    OutputMemoryBitStream();
+    OutputMemoryBitStream(uint32_t initialBufferByteSize);
     ~OutputMemoryBitStream();
     
     const char* getBufferPtr() const;

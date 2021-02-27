@@ -20,9 +20,22 @@
 #include <algorithm>
 
 Renderer::Renderer() :
+_renderFunc(NULL),
 _screenRenderer()
 {
     // TODO
+}
+
+void Renderer::setRenderFunc(RenderFunc rf)
+{
+    _renderFunc = rf;
+}
+
+void Renderer::render()
+{
+    assert(_renderFunc != NULL);
+    
+    _renderFunc(*this);
 }
 
 void Renderer::createDeviceDependentResources()

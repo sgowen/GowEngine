@@ -1,12 +1,12 @@
 //
-//  EntityLayoutManager.cpp
+//  EntityLayoutLoader.cpp
 //  GowEngine
 //
-//  Created by Stephen Gowen on 1/10/18.
+//  Created by Stephen Gowen on 2/27/21.
 //  Copyright © 2021 Stephen Gowen. All rights reserved.
 //
 
-#include "EntityLayoutManager.hpp"
+#include "EntityLayoutLoader.hpp"
 
 #include "Entity.hpp"
 #include "EntityIDManager.hpp"
@@ -25,24 +25,20 @@
 
 #include <assert.h>
 
-EntityLayoutManager::EntityLayoutManager(bool isServer) :
-_isServer(isServer)
-{
-    // Empty
-}
-
-void EntityLayoutManager::initWithJSONFile(const char* filePath)
+EntityLayout EntityLayoutLoader::initWithJSONFile(const char* filePath)
 {
     AssetHandler* ah = AssetHandlerFactory::create();
     FileData jsonData = ah->loadAsset(filePath);
-    initWithJSON((const char*)jsonData._data);
+    EntityLayout ret = initWithJSON((const char*)jsonData._data);
     ah->releaseAsset(jsonData);
     AssetHandlerFactory::destroy(ah);
+    
+    return ret;
 }
 
-void EntityLayoutManager::initWithJSON(const char* data)
+EntityLayout EntityLayoutLoader::initWithJSON(const char* data)
 {
-    _entityLayoutMap.clear();
+    EntityLayout ret;
     
     using namespace rapidjson;
     
@@ -58,17 +54,19 @@ void EntityLayoutManager::initWithJSON(const char* data)
         std::string name = i->name.GetString();
         uint32_t key = StringUtil::fourCharFromString(name);
         
-        assert(_entityLayoutMap.find(key) == _entityLayoutMap.end());
+        assert(ret._entityLayouts.find(key) == ret._entityLayouts.end());
         
         std::string filePath = iv.GetString();
         
-        _entityLayoutMap.emplace(key, EntityLayoutDef{key, name, filePath});
+        ret._entityLayouts.emplace(key, EntityLayoutDef{key, name, filePath});
     }
+    
+    return ret;
 }
 
-void EntityLayoutManager::loadEntityLayout(EntityLayoutDef& eld)
+void EntityLayoutLoader::loadEntityLayout(EntityLayoutDef& eld, bool isServer)
 {
-    EntityIDManager* eidm = INST_REG.get<EntityIDManager>(_isServer ? INSK_EID_SRVR : INSK_EID_CLNT);
+    EntityIDManager* eidm = INST_REG.get<EntityIDManager>(isServer ? INSK_EID_SRVR : INSK_EID_CLNT);
     assert(eidm != NULL);
     eidm->resetNextLayoutEntityID();
     
@@ -97,7 +95,7 @@ void EntityLayoutManager::loadEntityLayout(EntityLayoutDef& eld)
             uint32_t x = RapidJSONUtil::getUInt(iv, "x");
             uint32_t y = RapidJSONUtil::getUInt(iv, "y");
             
-            eld._entities.emplace_back(eidm->getNextLayoutEntityID(), StringUtil::fourCharFromString(key), x, y, _isServer);
+            eld._entities.emplace_back(eidm->getNextLayoutEntityID(), StringUtil::fourCharFromString(key), x, y, isServer);
         }
     }
     
@@ -115,7 +113,7 @@ void EntityLayoutManager::loadEntityLayout(EntityLayoutDef& eld)
             uint32_t x = RapidJSONUtil::getUInt(iv, "x");
             uint32_t y = RapidJSONUtil::getUInt(iv, "y");
             
-            eld._entitiesNetwork.emplace_back(eidm->getNextNetworkEntityID(), StringUtil::fourCharFromString(key), x, y, _isServer);
+            eld._entitiesNetwork.emplace_back(eidm->getNextNetworkEntityID(), StringUtil::fourCharFromString(key), x, y, isServer);
         }
     }
     
@@ -123,7 +121,24 @@ void EntityLayoutManager::loadEntityLayout(EntityLayoutDef& eld)
     AssetHandlerFactory::destroy(ah);
 }
 
-void EntityLayoutManager::saveEntityLayout(EntityLayoutDef& eld)
+FILE* openFile(const char* path, const char* mode)
+{
+    FILE *file;
+
+#if IS_WINDOWS
+    errno_t err;
+    if ((err = fopen_s(&file, path, mode)) != 0)
+#else
+    if ((file = fopen(path, mode)) == NULL)
+#endif
+    {
+        return NULL;
+    }
+
+    return file;
+}
+
+void EntityLayoutLoader::saveEntityLayout(EntityLayoutDef& eld)
 {
     FILE *file = openFile(eld._filePath.c_str(), "w+");
     if (file == NULL)
@@ -173,34 +188,4 @@ void EntityLayoutManager::saveEntityLayout(EntityLayoutDef& eld)
     UNUSED(sum);
 
     fclose(file);
-}
-
-std::map<uint32_t, EntityLayoutDef>& EntityLayoutManager::getEntityLayouts()
-{
-    return _entityLayoutMap;
-}
-
-EntityLayoutDef& EntityLayoutManager::entityLayoutDef(uint32_t key)
-{
-    auto q = _entityLayoutMap.find(key);
-    assert(q != _entityLayoutMap.end());
-
-    return q->second;
-}
-
-FILE* EntityLayoutManager::openFile(const char* path, const char* mode)
-{
-    FILE *file;
-
-#if IS_WINDOWS
-    errno_t err;
-    if ((err = fopen_s(&file, path, mode)) != 0)
-#else
-    if ((file = fopen(path, mode)) == NULL)
-#endif
-    {
-        return NULL;
-    }
-
-    return file;
 }

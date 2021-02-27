@@ -243,7 +243,7 @@ void NetworkClient::updateSayingHello()
     
     if (time > _timeOfLastHello + NW_CLNT_TIME_BETWEEN_HELLOS)
     {
-        OutputMemoryBitStream ombs;
+        OutputMemoryBitStream ombs(64);
         ombs.write<uint8_t, 4>(static_cast<uint8_t>(NWPT_HELLO));
         ombs.writeSmall(getPlayerName());
         sendPacket(ombs);
@@ -346,7 +346,7 @@ void NetworkClient::handleStatePacket(InputMemoryBitStream& imbs)
 
 void NetworkClient::updateSendingInputPacket()
 {
-    OutputMemoryBitStream ombs;
+    OutputMemoryBitStream ombs(NW_MAX_PACKET_SIZE);
     ombs.write<uint8_t, 4>(static_cast<uint8_t>(NWPT_INPUT));
     
     _deliveryNotificationManager.writeState(ombs);
@@ -395,7 +395,7 @@ void NetworkClient::updateAddLocalPlayerRequest()
     
     if (time > _timeOfLastHello + NW_CLNT_TIME_BETWEEN_HELLOS)
     {
-        OutputMemoryBitStream ombs;
+        OutputMemoryBitStream ombs(2);
         ombs.write<uint8_t, 4>(static_cast<uint8_t>(NWPT_ADD_LOCAL_PLAYER));
         ombs.write(_nextIndex);
         sendPacket(ombs);
@@ -413,7 +413,7 @@ void NetworkClient::updateDropLocalPlayerRequest()
     
     _isRequestingToAddLocalPlayer = false;
     
-    OutputMemoryBitStream ombs;
+    OutputMemoryBitStream ombs(1);
     ombs.write<uint8_t, 4>(static_cast<uint8_t>(NWPT_DROP_LOCAL_PLAYER));
     ombs.write(_isRequestingToDropLocalPlayer);
     sendPacket(ombs);
@@ -468,7 +468,7 @@ NetworkClient::~NetworkClient()
 {
     _entityRegistry.deregisterAll();
     
-    OutputMemoryBitStream ombs;
+    OutputMemoryBitStream ombs(1);
     ombs.write<uint8_t, 4>(static_cast<uint8_t>(NWPT_CLNT_EXIT));
     sendPacket(ombs);
     

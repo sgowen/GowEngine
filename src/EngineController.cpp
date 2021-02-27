@@ -13,6 +13,7 @@
 #include "EntityIDManager.hpp"
 #include "InstanceRegistry.hpp"
 #include "rapidjson/EntityManagerLoader.hpp"
+#include "rapidjson/EntityLayoutLoader.hpp"
 
 #if IS_ANDROID
     #include "android/JNIAndroidAssetHandler.hpp"
@@ -45,10 +46,8 @@ void EngineController::configureForNetwork(std::map<std::string, EntityNetworkCo
     static TimeTracker TIMC(getFrameRate());
     static EntityIDManager EIMS;
     static EntityIDManager EIMC;
-    static EntityLayoutManager ELMS(true);
-    static EntityLayoutManager ELMC(false);
-    ELMS.initWithJSONFile(entityLayoutManagerFilePath.c_str());
-    ELMC.initWithJSONFile(entityLayoutManagerFilePath.c_str());
+    static EntityLayout ELMS = EntityLayoutLoader::initWithJSONFile(entityLayoutManagerFilePath.c_str());
+    static EntityLayout ELMC = EntityLayoutLoader::initWithJSONFile(entityLayoutManagerFilePath.c_str());
     
     INST_REG.registerInstance(INSK_TIME_SRVR, &TIMS);
     INST_REG.registerInstance(INSK_TIME_CLNT, &TIMC);

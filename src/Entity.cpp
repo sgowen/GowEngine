@@ -8,7 +8,7 @@
 
 #include "Entity.hpp"
 
-#include "EntityLayoutManager.hpp"
+#include "EntityLayout.hpp"
 #include "EntityController.hpp"
 #include "EntityNetworkController.hpp"
 #include "EntityPhysicsController.hpp"

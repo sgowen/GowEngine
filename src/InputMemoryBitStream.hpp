@@ -17,7 +17,7 @@
 class InputMemoryBitStream
 {
 public:
-    InputMemoryBitStream(char* buffer, uint32_t bitCount);
+    InputMemoryBitStream(char* buffer, uint32_t byteCount);
     InputMemoryBitStream(const InputMemoryBitStream& other);
     ~InputMemoryBitStream();
     

@@ -19,6 +19,7 @@ void EngineState::enter(Engine* e)
     ASSETS.registerAssets(_assetsFilePath, _assets);
     createDeviceDependentResources(e);
     onWindowSizeChanged(e);
+    onEnter(e);
 }
 
 void EngineState::execute(Engine* e)
@@ -56,6 +57,15 @@ void EngineState::exit(Engine* e)
 {
     releaseDeviceDependentResources(e);
     ASSETS.deregisterAssets(_assetsFilePath);
+    onExit(e);
+}
+
+EngineState::EngineState(std::string assetsFilePath, std::string rendererFilePath, RenderFunc rf) : State<Engine>(),
+_assets(AssetsLoader::initWithJSONFile(assetsFilePath.c_str())),
+_renderer(RendererLoader::initWithJSONFile(rendererFilePath.c_str())),
+_assetsFilePath(assetsFilePath)
+{
+    _renderer.setRenderFunc(rf);
 }
 
 void EngineState::createDeviceDependentResources(Engine* e)
@@ -88,17 +98,11 @@ void EngineState::resume(Engine *e)
 void EngineState::update(Engine* e)
 {
     // TODO, call ASSETS.update to handle async callbacks
+    onUpdate(e);
 }
 
 void EngineState::render(Engine* e)
 {
+    _renderer.render();
     AUDIO_ENGINE.render();
-}
-
-EngineState::EngineState(std::string assetsFilePath, std::string rendererFilePath) : State<Engine>(),
-_assets(AssetsLoader::initWithJSONFile(assetsFilePath.c_str())),
-_renderer(RendererLoader::initWithJSONFile(rendererFilePath.c_str())),
-_assetsFilePath(assetsFilePath)
-{
-    // Empty
 }

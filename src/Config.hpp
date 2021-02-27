@@ -13,11 +13,11 @@
 
 class Config
 {
+    friend class ConfigLoader;
+    
 public:
     static const Config EMPTY;
     
-    void initWithJSONFile(const char* filePath);
-    void initWithJSON(const char* json);
     void initWithKeyValues(std::map<std::string, std::string> keyValues);
     bool hasValues();
     bool hasValue(std::string key);

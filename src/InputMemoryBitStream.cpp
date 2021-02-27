@@ -10,9 +10,9 @@
 
 #include <cstring>
 
-InputMemoryBitStream::InputMemoryBitStream(char* buffer, uint32_t bitCount) :
+InputMemoryBitStream::InputMemoryBitStream(char* buffer, uint32_t byteCount) :
 _buffer(buffer),
-_bitCapacity(bitCount),
+_bitCapacity(byteCount * 8),
 _bitHead(0),
 _isBufferOwner(false)
 {

@@ -80,7 +80,7 @@ void PacketHandler::readIncomingPacketsIntoQueue()
     static char packetMem[NW_MAX_PACKET_SIZE];
     bzero(packetMem, NW_MAX_PACKET_SIZE);
 
-    InputMemoryBitStream imbs(packetMem, NW_MAX_PACKET_SIZE * 8);
+    InputMemoryBitStream imbs(packetMem, NW_MAX_PACKET_SIZE);
     SocketAddress fromAddress;
 
     int receivedPacketCount = 0;

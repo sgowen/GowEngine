@@ -20,6 +20,8 @@
 
 #include <map>
 
+typedef void (*RenderFunc)(Renderer& r);
+
 class Entity;
 
 class Renderer
@@ -29,6 +31,8 @@ class Renderer
 public:
     Renderer();
     
+    void setRenderFunc(RenderFunc rf);
+    void render();
     void createDeviceDependentResources();
     void onWindowSizeChanged(uint16_t screenWidth, uint16_t screenHeight);
     void releaseDeviceDependentResources();
@@ -58,6 +62,7 @@ public:
     TriangleBatcher& triangleBatcher(std::string key = "main");
     
 private:
+    RenderFunc _renderFunc;
     std::map<std::string, CircleBatcher> _circleBatchers;
     std::map<std::string, FontBatcher> _fontBatchers;
     std::map<std::string, Framebuffer> _framebuffers;
