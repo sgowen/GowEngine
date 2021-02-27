@@ -13,7 +13,7 @@
 #if IS_DESKTOP
     #include <GLFW/glfw3.h>
 #else
-    // Empty till we add support for mobile
+    // TODO, add support for mobile
 #endif
 
 #define CLIPBOARD_UTIL ClipboardUtil::getInstance()
@@ -39,7 +39,7 @@ public:
 #if IS_DESKTOP
         return glfwGetClipboardString(_window);
 #else
-        // Empty till we add support for mobile
+        // TODO, add support for mobile
         return "";
 #endif
     }

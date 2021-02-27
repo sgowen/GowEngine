@@ -20,24 +20,20 @@
 
 void TextureLoader::loadTextureData(Texture& t)
 {
-    AssetHandler* ah = AssetHandlerFactory::create();
-    
-    const FileData textureData = ah->loadAsset(t._desc._filePath.c_str());
+    const FileData fd = ASSET_HANDLER.loadAsset(t._desc._filePath.c_str());
     
     if (IS_IOS)
     {
         stbi_convert_iphone_png_to_rgb(1);
     }
     
-    t._data = stbi_load_from_memory(textureData._data, (int)textureData._length, &t._width, &t._height, &t._numChannels, 0);
+    t._data = stbi_load_from_memory(fd._data, (int)fd._length, &t._width, &t._height, &t._numChannels, 0);
     assert(t._data != NULL);
 
-    ah->releaseAsset(textureData);
-
-    AssetHandlerFactory::destroy(ah);
+    ASSET_HANDLER.unloadAsset(fd);
 }
 
-void TextureLoader::releaseTextureData(Texture& t)
+void TextureLoader::unloadTextureData(Texture& t)
 {
     stbi_image_free(t._data);
     t._data = NULL;

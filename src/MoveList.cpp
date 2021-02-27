@@ -30,10 +30,6 @@ const Move& MoveList::addMove(InputState* inputState, uint32_t timestamp, uint32
 
 bool MoveList::addMoveIfNew(const Move& move)
 {
-    //we might have already received this move in another packet (since we're sending the same move in multiple packets)
-    //so make sure it's new...
-    
-    //adjust the deltatime and then place!
     uint32_t timeStamp = move.getTimestamp();
     uint32_t index = move.getIndex();
     

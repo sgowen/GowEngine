@@ -15,7 +15,7 @@
 
 using namespace oboe;
 
-constexpr int32_t kBufferSizeInBursts = 2; // Use 2 bursts as the buffer size (double buffer)
+constexpr int32_t kBufferSizeInBursts = 2;
 
 SimpleMultiPlayer::SimpleMultiPlayer() :
 _channelCount(0),
@@ -72,7 +72,6 @@ void SimpleMultiPlayer::setupAudioStream(int32_t channelCount)
 
 void SimpleMultiPlayer::teardownAudioStream()
 {
-    // tear down the player
     if (_audioStream != NULL)
     {
         _audioStream->stop();
@@ -83,10 +82,8 @@ void SimpleMultiPlayer::teardownAudioStream()
 
 bool SimpleMultiPlayer::openStream()
 {
-    // Create an audio stream
     AudioStreamBuilder builder;
     builder.setChannelCount(_channelCount);
-    // we will resample source data to device rate, so take default sample rate
     builder.setCallback(this);
     builder.setPerformanceMode(PerformanceMode::LowLatency);
     builder.setSharingMode(SharingMode::Exclusive);
@@ -98,10 +95,7 @@ bool SimpleMultiPlayer::openStream()
         LOG("SimpleMultiPlayer openStream failed. Error: %s", convertToText(result));
         return false;
     }
-
-    // Reduce stream latency by setting the buffer size to a multiple of the burst size
-    // Note: this will fail with ErrorUnimplemented if we are using a callback with OpenSL ES
-    // See oboe::AudioStreamBuffered::setBufferSizeInFrames
+    
     result = _audioStream->setBufferSizeInFrames(_audioStream->getFramesPerBurst() * kBufferSizeInBursts);
     if (result != Result::OK)
     {

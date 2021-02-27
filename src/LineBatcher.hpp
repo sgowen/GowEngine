@@ -23,7 +23,7 @@ public:
     LineBatcher(uint32_t maxBatchSize);
 
     void createDeviceDependentResources();
-    void releaseDeviceDependentResources();
+    void destroyDeviceDependentResources();
     void begin();
     void addLine(Line &line);
     void addLine(float oX, float oY, float eX, float eY);

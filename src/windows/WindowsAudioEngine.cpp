@@ -22,16 +22,14 @@ SoundWrapper* WindowsAudioEngine::loadMusic(const char* filePath)
     return loadSound(1337, filePath);
 }
 
-void WindowsAudioEngine::pause()
+void WindowsAudioEngine::onPause()
 {
-    AudioEngine::pause();
     _audioEngine->Suspend();
 }
 
-void WindowsAudioEngine::resume()
+void WindowsAudioEngine::onResume()
 {
     _audioEngine->Resume();
-    AudioEngine::resume();
 }
 
 WindowsAudioEngine::WindowsAudioEngine() : AudioEngine()

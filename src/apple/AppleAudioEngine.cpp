@@ -10,8 +10,8 @@
 
 #include "SoundWrapper.hpp"
 #include "AppleSoundWrapper.hpp"
-#include "ObjectALWrapper.hpp"
-#include "NSAppleAssetHandler.hpp"
+#include "ObjectALHelper.hpp"
+#include "NSBundleHelper.hpp"
 
 SoundWrapper* AppleAudioEngine::loadSound(const char *filePath, uint8_t numInstances)
 {
@@ -27,16 +27,14 @@ SoundWrapper* AppleAudioEngine::loadMusic(const char* filePath)
     return new AppleSoundWrapper(bundlePath, true);
 }
 
-void AppleAudioEngine::pause()
+void AppleAudioEngine::onPause()
 {
-    AudioEngine::pause();
     pauseObjectAL();
 }
 
-void AppleAudioEngine::resume()
+void AppleAudioEngine::onResume()
 {
     resumeObjectAL();
-    AudioEngine::resume();
 }
 
 AppleAudioEngine::AppleAudioEngine() : AudioEngine()

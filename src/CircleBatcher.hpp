@@ -23,7 +23,7 @@ public:
     CircleBatcher(uint32_t maxBatchSize);
 
     void createDeviceDependentResources();
-    void releaseDeviceDependentResources();
+    void destroyDeviceDependentResources();
     void begin();
     void addCircle(Circle& c);
     void addCircle(float x, float y, float radius);

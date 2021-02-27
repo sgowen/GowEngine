@@ -24,7 +24,7 @@ public:
     SpriteBatcher(uint32_t maxBatchSize);
 
     void createDeviceDependentResources();
-    void releaseDeviceDependentResources();
+    void destroyDeviceDependentResources();
     void begin();
     void addSprite(TextureRegion& tr, float x, float y, float width, float height, float angle = 0, bool flipX = false);
     void end(Shader& s, mat4& matrix, Texture& t, const Color& colorFactor = Color::ONE);

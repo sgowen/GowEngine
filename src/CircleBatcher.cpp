@@ -32,7 +32,7 @@ void CircleBatcher::createDeviceDependentResources()
     _vertexBuffer = OGL.loadVertexBuffer(sizeof(VERTEX_2D) * _vertices.capacity());
 }
 
-void CircleBatcher::releaseDeviceDependentResources()
+void CircleBatcher::destroyDeviceDependentResources()
 {
     OGL.unloadBuffer(_vertexBuffer);
 }

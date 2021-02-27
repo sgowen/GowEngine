@@ -61,7 +61,7 @@ FileData WindowsAssetHandler::loadAsset(const char* filePath)
 	return FileData(blob->size(), blob->data(), (const void*)blob);
 }
 
-void WindowsAssetHandler::releaseAsset(const FileData& fileData)
+void WindowsAssetHandler::unloadAsset(const FileData& fileData)
 {
 	assert(fileData._fileHandle != NULL);
 

@@ -10,15 +10,34 @@
 
 #include "AssetHandler.hpp"
 
+#include <jni.h>
+#include <android/asset_manager_jni.h>
+#include <assert.h>
+
 class AndroidAssetHandler : public AssetHandler
 {
     friend class AssetHandlerFactory;
     
 public:
-    virtual FileData loadAsset(const char* filePath);
-    virtual void releaseAsset(const FileData& fileData);
+    static void create(void* data1, void* data2);
+    static void destroy();
     
-protected:
-    AndroidAssetHandler() : AssetHandler() {}
+    virtual FileData loadAsset(const char* filePath);
+    virtual void unloadAsset(const FileData& fileData);
+
+private:
+    static AndroidAssetHandler* s_instance;
+    
+    static AndroidAssetHandler& getInstance()
+    {
+        assert(s_instance != NULL);
+        return *s_instance;
+    }
+
+    AAssetManager* _assetManager;
+
+    AndroidAssetHandler(JNIEnv *env, jobject assetManager);
     virtual ~AndroidAssetHandler() {}
+    AndroidAssetHandler(const AndroidAssetHandler&);
+    AndroidAssetHandler& operator=(const AndroidAssetHandler&);
 };

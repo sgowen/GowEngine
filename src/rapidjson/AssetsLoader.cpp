@@ -21,11 +21,9 @@
 
 Assets AssetsLoader::initWithJSONFile(const char* filePath)
 {
-    AssetHandler* ah = AssetHandlerFactory::create();
-    FileData jsonData = ah->loadAsset(filePath);
+    FileData jsonData = ASSET_HANDLER.loadAsset(filePath);
     Assets ret = initWithJSON((const char*)jsonData._data);
-    ah->releaseAsset(jsonData);
-    AssetHandlerFactory::destroy(ah);
+    ASSET_HANDLER.unloadAsset(jsonData);
     
     return ret;
 }
@@ -93,7 +91,7 @@ Assets AssetsLoader::initWithJSON(const char* json)
             if (iv.HasMember("uniforms"))
             {
                 ShaderDescriptor& sd = ret._shaderDescriptors.back();
-                std::vector<ShaderUniform>& uniforms = sd.getUniforms();
+                std::vector<ShaderUniform>& uniforms = sd._uniforms;
                 
                 const Value& v = iv["uniforms"];
                 assert(v.IsArray());
@@ -110,7 +108,7 @@ Assets AssetsLoader::initWithJSON(const char* json)
             if (iv.HasMember("attributes"))
             {
                 ShaderDescriptor& sd = ret._shaderDescriptors.back();
-                std::vector<ShaderAttribute>& attributes = sd.getAttributes();
+                std::vector<ShaderAttribute>& attributes = sd._attributes;
                 
                 const Value& v = iv["attributes"];
                 assert(v.IsArray());

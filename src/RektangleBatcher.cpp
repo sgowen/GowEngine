@@ -28,7 +28,7 @@ void RektangleBatcher::createDeviceDependentResources()
     _indexBuffer = OGL.loadRektangleIndexBuffer(_maxBatchSize);
 }
 
-void RektangleBatcher::releaseDeviceDependentResources()
+void RektangleBatcher::destroyDeviceDependentResources()
 {
     OGL.unloadBuffer(_vertexBuffer);
     OGL.unloadBuffer(_indexBuffer);

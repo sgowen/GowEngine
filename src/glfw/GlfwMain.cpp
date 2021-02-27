@@ -136,7 +136,6 @@ int GlfwMain::exec(EngineController& engineController, const char* windowTitle)
     int height = 480;
 
 #if IS_RELEASE
-    // Launch into fullscreen right away in release mode
     monitor = glfwGetPrimaryMonitor();
     if (monitor)
     {
@@ -278,7 +277,7 @@ int GlfwMain::exec(EngineController& engineController, const char* windowTitle)
         glfwSwapBuffers(window);
     }
 
-    _engine->releaseDeviceDependentResources();
+    _engine->destroyDeviceDependentResources();
     
     delete _engine;
     _engine = NULL;

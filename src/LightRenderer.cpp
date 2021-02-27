@@ -29,7 +29,7 @@ void LightRenderer::createDeviceDependentResources()
     _indexBuffer = OGL.loadRektangleIndexBuffer(1);
 }
 
-void LightRenderer::releaseDeviceDependentResources()
+void LightRenderer::destroyDeviceDependentResources()
 {
     OGL.unloadBuffer(_vertexBuffer);
     OGL.unloadBuffer(_indexBuffer);

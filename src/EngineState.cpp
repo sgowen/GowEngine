@@ -33,7 +33,7 @@ void EngineState::execute(Engine* e)
             onWindowSizeChanged(e);
             break;
         case ERSA_RELEASE_RESOURCES:
-            releaseDeviceDependentResources(e);
+            destroyDeviceDependentResources(e);
             break;
         case ERSA_PAUSE:
             pause(e);
@@ -55,7 +55,7 @@ void EngineState::execute(Engine* e)
 
 void EngineState::exit(Engine* e)
 {
-    releaseDeviceDependentResources(e);
+    destroyDeviceDependentResources(e);
     ASSETS.deregisterAssets(_assetsFilePath);
     onExit(e);
 }
@@ -79,10 +79,10 @@ void EngineState::onWindowSizeChanged(Engine* e)
     _renderer.onWindowSizeChanged(e->screenWidth(), e->screenHeight());
 }
 
-void EngineState::releaseDeviceDependentResources(Engine* e)
+void EngineState::destroyDeviceDependentResources(Engine* e)
 {
-    _renderer.releaseDeviceDependentResources();
-    ASSETS.releaseDeviceDependentResources();
+    _renderer.destroyDeviceDependentResources();
+    ASSETS.destroyDeviceDependentResources();
 }
 
 void EngineState::pause(Engine *e)
@@ -97,7 +97,7 @@ void EngineState::resume(Engine *e)
 
 void EngineState::update(Engine* e)
 {
-    // TODO, call ASSETS.update to handle async callbacks
+    ASSETS.update();
     onUpdate(e);
 }
 

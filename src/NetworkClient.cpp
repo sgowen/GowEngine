@@ -153,14 +153,14 @@ NetworkClientState NetworkClient::state() const
 
 bool NetworkClient::connect()
 {
-    if (SOCKET_UTIL.isLoggingEnabled())
+    if (IS_NETWORK_LOGGING_ENABLED())
     {
         LOG("Client Initializing PacketHandler at port %hu", _port);
     }
     
     int error = _packetHandler.connect();
     if (error != NO_ERROR &&
-        SOCKET_UTIL.isLoggingEnabled())
+        IS_NETWORK_LOGGING_ENABLED())
     {
         LOG("Client connect failed. Error code %d", error);
     }
@@ -175,7 +175,7 @@ EntityRegistry& NetworkClient::getEntityRegistry()
 
 void NetworkClient::processPacket(InputMemoryBitStream& imbs, SocketAddress* fromAddress)
 {
-    if (SOCKET_UTIL.isLoggingEnabled())
+    if (IS_NETWORK_LOGGING_ENABLED())
     {
         LOG("Client processPacket bit length: %d", imbs.getRemainingBitCount());
     }
@@ -201,14 +201,14 @@ void NetworkClient::processPacket(InputMemoryBitStream& imbs, SocketAddress* fro
             handleStatePacket(imbs);
             break;
         case NWPT_SRVR_EXIT:
-            if (SOCKET_UTIL.isLoggingEnabled())
+            if (IS_NETWORK_LOGGING_ENABLED())
             {
                 LOG("Server has shut down");
             }
             _state = NWCS_DISCONNECTED;
             break;
         default:
-            if (SOCKET_UTIL.isLoggingEnabled())
+            if (IS_NETWORK_LOGGING_ENABLED())
             {
                 LOG("Unknown packet type received from %s", fromAddress->toString().c_str());
             }
@@ -228,7 +228,7 @@ uint32_t NetworkClient::getNumMovesProcessed()
 
 void NetworkClient::sendPacket(const OutputMemoryBitStream& ombs)
 {
-    if (SOCKET_UTIL.isLoggingEnabled())
+    if (IS_NETWORK_LOGGING_ENABLED())
     {
         LOG("Client    sendPacket bit length: %d", ombs.getBitLength());
     }
@@ -259,7 +259,6 @@ void NetworkClient::handleWelcomePacket(InputMemoryBitStream& imbs)
         return;
     }
     
-    // if we got a player ID, we've been welcomed!
     uint8_t playerID;
     imbs.read<uint8_t, 3>(playerID);
     
@@ -268,7 +267,7 @@ void NetworkClient::handleWelcomePacket(InputMemoryBitStream& imbs)
     _indexToPlayerIDMap.clear();
     _indexToPlayerIDMap[_nextIndex] = playerID;
     
-    if (SOCKET_UTIL.isLoggingEnabled())
+    if (IS_NETWORK_LOGGING_ENABLED())
     {
         LOG("Client '%s' was welcomed as player %d", getPlayerName().c_str(), playerID);
     }
@@ -285,13 +284,12 @@ void NetworkClient::handleLocalPlayerAddedPacket(InputMemoryBitStream& imbs)
         return;
     }
     
-    // if we got a player ID, our local player has been added!
     uint8_t playerID;
     imbs.read(playerID);
     
     _indexToPlayerIDMap[_nextIndex] = playerID;
     
-    if (SOCKET_UTIL.isLoggingEnabled())
+    if (IS_NETWORK_LOGGING_ENABLED())
     {
         LOG("'%s(%d)' was welcomed on client as player %d", getPlayerName().c_str(), _nextIndex, playerID);
     }
@@ -305,7 +303,7 @@ void NetworkClient::handleLocalPlayerAddedPacket(InputMemoryBitStream& imbs)
 
 void NetworkClient::handleLocalPlayerDeniedPacket()
 {
-    if (SOCKET_UTIL.isLoggingEnabled())
+    if (IS_NETWORK_LOGGING_ENABLED())
     {
         LOG("'%s(%d)' was denied on client...", getPlayerName().c_str(), _nextIndex);
     }
@@ -423,7 +421,6 @@ void NetworkClient::updateDropLocalPlayerRequest()
 
 void NetworkClient::updateNextIndex()
 {
-    // Find the next available Player ID
     _nextIndex = 0;
     for (auto const& entry : _indexToPlayerIDMap)
     {
@@ -472,7 +469,7 @@ NetworkClient::~NetworkClient()
     ombs.write<uint8_t, 4>(static_cast<uint8_t>(NWPT_CLNT_EXIT));
     sendPacket(ombs);
     
-    if (SOCKET_UTIL.isLoggingEnabled())
+    if (IS_NETWORK_LOGGING_ENABLED())
     {
         _deliveryNotificationManager.logStats();
     }

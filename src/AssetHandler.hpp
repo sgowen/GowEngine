@@ -11,12 +11,10 @@
 #include "FileData.hpp"
 
 class AssetHandler
-{
-    friend class AssetHandlerFactory;
-    
+{    
 public:
     virtual FileData loadAsset(const char* filePath) = 0;
-    virtual void releaseAsset(const FileData& fileData) = 0;
+    virtual void unloadAsset(const FileData& fileData) = 0;
     
 protected:
     AssetHandler() {}

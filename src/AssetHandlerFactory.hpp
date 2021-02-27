@@ -25,31 +25,26 @@
 #include <assert.h>
 #include <stdlib.h>
 
+#define ASSET_HANDLER AssetHandlerFactory::getInstance()
+
 class AssetHandlerFactory
 {
 public:
-    static AssetHandler* create()
+    static AssetHandler& getInstance()
     {
 #if IS_APPLE
-        return new AppleAssetHandler();
+        return AppleAssetHandler::getInstance();
 #elif IS_ANDROID
-        return new AndroidAssetHandler();
+        return AndroidAssetHandler::getInstance();
 #elif IS_LINUX
-        return new LinuxAssetHandler();
+        return LinuxAssetHandler::getInstance();
 #elif IS_WINDOWS
-        return new WindowsAssetHandler();
+        return WindowsAssetHandler::getInstance();
 #else
         #error Need to add AssetHandler implementation
 #endif
     }
-    
-    static void destroy(AssetHandler* ah)
-    {
-        assert(ah != NULL);
 
-        delete ah;
-    }
-    
 private:
     AssetHandlerFactory();
     ~AssetHandlerFactory();

@@ -24,7 +24,7 @@ public:
     RektangleBatcher(uint32_t maxBatchSize, bool isFill);
 
     void createDeviceDependentResources();
-    void releaseDeviceDependentResources();
+    void destroyDeviceDependentResources();
     void begin();
     void addRektangle(Rektangle& r);
     void addRektangle(float left, float bottom, float right, float top);

@@ -50,9 +50,9 @@ void FontBatcher::createDeviceDependentResources()
     }
 }
 
-void FontBatcher::releaseDeviceDependentResources()
+void FontBatcher::destroyDeviceDependentResources()
 {
-    _spriteBatcher.releaseDeviceDependentResources();
+    _spriteBatcher.destroyDeviceDependentResources();
     
     _glyphs.clear();
 }

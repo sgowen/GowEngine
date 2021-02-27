@@ -62,6 +62,5 @@ uint16_t EntityRenderController::getSoundMapping(uint8_t state)
         return soundCollection[index];
     }
     
-    // No sound for this state
     return 0;
 }

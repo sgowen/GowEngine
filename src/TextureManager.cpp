@@ -25,7 +25,7 @@ void TextureManager::loadTextures(std::vector<TextureDescriptor>& tds)
         
         _loader.loadTextureData(t);
         _loader.loadTexture(t);
-        _loader.releaseTextureData(t);
+        _loader.unloadTextureData(t);
     }
 }
 
@@ -43,4 +43,9 @@ Texture& TextureManager::texture(std::string name)
     auto q = _textures.find(name);
     assert(q != _textures.end());
     return q->second;
+}
+
+std::map<std::string, Texture>& TextureManager::textures()
+{
+    return _textures;
 }

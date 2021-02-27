@@ -15,15 +15,15 @@ class SoundWrapper;
 class Sound;
 
 class AudioEngine
-{
-    friend class AudioEngineFactory;
-    
+{    
 public:
     virtual SoundWrapper* loadSound(const char *path, uint8_t numInstances = 1) = 0;
     virtual SoundWrapper* loadMusic(const char* path) = 0;
-    virtual void pause();
-    virtual void resume();
+    virtual void onPause() = 0;
+    virtual void onResume() = 0;
     
+    void pause();
+    void resume();
     void render();
     void playSound(uint16_t soundID, float volume = 1.0f, bool isLooping = false);
     void stopSound(uint16_t soundID);

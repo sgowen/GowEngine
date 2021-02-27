@@ -1,5 +1,5 @@
 //
-//  ObjectALWrapper.hpp
+//  ObjectALHelper.hpp
 //  GowEngine
 //
 //  Created by Stephen Gowen on 7/7/17.

@@ -39,3 +39,8 @@ Shader& ShaderManager::shader(std::string name)
     assert(q != _shaders.end());
     return q->second;
 }
+
+std::map<std::string, Shader>& ShaderManager::shaders()
+{
+    return _shaders;
+}

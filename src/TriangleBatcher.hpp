@@ -24,7 +24,7 @@ public:
     TriangleBatcher(uint32_t maxBatchSize, bool isFill);
 
     void createDeviceDependentResources();
-    void releaseDeviceDependentResources();
+    void destroyDeviceDependentResources();
     void begin();
     void addTriangle(Triangle& t);
     void addTriangle(float leftX, float leftY, float topX, float topY, float rightX, float rightY);

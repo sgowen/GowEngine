@@ -27,11 +27,9 @@
 
 EntityLayout EntityLayoutLoader::initWithJSONFile(const char* filePath)
 {
-    AssetHandler* ah = AssetHandlerFactory::create();
-    FileData jsonData = ah->loadAsset(filePath);
+    FileData jsonData = ASSET_HANDLER.loadAsset(filePath);
     EntityLayout ret = initWithJSON((const char*)jsonData._data);
-    ah->releaseAsset(jsonData);
-    AssetHandlerFactory::destroy(ah);
+    ASSET_HANDLER.unloadAsset(jsonData);
     
     return ret;
 }
@@ -73,8 +71,7 @@ void EntityLayoutLoader::loadEntityLayout(EntityLayoutDef& eld, bool isServer)
     eld._entities.clear();
     eld._entitiesNetwork.clear();
     
-    AssetHandler* ah = AssetHandlerFactory::create();
-    FileData jsonData = ah->loadAsset(eld._filePath.c_str());
+    FileData jsonData = ASSET_HANDLER.loadAsset(eld._filePath.c_str());
     
     using namespace rapidjson;
     
@@ -117,8 +114,7 @@ void EntityLayoutLoader::loadEntityLayout(EntityLayoutDef& eld, bool isServer)
         }
     }
     
-    ah->releaseAsset(jsonData);
-    AssetHandlerFactory::destroy(ah);
+    ASSET_HANDLER.unloadAsset(jsonData);
 }
 
 FILE* openFile(const char* path, const char* mode)

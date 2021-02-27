@@ -20,7 +20,7 @@
 
 void ReplicationManagerClient::read(InputMemoryBitStream& imbs, EntityRegistry& er)
 {
-    static uint32_t minRequiredBitsForAction = 34; // networkID + action
+    static uint32_t minRequiredBitsForAction = 34;
     while (imbs.getRemainingBitCount() >= minRequiredBitsForAction)
     {
         uint32_t networkID;

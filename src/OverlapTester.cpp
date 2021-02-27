@@ -131,21 +131,12 @@ bool OverlapTester::isPointInTriangle(Vector2& p, Triangle& tr)
     float p2X = tr.getPointC()._x;
     float p2Y = tr.getPointC()._y;
     
-    /* Calculate area of triangle ABC */
     float a = calcAreaOfTriangle(p0X, p0Y, p1X, p1Y, p2X, p2Y);
-    
-    /* Calculate area of triangle PBC */
     float a1 = calcAreaOfTriangle (pX, pY, p1X, p1Y, p2X, p2Y);
-    
-    /* Calculate area of triangle PAC */
     float a2 = calcAreaOfTriangle (p0X, p0Y, pX, pY, p2X, p2Y);
-    
-    /* Calculate area of triangle PAB */
     float a3 = calcAreaOfTriangle (p0X, p0Y, p1X, p1Y, pX, pY);
-    
     float aSum = a1 + a2 + a3;
     
-    /* Check if sum of A1, A2 and A3 is same as A */
     return a < (aSum + 0.1f) && a > (aSum - 0.1f);
 }
 
@@ -177,12 +168,11 @@ float OverlapTester::calcAreaOfTriangle(float x1, float y1, float x2, float y2, 
 
 bool OverlapTester::doLinesIntersect(double x1, double y1, double x2, double y2, double x3, double y3, double x4, double y4)
 {
-    // Return false if either of the lines have zero length
     if ((x1 == x2 && y1 == y2) || (x3 == x4 && y3 == y4))
     {
         return false;
     }
-    // Fastest method, based on Franklin Antonio's "Faster Line Segment Intersection" topic "in Graphics Gems III" book (http://www.graphicsgems.org/)
+    
     double ax = x2 - x1;
     double ay = y2 - y1;
     double bx = x3 - x4;
@@ -223,15 +213,10 @@ bool OverlapTester::doLinesIntersect(double x1, double y1, double x2, double y2,
     }
     if (commonDenominator == 0)
     {
-        // This code wasn't in Franklin Antonio's method. It was added by Keith Woodward.
-        // The lines are parallel.
-        // Check if they're collinear.
         double y3LessY1 = y3 - y1;
-        double collinearityTestForP3 = x1 * (y2 - y3) + x2 * (y3LessY1) + x3 * (y1 - y2); // see http://mathworld.wolfram.com/Collinear.html
-        // If p3 is collinear with p1 and p2 then p4 will also be collinear, since p1-p2 is parallel with p3-p4
+        double collinearityTestForP3 = x1 * (y2 - y3) + x2 * (y3LessY1) + x3 * (y1 - y2);
         if (collinearityTestForP3 == 0)
         {
-            // The lines are collinear. Now check if they overlap.
             if ((x1 >= x3 && x1 <= x4) || (x1 <= x3 && x1 >= x4) || (x2 >= x3 && x2 <= x4) || (x2 <= x3 && x2 >= x4) || (x3 >= x1 && x3 <= x2) || (x3 <= x1 && x3 >= x2))
             {
                 if ((y1 >= y3 && y1 <= y4) || (y1 <= y3 && y1 >= y4) || (y2 >= y3 && y2 <= y4) || (y2 <= y3 && y2 >= y4) || (y3 >= y1 && y3 <= y2) || (y3 <= y1 && y3 >= y2))

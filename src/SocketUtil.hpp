@@ -11,6 +11,7 @@
 #include "Network.hpp"
 
 #define SOCKET_UTIL (SocketUtil::getInstance())
+#define IS_NETWORK_LOGGING_ENABLED SOCKET_UTIL.isLoggingEnabled
 
 class UDPSocket;
 

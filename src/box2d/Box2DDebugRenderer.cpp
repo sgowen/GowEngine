@@ -13,18 +13,6 @@
 
 #include <box2d/box2d.h>
 
-Box2DDebugRenderer::Box2DDebugRenderer(uint32_t maxBatchSize) :
-_circleBatcher(maxBatchSize),
-_fillRektangleBatcher(maxBatchSize, true),
-_boundsRektangleBatcher(maxBatchSize, false),
-_fillTriangleBatcher(maxBatchSize, true),
-_boundsTriangleBatcher(maxBatchSize, false),
-_shader(NULL),
-_matrix(NULL)
-{
-    // Empty
-}
-
 void Box2DDebugRenderer::DrawPolygon(const b2Vec2* vertices, int32 vertexCount, const b2Color& color)
 {
     Color c = Color(color.r, color.g, color.b, 0.3f);
@@ -124,21 +112,6 @@ void Box2DDebugRenderer::DrawSolidCircle(const b2Vec2& center, float radius, con
     _circleBatcher.end(*_shader, *_matrix, c);
 }
 
-void Box2DDebugRenderer::DrawSegment(const b2Vec2& p1, const b2Vec2& p2, const b2Color& color)
-{
-    // Empty
-}
-
-void Box2DDebugRenderer::DrawTransform(const b2Transform& xf)
-{
-    // Empty
-}
-
-void Box2DDebugRenderer::DrawPoint(const b2Vec2& p, float size, const b2Color& color)
-{
-    // Empty
-}
-
 void Box2DDebugRenderer::createDeviceDependentResources()
 {
     _circleBatcher.createDeviceDependentResources();
@@ -148,13 +121,13 @@ void Box2DDebugRenderer::createDeviceDependentResources()
     _boundsTriangleBatcher.createDeviceDependentResources();
 }
 
-void Box2DDebugRenderer::releaseDeviceDependentResources()
+void Box2DDebugRenderer::destroyDeviceDependentResources()
 {
-    _circleBatcher.releaseDeviceDependentResources();
-    _fillRektangleBatcher.releaseDeviceDependentResources();
-    _boundsRektangleBatcher.releaseDeviceDependentResources();
-    _fillTriangleBatcher.releaseDeviceDependentResources();
-    _boundsTriangleBatcher.releaseDeviceDependentResources();
+    _circleBatcher.destroyDeviceDependentResources();
+    _fillRektangleBatcher.destroyDeviceDependentResources();
+    _boundsRektangleBatcher.destroyDeviceDependentResources();
+    _fillTriangleBatcher.destroyDeviceDependentResources();
+    _boundsTriangleBatcher.destroyDeviceDependentResources();
 }
 
 void Box2DDebugRenderer::render(Shader* shader, mat4* matrix, b2World* world)

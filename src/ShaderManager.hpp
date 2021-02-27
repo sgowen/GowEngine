@@ -20,6 +20,7 @@ public:
     void loadShaders(std::vector<ShaderDescriptor>& sds);
     void unloadShaders(std::vector<ShaderDescriptor>& sds);
     Shader& shader(std::string name);
+    std::map<std::string, Shader>& shaders();
     
 private:
     ShaderLoader _loader;

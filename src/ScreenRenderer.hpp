@@ -20,7 +20,7 @@ public:
     
     void createDeviceDependentResources();
     void onWindowSizeChanged(uint16_t screenWidth, uint16_t screenHeight);
-    void releaseDeviceDependentResources();
+    void destroyDeviceDependentResources();
     void renderToScreen(Shader& s, Framebuffer& fb);
     void renderFramebuffer(Shader& s, Framebuffer& fb);
     

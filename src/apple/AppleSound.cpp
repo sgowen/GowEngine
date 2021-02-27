@@ -8,7 +8,7 @@
 
 #include "AppleSound.hpp"
 
-#include "ObjectALWrapper.hpp"
+#include "ObjectALHelper.hpp"
 
 AppleSound::AppleSound(const char *filePath, bool isMusic, float volume) : Sound(),
 _bufferKey(0)

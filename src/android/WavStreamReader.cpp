@@ -65,7 +65,6 @@ void WavStreamReader::parse()
         {
             chunk = _dataChunk = new WavChunkHeader(tag);
             _dataChunk->read(_inputStream);
-            // We are now positioned at the start of the audio data.
             _audioDataStartPos = _inputStream->getPos();
             _inputStream->advance(_dataChunk->_chunkSize);
         }
@@ -73,7 +72,7 @@ void WavStreamReader::parse()
         {
             chunk = new WavChunkHeader(tag);
             chunk->read(_inputStream);
-            _inputStream->advance(chunk->_chunkSize); // skip the body
+            _inputStream->advance(chunk->_chunkSize);
         }
 
         (*_chunkMap)[tag] = chunk;

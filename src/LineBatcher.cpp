@@ -27,7 +27,7 @@ void LineBatcher::createDeviceDependentResources()
     _vertexBuffer = OGL.loadVertexBuffer(sizeof(VERTEX_2D) * _vertices.capacity());
 }
 
-void LineBatcher::releaseDeviceDependentResources()
+void LineBatcher::destroyDeviceDependentResources()
 {
     OGL.unloadBuffer(_vertexBuffer);
 }

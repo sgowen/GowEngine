@@ -37,7 +37,7 @@ void ScreenRenderer::onWindowSizeChanged(uint16_t screenWidth, uint16_t screenHe
     _screenHeight = screenHeight;
 }
 
-void ScreenRenderer::releaseDeviceDependentResources()
+void ScreenRenderer::destroyDeviceDependentResources()
 {
     OGL.unloadBuffer(_vertexBuffer);
     OGL.unloadBuffer(_indexBuffer);

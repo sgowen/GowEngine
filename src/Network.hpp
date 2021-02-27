@@ -42,7 +42,7 @@
     const int SOCKET_ERROR = -1;
 #endif
 
-#define ALL_DIRTY_STATE 0xFFu // 255
+#define ALL_DIRTY_STATE 0xFFu
 
 enum InstanceKeys
 {

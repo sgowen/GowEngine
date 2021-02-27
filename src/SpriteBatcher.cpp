@@ -28,7 +28,7 @@ void SpriteBatcher::createDeviceDependentResources()
     _indexBuffer = OGL.loadRektangleIndexBuffer(_maxBatchSize);
 }
 
-void SpriteBatcher::releaseDeviceDependentResources()
+void SpriteBatcher::destroyDeviceDependentResources()
 {
     OGL.unloadBuffer(_vertexBuffer);
     OGL.unloadBuffer(_indexBuffer);

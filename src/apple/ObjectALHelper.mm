@@ -1,12 +1,12 @@
 //
-//  ObjectALWrapper.mm
+//  ObjectALHelper.mm
 //  GowEngine
 //
 //  Created by Stephen Gowen on 7/7/17.
 //  Copyright © 2021 Stephen Gowen. All rights reserved.
 //
 
-#include "ObjectALWrapper.hpp"
+#include "ObjectALHelper.hpp"
 
 #import "ARCSafe_MemMgmt.h"
 
@@ -106,25 +106,14 @@ void initObjectAL()
     gContext = nil;
     gDevice = nil;
     
-    // Create the device and context.
-    // Note that it's easier to just let OALSimpleAudio handle
-    // these rather than make and manage them yourself.
     gDevice = [ALDevice deviceWithDeviceSpecifier:nil];
     gContext = [ALContext contextOnDevice:gDevice attributes:nil];
     [OpenALManager sharedInstance].currentContext = gContext;
     
-    // Deal with interruptions for me!
     [OALAudioSession sharedInstance].handleInterruptions = YES;
-    
-    // We don't want ipod music to keep playing since
-    // we have our own bg music.
     [OALAudioSession sharedInstance].allowIpod = NO;
-    
-    // Mute all audio if the silent switch is turned on.
     [OALAudioSession sharedInstance].honorSilentSwitch = YES;
     
-    // Take all 32 sources for this channel.
-    // (we probably won't use that many but what the heck!)
     gChannel = [ALChannelSource channelWithSources:32];
     
     gMusicTrack = [OALAudioTrack track];
@@ -134,7 +123,6 @@ void initObjectAL()
 
 void deinitObjectAL()
 {
-    // Stop all music and sound effects.
     [gChannel stop];
     [gChannel clear];
     [gChannel resetToDefault];
@@ -142,12 +130,6 @@ void deinitObjectAL()
     [gMusicTrack stop];
     [gSounds removeAllObjects];
     
-    // Note: You'll likely only have one device and context open throughout
-    // your program, so in a real program you'd be better off making a
-    // singleton object that manages the device and context, rather than
-    // allocating/deallocating it here.
-    // Most of the demos just let OALSimpleAudio manage the device and context
-    // for them.
     as_release(gSounds);
     as_release(gMusicTrack);
     as_release(gChannel);

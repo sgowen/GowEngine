@@ -17,7 +17,7 @@ WeightedTimedMovingAverage::WeightedTimedMovingAverage(TimeTracker* tt, float du
 _timeTracker(tt),
 _timeLastEntryMade(tt->realTime()),
 _duration(duration),
-_value(0.f)
+_value(0)
 {
     // Empty
 }
@@ -31,18 +31,10 @@ void WeightedTimedMovingAverage::updatePerSecond(float value)
     
     float time = _timeTracker->realTime();
     float timeSinceLastEntry = CLAMP(time - _timeLastEntryMade, 0, 10);
-    
     float valueOverTime = value / timeSinceLastEntry;
-    
-    // now update our value by whatever amount of the duration that was..
-    float fractionOfDuration  = (timeSinceLastEntry / _duration);
-    if (fractionOfDuration > 1.0f)
-    {
-        fractionOfDuration = 1.0f;
-    }
+    float fractionOfDuration  = CLAMP(timeSinceLastEntry / _duration, 0, 1);
     
     _value = _value * (1.0f - fractionOfDuration) + valueOverTime * fractionOfDuration;
-    
     _timeLastEntryMade = time;
 }
 
@@ -55,16 +47,9 @@ void WeightedTimedMovingAverage::update(float value)
     
     float time = _timeTracker->realTime();
     float timeSinceLastEntry = CLAMP(time - _timeLastEntryMade, 0, 10);
-    
-    // now update our value by whatever amount of the duration that was..
-    float fractionOfDuration  = (timeSinceLastEntry / _duration);
-    if (fractionOfDuration > 1.0f)
-    {
-        fractionOfDuration = 1.0f;
-    }
+    float fractionOfDuration  = CLAMP(timeSinceLastEntry / _duration, 0, 1);
     
     _value = _value * (1.0f - fractionOfDuration) + value * fractionOfDuration;
-    
     _timeLastEntryMade = time;
 }
 

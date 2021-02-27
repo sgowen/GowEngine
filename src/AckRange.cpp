@@ -32,7 +32,6 @@ void AckRange::write(OutputMemoryBitStream& ombs) const
     ombs.write(hasCount);
     if (hasCount)
     {
-        //most you can ack is 255...
         uint32_t countMinusOne = _count - 1;
         uint8_t countToAck = countMinusOne > 255 ? 255 : static_cast<uint8_t>(countMinusOne);
         ombs.write(countToAck);
@@ -52,7 +51,6 @@ void AckRange::read(InputMemoryBitStream& imbs)
     }
     else
     {
-        //default!
         _count = 1;
     }
 }

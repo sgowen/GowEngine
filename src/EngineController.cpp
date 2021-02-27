@@ -16,12 +16,11 @@
 #include "rapidjson/EntityLayoutLoader.hpp"
 
 #if IS_ANDROID
-    #include "android/JNIAndroidAssetHandler.hpp"
+    #include "android/AndroidAssetHandler.hpp"
 #endif
 
 double EngineController::getFrameRate()
 {
-    // default is 60 FPS
     return (1.0 / 60.0);
 }
 
@@ -76,13 +75,13 @@ void EngineController::registerRenderControllers(std::map<std::string, EntityRen
 EngineController::EngineController(void* data1, void* data2)
 {
 #if IS_ANDROID
-    JNIAndroidAssetHandler::create(data1, data2);
+    AndroidAssetHandler::create(data1, data2);
 #endif
 }
 
 EngineController::~EngineController()
 {
 #if IS_ANDROID
-    JNIAndroidAssetHandler::destroy();
+    AndroidAssetHandler::destroy();
 #endif
 }

@@ -17,8 +17,8 @@ class AppleAudioEngine : public AudioEngine
 public:
     virtual SoundWrapper* loadSound(const char *filePath, uint8_t numInstances = 1);
     virtual SoundWrapper* loadMusic(const char* filePath);
-    virtual void pause();
-    virtual void resume();
+    virtual void onPause();
+    virtual void onResume();
 
 private:
     static AudioEngine& getInstance()

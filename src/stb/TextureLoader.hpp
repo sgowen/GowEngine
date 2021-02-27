@@ -14,7 +14,7 @@ class TextureLoader
 {
 public:
     void loadTextureData(Texture& t);
-    void releaseTextureData(Texture& t);
+    void unloadTextureData(Texture& t);
     void loadTexture(Texture& t);
     void unloadTexture(Texture& t);
 };

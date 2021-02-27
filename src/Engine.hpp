@@ -42,7 +42,7 @@ public:
     
     void createDeviceDependentResources(void* data = NULL);
     void onWindowSizeChanged(uint16_t screenWidth, uint16_t screenHeight, uint16_t cursorWidth = 0, uint16_t cursorHeight = 0);
-    void releaseDeviceDependentResources();
+    void destroyDeviceDependentResources();
     void onPause();
     void onResume();
     EngineRequestedHostAction update(double deltaTime);

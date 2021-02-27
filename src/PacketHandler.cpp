@@ -91,14 +91,9 @@ void PacketHandler::readIncomingPacketsIntoQueue()
         int readByteCount = _socket->receiveFromAddress(packetMem, NW_MAX_PACKET_SIZE, fromAddress);
         assert(readByteCount <= NW_MAX_PACKET_SIZE);
         
-        if (readByteCount == 0)
+        if (readByteCount <= 0)
         {
-            // nothing to read
             break;
-        }
-        else if (readByteCount == -WSAECONNRESET)
-        {
-            // port closed on other end
         }
         else if (readByteCount > 0)
         {

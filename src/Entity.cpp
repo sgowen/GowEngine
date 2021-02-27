@@ -119,7 +119,6 @@ void Entity::requestDeletion()
 {
     if (!isServer())
     {
-        // Only the server can directly delete entities
         return;
     }
     

@@ -34,13 +34,9 @@ void SampleSource::mixAudio(float* outBuff, int numChannels, int numFrames, bool
 
     if (numWriteFrames != 0)
     {
-        // Mix in the samples
-
-        // investigate unrolling these loops...
         const float* data  = _sampleBuffer->getSampleData();
         if (numChannels == 1)
         {
-            // MONO output
             for (int32_t frameIndex = 0; frameIndex < numWriteFrames; frameIndex++)
             {
                 outBuff[frameIndex] += data[_curFrameIndex++] * _gain;
@@ -48,7 +44,6 @@ void SampleSource::mixAudio(float* outBuff, int numChannels, int numFrames, bool
         }
         else if (numChannels == 2)
         {
-            // STEREO output
             int dstSampleIndex = 0;
             for (int32_t frameIndex = 0; frameIndex < numWriteFrames; frameIndex++)
             {
@@ -69,10 +64,6 @@ void SampleSource::mixAudio(float* outBuff, int numChannels, int numFrames, bool
             }
         }
     }
-
-    // silence
-    // no need as the output buffer would need to have been filled with silence
-    // to be mixed into
 }
 
 void SampleSource::setPlayMode(bool isLooping)
@@ -154,7 +145,6 @@ SampleBuffer* SampleSource::buffer()
 
 void SampleSource::calcGainFactors()
 {
-    // useful panning information: http://www.cs.cmu.edu/~music/icm-online/readings/panlaws/
     float rightPan = (_pan * 0.5) + 0.5;
     _rightGain = rightPan * _gain;
     _leftGain = (1.0 - rightPan) * _gain;

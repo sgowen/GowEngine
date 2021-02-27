@@ -16,9 +16,15 @@ class AppleAssetHandler : public AssetHandler
     
 public:
     virtual FileData loadAsset(const char* filePath);
-    virtual void releaseAsset(const FileData& fileData);
+    virtual void unloadAsset(const FileData& fileData);
     
 private:
+    static AppleAssetHandler& getInstance()
+    {
+        static AppleAssetHandler ret = AppleAssetHandler();
+        return ret;
+    }
+    
     AppleAssetHandler() : AssetHandler() {}
     virtual ~AppleAssetHandler() {}
 };

@@ -197,14 +197,14 @@ SocketAddress& NetworkServer::getServerAddress()
 
 bool NetworkServer::connect()
 {
-    if (SOCKET_UTIL.isLoggingEnabled())
+    if (IS_NETWORK_LOGGING_ENABLED())
     {
         LOG("Server Initializing PacketHandler at port %hu", _port);
     }
     
     int error = _packetHandler.connect();
     if (error != NO_ERROR &&
-        SOCKET_UTIL.isLoggingEnabled())
+        IS_NETWORK_LOGGING_ENABLED())
     {
         LOG("Server connect failed. Error code %d", error);
     }
@@ -239,7 +239,7 @@ EntityRegistry& NetworkServer::getEntityRegistry()
 
 void NetworkServer::processPacket(InputMemoryBitStream& imbs, SocketAddress* fromAddress)
 {
-    if (SOCKET_UTIL.isLoggingEnabled())
+    if (IS_NETWORK_LOGGING_ENABLED())
     {
         LOG("Server processPacket bit length: %d", imbs.getRemainingBitCount());
     }
@@ -249,7 +249,7 @@ void NetworkServer::processPacket(InputMemoryBitStream& imbs, SocketAddress* fro
     {
         if (_playerIDToClientMap.size() < _maxNumPlayers)
         {
-            if (SOCKET_UTIL.isLoggingEnabled())
+            if (IS_NETWORK_LOGGING_ENABLED())
             {
                 LOG("Server is processing new client from %s", fromAddress->toString().c_str());
             }
@@ -258,7 +258,7 @@ void NetworkServer::processPacket(InputMemoryBitStream& imbs, SocketAddress* fro
         }
         else
         {
-            if (SOCKET_UTIL.isLoggingEnabled())
+            if (IS_NETWORK_LOGGING_ENABLED())
             {
                 LOG("Server is at max capacity, blocking new client...");
             }
@@ -296,7 +296,7 @@ const std::map<int, ClientProxy*>& NetworkServer::playerIDToClientMap()
 
 void NetworkServer::sendPacket(const OutputMemoryBitStream& ombs, SocketAddress* fromAddress)
 {
-    if (SOCKET_UTIL.isLoggingEnabled())
+    if (IS_NETWORK_LOGGING_ENABLED())
     {
         LOG("Server    sendPacket bit length: %d", ombs.getBitLength());
     }
@@ -306,12 +306,10 @@ void NetworkServer::sendPacket(const OutputMemoryBitStream& ombs, SocketAddress*
 
 void NetworkServer::handlePacketFromNewClient(InputMemoryBitStream& imbs, SocketAddress* fromAddress)
 {
-    // read the beginning- is it a hello?
     uint8_t packetType;
     imbs.read<uint8_t, 4>(packetType);
     if (packetType == NWPT_HELLO)
     {
-        // read the name
         std::string name;
         imbs.readSmall(name);
         
@@ -323,13 +321,10 @@ void NetworkServer::handlePacketFromNewClient(InputMemoryBitStream& imbs, Socket
         uint8_t playerID = cp.getPlayerID();
         _playerIDToClientMap[playerID] = &cp;
         
-        // tell the server about this client
         _handleNewClientFunc(username, playerID);
         
-        //and welcome the client...
         sendWelcomePacket(cp);
         
-        // and now init the replication manager with everything we know about!
         for (auto& pair: _entityRegistry.getMap())
         {
             cp.getReplicationManagerServer().replicateCreate(pair.first, ALL_DIRTY_STATE);
@@ -339,7 +334,7 @@ void NetworkServer::handlePacketFromNewClient(InputMemoryBitStream& imbs, Socket
     }
     else
     {
-        if (SOCKET_UTIL.isLoggingEnabled())
+        if (IS_NETWORK_LOGGING_ENABLED())
         {
             LOG("Unknown packet type received from %s", fromAddress->toString().c_str());
         }
@@ -356,8 +351,6 @@ void NetworkServer::processPacket(ClientProxy& cp, InputMemoryBitStream& imbs)
     switch (packetType)
     {
         case NWPT_HELLO:
-            //need to resend welcome. to be extra safe we should check the name is the one we expect from this address,
-            //otherwise something weird is going on...
             sendWelcomePacket(cp);
             break;
         case NWPT_INPUT:
@@ -373,7 +366,7 @@ void NetworkServer::processPacket(ClientProxy& cp, InputMemoryBitStream& imbs)
             handleClientDisconnected(cp);
             break;
         default:
-            if (SOCKET_UTIL.isLoggingEnabled())
+            if (IS_NETWORK_LOGGING_ENABLED())
             {
                 LOG("Unknown packet type received from %s", cp.getSocketAddress()->toString().c_str());
             }
@@ -388,7 +381,7 @@ void NetworkServer::sendWelcomePacket(ClientProxy& cp)
     ombs.write<uint8_t, 3>(cp.getPlayerID());
     sendPacket(ombs, cp.getSocketAddress());
     
-    if (SOCKET_UTIL.isLoggingEnabled())
+    if (IS_NETWORK_LOGGING_ENABLED())
     {
         LOG("Server welcoming new client '%s' as player %d", cp.getUsername().c_str(), cp.getPlayerID());
     }
@@ -492,7 +485,6 @@ void NetworkServer::handleAddLocalPlayerPacket(ClientProxy& cp, InputMemoryBitSt
 {
     if (_playerIDToClientMap.size() < _maxNumPlayers)
     {
-        // read the current number of local players for this client at the time when the request was made
         uint8_t requestedIndex;
         imbs.read(requestedIndex);
         
@@ -506,13 +498,11 @@ void NetworkServer::handleAddLocalPlayerPacket(ClientProxy& cp, InputMemoryBitSt
             
             _playerIDToClientMap[playerID] = &cp;
             
-            // tell the server about this client
             _handleNewClientFunc(localUsername, playerID);
             
             resetNextPlayerID();
         }
         
-        // and welcome the new local player...
         sendLocalPlayerAddedPacket(cp);
     }
     else
@@ -534,7 +524,7 @@ void NetworkServer::sendLocalPlayerAddedPacket(ClientProxy& cp)
     sendPacket(ombs, cp.getSocketAddress());
     
     std::string localPlayerName = StringUtil::format("%s(%d)", cp.getUsername().c_str(), index);
-    if (SOCKET_UTIL.isLoggingEnabled())
+    if (IS_NETWORK_LOGGING_ENABLED())
     {
         LOG("Server welcoming new client local player '%s' as player %d", localPlayerName.c_str(), playerID);
     }
@@ -542,11 +532,9 @@ void NetworkServer::sendLocalPlayerAddedPacket(ClientProxy& cp)
 
 void NetworkServer::handleDropLocalPlayerPacket(ClientProxy& cp, InputMemoryBitStream& imbs)
 {
-    // read the index to drop
     uint8_t localPlayerIndex;
     imbs.read(localPlayerIndex);
     
-    // If the primary player on this client wants to drop, a disconnect request should be fired off instead of a drop
     assert(localPlayerIndex >= 1);
     
     uint8_t playerID = cp.getPlayerID(localPlayerIndex);
@@ -566,7 +554,7 @@ void NetworkServer::handleDropLocalPlayerPacket(ClientProxy& cp, InputMemoryBitS
 
 void NetworkServer::handleClientDisconnected(ClientProxy& cp)
 {
-    if (SOCKET_UTIL.isLoggingEnabled())
+    if (IS_NETWORK_LOGGING_ENABLED())
     {
         LOG("Client is leaving the server");
     }
@@ -631,7 +619,7 @@ _maxNumPlayers(maxNumPlayers),
 _numMovesProcessed(0),
 _port(port)
 {
-    // Empty
+    // Empty 
 }
 
 NetworkServer::~NetworkServer()

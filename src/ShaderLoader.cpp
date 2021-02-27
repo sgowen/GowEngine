@@ -16,17 +16,13 @@
 
 void ShaderLoader::loadShader(Shader& s)
 {
-    AssetHandler* ah = AssetHandlerFactory::create();
-    
-    const FileData vertexShaderSrc = ah->loadAsset(s._desc._vertexShaderFilePath.c_str());
-    const FileData fragmentShaderSrc = ah->loadAsset(s._desc._fragmentShaderFilePath.c_str());
+    const FileData vertexShader = ASSET_HANDLER.loadAsset(s._desc._vertexShaderFilePath.c_str());
+    const FileData fragmentShader = ASSET_HANDLER.loadAsset(s._desc._fragmentShaderFilePath.c_str());
 
-    OGL.loadShader(s, vertexShaderSrc._data, vertexShaderSrc._length, fragmentShaderSrc._data, fragmentShaderSrc._length);
+    OGL.loadShader(s, vertexShader._data, vertexShader._length, fragmentShader._data, fragmentShader._length);
 
-    ah->releaseAsset(vertexShaderSrc);
-    ah->releaseAsset(fragmentShaderSrc);
-
-    AssetHandlerFactory::destroy(ah);
+    ASSET_HANDLER.unloadAsset(vertexShader);
+    ASSET_HANDLER.unloadAsset(fragmentShader);
 }
 
 void ShaderLoader::unloadShader(Shader& s)

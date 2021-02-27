@@ -24,7 +24,7 @@ public:
     LightRenderer();
     
     void createDeviceDependentResources();
-    void releaseDeviceDependentResources();
+    void destroyDeviceDependentResources();
     void resetLights();
     void configAmbientLight(float r, float g, float b, float a);
     void configureFallOff(float x, float y, float z);
@@ -35,9 +35,9 @@ private:
     uint32_t _vertexBuffer;
     uint32_t _indexBuffer;
     vec4 _lightPositions[NUM_LIGHTS];
-    vec4 _lightColors[NUM_LIGHTS]; // Light RGB and intensity (alpha)
-    vec4 _ambientColor; // Ambient RGB and intensity (alpha)
-    vec4 _fallOff; // Attenuation coefficients for light falloff
+    vec4 _lightColors[NUM_LIGHTS];
+    vec4 _ambientColor;
+    vec4 _fallOff;
     ivec4 _numLights;
     int _lightIndex;
 };

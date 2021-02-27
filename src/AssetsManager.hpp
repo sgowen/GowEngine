@@ -27,16 +27,18 @@ public:
         return ret;
     }
     
-    void createDeviceDependentResources();
-    void releaseDeviceDependentResources();
     void registerAssets(std::string key, Assets a);
     void deregisterAssets(std::string key);
+    void update();
+    void createDeviceDependentResources();
+    void destroyDeviceDependentResources();
     Shader& shader(std::string name);
     SoundWrapper* sound(uint16_t soundID);
     std::map<uint16_t, SoundWrapper*>& sounds();
     SoundWrapper* music();
     Texture& texture(std::string name);
     TextureRegion& textureRegion(std::string key, uint16_t stateTime = 0);
+    bool isLoaded();
 
 private:
     std::map<std::string, Assets> _assets;

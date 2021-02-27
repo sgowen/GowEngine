@@ -39,7 +39,7 @@ void OpenGLWrapper::bindShader(Shader& s)
     
     glUseProgram(s._program);
     
-    std::vector<ShaderAttribute>& attributes = s._desc.getAttributes();
+    std::vector<ShaderAttribute>& attributes = s._desc._attributes;
     for (const auto& sa : attributes)
     {
         glEnableVertexAttribArray(sa._location);
@@ -49,7 +49,7 @@ void OpenGLWrapper::bindShader(Shader& s)
 
 void OpenGLWrapper::unbindShader(Shader& s)
 {
-    std::vector<ShaderAttribute>& attributes = s._desc.getAttributes();
+    std::vector<ShaderAttribute>& attributes = s._desc._attributes;
     for (const auto& sa : attributes)
     {
         glDisableVertexAttribArray(sa._location);
@@ -149,7 +149,7 @@ void OpenGLWrapper::bindScreenFramebuffer(GLsizei width, GLsizei height, const C
     Framebuffer fb(width, height);
     
 #if IS_IOS
-    fb._fbo = 1; // wtf?
+    fb._fbo = 1;
 #else
     fb._fbo = 0;
 #endif
@@ -315,7 +315,7 @@ void OpenGLWrapper::loadShader(Shader& s, const uint8_t* vertexShaderSrc, const 
 {
     s._program = loadShader(vertexShaderSrc, vertexShaderSrcLength, fragmentShaderSrc, fragmentShaderSrcLength);
     
-    std::vector<ShaderUniform>& uniforms = s._desc.getUniforms();
+    std::vector<ShaderUniform>& uniforms = s._desc._uniforms;
     for (auto& su : uniforms)
     {
         su._location = glGetUniformLocation(s._program, su._name.c_str());
@@ -324,7 +324,7 @@ void OpenGLWrapper::loadShader(Shader& s, const uint8_t* vertexShaderSrc, const 
     size_t offset = 0;
     uint32_t totalSize = 0;
     
-    std::vector<ShaderAttribute>& attributes = s._desc.getAttributes();
+    std::vector<ShaderAttribute>& attributes = s._desc._attributes;
     for (auto& sa : attributes)
     {
         sa._offset = offset * sizeof(GL_FLOAT);

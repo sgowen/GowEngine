@@ -25,7 +25,6 @@ SampleBuffer::~SampleBuffer()
 
 void SampleBuffer::loadSampleData(WavStreamReader* reader)
 {
-    // Although we read this in, we only support mono
     _audioProperties._channelCount = reader->getNumChannels();
     _audioProperties._sampleRate = reader->getSampleRate();
 
@@ -59,24 +58,20 @@ void _resampleData(const ResampleBlock& input, ResampleBlock* output, int numCha
 {
     using namespace resampler;
     
-    // Calculate output buffer size
     double temp =
             ((double)input._numFrames * (double)output->_sampleRate) / (double)input._sampleRate;
 
-    // round up
     int32_t numOutFrames = (int32_t)(temp + 0.5);
-    // We iterate thousands of times through the loop. Roundoff error could accumulate
-    // so add a few more frames for padding
     numOutFrames += 8;
 
     MultiChannelResampler *resampler = MultiChannelResampler::make(
-            numChannels, // channel count
-            input._sampleRate, // input sampleRate
-            output->_sampleRate, // output sampleRate
-            MultiChannelResampler::Quality::Medium); // conversion quality
+            numChannels,
+            input._sampleRate,
+            output->_sampleRate,
+            MultiChannelResampler::Quality::Medium);
 
-    float *inputBuffer = input._buffer;;     // multi-channel buffer to be consumed
-    float *outputBuffer = new float[numOutFrames];    // multi-channel buffer to be filled
+    float *inputBuffer = input._buffer;
+    float *outputBuffer = new float[numOutFrames];
     output->_buffer = outputBuffer;
 
     int numOutputFrames = 0;
@@ -105,7 +100,6 @@ void SampleBuffer::resampleData(int sampleRate)
 {
     if (_audioProperties._sampleRate == sampleRate)
     {
-        // nothing to do
         return;
     }
 
@@ -118,10 +112,8 @@ void SampleBuffer::resampleData(int sampleRate)
     outputBlock._sampleRate = sampleRate;
     _resampleData(inputBlock, &outputBlock, _audioProperties._channelCount);
 
-    // delete previous samples
     delete[] _sampleData;
 
-    // install the resampled data
     _sampleData = outputBlock._buffer;
     _numSamples = outputBlock._numFrames;
     _audioProperties._sampleRate = outputBlock._sampleRate;

@@ -35,7 +35,7 @@ public:
     void render();
     void createDeviceDependentResources();
     void onWindowSizeChanged(uint16_t screenWidth, uint16_t screenHeight);
-    void releaseDeviceDependentResources();
+    void destroyDeviceDependentResources();
     void bindFramebuffer(std::string framebufferKey = "main", bool enableBlending = true);
     void clearFramebuffer(const Color& c = Color::CLEAR);
     void updateMatrix(float l, float r, float b, float t, float n = -1, float f = 1, std::string matrixKey = "main");

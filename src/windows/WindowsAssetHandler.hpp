@@ -16,9 +16,15 @@ class WindowsAssetHandler : public AssetHandler
     
 public:
     virtual FileData loadAsset(const char* filePath);
-    virtual void releaseAsset(const FileData& fileData);
+    virtual void unloadAsset(const FileData& fileData);
     
-protected:
+private:
+    static WindowsAssetHandler& getInstance()
+    {
+        static WindowsAssetHandler ret = WindowsAssetHandler();
+        return ret;
+    }
+    
     WindowsAssetHandler() : AssetHandler() {}
     virtual ~WindowsAssetHandler() {}
 };

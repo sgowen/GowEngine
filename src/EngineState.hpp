@@ -41,7 +41,7 @@ protected:
 private:
     void createDeviceDependentResources(Engine* e);
     void onWindowSizeChanged(Engine* e);
-    void releaseDeviceDependentResources(Engine* e);
+    void destroyDeviceDependentResources(Engine* e);
     void pause(Engine* e);
     void resume(Engine* e);
     void update(Engine* e);

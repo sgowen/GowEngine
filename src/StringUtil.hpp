@@ -23,19 +23,14 @@
     #include <debugapi.h>
 #endif
 
-// OUT_Z_ARRAY indicates an output array that will be null-terminated.
 #if _MSC_VER >= 1600
-    // Include the annotation header file.
     #include <sal.h>
     #if _MSC_VER >= 1700
-        // VS 2012+
         #define OUT_Z_ARRAY _Post_z_
     #else
-        // VS 2010
         #define OUT_Z_ARRAY _Deref_post_z_
     #endif
 #else
-    // gcc, clang, old versions of VS
     #define OUT_Z_ARRAY
 #endif
 
@@ -96,9 +91,7 @@ public:
         va_end(params);
     }
 
-#if IS_WINDOWS
-    // OutputDebugStringA is included with the Windows API
-#else
+#if !(IS_WINDOWS)
     static void OutputDebugStringA(const char* value)
     {
 #if IS_ANDROID

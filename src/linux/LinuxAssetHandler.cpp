@@ -36,7 +36,7 @@ FileData LinuxAssetHandler::loadAsset(const char* filePath)
     return FileData(size, buffer, NULL);
 }
 
-void LinuxAssetHandler::releaseAsset(const FileData& fileData)
+void LinuxAssetHandler::unloadAsset(const FileData& fileData)
 {
     assert(fileData._data != NULL);
 

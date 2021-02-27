@@ -16,9 +16,15 @@ class LinuxAssetHandler : public AssetHandler
     
 public:
     virtual FileData loadAsset(const char* filePath);
-    virtual void releaseAsset(const FileData& fileData);
+    virtual void unloadAsset(const FileData& fileData);
     
-protected:
+private:
+    static LinuxAssetHandler& getInstance()
+    {
+        static LinuxAssetHandler ret = LinuxAssetHandler();
+        return ret;
+    }
+    
     LinuxAssetHandler() : AssetHandler() {}
     virtual ~LinuxAssetHandler() {}
 };

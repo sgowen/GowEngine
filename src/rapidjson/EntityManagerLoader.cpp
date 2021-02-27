@@ -29,11 +29,9 @@
 
 void EntityManagerLoader::initWithJSONFile(EntityManager& em, const char* filePath)
 {
-    AssetHandler* ah = AssetHandlerFactory::create();
-    FileData jsonData = ah->loadAsset(filePath);
+    FileData jsonData = ASSET_HANDLER.loadAsset(filePath);
     initWithJSON(em, (const char*)jsonData._data);
-    ah->releaseAsset(jsonData);
-    AssetHandlerFactory::destroy(ah);
+    ASSET_HANDLER.unloadAsset(jsonData);
 }
 
 void EntityManagerLoader::initWithJSON(EntityManager& em, const char* json)

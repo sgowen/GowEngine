@@ -20,6 +20,7 @@ public:
     void loadTextures(std::vector<TextureDescriptor>& tds);
     void unloadTextures(std::vector<TextureDescriptor>& tds);
     Texture& texture(std::string name);
+    std::map<std::string, Texture>& textures();
     
 private:
     TextureLoader _loader;

@@ -20,6 +20,20 @@
 
 #define MAX_SOUNDS_TO_PLAY_PER_FRAME 4
 
+void AudioEngine::pause()
+{
+    pauseMusic();
+    pauseAllSounds();
+    onPause();
+}
+
+void AudioEngine::resume()
+{
+    onResume();
+    resumeMusic();
+    resumeAllSounds();
+}
+
 void AudioEngine::render()
 {
     for (Sound* s : _soundsToPlay)
@@ -45,18 +59,6 @@ void AudioEngine::render()
         s->resume();
     }
     _soundsToResume.clear();
-}
-
-void AudioEngine::pause()
-{
-    pauseMusic();
-    pauseAllSounds();
-}
-
-void AudioEngine::resume()
-{
-    resumeMusic();
-    resumeAllSounds();
 }
 
 void AudioEngine::playSound(uint16_t soundID, float volume, bool isLooping)

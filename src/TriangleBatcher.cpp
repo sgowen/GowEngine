@@ -26,7 +26,7 @@ void TriangleBatcher::createDeviceDependentResources()
     _vertexBuffer = OGL.loadVertexBuffer(sizeof(VERTEX_2D) * _vertices.capacity());
 }
 
-void TriangleBatcher::releaseDeviceDependentResources()
+void TriangleBatcher::destroyDeviceDependentResources()
 {
     OGL.unloadBuffer(_vertexBuffer);
 }

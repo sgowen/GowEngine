@@ -35,7 +35,6 @@ void ReplicationTransmissionData::handleDeliveryFailure(DeliveryNotificationMana
 {
     for (const ReplicationTransmission& rt: _transmissions)
     {
-        //is it a create? then we have to redo the create.
         uint32_t networkID = rt.getID();
         
         switch (rt.getAction())
@@ -89,7 +88,6 @@ void ReplicationTransmissionData::handleCreateDeliveryFailure(uint32_t networkID
     assert(_replicationManagerServer != NULL);
     assert(_entityRegistry != NULL);
     
-    //does the object still exist? it might be dead, in which case we don't resend a create
     Entity* e = _entityRegistry->getEntityByID(networkID);
     if (e != NULL)
     {
@@ -102,11 +100,8 @@ void ReplicationTransmissionData::handleUpdateStateDeliveryFailure(uint32_t netw
     assert(_replicationManagerServer != NULL);
     assert(_entityRegistry != NULL);
     
-    //does the object still exist? it might be dead, in which case we don't resend an update
     if (_entityRegistry->getEntityByID(networkID) != NULL)
     {
-        //look in all future in flight packets, in all transmissions
-        //remove written state from dirty state
         for (const auto& inFlightPacket: dnm->getInFlightPackets())
         {
             ReplicationTransmissionData* rtd = static_cast<ReplicationTransmissionData*>(inFlightPacket.getTransmissionData('RPLM'));
@@ -117,7 +112,6 @@ void ReplicationTransmissionData::handleUpdateStateDeliveryFailure(uint32_t netw
             }
         }
         
-        //if there's still any dirty state, mark it
         if (dirtyState > 0)
         {
             _replicationManagerServer->setStateDirty(networkID, dirtyState);
@@ -132,7 +126,6 @@ void ReplicationTransmissionData::handleDestroyDeliveryFailure(uint32_t networkI
 
 void ReplicationTransmissionData::handleCreateDeliverySuccess(uint32_t networkID) const
 {
-    //we've received an ack for the create, so we can start sending as only an update
     _replicationManagerServer->handleCreateAckd(networkID);
 }
 

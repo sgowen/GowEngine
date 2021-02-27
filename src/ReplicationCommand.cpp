@@ -26,7 +26,6 @@ void ReplicationCommand::handleCreateAckd()
 {
     if (_action == REPA_CREATE)
     {
-        // if the create is ack'd, we can demote to just an update...
         _action = REPA_UPDATE;
     }
 }

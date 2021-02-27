@@ -23,7 +23,7 @@ Renderer::Renderer() :
 _renderFunc(NULL),
 _screenRenderer()
 {
-    // TODO
+    // Empty
 }
 
 void Renderer::setRenderFunc(RenderFunc rf)
@@ -78,16 +78,16 @@ void Renderer::onWindowSizeChanged(uint16_t screenWidth, uint16_t screenHeight)
     _screenRenderer.onWindowSizeChanged(screenWidth, screenHeight);
 }
 
-void Renderer::releaseDeviceDependentResources()
+void Renderer::destroyDeviceDependentResources()
 {
     for (auto& pair : _circleBatchers)
     {
-        pair.second.releaseDeviceDependentResources();
+        pair.second.destroyDeviceDependentResources();
     }
     
     for (auto& pair : _fontBatchers)
     {
-        pair.second.releaseDeviceDependentResources();
+        pair.second.destroyDeviceDependentResources();
     }
     
     for (auto& pair : _framebuffers)
@@ -97,20 +97,20 @@ void Renderer::releaseDeviceDependentResources()
     
     for (auto& pair : _rektangleBatchers)
     {
-        pair.second.releaseDeviceDependentResources();
+        pair.second.destroyDeviceDependentResources();
     }
     
     for (auto& pair : _spriteBatchers)
     {
-        pair.second.releaseDeviceDependentResources();
+        pair.second.destroyDeviceDependentResources();
     }
     
     for (auto& pair : _triangleBatchers)
     {
-        pair.second.releaseDeviceDependentResources();
+        pair.second.destroyDeviceDependentResources();
     }
     
-    _screenRenderer.releaseDeviceDependentResources();
+    _screenRenderer.destroyDeviceDependentResources();
 }
 
 void Renderer::bindFramebuffer(std::string framebufferKey, bool enableBlending)

@@ -57,11 +57,9 @@ void InputMemoryBitStream::readBits(uint8_t& outData, uint32_t bitCount)
     uint32_t bitsFreeThisByte = 8 - bitOffset;
     if (bitsFreeThisByte < bitCount)
     {
-        //we need another byte
         outData |= static_cast<uint8_t>(_buffer[byteOffset + 1]) << bitsFreeThisByte;
     }
     
-    //don't forget a mask so that we only read the bit we wanted...
     outData &= (~(0x00ff << bitCount));
     
     _bitHead += bitCount;
@@ -70,7 +68,7 @@ void InputMemoryBitStream::readBits(uint8_t& outData, uint32_t bitCount)
 void InputMemoryBitStream::readBits(void* outData, uint32_t bitCount)
 {
     uint8_t* destByte = reinterpret_cast< uint8_t* >(outData);
-    // read all the bytes
+    
     while (bitCount > 8)
     {
         readBits(*destByte, 8);
@@ -78,7 +76,6 @@ void InputMemoryBitStream::readBits(void* outData, uint32_t bitCount)
         bitCount -= 8;
     }
     
-    // read anything left
     if (bitCount > 0)
     {
         readBits(*destByte, bitCount);

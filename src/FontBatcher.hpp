@@ -27,7 +27,7 @@ public:
 	FontBatcher(uint32_t maxBatchSize, std::string matrixName, std::string textureName, uint8_t glyphsPerRow, uint8_t glyphWidth, uint8_t glyphHeight);
     
     void createDeviceDependentResources();
-    void releaseDeviceDependentResources();
+    void destroyDeviceDependentResources();
     void begin();
     void addText(Renderer& r, TextView& tv);
 	void addText(Renderer& r, std::string text, TextAlignment alignment, float xWeight, float yWeight, float glyphWidthWeight);
