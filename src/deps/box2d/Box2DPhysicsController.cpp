@@ -11,6 +11,8 @@
 #include "Entity.hpp"
 #include "Macros.hpp"
 
+#include <box2d/box2d.h>
+
 IMPL_EntityController_create(Box2DPhysicsController, EntityPhysicsController)
 
 Box2DPhysicsController::Box2DPhysicsController(Entity* e) : EntityPhysicsController(e),

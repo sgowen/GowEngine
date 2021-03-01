@@ -8,5 +8,5 @@
 
 #pragma once
 
-#include "deps/GowEngine_deps.hpp"
 #include "core/GowEngine_core.hpp"
+#include "deps/GowEngine_deps.hpp"

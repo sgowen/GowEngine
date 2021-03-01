@@ -10,11 +10,12 @@
 
 #include "EntityPhysicsController.hpp"
 
-#include <box2d/box2d.h>
-
 #include <vector>
 
 class Entity;
+class b2Body;
+class b2Fixture;
+class b2World;
 
 class Box2DPhysicsController : public EntityPhysicsController
 {

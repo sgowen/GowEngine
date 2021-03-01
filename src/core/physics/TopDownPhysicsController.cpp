@@ -74,12 +74,14 @@ void TopDownPhysicsController::updateBodyFromPose()
 
 void TopDownPhysicsController::initPhysics()
 {
-    if (_entity->entityDef()._fixtures.size() > 0)
+    if (_entity->entityDef()._fixtures.empty())
     {
-        _boundingBox = new Rektangle(-1, -1, 1, 1);
-        _bounds = new Bounds();
-        updateBodyFromPose();
+        return;
     }
+    
+    _boundingBox = new Rektangle(-1, -1, 1, 1);
+    _bounds = new Bounds();
+    updateBodyFromPose();
 }
 
 void TopDownPhysicsController::processPhysics(TimeTracker* tt)
