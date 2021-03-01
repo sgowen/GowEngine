@@ -1,5 +1,5 @@
 //
-//  GowEngine.hpp
+//  GowEngine_physics.hpp
 //  GowEngine
 //
 //  Created by Stephen Gowen on 2/28/21.
@@ -8,5 +8,5 @@
 
 #pragma once
 
-#include "deps/GowEngine_deps.hpp"
-#include "core/GowEngine_core.hpp"
+#include "EntityPhysicsController.hpp"
+#include "TopDownPhysicsController.hpp"

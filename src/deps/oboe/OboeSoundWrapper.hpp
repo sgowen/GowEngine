@@ -8,6 +8,9 @@
 
 #pragma once
 
+#include "PlatformMacros.hpp"
+#if IS_ANDROID
+
 #include "SoundWrapper.hpp"
 
 class SimpleMultiPlayer;
@@ -18,3 +21,5 @@ public:
     OboeSoundWrapper(SimpleMultiPlayer* simpleMultiPlayer, std::string filePath, uint8_t numInstances = 1);
     virtual ~OboeSoundWrapper() {}
 };
+
+#endif /* IS_ANDROID */

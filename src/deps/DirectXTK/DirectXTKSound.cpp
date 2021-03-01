@@ -6,6 +6,9 @@
 //  Copyright © 2021 Stephen Gowen. All rights reserved.
 //
 
+#include "PlatformMacros.hpp"
+#if IS_WINDOWS
+
 #include "DirectXTKSound.hpp"
 
 DirectXTKSound::DirectXTKSound(DirectX::SoundEffect& sound, float volume) : Sound()
@@ -66,3 +69,5 @@ bool DirectXTKSound::isPaused()
 {
     return !isPlaying();
 }
+
+#endif /* IS_WINDOWS */

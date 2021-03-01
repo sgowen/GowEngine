@@ -8,6 +8,9 @@
 
 #pragma once
 
+#include "PlatformMacros.hpp"
+#if IS_ANDROID
+
 #include "Sound.hpp"
 
 class SimpleMultiPlayer;
@@ -31,3 +34,5 @@ private:
     SimpleMultiPlayer* _simpleMultiPlayer;
     uint32_t _sampleSourceKey;
 };
+
+#endif /* IS_ANDROID */

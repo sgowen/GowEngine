@@ -8,6 +8,9 @@
 
 #pragma once
 
+#include "PlatformMacros.hpp"
+#if IS_WINDOWS
+
 #include "SoundWrapper.hpp"
 
 #include "Audio.h"
@@ -23,3 +26,5 @@ public:
 private:
     std::unique_ptr<DirectX::SoundEffect> _sound;
 };
+
+#endif /* IS_WINDOWS */

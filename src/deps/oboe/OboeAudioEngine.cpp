@@ -6,6 +6,9 @@
 //  Copyright © 2021 Stephen Gowen. All rights reserved.
 //
 
+#include "PlatformMacros.hpp"
+#if IS_ANDROID
+
 #include "OboeAudioEngine.hpp"
 
 #include "OboeSoundWrapper.hpp"
@@ -36,3 +39,5 @@ OboeAudioEngine::~OboeAudioEngine()
     delete _simpleMultiPlayer;
     _simpleMultiPlayer = NULL;
 }
+
+#endif /* IS_ANDROID */

@@ -8,6 +8,9 @@
 
 #pragma once
 
+#include "PlatformMacros.hpp"
+#if IS_ANDROID
+
 #include "WavTypes.hpp"
 
 class InputStream;
@@ -26,3 +29,5 @@ public:
 
     virtual void read(InputStream* inputStream);
 };
+
+#endif /* IS_ANDROID */

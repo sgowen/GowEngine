@@ -6,6 +6,9 @@
 //  Copyright © 2021 Stephen Gowen. All rights reserved.
 //
 
+#include "PlatformMacros.hpp"
+#if IS_ANDROID
+
 #include "InputStream.hpp"
 
 #include <algorithm>
@@ -65,3 +68,5 @@ void InputStream::setPos(int32_t pos)
         }
     }
 }
+
+#endif /* IS_ANDROID */

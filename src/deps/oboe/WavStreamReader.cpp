@@ -6,6 +6,9 @@
 //  Copyright © 2021 Stephen Gowen. All rights reserved.
 //
 
+#include "PlatformMacros.hpp"
+#if IS_ANDROID
+
 #include "WavStreamReader.hpp"
 
 #include "InputStream.hpp"
@@ -158,3 +161,5 @@ int WavStreamReader::getBitsPerSample()
 {
     return _fmtChunk->_sampleSize;
 }
+
+#endif /* IS_ANDROID */

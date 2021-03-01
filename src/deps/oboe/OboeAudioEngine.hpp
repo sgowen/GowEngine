@@ -8,6 +8,9 @@
 
 #pragma once
 
+#include "PlatformMacros.hpp"
+#if IS_ANDROID
+
 #include "AudioEngine.hpp"
 
 class SimpleMultiPlayer;
@@ -36,3 +39,5 @@ private:
     OboeAudioEngine(const OboeAudioEngine&);
     OboeAudioEngine& operator=(const OboeAudioEngine&);
 };
+
+#endif /* IS_ANDROID */

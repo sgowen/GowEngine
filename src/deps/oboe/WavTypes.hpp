@@ -8,6 +8,9 @@
 
 #pragma once
 
+#include "PlatformMacros.hpp"
+#if IS_ANDROID
+
 #include <stdint.h>
 
 typedef uint32_t RiffID;
@@ -18,3 +21,5 @@ inline RiffID makeRiffID(char a, char b, char c, char d)
 {
     return ((RiffID)d << 24) | ((RiffID)c << 16) | ((RiffID)b << 8) | (RiffID)a;
 }
+
+#endif /* IS_ANDROID */

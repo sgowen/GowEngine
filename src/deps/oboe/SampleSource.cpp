@@ -6,6 +6,9 @@
 //  Copyright © 2021 Stephen Gowen. All rights reserved.
 //
 
+#include "PlatformMacros.hpp"
+#if IS_ANDROID
+
 #include "SampleSource.hpp"
 
 #include "SampleBuffer.hpp"
@@ -149,3 +152,5 @@ void SampleSource::calcGainFactors()
     _rightGain = rightPan * _gain;
     _leftGain = (1.0 - rightPan) * _gain;
 }
+
+#endif /* IS_ANDROID */

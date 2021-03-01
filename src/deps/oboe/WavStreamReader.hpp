@@ -8,6 +8,9 @@
 
 #pragma once
 
+#include "PlatformMacros.hpp"
+#if IS_ANDROID
+
 #include "WavTypes.hpp"
 
 #include <map>
@@ -39,3 +42,5 @@ protected:
     long _audioDataStartPos;
     std::map<RiffID, WavChunkHeader *>* _chunkMap;
 };
+
+#endif /* IS_ANDROID */

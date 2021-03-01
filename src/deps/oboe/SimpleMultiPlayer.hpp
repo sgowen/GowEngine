@@ -8,6 +8,9 @@
 
 #pragma once
 
+#include "PlatformMacros.hpp"
+#if IS_ANDROID
+
 #include <oboe/Oboe.h>
 
 #include <map>
@@ -57,3 +60,5 @@ private:
     
     SampleSource* sampleSource(uint32_t key);
 };
+
+#endif /* IS_ANDROID */

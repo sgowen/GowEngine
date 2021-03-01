@@ -8,6 +8,9 @@
 
 #pragma once
 
+#include "PlatformMacros.hpp"
+#if IS_ANDROID
+
 #include "WavChunkHeader.hpp"
 
 class WavRIFFChunkHeader : public WavChunkHeader
@@ -24,3 +27,5 @@ public:
 
     virtual void read(InputStream* inputStream);
 };
+
+#endif /* IS_ANDROID */

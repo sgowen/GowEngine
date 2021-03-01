@@ -6,6 +6,9 @@
 //  Copyright © 2021 Stephen Gowen. All rights reserved.
 //
 
+#include "PlatformMacros.hpp"
+#if IS_DESKTOP
+
 #include "GlfwMain.hpp"
 
 #include "Engine.hpp"
@@ -287,3 +290,5 @@ int GlfwMain::exec(EngineController& engineController, const char* windowTitle)
     glfwTerminate();
     exit(EXIT_SUCCESS);
 }
+
+#endif /* IS_DESKTOP */

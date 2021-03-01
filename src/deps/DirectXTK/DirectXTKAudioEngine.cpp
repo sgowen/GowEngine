@@ -6,6 +6,9 @@
 //  Copyright © 2021 Stephen Gowen. All rights reserved.
 //
 
+#include "PlatformMacros.hpp"
+#if IS_WINDOWS
+
 #include "DirectXTKAudioEngine.hpp"
 
 #include "SoundWrapper.hpp"
@@ -47,3 +50,5 @@ DirectXTKAudioEngine::~DirectXTKAudioEngine()
 {
     _audioEngine->Suspend();
 }
+
+#endif /* IS_WINDOWS */

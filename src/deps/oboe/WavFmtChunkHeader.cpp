@@ -6,6 +6,9 @@
 //  Copyright © 2021 Stephen Gowen. All rights reserved.
 //
 
+#include "PlatformMacros.hpp"
+#if IS_ANDROID
+
 #include "WavFmtChunkHeader.hpp"
 
 #include "InputStream.hpp"
@@ -58,3 +61,5 @@ void WavFmtChunkHeader::read(InputStream* inputStream)
         _extraBytes = (short) (_chunkSize - 16);
     }
 }
+
+#endif /* IS_ANDROID */

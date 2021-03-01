@@ -8,6 +8,9 @@
 
 #pragma once
 
+#include "PlatformMacros.hpp"
+#if IS_ANDROID
+
 #include <stdint.h>
 
 class SampleBuffer;
@@ -49,3 +52,5 @@ protected:
 private:
     void calcGainFactors();
 };
+
+#endif /* IS_ANDROID */

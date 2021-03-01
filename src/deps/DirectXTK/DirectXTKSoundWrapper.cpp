@@ -6,6 +6,9 @@
 //  Copyright © 2021 Stephen Gowen. All rights reserved.
 //
 
+#include "PlatformMacros.hpp"
+#if IS_WINDOWS
+
 #include "DirectXTKSoundWrapper.hpp"
 
 #include "DirectXTKSound.hpp"
@@ -32,3 +35,5 @@ DirectXTKSoundWrapper::~DirectXTKSoundWrapper()
 
     _sound.reset();
 }
+
+#endif /* IS_WINDOWS */

@@ -6,6 +6,9 @@
 //  Copyright © 2021 Stephen Gowen. All rights reserved.
 //
 
+#include "PlatformMacros.hpp"
+#if IS_ANDROID
+
 #include "SampleBuffer.hpp"
 
 #include "WavStreamReader.hpp"
@@ -133,3 +136,5 @@ int32_t SampleBuffer::getNumSampleFrames()
 {
     return _numSamples;
 }
+
+#endif /* IS_ANDROID */

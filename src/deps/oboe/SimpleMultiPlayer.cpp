@@ -6,6 +6,9 @@
 //  Copyright © 2021 Stephen Gowen. All rights reserved.
 //
 
+#include "PlatformMacros.hpp"
+#if IS_ANDROID
+
 #include "SimpleMultiPlayer.hpp"
 
 #include "SampleSource.hpp"
@@ -227,3 +230,5 @@ SampleSource* SimpleMultiPlayer::sampleSource(uint32_t key)
     
     return q->second;
 }
+
+#endif /* IS_ANDROID */

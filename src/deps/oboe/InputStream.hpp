@@ -8,6 +8,9 @@
 
 #pragma once
 
+#include "PlatformMacros.hpp"
+#if IS_ANDROID
+
 #include <stdint.h>
 
 class InputStream
@@ -26,3 +29,5 @@ private:
     int32_t _bufferLen;
     int32_t _pos;
 };
+
+#endif /* IS_ANDROID */

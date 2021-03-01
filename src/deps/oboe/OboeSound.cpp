@@ -6,6 +6,9 @@
 //  Copyright © 2021 Stephen Gowen. All rights reserved.
 //
 
+#include "PlatformMacros.hpp"
+#if IS_ANDROID
+
 #include "OboeSound.hpp"
 
 #include "SimpleMultiPlayer.hpp"
@@ -101,3 +104,5 @@ bool OboeSound::isPaused()
 {
     return _simpleMultiPlayer->isPaused(_sampleSourceKey);
 }
+
+#endif /* IS_ANDROID */

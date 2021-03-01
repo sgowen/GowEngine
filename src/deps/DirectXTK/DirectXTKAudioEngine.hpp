@@ -8,6 +8,9 @@
 
 #pragma once
 
+#include "PlatformMacros.hpp"
+#if IS_WINDOWS
+
 #include "AudioEngine.hpp"
 
 #include "Audio.h"
@@ -38,3 +41,5 @@ private:
     DirectXTKAudioEngine(const DirectXTKAudioEngine&);
     DirectXTKAudioEngine& operator=(const DirectXTKAudioEngine&);
 };
+
+#endif /* IS_WINDOWS */

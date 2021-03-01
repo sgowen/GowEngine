@@ -8,6 +8,9 @@
 
 #pragma once
 
+#include "PlatformMacros.hpp"
+#if IS_ANDROID
+
 #include <stdint.h>
 
 struct AudioProperties
@@ -36,3 +39,5 @@ protected:
     float*  _sampleData;
     int32_t _numSamples;
 };
+
+#endif /* IS_ANDROID */

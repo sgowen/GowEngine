@@ -6,6 +6,9 @@
 //  Copyright © 2021 Stephen Gowen. All rights reserved.
 //
 
+#include "PlatformMacros.hpp"
+#if IS_ANDROID
+
 #include "OboeSoundWrapper.hpp"
 
 #include "SimpleMultiPlayer.hpp"
@@ -18,3 +21,5 @@ OboeSoundWrapper::OboeSoundWrapper(SimpleMultiPlayer* simpleMultiPlayer, std::st
         _sounds.push_back(new OboeSound(simpleMultiPlayer, filePath));
     }
 }
+
+#endif /* IS_ANDROID */

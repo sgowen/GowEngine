@@ -6,6 +6,9 @@
 //  Copyright © 2021 Stephen Gowen. All rights reserved.
 //
 
+#include "PlatformMacros.hpp"
+#if IS_ANDROID
+
 #include "WavRIFFChunkHeader.hpp"
 
 #include "InputStream.hpp"
@@ -30,3 +33,5 @@ void WavRIFFChunkHeader::read(InputStream* inputStream)
     WavChunkHeader::read(inputStream);
     inputStream->read(&_formatID, sizeof(_formatID));
 }
+
+#endif /* IS_ANDROID */
