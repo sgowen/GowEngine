@@ -90,7 +90,7 @@ public:
     void unloadFramebuffer(Framebuffer& fb);
     void loadTexture(Texture& t);
     void unloadTexture(Texture& t);
-    void loadShader(Shader& s, const uint8_t* vertexShaderSrc, const long vertexShaderSrcLength, const uint8_t* fragmentShaderSrc, const long fragmentShaderSrcLength);
+    void loadShader(Shader& s);
     void unloadShader(Shader& s);
 
 private:

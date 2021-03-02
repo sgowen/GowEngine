@@ -9,6 +9,7 @@
 #include "TextureManager.hpp"
 
 #include "TextureDescriptor.hpp"
+#include "OpenGLWrapper.hpp"
 
 void TextureManager::loadTextures(std::vector<TextureDescriptor>& tds)
 {
@@ -23,9 +24,9 @@ void TextureManager::loadTextures(std::vector<TextureDescriptor>& tds)
     {
         Texture& t = i->second;
         
-        _loader.loadTextureData(t);
         _loader.loadTexture(t);
-        _loader.unloadTextureData(t);
+        OGL.loadTexture(t);
+        _loader.unloadTexture(t);
     }
 }
 
@@ -33,7 +34,8 @@ void TextureManager::unloadTextures(std::vector<TextureDescriptor>& tds)
 {
     for (std::map<std::string, Texture>::iterator i = _textures.begin(); i != _textures.end(); ++i)
     {
-        _loader.unloadTexture(i->second);
+        Texture& t = i->second;
+        OGL.unloadTexture(t);
     }
     _textures.clear();
 }

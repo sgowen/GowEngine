@@ -98,11 +98,22 @@ void EngineState::resume(Engine *e)
 void EngineState::update(Engine* e)
 {
     ASSETS.update();
+    
+    if (!ASSETS.isLoaded())
+    {
+        return;
+    }
+    
     onUpdate(e);
 }
 
 void EngineState::render(Engine* e)
 {
+    if (!ASSETS.isLoaded())
+    {
+        return;
+    }
+    
     _renderer.render();
     AUDIO_ENGINE.render();
 }

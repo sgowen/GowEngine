@@ -311,8 +311,12 @@ void OpenGLWrapper::unloadTexture(Texture& t)
     t._texture = 0;
 }
 
-void OpenGLWrapper::loadShader(Shader& s, const uint8_t* vertexShaderSrc, const long vertexShaderSrcLength, const uint8_t* fragmentShaderSrc, const long fragmentShaderSrcLength)
+void OpenGLWrapper::loadShader(Shader& s)
 {
+    const uint8_t* vertexShaderSrc = s._vertexShaderFileData->_data;
+    const long vertexShaderSrcLength = s._vertexShaderFileData->_length;
+    const uint8_t* fragmentShaderSrc = s._fragmentShaderFileData->_data;
+    const long fragmentShaderSrcLength = s._fragmentShaderFileData->_length;
     s._program = loadShader(vertexShaderSrc, vertexShaderSrcLength, fragmentShaderSrc, fragmentShaderSrcLength);
     
     std::vector<ShaderUniform>& uniforms = s._desc._uniforms;

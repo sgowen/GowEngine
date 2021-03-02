@@ -12,20 +12,18 @@
 #include "AssetHandlerFactory.hpp"
 #include "AssetHandler.hpp"
 #include "FileData.hpp"
-#include "OpenGLWrapper.hpp"
 
 void ShaderLoader::loadShader(Shader& s)
 {
-    const FileData vertexShader = ASSET_HANDLER.loadAsset(s._desc._vertexShaderFilePath);
-    const FileData fragmentShader = ASSET_HANDLER.loadAsset(s._desc._fragmentShaderFilePath);
-
-    OGL.loadShader(s, vertexShader._data, vertexShader._length, fragmentShader._data, fragmentShader._length);
-
-    ASSET_HANDLER.unloadAsset(vertexShader);
-    ASSET_HANDLER.unloadAsset(fragmentShader);
+    s._vertexShaderFileData = new FileData(ASSET_HANDLER.loadAsset(s._desc._vertexShaderFilePath));
+    s._fragmentShaderFileData = new FileData(ASSET_HANDLER.loadAsset(s._desc._fragmentShaderFilePath));
 }
 
 void ShaderLoader::unloadShader(Shader& s)
 {
-    OGL.unloadShader(s);
+    assert(s._vertexShaderFileData != NULL);
+    assert(s._fragmentShaderFileData != NULL);
+    
+    ASSET_HANDLER.unloadAsset(*s._vertexShaderFileData);
+    ASSET_HANDLER.unloadAsset(*s._fragmentShaderFileData);
 }

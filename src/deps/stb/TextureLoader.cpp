@@ -13,12 +13,11 @@
 #include "AssetHandler.hpp"
 #include "FileData.hpp"
 #include "PlatformMacros.hpp"
-#include "OpenGLWrapper.hpp"
 
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"
 
-void TextureLoader::loadTextureData(Texture& t)
+void TextureLoader::loadTexture(Texture& t)
 {
     const FileData fd = ASSET_HANDLER.loadAsset(t._desc._filePath);
     
@@ -33,18 +32,8 @@ void TextureLoader::loadTextureData(Texture& t)
     ASSET_HANDLER.unloadAsset(fd);
 }
 
-void TextureLoader::unloadTextureData(Texture& t)
+void TextureLoader::unloadTexture(Texture& t)
 {
     stbi_image_free(t._data);
     t._data = NULL;
-}
-
-void TextureLoader::loadTexture(Texture& t)
-{
-    OGL.loadTexture(t);
-}
-
-void TextureLoader::unloadTexture(Texture& t)
-{
-    OGL.unloadTexture(t);
 }

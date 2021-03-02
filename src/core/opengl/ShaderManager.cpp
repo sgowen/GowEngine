@@ -9,6 +9,7 @@
 #include "ShaderManager.hpp"
 
 #include "ShaderDescriptor.hpp"
+#include "OpenGLWrapper.hpp"
 
 void ShaderManager::loadShaders(std::vector<ShaderDescriptor>& sds)
 {
@@ -19,7 +20,10 @@ void ShaderManager::loadShaders(std::vector<ShaderDescriptor>& sds)
     
     for (std::map<std::string, Shader>::iterator i = _shaders.begin(); i != _shaders.end(); ++i)
     {
-        _loader.loadShader(i->second);
+        Shader& s = i->second;
+        _loader.loadShader(s);
+        OGL.loadShader(s);
+        _loader.unloadShader(s);
     }
 }
 
@@ -27,7 +31,8 @@ void ShaderManager::unloadShaders(std::vector<ShaderDescriptor>& sds)
 {
     for (std::map<std::string, Shader>::iterator i = _shaders.begin(); i != _shaders.end(); ++i)
     {
-        _loader.unloadShader(i->second);
+        Shader& s = i->second;
+        OGL.unloadShader(s);
     }
     
     _shaders.clear();
