@@ -10,10 +10,8 @@
 
 #include <tinythread.h>
 
+#include <map>
 #include <string>
-#include <vector>
-
-using namespace tthread;
 
 #define THREAD_MGR ThreadManager::getInstance()
 
@@ -26,7 +24,8 @@ public:
         return ret;
     }
     
-    void spawnThread(std::string threadID, void* arg);
+    void spawnThread(std::string threadID, void (*func)(void *), void* arg);
+    void tearDownThread(std::string threadID);
     
 private:
     std::map<std::string, tthread::thread*> _threads;
