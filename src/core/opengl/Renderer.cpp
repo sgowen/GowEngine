@@ -142,6 +142,18 @@ void Renderer::clearFramebuffer(const Color& c)
     OGL.clearFramebuffer(c);
 }
 
+void Renderer::renderImageViews(float angle, bool flipX, std::string matrixKey, std::string shaderKey, std::string spriteBatcherKey)
+{
+    Matrix& m = matrix();
+    float w = m._desc.width();
+    float h = m._desc.height();
+    for (auto& pair : _imageViews)
+    {
+        ImageView& iv = pair.second;
+        renderSprite(iv._textureName, iv._textureRegionName, w * iv._xWeight, h * iv._yWeight, w * iv._widthWeight, h * iv._heightWeight, angle, flipX, matrixKey, shaderKey, spriteBatcherKey);
+    }
+}
+
 void Renderer::updateMatrix(float l, float r, float b, float t, float n, float f, std::string matrixKey)
 {
     Matrix& m = matrix(matrixKey);
@@ -223,7 +235,7 @@ void Renderer::hideAllText()
     }
 }
 
-void Renderer::renderText(std::string fontBatcherKey, std::string shaderKey)
+void Renderer::renderTextViews(std::string fontBatcherKey, std::string shaderKey)
 {
     FontBatcher& fb = fontBatcher(fontBatcherKey);
     Shader& s = ASSETS.shader(shaderKey);
@@ -259,6 +271,13 @@ Framebuffer& Renderer::framebuffer(std::string key)
 {
     auto q = _framebuffers.find(key);
     assert(q != _framebuffers.end());
+    return q->second;
+}
+
+ImageView& Renderer::imageView(std::string key)
+{
+    auto q = _imageViews.find(key);
+    assert(q != _imageViews.end());
     return q->second;
 }
 

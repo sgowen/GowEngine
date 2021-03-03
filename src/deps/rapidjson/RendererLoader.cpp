@@ -99,6 +99,29 @@ Renderer RendererLoader::initWithJSON(const char* json)
         }
     }
     
+    if (d.HasMember("imageViews"))
+    {
+        Value& v = d["imageViews"];
+        assert(v.IsObject());
+        
+        for (Value::ConstMemberIterator i = v.MemberBegin(); i != v.MemberEnd(); ++i)
+        {
+            const Value& iv = i->value;
+            assert(iv.IsObject());
+            
+            std::string key = i->name.GetString();
+            
+            std::string texture = RapidJSONUtil::getString(iv, "texture");
+            std::string textureRegion = RapidJSONUtil::getString(iv, "textureRegion");
+            float xWeight = RapidJSONUtil::getFloat(iv, "xWeight");
+            float yWeight = RapidJSONUtil::getFloat(iv, "yWeight");
+            float widthWeight = RapidJSONUtil::getFloat(iv, "widthWeight");
+            float heightWeight = RapidJSONUtil::getFloat(iv, "heightWeight");
+            
+            ret._imageViews.emplace(key, ImageView{texture, textureRegion, xWeight, yWeight, widthWeight, heightWeight});
+        }
+    }
+    
     if (d.HasMember("matrices"))
     {
         Value& v = d["matrices"];
