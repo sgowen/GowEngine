@@ -56,7 +56,7 @@ void AssetsManager::update()
     }
 }
 
-void load(void* arg)
+void thread_createDeviceDependentResources(void* arg)
 {
     assert(arg != NULL);
     
@@ -67,7 +67,7 @@ void load(void* arg)
 
 void AssetsManager::createDeviceDependentResourcesAsync()
 {
-    THREAD_MGR.spawnThread("AssetsManager", load, this);
+    THREAD_MGR.spawnThread("AssetsManager", thread_createDeviceDependentResources, this);
 }
 
 void AssetsManager::createDeviceDependentResources()
