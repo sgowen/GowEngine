@@ -11,6 +11,7 @@
 #include "Assets.hpp"
 #include "ShaderManager.hpp"
 #include "TextureManager.hpp"
+#include "deps/tinythreadpp/ThreadManager.hpp"
 
 #include <assert.h>
 
@@ -29,7 +30,44 @@ void AssetsManager::deregisterAssets(std::string key)
 
 void AssetsManager::update()
 {
-    // TODO, process async shader/texture loading threads, since we can only load into OGL on the main thread. Only load a single shader/texture into OGL per frame though
+    std::map<std::string, Shader>& shaders = _shaderMgr.shaders();
+    for (auto& pair : shaders)
+    {
+        Shader& s = pair.second;
+        if (s._program == 0 &&
+            s._vertexShaderFileData != NULL &&
+            s._fragmentShaderFileData != NULL)
+        {
+            _shaderMgr.loadShader(s);
+            return;
+        }
+    }
+    
+    std::map<std::string, Texture>& textures = _textureMgr.textures();
+    for (auto& pair : textures)
+    {
+        Texture& t = pair.second;
+        if (t._texture == 0 &&
+            t._data != NULL)
+        {
+            _textureMgr.loadTexture(t);
+            return;
+        }
+    }
+}
+
+void load(void* arg)
+{
+    assert(arg != NULL);
+    
+    AssetsManager* am = static_cast<AssetsManager*>(arg);
+    am->createDeviceDependentResources();
+    THREAD_MGR.tearDownThread("AssetsManager");
+}
+
+void AssetsManager::createDeviceDependentResourcesAsync()
+{
+    THREAD_MGR.spawnThread("AssetsManager", load, this);
 }
 
 void AssetsManager::createDeviceDependentResources()
@@ -59,6 +97,11 @@ Shader& AssetsManager::shader(std::string name)
     return _shaderMgr.shader(name);
 }
 
+bool AssetsManager::isShaderLoaded(std::string name)
+{
+    return _shaderMgr.isShaderLoaded(name);
+}
+
 SoundWrapper* AssetsManager::sound(uint16_t soundID)
 {
     return _soundMgr.sound(soundID);
@@ -77,6 +120,11 @@ SoundWrapper* AssetsManager::music()
 Texture& AssetsManager::texture(std::string name)
 {
     return _textureMgr.texture(name);
+}
+
+bool AssetsManager::isTextureLoaded(std::string name)
+{
+    return _textureMgr.isTextureLoaded(name);
 }
 
 TextureRegion& AssetsManager::textureRegion(std::string key, uint16_t stateTime)
@@ -99,6 +147,11 @@ TextureRegion& AssetsManager::textureRegion(std::string key, uint16_t stateTime)
 
 bool AssetsManager::isLoaded()
 {
+    if (THREAD_MGR.isThreadRunning("AssetsManager"))
+    {
+        return false;
+    }
+    
     int numShaders = 0;
     int numSounds = 0;
     int numTextures = 0;
@@ -116,7 +169,12 @@ bool AssetsManager::isLoaded()
     }
     
     std::map<uint16_t, SoundWrapper*>& sounds = _soundMgr.sounds();
-    if (numSounds != sounds.size())
+    size_t expectedNumSounds = sounds.size();
+    if (_soundMgr.music() != NULL)
+    {
+        ++expectedNumSounds;
+    }
+    if (numSounds != expectedNumSounds)
     {
         return false;
     }

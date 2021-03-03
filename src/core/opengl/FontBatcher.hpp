@@ -30,7 +30,7 @@ public:
     void destroyDeviceDependentResources();
     void begin();
     void addText(Renderer& r, TextView& tv);
-	void addText(Renderer& r, std::string text, TextAlignment alignment, float xWeight, float yWeight, float glyphWidthWeight);
+	void addText(Renderer& r, std::string text, uint8_t alignment, float xWeight, float yWeight, float glyphWidthWeight);
     void end(Renderer& r, Shader& s);
 
 private:

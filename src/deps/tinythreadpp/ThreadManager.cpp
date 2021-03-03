@@ -23,3 +23,9 @@ void ThreadManager::tearDownThread(std::string threadID)
     delete q->second;
     _threads.erase(q);
 }
+
+bool ThreadManager::isThreadRunning(std::string threadID)
+{
+    auto q = _threads.find(threadID);
+    return q != _threads.end();
+}

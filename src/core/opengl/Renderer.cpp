@@ -113,6 +113,23 @@ void Renderer::destroyDeviceDependentResources()
     _screenRenderer.destroyDeviceDependentResources();
 }
 
+void Renderer::renderLoadingScreen()
+{
+    clearFramebuffer();
+    
+    if (!ASSETS.isShaderLoaded("texture") ||
+        !ASSETS.isTextureLoaded("texture_font"))
+    {
+        return;
+    }
+    
+    FontBatcher& fb = fontBatcher("main");
+    Shader& s = ASSETS.shader("texture");
+    fb.begin();
+    fb.addText(*this, "Loading...", 2, 0.98, 0.02, 0.012);
+    fb.end(*this, s);
+}
+
 void Renderer::bindFramebuffer(std::string framebufferKey, bool enableBlending)
 {
     Framebuffer& fb = framebuffer(framebufferKey);

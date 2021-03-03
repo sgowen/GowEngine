@@ -18,8 +18,10 @@ class TextureManager
 {
 public:
     void loadTextures(std::vector<TextureDescriptor>& tds);
+    void loadTexture(Texture& t);
     void unloadTextures(std::vector<TextureDescriptor>& tds);
     Texture& texture(std::string name);
+    bool isTextureLoaded(std::string name);
     std::map<std::string, Texture>& textures();
     
 private:

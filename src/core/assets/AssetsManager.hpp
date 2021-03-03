@@ -30,13 +30,16 @@ public:
     void registerAssets(std::string key, Assets a);
     void deregisterAssets(std::string key);
     void update();
+    void createDeviceDependentResourcesAsync();
     void createDeviceDependentResources();
     void destroyDeviceDependentResources();
     Shader& shader(std::string name);
+    bool isShaderLoaded(std::string name);
     SoundWrapper* sound(uint16_t soundID);
     std::map<uint16_t, SoundWrapper*>& sounds();
     SoundWrapper* music();
     Texture& texture(std::string name);
+    bool isTextureLoaded(std::string name);
     TextureRegion& textureRegion(std::string key, uint16_t stateTime = 0);
     bool isLoaded();
 

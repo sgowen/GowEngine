@@ -22,9 +22,13 @@ void ShaderManager::loadShaders(std::vector<ShaderDescriptor>& sds)
     {
         Shader& s = i->second;
         _loader.loadShader(s);
-        OGL.loadShader(s);
-        _loader.unloadShader(s);
     }
+}
+
+void ShaderManager::loadShader(Shader &s)
+{
+    OGL.loadShader(s);
+    _loader.unloadShader(s);
 }
 
 void ShaderManager::unloadShaders(std::vector<ShaderDescriptor>& sds)
@@ -34,7 +38,6 @@ void ShaderManager::unloadShaders(std::vector<ShaderDescriptor>& sds)
         Shader& s = i->second;
         OGL.unloadShader(s);
     }
-    
     _shaders.clear();
 }
 
@@ -43,6 +46,17 @@ Shader& ShaderManager::shader(std::string name)
     auto q = _shaders.find(name);
     assert(q != _shaders.end());
     return q->second;
+}
+
+bool ShaderManager::isShaderLoaded(std::string name)
+{
+    auto q = _shaders.find(name);
+    if (q != _shaders.end())
+    {
+        return q->second._program != 0;
+    }
+    
+    return false;
 }
 
 std::map<std::string, Shader>& ShaderManager::shaders()

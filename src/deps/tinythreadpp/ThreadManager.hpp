@@ -26,6 +26,7 @@ public:
     
     void spawnThread(std::string threadID, void (*func)(void *), void* arg);
     void tearDownThread(std::string threadID);
+    bool isThreadRunning(std::string threadID);
     
 private:
     std::map<std::string, tthread::thread*> _threads;

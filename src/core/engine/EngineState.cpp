@@ -70,7 +70,7 @@ _assetsFilePath(assetsFilePath)
 
 void EngineState::createDeviceDependentResources(Engine* e)
 {
-    ASSETS.createDeviceDependentResources();
+    ASSETS.createDeviceDependentResourcesAsync();
     _renderer.createDeviceDependentResources();
 }
 
@@ -98,7 +98,6 @@ void EngineState::resume(Engine *e)
 void EngineState::update(Engine* e)
 {
     ASSETS.update();
-    
     if (!ASSETS.isLoaded())
     {
         return;
@@ -111,6 +110,7 @@ void EngineState::render(Engine* e)
 {
     if (!ASSETS.isLoaded())
     {
+        _renderer.renderLoadingScreen();
         return;
     }
     

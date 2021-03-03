@@ -32,29 +32,11 @@ _glyphWidthToHeightRatio(_glyphHeight / (float)_glyphWidth)
 void FontBatcher::createDeviceDependentResources()
 {
     _spriteBatcher.createDeviceDependentResources();
-    
-    Texture& t = ASSETS.texture(_textureName);
-    int x = 0;
-    int y = 0;
-    for (int i = 0; i < 176; ++i)
-    {
-        _glyphs.emplace_back(x, y, _glyphWidth, _glyphHeight, t._width, t._height);
-
-        x += _glyphWidth;
-
-        if (x == _glyphsPerRow * _glyphWidth)
-        {
-            x = 0;
-            y += _glyphHeight;
-        }
-    }
 }
 
 void FontBatcher::destroyDeviceDependentResources()
 {
     _spriteBatcher.destroyDeviceDependentResources();
-    
-    _glyphs.clear();
 }
 
 void FontBatcher::begin()
@@ -67,6 +49,25 @@ void FontBatcher::addText(Renderer& r, TextView& tv)
     if (tv._visibility == TEXV_HIDDEN)
     {
         return;
+    }
+    
+    if (_glyphs.empty())
+    {
+        Texture& t = ASSETS.texture(_textureName);
+        int x = 0;
+        int y = 0;
+        for (int i = 0; i < 176; ++i)
+        {
+            _glyphs.emplace_back(x, y, _glyphWidth, _glyphHeight, t._width, t._height);
+
+            x += _glyphWidth;
+
+            if (x == _glyphsPerRow * _glyphWidth)
+            {
+                x = 0;
+                y += _glyphHeight;
+            }
+        }
     }
     
     size_t len = tv._text.length();
@@ -131,7 +132,7 @@ void FontBatcher::addText(Renderer& r, TextView& tv)
     }
 }
 
-void FontBatcher::addText(Renderer& r, std::string text, TextAlignment alignment, float xWeight, float yWeight, float glyphWidthWeight)
+void FontBatcher::addText(Renderer& r, std::string text, uint8_t alignment, float xWeight, float yWeight, float glyphWidthWeight)
 {
     TextView tv(text, alignment, xWeight, yWeight, glyphWidthWeight);
     addText(r, tv);
