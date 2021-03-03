@@ -15,6 +15,8 @@
 #include "Macros.hpp"
 #include "EntityPhysicsController.hpp"
 #include "TopDownPhysicsController.hpp"
+#include "core/audio/SoundUtil.hpp"
+#include "NetworkClient.hpp"
 
 IMPL_EntityController_create(EntityNetworkController, EntityNetworkController)
 
@@ -27,6 +29,7 @@ _entity(e)
 void EntityNetworkController::read(InputMemoryBitStream& imbs)
 {
     Entity& e = *_entity;
+    uint8_t fromState = e.stateCache()._state;
     
     bool stateBit;
     
@@ -59,6 +62,14 @@ void EntityNetworkController::read(InputMemoryBitStream& imbs)
         imbs.read(e._state._stateTime);
         
         e._stateCache = e._state;
+    }
+    
+    // TODO, read from "networkData"
+    
+    uint8_t playerID = _entity->entityDef()._data.getUInt("playerID");
+    if (!NW_CLNT->isPlayerIDLocal(playerID))
+    {
+        SoundUtil::playSoundForStateIfChanged(e, fromState, e.state()._state);
     }
 }
 
@@ -100,6 +111,8 @@ uint8_t EntityNetworkController::write(OutputMemoryBitStream& ombs, uint8_t dirt
         
         ret |= Entity::RSTF_STATE;
     }
+    
+    // TODO, write out "networkData"
     
     return ret;
 }

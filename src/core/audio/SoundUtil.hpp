@@ -8,14 +8,24 @@
 
 #pragma once
 
-#include <stdint.h>
+#include "Entity.hpp"
+#include "EntityRenderController.hpp"
+#include "AudioEngineFactory.hpp"
 
-class Entity;
+#include <stdint.h>
 
 class SoundUtil
 {
 public:
-    static void playSoundForStateIfChanged(Entity* e, uint8_t fromState, uint8_t toState);
+    static void playSoundForStateIfChanged(Entity& e, uint8_t fromState, uint8_t toState)
+    {
+        if (fromState == toState)
+        {
+            return;
+        }
+        
+        AUDIO_ENGINE.playSound(e.renderController()->getSoundMapping(toState));
+    }
     
 private:
     SoundUtil() {}
