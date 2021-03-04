@@ -48,8 +48,9 @@ void EntityNetworkController::read(InputMemoryBitStream& imbs)
         {
             // FIXME, this is a hacky way to determine that we are using the Box2D physics controller
             imbs.read<uint8_t, 4>(e._pose._numGroundContacts);
-            imbs.read(e._pose._isFacingLeft);
         }
+        
+        imbs.read(e._pose._isFacingLeft);
         
         e._poseCache = e._pose;
     }
@@ -95,8 +96,9 @@ uint8_t EntityNetworkController::write(OutputMemoryBitStream& ombs, uint8_t dirt
         {
             // FIXME, this is a hacky way to determine that we are using the Box2D physics controller
             ombs.write<uint8_t, 4>(e._pose._numGroundContacts);
-            ombs.write(e._pose._isFacingLeft);
         }
+        
+        ombs.write(e._pose._isFacingLeft);
         
         ret |= Entity::RSTF_POSE;
     }

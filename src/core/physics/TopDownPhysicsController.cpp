@@ -116,7 +116,7 @@ void TopDownPhysicsController::processCollisions(std::vector<Entity*>& entities)
             continue;
         }
         
-        static float fudgeFactor = 0.01f;
+        static float fudgeFactor = 0.001f;
         bool isCollision = false;
         
         if (OverlapTester::doLineAndRektangleOverlap(_bounds->_left, *target))
@@ -149,8 +149,8 @@ void TopDownPhysicsController::processCollisions(std::vector<Entity*>& entities)
         
         if (isCollision)
         {
-            onCollision(e);
-            e->physicsController<TopDownPhysicsController>()->onCollision(_entity);
+            _entity->controller()->onCollision(e);
+            e->controller()->onCollision(_entity);
         }
     }
 }

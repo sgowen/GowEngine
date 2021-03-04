@@ -60,9 +60,6 @@ public:
     void push(int dir, float force);
     Rektangle* boundingBox();
     
-protected:
-    virtual void onCollision(Entity* e) {}
-    
 private:
     Rektangle* _boundingBox;
     Bounds* _bounds;

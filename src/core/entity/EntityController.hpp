@@ -24,6 +24,7 @@ public:
     
     virtual void update() {}
     virtual void onMessage(uint16_t message) {}
+    virtual void onCollision(Entity* e) {}
     
 protected:
     Entity* _entity;
