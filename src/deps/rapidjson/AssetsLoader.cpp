@@ -173,6 +173,20 @@ Assets AssetsLoader::initWithJSON(const char* json)
                         auto q = animations.find(key);
                         assert(q == animations.end());
                         
+                        if (iv.HasMember("regionWidths"))
+                        {
+                            const Value& v = iv["uniforms"];
+                            assert(v.IsArray());
+                            for (SizeType i = 0; i < v.Size(); ++i)
+                            {
+                                // TODO
+                            }
+                        }
+                        else
+                        {
+                            // Stuff regionWidths with a single value, for every frame
+                        }
+                        
                         bool looping = RapidJSONUtil::getBool(iv, "looping", true);
                         int firstLoopingFrame = RapidJSONUtil::getInt(iv, "firstLoopingFrame");
                         int xPadding = RapidJSONUtil::getInt(iv, "xPadding");

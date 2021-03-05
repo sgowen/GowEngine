@@ -18,7 +18,7 @@
 #include "core/audio/SoundUtil.hpp"
 #include "NetworkClient.hpp"
 
-IMPL_EntityController_create(EntityNetworkController, EntityNetworkController)
+IMPL_EntityController_create(EntityNetworkController)
 
 EntityNetworkController::EntityNetworkController(Entity* e) :
 _entity(e)
@@ -50,7 +50,7 @@ void EntityNetworkController::read(InputMemoryBitStream& imbs)
             imbs.read<uint8_t, 4>(e._pose._numGroundContacts);
         }
         
-        imbs.read(e._pose._isFacingLeft);
+        imbs.read(e._pose._isXFlipped);
         
         e._poseCache = e._pose;
     }
@@ -98,7 +98,7 @@ uint8_t EntityNetworkController::write(OutputMemoryBitStream& ombs, uint8_t dirt
             ombs.write<uint8_t, 4>(e._pose._numGroundContacts);
         }
         
-        ombs.write(e._pose._isFacingLeft);
+        ombs.write(e._pose._isXFlipped);
         
         ret |= Entity::RSTF_POSE;
     }

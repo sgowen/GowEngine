@@ -52,7 +52,7 @@ struct EntityDef
     std::string _networkController;
     std::string _physicsController;
     std::string _renderController;
-    std::map<uint8_t, std::string> _textureMappings;
+    std::map<uint8_t, std::map<uint8_t, std::string> > _textureMappings;
     std::map<uint8_t, uint16_t> _soundMappings;
     std::map<uint8_t, std::vector<uint16_t> > _soundRandomMappings;
     std::vector<FixtureDef> _fixtures;
@@ -68,7 +68,7 @@ struct EntityDef
               std::string networkController,
               std::string physicsController,
               std::string renderController,
-              std::map<uint8_t, std::string> textureMappings,
+              std::map<uint8_t, std::map<uint8_t, std::string> > textureMappings,
               std::map<uint8_t, uint16_t> soundMappings,
               std::map<uint8_t, std::vector<uint16_t> > soundRandomMappings,
               std::vector<FixtureDef> fixtures,
@@ -123,7 +123,7 @@ public:
     float angle();
     const uint32_t getID();
     bool isGrounded();
-    bool isFacingLeft();
+    bool isXFlipped();
     bool isBody();
     bool isLayer();
     bool isStatic();
@@ -168,14 +168,14 @@ public:
         Vector2 _velocity;
         float _angle;
         uint8_t _numGroundContacts;
-        bool _isFacingLeft;
+        bool _isXFlipped;
         
         Pose(float x, float y) :
         _position(x, y),
         _velocity(VECTOR2_ZERO),
         _angle(0),
         _numGroundContacts(0),
-        _isFacingLeft(false)
+        _isXFlipped(false)
         {
             // Empty
         }
@@ -187,7 +187,7 @@ public:
             a._velocity          == b._velocity &&
             a._angle             == b._angle &&
             a._numGroundContacts == b._numGroundContacts &&
-            a._isFacingLeft      == b._isFacingLeft;
+            a._isXFlipped      == b._isXFlipped;
         }
         
         friend bool operator!=(Pose& a, Pose& b)

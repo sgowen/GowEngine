@@ -12,7 +12,6 @@
 #include "Macros.hpp"
 
 class Entity;
-class SpriteBatcher;
 
 class EntityRenderController
 {
@@ -23,9 +22,8 @@ public:
     EntityRenderController(Entity* e);
     virtual ~EntityRenderController() {}
     
-    virtual void addSprite(SpriteBatcher& sb);
     virtual std::string getTextureMapping();
-    virtual std::string getTextureMapping(uint8_t state);
+    virtual std::string getTextureMapping(uint8_t state, uint8_t stateFlags = 0);
     virtual uint16_t getSoundMapping(uint8_t state);
     
 protected:

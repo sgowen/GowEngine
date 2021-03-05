@@ -203,7 +203,7 @@ void Renderer::spriteBatcherAddEntities(std::vector<Entity*>& entities, std::str
     SpriteBatcher& sb = spriteBatcher(spriteBatcherKey);
     for (Entity* e : entities)
     {
-        e->renderController()->addSprite(sb);
+        addSpriteForEntity(sb, *e);
     }
 }
 
@@ -314,4 +314,10 @@ TriangleBatcher& Renderer::triangleBatcher(std::string key)
     auto q = _triangleBatchers.find(key);
     assert(q != _triangleBatchers.end());
     return q->second;
+}
+
+void Renderer::addSpriteForEntity(SpriteBatcher& sb, Entity& e)
+{
+    TextureRegion tr = ASSETS.textureRegion(e.renderController()->getTextureMapping(), e.stateTime());
+    sb.addSprite(tr, e.position()._x, e.position()._y, e.width(), e.height(), e.angle(), e.isXFlipped());
 }

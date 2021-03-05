@@ -16,7 +16,7 @@
 #include "MathUtil.hpp"
 
 IMPL_RTTI(TopDownPhysicsController, EntityPhysicsController)
-IMPL_EntityController_create(TopDownPhysicsController, EntityPhysicsController)
+IMPL_EntityController_create(TopDownPhysicsController)
 
 TopDownPhysicsController::TopDownPhysicsController(Entity* e) : EntityPhysicsController(e),
 _boundingBox(NULL),

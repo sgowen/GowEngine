@@ -9,11 +9,10 @@
 #include "EntityRenderController.hpp"
 
 #include "Entity.hpp"
-#include "SpriteBatcher.hpp"
 #include "AssetsManager.hpp"
 
 IMPL_RTTI_NOPARENT(EntityRenderController)
-IMPL_EntityController_create(EntityRenderController, EntityRenderController)
+IMPL_EntityController_create(EntityRenderController)
 
 EntityRenderController::EntityRenderController(Entity* e) :
 _entity(e)
@@ -21,27 +20,23 @@ _entity(e)
     // Empty
 }
 
-void EntityRenderController::addSprite(SpriteBatcher& sb)
-{
-    Entity& e = *_entity;
-    TextureRegion tr = ASSETS.textureRegion(getTextureMapping(), e.stateTime());
-    
-    sb.addSprite(tr, e.position()._x, e.position()._y, e.width(), e.height(), e.angle(), e.isFacingLeft());
-}
-
 std::string EntityRenderController::getTextureMapping()
 {
     Entity& e = *_entity;
-    return getTextureMapping(e._state._state);
+    return getTextureMapping(e._state._state, e._state._stateFlags);
 }
 
-std::string EntityRenderController::getTextureMapping(uint8_t state)
+std::string EntityRenderController::getTextureMapping(uint8_t state, uint8_t stateFlags)
 {
     Entity& e = *_entity;
     auto q = e.entityDef()._textureMappings.find(state);
     assert (q != e.entityDef()._textureMappings.end());
     
-    return q->second;
+    std::map<uint8_t, std::string>& stateTextureMappings = q->second;
+    auto q2 = stateTextureMappings.find(stateFlags);
+    assert (q2 != stateTextureMappings.end());
+    
+    return q2->second;
 }
 
 uint16_t EntityRenderController::getSoundMapping(uint8_t state)

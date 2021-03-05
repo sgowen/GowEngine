@@ -85,4 +85,6 @@ private:
     std::map<std::string, TextView> _textViews;
     std::map<std::string, TriangleBatcher> _triangleBatchers;
     ScreenRenderer _screenRenderer;
+    
+    void addSpriteForEntity(SpriteBatcher& sb, Entity& e);
 };

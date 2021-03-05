@@ -23,11 +23,12 @@ public:
     virtual double getFrameRate();
     
 protected:
-    void registerControllers(std::map<std::string, EntityControllerCreationFunc>& config, std::string entityManagerFilePath);
-    void configureForNetwork(std::map<std::string, EntityNetworkControllerCreationFunc>& config, std::string entityLayoutManagerFilePath);
-    void registerPhysicsControllers(std::map<std::string, EntityPhysicsControllerCreationFunc>& config);
-    void registerRenderControllers(std::map<std::string, EntityRenderControllerCreationFunc>& config);
+    void configureForNetwork(std::string entityManagerFilePath, std::string entityLayoutManagerFilePath, std::map<std::string, EntityControllerCreationFunc>& config);
+    void configureForOffline(std::string entityManagerFilePath, std::string entityLayoutManagerFilePath, std::map<std::string, EntityControllerCreationFunc>& config);
     
     EngineController(void* data1 = NULL, void* data2 = NULL);
     virtual ~EngineController();
+    
+private:
+    void registerControllers(std::string entityManagerFilePath, std::map<std::string, EntityControllerCreationFunc>& config);
 };

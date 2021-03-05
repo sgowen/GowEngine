@@ -13,7 +13,8 @@
 
 #include <box2d/box2d.h>
 
-IMPL_EntityController_create(Box2DPhysicsController, EntityPhysicsController)
+IMPL_RTTI(Box2DPhysicsController, EntityPhysicsController)
+IMPL_EntityController_create(Box2DPhysicsController)
 
 Box2DPhysicsController::Box2DPhysicsController(Entity* e) : EntityPhysicsController(e),
 _body(NULL),
@@ -53,7 +54,7 @@ void Box2DPhysicsController::updateBodyFromPose()
     _body->SetLinearVelocity(bodyVelocity);
     _body->SetTransform(bodyPosition, _entity->angle());
     
-    if (_isBodyFacingLeft != _entity->isFacingLeft() ||
+    if (_isBodyFacingLeft != _entity->isXFlipped() ||
         _bodyWidth != _entity->width() ||
         _bodyHeight != _entity->height())
     {
@@ -124,7 +125,7 @@ b2Body* Box2DPhysicsController::getBody()
 
 void Box2DPhysicsController::createFixtures()
 {
-    _isBodyFacingLeft = _entity->isFacingLeft();
+    _isBodyFacingLeft = _entity->isXFlipped();
     _bodyWidth = _entity->width();
     _bodyHeight = _entity->height();
     

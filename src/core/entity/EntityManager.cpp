@@ -20,6 +20,8 @@
 #include "AssetHandlerFactory.hpp"
 #include "AssetHandler.hpp"
 #include "FileData.hpp"
+#include "core/physics/TopDownPhysicsController.hpp"
+#include "deps/box2d/Box2DPhysicsController.hpp"
 
 #include <assert.h>
 
@@ -113,5 +115,7 @@ EntityManager::EntityManager()
     registerController("Default", EntityController::create);
     registerNetworkController("Default", EntityNetworkController::create);
     registerPhysicsController("Default", EntityPhysicsController::create);
+    registerPhysicsController("TopDown", TopDownPhysicsController::create);
+    registerPhysicsController("Box2D", Box2DPhysicsController::create);
     registerRenderController("Default", EntityRenderController::create);
 }

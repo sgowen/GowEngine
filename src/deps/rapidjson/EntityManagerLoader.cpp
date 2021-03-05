@@ -61,7 +61,7 @@ void EntityManagerLoader::initWithJSON(EntityManager& em, const char* json)
         std::string physicsController = RapidJSONUtil::getString(iv, "physicsController", "Default");
         std::string renderController = RapidJSONUtil::getString(iv, "renderController", "Default");
         
-        std::map<uint8_t, std::string> textureMappings;
+        std::map<uint8_t, std::map<uint8_t, std::string> > textureMappings;
         if (iv.HasMember("textureMappings"))
         {
             const Value& v = iv["textureMappings"];
@@ -71,8 +71,25 @@ void EntityManagerLoader::initWithJSON(EntityManager& em, const char* json)
                 std::string name = i->name.GetString();
                 uint32_t nameVal = StringUtil::stringToNumber<uint32_t>(name);
                 uint8_t state = nameVal;
-                std::string value = i->value.GetString();
-                textureMappings.emplace(state, value);
+                const Value& value = i->value;
+                std::map<uint8_t, std::string> stateFlagMappings;
+                if (value.IsObject())
+                {
+                    for (Value::ConstMemberIterator i = value.MemberBegin(); i != value.MemberEnd(); ++i)
+                    {
+                        std::string name = i->name.GetString();
+                        uint32_t nameVal = StringUtil::stringToNumber<uint32_t>(name);
+                        uint8_t stateFlag = nameVal;
+                        std::string stateFlagMapping = i->value.GetString();
+                        stateFlagMappings.emplace(stateFlag, stateFlagMapping);
+                    }
+                }
+                else
+                {
+                    std::string stateMapping = value.GetString();
+                    stateFlagMappings.emplace(0, stateMapping);
+                }
+                textureMappings.emplace(state, stateFlagMappings);
             }
         }
         else if (iv.HasMember("textureMapping"))
@@ -182,6 +199,8 @@ void EntityManagerLoader::initWithJSON(EntityManager& em, const char* json)
                 cfg._keyValues[i->name.GetString()] = i->value.GetString();
             }
         }
+        
+        // TODO load "networkData"
         
         em._entityDescriptorsMap.emplace(key, EntityDef{key, name, keyName, controller, networkController, physicsController, renderController, textureMappings, soundMappings, soundRandomMappings, fixtures, bodyFlags, width, height, cfg});
     }

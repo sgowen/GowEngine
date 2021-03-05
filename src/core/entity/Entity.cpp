@@ -130,9 +130,9 @@ bool Entity::isRequestingDeletion()
     return _isRequestingDeletion;
 }
 
-bool Entity::isFacingLeft()
+bool Entity::isXFlipped()
 {
-    return _pose._isFacingLeft;
+    return _pose._isXFlipped;
 }
 
 bool Entity::isBody()
