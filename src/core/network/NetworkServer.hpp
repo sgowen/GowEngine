@@ -44,6 +44,7 @@ public:
     void processIncomingPackets();
     void sendOutgoingPackets();
     void registerEntity(Entity* e);
+    void registerNewEntity(uint32_t key, uint32_t x, uint32_t y);
     void deregisterEntity(Entity* e);
     void deregisterAllEntities();
     void setStateDirty(uint32_t networkID, uint8_t dirtyState);

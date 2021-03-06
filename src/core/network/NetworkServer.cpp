@@ -28,6 +28,7 @@
 #include "SocketAddress.hpp"
 #include "EntityIDManager.hpp"
 #include "SocketUtil.hpp"
+#include "EntityManager.hpp"
 
 #include <assert.h>
 
@@ -95,6 +96,11 @@ void NetworkServer::sendOutgoingPackets()
 void NetworkServer::registerEntity(Entity* e)
 {
     _entityRegistry.registerEntity(e);
+}
+
+void NetworkServer::registerNewEntity(uint32_t key, uint32_t x, uint32_t y)
+{
+    registerEntity(ENTITY_MGR.createEntity(EntityInstanceDef(INST_REG.get<EntityIDManager>(INSK_EID_SRVR)->getNextNetworkEntityID(), key, x, y, true)));
 }
 
 void NetworkServer::deregisterEntity(Entity* e)

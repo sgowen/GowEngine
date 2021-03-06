@@ -20,7 +20,7 @@ class b2World;
 class Box2DPhysicsController : public EntityPhysicsController
 {
     DECL_RTTI;
-    DECL_EntityController_create(EntityPhysicsController);
+    DECL_EntityController_create(Box2DPhysicsController);
     
 public:
     Box2DPhysicsController(Entity* e);

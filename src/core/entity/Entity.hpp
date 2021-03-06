@@ -43,6 +43,75 @@ enum BodyFlags
     BODF_PLAYER         = 1 << 3
 };
 
+enum NetworkDataFieldType
+{
+    NDFT_BOOL = 0,
+    NDFT_UINT8 = 1,
+    NDFT_UINT16 = 2,
+    NDFT_UINT32 = 3,
+    NDFT_SMALL_STRING = 4,
+    NDFT_LARGE_STRING = 5
+};
+
+struct NetworkDataField
+{
+    std::string _name;
+    uint8_t _type;
+    std::map<std::string, bool> _valueBool;
+    std::map<std::string, uint8_t> _valueUInt8;
+    std::map<std::string, uint16_t> _valueUInt16;
+    std::map<std::string, uint32_t> _valueUInt32;
+    std::map<std::string, std::string> _valueString;
+    
+    NetworkDataField(std::string name, uint8_t type) :
+    _name(name),
+    _type(type)
+    {
+        switch (_type)
+        {
+            case NDFT_BOOL:
+                <#statements#>
+                break;
+                
+            default:
+                break;
+        }
+    }
+};
+
+struct NetworkDataGroup
+{
+    uint8_t _readStateFlag;
+    std::string _name;
+    std::vector<NetworkDataField> _data;
+    
+    NetworkDataGroup(uint8_t readStateFlag, std::string name, std::vector<NetworkDataField> data) :
+    _readStateFlag(readStateFlag),
+    _name(name),
+    _data(data)
+    {
+        // Empty
+    }
+};
+
+struct NetworkData
+{
+    std::vector<NetworkDataGroup> _data;
+    
+    NetworkData(std::vector<NetworkDataGroup> data) :
+    _data(data)
+    {
+        // Empty
+    }
+};
+
+enum ReadStateFlag
+{
+    RSTF_POSE =        1 << 0,
+    RSTF_STATE =       1 << 1,
+    RSTF_DATA_BEGIN =  1 << 2
+};
+
 struct EntityDef
 {
     uint32_t _key;
@@ -60,6 +129,7 @@ struct EntityDef
     uint8_t _width;
     uint8_t _height;
     Config _data;
+    NetworkData _networkData;
     
     EntityDef(uint32_t key,
               std::string name,
@@ -75,7 +145,8 @@ struct EntityDef
               uint8_t bodyFlags,
               uint8_t width,
               uint8_t height,
-              Config data) :
+              Config data,
+              NetworkData networkData) :
     _key(key),
     _name(name),
     _keyName(keyName),
@@ -90,7 +161,8 @@ struct EntityDef
     _bodyFlags(bodyFlags),
     _width(width),
     _height(height),
-    _data(data)
+    _data(data),
+    _networkData(networkData)
     {
         // Empty
     }
@@ -155,12 +227,6 @@ public:
     {
         return static_cast<T*>(_renderController);
     }
-    
-    enum ReadStateFlag
-    {
-        RSTF_POSE =  1 << 0,
-        RSTF_STATE = 1 << 1
-    };
     
     struct Pose
     {

@@ -200,7 +200,10 @@ void EntityManagerLoader::initWithJSON(EntityManager& em, const char* json)
             }
         }
         
-        // TODO load "networkData"
+        if (iv.HasMember("networkData"))
+        {
+            // TODO load "networkData"
+        }
         
         em._entityDescriptorsMap.emplace(key, EntityDef{key, name, keyName, controller, networkController, physicsController, renderController, textureMappings, soundMappings, soundRandomMappings, fixtures, bodyFlags, width, height, cfg});
     }
