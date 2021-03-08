@@ -69,7 +69,7 @@ void EntityManagerLoader::initWithJSON(EntityManager& em, const char* json)
             for (Value::ConstMemberIterator i = v.MemberBegin(); i != v.MemberEnd(); ++i)
             {
                 std::string name = i->name.GetString();
-                uint32_t nameVal = StringUtil::stringToNumber<uint32_t>(name);
+                uint16_t nameVal = StringUtil::stringToNumber<uint16_t>(name);
                 uint8_t state = nameVal;
                 const Value& value = i->value;
                 std::map<uint8_t, std::string> stateFlagMappings;
@@ -78,7 +78,7 @@ void EntityManagerLoader::initWithJSON(EntityManager& em, const char* json)
                     for (Value::ConstMemberIterator i = value.MemberBegin(); i != value.MemberEnd(); ++i)
                     {
                         std::string name = i->name.GetString();
-                        uint32_t nameVal = StringUtil::stringToNumber<uint32_t>(name);
+                        uint16_t nameVal = StringUtil::stringToNumber<uint16_t>(name);
                         uint8_t stateFlag = nameVal;
                         std::string stateFlagMapping = i->value.GetString();
                         stateFlagMappings.emplace(stateFlag, stateFlagMapping);
@@ -109,7 +109,7 @@ void EntityManagerLoader::initWithJSON(EntityManager& em, const char* json)
             for (Value::ConstMemberIterator i = v.MemberBegin(); i != v.MemberEnd(); ++i)
             {
                 std::string name = i->name.GetString();
-                uint32_t nameVal = StringUtil::stringToNumber<uint32_t>(name);
+                uint16_t nameVal = StringUtil::stringToNumber<uint16_t>(name);
                 uint8_t state = nameVal;
                 assert(i->value.IsUint());
                 uint16_t soundID = i->value.GetUint();
@@ -134,7 +134,7 @@ void EntityManagerLoader::initWithJSON(EntityManager& em, const char* json)
                     soundCollection.push_back(iv.GetUint());
                 }
                 std::string name = i->name.GetString();
-                uint32_t nameVal = StringUtil::stringToNumber<uint32_t>(name);
+                uint16_t nameVal = StringUtil::stringToNumber<uint16_t>(name);
                 uint8_t state = nameVal;
                 soundRandomMappings.emplace(state, soundCollection);
             }
@@ -200,11 +200,41 @@ void EntityManagerLoader::initWithJSON(EntityManager& em, const char* json)
             }
         }
         
+        std::vector<NetworkDataGroup> networkDataGroups;
         if (iv.HasMember("networkData"))
         {
-            // TODO load "networkData"
+            const Value& v = iv["networkData"];
+            assert(v.IsArray());
+            assert(v.Size() <= 6);
+            for (SizeType i = 0; i < v.Size(); ++i)
+            {
+                const Value& iv = v[i];
+                assert(iv.IsObject());
+                
+                uint8_t readStateFlag = RSTF_EXTRA_DATA_BEGIN << i;
+                std::string name = RapidJSONUtil::getString(iv, "name");
+                
+                std::vector<NetworkDataField> networkDataFields;
+                assert(iv.HasMember("data"));
+                const Value& dataValue = iv["networkData"];
+                assert(dataValue.IsArray());
+                for (SizeType i = 0; i < dataValue.Size(); ++i)
+                {
+                    const Value& iv = dataValue[i];
+                    assert(iv.IsObject());
+                    
+                    std::string name = RapidJSONUtil::getString(iv, "name");
+                    std::string type = RapidJSONUtil::getString(iv, "type");
+                    std::string value = RapidJSONUtil::getString(iv, "value");
+                    
+                    networkDataFields.emplace_back(name, type, value);
+                }
+                
+                networkDataGroups.emplace_back(readStateFlag, name, networkDataFields);
+            }
         }
+        NetworkData nd(networkDataGroups);
         
-        em._entityDescriptorsMap.emplace(key, EntityDef{key, name, keyName, controller, networkController, physicsController, renderController, textureMappings, soundMappings, soundRandomMappings, fixtures, bodyFlags, width, height, cfg});
+        em._entityDescriptorsMap.emplace(key, EntityDef{key, name, keyName, controller, networkController, physicsController, renderController, textureMappings, soundMappings, soundRandomMappings, fixtures, bodyFlags, width, height, cfg, nd});
     }
 }

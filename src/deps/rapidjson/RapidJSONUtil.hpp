@@ -26,6 +26,11 @@ public:
         return v.HasMember(name) ? v[name].GetFloat() : defaultValue;
     }
     
+    static float getDouble(const rapidjson::Value& v, const char* name, double defaultValue = 0)
+    {
+        return v.HasMember(name) ? v[name].GetDouble() : defaultValue;
+    }
+    
     static int getInt(const rapidjson::Value& v, const char* name, int defaultValue = 0)
     {
         return v.HasMember(name) ? v[name].GetInt() : defaultValue;

@@ -11,6 +11,7 @@
 #include "EntityLayout.hpp"
 #include "Vector2.hpp"
 #include "Config.hpp"
+#include "StringUtil.hpp"
 
 #include <stdint.h>
 #include <string>
@@ -49,8 +50,15 @@ enum NetworkDataFieldType
     NDFT_UINT8 = 1,
     NDFT_UINT16 = 2,
     NDFT_UINT32 = 3,
-    NDFT_SMALL_STRING = 4,
-    NDFT_LARGE_STRING = 5
+    NDFT_UINT64 = 4,
+    NDFT_INT8 = 5,
+    NDFT_INT16 = 6,
+    NDFT_INT32 = 7,
+    NDFT_INT64 = 8,
+    NDFT_FLOAT = 9,
+    NDFT_DOUBLE = 10,
+    NDFT_SMALL_STRING = 11,
+    NDFT_LARGE_STRING = 12
 };
 
 struct NetworkDataField
@@ -61,21 +69,121 @@ struct NetworkDataField
     std::map<std::string, uint8_t> _valueUInt8;
     std::map<std::string, uint16_t> _valueUInt16;
     std::map<std::string, uint32_t> _valueUInt32;
+    std::map<std::string, uint64_t> _valueUInt64;
+    std::map<std::string, int8_t> _valueInt8;
+    std::map<std::string, int16_t> _valueInt16;
+    std::map<std::string, int32_t> _valueInt32;
+    std::map<std::string, int64_t> _valueInt64;
+    std::map<std::string, float> _valueFloat;
+    std::map<std::string, double> _valueDouble;
     std::map<std::string, std::string> _valueString;
     
-    NetworkDataField(std::string name, uint8_t type) :
+    NetworkDataField(std::string name, uint8_t type, std::string value) :
     _name(name),
     _type(type)
     {
         switch (_type)
         {
             case NDFT_BOOL:
-                <#statements#>
+                _valueBool.emplace(name, StringUtil::stringToBool(value));
                 break;
-                
+            case NDFT_UINT8:
+                _valueUInt8.emplace(name, StringUtil::stringToNumber<uint16_t>(value));
+                break;
+            case NDFT_UINT16:
+                _valueUInt16.emplace(name, StringUtil::stringToNumber<uint16_t>(value));
+                break;
+            case NDFT_UINT32:
+                _valueUInt32.emplace(name, StringUtil::stringToNumber<uint32_t>(value));
+                break;
+            case NDFT_UINT64:
+                _valueUInt64.emplace(name, StringUtil::stringToNumber<uint64_t>(value));
+                break;
+            case NDFT_INT8:
+                _valueInt8.emplace(name, StringUtil::stringToNumber<int16_t>(value));
+                break;
+            case NDFT_INT16:
+                _valueInt16.emplace(name, StringUtil::stringToNumber<int16_t>(value));
+                break;
+            case NDFT_INT32:
+                _valueInt32.emplace(name, StringUtil::stringToNumber<int32_t>(value));
+                break;
+            case NDFT_INT64:
+                _valueInt64.emplace(name, StringUtil::stringToNumber<int64_t>(value));
+                break;
+            case NDFT_FLOAT:
+                _valueFloat.emplace(name, StringUtil::stringToNumber<float>(value));
+                break;
+            case NDFT_DOUBLE:
+                _valueDouble.emplace(name, StringUtil::stringToNumber<double>(value));
+                break;
+            case NDFT_SMALL_STRING:
+            case NDFT_LARGE_STRING:
+                _valueString.emplace(name, value);
+                break;
             default:
                 break;
         }
+    }
+    
+    bool& valueBool()
+    {
+        return _valueBool[_name];
+    }
+    
+    uint8_t& valueUInt8()
+    {
+        return _valueUInt8[_name];
+    }
+    
+    uint16_t& valueUInt16()
+    {
+        return _valueUInt16[_name];
+    }
+    
+    uint32_t& valueUInt32()
+    {
+        return _valueUInt32[_name];
+    }
+    
+    uint64_t& valueUInt64()
+    {
+        return _valueUInt64[_name];
+    }
+    
+    int8_t& valueInt8()
+    {
+        return _valueInt8[_name];
+    }
+    
+    int16_t& valueInt16()
+    {
+        return _valueInt16[_name];
+    }
+    
+    int32_t& valueInt32()
+    {
+        return _valueInt32[_name];
+    }
+    
+    int64_t& valueInt64()
+    {
+        return _valueInt64[_name];
+    }
+    
+    float& valueFloat()
+    {
+        return _valueFloat[_name];
+    }
+    
+    double& valueDouble()
+    {
+        return _valueDouble[_name];
+    }
+    
+    std::string& valueString()
+    {
+        return _valueString[_name];
     }
 };
 
@@ -84,11 +192,13 @@ struct NetworkDataGroup
     uint8_t _readStateFlag;
     std::string _name;
     std::vector<NetworkDataField> _data;
+    std::vector<NetworkDataField> _dataCache;
     
     NetworkDataGroup(uint8_t readStateFlag, std::string name, std::vector<NetworkDataField> data) :
     _readStateFlag(readStateFlag),
     _name(name),
-    _data(data)
+    _data(data),
+    _dataCache(_data)
     {
         // Empty
     }
@@ -107,9 +217,9 @@ struct NetworkData
 
 enum ReadStateFlag
 {
-    RSTF_POSE =        1 << 0,
-    RSTF_STATE =       1 << 1,
-    RSTF_DATA_BEGIN =  1 << 2
+    RSTF_POSE =              1 << 0,
+    RSTF_STATE =             1 << 1,
+    RSTF_EXTRA_DATA_BEGIN =  1 << 2
 };
 
 struct EntityDef

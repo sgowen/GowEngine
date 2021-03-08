@@ -100,7 +100,9 @@ void NetworkServer::registerEntity(Entity* e)
 
 void NetworkServer::registerNewEntity(uint32_t key, uint32_t x, uint32_t y)
 {
-    registerEntity(ENTITY_MGR.createEntity(EntityInstanceDef(INST_REG.get<EntityIDManager>(INSK_EID_SRVR)->getNextNetworkEntityID(), key, x, y, true)));
+    EntityInstanceDef eid(INST_REG.get<EntityIDManager>(INSK_EID_SRVR)->getNextNetworkEntityID(), key, x, y, true);
+    Entity* e = ENTITY_MGR.createEntity(eid);
+    registerEntity(e);
 }
 
 void NetworkServer::deregisterEntity(Entity* e)
