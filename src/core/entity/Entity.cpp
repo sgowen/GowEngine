@@ -75,6 +75,36 @@ EntityDef& Entity::entityDef()
     return _entityDef;
 }
 
+Config& Entity::data()
+{
+    return _entityDef._data;
+}
+
+NetworkData& Entity::nwData()
+{
+    return _entityDef._networkData;
+}
+
+NetworkDataField& Entity::nwDataField(std::string name)
+{
+    NetworkDataField* ret = NULL;
+    NetworkData& nd = _entityDef._networkData;
+    for (NetworkDataGroup& ndg : nd._data)
+    {
+        for (NetworkDataField& ndf : ndg._data)
+        {
+            if (ndf._name == name)
+            {
+                ret = &ndf;
+            }
+        }
+    }
+    
+    assert(ret != NULL);
+    
+    return *ret;
+}
+
 uint16_t Entity::stateTime()
 {
     return _state._stateTime;

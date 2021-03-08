@@ -297,6 +297,9 @@ public:
     void update();
     void message(uint16_t message);
     EntityDef& entityDef();
+    Config& data();
+    NetworkData& nwData();
+    NetworkDataField& nwDataField(std::string name);
     uint16_t stateTime();
     Vector2& position();
     Vector2& velocity();

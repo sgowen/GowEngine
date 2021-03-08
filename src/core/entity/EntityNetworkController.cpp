@@ -65,65 +65,22 @@ void EntityNetworkController::read(InputMemoryBitStream& imbs)
         e._stateCache = e._state;
     }
     
-    NetworkData& nd = e.entityDef()._networkData;
-    for (NetworkDataGroup ndg : nd._data)
+    NetworkData& nd = e.nwData();
+    for (NetworkDataGroup& ndg : nd._data)
     {
         imbs.read(stateBit);
         if (stateBit)
         {
-            for (NetworkDataField ndf : ndg._data)
+            for (NetworkDataField& ndf : ndg._data)
             {
-                switch (ndf._type)
-                {
-                    case NDFT_BOOL:
-                        imbs.read(ndf.valueBool());
-                        break;
-                    case NDFT_UINT8:
-                        imbs.read(ndf.valueUInt8());
-                        break;
-                    case NDFT_UINT16:
-                        imbs.read(ndf.valueUInt16());
-                        break;
-                    case NDFT_UINT32:
-                        imbs.read(ndf.valueUInt32());
-                        break;
-                    case NDFT_UINT64:
-                        imbs.read(ndf.valueUInt64());
-                        break;
-                    case NDFT_INT8:
-                        imbs.read(ndf.valueInt8());
-                        break;
-                    case NDFT_INT16:
-                        imbs.read(ndf.valueInt16());
-                        break;
-                    case NDFT_INT32:
-                        imbs.read(ndf.valueInt32());
-                        break;
-                    case NDFT_INT64:
-                        imbs.read(ndf.valueInt64());
-                        break;
-                    case NDFT_FLOAT:
-                        imbs.read(ndf.valueFloat());
-                        break;
-                    case NDFT_DOUBLE:
-                        imbs.read(ndf.valueDouble());
-                        break;
-                    case NDFT_SMALL_STRING:
-                        imbs.readSmall(ndf.valueString());
-                        break;
-                    case NDFT_LARGE_STRING:
-                        imbs.readLarge(ndf.valueString());
-                        break;
-                    default:
-                        break;
-                }
+                MemoryBitStreamUtil::read(imbs, ndf);
             }
             
             ndg._dataCache = ndg._data;
         }
     }
     
-    uint8_t playerID = _entity->entityDef()._data.getUInt("playerID");
+    uint8_t playerID = _entity->data().getUInt("playerID");
     if (!NW_CLNT->isPlayerIDLocal(playerID))
     {
         SoundUtil::playSoundForStateIfChanged(e, fromState, e.state()._state);
@@ -136,7 +93,7 @@ uint8_t EntityNetworkController::write(OutputMemoryBitStream& ombs, uint8_t dirt
     
     uint8_t ret = 0;
     
-    bool pose = IS_BIT_SET(dirtyState, Entity::RSTF_POSE);
+    bool pose = IS_BIT_SET(dirtyState, RSTF_POSE);
     ombs.write(pose);
     if (pose)
     {
@@ -156,10 +113,10 @@ uint8_t EntityNetworkController::write(OutputMemoryBitStream& ombs, uint8_t dirt
         
         ombs.write(e._pose._isXFlipped);
         
-        ret |= Entity::RSTF_POSE;
+        ret |= RSTF_POSE;
     }
     
-    bool state = IS_BIT_SET(dirtyState, Entity::RSTF_STATE);
+    bool state = IS_BIT_SET(dirtyState, RSTF_STATE);
     ombs.write(state);
     if (state)
     {
@@ -167,62 +124,19 @@ uint8_t EntityNetworkController::write(OutputMemoryBitStream& ombs, uint8_t dirt
         ombs.write(e._state._stateFlags);
         ombs.write(e._state._stateTime);
         
-        ret |= Entity::RSTF_STATE;
+        ret |= RSTF_STATE;
     }
     
-    NetworkData& nd = e.entityDef()._networkData;
-    for (NetworkDataGroup ndg : nd._data)
+    NetworkData& nd = e.nwData();
+    for (NetworkDataGroup& ndg : nd._data)
     {
         bool readStateFlag = IS_BIT_SET(dirtyState, ndg._readStateFlag);
         ombs.write(readStateFlag);
         if (readStateFlag)
         {
-            for (NetworkDataField ndf : ndg._data)
+            for (NetworkDataField& ndf : ndg._data)
             {
-                switch (ndf._type)
-                {
-                    case NDFT_BOOL:
-                        ombs.write(ndf.valueBool());
-                        break;
-                    case NDFT_UINT8:
-                        ombs.write(ndf.valueUInt8());
-                        break;
-                    case NDFT_UINT16:
-                        ombs.write(ndf.valueUInt16());
-                        break;
-                    case NDFT_UINT32:
-                        ombs.write(ndf.valueUInt32());
-                        break;
-                    case NDFT_UINT64:
-                        ombs.write(ndf.valueUInt64());
-                        break;
-                    case NDFT_INT8:
-                        ombs.write(ndf.valueInt8());
-                        break;
-                    case NDFT_INT16:
-                        ombs.write(ndf.valueInt16());
-                        break;
-                    case NDFT_INT32:
-                        ombs.write(ndf.valueInt32());
-                        break;
-                    case NDFT_INT64:
-                        ombs.write(ndf.valueInt64());
-                        break;
-                    case NDFT_FLOAT:
-                        ombs.write(ndf.valueFloat());
-                        break;
-                    case NDFT_DOUBLE:
-                        ombs.write(ndf.valueDouble());
-                        break;
-                    case NDFT_SMALL_STRING:
-                        ombs.writeSmall(ndf.valueString());
-                        break;
-                    case NDFT_LARGE_STRING:
-                        ombs.writeLarge(ndf.valueString());
-                        break;
-                    default:
-                        break;
-                }
+                MemoryBitStreamUtil::write(ombs, ndf);
             }
             
             ret |= ndg._readStateFlag;
@@ -239,8 +153,8 @@ void EntityNetworkController::recallCache()
     e._pose = e._poseCache;
     e._state = e._stateCache;
     
-    NetworkData& nd = e.entityDef()._networkData;
-    for (NetworkDataGroup ndg : nd._data)
+    NetworkData& nd = e.nwData();
+    for (NetworkDataGroup& ndg : nd._data)
     {
         ndg._data = ndg._dataCache;
     }
@@ -257,17 +171,17 @@ uint8_t EntityNetworkController::refreshDirtyState()
     if (e._poseCache != e._pose)
     {
         e._poseCache = e._pose;
-        ret |= Entity::RSTF_POSE;
+        ret |= RSTF_POSE;
     }
     
     if (e._stateCache != e._state)
     {
         e._stateCache = e._state;
-        ret |= Entity::RSTF_STATE;
+        ret |= RSTF_STATE;
     }
     
-    NetworkData& nd = e.entityDef()._networkData;
-    for (NetworkDataGroup ndg : nd._data)
+    NetworkData& nd = e.nwData();
+    for (NetworkDataGroup& ndg : nd._data)
     {
         if (ndg._dataCache != ndg._data)
         {

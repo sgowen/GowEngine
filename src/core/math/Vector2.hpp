@@ -70,7 +70,7 @@ struct Vector2
         _y = other._y;
     }
     
-    Vector2 set(const Vector2& other)
+    Vector2& set(const Vector2& other)
     {
         _x = other._x;
         _y = other._y;
@@ -78,7 +78,7 @@ struct Vector2
         return *this;
     }
     
-    Vector2 set(float x, float y)
+    Vector2& set(float x, float y)
     {
         _x = x;
         _y = y;
@@ -86,14 +86,14 @@ struct Vector2
         return *this;
     }
     
-	Vector2 setX(float x)
+	Vector2& setX(float x)
     {
         _x = x;
         
         return *this;
     }
     
-	Vector2 setY(float y)
+	Vector2& setY(float y)
     {
         _y = y;
         
@@ -105,7 +105,7 @@ struct Vector2
         add(other._x, other._y);
     }
     
-    Vector2 add(float x, float y)
+    Vector2& add(float x, float y)
     {
         _x += x;
         _y += y;
@@ -118,7 +118,7 @@ struct Vector2
         sub(other._x, other._y);
     }
     
-    Vector2 sub(float x, float y)
+    Vector2& sub(float x, float y)
     {
         _x -= x;
         _y -= y;
@@ -131,7 +131,7 @@ struct Vector2
         return mul(scalar);
     }
     
-    Vector2 mul(float scalar)
+    Vector2& mul(float scalar)
     {
         _x *= scalar;
         _y *= scalar;
@@ -144,7 +144,7 @@ struct Vector2
         return div(scalar);
     }
     
-    Vector2 div(float scalar)
+    Vector2& div(float scalar)
     {
         _x /= scalar;
         _y /= scalar;
@@ -167,7 +167,7 @@ struct Vector2
         return _x * _x + _y * _y;
     }
     
-    Vector2 nor()
+    Vector2& nor()
     {
         float l = len();
         
@@ -193,7 +193,7 @@ struct Vector2
         return angle;
     }
     
-    Vector2 rotate(float angle)
+    Vector2& rotate(float angle)
     {
         float rad = DEGREES_TO_RADIANS(angle);
         float cos = cosf(rad);
@@ -234,5 +234,11 @@ struct Vector2
         float distY = _y - y;
         
         return distX * distX + distY * distY;
+    }
+    
+    void reset()
+    {
+        _x = 0;
+        _y = 0;
     }
 };

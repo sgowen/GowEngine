@@ -12,12 +12,16 @@
 
 class InputMemoryBitStream;
 class OutputMemoryBitStream;
+struct NetworkDataField;
 
 class MemoryBitStreamUtil
 {
 public:
     static void read(InputMemoryBitStream& imbs, float& x, float& y);
     static void write(OutputMemoryBitStream& ombs, float& x, float& y);
+    
+    static void read(InputMemoryBitStream& imbs, NetworkDataField& ndf);
+    static void write(OutputMemoryBitStream& ombs, NetworkDataField& ndf);
     
 private:
     MemoryBitStreamUtil();
