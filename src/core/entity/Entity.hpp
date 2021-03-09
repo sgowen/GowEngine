@@ -126,6 +126,30 @@ struct NetworkDataField
         }
     }
     
+    friend bool operator==(const NetworkDataField& a, const NetworkDataField& b)
+    {
+        return
+        a._name        == b._name &&
+        a._type        == b._type &&
+        a._valueBool   == b._valueBool &&
+        a._valueUInt8  == b._valueUInt8 &&
+        a._valueUInt16 == b._valueUInt16 &&
+        a._valueUInt32 == b._valueUInt32 &&
+        a._valueUInt64 == b._valueUInt64 &&
+        a._valueInt8   == b._valueInt8 &&
+        a._valueInt16  == b._valueInt16 &&
+        a._valueInt32  == b._valueInt32 &&
+        a._valueInt64  == b._valueInt64 &&
+        a._valueFloat  == b._valueFloat &&
+        a._valueDouble == b._valueDouble &&
+        a._valueString == b._valueString;
+    }
+    
+    friend bool operator!=(NetworkDataField& a, NetworkDataField& b)
+    {
+        return !(a == b);
+    }
+    
     bool& valueBool()
     {
         return _valueBool[_name];
@@ -238,7 +262,7 @@ struct EntityDef
     uint8_t _bodyFlags;
     uint8_t _width;
     uint8_t _height;
-    Config _data;
+    Config _metadata;
     NetworkData _networkData;
     
     EntityDef(uint32_t key,
@@ -255,7 +279,7 @@ struct EntityDef
               uint8_t bodyFlags,
               uint8_t width,
               uint8_t height,
-              Config data,
+              Config metadata,
               NetworkData networkData) :
     _key(key),
     _name(name),
@@ -271,7 +295,7 @@ struct EntityDef
     _bodyFlags(bodyFlags),
     _width(width),
     _height(height),
-    _data(data),
+    _metadata(metadata),
     _networkData(networkData)
     {
         // Empty
@@ -297,9 +321,9 @@ public:
     void update();
     void message(uint16_t message);
     EntityDef& entityDef();
-    Config& data();
-    NetworkData& nwData();
-    NetworkDataField& nwDataField(std::string name);
+    Config& metadata();
+    NetworkData& data();
+    NetworkDataField& dataField(std::string name);
     uint16_t stateTime();
     Vector2& position();
     Vector2& velocity();

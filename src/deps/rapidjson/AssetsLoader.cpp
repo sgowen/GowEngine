@@ -13,6 +13,7 @@
 #include "AssetHandler.hpp"
 #include "FileData.hpp"
 #include "RapidJSONUtil.hpp"
+#include "STLUtil.hpp"
 
 #include <assert.h>
 #include <algorithm>
@@ -169,27 +170,13 @@ Assets AssetsLoader::initWithJSON(const char* json)
                         auto q = animations.find(key);
                         assert(q == animations.end());
                         
-                        if (iv.HasMember("regionWidths"))
-                        {
-                            const Value& v = iv["uniforms"];
-                            assert(v.IsArray());
-                            for (SizeType i = 0; i < v.Size(); ++i)
-                            {
-                                // TODO
-                            }
-                        }
-                        else
-                        {
-                            // Stuff regionWidths with a single value, for every frame
-                        }
-                        
                         bool looping = RapidJSONUtil::getBool(iv, "looping", true);
                         int firstLoopingFrame = RapidJSONUtil::getInt(iv, "firstLoopingFrame");
                         int xPadding = RapidJSONUtil::getInt(iv, "xPadding");
                         int yPadding = RapidJSONUtil::getInt(iv, "yPadding");
                         
                         std::vector<uint16_t> frameTimes;
-                        int numFrames;
+                        size_t numFrames;
                         
                         if (iv.HasMember("frameTimes"))
                         {
@@ -198,15 +185,15 @@ Assets AssetsLoader::initWithJSON(const char* json)
                             for (SizeType i = 0; i < va.Size(); ++i)
                             {
                                 const Value& iva = va[i];
-                                frameTimes.push_back(iva.GetInt());
+                                frameTimes.push_back(iva.GetUint());
                             }
                             
-                            numFrames = static_cast<int>(frameTimes.size());
+                            numFrames = frameTimes.size();
                         }
                         else
                         {
                             uint16_t frameTime = RapidJSONUtil::getUInt(iv, "frameTime");
-                            numFrames = RapidJSONUtil::getInt(iv, "numFrames");
+                            numFrames = RapidJSONUtil::getUInt(iv, "numFrames");
                             
                             frameTimes.reserve(numFrames);
                             for (int i = 0; i < numFrames; ++i)
@@ -215,17 +202,58 @@ Assets AssetsLoader::initWithJSON(const char* json)
                             }
                         }
                         
-                        int animationWidth = regionWidth * numFrames;
-                        int animationHeight = regionHeight;
+                        std::vector<uint16_t> regionWidths;
+                        std::vector<uint16_t> regionHeights;
+                        
+                        if (iv.HasMember("regionWidths"))
+                        {
+                            const Value& va = iv["regionWidths"];
+                            assert(va.IsArray());
+                            for (SizeType i = 0; i < va.Size(); ++i)
+                            {
+                                const Value& iva = va[i];
+                                regionWidths.push_back(iva.GetUint());
+                            }
+                        }
+                        else
+                        {
+                            regionWidths.reserve(numFrames);
+                            for (int i = 0; i < numFrames; ++i)
+                            {
+                                regionWidths.push_back(regionWidth);
+                            }
+                        }
+                        
+                        if (iv.HasMember("regionHeights"))
+                        {
+                            const Value& va = iv["regionHeights"];
+                            assert(va.IsArray());
+                            for (SizeType i = 0; i < va.Size(); ++i)
+                            {
+                                const Value& iva = va[i];
+                                regionHeights.push_back(iva.GetUint());
+                            }
+                        }
+                        else
+                        {
+                            regionHeights.reserve(numFrames);
+                            for (int i = 0; i < numFrames; ++i)
+                            {
+                                regionHeights.push_back(regionHeight);
+                            }
+                        }
+                        
+                        uint16_t animationWidth = STLUtil::sum(regionWidths);
+                        uint16_t animationHeight = regionHeight;
                         if (iv.HasMember("animationWidth") && iv.HasMember("animationHeight"))
                         {
-                            animationWidth = RapidJSONUtil::getInt(iv, "animationWidth");
-                            animationHeight = RapidJSONUtil::getInt(iv, "animationHeight");
+                            animationWidth = RapidJSONUtil::getUInt(iv, "animationWidth");
+                            animationHeight = RapidJSONUtil::getUInt(iv, "animationHeight");
                         }
                         
                         animations.emplace(std::piecewise_construct,
                                            std::forward_as_tuple(key),
-                                           std::forward_as_tuple(x, y, regionWidth, regionHeight, animationWidth, animationHeight, textureWidth, textureHeight, looping, firstLoopingFrame, xPadding, yPadding, frameTimes)
+                                           std::forward_as_tuple(x, y, regionWidths, regionHeights, animationWidth, animationHeight, textureWidth, textureHeight, looping, firstLoopingFrame, xPadding, yPadding, frameTimes)
                                            );
                     }
                     else

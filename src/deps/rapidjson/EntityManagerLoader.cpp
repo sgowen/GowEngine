@@ -97,8 +97,10 @@ void EntityManagerLoader::initWithJSON(EntityManager& em, const char* json)
             const Value& v = iv["textureMapping"];
             assert(v.IsString());
             uint8_t state = 0;
-            std::string value = v.GetString();
-            textureMappings.emplace(state, value);
+            std::string stateMapping = v.GetString();
+            std::map<uint8_t, std::string> stateFlagMappings;
+            stateFlagMappings.emplace(0, stateMapping);
+            textureMappings.emplace(state, stateFlagMappings);
         }
         
         std::map<uint8_t, uint16_t> soundMappings;
@@ -187,16 +189,16 @@ void EntityManagerLoader::initWithJSON(EntityManager& em, const char* json)
         uint8_t width = RapidJSONUtil::getUInt(iv, "width");
         uint8_t height = RapidJSONUtil::getUInt(iv, "height");
         
-        Config cfg;
-        if (iv.HasMember("data"))
+        Config metadata;
+        if (iv.HasMember("metadata"))
         {
-            const Value& v = iv["data"];
+            const Value& v = iv["metadata"];
             assert(v.IsObject());
             for (Value::ConstMemberIterator i = v.MemberBegin(); i != v.MemberEnd(); ++i)
             {
                 assert(i->value.IsString());
                 
-                cfg._keyValues[i->name.GetString()] = i->value.GetString();
+                metadata._keyValues[i->name.GetString()] = i->value.GetString();
             }
         }
         
@@ -216,7 +218,7 @@ void EntityManagerLoader::initWithJSON(EntityManager& em, const char* json)
                 
                 std::vector<NetworkDataField> networkDataFields;
                 assert(iv.HasMember("data"));
-                const Value& dataValue = iv["networkData"];
+                const Value& dataValue = iv["data"];
                 assert(dataValue.IsArray());
                 for (SizeType i = 0; i < dataValue.Size(); ++i)
                 {
@@ -224,7 +226,7 @@ void EntityManagerLoader::initWithJSON(EntityManager& em, const char* json)
                     assert(iv.IsObject());
                     
                     std::string name = RapidJSONUtil::getString(iv, "name");
-                    std::string type = RapidJSONUtil::getString(iv, "type");
+                    uint8_t type = RapidJSONUtil::getUInt(iv, "type");
                     std::string value = RapidJSONUtil::getString(iv, "value");
                     
                     networkDataFields.emplace_back(name, type, value);
@@ -235,6 +237,6 @@ void EntityManagerLoader::initWithJSON(EntityManager& em, const char* json)
         }
         NetworkData nd(networkDataGroups);
         
-        em._entityDescriptorsMap.emplace(key, EntityDef{key, name, keyName, controller, networkController, physicsController, renderController, textureMappings, soundMappings, soundRandomMappings, fixtures, bodyFlags, width, height, cfg, nd});
+        em._entityDescriptorsMap.emplace(key, EntityDef{key, name, keyName, controller, networkController, physicsController, renderController, textureMappings, soundMappings, soundRandomMappings, fixtures, bodyFlags, width, height, metadata, nd});
     }
 }

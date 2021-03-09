@@ -45,7 +45,7 @@ enum EntityDirection
 class TopDownPhysicsController : public EntityPhysicsController
 {
     DECL_RTTI;
-    DECL_EntityController_create(TopDownPhysicsController);
+    DECL_EntityController_create(EntityPhysicsController);
     
 public:
     TopDownPhysicsController(Entity* e);

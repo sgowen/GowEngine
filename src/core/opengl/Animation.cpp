@@ -12,7 +12,7 @@
 
 #include <assert.h>
 
-Animation::Animation(int x, int y, int regionWidth, int regionHeight, int animationWidth, int animationHeight, int textureWidth, int textureHeight, bool isLooping, int firstLoopingFrame, int xPadding, int yPadding, std::vector<uint16_t> frameTimes) :
+Animation::Animation(uint16_t x, uint16_t y, std::vector<uint16_t> regionWidths, std::vector<uint16_t> regionHeights, uint16_t animationWidth, uint16_t animationHeight, uint16_t textureWidth, uint16_t textureHeight, bool isLooping, uint16_t firstLoopingFrame, uint16_t xPadding, uint16_t yPadding, std::vector<uint16_t> frameTimes) :
 _isLooping(isLooping),
 _firstLoopingFrame(firstLoopingFrame),
 _frameTimes(frameTimes),
@@ -28,11 +28,13 @@ _cycleTime(0)
 	const int right = x + animationWidth;
     const int bottom = y + animationHeight;
 
-    for (int j = y; j < bottom; j += regionHeight + yPadding)
+    int frame = 0;
+    for (int j = y; j < bottom; j += regionHeights[frame] + yPadding)
     {
-        for (int i = x; i < right; i += regionWidth + xPadding)
+        for (int i = x; i < right; i += regionWidths[frame] + xPadding)
         {
-            _textureRegions.emplace_back(i, j, regionWidth, regionHeight, textureWidth, textureHeight);
+            _textureRegions.emplace_back(i, j, regionWidths[frame], regionHeights[frame], textureWidth, textureHeight);
+            ++frame;
 
             if (_textureRegions.size() == numFrames)
             {

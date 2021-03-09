@@ -14,7 +14,7 @@
 #include <box2d/box2d.h>
 
 IMPL_RTTI(Box2DPhysicsController, EntityPhysicsController)
-IMPL_EntityController_create(Box2DPhysicsController)
+IMPL_EntityController_create(Box2DPhysicsController, EntityPhysicsController)
 
 Box2DPhysicsController::Box2DPhysicsController(Entity* e) : EntityPhysicsController(e),
 _body(NULL),

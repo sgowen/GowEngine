@@ -13,12 +13,18 @@
 #define SET_BIT(val, bit, set) val = (val & ~bit) | (set ? bit : 0)
 #define IS_BIT_SET(val, bit) (val & bit)
 
-#define DECL_EntityController_create(type) \
-public:                                    \
-    static type* create(Entity* e)
+#define DECL_EntityController_create(parent)        \
+public:                                             \
+    static parent* create(Entity* e)
 
-#define IMPL_EntityController_create(type) \
-type* type::create(Entity* e)              \
-{                                          \
-    return new type(e);                    \
+#define IMPL_EntityController_create(type, parent)  \
+parent* type::create(Entity* e)                     \
+{                                                   \
+    return new type(e);                             \
+}
+
+#define IMPL_EntityController_NOPARENT_create(type) \
+type* type::create(Entity* e)                       \
+{                                                   \
+    return new type(e);                             \
 }

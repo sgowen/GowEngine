@@ -207,6 +207,12 @@ void Renderer::spriteBatcherAddEntities(std::vector<Entity*>& entities, std::str
     }
 }
 
+void Renderer::addSpriteForEntity(Entity* e, std::string spriteBatcherKey)
+{
+    SpriteBatcher& sb = spriteBatcher(spriteBatcherKey);
+    addSpriteForEntity(sb, *e);
+}
+
 void Renderer::spriteBatcherEnd(std::string textureKey, std::string matrixKey, std::string shaderKey, std::string spriteBatcherKey, const Color& colorFactor)
 {
     SpriteBatcher& sb = spriteBatcher(spriteBatcherKey);

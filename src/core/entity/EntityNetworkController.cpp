@@ -18,7 +18,7 @@
 #include "core/audio/SoundUtil.hpp"
 #include "NetworkClient.hpp"
 
-IMPL_EntityController_create(EntityNetworkController)
+IMPL_EntityController_NOPARENT_create(EntityNetworkController)
 
 EntityNetworkController::EntityNetworkController(Entity* e) :
 _entity(e)
@@ -65,7 +65,7 @@ void EntityNetworkController::read(InputMemoryBitStream& imbs)
         e._stateCache = e._state;
     }
     
-    NetworkData& nd = e.nwData();
+    NetworkData& nd = e.data();
     for (NetworkDataGroup& ndg : nd._data)
     {
         imbs.read(stateBit);
@@ -80,7 +80,7 @@ void EntityNetworkController::read(InputMemoryBitStream& imbs)
         }
     }
     
-    uint8_t playerID = _entity->data().getUInt("playerID");
+    uint8_t playerID = _entity->metadata().getUInt("playerID", 0);
     if (!NW_CLNT->isPlayerIDLocal(playerID))
     {
         SoundUtil::playSoundForStateIfChanged(e, fromState, e.state()._state);
@@ -127,7 +127,7 @@ uint8_t EntityNetworkController::write(OutputMemoryBitStream& ombs, uint8_t dirt
         ret |= RSTF_STATE;
     }
     
-    NetworkData& nd = e.nwData();
+    NetworkData& nd = e.data();
     for (NetworkDataGroup& ndg : nd._data)
     {
         bool readStateFlag = IS_BIT_SET(dirtyState, ndg._readStateFlag);
@@ -153,7 +153,7 @@ void EntityNetworkController::recallCache()
     e._pose = e._poseCache;
     e._state = e._stateCache;
     
-    NetworkData& nd = e.nwData();
+    NetworkData& nd = e.data();
     for (NetworkDataGroup& ndg : nd._data)
     {
         ndg._data = ndg._dataCache;
@@ -180,7 +180,7 @@ uint8_t EntityNetworkController::refreshDirtyState()
         ret |= RSTF_STATE;
     }
     
-    NetworkData& nd = e.nwData();
+    NetworkData& nd = e.data();
     for (NetworkDataGroup& ndg : nd._data)
     {
         if (ndg._dataCache != ndg._data)

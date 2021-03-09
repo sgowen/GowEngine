@@ -20,14 +20,14 @@ class b2World;
 class Box2DPhysicsController : public EntityPhysicsController
 {
     DECL_RTTI;
-    DECL_EntityController_create(Box2DPhysicsController);
+    DECL_EntityController_create(EntityPhysicsController);
     
 public:
     Box2DPhysicsController(Entity* e);
     virtual ~Box2DPhysicsController() {}
     
-    virtual void updatePoseFromBody();
-    virtual void updateBodyFromPose();
+    virtual void updatePoseFromBody() override;
+    virtual void updateBodyFromPose() override;
     
     bool shouldCollide(Entity* e, b2Fixture* fixtureA, b2Fixture* fixtureB);
     void handleBeginContact(Entity* e, b2Fixture* fixtureA, b2Fixture* fixtureB);

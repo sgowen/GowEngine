@@ -16,7 +16,7 @@ struct TextureRegion;
 class Animation
 {
 public:
-    Animation(int x, int y, int regionWidth, int regionHeight, int animationWidth, int animationHeight, int textureWidth, int textureHeight, bool looping, int firstLoopingFrame, int xPadding, int yPadding, std::vector<uint16_t> frameTimes);
+    Animation(uint16_t x, uint16_t y, std::vector<uint16_t> regionWidths, std::vector<uint16_t> regionHeights, uint16_t animationWidth, uint16_t animationHeight, uint16_t textureWidth, uint16_t textureHeight, bool looping, uint16_t firstLoopingFrame, uint16_t xPadding, uint16_t yPadding, std::vector<uint16_t> frameTimes);
 
     TextureRegion& textureRegion(uint16_t stateTime);
     TextureRegion& textureRegionAtKeyFrame(uint16_t frameIndex);

@@ -60,11 +60,6 @@ void thread_createDeviceDependentResources(void* arg)
 {
     assert(arg != NULL);
     
-    if (THREAD_MGR.isThreadRunning("AssetsManager"))
-    {
-        return;
-    }
-    
     AssetsManager* am = static_cast<AssetsManager*>(arg);
     am->createDeviceDependentResources();
     THREAD_MGR.tearDownThread("AssetsManager");
@@ -72,6 +67,11 @@ void thread_createDeviceDependentResources(void* arg)
 
 void AssetsManager::createDeviceDependentResourcesAsync()
 {
+    if (THREAD_MGR.isThreadRunning("AssetsManager"))
+    {
+        return;
+    }
+    
     THREAD_MGR.spawnThread("AssetsManager", thread_createDeviceDependentResources, this);
 }
 

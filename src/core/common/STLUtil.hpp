@@ -15,6 +15,17 @@ class STLUtil
 {
 public:
     template<typename T>
+    static T sum(std::vector<T>& items)
+    {
+        T ret = 0;
+        for (T i : items)
+        {
+            ret += i;
+        }
+        return ret;
+    }
+    
+    template<typename T>
     static void cleanUpVectorOfPointers(std::vector<T*>& items)
     {
         for (typename std::vector<T*>::iterator i = items.begin(); i != items.end(); )

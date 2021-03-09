@@ -12,7 +12,7 @@
 #include "AssetsManager.hpp"
 
 IMPL_RTTI_NOPARENT(EntityRenderController)
-IMPL_EntityController_create(EntityRenderController)
+IMPL_EntityController_NOPARENT_create(EntityRenderController)
 
 EntityRenderController::EntityRenderController(Entity* e) :
 _entity(e)

@@ -75,17 +75,17 @@ EntityDef& Entity::entityDef()
     return _entityDef;
 }
 
-Config& Entity::data()
+Config& Entity::metadata()
 {
-    return _entityDef._data;
+    return _entityDef._metadata;
 }
 
-NetworkData& Entity::nwData()
+NetworkData& Entity::data()
 {
     return _entityDef._networkData;
 }
 
-NetworkDataField& Entity::nwDataField(std::string name)
+NetworkDataField& Entity::dataField(std::string name)
 {
     NetworkDataField* ret = NULL;
     NetworkData& nd = _entityDef._networkData;
