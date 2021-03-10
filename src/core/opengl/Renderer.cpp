@@ -325,5 +325,5 @@ TriangleBatcher& Renderer::triangleBatcher(std::string key)
 void Renderer::addSpriteForEntity(SpriteBatcher& sb, Entity& e)
 {
     TextureRegion tr = ASSETS.textureRegion(e.renderController()->getTextureMapping(), e.stateTime());
-    sb.addSprite(tr, e.position()._x, e.position()._y, e.width(), e.height(), e.angle(), e.isXFlipped());
+    sb.addSprite(tr, e.position()._x, e.position()._y, tr._width / 16, tr._height / 16, e.angle(), e.isXFlipped());
 }
