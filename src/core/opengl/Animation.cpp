@@ -29,11 +29,15 @@ _cycleTime(0)
     const int bottom = y + animationHeight;
 
     int frame = 0;
-    for (int j = y; j < bottom; j += regionHeights[frame] + yPadding)
+    int xIncrement = 0;
+    int yIncrement = 0;
+    for (int j = y; j < bottom; j += yIncrement)
     {
-        for (int i = x; i < right; i += regionWidths[frame] + xPadding)
+        for (int i = x; i < right; i += xIncrement)
         {
             _textureRegions.emplace_back(i, j, regionWidths[frame], regionHeights[frame], textureWidth, textureHeight);
+            xIncrement = regionWidths[frame] + xPadding;
+            yIncrement = regionHeights[frame] + yPadding;
             ++frame;
 
             if (_textureRegions.size() == numFrames)
