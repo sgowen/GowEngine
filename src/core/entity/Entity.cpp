@@ -26,7 +26,7 @@ _controller(ENTITY_MGR.createEntityController(ed, this)),
 _networkController(ENTITY_MGR.createEntityNetworkController(ed, this)),
 _physicsController(ENTITY_MGR.createEntityPhysicsController(ed, this)),
 _renderController(ENTITY_MGR.createEntityRenderController(ed, this)),
-_pose(eid._x, eid._y),
+_pose(eid._x, eid._y, ed._width, ed._height),
 _poseCache(_pose),
 _state(),
 _stateCache(_state),
@@ -122,12 +122,22 @@ Vector2& Entity::velocity()
 
 float Entity::width()
 {
-    return _entityDef._width;
+    return _pose._width;
 }
 
 float Entity::height()
 {
-    return _entityDef._height;
+    return _pose._height;
+}
+
+void Entity::resetWidth()
+{
+    _pose._width = _entityDef._width;
+}
+
+void Entity::resetHeight()
+{
+    _pose._height = _entityDef._height;
 }
 
 float Entity::angle()
@@ -188,6 +198,11 @@ bool Entity::isDynamic()
 bool Entity::isPlayer()
 {
     return IS_BIT_SET(_entityDef._bodyFlags, BODF_PLAYER);
+}
+
+bool Entity::isDynamicSize()
+{
+    return IS_BIT_SET(_entityDef._bodyFlags, BODF_DYNAMIC_SIZE);
 }
 
 bool Entity::isFixedRotation()

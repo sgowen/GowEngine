@@ -41,7 +41,8 @@ enum BodyFlags
     BODF_STATIC =         1 << 0,
     BODF_DYNAMIC =        1 << 1,
     BODF_FIXED_ROTATION = 1 << 2,
-    BODF_PLAYER         = 1 << 3
+    BODF_PLAYER         = 1 << 3,
+    BODF_DYNAMIC_SIZE   = 1 << 4
 };
 
 enum NetworkDataFieldType
@@ -329,6 +330,8 @@ public:
     Vector2& velocity();
     float width();
     float height();
+    void resetWidth();
+    void resetHeight();
     float angle();
     const uint32_t getID();
     bool isGrounded();
@@ -338,6 +341,7 @@ public:
     bool isStatic();
     bool isDynamic();
     bool isPlayer();
+    bool isDynamicSize();
     bool isFixedRotation();
     bool isServer();
     
@@ -369,13 +373,17 @@ public:
     {
         Vector2 _position;
         Vector2 _velocity;
+        float _width;
+        float _height;
         float _angle;
         uint8_t _numGroundContacts;
         bool _isXFlipped;
         
-        Pose(float x, float y) :
+        Pose(float x, float y, float width, float height) :
         _position(x, y),
         _velocity(VECTOR2_ZERO),
+        _width(width),
+        _height(height),
         _angle(0),
         _numGroundContacts(0),
         _isXFlipped(false)
@@ -388,9 +396,11 @@ public:
             return
             a._position          == b._position &&
             a._velocity          == b._velocity &&
+            a._width             == b._width &&
+            a._height            == b._height &&
             a._angle             == b._angle &&
             a._numGroundContacts == b._numGroundContacts &&
-            a._isXFlipped      == b._isXFlipped;
+            a._isXFlipped        == b._isXFlipped;
         }
         
         friend bool operator!=(Pose& a, Pose& b)
