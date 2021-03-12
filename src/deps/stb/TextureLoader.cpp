@@ -6,13 +6,7 @@
 //  Copyright © 2021 Stephen Gowen. All rights reserved.
 //
 
-#include "TextureLoader.hpp"
-
-#include "Texture.hpp"
-#include "AssetHandlerFactory.hpp"
-#include "AssetHandler.hpp"
-#include "FileData.hpp"
-#include "PlatformMacros.hpp"
+#include <GowEngine/GowEngine.hpp>
 
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"

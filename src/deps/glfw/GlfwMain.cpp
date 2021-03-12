@@ -6,21 +6,11 @@
 //  Copyright © 2021 Stephen Gowen. All rights reserved.
 //
 
-#include "PlatformMacros.hpp"
+#include <GowEngine/GowEngine.hpp>
 #if IS_DESKTOP
-
-#include "GlfwMain.hpp"
-
-#include "Engine.hpp"
-#include "PlatformMacros.hpp"
-#include "OpenGLWrapper.hpp"
 
 #define GLFW_INCLUDE_NONE
 #include <GLFW/glfw3.h>
-
-#include <stdlib.h>
-#include <stdio.h>
-#include <cstring>
 
 Engine* _engine = NULL;
 int joysticks[GLFW_JOYSTICK_LAST + 1];

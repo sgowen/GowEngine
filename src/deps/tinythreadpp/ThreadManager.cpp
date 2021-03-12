@@ -6,7 +6,7 @@
 //  Copyright © 2021 Stephen Gowen. All rights reserved.
 //
 
-#include "ThreadManager.hpp"
+#include <GowEngine/GowEngine.hpp>
 
 void ThreadManager::spawnThread(std::string threadID, void (*func)(void *), void* arg)
 {

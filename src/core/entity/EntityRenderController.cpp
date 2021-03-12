@@ -6,10 +6,7 @@
 //  Copyright © 2021 Stephen Gowen. All rights reserved.
 //
 
-#include "EntityRenderController.hpp"
-
-#include "Entity.hpp"
-#include "AssetsManager.hpp"
+#include <GowEngine/GowEngine.hpp>
 
 IMPL_RTTI_NOPARENT(EntityRenderController)
 IMPL_EntityController_NOPARENT_create(EntityRenderController)

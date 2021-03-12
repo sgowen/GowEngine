@@ -6,12 +6,8 @@
 //  Copyright © 2021 Stephen Gowen. All rights reserved.
 //
 
-#include "PlatformMacros.hpp"
+#include <GowEngine/GowEngine.hpp>
 #if IS_LINUX
-
-#include "OpenALSoundWrapper.hpp"
-
-#include "OpenALSound.hpp"
 
 OpenALSoundWrapper::OpenALSoundWrapper(std::string filePath, uint8_t numInstances) : SoundWrapper(numInstances)
 {

@@ -6,25 +6,10 @@
 //  Copyright © 2021 Stephen Gowen. All rights reserved.
 //
 
-#include "EntityLayoutLoader.hpp"
-
-#include "Entity.hpp"
-#include "EntityIDManager.hpp"
-#include "StringUtil.hpp"
-#include "AssetHandlerFactory.hpp"
-#include "AssetHandler.hpp"
-#include "FileData.hpp"
-#include "PlatformMacros.hpp"
-#include "Macros.hpp"
-#include "deps/rapidjson/RapidJSONUtil.hpp"
-#include "InstanceRegistry.hpp"
-#include "Network.hpp"
-#include "FileUtil.hpp"
+#include <GowEngine/GowEngine.hpp>
 
 #include <rapidjson/document.h>
 #include <rapidjson/prettywriter.h>
-
-#include <assert.h>
 
 EntityLayout EntityLayoutLoader::initWithJSONFile(std::string filePath)
 {

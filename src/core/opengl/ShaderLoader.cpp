@@ -6,12 +6,7 @@
 //  Copyright © 2021 Stephen Gowen. All rights reserved.
 //
 
-#include "ShaderLoader.hpp"
-
-#include "Shader.hpp"
-#include "AssetHandlerFactory.hpp"
-#include "AssetHandler.hpp"
-#include "FileData.hpp"
+#include <GowEngine/GowEngine.hpp>
 
 void ShaderLoader::loadShader(Shader& s)
 {

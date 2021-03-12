@@ -6,17 +6,9 @@
 //  Copyright © 2021 Stephen Gowen. All rights reserved.
 //
 
-#include "PlatformMacros.hpp"
+#include <GowEngine/GowEngine.hpp>
 #if IS_APPLE
 
-#include "AppleAssetHandler.hpp"
-
-#include "FileData.hpp"
-#include "FileUtil.hpp"
-
-#include <assert.h>
-#include <stdio.h>
-#include <stdlib.h>
 #include <fstream>
 
 void AppleAssetHandler::create(void* bundleRootFilePath)

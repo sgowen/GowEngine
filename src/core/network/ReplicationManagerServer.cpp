@@ -6,17 +6,7 @@
 //  Copyright © 2021 Stephen Gowen. All rights reserved.
 //
 
-#include "ReplicationManagerServer.hpp"
-
-#include "EntityRegistry.hpp"
-#include "OutputMemoryBitStream.hpp"
-#include "ReplicationTransmissionData.hpp"
-#include "EntityRegistry.hpp"
-#include "Macros.hpp"
-#include "Entity.hpp"
-#include "EntityNetworkController.hpp"
-
-#include <assert.h>
+#include <GowEngine/GowEngine.hpp>
 
 ReplicationManagerServer::ReplicationManagerServer(EntityRegistry& entityRegistry) :
 _entityRegistry(entityRegistry)

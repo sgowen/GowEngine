@@ -6,10 +6,7 @@
 //  Copyright © 2021 Stephen Gowen. All rights reserved.
 //
 
-#include "AckRange.hpp"
-
-#include "OutputMemoryBitStream.hpp"
-#include "InputMemoryBitStream.hpp"
+#include <GowEngine/GowEngine.hpp>
 
 AckRange::AckRange() :
 _start(0),

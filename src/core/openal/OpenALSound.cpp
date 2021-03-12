@@ -6,12 +6,8 @@
 //  Copyright © 2021 Stephen Gowen. All rights reserved.
 //
 
-#include "PlatformMacros.hpp"
+#include <GowEngine/GowEngine.hpp>
 #if IS_LINUX
-
-#include "OpenALSound.hpp"
-
-#include <assert.h>
 
 #include <AL/alut.h>
 

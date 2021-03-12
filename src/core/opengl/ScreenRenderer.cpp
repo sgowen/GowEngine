@@ -6,13 +6,7 @@
 //  Copyright © 2021 Stephen Gowen. All rights reserved.
 //
 
-#include "ScreenRenderer.hpp"
-
-#include "Shader.hpp"
-#include "Framebuffer.hpp"
-#include "ShaderInput.hpp"
-#include "OpenGLWrapper.hpp"
-#include "Color.hpp"
+#include <GowEngine/GowEngine.hpp>
 
 ScreenRenderer::ScreenRenderer() :
 _vertexBuffer(0),

@@ -6,9 +6,7 @@
 //  Copyright © 2021 Stephen Gowen. All rights reserved.
 //
 
-#include "ObjectALSoundWrapper.hpp"
-
-#include "ObjectALSound.hpp"
+#include <GowEngine/GowEngine.hpp>
 
 ObjectALSoundWrapper::ObjectALSoundWrapper(std::string filePath, bool isMusic, uint8_t numInstances) : SoundWrapper(numInstances)
 {

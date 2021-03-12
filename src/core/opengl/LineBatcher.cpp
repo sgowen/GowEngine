@@ -6,14 +6,7 @@
 //  Copyright © 2021 Stephen Gowen. All rights reserved.
 //
 
-#include "LineBatcher.hpp"
-
-#include "Color.hpp"
-#include "Line.hpp"
-#include "Shader.hpp"
-#include "OpenGLWrapper.hpp"
-
-#include <assert.h>
+#include <GowEngine/GowEngine.hpp>
 
 LineBatcher::LineBatcher(uint32_t maxBatchSize) :
 _maxBatchSize(maxBatchSize),

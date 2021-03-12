@@ -6,9 +6,7 @@
 //  Copyright © 2021 Stephen Gowen. All rights reserved.
 //
 
-#include "EntityController.hpp"
-
-#include "Entity.hpp"
+#include <GowEngine/GowEngine.hpp>
 
 IMPL_RTTI_NOPARENT(EntityController)
 IMPL_EntityController_NOPARENT_create(EntityController)

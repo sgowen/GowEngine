@@ -6,16 +6,7 @@
 //  Copyright © 2021 Stephen Gowen. All rights reserved.
 //
 
-#include "FontBatcher.hpp"
-
-#include "Renderer.hpp"
-#include "Shader.hpp"
-#include "Texture.hpp"
-#include "TextureRegion.hpp"
-#include "AssetsManager.hpp"
-#include "KeyboardEvent.hpp"
-
-#include <assert.h>
+#include <GowEngine/GowEngine.hpp>
 
 FontBatcher::FontBatcher(uint32_t maxBatchSize, std::string matrixName, std::string textureName, uint8_t glyphsPerRow, uint8_t glyphWidth, uint8_t glyphHeight) :
 _spriteBatcher(maxBatchSize),

@@ -8,11 +8,15 @@
 
 #pragma once
 
+/// System
+#include <algorithm>
 #include <assert.h>
 #include <ctime>
+#include <math.h>
 #include <memory>
 #include <sstream>
 #include <stdint.h>
+#include <stdio.h>
 #include <stdlib.h>
 #include <string>
 #include <vector>
@@ -76,13 +80,16 @@
 #include "core/assets/FileData.hpp"
 #include "core/assets/FileUtil.hpp"
 #include "core/assets/LinuxAssetHandler.hpp"
+#include "core/assets/MatrixDescriptor.hpp"
+#include "core/assets/ShaderDescriptor.hpp"
+#include "core/assets/SoundDescriptor.hpp"
+#include "core/assets/TextureDescriptor.hpp"
 #include "core/assets/WindowsAssetHandler.hpp"
 
 /// Core Audio
 #include "core/audio/AudioEngine.hpp"
 #include "core/audio/AudioEngineFactory.hpp"
 #include "core/audio/Sound.hpp"
-#include "core/audio/SoundDescriptor.hpp"
 #include "core/audio/SoundManager.hpp"
 #include "core/audio/SoundUtil.hpp"
 #include "core/audio/SoundWrapper.hpp"
@@ -174,14 +181,12 @@
 #include "core/opengl/LightRenderer.hpp"
 #include "core/opengl/LineBatcher.hpp"
 #include "core/opengl/Matrix.hpp"
-#include "core/opengl/MatrixDescriptor.hpp"
 #include "core/opengl/OpenGLWrapper.hpp"
 #include "core/opengl/RektangleBatcher.hpp"
 #include "core/opengl/Renderer.hpp"
 #include "core/opengl/ScreenRenderer.hpp"
 #include "core/opengl/Shader.hpp"
 #include "core/opengl/ShaderAttribute.hpp"
-#include "core/opengl/ShaderDescriptor.hpp"
 #include "core/opengl/ShaderInput.hpp"
 #include "core/opengl/ShaderLoader.hpp"
 #include "core/opengl/ShaderManager.hpp"
@@ -189,7 +194,6 @@
 #include "core/opengl/SpriteBatcher.hpp"
 #include "core/opengl/TextView.hpp"
 #include "core/opengl/Texture.hpp"
-#include "core/opengl/TextureDescriptor.hpp"
 #include "core/opengl/TextureManager.hpp"
 #include "core/opengl/TextureRegion.hpp"
 #include "core/opengl/TriangleBatcher.hpp"

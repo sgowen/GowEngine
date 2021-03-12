@@ -6,7 +6,7 @@
 //  Copyright © 2021 Stephen Gowen. All rights reserved.
 //
 
-#include "FPSUtil.hpp"
+#include <GowEngine/GowEngine.hpp>
 
 void FPSUtil::update(double deltaTime)
 {

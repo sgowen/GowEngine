@@ -8,7 +8,7 @@
 
 #pragma once
 
-#include "PlatformMacros.hpp"
+#include "core/common/PlatformMacros.hpp"
 #if IS_ANDROID
 
 #include "WavTypes.hpp"

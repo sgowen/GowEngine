@@ -6,17 +6,7 @@
 //  Copyright © 2021 Stephen Gowen. All rights reserved.
 //
 
-#include "AudioEngine.hpp"
-
-#include "SoundWrapper.hpp"
-#include "Sound.hpp"
-#include "AudioEngine.hpp"
-#include "AudioEngineFactory.hpp"
-#include "MathUtil.hpp"
-#include "Assets.hpp"
-#include "SoundDescriptor.hpp"
-#include "STLUtil.hpp"
-#include "AssetsManager.hpp"
+#include <GowEngine/GowEngine.hpp>
 
 #define MAX_SOUNDS_TO_PLAY_PER_FRAME 4
 

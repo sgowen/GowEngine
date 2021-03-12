@@ -6,17 +6,7 @@
 //  Copyright © 2021 Stephen Gowen. All rights reserved.
 //
 
-#include "AssetsLoader.hpp"
-
-#include "Assets.hpp"
-#include "AssetHandlerFactory.hpp"
-#include "AssetHandler.hpp"
-#include "FileData.hpp"
-#include "RapidJSONUtil.hpp"
-#include "STLUtil.hpp"
-
-#include <assert.h>
-#include <algorithm>
+#include <GowEngine/GowEngine.hpp>
 
 #include <rapidjson/document.h>
 

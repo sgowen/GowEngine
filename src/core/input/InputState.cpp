@@ -6,13 +6,7 @@
 //  Copyright © 2021 Stephen Gowen. All rights reserved.
 //
 
-#include "InputState.hpp"
-
-#include "OutputMemoryBitStream.hpp"
-#include "InputMemoryBitStream.hpp"
-#include "Network.hpp"
-
-#include <assert.h>
+#include <GowEngine/GowEngine.hpp>
 
 #define DEFAULT_MAX_NUM_PLAYERS 4
 

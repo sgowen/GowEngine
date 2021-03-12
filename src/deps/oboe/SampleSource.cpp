@@ -6,14 +6,8 @@
 //  Copyright © 2021 Stephen Gowen. All rights reserved.
 //
 
-#include "PlatformMacros.hpp"
+#include <GowEngine/GowEngine.hpp>
 #if IS_ANDROID
-
-#include "SampleSource.hpp"
-
-#include "SampleBuffer.hpp"
-
-#include <algorithm>
 
 SampleSource::SampleSource(SampleBuffer* sampleBuffer, float pan) :
 _sampleBuffer(sampleBuffer),

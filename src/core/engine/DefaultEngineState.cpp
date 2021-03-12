@@ -6,9 +6,7 @@
 //  Copyright © 2021 Stephen Gowen. All rights reserved.
 //
 
-#include "DefaultEngineState.hpp"
-
-#include "Engine.hpp"
+#include <GowEngine/GowEngine.hpp>
 
 void DefaultEngineState::execute(Engine* e)
 {

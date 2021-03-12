@@ -6,13 +6,7 @@
 //  Copyright © 2021 Stephen Gowen. All rights reserved.
 //
 
-#include "SpriteBatcher.hpp"
-
-#include "TextureRegion.hpp"
-#include "Shader.hpp"
-#include "Texture.hpp"
-#include "OpenGLWrapper.hpp"
-#include "MathUtil.hpp"
+#include <GowEngine/GowEngine.hpp>
 
 SpriteBatcher::SpriteBatcher(uint32_t maxBatchSize) :
 _maxBatchSize(maxBatchSize),

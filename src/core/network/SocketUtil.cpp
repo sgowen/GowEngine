@@ -6,12 +6,7 @@
 //  Copyright © 2021 Stephen Gowen. All rights reserved.
 //
 
-#include "SocketUtil.hpp"
-
-#include "UDPSocket.hpp"
-#include "Network.hpp"
-#include "StringUtil.hpp"
-#include "PlatformMacros.hpp"
+#include <GowEngine/GowEngine.hpp>
 
 SocketUtil& SocketUtil::getInstance()
 {

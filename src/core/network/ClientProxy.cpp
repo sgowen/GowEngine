@@ -6,12 +6,7 @@
 //  Copyright © 2021 Stephen Gowen. All rights reserved.
 //
 
-#include "ClientProxy.hpp"
-
-#include "EntityRegistry.hpp"
-#include "SocketAddress.hpp"
-#include "TimeTracker.hpp"
-#include "InstanceRegistry.hpp"
+#include <GowEngine/GowEngine.hpp>
 
 ClientProxy::ClientProxy(EntityRegistry& entityRegistry, SocketAddress* socketAddress, std::string username, uint8_t playerID) :
 _deliveryNotificationManager(INST_REG.get<TimeTracker>(INSK_TIME_SRVR), false, true),

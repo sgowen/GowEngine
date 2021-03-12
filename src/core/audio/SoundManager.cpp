@@ -6,10 +6,7 @@
 //  Copyright © 2021 Stephen Gowen. All rights reserved.
 //
 
-#include "SoundManager.hpp"
-
-#include "SoundDescriptor.hpp"
-#include "AudioEngineFactory.hpp"
+#include <GowEngine/GowEngine.hpp>
 
 void SoundManager::loadSounds(std::vector<SoundDescriptor>& soundDescriptors)
 {

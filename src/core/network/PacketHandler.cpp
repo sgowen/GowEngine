@@ -6,16 +6,7 @@
 //  Copyright © 2021 Stephen Gowen. All rights reserved.
 //
 
-#include "PacketHandler.hpp"
-
-#include "TimeTracker.hpp"
-#include "MovingAverage.hpp"
-#include "InputMemoryBitStream.hpp"
-#include "OutputMemoryBitStream.hpp"
-#include "SocketAddress.hpp"
-#include "StringUtil.hpp"
-#include "SocketUtil.hpp"
-#include "UDPSocket.hpp"
+#include <GowEngine/GowEngine.hpp>
 
 PacketHandler::PacketHandler(TimeTracker* tt, uint16_t port, ProcessPacketFunc ppf) :
 _timeTracker(tt),

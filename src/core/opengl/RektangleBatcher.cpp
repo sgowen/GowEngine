@@ -6,12 +6,7 @@
 //  Copyright © 2021 Stephen Gowen. All rights reserved.
 //
 
-#include "RektangleBatcher.hpp"
-
-#include "Color.hpp"
-#include "Rektangle.hpp"
-#include "Shader.hpp"
-#include "OpenGLWrapper.hpp"
+#include <GowEngine/GowEngine.hpp>
 
 RektangleBatcher::RektangleBatcher(uint32_t maxBatchSize, bool isFill) :
 _maxBatchSize(maxBatchSize),

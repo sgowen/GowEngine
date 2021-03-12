@@ -6,16 +6,9 @@
 //  Copyright © 2021 Stephen Gowen. All rights reserved.
 //
 
-#include "ConfigLoader.hpp"
-
-#include "AssetHandlerFactory.hpp"
-#include "AssetHandler.hpp"
-#include "FileData.hpp"
-#include "StringUtil.hpp"
+#include <GowEngine/GowEngine.hpp>
 
 #include <rapidjson/document.h>
-
-#include <assert.h>
 
 Config ConfigLoader::initWithJSONFile(std::string filePath)
 {

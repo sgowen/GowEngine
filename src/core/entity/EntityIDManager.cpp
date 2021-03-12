@@ -6,9 +6,7 @@
 //  Copyright © 2021 Stephen Gowen. All rights reserved.
 //
 
-#include "EntityIDManager.hpp"
-
-#include "MathUtil.hpp"
+#include <GowEngine/GowEngine.hpp>
 
 #define  LAYOUT_ENTITY_ID_BEGIN 0x00000000u
 #define  LAYOUT_ENTITY_ID_END   0x000FFFFFu

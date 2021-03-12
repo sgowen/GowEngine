@@ -6,18 +6,7 @@
 //  Copyright © 2021 Stephen Gowen. All rights reserved.
 //
 
-#include "Renderer.hpp"
-
-#include "Entity.hpp"
-#include "EntityRenderController.hpp"
-#include "AssetHandlerFactory.hpp"
-#include "AssetHandler.hpp"
-#include "FileData.hpp"
-#include "AssetsManager.hpp"
-#include "OpenGLWrapper.hpp"
-
-#include <assert.h>
-#include <algorithm>
+#include <GowEngine/GowEngine.hpp>
 
 Renderer::Renderer() :
 _renderFunc(NULL),

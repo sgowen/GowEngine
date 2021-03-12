@@ -6,17 +6,7 @@
 //  Copyright © 2021 Stephen Gowen. All rights reserved.
 //
 
-#include "ReplicationManagerClient.hpp"
-
-#include "ReplicationCommand.hpp"
-#include "EntityRegistry.hpp"
-#include "InputMemoryBitStream.hpp"
-#include "EntityManager.hpp"
-#include "Entity.hpp"
-#include "EntityLayout.hpp"
-#include "EntityNetworkController.hpp"
-
-#include <cassert>
+#include <GowEngine/GowEngine.hpp>
 
 void ReplicationManagerClient::read(InputMemoryBitStream& imbs, EntityRegistry& er)
 {

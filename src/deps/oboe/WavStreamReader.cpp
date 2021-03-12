@@ -6,20 +6,8 @@
 //  Copyright © 2021 Stephen Gowen. All rights reserved.
 //
 
-#include "PlatformMacros.hpp"
+#include <GowEngine/GowEngine.hpp>
 #if IS_ANDROID
-
-#include "WavStreamReader.hpp"
-
-#include "InputStream.hpp"
-#include "WavRIFFChunkHeader.hpp"
-#include "WavFmtChunkHeader.hpp"
-#include "WavChunkHeader.hpp"
-#include "STLUtil.hpp"
-#include "StringUtil.hpp"
-
-#include <algorithm>
-#include <string.h>
 
 WavStreamReader::WavStreamReader(InputStream* inputStream) :
 _inputStream(inputStream),

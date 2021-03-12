@@ -6,13 +6,7 @@
 //  Copyright © 2021 Stephen Gowen. All rights reserved.
 //
 
-#include "EngineState.hpp"
-
-#include "Engine.hpp"
-#include "deps/rapidjson/AssetsLoader.hpp"
-#include "deps/rapidjson/RendererLoader.hpp"
-#include "AssetsManager.hpp"
-#include "AudioEngineFactory.hpp"
+#include <GowEngine/GowEngine.hpp>
 
 void EngineState::enter(Engine* e)
 {

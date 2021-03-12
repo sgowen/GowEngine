@@ -6,11 +6,7 @@
 //  Copyright © 2021 Stephen Gowen. All rights reserved.
 //
 
-#include "Config.hpp"
-
-#include "StringUtil.hpp"
-
-#include <assert.h>
+#include <GowEngine/GowEngine.hpp>
 
 const Config Config::EMPTY = Config();
 

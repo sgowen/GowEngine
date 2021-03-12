@@ -8,19 +8,11 @@
 
 #pragma once
 
-#include "PlatformMacros.hpp"
+#include "deps/ObjectAL-for-iPhone/ObjectALAudioEngine.hpp"
+#include "deps/oboe/OboeAudioEngine.hpp"
+#include "deps/DirectXTK/DirectXTKAudioEngine.hpp"
 
-#if IS_APPLE
-    #include "deps/ObjectAL-for-iPhone/ObjectALAudioEngine.hpp"
-#elif IS_ANDROID
-    #include "deps/oboe/OboeAudioEngine.hpp"
-#elif IS_LINUX
-    #include "core/openal/OpenALAudioEngine.hpp"
-#elif IS_WINDOWS
-    #include "deps/DirectXTK/DirectXTKAudioEngine.hpp"
-#else
-    #error Need to add AudioEngine implementation
-#endif
+#include "core/openal/OpenALAudioEngine.hpp"
 
 #include <assert.h>
 #include <stdlib.h>

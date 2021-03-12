@@ -6,14 +6,8 @@
 //  Copyright © 2021 Stephen Gowen. All rights reserved.
 //
 
-#include "PlatformMacros.hpp"
+#include <GowEngine/GowEngine.hpp>
 #if IS_WINDOWS
-
-#include "DirectXTKAudioEngine.hpp"
-
-#include "SoundWrapper.hpp"
-#include "DirectXTKSoundWrapper.hpp"
-#include "PlatformMacros.hpp"
 
 SoundWrapper* DirectXTKAudioEngine::loadSound(std::string filePath, uint8_t numInstances)
 {

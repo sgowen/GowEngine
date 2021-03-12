@@ -6,24 +6,7 @@
 //  Copyright © 2021 Stephen Gowen. All rights reserved.
 //
 
-#include "EntityManager.hpp"
-
-#include "Entity.hpp"
-#include "EntityLayout.hpp"
-#include "EntityController.hpp"
-#include "EntityNetworkController.hpp"
-#include "EntityPhysicsController.hpp"
-#include "EntityRenderController.hpp"
-#include "EntityController.hpp"
-#include "StringUtil.hpp"
-#include "STLUtil.hpp"
-#include "AssetHandlerFactory.hpp"
-#include "AssetHandler.hpp"
-#include "FileData.hpp"
-#include "core/physics/TopDownPhysicsController.hpp"
-#include "deps/box2d/Box2DPhysicsController.hpp"
-
-#include <assert.h>
+#include <GowEngine/GowEngine.hpp>
 
 Entity* EntityManager::createEntity(EntityInstanceDef eid)
 {

@@ -6,16 +6,7 @@
 //  Copyright © 2021 Stephen Gowen. All rights reserved.
 //
 
-#include "CircleBatcher.hpp"
-
-#include "Circle.hpp"
-#include "Color.hpp"
-#include "Shader.hpp"
-#include "OpenGLWrapper.hpp"
-#include "MathUtil.hpp"
-
-#include <math.h>
-#include <assert.h>
+#include <GowEngine/GowEngine.hpp>
 
 #define DEGREE_SPACING 6
 #define NUM_VERTICES_PER_FULL_CIRCLE 360 / DEGREE_SPACING

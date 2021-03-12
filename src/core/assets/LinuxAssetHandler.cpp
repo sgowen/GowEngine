@@ -6,14 +6,10 @@
 //  Copyright © 2021 Stephen Gowen. All rights reserved.
 //
 
-#include "PlatformMacros.hpp"
+#include <GowEngine/GowEngine.hpp>
 #if IS_LINUX
 
-#include "LinuxAssetHandler.hpp"
-
-#include <stdint.h>
 #include <fstream>
-#include <assert.h>
 
 FileData LinuxAssetHandler::loadAsset(std::string filePath)
 {

@@ -6,11 +6,7 @@
 //  Copyright © 2021 Stephen Gowen. All rights reserved.
 //
 
-#include "InFlightPacket.hpp"
-
-#include "TransmissionData.hpp"
-#include "DeliveryNotificationManager.hpp"
-#include "TimeTracker.hpp"
+#include <GowEngine/GowEngine.hpp>
 
 InFlightPacket::InFlightPacket(uint16_t sequenceNumber, uint32_t timeDispatched) :
 _sequenceNumber(sequenceNumber),

@@ -6,13 +6,7 @@
 //  Copyright © 2021 Stephen Gowen. All rights reserved.
 //
 
-#include "DeliveryNotificationManager.hpp"
-
-#include "TimeTracker.hpp"
-#include "OutputMemoryBitStream.hpp"
-#include "InputMemoryBitStream.hpp"
-#include "StringUtil.hpp"
-#include "PlatformMacros.hpp"
+#include <GowEngine/GowEngine.hpp>
 
 DeliveryNotificationManager::DeliveryNotificationManager(TimeTracker* tt, bool shouldSendAcks, bool shouldProcessAcks) :
 _timeTracker(tt),

@@ -6,26 +6,9 @@
 //  Copyright © 2021 Stephen Gowen. All rights reserved.
 //
 
-#include "EntityManagerLoader.hpp"
-
-#include "Entity.hpp"
-#include "EntityManager.hpp"
-#include "EntityLayout.hpp"
-#include "EntityController.hpp"
-#include "EntityNetworkController.hpp"
-#include "EntityPhysicsController.hpp"
-#include "EntityRenderController.hpp"
-#include "EntityController.hpp"
-#include "StringUtil.hpp"
-#include "STLUtil.hpp"
-#include "AssetHandlerFactory.hpp"
-#include "AssetHandler.hpp"
-#include "FileData.hpp"
-#include "RapidJSONUtil.hpp"
+#include <GowEngine/GowEngine.hpp>
 
 #include <rapidjson/document.h>
-
-#include <assert.h>
 
 void EntityManagerLoader::initWithJSONFile(EntityManager& em, std::string filePath)
 {

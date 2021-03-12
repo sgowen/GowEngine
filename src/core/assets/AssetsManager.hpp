@@ -8,11 +8,11 @@
 
 #pragma once
 
-#include "TextureDescriptor.hpp"
+#include "core/opengl/ShaderManager.hpp"
+#include "core/audio/SoundManager.hpp"
+#include "core/opengl/TextureManager.hpp"
+
 #include "Assets.hpp"
-#include "ShaderManager.hpp"
-#include "SoundManager.hpp"
-#include "TextureManager.hpp"
 
 #include <map>
 

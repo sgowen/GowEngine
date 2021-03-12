@@ -6,13 +6,8 @@
 //  Copyright © 2021 Stephen Gowen. All rights reserved.
 //
 
-#include "PlatformMacros.hpp"
+#include <GowEngine/GowEngine.hpp>
 #if IS_ANDROID
-
-#include "InputStream.hpp"
-
-#include <algorithm>
-#include <string.h>
 
 InputStream::InputStream(uint8_t *buff, int32_t len) :
 _buffer(buff),

@@ -6,10 +6,7 @@
 //  Copyright © 2021 Stephen Gowen. All rights reserved.
 //
 
-#include "ShaderManager.hpp"
-
-#include "ShaderDescriptor.hpp"
-#include "OpenGLWrapper.hpp"
+#include <GowEngine/GowEngine.hpp>
 
 void ShaderManager::loadShaders(std::vector<ShaderDescriptor>& sds)
 {

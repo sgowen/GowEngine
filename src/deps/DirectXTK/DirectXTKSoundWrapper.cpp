@@ -6,13 +6,8 @@
 //  Copyright © 2021 Stephen Gowen. All rights reserved.
 //
 
-#include "PlatformMacros.hpp"
+#include <GowEngine/GowEngine.hpp>
 #if IS_WINDOWS
-
-#include "DirectXTKSoundWrapper.hpp"
-
-#include "DirectXTKSound.hpp"
-#include "STLUtil.hpp"
 
 DirectXTKSoundWrapper::DirectXTKSoundWrapper(std::string filePath, DirectX::AudioEngine* audioEngine, uint8_t numInstances) : SoundWrapper(numInstances)
 {

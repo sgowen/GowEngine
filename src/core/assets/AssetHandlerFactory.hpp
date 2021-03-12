@@ -8,19 +8,12 @@
 
 #pragma once
 
-#include "PlatformMacros.hpp"
+#include "core/common/PlatformMacros.hpp"
 
-#if IS_APPLE
-    #include "AppleAssetHandler.hpp"
-#elif IS_ANDROID
-    #include "AndroidAssetHandler.hpp"
-#elif IS_LINUX
-    #include "LinuxAssetHandler.hpp"
-#elif IS_WINDOWS
-    #include "WindowsAssetHandler.hpp"
-#else
-    #error Need to add AssetHandler implementation
-#endif
+#include "AndroidAssetHandler.hpp"
+#include "AppleAssetHandler.hpp"
+#include "LinuxAssetHandler.hpp"
+#include "WindowsAssetHandler.hpp"
 
 #include <assert.h>
 #include <stdlib.h>

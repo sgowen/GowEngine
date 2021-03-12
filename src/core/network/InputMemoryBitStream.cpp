@@ -6,9 +6,7 @@
 //  Copyright © 2021 Stephen Gowen. All rights reserved.
 //
 
-#include "InputMemoryBitStream.hpp"
-
-#include <cstring>
+#include <GowEngine/GowEngine.hpp>
 
 InputMemoryBitStream::InputMemoryBitStream(char* buffer, uint32_t byteCount) :
 _buffer(buffer),

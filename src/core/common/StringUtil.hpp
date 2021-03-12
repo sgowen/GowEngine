@@ -8,7 +8,7 @@
 
 #pragma once
 
-#include "PlatformMacros.hpp"
+#include "core/common/PlatformMacros.hpp"
 
 #include <string>
 #include <sstream>

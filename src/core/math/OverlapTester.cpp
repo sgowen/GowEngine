@@ -6,17 +6,7 @@
 //  Copyright © 2021 Stephen Gowen. All rights reserved.
 //
 
-#include "OverlapTester.hpp"
-
-#include "Vector2.hpp"
-#include "Circle.hpp"
-#include "Rektangle.hpp"
-#include "Triangle.hpp"
-#include "Line.hpp"
-#include "MathUtil.hpp"
-
-#include <stdio.h>
-#include <stdlib.h>
+#include <GowEngine/GowEngine.hpp>
 
 bool OverlapTester::doCirclesOverlap(Circle& c1, Circle& c2)
 {

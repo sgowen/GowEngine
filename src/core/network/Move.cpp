@@ -6,11 +6,7 @@
 //  Copyright © 2021 Stephen Gowen. All rights reserved.
 //
 
-#include "Move.hpp"
-
-#include "InputState.hpp"
-#include "OutputMemoryBitStream.hpp"
-#include "InputMemoryBitStream.hpp"
+#include <GowEngine/GowEngine.hpp>
 
 Move::Move(InputState* inputState, uint32_t timestamp, uint32_t index) :
 _inputState(inputState),

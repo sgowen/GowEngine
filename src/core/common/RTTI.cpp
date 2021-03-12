@@ -6,7 +6,7 @@
 //  Copyright © 2021 Stephen Gowen. All rights reserved.
 //
 
-#include "RTTI.hpp"
+#include <GowEngine/GowEngine.hpp>
 
 RTTI::RTTI(const std::string& className) : _className(className), _parentRTTI(NULL)
 {

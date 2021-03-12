@@ -6,11 +6,7 @@
 //  Copyright © 2021 Stephen Gowen. All rights reserved.
 //
 
-#include "ObjectALAudioEngine.hpp"
-
-#include "SoundWrapper.hpp"
-#include "ObjectALSoundWrapper.hpp"
-#include "ObjectALHelper.hpp"
+#include <GowEngine/GowEngine.hpp>
 
 SoundWrapper* ObjectALAudioEngine::loadSound(std::string filePath, uint8_t numInstances)
 {

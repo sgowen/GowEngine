@@ -6,13 +6,8 @@
 //  Copyright © 2021 Stephen Gowen. All rights reserved.
 //
 
-#include "PlatformMacros.hpp"
+#include <GowEngine/GowEngine.hpp>
 #if IS_ANDROID
-
-#include "OboeAudioEngine.hpp"
-
-#include "OboeSoundWrapper.hpp"
-#include "SimpleMultiPlayer.hpp"
 
 SoundWrapper* OboeAudioEngine::loadSound(std::string filePath, uint8_t numInstances)
 {

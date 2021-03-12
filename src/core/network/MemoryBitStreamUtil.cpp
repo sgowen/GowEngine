@@ -6,11 +6,7 @@
 //  Copyright © 2021 Stephen Gowen. All rights reserved.
 //
 
-#include "MemoryBitStreamUtil.hpp"
-
-#include "InputMemoryBitStream.hpp"
-#include "OutputMemoryBitStream.hpp"
-#include "core/entity/Entity.hpp"
+#include <GowEngine/GowEngine.hpp>
 
 void MemoryBitStreamUtil::read(InputMemoryBitStream& imbs, float& x, float& y)
 {

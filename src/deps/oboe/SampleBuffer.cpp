@@ -6,12 +6,9 @@
 //  Copyright © 2021 Stephen Gowen. All rights reserved.
 //
 
-#include "PlatformMacros.hpp"
+#include <GowEngine/GowEngine.hpp>
 #if IS_ANDROID
 
-#include "SampleBuffer.hpp"
-
-#include "WavStreamReader.hpp"
 #include "resampler/MultiChannelResampler.h"
 
 SampleBuffer::SampleBuffer() :

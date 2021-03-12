@@ -6,12 +6,8 @@
 //  Copyright © 2021 Stephen Gowen. All rights reserved.
 //
 
-#include "PlatformMacros.hpp"
+#include <GowEngine/GowEngine.hpp>
 #if IS_ANDROID
-
-#include "WavFmtChunkHeader.hpp"
-
-#include "InputStream.hpp"
 
 const RiffID WavFmtChunkHeader::RIFFID_FMT = makeRiffID('f', 'm', 't', ' ');
 const short WavFmtChunkHeader::ENCODING_PCM = 1;

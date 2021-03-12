@@ -6,14 +6,7 @@
 //  Copyright © 2021 Stephen Gowen. All rights reserved.
 //
 
-#include "ReplicationTransmissionData.hpp"
-
-#include "ReplicationManagerServer.hpp"
-#include "EntityRegistry.hpp"
-#include "Entity.hpp"
-#include "DeliveryNotificationManager.hpp"
-
-#include <assert.h>
+#include <GowEngine/GowEngine.hpp>
 
 ReplicationTransmissionData::ReplicationTransmissionData() :
 _replicationManagerServer(NULL),

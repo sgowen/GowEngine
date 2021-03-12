@@ -6,14 +6,7 @@
 //  Copyright © 2021 Stephen Gowen. All rights reserved.
 //
 
-#include "LightRenderer.hpp"
-
-#include "Shader.hpp"
-#include "Texture.hpp"
-#include "Framebuffer.hpp"
-#include "OpenGLWrapper.hpp"
-
-#include <assert.h>
+#include <GowEngine/GowEngine.hpp>
 
 LightRenderer::LightRenderer() :
 _lightIndex(0)

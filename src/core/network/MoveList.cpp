@@ -6,11 +6,7 @@
 //  Copyright © 2021 Stephen Gowen. All rights reserved.
 //
 
-#include "MoveList.hpp"
-
-#include "InputState.hpp"
-#include "TimeTracker.hpp"
-#include "StringUtil.hpp"
+#include <GowEngine/GowEngine.hpp>
 
 MoveList::MoveList() :
 _lastMoveTimestamp(0),

@@ -6,15 +6,8 @@
 //  Copyright © 2021 Stephen Gowen. All rights reserved.
 //
 
-#include "PlatformMacros.hpp"
+#include <GowEngine/GowEngine.hpp>
 #if IS_ANDROID
-
-#include "SimpleMultiPlayer.hpp"
-
-#include "SampleSource.hpp"
-#include "SampleBuffer.hpp"
-#include "StringUtil.hpp"
-#include "STLUtil.hpp"
 
 using namespace oboe;
 

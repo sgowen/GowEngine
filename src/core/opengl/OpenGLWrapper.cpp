@@ -6,19 +6,33 @@
 //  Copyright © 2021 Stephen Gowen. All rights reserved.
 //
 
-#include "OpenGLWrapper.hpp"
+#include "core/common/PlatformMacros.hpp"
+#if IS_IOS
+    #include <OpenGLES/ES3/gl.h>
+#elif IS_MACOS
+    #include <OpenGL/OpenGL.h>
+    #include <OpenGL/gl.h>
+#elif IS_ANDROID
+    #ifdef GL3
+        #include <GLES3/gl3.h>
+    #elif GL3_2
+        #include <GLES3/gl32.h>
+    #else
+        #include <GLES2/gl2.h>
+        #include <GLES2/gl2ext.h>
+    #endif
+#elif IS_LINUX
+    #include <GL/glew.h>
+#elif IS_WINDOWS
+    #define WIN32_LEAN_AND_MEAN
+    #define NOMINMAX
+    #include <windows.h>
+    #include <glad/gl.h>
+#endif
 
-#include "Framebuffer.hpp"
-#include "Shader.hpp"
-#include "Texture.hpp"
-#include "Color.hpp"
-#include "ShaderAttribute.hpp"
-#include "ShaderUniform.hpp"
-#include "PlatformMacros.hpp"
-#include "Macros.hpp"
-#include "StringUtil.hpp"
+#include <GowEngine/GowEngine.hpp>
 
-GLenum OpenGLWrapper::TEXTURE_SLOTS[NUM_SUPPORTED_TEXTURE_SLOTS] = {GL_TEXTURE0, GL_TEXTURE1, GL_TEXTURE2, GL_TEXTURE3};
+uint32_t OpenGLWrapper::TEXTURE_SLOTS[NUM_SUPPORTED_TEXTURE_SLOTS] = {GL_TEXTURE0, GL_TEXTURE1, GL_TEXTURE2, GL_TEXTURE3};
 
 void OpenGLWrapper::enableBlending(bool srcAlpha)
 {
@@ -98,12 +112,12 @@ void OpenGLWrapper::bindFloat4Array(Shader& s, std::string uniformName, int coun
     glUniform4fv(su._location, count, (const GLfloat*)value);
 }
 
-void OpenGLWrapper::bindTexture(Shader& s, std::string uniformName, GLuint index, Texture& t)
+void OpenGLWrapper::bindTexture(Shader& s, std::string uniformName, uint32_t index, Texture& t)
 {
     bindTexture(s, uniformName, index, t._texture);
 }
 
-void OpenGLWrapper::bindTexture(Shader& s, std::string uniformName, GLuint index, GLuint texture)
+void OpenGLWrapper::bindTexture(Shader& s, std::string uniformName, uint32_t index, uint32_t texture)
 {
     assert(index < NUM_SUPPORTED_TEXTURE_SLOTS);
     assert(texture > 0);
@@ -117,7 +131,7 @@ void OpenGLWrapper::bindTexture(Shader& s, std::string uniformName, GLuint index
     glUniform1i(su._location, index);
 }
 
-void OpenGLWrapper::unbindTexture(GLuint index)
+void OpenGLWrapper::unbindTexture(uint32_t index)
 {
     assert(index < NUM_SUPPORTED_TEXTURE_SLOTS);
     
@@ -126,14 +140,14 @@ void OpenGLWrapper::unbindTexture(GLuint index)
     glDisable(GL_TEXTURE_2D);
 }
 
-void OpenGLWrapper::bindVertexBuffer(GLuint buffer)
+void OpenGLWrapper::bindVertexBuffer(uint32_t buffer)
 {
     assert(buffer > 0);
     
     glBindBuffer(GL_ARRAY_BUFFER, buffer);
 }
 
-void OpenGLWrapper::bindVertexBuffer(GLuint buffer, size_t size, const void* data)
+void OpenGLWrapper::bindVertexBuffer(uint32_t buffer, size_t size, const void* data)
 {
     bindVertexBuffer(buffer);
     glBufferSubData(GL_ARRAY_BUFFER, 0, size, data);
@@ -144,7 +158,7 @@ void OpenGLWrapper::unbindVertexBuffer()
     glBindBuffer(GL_ARRAY_BUFFER, 0);
 }
 
-void OpenGLWrapper::bindScreenFramebuffer(GLsizei width, GLsizei height, const Color& clearColor)
+void OpenGLWrapper::bindScreenFramebuffer(int32_t width, int32_t height, const Color& clearColor)
 {
     Framebuffer fb(width, height);
     
@@ -182,14 +196,14 @@ void OpenGLWrapper::clearFramebuffer(float red, float green, float blue, float a
     glClear(GL_COLOR_BUFFER_BIT);
 }
 
-void OpenGLWrapper::draw(GLenum mode, uint32_t first, uint32_t count)
+void OpenGLWrapper::draw(uint32_t mode, uint32_t first, uint32_t count)
 {
     assert(count > 0);
     
     glDrawArrays(mode, first, count);
 }
 
-void OpenGLWrapper::drawIndexed(GLenum mode, GLuint indexBuffer, uint32_t count, size_t first)
+void OpenGLWrapper::drawIndexed(uint32_t mode, uint32_t indexBuffer, uint32_t count, size_t first)
 {
     assert(indexBuffer > 0);
     assert(count > 0);
@@ -199,11 +213,11 @@ void OpenGLWrapper::drawIndexed(GLenum mode, GLuint indexBuffer, uint32_t count,
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 }
 
-GLuint OpenGLWrapper::loadRektangleIndexBuffer(int numRektangles)
+uint32_t OpenGLWrapper::loadRektangleIndexBuffer(int numRektangles)
 {
     assert(numRektangles > 0);
     
-    GLuint ret;
+    uint32_t ret;
     
     std::vector<uint16_t> indices;
     indices.reserve(numRektangles * NUM_INDICES_PER_RECTANGLE);
@@ -227,11 +241,11 @@ GLuint OpenGLWrapper::loadRektangleIndexBuffer(int numRektangles)
     return ret;
 }
 
-GLuint OpenGLWrapper::loadVertexBuffer(size_t size)
+uint32_t OpenGLWrapper::loadVertexBuffer(size_t size)
 {
     assert(size > 0);
     
-    GLuint ret;
+    uint32_t ret;
     
     glGenBuffers(1, &ret);
     bindVertexBuffer(ret);
@@ -241,11 +255,11 @@ GLuint OpenGLWrapper::loadVertexBuffer(size_t size)
     return ret;
 }
 
-GLuint OpenGLWrapper::loadVertexBuffer(size_t size, const void* data)
+uint32_t OpenGLWrapper::loadVertexBuffer(size_t size, const void* data)
 {
     assert(size > 0);
     
-    GLuint ret;
+    uint32_t ret;
     
     glGenBuffers(1, &ret);
     bindVertexBuffer(ret);
@@ -255,7 +269,7 @@ GLuint OpenGLWrapper::loadVertexBuffer(size_t size, const void* data)
     return ret;
 }
 
-void OpenGLWrapper::unloadBuffer(GLuint& buffer)
+void OpenGLWrapper::unloadBuffer(uint32_t& buffer)
 {
     assert(buffer > 0);
     
@@ -265,10 +279,10 @@ void OpenGLWrapper::unloadBuffer(GLuint& buffer)
 
 void OpenGLWrapper::loadFramebuffer(Framebuffer& fb)
 {
-    GLuint texture;
-    GLuint fbo;
+    uint32_t texture;
+    uint32_t fbo;
     
-    GLint currentFBO;
+    int32_t currentFBO;
     glGetIntegerv(GL_FRAMEBUFFER_BINDING, &currentFBO);
     
     texture = loadTexture(fb._width, fb._height, NULL, fb._filterMin, fb._filterMag, false);
@@ -277,7 +291,7 @@ void OpenGLWrapper::loadFramebuffer(Framebuffer& fb)
     glBindFramebuffer(GL_FRAMEBUFFER, fbo);
     glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, texture, 0);
     
-    GLenum status = glCheckFramebufferStatus(GL_FRAMEBUFFER);
+    uint32_t status = glCheckFramebufferStatus(GL_FRAMEBUFFER);
     assert(status == GL_FRAMEBUFFER_COMPLETE);
     
     glBindFramebuffer(GL_FRAMEBUFFER, currentFBO);
@@ -349,12 +363,12 @@ void OpenGLWrapper::unloadShader(Shader& s)
     s._program = 0;
 }
 
-GLuint OpenGLWrapper::loadTexture(int width, int height, uint8_t* data, std::string filterMin, std::string filterMag, bool mipmap)
+uint32_t OpenGLWrapper::loadTexture(int width, int height, uint8_t* data, std::string filterMin, std::string filterMag, bool mipmap)
 {
     assert(width > 0);
     assert(height > 0);
 
-    GLuint ret;
+    uint32_t ret;
     
     glActiveTexture(TEXTURE_SLOTS[0]);
     
@@ -383,26 +397,26 @@ GLuint OpenGLWrapper::loadTexture(int width, int height, uint8_t* data, std::str
     return ret;
 }
 
-void OpenGLWrapper::unloadTexture(GLuint texture)
+void OpenGLWrapper::unloadTexture(uint32_t texture)
 {
     assert(texture > 0);
     
     glDeleteTextures(1, &texture);
 }
 
-GLuint OpenGLWrapper::loadShader(const uint8_t* vertexShaderSrc, const long vertexShaderSrcLength, const uint8_t* fragmentShaderSrc, const long fragmentShaderSrcLength)
+uint32_t OpenGLWrapper::loadShader(const uint8_t* vertexShaderSrc, const long vertexShaderSrcLength, const uint8_t* fragmentShaderSrc, const long fragmentShaderSrcLength)
 {
     assert(vertexShaderSrc != NULL);
     assert(vertexShaderSrcLength > 0);
     assert(fragmentShaderSrc != NULL);
     assert(fragmentShaderSrcLength > 0);
 
-    GLuint ret;
+    uint32_t ret;
     
-    GLuint vertexShader = compileShader(GL_VERTEX_SHADER, vertexShaderSrc, (GLint)vertexShaderSrcLength);
+    uint32_t vertexShader = compileShader(GL_VERTEX_SHADER, vertexShaderSrc, (int32_t)vertexShaderSrcLength);
     assert(vertexShader > 0);
     
-    GLuint fragmentShader = compileShader(GL_FRAGMENT_SHADER, fragmentShaderSrc, (GLint)fragmentShaderSrcLength);
+    uint32_t fragmentShader = compileShader(GL_FRAGMENT_SHADER, fragmentShaderSrc, (int32_t)fragmentShaderSrcLength);
     assert(fragmentShader > 0);
     
     ret = glCreateProgram();
@@ -412,7 +426,7 @@ GLuint OpenGLWrapper::loadShader(const uint8_t* vertexShaderSrc, const long vert
     glAttachShader(ret, fragmentShader);
     glLinkProgram(ret);
     
-    GLint linkStatus;
+    int32_t linkStatus;
     glGetProgramiv(ret, GL_LINK_STATUS, &linkStatus);
     assert(linkStatus != GL_FALSE);
 
@@ -424,30 +438,30 @@ GLuint OpenGLWrapper::loadShader(const uint8_t* vertexShaderSrc, const long vert
     return ret;
 }
 
-void OpenGLWrapper::unloadShader(GLuint program)
+void OpenGLWrapper::unloadShader(uint32_t program)
 {
     assert(program > 0);
     
     glDeleteProgram(program);
 }
 
-GLuint OpenGLWrapper::compileShader(const GLenum type, const uint8_t* source, const GLint length)
+uint32_t OpenGLWrapper::compileShader(const uint32_t type, const uint8_t* source, const int32_t length)
 {
     assert(source != NULL);
     assert(length > 0);
 
-    GLuint ret = glCreateShader(type);
+    uint32_t ret = glCreateShader(type);
     assert(ret != GL_FALSE);
 
     glShaderSource(ret, 1, (const GLchar **)&source, &length);
     glCompileShader(ret);
     
-    GLint compileStatus;
+    int32_t compileStatus;
     glGetShaderiv(ret, GL_COMPILE_STATUS, &compileStatus);
 
     if (compileStatus == GL_FALSE)
     {
-        GLint maxLength = 0;
+        int32_t maxLength = 0;
         glGetShaderiv(ret, GL_INFO_LOG_LENGTH, &maxLength);
 
         GLchar* errorLog = (GLchar*) malloc(maxLength);

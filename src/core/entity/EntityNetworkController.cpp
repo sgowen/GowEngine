@@ -6,17 +6,7 @@
 //  Copyright © 2021 Stephen Gowen. All rights reserved.
 //
 
-#include "EntityNetworkController.hpp"
-
-#include "Entity.hpp"
-#include "InputMemoryBitStream.hpp"
-#include "OutputMemoryBitStream.hpp"
-#include "MemoryBitStreamUtil.hpp"
-#include "Macros.hpp"
-#include "EntityPhysicsController.hpp"
-#include "TopDownPhysicsController.hpp"
-#include "core/audio/SoundUtil.hpp"
-#include "NetworkClient.hpp"
+#include <GowEngine/GowEngine.hpp>
 
 IMPL_EntityController_NOPARENT_create(EntityNetworkController)
 

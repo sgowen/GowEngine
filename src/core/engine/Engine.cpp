@@ -6,13 +6,7 @@
 //  Copyright © 2021 Stephen Gowen. All rights reserved.
 //
 
-#include "Engine.hpp"
-
-#include "EngineController.hpp"
-#include "InputManager.hpp"
-#include "FPSUtil.hpp"
-#include "ClipboardUtil.hpp"
-#include "DefaultEngineState.hpp"
+#include <GowEngine/GowEngine.hpp>
 
 Engine::Engine(EngineController& ec) :
 _initialState(ec.getInitialState()),

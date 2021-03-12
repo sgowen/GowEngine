@@ -6,14 +6,7 @@
 //  Copyright © 2021 Stephen Gowen. All rights reserved.
 //
 
-#include "AssetsManager.hpp"
-
-#include "Assets.hpp"
-#include "ShaderManager.hpp"
-#include "TextureManager.hpp"
-#include "deps/tinythreadpp/ThreadManager.hpp"
-
-#include <assert.h>
+#include <GowEngine/GowEngine.hpp>
 
 void AssetsManager::registerAssets(std::string key, Assets a)
 {

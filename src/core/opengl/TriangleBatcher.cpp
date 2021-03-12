@@ -6,12 +6,7 @@
 //  Copyright © 2021 Stephen Gowen. All rights reserved.
 //
 
-#include "TriangleBatcher.hpp"
-
-#include "Color.hpp"
-#include "Triangle.hpp"
-#include "Shader.hpp"
-#include "OpenGLWrapper.hpp"
+#include <GowEngine/GowEngine.hpp>
 
 TriangleBatcher::TriangleBatcher(uint32_t maxBatchSize, bool isFill) :
 _maxBatchSize(maxBatchSize),

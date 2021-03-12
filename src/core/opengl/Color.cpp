@@ -6,7 +6,7 @@
 //  Copyright © 2021 Stephen Gowen. All rights reserved.
 //
 
-#include "Color.hpp"
+#include <GowEngine/GowEngine.hpp>
 
 const Color Color::CLEAR = Color(COLOR_CLEAR);
 const Color Color::WHITE = Color(COLOR_WHITE);

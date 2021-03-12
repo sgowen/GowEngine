@@ -6,16 +6,11 @@
 //  Copyright © 2021 Stephen Gowen. All rights reserved.
 //
 
-#include "PlatformMacros.hpp"
+#include <GowEngine/GowEngine.hpp>
 #if IS_WINDOWS
 
-#include "WindowsAssetHandler.hpp"
-
-#include <Windows.h>
-#include <stdint.h>
+#include <windows.h>
 #include <fstream>
-#include <vector>
-#include <assert.h>
 
 FileData WindowsAssetHandler::loadAsset(std::string filePath)
 {

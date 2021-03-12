@@ -6,7 +6,7 @@
 //  Copyright © 2021 Stephen Gowen. All rights reserved.
 //
 
-#include "ReplicationCommand.hpp"
+#include <GowEngine/GowEngine.hpp>
 
 ReplicationCommand::ReplicationCommand() :
 _action(REPA_CREATE),

@@ -6,10 +6,7 @@
 //  Copyright © 2021 Stephen Gowen. All rights reserved.
 //
 
-#include "Box2DPhysicsController.hpp"
-
-#include "Entity.hpp"
-#include "Macros.hpp"
+#include <GowEngine/GowEngine.hpp>
 
 #include <box2d/box2d.h>
 

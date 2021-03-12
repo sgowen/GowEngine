@@ -6,16 +6,10 @@
 //  Copyright © 2021 Stephen Gowen. All rights reserved.
 //
 
-#include "PlatformMacros.hpp"
+#include <GowEngine/GowEngine.hpp>
 #if IS_LINUX
 
-#include "OpenALAudioEngine.hpp"
-
-#include "SoundWrapper.hpp"
-#include "OpenALSoundWrapper.hpp"
-
 #include <AL/alut.h>
-#include <stdio.h>
 
 SoundWrapper* OpenALAudioEngine::loadSound(std::string filePath, uint8_t numInstances)
 {

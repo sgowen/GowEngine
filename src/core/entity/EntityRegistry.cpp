@@ -6,9 +6,7 @@
 //  Copyright © 2021 Stephen Gowen. All rights reserved.
 //
 
-#include "EntityRegistry.hpp"
-
-#include "Entity.hpp"
+#include <GowEngine/GowEngine.hpp>
 
 EntityRegistry::EntityRegistry(OnEntityRegisteredFunc oerf, OnEntityDeregisteredFunc oedf) :
 _onEntityRegisteredFunc(oerf),

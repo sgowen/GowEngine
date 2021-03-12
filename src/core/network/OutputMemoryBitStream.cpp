@@ -6,13 +6,7 @@
 //  Copyright © 2021 Stephen Gowen. All rights reserved.
 //
 
-#include "OutputMemoryBitStream.hpp"
-
-#include "MathUtil.hpp"
-#include "StringUtil.hpp"
-
-#include <cstring>
-#include <assert.h>
+#include <GowEngine/GowEngine.hpp>
 
 OutputMemoryBitStream::OutputMemoryBitStream(uint32_t initialBufferByteSize) :
 _bitHead(0),

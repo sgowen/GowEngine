@@ -6,12 +6,7 @@
 //  Copyright © 2021 Stephen Gowen. All rights reserved.
 //
 
-#include "InputManager.hpp"
-
-#include "StringUtil.hpp"
-#include "PlatformMacros.hpp"
-#include "MathUtil.hpp"
-#include "Matrix.hpp"
+#include <GowEngine/GowEngine.hpp>
 
 #include <algorithm>
 

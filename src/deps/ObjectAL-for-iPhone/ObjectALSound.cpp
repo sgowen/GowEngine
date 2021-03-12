@@ -6,10 +6,7 @@
 //  Copyright © 2021 Stephen Gowen. All rights reserved.
 //
 
-#include "ObjectALSound.hpp"
-
-#include "ObjectALHelper.hpp"
-#include "core/assets/AppleAssetHandler.hpp"
+#include <GowEngine/GowEngine.hpp>
 
 ObjectALSound::ObjectALSound(std::string filePath, bool isMusic, float volume) : Sound(),
 _bufferKey(0)

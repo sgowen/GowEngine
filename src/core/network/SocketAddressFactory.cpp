@@ -6,13 +6,7 @@
 //  Copyright © 2021 Stephen Gowen. All rights reserved.
 //
 
-#include "SocketAddressFactory.hpp"
-
-#include "SocketAddress.hpp"
-#include "SocketUtil.hpp"
-#include "StringUtil.hpp"
-
-#include <cstring>
+#include <GowEngine/GowEngine.hpp>
 
 SocketAddress* SocketAddressFactory::createIPv4FromString(const std::string& value)
 {

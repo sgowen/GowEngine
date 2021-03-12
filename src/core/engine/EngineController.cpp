@@ -6,21 +6,7 @@
 //  Copyright © 2021 Stephen Gowen. All rights reserved.
 //
 
-#include "EngineController.hpp"
-
-#include "Network.hpp"
-#include "TimeTracker.hpp"
-#include "EntityIDManager.hpp"
-#include "InstanceRegistry.hpp"
-#include "PlatformMacros.hpp"
-#include "deps/rapidjson/EntityManagerLoader.hpp"
-#include "deps/rapidjson/EntityLayoutLoader.hpp"
-
-#if IS_ANDROID
-    #include "core/assets/AndroidAssetHandler.hpp"
-#elif IS_APPLE
-    #include "core/assets/AppleAssetHandler.hpp"
-#endif
+#include <GowEngine/GowEngine.hpp>
 
 double EngineController::getFrameRate()
 {

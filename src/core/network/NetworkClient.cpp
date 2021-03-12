@@ -6,22 +6,7 @@
 //  Copyright © 2021 Stephen Gowen. All rights reserved.
 //
 
-#include "NetworkClient.hpp"
-
-#include "InputMemoryBitStream.hpp"
-#include "OutputMemoryBitStream.hpp"
-#include "SocketAddress.hpp"
-#include "Entity.hpp"
-#include "MoveList.hpp"
-#include "SocketAddress.hpp"
-#include "TimeTracker.hpp"
-#include "StringUtil.hpp"
-#include "SocketAddressFactory.hpp"
-#include "Macros.hpp"
-#include "InstanceRegistry.hpp"
-#include "SocketUtil.hpp"
-
-#include <assert.h>
+#include <GowEngine/GowEngine.hpp>
 
 NetworkClient* NetworkClient::s_instance = NULL;
 

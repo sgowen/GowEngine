@@ -6,12 +6,7 @@
 //  Copyright © 2021 Stephen Gowen. All rights reserved.
 //
 
-#include "MovingAverage.hpp"
-
-#include "TimeTracker.hpp"
-#include "MathUtil.hpp"
-
-#include <assert.h>
+#include <GowEngine/GowEngine.hpp>
 
 MovingAverage::MovingAverage(TimeTracker* tt, float duration) :
 _timeTracker(tt),

@@ -6,14 +6,7 @@
 //  Copyright © 2021 Stephen Gowen. All rights reserved.
 //
 
-#include "TopDownPhysicsController.hpp"
-
-#include "Entity.hpp"
-#include "TimeTracker.hpp"
-#include "Rektangle.hpp"
-#include "OverlapTester.hpp"
-#include "EntityController.hpp"
-#include "MathUtil.hpp"
+#include <GowEngine/GowEngine.hpp>
 
 IMPL_RTTI(TopDownPhysicsController, EntityPhysicsController)
 IMPL_EntityController_create(TopDownPhysicsController, EntityPhysicsController)

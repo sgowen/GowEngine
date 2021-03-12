@@ -6,22 +6,8 @@
 //  Copyright © 2021 Stephen Gowen. All rights reserved.
 //
 
-#include "PlatformMacros.hpp"
+#include <GowEngine/GowEngine.hpp>
 #if IS_ANDROID
-
-#include "OboeSound.hpp"
-
-#include "SimpleMultiPlayer.hpp"
-#include "AssetHandler.hpp"
-#include "AssetHandlerFactory.hpp"
-#include "FileData.hpp"
-#include "InputStream.hpp"
-#include "WavStreamReader.hpp"
-#include "SampleBuffer.hpp"
-#include "SampleSource.hpp"
-#include "StringUtil.hpp"
-
-#include <assert.h>
 
 OboeSound::OboeSound(SimpleMultiPlayer* simpleMultiPlayer, std::string filePath, float volume) : Sound(),
 _simpleMultiPlayer(simpleMultiPlayer),

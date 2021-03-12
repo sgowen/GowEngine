@@ -8,7 +8,7 @@
 
 #pragma once
 
-#include "PlatformMacros.hpp"
+#include "core/common/PlatformMacros.hpp"
 
 #if IS_DESKTOP
     #include <GLFW/glfw3.h>

@@ -6,31 +6,7 @@
 //  Copyright © 2021 Stephen Gowen. All rights reserved.
 //
 
-#include "NetworkServer.hpp"
-
-#include "ReplicationTransmissionData.hpp"
-#include "InputMemoryBitStream.hpp"
-#include "OutputMemoryBitStream.hpp"
-#include "DeliveryNotificationManager.hpp"
-#include "SocketAddress.hpp"
-#include "ClientProxy.hpp"
-#include "InputState.hpp"
-#include "Entity.hpp"
-#include "TimeTracker.hpp"
-#include "PlatformMacros.hpp"
-#include "StringUtil.hpp"
-#include "EntityRegistry.hpp"
-#include "StringUtil.hpp"
-#include "STLUtil.hpp"
-#include "NetworkClient.hpp"
-#include "ReplicationManagerServer.hpp"
-#include "InstanceRegistry.hpp"
-#include "SocketAddress.hpp"
-#include "EntityIDManager.hpp"
-#include "SocketUtil.hpp"
-#include "EntityManager.hpp"
-
-#include <assert.h>
+#include <GowEngine/GowEngine.hpp>
 
 NetworkServer* NetworkServer::s_instance = NULL;
 

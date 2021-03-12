@@ -6,18 +6,7 @@
 //  Copyright © 2021 Stephen Gowen. All rights reserved.
 //
 
-#include "Entity.hpp"
-
-#include "EntityLayout.hpp"
-#include "EntityController.hpp"
-#include "EntityNetworkController.hpp"
-#include "EntityPhysicsController.hpp"
-#include "EntityRenderController.hpp"
-#include "MathUtil.hpp"
-#include "EntityManager.hpp"
-#include "Macros.hpp"
-#include "Rektangle.hpp"
-#include "OverlapTester.hpp"
+#include <GowEngine/GowEngine.hpp>
 
 Entity::Entity(EntityDef ed, EntityInstanceDef eid) :
 _entityDef(ed),

@@ -6,10 +6,7 @@
 //  Copyright © 2021 Stephen Gowen. All rights reserved.
 //
 
-#include "TextureManager.hpp"
-
-#include "TextureDescriptor.hpp"
-#include "OpenGLWrapper.hpp"
+#include <GowEngine/GowEngine.hpp>
 
 void TextureManager::loadTextures(std::vector<TextureDescriptor>& tds)
 {

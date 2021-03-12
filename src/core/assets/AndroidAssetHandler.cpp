@@ -6,12 +6,8 @@
 //  Copyright © 2021 Stephen Gowen. All rights reserved.
 //
 
-#include "PlatformMacros.hpp"
+#include <GowEngine/GowEngine.hpp>
 #if IS_ANDROID
-
-#include "AndroidAssetHandler.hpp"
-
-#include "StringUtil.hpp"
 
 #include <android/asset_manager.h>
 

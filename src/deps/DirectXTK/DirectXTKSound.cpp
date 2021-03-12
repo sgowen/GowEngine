@@ -6,10 +6,8 @@
 //  Copyright © 2021 Stephen Gowen. All rights reserved.
 //
 
-#include "PlatformMacros.hpp"
+#include <GowEngine/GowEngine.hpp>
 #if IS_WINDOWS
-
-#include "DirectXTKSound.hpp"
 
 DirectXTKSound::DirectXTKSound(DirectX::SoundEffect& sound, float volume) : Sound()
 {

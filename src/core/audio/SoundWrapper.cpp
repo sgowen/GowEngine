@@ -6,10 +6,7 @@
 //  Copyright © 2021 Stephen Gowen. All rights reserved.
 //
 
-#include "SoundWrapper.hpp"
-
-#include "Sound.hpp"
-#include "STLUtil.hpp"
+#include <GowEngine/GowEngine.hpp>
 
 SoundWrapper::SoundWrapper(uint8_t numInstances) :
 _soundIndex(0),
