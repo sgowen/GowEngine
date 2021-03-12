@@ -28,7 +28,6 @@ class SocketAddress;
 #define NW_CLNT (NetworkClient::getInstance())
 
 typedef void (*RemoveProcessedMovesFunc)(float lastMoveProcessedByServerTimestamp);
-typedef MoveList& (*GetMoveListFunc)();
 typedef void (*OnPlayerWelcomedFunc)(uint8_t playerID);
 
 enum NetworkClientState
@@ -41,12 +40,12 @@ enum NetworkClientState
 class NetworkClient
 {
 public:
-    static void create(std::string serverIPAddress, std::string username, uint16_t port, OnEntityRegisteredFunc oerf, OnEntityDeregisteredFunc oedf, RemoveProcessedMovesFunc rpmf, GetMoveListFunc gmlf, OnPlayerWelcomedFunc opwf);
+    static void create(std::string serverIPAddress, std::string username, uint16_t port, OnEntityRegisteredFunc oerf, OnEntityDeregisteredFunc oedf, RemoveProcessedMovesFunc rpmf, OnPlayerWelcomedFunc opwf);
     static NetworkClient* getInstance();
     static void destroy();
     
     NetworkClientState processIncomingPackets();
-    void sendOutgoingPackets();
+    void sendOutgoingPackets(MoveList& ml);
     void requestToAddLocalPlayer();
     void requestToDropLocalPlayer(uint8_t index);
     const MovingAverage& getBytesReceivedPerSecond() const;
@@ -59,7 +58,6 @@ public:
     std::string& getPlayerName();
     NetworkClientState state() const;
     bool connect();
-    EntityRegistry& getEntityRegistry();
     void processPacket(InputMemoryBitStream& imbs, SocketAddress* fromAddress);
     void onMoveProcessed();
     uint32_t getNumMovesProcessed();
@@ -71,7 +69,6 @@ private:
     SocketAddress* _serverAddress;
     std::string _username;
     RemoveProcessedMovesFunc _removeProcessedMovesFunc;
-    GetMoveListFunc _getMoveListFunc;
     OnPlayerWelcomedFunc _onPlayerWelcomedFunc;
     DeliveryNotificationManager _deliveryNotificationManager;
     EntityRegistry _entityRegistry;
@@ -95,12 +92,12 @@ private:
     void handleLocalPlayerAddedPacket(InputMemoryBitStream& imbs);
     void handleLocalPlayerDeniedPacket();
     void handleStatePacket(InputMemoryBitStream& imbs);
-    void updateSendingInputPacket();
+    void updateSendingInputPacket(MoveList& ml);
     void updateAddLocalPlayerRequest();
     void updateDropLocalPlayerRequest();
     void updateNextIndex();
     
-    NetworkClient(std::string serverIPAddress, std::string username, uint16_t port, OnEntityRegisteredFunc oerf, OnEntityDeregisteredFunc oedf, RemoveProcessedMovesFunc rpmf, GetMoveListFunc gmlf, OnPlayerWelcomedFunc opwf);
+    NetworkClient(std::string serverIPAddress, std::string username, uint16_t port, OnEntityRegisteredFunc oerf, OnEntityDeregisteredFunc oedf, RemoveProcessedMovesFunc rpmf, OnPlayerWelcomedFunc opwf);
     ~NetworkClient();
     NetworkClient(const NetworkClient&);
     NetworkClient& operator=(const NetworkClient&);

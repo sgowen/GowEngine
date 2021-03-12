@@ -25,13 +25,13 @@
 
 NetworkClient* NetworkClient::s_instance = NULL;
 
-void NetworkClient::create(std::string serverIPAddress, std::string username, uint16_t port, OnEntityRegisteredFunc oerf, OnEntityDeregisteredFunc oedf, RemoveProcessedMovesFunc rpmf, GetMoveListFunc gmlf, OnPlayerWelcomedFunc opwf)
+void NetworkClient::create(std::string serverIPAddress, std::string username, uint16_t port, OnEntityRegisteredFunc oerf, OnEntityDeregisteredFunc oedf, RemoveProcessedMovesFunc rpmf, OnPlayerWelcomedFunc opwf)
 {
     assert(s_instance == NULL);
     
     INST_REG.get<TimeTracker>(INSK_TIME_CLNT)->reset();
     
-    s_instance = new NetworkClient(serverIPAddress, username, port, oerf, oedf, rpmf, gmlf, opwf);
+    s_instance = new NetworkClient(serverIPAddress, username, port, oerf, oedf, rpmf, opwf);
 }
 
 NetworkClient * NetworkClient::getInstance()
@@ -64,7 +64,7 @@ NetworkClientState NetworkClient::processIncomingPackets()
     return _state;
 }
 
-void NetworkClient::sendOutgoingPackets()
+void NetworkClient::sendOutgoingPackets(MoveList& ml)
 {
     switch (_state)
     {
@@ -72,7 +72,7 @@ void NetworkClient::sendOutgoingPackets()
             updateSayingHello();
             break;
         case NWCS_WELCOMED:
-            updateSendingInputPacket();
+            updateSendingInputPacket(ml);
             updateAddLocalPlayerRequest();
             updateDropLocalPlayerRequest();
             break;
@@ -166,11 +166,6 @@ bool NetworkClient::connect()
     }
     
     return error == NO_ERROR;
-}
-
-EntityRegistry& NetworkClient::getEntityRegistry()
-{
-    return _entityRegistry;
 }
 
 void NetworkClient::processPacket(InputMemoryBitStream& imbs, SocketAddress* fromAddress)
@@ -342,22 +337,21 @@ void NetworkClient::handleStatePacket(InputMemoryBitStream& imbs)
     _hasReceivedNewState = true;
 }
 
-void NetworkClient::updateSendingInputPacket()
+void NetworkClient::updateSendingInputPacket(MoveList& ml)
 {
     OutputMemoryBitStream ombs(NW_MAX_PACKET_SIZE);
     ombs.write<uint8_t, 4>(static_cast<uint8_t>(NWPT_INPUT));
     
     _deliveryNotificationManager.writeState(ombs);
     
-    MoveList& moveList = _getMoveListFunc();
-    ombs.write(moveList.hasMoves());
-    if (moveList.hasMoves())
+    ombs.write(ml.hasMoves());
+    if (ml.hasMoves())
     {
-        int moveCount = moveList.getNumMovesAfterTimestamp(_lastMoveProcessedByServerTimestamp);
+        int moveCount = ml.getNumMovesAfterTimestamp(_lastMoveProcessedByServerTimestamp);
         assert(moveCount <= NW_CLNT_MAX_NUM_MOVES);
         ombs.write<uint8_t, 4>(moveCount);
         
-        std::deque<Move>::const_iterator moveItr = moveList.begin();
+        std::deque<Move>::const_iterator moveItr = ml.begin();
         
         const Move* moveToCopy = NULL;
         for (int i = 0; i < moveCount; ++i, ++moveItr)
@@ -436,12 +430,11 @@ void cb_client_processPacket(InputMemoryBitStream& imbs, SocketAddress* fromAddr
     NW_CLNT->processPacket(imbs, fromAddress);
 }
 
-NetworkClient::NetworkClient(std::string serverIPAddress, std::string username, uint16_t port, OnEntityRegisteredFunc oerf, OnEntityDeregisteredFunc oedf, RemoveProcessedMovesFunc rpmf, GetMoveListFunc gmlf, OnPlayerWelcomedFunc opwf) :
+NetworkClient::NetworkClient(std::string serverIPAddress, std::string username, uint16_t port, OnEntityRegisteredFunc oerf, OnEntityDeregisteredFunc oedf, RemoveProcessedMovesFunc rpmf, OnPlayerWelcomedFunc opwf) :
 _packetHandler(INST_REG.get<TimeTracker>(INSK_TIME_CLNT), port, cb_client_processPacket),
 _serverAddress(SocketAddressFactory::createIPv4FromString(serverIPAddress)),
 _username(username),
 _removeProcessedMovesFunc(rpmf),
-_getMoveListFunc(gmlf),
 _onPlayerWelcomedFunc(opwf),
 _entityRegistry(oerf, oedf),
 _replicationManagerClient(),

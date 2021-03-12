@@ -240,11 +240,6 @@ void NetworkServer::onEntityDeregistered(Entity* e)
     _onEntityDeregisteredFunc(e);
 }
 
-EntityRegistry& NetworkServer::getEntityRegistry()
-{
-    return _entityRegistry;
-}
-
 void NetworkServer::processPacket(InputMemoryBitStream& imbs, SocketAddress* fromAddress)
 {
     if (IS_NETWORK_LOGGING_ENABLED())

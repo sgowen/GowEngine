@@ -16,6 +16,7 @@
     #elif IS_MACOS
         #import <Cocoa/Cocoa.h>
     #endif
+
     #define APPLE_INIT_BUNDLE_ROOT_FILE_PATH                                                                            \
         NSBundle* bundleToUse = [NSBundle mainBundle];                                                                  \
         NSString* dataPath = [[NSString alloc] initWithCString:"data/json/config.json" encoding:NSASCIIStringEncoding]; \
@@ -23,5 +24,6 @@
         std::size_t dataIndex = dataBundlePath.find("data/json/config.json");                                           \
         std::string bundleRootFilePath = dataBundlePath.substr(0, dataIndex);                                           \
         void* data1 = (void*)&bundleRootFilePath
+    
     #define APPLE_BUNDLE_ROOT_FILE_PATH data1
 #endif

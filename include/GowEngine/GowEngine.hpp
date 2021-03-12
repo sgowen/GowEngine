@@ -8,6 +8,15 @@
 
 #pragma once
 
+#include <assert.h>
+#include <ctime>
+#include <memory>
+#include <sstream>
+#include <stdint.h>
+#include <stdlib.h>
+#include <string>
+#include <vector>
+
 /// Box2D Implementation
 #include "deps/box2d/Box2DDebugRenderer.hpp"
 #include "deps/box2d/Box2DPhysicsController.hpp"

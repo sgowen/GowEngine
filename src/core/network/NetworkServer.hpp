@@ -56,7 +56,6 @@ public:
     bool connect();
     void onEntityRegistered(Entity* e);
     void onEntityDeregistered(Entity* e);
-    EntityRegistry& getEntityRegistry();
     void processPacket(InputMemoryBitStream& imbs, SocketAddress* fromAddress);
     void removeProcessedMovesForPlayer(uint8_t playerID);
     void onMovesProcessed(uint8_t moveCount);
