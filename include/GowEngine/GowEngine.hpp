@@ -67,9 +67,6 @@
 /// stb Implementation
 #include "deps/stb/TextureLoader.hpp"
 
-/// TinyThread++ Implementation
-#include "deps/tinythreadpp/ThreadManager.hpp"
-
 /// Core Assets
 #include "core/assets/AndroidAssetHandler.hpp"
 #include "core/assets/AppleAssetHandler.hpp"
@@ -87,8 +84,8 @@
 #include "core/assets/WindowsAssetHandler.hpp"
 
 /// Core Audio
-#include "core/audio/AudioEngine.hpp"
 #include "core/audio/AudioEngineFactory.hpp"
+#include "core/audio/GowAudioEngine.hpp"
 #include "core/audio/Sound.hpp"
 #include "core/audio/SoundManager.hpp"
 #include "core/audio/SoundUtil.hpp"
@@ -106,6 +103,7 @@
 #include "core/common/STLUtil.hpp"
 #include "core/common/StateMachine.hpp"
 #include "core/common/StringUtil.hpp"
+#include "core/common/ThreadManager.hpp"
 #include "core/common/TimeTracker.hpp"
 
 /// Core Engine

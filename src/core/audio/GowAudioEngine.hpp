@@ -1,5 +1,5 @@
 //
-//  AudioEngine.hpp
+//  GowAudioEngine.hpp
 //  GowEngine
 //
 //  Created by Stephen Gowen on 3/8/17.
@@ -15,7 +15,7 @@
 class SoundWrapper;
 class Sound;
 
-class AudioEngine
+class GowAudioEngine
 {    
 public:
     virtual SoundWrapper* loadSound(std::string filePath, uint8_t numInstances = 1) = 0;
@@ -45,8 +45,8 @@ public:
     void setSoundsDisabled(bool value);
     
 protected:
-    AudioEngine();
-    virtual ~AudioEngine() {}
+    GowAudioEngine();
+    virtual ~GowAudioEngine() {}
     
 private:
     bool _musicDisabled;

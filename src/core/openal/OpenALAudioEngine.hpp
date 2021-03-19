@@ -8,12 +8,12 @@
 
 #pragma once
 
+#include "core/audio/GowAudioEngine.hpp"
 #include "core/common/PlatformMacros.hpp"
+
 #if IS_LINUX
 
-#include "AudioEngine.hpp"
-
-class OpenALAudioEngine : public AudioEngine
+class OpenALAudioEngine : public GowAudioEngine
 {
     friend class AudioEngineFactory;
     
@@ -24,10 +24,10 @@ public:
     virtual void onResume() {}
 
 private:
-    static AudioEngine* getInstance()
+    static GowAudioEngine& getInstance()
     {
         static OpenALAudioEngine ret = OpenALAudioEngine();
-        return &ret;
+        return ret;
     }
     
     OpenALAudioEngine();

@@ -9,13 +9,13 @@
 #include <GowEngine/GowEngine.hpp>
 
 PacketHandler::PacketHandler(TimeTracker* tt, uint16_t port, ProcessPacketFunc ppf) :
+_socket(NULL),
+_socketAddress(INADDR_ANY, port),
 _timeTracker(tt),
 _processPacketFunc(ppf),
-_bytesReceivedPerSecond(tt, 1.0f),
-_bytesSentPerSecond(tt, 1.0f),
 _bytesSentThisFrame(0),
-_socket(NULL),
-_socketAddress(INADDR_ANY, port)
+_bytesReceivedPerSecond(tt, 1.0f),
+_bytesSentPerSecond(tt, 1.0f)
 {
     // Empty
 }
@@ -146,8 +146,8 @@ void PacketHandler::updateBytesReceivedLastFrame(int totalReadByteCount)
 
 PacketHandler::ReceivedPacket::ReceivedPacket(uint32_t receivedTime, InputMemoryBitStream& imbs, SocketAddress fromAddress) :
 _receivedTime(receivedTime),
-_fromAddress(fromAddress),
-_packetBuffer(imbs)
+_packetBuffer(imbs),
+_fromAddress(fromAddress)
 {
     // Empty
 }

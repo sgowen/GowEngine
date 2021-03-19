@@ -9,9 +9,10 @@
 #pragma once
 
 #include "core/common/PlatformMacros.hpp"
-#if IS_WINDOWS
 
 #include "AssetHandler.hpp"
+
+#if IS_WINDOWS
 
 class WindowsAssetHandler : public AssetHandler
 {

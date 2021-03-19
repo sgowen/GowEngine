@@ -8,6 +8,10 @@
 
 #pragma once
 
+#include "core/common/PlatformMacros.hpp"
+
+#if IS_APPLE
+
 #ifdef __OBJC__
 #import "ObjectAL.h"
 #endif
@@ -35,3 +39,5 @@ void resumeMusic();
 bool isMusicPlaying();
 bool isMusicLooping();
 bool isMusicLoaded();
+
+#endif /* IS_APPLE */

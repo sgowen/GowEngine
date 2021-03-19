@@ -8,7 +8,7 @@
 
 #pragma once
 
-#include "Renderer.hpp"
+#include "core/opengl/Renderer.hpp"
 
 class RendererLoader
 {

@@ -8,14 +8,14 @@
 
 #pragma once
 
+#include "core/audio/GowAudioEngine.hpp"
 #include "core/common/PlatformMacros.hpp"
-#if IS_ANDROID
 
-#include "AudioEngine.hpp"
+#if IS_ANDROID
 
 class SimpleMultiPlayer;
 
-class OboeAudioEngine : public AudioEngine
+class OboeAudioEngine : public GowAudioEngine
 {
     friend class AudioEngineFactory;
     
@@ -26,10 +26,10 @@ public:
     virtual void onResume() {}
     
 private:
-    static AudioEngine* getInstance()
+    static GowAudioEngine& getInstance()
     {
         static OboeAudioEngine ret = OboeAudioEngine();
-        return &ret;
+        return ret;
     }
     
     SimpleMultiPlayer* _simpleMultiPlayer;

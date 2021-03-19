@@ -7,6 +7,7 @@
 //
 
 #include <GowEngine/GowEngine.hpp>
+
 #if IS_WINDOWS
 
 DirectXTKSound::DirectXTKSound(DirectX::SoundEffect& sound, float volume) : Sound()

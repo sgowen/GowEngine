@@ -22,7 +22,7 @@
 class AudioEngineFactory
 {
 public:
-    static AudioEngine& getInstance()
+    static GowAudioEngine& getInstance()
     {
 #if IS_APPLE
         return ObjectALAudioEngine::getInstance();
@@ -33,7 +33,7 @@ public:
 #elif IS_WINDOWS
         return DirectXTKAudioEngine::getInstance();
 #else
-        #error Need to add AudioEngine implementation
+        #error Need to add GowAudioEngine implementation
 #endif
     }
     

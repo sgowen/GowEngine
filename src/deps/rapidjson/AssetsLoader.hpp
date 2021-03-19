@@ -8,7 +8,7 @@
 
 #pragma once
 
-#include "Assets.hpp"
+#include "core/assets/Assets.hpp"
 
 class AssetsLoader
 {

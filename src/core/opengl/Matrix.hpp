@@ -8,7 +8,8 @@
 
 #pragma once
 
-#include "MatrixDescriptor.hpp"
+#include "core/assets/MatrixDescriptor.hpp"
+
 #include "ShaderInput.hpp"
 
 struct Matrix

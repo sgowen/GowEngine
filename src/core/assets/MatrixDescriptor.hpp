@@ -30,9 +30,9 @@ struct MatrixDescriptor
     
     MatrixDescriptor(uint32_t width, uint32_t height) :
     _left(0),
-    _right(width),
+    _right(static_cast<float>(width)),
     _bottom(0),
-    _top(height),
+    _top(static_cast<float>(height)),
     _near(-1),
     _far(1)
     {

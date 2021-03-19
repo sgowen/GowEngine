@@ -8,10 +8,9 @@
 
 #pragma once
 
-#include "StateMachine.hpp"
-
-#include "Assets.hpp"
-#include "Renderer.hpp"
+#include "core/common/StateMachine.hpp"
+#include "core/assets/Assets.hpp"
+#include "core/opengl/Renderer.hpp"
 
 #include <string>
 

@@ -8,8 +8,8 @@
 
 #pragma once
 
-#include "StateMachine.hpp"
-#include "EntityManager.hpp"
+#include "core/common/StateMachine.hpp"
+#include "core/entity/EntityManager.hpp"
 
 #include <map>
 #include <string>

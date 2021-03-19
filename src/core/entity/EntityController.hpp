@@ -8,8 +8,8 @@
 
 #pragma once
 
-#include "RTTI.hpp"
-#include "Macros.hpp"
+#include "core/common/RTTI.hpp"
+#include "core/common/Macros.hpp"
 
 class Entity;
 

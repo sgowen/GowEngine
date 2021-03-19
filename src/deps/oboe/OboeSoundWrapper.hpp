@@ -8,10 +8,10 @@
 
 #pragma once
 
+#include "core/audio/SoundWrapper.hpp"
 #include "core/common/PlatformMacros.hpp"
-#if IS_ANDROID
 
-#include "SoundWrapper.hpp"
+#if IS_ANDROID
 
 class SimpleMultiPlayer;
 

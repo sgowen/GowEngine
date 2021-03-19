@@ -6,8 +6,17 @@
 //  Copyright © 2021 Stephen Gowen. All rights reserved.
 //
 
-#include <GowEngine/GowEngine.hpp>
+#include "core/common/PlatformMacros.hpp"
+
 #if IS_DESKTOP
+
+#if IS_LINUX
+    #include <GL/glew.h>
+#elif IS_WINDOWS
+    #include <glad/gl.h>
+#endif
+
+#include <GowEngine/GowEngine.hpp>
 
 #define GLFW_INCLUDE_NONE
 #include <GLFW/glfw3.h>

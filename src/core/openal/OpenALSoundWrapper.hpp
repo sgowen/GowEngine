@@ -8,10 +8,10 @@
 
 #pragma once
 
+#include "core/audio/SoundWrapper.hpp"
 #include "core/common/PlatformMacros.hpp"
-#if IS_LINUX
 
-#include "SoundWrapper.hpp"
+#if IS_LINUX
 
 class OpenALSoundWrapper : public SoundWrapper
 {

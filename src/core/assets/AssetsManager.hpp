@@ -48,6 +48,9 @@ private:
     ShaderManager _shaderMgr;
     SoundManager _soundMgr;
     TextureManager _textureMgr;
+    bool _isLoaded;
+    
+    bool areAssetsLoaded();
     
     AssetsManager();
     ~AssetsManager() {}

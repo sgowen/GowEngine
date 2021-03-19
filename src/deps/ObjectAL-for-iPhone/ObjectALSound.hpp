@@ -8,9 +8,12 @@
 
 #pragma once
 
-#include "Sound.hpp"
+#include "core/common/PlatformMacros.hpp"
+#include "core/audio/Sound.hpp"
 
 #include <string>
+
+#if IS_APPLE
 
 class ObjectALSound : public Sound
 {
@@ -30,3 +33,5 @@ public:
 private:
     uint32_t _bufferKey;
 };
+
+#endif /* IS_APPLE */

@@ -25,14 +25,18 @@
     #include <GL/glew.h>
 #elif IS_WINDOWS
     #define WIN32_LEAN_AND_MEAN
-    #define NOMINMAX
     #include <windows.h>
+
     #include <glad/gl.h>
 #endif
 
 #include <GowEngine/GowEngine.hpp>
 
 uint32_t OpenGLWrapper::TEXTURE_SLOTS[NUM_SUPPORTED_TEXTURE_SLOTS] = {GL_TEXTURE0, GL_TEXTURE1, GL_TEXTURE2, GL_TEXTURE3};
+uint32_t OpenGLWrapper::MODE_LINES = GL_LINES;
+uint32_t OpenGLWrapper::MODE_LINE_STRIP = GL_LINE_STRIP;
+uint32_t OpenGLWrapper::MODE_TRIANGLES = GL_TRIANGLES;
+uint32_t OpenGLWrapper::MODE_TRIANGLE_STRIP = GL_TRIANGLE_STRIP;
 
 void OpenGLWrapper::enableBlending(bool srcAlpha)
 {

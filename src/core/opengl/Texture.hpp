@@ -8,7 +8,7 @@
 
 #pragma once
 
-#include "TextureDescriptor.hpp"
+#include "core/assets/TextureDescriptor.hpp"
 
 struct Texture
 {

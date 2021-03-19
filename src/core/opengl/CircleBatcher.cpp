@@ -107,7 +107,7 @@ void CircleBatcher::end(Shader& s, mat4& matrix, const Color& c)
     for (std::vector<size_t>::iterator i = _circles.begin(); i != _circles.end(); ++i)
     {
         uint32_t numPoints = (uint32_t)(*i);
-        OGL.draw(GL_TRIANGLE_STRIP, offset, numPoints);
+        OGL.draw(OpenGLWrapper::MODE_TRIANGLE_STRIP, offset, numPoints);
         offset += numPoints;
     }
 

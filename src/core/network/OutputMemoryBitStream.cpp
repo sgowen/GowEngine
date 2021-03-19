@@ -9,8 +9,8 @@
 #include <GowEngine/GowEngine.hpp>
 
 OutputMemoryBitStream::OutputMemoryBitStream(uint32_t initialBufferByteSize) :
-_bitHead(0),
-_buffer(NULL)
+_buffer(NULL),
+_bitHead(0)
 {
     reallocBuffer(initialBufferByteSize * 8);
 }
@@ -41,7 +41,7 @@ void OutputMemoryBitStream::writeBits(uint8_t data, uint32_t bitCount)
 
     if (nextBitHead > _bitCapacity)
     {
-        reallocBuffer(std::max(_bitCapacity * 2, nextBitHead));
+        reallocBuffer(GOW_MAX(_bitCapacity * 2, nextBitHead));
     }
     
     uint32_t byteOffset = _bitHead >> 3;

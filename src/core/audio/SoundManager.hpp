@@ -9,7 +9,7 @@
 #pragma once
 
 #include "SoundWrapper.hpp"
-#include "SoundDescriptor.hpp"
+#include "core/assets/SoundDescriptor.hpp"
 
 #include <map>
 #include <vector>

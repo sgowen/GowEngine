@@ -9,6 +9,7 @@
 #pragma once
 
 #include "core/common/PlatformMacros.hpp"
+
 #if IS_ANDROID
 
 #include <oboe/Oboe.h>

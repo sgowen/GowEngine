@@ -15,7 +15,7 @@
 #include <queue>
 #include <list>
 
-class TimeTracker;
+struct TimeTracker;
 class InputMemoryBitStream;
 class OutputMemoryBitStream;
 class SocketAddress;

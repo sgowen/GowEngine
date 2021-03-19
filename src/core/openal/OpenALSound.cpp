@@ -7,6 +7,7 @@
 //
 
 #include <GowEngine/GowEngine.hpp>
+
 #if IS_LINUX
 
 #include <AL/alut.h>
@@ -15,9 +16,11 @@ OpenALSound::OpenALSound(std::string filePath, float volume) : Sound(),
 _buf(0),
 _src(0)
 {
-    alGenSources(1, &_src);
-    _buf = alutCreateBufferFromFile(filePath);
+    _buf = alutCreateBufferFromFile(filePath.c_str());
     assert(_buf != AL_NONE);
+
+    alGenSources(1, &_src);
+
     alSourcei(_src, AL_BUFFER, _buf);
     alSourcei(_src, AL_LOOPING, AL_FALSE);
 }
@@ -25,15 +28,14 @@ _src(0)
 OpenALSound::~OpenALSound()
 {
     stop();
-    
-    alDeleteBuffers(1, &_buf);
+
     alDeleteSources(1, &_src);
+    alDeleteBuffers(1, &_buf);
 }
 
 void OpenALSound::play()
 {
     alSourcei(_src, AL_LOOPING, _isLooping ? AL_TRUE : AL_FALSE);
-
     alSourcePlay(_src);
 }
 
@@ -67,7 +69,7 @@ bool OpenALSound::isLooping()
 {
     ALint isLooping;
     alGetSourcei(_src, AL_LOOPING, &isLooping);
-    
+
     return isLooping;
 }
 

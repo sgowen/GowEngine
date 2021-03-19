@@ -7,6 +7,7 @@
 //
 
 #include <GowEngine/GowEngine.hpp>
+
 #if IS_WINDOWS
 
 SoundWrapper* DirectXTKAudioEngine::loadSound(std::string filePath, uint8_t numInstances)
@@ -16,7 +17,7 @@ SoundWrapper* DirectXTKAudioEngine::loadSound(std::string filePath, uint8_t numI
 
 SoundWrapper* DirectXTKAudioEngine::loadMusic(std::string filePath)
 {
-    return loadSound(1337, filePath);
+    return loadSound(filePath);
 }
 
 void DirectXTKAudioEngine::onPause()
@@ -29,15 +30,17 @@ void DirectXTKAudioEngine::onResume()
     _audioEngine->Resume();
 }
 
-DirectXTKAudioEngine::DirectXTKAudioEngine() : AudioEngine()
+DirectXTKAudioEngine::DirectXTKAudioEngine() : GowAudioEngine()
 {
 	using namespace DirectX;
+
+    CoInitializeEx(NULL, COINIT_MULTITHREADED);
 
     AUDIO_ENGINE_FLAGS flags = AudioEngine_Default;
 #if IS_DEBUG
     flags |= AudioEngine_Debug;
 #endif
-    _audioEngine = std::make_unique<AudioEngine>(flags);
+    _audioEngine = std::make_unique<DirectX::AudioEngine>(flags);
 }
 
 DirectXTKAudioEngine::~DirectXTKAudioEngine()

@@ -9,9 +9,10 @@
 #pragma once
 
 #include "core/common/PlatformMacros.hpp"
-#if IS_LINUX
 
 #include "AssetHandler.hpp"
+
+#if IS_LINUX
 
 class LinuxAssetHandler : public AssetHandler
 {

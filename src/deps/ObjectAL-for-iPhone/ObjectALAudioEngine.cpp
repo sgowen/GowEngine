@@ -8,6 +8,8 @@
 
 #include <GowEngine/GowEngine.hpp>
 
+#if IS_APPLE
+
 SoundWrapper* ObjectALAudioEngine::loadSound(std::string filePath, uint8_t numInstances)
 {
     return new ObjectALSoundWrapper(filePath, false, numInstances);
@@ -28,7 +30,7 @@ void ObjectALAudioEngine::onResume()
     resumeObjectAL();
 }
 
-ObjectALAudioEngine::ObjectALAudioEngine() : AudioEngine()
+ObjectALAudioEngine::ObjectALAudioEngine() : GowAudioEngine()
 {
     initObjectAL();
 }
@@ -37,3 +39,5 @@ ObjectALAudioEngine::~ObjectALAudioEngine()
 {
     deinitObjectAL();
 }
+
+#endif /* IS_APPLE */

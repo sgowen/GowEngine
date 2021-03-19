@@ -8,6 +8,8 @@
 
 #include <GowEngine/GowEngine.hpp>
 
+#if IS_APPLE
+
 ObjectALSound::ObjectALSound(std::string filePath, bool isMusic, float volume) : Sound(),
 _bufferKey(0)
 {
@@ -132,3 +134,5 @@ bool ObjectALSound::isPaused()
 {
     return !isPlaying();
 }
+
+#endif /* IS_APPLE */

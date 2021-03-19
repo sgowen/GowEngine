@@ -7,6 +7,7 @@
 //
 
 #include <GowEngine/GowEngine.hpp>
+
 #if IS_ANDROID
 
 using namespace oboe;
@@ -150,17 +151,17 @@ void SimpleMultiPlayer::play(uint32_t key, bool isLooping)
 
 bool SimpleMultiPlayer::isPlaying(uint32_t key)
 {
-    sampleSource(key)->isPlaying();
+    return sampleSource(key)->isPlaying();
 }
 
 bool SimpleMultiPlayer::isPaused(uint32_t key)
 {
-    sampleSource(key)->isPaused();
+    return sampleSource(key)->isPaused();
 }
 
 bool SimpleMultiPlayer::isLooping(uint32_t key)
 {
-    sampleSource(key)->isLooping();
+    return sampleSource(key)->isLooping();
 }
 
 void SimpleMultiPlayer::pause(uint32_t key)

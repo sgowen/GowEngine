@@ -7,6 +7,7 @@
 //
 
 #include <GowEngine/GowEngine.hpp>
+
 #if IS_ANDROID
 
 SoundWrapper* OboeAudioEngine::loadSound(std::string filePath, uint8_t numInstances)
@@ -19,7 +20,7 @@ SoundWrapper* OboeAudioEngine::loadMusic(std::string filePath)
     return loadSound(filePath);
 }
 
-OboeAudioEngine::OboeAudioEngine() : AudioEngine(),
+OboeAudioEngine::OboeAudioEngine() : GowAudioEngine(),
 _simpleMultiPlayer(new SimpleMultiPlayer())
 {
     _simpleMultiPlayer->setupAudioStream(2);

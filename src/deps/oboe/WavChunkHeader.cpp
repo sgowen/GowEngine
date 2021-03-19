@@ -7,6 +7,7 @@
 //
 
 #include <GowEngine/GowEngine.hpp>
+
 #if IS_ANDROID
 
 const RiffID WavChunkHeader::RIFFID_DATA = makeRiffID('d', 'a', 't', 'a');

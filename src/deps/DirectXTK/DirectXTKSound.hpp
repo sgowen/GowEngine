@@ -8,10 +8,10 @@
 
 #pragma once
 
+#include "core/audio/Sound.hpp"
 #include "core/common/PlatformMacros.hpp"
-#if IS_WINDOWS
 
-#include "Sound.hpp"
+#if IS_WINDOWS
 
 #include "Audio.h"
 

@@ -8,8 +8,8 @@
 
 #pragma once
 
-#include "ShaderDescriptor.hpp"
-#include "FileData.hpp"
+#include "core/assets/ShaderDescriptor.hpp"
+#include "core/assets/FileData.hpp"
 
 struct Shader
 {

@@ -8,8 +8,9 @@
 
 #pragma once
 
+#include "core/entity/EntityRegistry.hpp"
+
 #include "PacketHandler.hpp"
-#include "EntityRegistry.hpp"
 #include "DeliveryNotificationManager.hpp"
 #include "ReplicationManagerClient.hpp"
 #include "MovingAverage.hpp"

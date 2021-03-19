@@ -10,16 +10,16 @@
 
 InputMemoryBitStream::InputMemoryBitStream(char* buffer, uint32_t byteCount) :
 _buffer(buffer),
-_bitCapacity(byteCount * 8),
 _bitHead(0),
+_bitCapacity(byteCount * 8),
 _isBufferOwner(false)
 {
     // Empty
 }
 
 InputMemoryBitStream::InputMemoryBitStream(const InputMemoryBitStream& other) :
-_bitCapacity(other._bitCapacity),
 _bitHead(other._bitHead),
+_bitCapacity(other._bitCapacity),
 _isBufferOwner(true)
 {
     int byteCount = (_bitCapacity + 7) / 8;

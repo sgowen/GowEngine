@@ -8,13 +8,14 @@
 
 #pragma once
 
-#include "EntityPhysicsController.hpp"
-#include "Line.hpp"
+#include "core/entity/EntityPhysicsController.hpp"
+
+#include "core/math/Line.hpp"
 
 #include <vector>
 
 class Entity;
-class TimeTracker;
+struct TimeTracker;
 struct Rektangle;
 
 struct Bounds

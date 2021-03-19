@@ -20,7 +20,7 @@ _cycleTime(0)
     }
     assert(_cycleTime > 0);
 
-    const int numFrames = static_cast<int>(_frameTimes.size());
+    const size_t numFrames = _frameTimes.size();
 	const int right = x + animationWidth;
     const int bottom = y + animationHeight;
 

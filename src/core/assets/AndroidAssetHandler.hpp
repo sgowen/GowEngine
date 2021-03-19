@@ -9,9 +9,10 @@
 #pragma once
 
 #include "core/common/PlatformMacros.hpp"
-#if IS_ANDROID
 
 #include "AssetHandler.hpp"
+
+#if IS_ANDROID
 
 #include <jni.h>
 #include <android/asset_manager_jni.h>

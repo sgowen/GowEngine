@@ -8,10 +8,11 @@
 
 #pragma once
 
+#include "core/math/Vector2.hpp"
+#include "core/common/Config.hpp"
+#include "core/common/StringUtil.hpp"
+
 #include "EntityLayout.hpp"
-#include "Vector2.hpp"
-#include "Config.hpp"
-#include "StringUtil.hpp"
 
 #include <stdint.h>
 #include <string>
@@ -89,7 +90,7 @@ struct NetworkDataField
                 _valueBool.emplace(name, StringUtil::stringToBool(value));
                 break;
             case NDFT_UINT8:
-                _valueUInt8.emplace(name, StringUtil::stringToNumber<uint16_t>(value));
+                _valueUInt8.emplace(name, static_cast<uint8_t>(StringUtil::stringToNumber<uint16_t>(value)));
                 break;
             case NDFT_UINT16:
                 _valueUInt16.emplace(name, StringUtil::stringToNumber<uint16_t>(value));
@@ -101,7 +102,7 @@ struct NetworkDataField
                 _valueUInt64.emplace(name, StringUtil::stringToNumber<uint64_t>(value));
                 break;
             case NDFT_INT8:
-                _valueInt8.emplace(name, StringUtil::stringToNumber<int16_t>(value));
+                _valueInt8.emplace(name, static_cast<int8_t>(StringUtil::stringToNumber<int16_t>(value)));
                 break;
             case NDFT_INT16:
                 _valueInt16.emplace(name, StringUtil::stringToNumber<int16_t>(value));

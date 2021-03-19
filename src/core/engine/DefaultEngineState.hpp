@@ -8,7 +8,7 @@
 
 #pragma once
 
-#include "StateMachine.hpp"
+#include "core/common/StateMachine.hpp"
 
 class Engine;
 
@@ -22,15 +22,15 @@ public:
         static DefaultEngineState ret = DefaultEngineState();
         return ret;
     }
-    
+
     virtual void enter(Engine* e) {}
     virtual void execute(Engine* e);
     virtual void exit(Engine* e) {}
-    
+
 private:
     bool ERSA_CREATE_RESOURCES_called;
     bool ERSA_WINDOW_SIZE_CHANGED_called;
-    
+
     DefaultEngineState();
     virtual ~DefaultEngineState() {}
     DefaultEngineState(const DefaultEngineState&);

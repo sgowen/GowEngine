@@ -40,14 +40,14 @@ void RektangleBatcher::addRektangle(Rektangle& r)
     float bottom = r.bottom();
     float right = left + r._width;
     float top = bottom + r._height;
-    
+
     addRektangle(left, bottom, right, top);
 }
 
 void RektangleBatcher::addRektangle(float left, float bottom, float right, float top)
 {
     assert((_vertices.size() / NUM_VERTICES_PER_RECTANGLE) < _maxBatchSize);
-    
+
     _vertices.emplace_back(left, bottom);
     _vertices.emplace_back(left, top);
     _vertices.emplace_back(right, top);
@@ -60,26 +60,26 @@ void RektangleBatcher::end(Shader& s, mat4& matrix, const Color& c)
     {
         return;
     }
-    
-    int numQuads = (int)_vertices.size() / NUM_VERTICES_PER_RECTANGLE;
-    
+
+    uint32_t numQuads = (uint32_t)_vertices.size() / NUM_VERTICES_PER_RECTANGLE;
+
     OGL.bindVertexBuffer(_vertexBuffer, sizeof(VERTEX_2D) * _vertices.size(), &_vertices[0]);
     OGL.bindShader(s);
     OGL.bindMatrix(s, "u_Matrix", matrix);
     OGL.bindColor(s, "u_Color", c);
-    
+
     if (_isFill)
     {
-        OGL.drawIndexed(GL_TRIANGLES, _indexBuffer, numQuads);
+        OGL.drawIndexed(OpenGLWrapper::MODE_TRIANGLES, _indexBuffer, numQuads);
     }
     else
     {
         for (uint32_t i = 0; i < numQuads; ++i)
         {
-            OGL.drawIndexed(GL_LINE_STRIP, _indexBuffer, 1, i);
+            OGL.drawIndexed(OpenGLWrapper::MODE_LINE_STRIP, _indexBuffer, 1, i);
         }
     }
-    
+
     OGL.unbindShader(s);
     OGL.unbindVertexBuffer();
 }

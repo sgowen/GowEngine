@@ -29,6 +29,10 @@ class OpenGLWrapper
 {
 public:
     static uint32_t TEXTURE_SLOTS[NUM_SUPPORTED_TEXTURE_SLOTS];
+    static uint32_t MODE_LINES;
+    static uint32_t MODE_LINE_STRIP;
+    static uint32_t MODE_TRIANGLES;
+    static uint32_t MODE_TRIANGLE_STRIP;
 
     static OpenGLWrapper& getInstance()
     {

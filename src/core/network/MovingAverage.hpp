@@ -8,7 +8,7 @@
 
 #pragma once
 
-class TimeTracker;
+struct TimeTracker;
 
 class MovingAverage
 {

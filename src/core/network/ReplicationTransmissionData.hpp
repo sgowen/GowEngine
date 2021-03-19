@@ -8,10 +8,10 @@
 
 #pragma once
 
-#include "TransmissionData.hpp"
+#include "core/common/Pool.hpp"
 
+#include "TransmissionData.hpp"
 #include "ReplicationCommand.hpp"
-#include "Pool.hpp"
 
 #include <vector>
 

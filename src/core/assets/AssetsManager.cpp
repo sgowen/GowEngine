@@ -23,6 +23,11 @@ void AssetsManager::deregisterAssets(std::string key)
 
 void AssetsManager::update()
 {
+    if (_isLoaded)
+    {
+        return;
+    }
+
     std::map<std::string, Shader>& shaders = _shaderMgr.shaders();
     for (auto& pair : shaders)
     {
@@ -35,7 +40,7 @@ void AssetsManager::update()
             return;
         }
     }
-    
+
     std::map<std::string, Texture>& textures = _textureMgr.textures();
     for (auto& pair : textures)
     {
@@ -47,15 +52,20 @@ void AssetsManager::update()
             return;
         }
     }
+
+    if (areAssetsLoaded())
+    {
+        THREAD_MGR.tearDownThread("AssetsManager");
+        _isLoaded = true;
+    }
 }
 
 void thread_createDeviceDependentResources(void* arg)
 {
     assert(arg != NULL);
-    
+
     AssetsManager* am = static_cast<AssetsManager*>(arg);
     am->createDeviceDependentResources();
-    THREAD_MGR.tearDownThread("AssetsManager");
 }
 
 void AssetsManager::createDeviceDependentResourcesAsync()
@@ -64,12 +74,13 @@ void AssetsManager::createDeviceDependentResourcesAsync()
     {
         return;
     }
-    
+
     THREAD_MGR.spawnThread("AssetsManager", thread_createDeviceDependentResources, this);
 }
 
 void AssetsManager::createDeviceDependentResources()
 {
+    _isLoaded = false;
     for (auto& pair : _assets)
     {
         Assets& a = pair.second;
@@ -128,7 +139,7 @@ bool AssetsManager::isTextureLoaded(std::string name)
 TextureRegion& AssetsManager::textureRegion(std::string key, uint16_t stateTime)
 {
     TextureRegion* ret = NULL;
-    
+
     for (auto& pair : _assets)
     {
         ret = pair.second.textureRegion(key, stateTime);
@@ -137,35 +148,35 @@ TextureRegion& AssetsManager::textureRegion(std::string key, uint16_t stateTime)
             break;
         }
     }
-    
+
     assert(ret != NULL);
-    
+
     return *ret;
 }
 
 bool AssetsManager::isLoaded()
 {
-    if (THREAD_MGR.isThreadRunning("AssetsManager"))
-    {
-        return false;
-    }
-    
-    int numShaders = 0;
-    int numSounds = 0;
-    int numTextures = 0;
+    return _isLoaded;
+}
+
+bool AssetsManager::areAssetsLoaded()
+{
+    size_t numShaders = 0;
+    size_t numSounds = 0;
+    size_t numTextures = 0;
     for (auto& pair : _assets)
     {
         numShaders += pair.second._shaderDescriptors.size();
         numSounds += pair.second._soundDescriptors.size();
         numTextures += pair.second._textureDescriptors.size();
     }
-    
+
     std::map<std::string, Shader>& shaders = _shaderMgr.shaders();
     if (numShaders != shaders.size())
     {
         return false;
     }
-    
+
     std::map<uint16_t, SoundWrapper*>& sounds = _soundMgr.sounds();
     size_t expectedNumSounds = sounds.size();
     if (_soundMgr.music() != NULL)
@@ -176,13 +187,13 @@ bool AssetsManager::isLoaded()
     {
         return false;
     }
-    
+
     std::map<std::string, Texture>& textures = _textureMgr.textures();
     if (numTextures != textures.size())
     {
         return false;
     }
-    
+
     for (auto& pair : shaders)
     {
         if (pair.second._program == 0)
@@ -190,7 +201,7 @@ bool AssetsManager::isLoaded()
             return false;
         }
     }
-    
+
     for (auto& pair : textures)
     {
         if (pair.second._texture == 0)
@@ -198,14 +209,15 @@ bool AssetsManager::isLoaded()
             return false;
         }
     }
-    
+
     return true;
 }
 
 AssetsManager::AssetsManager() :
 _shaderMgr(),
 _soundMgr(),
-_textureMgr()
+_textureMgr(),
+_isLoaded(false)
 {
     // Empty
 }

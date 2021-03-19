@@ -8,6 +8,8 @@
 
 #include <GowEngine/GowEngine.hpp>
 
+#if IS_APPLE
+
 ObjectALSoundWrapper::ObjectALSoundWrapper(std::string filePath, bool isMusic, uint8_t numInstances) : SoundWrapper(numInstances)
 {
     for (int i = 0; i < _numInstances; ++i)
@@ -15,3 +17,5 @@ ObjectALSoundWrapper::ObjectALSoundWrapper(std::string filePath, bool isMusic, u
         _sounds.push_back(new ObjectALSound(filePath, isMusic));
     }
 }
+
+#endif /* IS_APPLE */

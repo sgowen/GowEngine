@@ -8,7 +8,7 @@
 
 #pragma once
 
-#include "Vector2.hpp"
+#include "core/math/Vector2.hpp"
 
 enum CursorEventType
 {

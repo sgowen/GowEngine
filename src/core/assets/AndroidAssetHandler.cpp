@@ -7,6 +7,7 @@
 //
 
 #include <GowEngine/GowEngine.hpp>
+
 #if IS_ANDROID
 
 #include <android/asset_manager.h>
@@ -33,12 +34,10 @@ AndroidAssetHandler* AndroidAssetHandler::s_instance = NULL;
 
 FileData AndroidAssetHandler::loadAsset(std::string filePath)
 {
-    assert(filePath != NULL);
-    
-    AAsset *asset = AAssetManager_open(_assetManager, filePath, AASSET_MODE_STREAMING);
+    AAsset *asset = AAssetManager_open(_assetManager, filePath.c_str(), AASSET_MODE_STREAMING);
     if (asset == NULL)
     {
-        LOG("Unable to load %s from AssetManager", filePath);
+        LOG("Unable to load %s from AssetManager", filePath.c_str());
     }
     assert(asset != NULL);
     

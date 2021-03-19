@@ -8,9 +8,9 @@
 
 #pragma once
 
-#include "CircleBatcher.hpp"
-#include "RektangleBatcher.hpp"
-#include "TriangleBatcher.hpp"
+#include "core/opengl/CircleBatcher.hpp"
+#include "core/opengl/RektangleBatcher.hpp"
+#include "core/opengl/TriangleBatcher.hpp"
 
 #include <box2d/b2_draw.h>
 

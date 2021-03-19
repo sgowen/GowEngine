@@ -7,6 +7,7 @@
 //
 
 #include <GowEngine/GowEngine.hpp>
+
 #if IS_LINUX
 
 #include <AL/alut.h>
@@ -18,7 +19,7 @@ SoundWrapper* OpenALAudioEngine::loadSound(std::string filePath, uint8_t numInst
 
 SoundWrapper* OpenALAudioEngine::loadMusic(std::string filePath)
 {
-    return loadSound(1337, filePath);
+    return loadSound(filePath);
 }
 
 static void reportError()
@@ -26,7 +27,7 @@ static void reportError()
     fprintf(stderr, "ALUT error: %s\n", alutGetErrorString(alutGetError()));
 }
 
-OpenALAudioEngine::OpenALAudioEngine() : AudioEngine()
+OpenALAudioEngine::OpenALAudioEngine() : GowAudioEngine()
 {
     if (!alutInit(NULL, NULL))
     {

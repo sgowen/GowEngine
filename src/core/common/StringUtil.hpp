@@ -16,24 +16,6 @@
 #include <stdarg.h>
 #include <assert.h>
 
-#if IS_ANDROID
-    #include <android/log.h>
-#elif IS_WINDOWS
-    #include <windows.h>
-    #include <debugapi.h>
-#endif
-
-#if _MSC_VER >= 1600
-    #include <sal.h>
-    #if _MSC_VER >= 1700
-        #define OUT_Z_ARRAY _Post_z_
-    #else
-        #define OUT_Z_ARRAY _Deref_post_z_
-    #endif
-#else
-    #define OUT_Z_ARRAY
-#endif
-
 #define LOG(...) StringUtil::log(__VA_ARGS__)
 
 class StringUtil
@@ -73,34 +55,6 @@ public:
         
         return defaultValue;
     }
-
-    template<size_t maxLenInChars>
-    static void sprintf_safe(OUT_Z_ARRAY char (&pDest)[maxLenInChars], const char *pFormat, ...)
-    {
-        va_list params;
-        va_start(params, pFormat);
-
-#if IS_WINDOWS
-        _vsnprintf(pDest, maxLenInChars, pFormat, params);
-#else
-        vsnprintf(pDest, maxLenInChars, pFormat, params);
-#endif
-
-        pDest[maxLenInChars - 1] = '\0';
-
-        va_end(params);
-    }
-
-#if !(IS_WINDOWS)
-    static void OutputDebugStringA(const char* value)
-    {
-#if IS_ANDROID
-        __android_log_print(ANDROID_LOG_DEBUG, "GowEngine", "%s", value);
-#else
-        printf("%s", value);
-#endif
-    }
-#endif
     
     static std::string format(const char* format, ...)
     {
@@ -120,21 +74,7 @@ public:
 
     static void log(const char* format, ...)
     {
-        char temp[4096];
-        
-        va_list args;
-        va_start (args, format);
-        
-    #if IS_WINDOWS
-        _vsnprintf_s(temp, 4096, 4096, format, args);
-    #elif IS_ANDROID
-        __android_log_vprint(ANDROID_LOG_DEBUG, "GowEngine", format, args);
-    #else
-        vsnprintf(temp, 4096, format, args);
-    #endif
-        
-        OutputDebugStringA(temp);
-        OutputDebugStringA("\n");
+        // TODO, replace with spdlog
     }
 
     static std::string stringFromFourChar(uint32_t fourCC)

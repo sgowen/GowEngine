@@ -14,7 +14,7 @@
 #include <deque>
 #include <stdint.h>
 
-class TimeTracker;
+struct TimeTracker;
 class OutputMemoryBitStream;
 class InputMemoryBitStream;
 

@@ -41,7 +41,7 @@ void FontBatcher::addText(Renderer& r, TextView& tv)
     {
         return;
     }
-    
+
     if (_glyphs.empty())
     {
         Texture& t = ASSETS.texture(_textureName);
@@ -60,9 +60,9 @@ void FontBatcher::addText(Renderer& r, TextView& tv)
             }
         }
     }
-    
+
     size_t len = tv._text.length();
-    
+
     std::vector<int> rows;
     rows.push_back(0);
     int rowIndex = 0;
@@ -75,22 +75,22 @@ void FontBatcher::addText(Renderer& r, TextView& tv)
             ++rowIndex;
             continue;
         }
-        
+
         ++rows[rowIndex];
     }
-    
+
     Matrix& m = r.matrix(_matrixName);
     float matrixWidth = m._desc.width();
     float matrixHeight = m._desc.height();
     float y = matrixHeight * tv._yWeight;
-    
+
     int numCharsConsumed = 0;
     for (int rowLen : rows)
     {
         float x = matrixWidth * tv._xWeight;
         float glyphWidth = matrixWidth * tv._glyphWidthWeight;
         float glyphHeight = glyphWidth * _glyphWidthToHeightRatio;
-        
+
         if (tv._alignment == TEXA_CENTER)
         {
             x -= rowLen * glyphWidth / 2;
@@ -100,13 +100,13 @@ void FontBatcher::addText(Renderer& r, TextView& tv)
         {
             x -= (rowLen - 1) * glyphWidth;
         }
-        
+
         float startingXValue = x;
 
-        for (size_t i = 0; i < rowLen; ++i)
+        for (int i = 0; i < rowLen; ++i)
         {
             uint8_t c = ((uint8_t)tv._text.at(i + numCharsConsumed));
-            
+
             if (c == GOW_KEY_NEW_LINE)
             {
                 x = startingXValue;

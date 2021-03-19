@@ -12,7 +12,7 @@ void ThreadManager::spawnThread(std::string threadID, void (*func)(void *), void
 {
     assert(_threads.find(threadID) == _threads.end());
     
-    _threads.emplace(threadID, new tthread::thread {func, arg});
+    _threads.emplace(threadID, new std::thread {func, arg});
 }
 
 void ThreadManager::tearDownThread(std::string threadID)

@@ -7,6 +7,7 @@
 //
 
 #include <GowEngine/GowEngine.hpp>
+
 #if IS_ANDROID
 
 SampleSource::SampleSource(SampleBuffer* sampleBuffer, float pan) :

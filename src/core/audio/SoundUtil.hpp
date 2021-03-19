@@ -8,9 +8,9 @@
 
 #pragma once
 
-#include "Entity.hpp"
-#include "EntityRenderController.hpp"
-#include "AudioEngineFactory.hpp"
+#include "core/entity/Entity.hpp"
+#include "core/entity/EntityRenderController.hpp"
+#include "core/audio/AudioEngineFactory.hpp"
 
 #include <stdint.h>
 

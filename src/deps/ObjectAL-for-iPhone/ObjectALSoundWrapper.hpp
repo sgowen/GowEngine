@@ -8,7 +8,10 @@
 
 #pragma once
 
-#include "SoundWrapper.hpp"
+#include "core/audio/SoundWrapper.hpp"
+#include "core/common/PlatformMacros.hpp"
+
+#if IS_APPLE
 
 class ObjectALSoundWrapper : public SoundWrapper
 {
@@ -16,3 +19,5 @@ public:
     ObjectALSoundWrapper(std::string filePath, bool isMusic, uint8_t numInstances = 1);
     virtual ~ObjectALSoundWrapper() {}
 };
+
+#endif /* IS_APPLE */

@@ -183,7 +183,7 @@ struct Vector2
     float angle()
     {
         float radians = atan2f(_y, _x);
-        float angle = RADIANS_TO_DEGREES(radians);
+        float angle = static_cast<float>(RADIANS_TO_DEGREES(radians));
         
         if (angle < 0)
         {
@@ -195,7 +195,7 @@ struct Vector2
     
     Vector2& rotate(float angle)
     {
-        float rad = DEGREES_TO_RADIANS(angle);
+        float rad = static_cast<float>(DEGREES_TO_RADIANS(angle));
         float cos = cosf(rad);
         float sin = sinf(rad);
         

@@ -7,6 +7,7 @@
 //
 
 #include "core/common/PlatformMacros.hpp"
+
 #if IS_DESKTOP
 
 class EngineController;

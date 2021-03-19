@@ -7,24 +7,23 @@
 //
 
 #include <GowEngine/GowEngine.hpp>
+
 #if IS_ANDROID
 
 OboeSound::OboeSound(SimpleMultiPlayer* simpleMultiPlayer, std::string filePath, float volume) : Sound(),
 _simpleMultiPlayer(simpleMultiPlayer),
 _sampleSourceKey(0)
 {
-    AssetHandler* ah = AssetHandlerFactory::create();
-    
-    const FileData fileData = ah->loadAsset(filePath);
+    FileData fd = ASSET_HANDLER.loadAsset(filePath);
 
-    InputStream stream((uint8_t*)fileData._data, fileData._length);
+    InputStream stream((uint8_t*)fd._data, fd._length);
     WavStreamReader reader(&stream);
     reader.parse();
 
     bool isFormatValid = reader.getNumChannels() == 1;
     if (!isFormatValid)
     {
-        LOG("%s is in an invalid format!", filePath);
+        LOG("%s is in an invalid format!", filePath.c_str());
     }
 
     assert(isFormatValid);
@@ -34,8 +33,6 @@ _sampleSourceKey(0)
 
     SampleSource* source = new SampleSource(sampleBuffer, 0);
     _sampleSourceKey = _simpleMultiPlayer->addSampleSource(source);
-
-    AssetHandlerFactory::destroy(ah);
 }
 
 OboeSound::~OboeSound()

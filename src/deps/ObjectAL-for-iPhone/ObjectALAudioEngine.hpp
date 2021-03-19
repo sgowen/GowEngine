@@ -8,9 +8,12 @@
 
 #pragma once
 
-#include "AudioEngine.hpp"
+#include "core/audio/GowAudioEngine.hpp"
+#include "core/common/PlatformMacros.hpp"
 
-class ObjectALAudioEngine : public AudioEngine
+#if IS_APPLE
+
+class ObjectALAudioEngine : public GowAudioEngine
 {
     friend class AudioEngineFactory;
     
@@ -21,7 +24,7 @@ public:
     virtual void onResume();
 
 private:
-    static AudioEngine& getInstance()
+    static GowAudioEngine& getInstance()
     {
         static ObjectALAudioEngine ret = ObjectALAudioEngine();
         return ret;
@@ -32,3 +35,5 @@ private:
     ObjectALAudioEngine(const ObjectALAudioEngine&);
     ObjectALAudioEngine& operator=(const ObjectALAudioEngine&);
 };
+
+#endif /* IS_APPLE */

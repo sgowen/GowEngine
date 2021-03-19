@@ -7,9 +7,12 @@
 //
 
 #include <GowEngine/GowEngine.hpp>
+
 #if IS_WINDOWS
 
+#define WIN32_LEAN_AND_MEAN
 #include <windows.h>
+
 #include <fstream>
 
 FileData WindowsAssetHandler::loadAsset(std::string filePath)

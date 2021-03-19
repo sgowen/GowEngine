@@ -8,10 +8,9 @@
 
 #pragma once
 
-#include <tinythread.h>
-
 #include <map>
 #include <string>
+#include <thread>
 
 #define THREAD_MGR ThreadManager::getInstance()
 
@@ -29,7 +28,7 @@ public:
     bool isThreadRunning(std::string threadID);
     
 private:
-    std::map<std::string, tthread::thread*> _threads;
+    std::map<std::string, std::thread*> _threads;
     
     ThreadManager() {}
     ~ThreadManager() {}

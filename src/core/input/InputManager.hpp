@@ -8,11 +8,12 @@
 
 #pragma once
 
+#include "core/common/FixedSizePool.hpp"
+#include "core/math/Vector2.hpp"
+
 #include "CursorEvent.hpp"
 #include "GamepadEvent.hpp"
 #include "KeyboardEvent.hpp"
-#include "FixedSizePool.hpp"
-#include "Vector2.hpp"
 
 #include <map>
 #include <vector>

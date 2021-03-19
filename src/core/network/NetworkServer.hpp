@@ -8,8 +8,9 @@
 
 #pragma once
 
-#include "Pool.hpp"
-#include "EntityRegistry.hpp"
+#include "core/common/Pool.hpp"
+#include "core/entity/EntityRegistry.hpp"
+
 #include "PacketHandler.hpp"
 
 #include <map>

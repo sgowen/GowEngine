@@ -8,7 +8,7 @@
 
 #pragma once
 
-#include "EntityLayout.hpp"
+#include "core/entity/EntityLayout.hpp"
 
 class EntityLayoutLoader
 {

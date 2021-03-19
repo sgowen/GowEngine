@@ -8,16 +8,16 @@
 
 #pragma once
 
+#include "core/audio/GowAudioEngine.hpp"
 #include "core/common/PlatformMacros.hpp"
-#if IS_WINDOWS
 
-#include "AudioEngine.hpp"
+#if IS_WINDOWS
 
 #include "Audio.h"
 
 #include <memory>
 
-class DirectXTKAudioEngine : public AudioEngine
+class DirectXTKAudioEngine : public GowAudioEngine
 {
     friend class AudioEngineFactory;
     
@@ -28,10 +28,10 @@ public:
     virtual void onResume();
 
 private:
-    static AudioEngine* getInstance()
+    static GowAudioEngine& getInstance()
     {
         static DirectXTKAudioEngine ret = DirectXTKAudioEngine();
-        return &ret;
+        return ret;
     }
     
     std::unique_ptr<DirectX::AudioEngine> _audioEngine;

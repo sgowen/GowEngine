@@ -8,7 +8,7 @@
 
 #pragma once
 
-#include "EntityPhysicsController.hpp"
+#include "core/entity/EntityPhysicsController.hpp"
 
 #include <vector>
 

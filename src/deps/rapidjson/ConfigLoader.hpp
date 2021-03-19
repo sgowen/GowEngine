@@ -8,7 +8,7 @@
 
 #pragma once
 
-#include "Config.hpp"
+#include "core/common/Config.hpp"
 
 class ConfigLoader
 {

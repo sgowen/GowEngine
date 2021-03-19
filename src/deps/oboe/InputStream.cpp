@@ -7,6 +7,7 @@
 //
 
 #include <GowEngine/GowEngine.hpp>
+
 #if IS_ANDROID
 
 InputStream::InputStream(uint8_t *buff, int32_t len) :

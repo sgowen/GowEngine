@@ -6,6 +6,10 @@
 //  Copyright © 2021 Stephen Gowen. All rights reserved.
 //
 
+#include "core/common/PlatformMacros.hpp"
+
+#if IS_APPLE
+
 #include "ObjectALHelper.hpp"
 
 #import "ARCSafe_MemMgmt.h"
@@ -265,3 +269,5 @@ bool isMusicLoaded()
 {
     return [gMusicTrack preloaded];
 }
+
+#endif /* IS_APPLE */

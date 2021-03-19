@@ -24,7 +24,6 @@ A basic no nonsense portable C++ 2D game engine, how bout that?
     * rapidjson for json parsing on all platforms
     * spdlog for console/file logging on all platforms
     * stb for image loading on all platforms
-    * tinythreadpp for pre-C++11 asynchronous functionality on all platforms
 * Will eventually:
     * be configured to use CMake build system (but for now is actively developed as part of GowEngineDemo)
     * Implement OpenAL Soft and provide its dynamic libraries for all platforms (with the lib being easily replaceable as per LGPL requirements)

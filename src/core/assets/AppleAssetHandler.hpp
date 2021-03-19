@@ -9,9 +9,10 @@
 #pragma once
 
 #include "core/common/PlatformMacros.hpp"
-#if IS_APPLE
 
 #include "AssetHandler.hpp"
+
+#if IS_APPLE
 
 class AppleAssetHandler : public AssetHandler
 {

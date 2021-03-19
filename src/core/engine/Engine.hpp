@@ -26,7 +26,7 @@ enum EngineRequestedHostAction
     ERHA_EXIT
 };
 
-#include "StateMachine.hpp"
+#include "core/common/StateMachine.hpp"
 
 #include <stdint.h>
 

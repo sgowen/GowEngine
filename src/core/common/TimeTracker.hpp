@@ -39,6 +39,6 @@ struct TimeTracker
     
     float realTime(uint32_t time)
     {
-        return time * _frameRate;
+        return static_cast<float>(time * _frameRate);
     }
 };
