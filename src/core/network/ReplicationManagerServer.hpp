@@ -8,7 +8,6 @@
 
 #pragma once
 
-#include "Network.hpp"
 #include "ReplicationCommand.hpp"
 
 #include <map>

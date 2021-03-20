@@ -84,14 +84,14 @@ int UDPSocket::receiveFromAddress(void* toReceive, int maxLength, SocketAddress&
     }
 }
 
-int UDPSocket::setNonBlockingMode(bool shouldBeNonBlocking)
+int UDPSocket::setNonBlockingMode(bool nonBlocking)
 {
 #if IS_WINDOWS
-    u_long arg = shouldBeNonBlocking ? 1 : 0;
+    u_long arg = nonBlocking ? 1 : 0;
     int result = ioctlsocket(_socket, FIONBIO, &arg);
 #else
     int flags = fcntl(_socket, F_GETFL, 0);
-    flags = shouldBeNonBlocking ? (flags | O_NONBLOCK) : (flags & ~O_NONBLOCK);
+    flags = nonBlocking ? (flags | O_NONBLOCK) : (flags & ~O_NONBLOCK);
     int result = fcntl(_socket, F_SETFL, flags);
 #endif
     

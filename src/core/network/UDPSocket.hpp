@@ -22,7 +22,7 @@ public:
     int bindSocket(const SocketAddress& toAddress);
     int sendToAddress(const void* toSend, int length, const SocketAddress& toAddress);
     int receiveFromAddress(void* toReceive, int maxLength, SocketAddress& fromAddress);
-    int setNonBlockingMode(bool shouldBeNonBlocking);
+    int setNonBlockingMode(bool nonBlocking);
     
 private:
     SOCKET _socket;
