@@ -33,6 +33,8 @@ _sampleSourceKey(0)
 
     SampleSource* source = new SampleSource(sampleBuffer, 0);
     _sampleSourceKey = _simpleMultiPlayer->addSampleSource(source);
+    
+    ASSET_HANDLER.unloadAsset(fd);
 }
 
 OboeSound::~OboeSound()
