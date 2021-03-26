@@ -40,8 +40,8 @@ protected:
     b2Body* _body;
     std::vector<b2Fixture*> _fixtures;
     b2Fixture* _groundSensorFixture;
-    int _bodyWidth;
-    int _bodyHeight;
+    float _bodyWidth;
+    float _bodyHeight;
     bool _isBodyFacingLeft;
     
     void createFixtures();

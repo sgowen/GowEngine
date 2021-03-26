@@ -80,7 +80,7 @@ void TopDownPhysicsController::initPhysics()
 void TopDownPhysicsController::processPhysics(TimeTracker* tt)
 {
     Vector2& vel = _entity->pose()._velocity;
-    _entity->pose()._position += vel * tt->_frameRate;
+    _entity->pose()._position += vel * static_cast<float>(tt->_frameRate);
     
     vel *= 0.9f;
     sanitizeCloseToZeroVector(vel._x, vel._y, 0.01f);

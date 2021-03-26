@@ -13,7 +13,7 @@
 struct TextureRegion
 {
     const uint16_t _x, _y, _width, _height, _textureWidth, _textureHeight;
-    const double _u1, _v1, _u2, _v2;
+    const float _u1, _v1, _u2, _v2;
     
     TextureRegion(uint16_t x, uint16_t y, uint16_t width, uint16_t height, uint16_t textureWidth, uint16_t textureHeight) :
     _x(x),
@@ -22,10 +22,10 @@ struct TextureRegion
     _height(height),
     _textureWidth(textureWidth),
     _textureHeight(textureHeight),
-    _u1(x / (double) textureWidth),
-    _v1(y / (double) textureHeight),
-    _u2(_u1 + width / (double) textureWidth),
-    _v2(_v1 + height / (double) textureHeight)
+    _u1(x / (float) textureWidth),
+    _v1(y / (float) textureHeight),
+    _u2(_u1 + width / (float) textureWidth),
+    _v2(_v1 + height / (float) textureHeight)
     {
         // Empty
     }

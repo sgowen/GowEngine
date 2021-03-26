@@ -13,9 +13,12 @@
 
 #if IS_WINDOWS
 
-#include "Audio.h"
-
 #include <memory>
+
+namespace DirectX
+{
+    class AudioEngine;
+};
 
 class DirectXTKAudioEngine : public GowAudioEngine
 {

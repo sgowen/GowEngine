@@ -164,7 +164,7 @@ void NetworkClient::processPacket(InputMemoryBitStream& imbs, SocketAddress* fro
     _lastServerCommunicationTimestamp = tt->_time;
     
     uint8_t packetType;
-    imbs.read<uint8_t, 4>(packetType);
+    imbs.readBits(packetType, 4);
     
     switch (packetType)
     {
@@ -219,12 +219,12 @@ void NetworkClient::sendPacket(const OutputMemoryBitStream& ombs)
 void NetworkClient::updateSayingHello()
 {
     TimeTracker* tt = INST_REG.get<TimeTracker>(INSK_TIME_CLNT);
-    float time = tt->_time;
+    uint32_t time = tt->_time;
     
     if (time > _timeOfLastHello + NW_CLNT_TIME_BETWEEN_HELLOS)
     {
         OutputMemoryBitStream ombs(64);
-        ombs.write<uint8_t, 4>(static_cast<uint8_t>(NWPT_HELLO));
+        ombs.writeBits(static_cast<uint8_t>(NWPT_HELLO), 4);
         ombs.writeSmall(getPlayerName());
         sendPacket(ombs);
         
@@ -240,7 +240,7 @@ void NetworkClient::handleWelcomePacket(InputMemoryBitStream& imbs)
     }
     
     uint8_t playerID;
-    imbs.read<uint8_t, 3>(playerID);
+    imbs.readBits(playerID, 3);
     
     _state = NWCS_WELCOMED;
     
@@ -325,7 +325,7 @@ void NetworkClient::handleStatePacket(InputMemoryBitStream& imbs)
 void NetworkClient::updateSendingInputPacket(MoveList& ml)
 {
     OutputMemoryBitStream ombs(NW_MAX_PACKET_SIZE);
-    ombs.write<uint8_t, 4>(static_cast<uint8_t>(NWPT_INPUT));
+    ombs.writeBits(static_cast<uint8_t>(NWPT_INPUT), 4);
     
     _deliveryNotificationManager.writeState(ombs);
     
@@ -334,7 +334,7 @@ void NetworkClient::updateSendingInputPacket(MoveList& ml)
     {
         int moveCount = ml.getNumMovesAfterTimestamp(_lastMoveProcessedByServerTimestamp);
         assert(moveCount <= NW_CLNT_MAX_NUM_MOVES);
-        ombs.write<uint8_t, 4>(moveCount);
+        ombs.writeBits(moveCount, 4);
         
         std::deque<Move>::const_iterator moveItr = ml.begin();
         
@@ -368,12 +368,12 @@ void NetworkClient::updateAddLocalPlayerRequest()
     }
     
     TimeTracker* tt = INST_REG.get<TimeTracker>(INSK_TIME_CLNT);
-    float time = tt->_time;
+    uint32_t time = tt->_time;
     
     if (time > _timeOfLastHello + NW_CLNT_TIME_BETWEEN_HELLOS)
     {
         OutputMemoryBitStream ombs(2);
-        ombs.write<uint8_t, 4>(static_cast<uint8_t>(NWPT_ADD_LOCAL_PLAYER));
+        ombs.writeBits(static_cast<uint8_t>(NWPT_ADD_LOCAL_PLAYER), 4);
         ombs.write(_nextIndex);
         sendPacket(ombs);
         
@@ -391,7 +391,7 @@ void NetworkClient::updateDropLocalPlayerRequest()
     _isRequestingToAddLocalPlayer = false;
     
     OutputMemoryBitStream ombs(1);
-    ombs.write<uint8_t, 4>(static_cast<uint8_t>(NWPT_DROP_LOCAL_PLAYER));
+    ombs.writeBits(static_cast<uint8_t>(NWPT_DROP_LOCAL_PLAYER), 4);
     ombs.write(_isRequestingToDropLocalPlayer);
     sendPacket(ombs);
     
@@ -444,7 +444,7 @@ NetworkClient::~NetworkClient()
     _entityRegistry.deregisterAll();
     
     OutputMemoryBitStream ombs(1);
-    ombs.write<uint8_t, 4>(static_cast<uint8_t>(NWPT_CLNT_EXIT));
+    ombs.writeBits(static_cast<uint8_t>(NWPT_CLNT_EXIT), 4);
     sendPacket(ombs);
     
     if (IS_NETWORK_LOGGING_ENABLED())

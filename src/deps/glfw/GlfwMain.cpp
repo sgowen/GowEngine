@@ -73,7 +73,7 @@ void joystick_callback(int jid, int event)
 
 void mouse_scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
 {
-    _engine->onCursorScrolled(yoffset);
+    _engine->onCursorScrolled((float)yoffset);
 }
 
 void mouse_button_callback(GLFWwindow* window, int button, int action, int mods)
@@ -87,11 +87,11 @@ void mouse_button_callback(GLFWwindow* window, int button, int action, int mods)
     switch (action)
     {
         case GLFW_PRESS:
-            _engine->onCursorDown(x, y, isAlt);
+            _engine->onCursorDown((float)x, (float)y, isAlt);
             isDown = true;
             break;
         case GLFW_RELEASE:
-            _engine->onCursorUp(x, y, isAlt);
+            _engine->onCursorUp((float)x, (float)y, isAlt);
             isDown = false;
             break;
         default:
@@ -103,11 +103,11 @@ void mouse_cursor_pos_callback(GLFWwindow* window, double x, double y)
 {
     if (isDown)
     {
-        _engine->onCursorDragged(x, y, isAlt);
+        _engine->onCursorDragged((float)x, (float)y, isAlt);
     }
     else
     {
-        _engine->onCursorMoved(x, y);
+        _engine->onCursorMoved((float)x, (float)y);
     }
 }
 

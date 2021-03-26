@@ -33,7 +33,7 @@ SocketAddress* ClientProxy::getSocketAddress() const
 
 uint8_t ClientProxy::getPlayerID(uint8_t index) const
 {
-    return _playerIDs.size() > index ? _playerIDs[index] : NW_INPUT_UNASSIGNED;
+    return _playerIDs.size() > index ? _playerIDs[index] : 0;
 }
 
 const std::string& ClientProxy::getUsername() const

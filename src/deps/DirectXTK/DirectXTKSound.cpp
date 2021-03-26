@@ -10,6 +10,8 @@
 
 #if IS_WINDOWS
 
+#include "Audio.h"
+
 DirectXTKSound::DirectXTKSound(DirectX::SoundEffect& sound, float volume) : Sound()
 {
     _soundEffectInstance = sound.CreateInstance();

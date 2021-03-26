@@ -47,7 +47,7 @@ void CircleBatcher::addCircle(float x, float y, float radius)
     
     for (int i = 0; i <= 360; i += DEGREE_SPACING)
     {
-        float rad = DEGREES_TO_RADIANS(i);
+        float rad = static_cast<float>(DEGREES_TO_RADIANS(i));
         float cos = cosf(rad);
         float sin = sinf(rad);
         
@@ -72,7 +72,7 @@ void CircleBatcher::addPartialCircle(float x, float y, float radius, int arcDegr
     
     for (int i = 90; i < (450 - arcDegrees); i += DEGREE_SPACING)
     {
-        float rad = DEGREES_TO_RADIANS(i);
+        float rad = static_cast<float>(DEGREES_TO_RADIANS(i));
         float cos = cosf(rad);
         float sin = sinf(rad);
         
@@ -80,7 +80,7 @@ void CircleBatcher::addPartialCircle(float x, float y, float radius, int arcDegr
         _vertices.emplace_back(x, y);
     }
     
-    float rad = DEGREES_TO_RADIANS(450 - arcDegrees);
+    float rad = static_cast<float>(DEGREES_TO_RADIANS(450 - arcDegrees));
     float cos = cosf(rad);
     float sin = sinf(rad);
     

@@ -19,8 +19,6 @@
     #pragma comment(lib, "Ws2_32.lib")
 
     typedef int socklen_t;
-
-    #define bzero(b,len) (memset((b), '\0', (len)), (void) 0)
 #else
     #include <sys/socket.h>
     #include <netinet/in.h>
@@ -79,7 +77,6 @@ enum SocketAddressFamily
 #define NW_CLNT_MAX_NUM_MOVES 15
 #define NW_MAX_NUM_PACKETS_PER_FRAME 10
 #define NW_MAX_PACKET_SIZE 1200
-#define NW_INPUT_UNASSIGNED 7
 
 #ifndef htonll
 #define htonll(x) \
@@ -104,6 +101,38 @@ enum SocketAddressFamily
 (((uint64_t)(x) & 0x000000000000ff00ULL) << 40) | \
 (((uint64_t)(x) & 0x00000000000000ffULL) << 56)))
 #endif
+
+inline double hton_double(double value)
+{
+    union v
+    {
+        double d;
+        uint64_t i;
+    };
+
+    union v val;
+
+    val.d = value;
+    val.i = htonll(val.i);
+
+    return val.d;
+}
+
+inline double ntoh_double(double value)
+{
+    union v
+    {
+        double d;
+        uint64_t i;
+    };
+
+    union v val;
+
+    val.d = value;
+    val.i = ntohll(val.i);
+
+    return val.d;
+}
 
 inline float hton_float(float value)
 {

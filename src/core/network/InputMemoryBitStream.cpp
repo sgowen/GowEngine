@@ -85,14 +85,78 @@ void InputMemoryBitStream::readBytes(void* outData, uint32_t byteCount)
     readBits(outData, byteCount << 3);
 }
 
-void InputMemoryBitStream::read(bool& outData)
+void InputMemoryBitStream::read(uint64_t& data)
 {
-    readBits(&outData, 1);
+    readBits(&data, 64);
+    data = ntohll(data);
+}
+
+void InputMemoryBitStream::read(uint32_t& data)
+{
+    readBits(&data, 32);
+    data = ntohl(data);
+}
+
+void InputMemoryBitStream::read(uint16_t& data)
+{
+    readBits(&data, 16);
+    data = ntohs(data);
+}
+
+void InputMemoryBitStream::read(uint8_t& data)
+{
+    readBits(&data, 8);
+}
+
+void InputMemoryBitStream::read(int64_t& data)
+{
+    readBits(&data, 64);
+    data = ntohll(data);
+}
+
+void InputMemoryBitStream::read(int32_t& data)
+{
+    readBits(&data, 32);
+    data = ntohl(data);
+}
+
+void InputMemoryBitStream::read(int16_t& data)
+{
+    readBits(&data, 16);
+    data = ntohs(data);
+}
+
+void InputMemoryBitStream::read(int8_t& data)
+{
+    readBits(&data, 8);
+}
+
+void InputMemoryBitStream::read(double& data)
+{
+    readBits(&data, 64);
+    data = ntoh_double(data);
+}
+
+void InputMemoryBitStream::read(float& data)
+{
+    readBits(&data, 32);
+    data = ntoh_float(data);
+}
+
+void InputMemoryBitStream::read(char& data)
+{
+    readBits(&data, 8);
+}
+
+void InputMemoryBitStream::read(bool& data)
+{
+    readBits(&data, 1);
 }
 
 void InputMemoryBitStream::resetToCapacity(uint32_t byteCapacity)
 {
-    _bitCapacity = byteCapacity << 3; _bitHead = 0;
+    _bitCapacity = byteCapacity << 3;
+    _bitHead = 0;
 }
 
 void InputMemoryBitStream::readLarge(std::string& value)

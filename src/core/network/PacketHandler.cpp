@@ -69,7 +69,7 @@ SocketAddress& PacketHandler::getSocketAddress()
 void PacketHandler::readIncomingPacketsIntoQueue()
 {
     static char packetMem[NW_MAX_PACKET_SIZE];
-    bzero(packetMem, NW_MAX_PACKET_SIZE);
+    memset(packetMem, '\0', NW_MAX_PACKET_SIZE);
 
     InputMemoryBitStream imbs(packetMem, NW_MAX_PACKET_SIZE);
     SocketAddress fromAddress;
@@ -107,7 +107,7 @@ void PacketHandler::processQueuedPackets()
     while (!_packetQueue.empty())
     {
         ReceivedPacket& nextPacket = _packetQueue.front();
-        if (_timeTracker->_time > nextPacket.getReceivedTime())
+        if (_timeTracker->_time >= nextPacket.getReceivedTime())
         {
             _processPacketFunc(nextPacket.getPacketBuffer(), &nextPacket.getFromAddress());
             _packetQueue.pop();

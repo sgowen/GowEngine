@@ -53,7 +53,7 @@ void EntityManagerLoader::initWithJSON(EntityManager& em, const char* json)
             {
                 std::string name = i->name.GetString();
                 uint16_t nameVal = StringUtil::stringToNumber<uint16_t>(name);
-                uint8_t state = nameVal;
+                uint8_t state = (uint8_t)nameVal;
                 const Value& value = i->value;
                 std::map<uint8_t, std::string> stateFlagMappings;
                 if (value.IsObject())
@@ -62,7 +62,7 @@ void EntityManagerLoader::initWithJSON(EntityManager& em, const char* json)
                     {
                         std::string name = i->name.GetString();
                         uint16_t nameVal = StringUtil::stringToNumber<uint16_t>(name);
-                        uint8_t stateFlag = nameVal;
+                        uint8_t stateFlag = (uint8_t)nameVal;
                         std::string stateFlagMapping = i->value.GetString();
                         stateFlagMappings.emplace(stateFlag, stateFlagMapping);
                     }
@@ -95,7 +95,7 @@ void EntityManagerLoader::initWithJSON(EntityManager& em, const char* json)
             {
                 std::string name = i->name.GetString();
                 uint16_t nameVal = StringUtil::stringToNumber<uint16_t>(name);
-                uint8_t state = nameVal;
+                uint8_t state = (uint8_t)nameVal;
                 assert(i->value.IsUint());
                 uint16_t soundID = i->value.GetUint();
                 soundMappings.emplace(state, soundID);
@@ -120,7 +120,7 @@ void EntityManagerLoader::initWithJSON(EntityManager& em, const char* json)
                 }
                 std::string name = i->name.GetString();
                 uint16_t nameVal = StringUtil::stringToNumber<uint16_t>(name);
-                uint8_t state = nameVal;
+                uint8_t state = (uint8_t)nameVal;
                 soundRandomMappings.emplace(state, soundCollection);
             }
         }

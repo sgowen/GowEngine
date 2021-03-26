@@ -10,6 +10,8 @@
 
 #if IS_WINDOWS
 
+#include "Audio.h"
+
 SoundWrapper* DirectXTKAudioEngine::loadSound(std::string filePath, uint8_t numInstances)
 {
     return new DirectXTKSoundWrapper(filePath, _audioEngine.get(), numInstances);

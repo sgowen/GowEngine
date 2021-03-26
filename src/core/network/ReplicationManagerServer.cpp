@@ -61,7 +61,7 @@ void ReplicationManagerServer::write(OutputMemoryBitStream& ombs, ReplicationTra
         ombs.write(networkID);
         
         ReplicationAction ra = rc.getAction();
-        ombs.write<uint8_t, 2>(static_cast<uint8_t>(ra));
+        ombs.writeBits(static_cast<uint8_t>(ra), 2);
         
         uint8_t writtenState = 0;
         uint8_t dirtyState = rc.getDirtyState();

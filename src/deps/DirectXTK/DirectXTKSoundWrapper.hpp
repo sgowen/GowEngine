@@ -13,9 +13,13 @@
 
 #if IS_WINDOWS
 
-#include "Audio.h"
-
 #include <memory>
+
+namespace DirectX
+{
+    class AudioEngine;
+    class SoundEffect;
+};
 
 class DirectXTKSoundWrapper : public SoundWrapper
 {

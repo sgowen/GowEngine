@@ -24,10 +24,10 @@ void InputState::setMaxNumPlayers(uint8_t maxNumPlayers)
 
 void InputState::write(OutputMemoryBitStream& ombs) const
 {
-    ombs.write<uint8_t, 4>(_maxNumPlayers);
+    ombs.writeBits(_maxNumPlayers, 4);
     for (uint8_t i = 0; i < _maxNumPlayers; ++i)
     {
-        bool isInputAssigned = _playerInputStates[i]._playerID != NW_INPUT_UNASSIGNED;
+        bool isInputAssigned = _playerInputStates[i]._playerID != 0;
         ombs.write(isInputAssigned);
         if (isInputAssigned)
         {
@@ -39,7 +39,7 @@ void InputState::write(OutputMemoryBitStream& ombs) const
 void InputState::read(InputMemoryBitStream& imbs)
 {
     uint8_t maxNumPlayers;
-    imbs.read<uint8_t, 4>(maxNumPlayers);
+    imbs.readBits(maxNumPlayers, 4);
     setMaxNumPlayers(maxNumPlayers);
     
     for (uint8_t i = 0; i < _maxNumPlayers; ++i)
@@ -59,7 +59,7 @@ void InputState::reset()
     
     for (PlayerInputState& pis : _playerInputStates)
     {
-        pis._playerID = NW_INPUT_UNASSIGNED;
+        pis._playerID = 0;
         pis._inputState = 0;
     }
 }
@@ -99,9 +99,11 @@ void InputState::copyTo(InputState* inputState) const
 
 void InputState::activateNextPlayer(uint8_t playerID)
 {
+    assert(playerID != 0);
+    
     for (uint8_t i = 0; i < _maxNumPlayers; ++i)
     {
-        if (_playerInputStates[i]._playerID == NW_INPUT_UNASSIGNED)
+        if (_playerInputStates[i]._playerID == 0)
         {
             _playerInputStates[i]._playerID = playerID;
             return;
@@ -126,7 +128,7 @@ bool InputState::isRequestingToAddLocalPlayer() const
 {
     for (int i = 1; i < _maxNumPlayers; ++i)
     {
-        if (_playerInputStates[i]._playerID == NW_INPUT_UNASSIGNED &&
+        if (_playerInputStates[i]._playerID == 0 &&
             _playerInputStates[i]._inputState > 0)
         {
             return true;
@@ -143,18 +145,18 @@ InputState::PlayerInputState& InputState::playerInputState(uint8_t index)
 
 void InputState::PlayerInputState::write(OutputMemoryBitStream& ombs) const
 {
-    ombs.write<uint8_t, 3>(_playerID);
+    ombs.writeBits(_playerID, 3);
     ombs.write(_inputState);
 }
 
 void InputState::PlayerInputState::read(InputMemoryBitStream& imbs)
 {
-    imbs.read<uint8_t, 3>(_playerID);
+    imbs.readBits(_playerID, 3);
     imbs.read(_inputState);
 }
 
 InputState::PlayerInputState::PlayerInputState() :
-_playerID(NW_INPUT_UNASSIGNED),
+_playerID(0),
 _inputState(0)
 {
     // Empty

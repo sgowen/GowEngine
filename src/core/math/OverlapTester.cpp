@@ -25,7 +25,7 @@ bool OverlapTester::doRektanglesOverlap(Rektangle& r1, Rektangle& r2)
         float halfWidth = r1._width / 2;
         float halfHeight = r1._height / 2;
         
-        float rad = DEGREES_TO_RADIANS(r1._angle);
+        float rad = static_cast<float>(DEGREES_TO_RADIANS(r1._angle));
         float cos = cosf(rad);
         float sin = sinf(rad);
         

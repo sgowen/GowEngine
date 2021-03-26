@@ -115,7 +115,7 @@ void Renderer::renderLoadingScreen()
     FontBatcher& fb = fontBatcher("main");
     Shader& s = ASSETS.shader("texture");
     fb.begin();
-    fb.addText(*this, "Loading...", 2, 0.98, 0.02, 0.012);
+    fb.addText(*this, "Loading...", 2, 0.98f, 0.02f, 0.012f);
     fb.end(*this, s);
 }
 

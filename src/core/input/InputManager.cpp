@@ -146,8 +146,8 @@ Vector2& InputManager::convert(Vector2& v)
 
 void InputManager::setCursorSize(int cursorWidth, int cursorHeight)
 {
-    _cursorWidth = (float) cursorWidth;
-    _cursorHeight = (float) cursorHeight;
+    _cursorWidth = cursorWidth;
+    _cursorHeight = cursorHeight;
 }
 
 void InputManager::setMatrix(Matrix* m)

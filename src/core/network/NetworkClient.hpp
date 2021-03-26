@@ -24,11 +24,10 @@ class OutputMemoryBitStream;
 class SocketAddress;
 class Entity;
 class MoveList;
-class SocketAddress;
 
 #define NW_CLNT (NetworkClient::getInstance())
 
-typedef void (*RemoveProcessedMovesFunc)(float lastMoveProcessedByServerTimestamp);
+typedef void (*RemoveProcessedMovesFunc)(uint32_t lastMoveProcessedByServerTimestamp);
 typedef void (*OnPlayerWelcomedFunc)(uint8_t playerID);
 
 enum NetworkClientState

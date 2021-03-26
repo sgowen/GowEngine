@@ -16,9 +16,7 @@
 #include <list>
 
 struct TimeTracker;
-class InputMemoryBitStream;
 class OutputMemoryBitStream;
-class SocketAddress;
 class UDPSocket;
 
 typedef void (*ProcessPacketFunc)(InputMemoryBitStream& imbs, SocketAddress* fromAddress);

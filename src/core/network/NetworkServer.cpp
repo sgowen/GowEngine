@@ -286,7 +286,8 @@ void NetworkServer::sendPacket(const OutputMemoryBitStream& ombs, SocketAddress*
 void NetworkServer::handlePacketFromNewClient(InputMemoryBitStream& imbs, SocketAddress* fromAddress)
 {
     uint8_t packetType;
-    imbs.read<uint8_t, 4>(packetType);
+    imbs.readBits(packetType, 4);
+    
     if (packetType == NWPT_HELLO)
     {
         std::string name;
@@ -325,7 +326,7 @@ void NetworkServer::processPacket(ClientProxy& cp, InputMemoryBitStream& imbs)
     cp.updateLastPacketTime();
     
     uint8_t packetType;
-    imbs.read<uint8_t, 4>(packetType);
+    imbs.readBits(packetType, 4);
     
     switch (packetType)
     {
@@ -356,8 +357,8 @@ void NetworkServer::processPacket(ClientProxy& cp, InputMemoryBitStream& imbs)
 void NetworkServer::sendWelcomePacket(ClientProxy& cp)
 {
     OutputMemoryBitStream ombs(1);
-    ombs.write<uint8_t, 4>(static_cast<uint8_t>(NWPT_WELCOME));
-    ombs.write<uint8_t, 3>(cp.getPlayerID());
+    ombs.writeBits(static_cast<uint8_t>(NWPT_WELCOME), 4);
+    ombs.writeBits(cp.getPlayerID(), 3);
     sendPacket(ombs, cp.getSocketAddress());
     
     if (IS_NETWORK_LOGGING_ENABLED())
@@ -369,7 +370,7 @@ void NetworkServer::sendWelcomePacket(ClientProxy& cp)
 void NetworkServer::sendStatePacketToClient(ClientProxy& cp)
 {
     OutputMemoryBitStream ombs(NW_MAX_PACKET_SIZE);
-    ombs.write<uint8_t, 4>(static_cast<uint8_t>(NWPT_STATE));
+    ombs.writeBits(static_cast<uint8_t>(NWPT_STATE), 4);
     
     ombs.write(_numMovesProcessed);
     
@@ -415,7 +416,7 @@ void NetworkServer::handleInputPacket(ClientProxy& cp, InputMemoryBitStream& imb
     }
     
     uint8_t moveCount = 0;
-    imbs.read<uint8_t, 4>(moveCount);
+    imbs.readBits(moveCount, 4);
     
 	InputState* referenceInputState = NULL;
 	bool isRefInputStateOrphaned = false;
@@ -468,7 +469,7 @@ void NetworkServer::handleAddLocalPlayerPacket(ClientProxy& cp, InputMemoryBitSt
         imbs.read(requestedIndex);
         
         uint8_t playerID = cp.getPlayerID(requestedIndex);
-        if (playerID == NW_INPUT_UNASSIGNED)
+        if (playerID == 0)
         {
             std::string localUsername = StringUtil::format("%s(%d)", cp.getUsername().c_str(), requestedIndex);
             uint8_t playerID = _nextPlayerID;
@@ -487,7 +488,7 @@ void NetworkServer::handleAddLocalPlayerPacket(ClientProxy& cp, InputMemoryBitSt
     else
     {
         OutputMemoryBitStream ombs(1);
-        ombs.write<uint8_t, 4>(static_cast<uint8_t>(NWPT_LOCAL_PLAYER_DENIED));
+        ombs.writeBits(static_cast<uint8_t>(NWPT_LOCAL_PLAYER_DENIED), 4);
         sendPacket(ombs, cp.getSocketAddress());
     }
 }
@@ -498,8 +499,8 @@ void NetworkServer::sendLocalPlayerAddedPacket(ClientProxy& cp)
     uint8_t playerID = cp.getPlayerID(index);
     
     OutputMemoryBitStream ombs(1);
-    ombs.write<uint8_t, 4>(static_cast<uint8_t>(NWPT_LOCAL_PLAYER_ADDED));
-    ombs.write<uint8_t, 3>(playerID);
+    ombs.writeBits(static_cast<uint8_t>(NWPT_LOCAL_PLAYER_ADDED), 4);
+    ombs.writeBits(playerID, 3);
     sendPacket(ombs, cp.getSocketAddress());
     
     std::string localPlayerName = StringUtil::format("%s(%d)", cp.getUsername().c_str(), index);
@@ -517,7 +518,7 @@ void NetworkServer::handleDropLocalPlayerPacket(ClientProxy& cp, InputMemoryBitS
     assert(localPlayerIndex >= 1);
     
     uint8_t playerID = cp.getPlayerID(localPlayerIndex);
-    if (playerID == NW_INPUT_UNASSIGNED)
+    if (playerID == 0)
     {
         return;
     }
@@ -608,7 +609,7 @@ NetworkServer::~NetworkServer()
         ClientProxy& cp = pair.second;
         
         OutputMemoryBitStream ombs(1);
-        ombs.write<uint8_t, 4>(static_cast<uint8_t>(NWPT_SRVR_EXIT));
+        ombs.writeBits(static_cast<uint8_t>(NWPT_SRVR_EXIT), 4);
         sendPacket(ombs, cp.getSocketAddress());
     }
     

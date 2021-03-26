@@ -10,13 +10,11 @@
 
 #include "core/common/PlatformMacros.hpp"
 
-#if IS_DESKTOP
-    #include <GLFW/glfw3.h>
-#else
-    // TODO, add support for mobile
-#endif
-
 #define CLIPBOARD_UTIL ClipboardUtil::getInstance()
+
+#if IS_DESKTOP
+    struct GLFWwindow;
+#endif
 
 class ClipboardUtil
 {
@@ -27,33 +25,14 @@ public:
         return ret;
     }
     
-    void init(void* data)
-    {
-#if IS_DESKTOP
-        initWithWindow(static_cast<GLFWwindow*>(data));
-#endif
-    }
-    
-    const char* getClipboardString()
-    {
-#if IS_DESKTOP
-        return glfwGetClipboardString(_window);
-#else
-        // TODO, add support for mobile
-        return "";
-#endif
-    }
+    void init(void* data);
+    const char* getClipboardString();
     
 private:
 #if IS_DESKTOP
     GLFWwindow* _window;
     
-    void initWithWindow(GLFWwindow* window)
-    {
-        assert(window != NULL);
-
-        _window = window;
-    }
+    void initWithWindow(GLFWwindow* window);
 #endif
     
     ClipboardUtil() {}

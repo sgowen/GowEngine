@@ -37,7 +37,7 @@ uint32_t OutputMemoryBitStream::getByteLength() const
 
 void OutputMemoryBitStream::writeBits(uint8_t data, uint32_t bitCount)
 {
-    uint32_t nextBitHead = _bitHead + static_cast<uint32_t>(bitCount);
+    uint32_t nextBitHead = _bitHead + bitCount;
 
     if (nextBitHead > _bitCapacity)
     {
@@ -82,6 +82,69 @@ void OutputMemoryBitStream::writeBytes(const void* data, uint32_t byteCount)
     writeBits(data, byteCount << 3);
 }
 
+void OutputMemoryBitStream::write(uint64_t data)
+{
+    uint64_t toWrite = htonll(data);
+    writeBits(&toWrite, 64);
+}
+
+void OutputMemoryBitStream::write(uint32_t data)
+{
+    uint32_t toWrite = htonl(data);
+    writeBits(&toWrite, 32);
+}
+
+void OutputMemoryBitStream::write(uint16_t data)
+{
+    uint16_t toWrite = htons(data);
+    writeBits(&toWrite, 16);
+}
+
+void OutputMemoryBitStream::write(uint8_t data)
+{
+    writeBits(&data, 8);
+}
+
+void OutputMemoryBitStream::write(int64_t data)
+{
+    int64_t toWrite = htonll(data);
+    writeBits(&toWrite, 64);
+}
+
+void OutputMemoryBitStream::write(int32_t data)
+{
+    int32_t toWrite = htonl(data);
+    writeBits(&toWrite, 32);
+}
+
+void OutputMemoryBitStream::write(int16_t data)
+{
+    int16_t toWrite = htons(data);
+    writeBits(&toWrite, 16);
+}
+
+void OutputMemoryBitStream::write(int8_t data)
+{
+    writeBits(&data, 8);
+}
+
+void OutputMemoryBitStream::write(double data)
+{
+    double toWrite = hton_double(data);
+    writeBits(&toWrite, 64);
+}
+
+void OutputMemoryBitStream::write(float data)
+{
+    float toWrite = hton_float(data);
+    writeBits(&toWrite, 32);
+}
+
+void OutputMemoryBitStream::write(char data)
+{
+    writeBits(&data, 8);
+}
+
 void OutputMemoryBitStream::write(bool data)
 {
     writeBits(&data, 1);
@@ -102,7 +165,7 @@ void OutputMemoryBitStream::writeSmall(const std::string& value)
 {
     uint8_t elementCount = static_cast<uint8_t>(value.size());
     write(elementCount);
-    for (const auto& element : value)
+    for (const char& element : value)
     {
         write(element);
     }

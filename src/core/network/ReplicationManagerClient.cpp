@@ -17,7 +17,7 @@ void ReplicationManagerClient::read(InputMemoryBitStream& imbs, EntityRegistry& 
         imbs.read(networkID);
         
         uint8_t action;
-        imbs.read<uint8_t, 2>(action);
+        imbs.readBits(action, 2);
         
         switch (action)
         {

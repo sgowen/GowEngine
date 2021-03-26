@@ -10,6 +10,8 @@
 
 #if IS_WINDOWS
 
+#include "Audio.h"
+
 DirectXTKSoundWrapper::DirectXTKSoundWrapper(std::string filePath, DirectX::AudioEngine* audioEngine, uint8_t numInstances) : SoundWrapper(numInstances)
 {
     wchar_t* wFilePath = new wchar_t[4096];

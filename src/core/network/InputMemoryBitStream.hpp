@@ -8,8 +8,6 @@
 
 #pragma once
 
-#include "Network.hpp"
-
 #include <stdint.h>
 #include <cstdlib>
 #include <string>
@@ -26,40 +24,21 @@ public:
     void readBits(uint8_t& outData, uint32_t bitCount);
     void readBits(void* outData, uint32_t bitCount);
     void readBytes(void* outData, uint32_t byteCount);
-    void read(bool& outData);
+    void read(uint64_t& data);
+    void read(uint32_t& data);
+    void read(uint16_t& data);
+    void read(uint8_t& data);
+    void read(int64_t& data);
+    void read(int32_t& data);
+    void read(int16_t& data);
+    void read(int8_t& data);
+    void read(double& data);
+    void read(float& data);
+    void read(char& data);
+    void read(bool& data);
     void resetToCapacity(uint32_t byteCapacity);
     void readLarge(std::string& value);
     void readSmall(std::string& value);
-    
-    template <typename T, uint32_t BIT_COUNT = sizeof(T) * 8>
-    void read(T& outData)
-    {
-        static_assert(std::is_arithmetic< T >::value, "Generic Read only supports primitive data types");
-        
-        static_assert(BIT_COUNT == 64 || BIT_COUNT == 32 || BIT_COUNT == 16 || BIT_COUNT <= 8, "BIT_COUNT must be 64, 32, 16, or less than or equal to 8");
-        
-        readBits(&outData, BIT_COUNT);
-        
-        if (BIT_COUNT == 64)
-        {
-            outData = ntohll(outData);
-        }
-        else if (BIT_COUNT == 32)
-        {
-            if (std::is_floating_point<T>::value)
-            {
-                outData = ntoh_float(outData);
-            }
-            else
-            {
-                outData = ntohl(outData);
-            }
-        }
-        else if (BIT_COUNT == 16)
-        {
-            outData = ntohs(outData);
-        }
-    }
     
 private:
     char* _buffer;
