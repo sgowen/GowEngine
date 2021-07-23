@@ -1,12 +1,6 @@
-[submodule "deps/box2d"]
-	path = deps/box2d
-	url = https://github.com/sgowen/box2d.git
 [submodule "deps/DirectXTK"]
 	path = deps/DirectXTK
 	url = https://github.com/microsoft/DirectXTK.git
-[submodule "deps/glfw"]
-	path = deps/glfw
-	url = https://github.com/sgowen/glfw.git
 [submodule "deps/ObjectAL-for-iPhone"]
 	path = deps/ObjectAL-for-iPhone
 	url = https://github.com/kstenerud/ObjectAL-for-iPhone.git
