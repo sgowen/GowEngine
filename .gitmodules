@@ -16,3 +16,9 @@
 [submodule "deps/stb"]
 	path = deps/stb
 	url = https://github.com/nothings/stb.git
+[submodule "deps/box2d"]
+	path = deps/box2d
+	url = https://github.com/erincatto/box2d.git
+[submodule "deps/glfw"]
+	path = deps/glfw
+	url = https://github.com/glfw/glfw.git
