@@ -19,9 +19,6 @@
 [submodule "deps/stb"]
 	path = deps/stb
 	url = https://github.com/nothings/stb.git
-[submodule "deps/tinythreadpp"]
-	path = deps/tinythreadpp
-	url = https://github.com/sgowen/tinythreadpp.git
 [submodule "deps/spdlog"]
 	path = deps/spdlog
 	url = https://github.com/gabime/spdlog.git
