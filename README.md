@@ -1,5 +1,5 @@
 # GowEngine
-A basic no nonsense portable C++ 2D game engine, how bout that?
+A basic no nonsense LGPL-licensed portable C++ 2D game engine, how bout that?
 Making games shouldn't cost money.
 A solid idea manifested from within you is all you need, and you can't pay for that even if you wanted to.
 If you don't have a solid idea, then does it really matter if you've paid the license fee for a robust game engine?
