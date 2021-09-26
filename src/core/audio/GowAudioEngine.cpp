@@ -59,7 +59,7 @@ void GowAudioEngine::playSound(uint16_t soundID, float volume, bool isLooping)
     }
     
     SoundWrapper* sw = ASSETS.sound(soundID);
-    if (sw == NULL)
+    if (sw == nullptr)
     {
         return;
     }
@@ -79,7 +79,7 @@ void GowAudioEngine::stopSound(uint16_t soundID)
     }
     
     SoundWrapper* sw = ASSETS.sound(soundID);
-    if (sw == NULL)
+    if (sw == nullptr)
     {
         return;
     }
@@ -99,7 +99,7 @@ void GowAudioEngine::pauseSound(uint16_t soundID)
     }
     
     SoundWrapper* sw = ASSETS.sound(soundID);
-    if (sw == NULL)
+    if (sw == nullptr)
     {
         return;
     }
@@ -119,7 +119,7 @@ void GowAudioEngine::resumeSound(uint16_t soundID)
     }
     
     SoundWrapper* sw = ASSETS.sound(soundID);
-    if (sw == NULL)
+    if (sw == nullptr)
     {
         return;
     }
@@ -191,7 +191,7 @@ void GowAudioEngine::resumeAllSounds()
 void GowAudioEngine::playMusic(float volume, bool isLooping)
 {
     SoundWrapper* music = ASSETS.music();
-    if (_musicDisabled || music == NULL)
+    if (_musicDisabled || music == nullptr)
     {
         return;
     }
@@ -205,7 +205,7 @@ void GowAudioEngine::playMusic(float volume, bool isLooping)
 void GowAudioEngine::setMusicVolume(float volume)
 {
     SoundWrapper* music = ASSETS.music();
-    if (_musicDisabled || music == NULL)
+    if (_musicDisabled || music == nullptr)
     {
         return;
     }
@@ -216,7 +216,7 @@ void GowAudioEngine::setMusicVolume(float volume)
 void GowAudioEngine::stopMusic()
 {
     SoundWrapper* music = ASSETS.music();
-    if (_musicDisabled || music == NULL)
+    if (_musicDisabled || music == nullptr)
     {
         return;
     }
@@ -227,7 +227,7 @@ void GowAudioEngine::stopMusic()
 void GowAudioEngine::pauseMusic()
 {
     SoundWrapper* music = ASSETS.music();
-    if (_musicDisabled || music == NULL)
+    if (_musicDisabled || music == nullptr)
     {
         return;
     }
@@ -238,7 +238,7 @@ void GowAudioEngine::pauseMusic()
 void GowAudioEngine::resumeMusic()
 {
     SoundWrapper* music = ASSETS.music();
-    if (_musicDisabled || music == NULL)
+    if (_musicDisabled || music == nullptr)
     {
         return;
     }
@@ -250,7 +250,7 @@ bool GowAudioEngine::isMusicPlaying()
 {
     SoundWrapper* music = ASSETS.music();
     if (isMusicDisabled() ||
-        music == NULL)
+        music == nullptr)
     {
         return false;
     }

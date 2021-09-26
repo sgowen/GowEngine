@@ -29,7 +29,7 @@ static void reportError()
 
 OpenALAudioEngine::OpenALAudioEngine() : GowAudioEngine()
 {
-    if (!alutInit(NULL, NULL))
+    if (!alutInit(nullptr, nullptr))
     {
         reportError();
     }

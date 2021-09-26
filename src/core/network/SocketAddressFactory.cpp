@@ -28,18 +28,18 @@ SocketAddress* SocketAddressFactory::createIPv4FromString(const std::string& val
     memset(&hint, 0, sizeof(hint));
     hint.ai_family = AF_INET;
     
-    addrinfo* result = NULL;
+    addrinfo* result = nullptr;
     int error = getaddrinfo(host.c_str(), service.c_str(), &hint, &result);
-    if (error != 0 && result != NULL)
+    if (error != 0 && result != nullptr)
     {
         SOCKET_UTIL.reportError("SocketAddressFactory::createIPv4FromString");
-        return NULL;
+        return nullptr;
     }
     
-    if (result == NULL)
+    if (result == nullptr)
     {
         SOCKET_UTIL.reportError("SocketAddressFactory::createIPv4FromString");
-        return NULL;
+        return nullptr;
     }
     
     while (!result->ai_addr && result->ai_next)
@@ -49,7 +49,7 @@ SocketAddress* SocketAddressFactory::createIPv4FromString(const std::string& val
     
     if (!result->ai_addr)
     {
-        return NULL;
+        return nullptr;
     }
     
     SocketAddress* ret = new SocketAddress(*result->ai_addr);

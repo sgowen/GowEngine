@@ -14,8 +14,8 @@ IMPL_RTTI(Box2DPhysicsController, EntityPhysicsController)
 IMPL_EntityController_create(Box2DPhysicsController, EntityPhysicsController)
 
 Box2DPhysicsController::Box2DPhysicsController(Entity* e) : EntityPhysicsController(e),
-_body(NULL),
-_groundSensorFixture(NULL),
+_body(nullptr),
+_groundSensorFixture(nullptr),
 _bodyWidth(0),
 _bodyHeight(0),
 _isBodyFacingLeft(false)
@@ -25,7 +25,7 @@ _isBodyFacingLeft(false)
 
 void Box2DPhysicsController::updatePoseFromBody()
 {
-    if (_body == NULL)
+    if (_body == nullptr)
     {
         return;
     }
@@ -40,7 +40,7 @@ void Box2DPhysicsController::updatePoseFromBody()
 
 void Box2DPhysicsController::updateBodyFromPose()
 {
-    if (_body == NULL)
+    if (_body == nullptr)
     {
         return;
     }
@@ -92,7 +92,7 @@ void Box2DPhysicsController::handleEndContact(Entity* e, b2Fixture* fixtureA, b2
 
 void Box2DPhysicsController::initPhysics(b2World& world)
 {
-    assert(_body == NULL);
+    assert(_body == nullptr);
     
     b2BodyDef bodyDef;
     bodyDef.position.Set(_entity->position()._x, _entity->position()._y);
@@ -106,13 +106,13 @@ void Box2DPhysicsController::initPhysics(b2World& world)
 
 void Box2DPhysicsController::deinitPhysics()
 {
-    assert(_body != NULL);
+    assert(_body != nullptr);
     
     destroyFixtures();
     
     b2World* world = _body->GetWorld();
     world->DestroyBody(_body);
-    _body = NULL;
+    _body = nullptr;
 }
 
 b2Body* Box2DPhysicsController::getBody()
@@ -199,5 +199,5 @@ void Box2DPhysicsController::destroyFixtures()
         i = _fixtures.erase(i);
     }
     
-    _groundSensorFixture = NULL;
+    _groundSensorFixture = nullptr;
 }

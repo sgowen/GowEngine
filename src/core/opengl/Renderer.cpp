@@ -9,7 +9,7 @@
 #include <GowEngine/GowEngine.hpp>
 
 Renderer::Renderer() :
-_renderFunc(NULL),
+_renderFunc(nullptr),
 _screenRenderer()
 {
     // Empty
@@ -22,7 +22,7 @@ void Renderer::setRenderFunc(RenderFunc rf)
 
 void Renderer::render()
 {
-    assert(_renderFunc != NULL);
+    assert(_renderFunc != nullptr);
     
     _renderFunc(*this);
 }

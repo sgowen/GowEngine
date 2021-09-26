@@ -11,7 +11,7 @@
 #include "Config.hpp"
 
 #include <stack>
-#include <assert.h>
+#include <cassert>
 
 #define ARG_OVERWRITE_STATE "ARG_OVERWRITE_STATE"
 
@@ -53,7 +53,7 @@ public:
     
     void changeState(State<T>* state, Config args = Config::EMPTY)
     {
-        assert(state != NULL);
+        assert(state != nullptr);
         
         exit();
         
@@ -78,7 +78,7 @@ public:
     
     State<T>* getCurrentState() const
     {
-        return _states.size() > 0 ? _states.top() : NULL;
+        return _states.size() > 0 ? _states.top() : nullptr;
     }
     
 private:
@@ -89,7 +89,7 @@ private:
     void enter(Config args)
     {
         State<T>* currentState = getCurrentState();
-        assert(currentState != NULL);
+        assert(currentState != nullptr);
         
         currentState->_args = args;
         currentState->enter(_owner);
@@ -98,7 +98,7 @@ private:
     void revert()
     {
         State<T>* currentState = getCurrentState();
-        assert(currentState != NULL);
+        assert(currentState != nullptr);
         
         currentState->enter(_owner);
     }
@@ -106,7 +106,7 @@ private:
     void exit()
     {
         State<T>* currentState = getCurrentState();
-        assert(currentState != NULL);
+        assert(currentState != nullptr);
         
         currentState->exit(_owner);
     }

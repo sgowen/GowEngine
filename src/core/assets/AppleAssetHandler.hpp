@@ -33,7 +33,7 @@ private:
     
     static AppleAssetHandler& getInstance()
     {
-        assert(s_instance != NULL);
+        assert(s_instance != nullptr);
         return *s_instance;
     }
     

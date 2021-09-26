@@ -33,8 +33,8 @@ void AssetsManager::update()
     {
         Shader& s = pair.second;
         if (s._program == 0 &&
-            s._vertexShaderFileData != NULL &&
-            s._fragmentShaderFileData != NULL)
+            s._vertexShaderFileData != nullptr &&
+            s._fragmentShaderFileData != nullptr)
         {
             _shaderMgr.loadShader(s);
             return;
@@ -46,7 +46,7 @@ void AssetsManager::update()
     {
         Texture& t = pair.second;
         if (t._texture == 0 &&
-            t._data != NULL)
+            t._data != nullptr)
         {
             _textureMgr.loadTexture(t);
             return;
@@ -62,7 +62,7 @@ void AssetsManager::update()
 
 void thread_createDeviceDependentResources(void* arg)
 {
-    assert(arg != NULL);
+    assert(arg != nullptr);
 
     AssetsManager* am = static_cast<AssetsManager*>(arg);
     am->createDeviceDependentResources();
@@ -138,18 +138,18 @@ bool AssetsManager::isTextureLoaded(std::string name)
 
 TextureRegion& AssetsManager::textureRegion(std::string key, uint16_t stateTime)
 {
-    TextureRegion* ret = NULL;
+    TextureRegion* ret = nullptr;
 
     for (auto& pair : _assets)
     {
         ret = pair.second.textureRegion(key, stateTime);
-        if (ret != NULL)
+        if (ret != nullptr)
         {
             break;
         }
     }
 
-    assert(ret != NULL);
+    assert(ret != nullptr);
 
     return *ret;
 }
@@ -179,7 +179,7 @@ bool AssetsManager::areAssetsLoaded()
 
     std::map<uint16_t, SoundWrapper*>& sounds = _soundMgr.sounds();
     size_t expectedNumSounds = sounds.size();
-    if (_soundMgr.music() != NULL)
+    if (_soundMgr.music() != nullptr)
     {
         ++expectedNumSounds;
     }

@@ -136,7 +136,7 @@ Vector2& InputManager::convert(CursorEvent* ce)
 
 Vector2& InputManager::convert(Vector2& v)
 {
-    assert(_matrix != NULL);
+    assert(_matrix != nullptr);
     
     float w = _matrix->_desc.width();
     float h = _matrix->_desc.height();
@@ -188,7 +188,7 @@ _poolKeyboard(4096),
 _lastConvertedCursorPos(),
 _cursorWidth(1),
 _cursorHeight(1),
-_matrix(NULL),
+_matrix(nullptr),
 _isLoggingEnabled(false)
 {
     _numericalKeys.push_back(GOW_KEY_0);

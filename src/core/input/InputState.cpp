@@ -121,7 +121,7 @@ InputState::PlayerInputState* InputState::playerInputStateForID(uint8_t playerID
         }
     }
     
-    return NULL;
+    return nullptr;
 }
 
 bool InputState::isRequestingToAddLocalPlayer() const

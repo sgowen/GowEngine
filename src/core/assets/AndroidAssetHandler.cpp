@@ -14,49 +14,49 @@
 
 void AndroidAssetHandler::create(void* jniEnv, void* assetManager)
 {
-    assert(s_instance == NULL);
+    assert(s_instance == nullptr);
     
-    assert(jniEnv != NULL);
-    assert(assetManager != NULL);
+    assert(jniEnv != nullptr);
+    assert(assetManager != nullptr);
     
     s_instance = new AndroidAssetHandler(static_cast<JNIEnv*>(jniEnv), static_cast<jobject>(assetManager));
 }
 
 void AndroidAssetHandler::destroy()
 {
-    assert(s_instance != NULL);
+    assert(s_instance != nullptr);
 
     delete s_instance;
-    s_instance = NULL;
+    s_instance = nullptr;
 }
 
-AndroidAssetHandler* AndroidAssetHandler::s_instance = NULL;
+AndroidAssetHandler* AndroidAssetHandler::s_instance = nullptr;
 
 FileData AndroidAssetHandler::loadAsset(std::string filePath)
 {
     AAsset *asset = AAssetManager_open(_assetManager, filePath.c_str(), AASSET_MODE_STREAMING);
-    if (asset == NULL)
+    if (asset == nullptr)
     {
         LOG("Unable to load %s from AssetManager", filePath.c_str());
     }
-    assert(asset != NULL);
+    assert(asset != nullptr);
     
     return FileData(AAsset_getLength(asset), static_cast<const uint8_t*>(AAsset_getBuffer(asset)), asset);
 }
 
 void AndroidAssetHandler::unloadAsset(const FileData& fileData)
 {
-    assert(fileData._fileHandle != NULL);
+    assert(fileData._fileHandle != nullptr);
     
     AAsset_close((AAsset*)fileData._fileHandle);
 }
 
 AndroidAssetHandler::AndroidAssetHandler(JNIEnv *jniEnv, jobject assetManager) : AssetHandler()
 {
-    assert(jniEnv != NULL);
+    assert(jniEnv != nullptr);
     
     _assetManager = AAssetManager_fromJava(jniEnv, assetManager);
-    assert(_assetManager != NULL);
+    assert(_assetManager != nullptr);
 }
 
 #endif /* IS_ANDROID */

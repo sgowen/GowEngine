@@ -8,11 +8,11 @@
 
 #include <GowEngine/GowEngine.hpp>
 
-NetworkClient* NetworkClient::s_instance = NULL;
+NetworkClient* NetworkClient::s_instance = nullptr;
 
 void NetworkClient::create(std::string serverIPAddress, std::string username, uint16_t port, OnEntityRegisteredFunc oerf, OnEntityDeregisteredFunc oedf, RemoveProcessedMovesFunc rpmf, OnPlayerWelcomedFunc opwf)
 {
-    assert(s_instance == NULL);
+    assert(s_instance == nullptr);
     
     INST_REG.get<TimeTracker>(INSK_TIME_CLNT)->reset();
     
@@ -26,10 +26,10 @@ NetworkClient * NetworkClient::getInstance()
 
 void NetworkClient::destroy()
 {
-    assert(s_instance != NULL);
+    assert(s_instance != nullptr);
     
     delete s_instance;
-    s_instance = NULL;
+    s_instance = nullptr;
 }
 
 NetworkClientState NetworkClient::processIncomingPackets()
@@ -338,10 +338,10 @@ void NetworkClient::updateSendingInputPacket(MoveList& ml)
         
         std::deque<Move>::const_iterator moveItr = ml.begin();
         
-        const Move* moveToCopy = NULL;
+        const Move* moveToCopy = nullptr;
         for (int i = 0; i < moveCount; ++i, ++moveItr)
         {
-            if (moveToCopy != NULL && moveItr->isEqual(moveToCopy))
+            if (moveToCopy != nullptr && moveItr->isEqual(moveToCopy))
             {
                 ombs.write(true);
                 ombs.write(moveItr->getTimestamp());

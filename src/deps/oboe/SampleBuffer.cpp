@@ -13,7 +13,7 @@
 #include "resampler/MultiChannelResampler.h"
 
 SampleBuffer::SampleBuffer() :
-_sampleData(NULL),
+_sampleData(nullptr),
 _numSamples(0)
 {
     // Empty
@@ -39,10 +39,10 @@ void SampleBuffer::loadSampleData(WavStreamReader* reader)
 
 void SampleBuffer::unloadSampleData()
 {
-    if (_sampleData != nullptr)
+    if (_sampleData != nullptrptr)
     {
         delete[] _sampleData;
-        _sampleData = nullptr;
+        _sampleData = nullptrptr;
     }
     _numSamples = 0;
 }

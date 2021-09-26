@@ -16,8 +16,8 @@ void ShaderLoader::loadShader(Shader& s)
 
 void ShaderLoader::unloadShader(Shader& s)
 {
-    assert(s._vertexShaderFileData != NULL);
-    assert(s._fragmentShaderFileData != NULL);
+    assert(s._vertexShaderFileData != nullptr);
+    assert(s._fragmentShaderFileData != nullptr);
     
     ASSET_HANDLER.unloadAsset(*s._vertexShaderFileData);
     ASSET_HANDLER.unloadAsset(*s._fragmentShaderFileData);

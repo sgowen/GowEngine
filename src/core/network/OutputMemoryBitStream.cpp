@@ -9,7 +9,7 @@
 #include <GowEngine/GowEngine.hpp>
 
 OutputMemoryBitStream::OutputMemoryBitStream(uint32_t initialBufferByteSize) :
-_buffer(NULL),
+_buffer(nullptr),
 _bitHead(0)
 {
     reallocBuffer(initialBufferByteSize * 8);
@@ -173,7 +173,7 @@ void OutputMemoryBitStream::writeSmall(const std::string& value)
 
 void OutputMemoryBitStream::reallocBuffer(uint32_t newBitLength)
 {
-    if (_buffer == NULL)
+    if (_buffer == nullptr)
     {
         _buffer = static_cast<char*>(std::malloc(newBitLength >> 3));
         memset(_buffer, 0, newBitLength >> 3);

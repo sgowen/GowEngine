@@ -42,7 +42,7 @@ void SoundManager::unloadSounds(std::vector<SoundDescriptor>& soundDescriptors)
 
 SoundWrapper* SoundManager::sound(uint16_t soundID)
 {
-    SoundWrapper* ret = NULL;
+    SoundWrapper* ret = nullptr;
     
     auto q = _sounds.find(soundID);
     if (q != _sounds.end())
@@ -88,11 +88,11 @@ void SoundManager::loadMusic(std::string filePath)
 
 void SoundManager::unloadMusic()
 {
-    if (_music == NULL)
+    if (_music == nullptr)
     {
         return;
     }
     
     delete _music;
-    _music = NULL;
+    _music = nullptr;
 }

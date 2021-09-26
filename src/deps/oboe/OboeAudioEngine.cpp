@@ -33,7 +33,7 @@ OboeAudioEngine::~OboeAudioEngine()
     _simpleMultiPlayer->unloadSampleData();
     
     delete _simpleMultiPlayer;
-    _simpleMultiPlayer = NULL;
+    _simpleMultiPlayer = nullptr;
 }
 
 #endif /* IS_ANDROID */

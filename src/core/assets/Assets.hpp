@@ -22,13 +22,13 @@ struct Assets
     
     TextureRegion* textureRegion(std::string key, uint16_t stateTime)
     {
-        TextureRegion* ret = NULL;
+        TextureRegion* ret = nullptr;
         
         std::vector<TextureDescriptor>& tds = _textureDescriptors;
         for (TextureDescriptor& td : tds)
         {
             ret = td.textureRegion(key, stateTime);
-            if (ret != NULL)
+            if (ret != nullptr)
             {
                 break;
             }

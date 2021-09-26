@@ -9,7 +9,7 @@
 #include <GowEngine/GowEngine.hpp>
 
 PacketHandler::PacketHandler(TimeTracker* tt, uint16_t port, ProcessPacketFunc ppf) :
-_socket(NULL),
+_socket(nullptr),
 _socketAddress(INADDR_ANY, port),
 _timeTracker(tt),
 _processPacketFunc(ppf),
@@ -22,7 +22,7 @@ _bytesSentPerSecond(tt, 1.0f)
 
 PacketHandler::~PacketHandler()
 {
-    if (_socket != NULL)
+    if (_socket != nullptr)
     {
         delete _socket;
     }

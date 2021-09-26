@@ -41,7 +41,7 @@ void ReplicationManagerClient::readAndDoCreateAction(InputMemoryBitStream& imbs,
     
     bool isEntityNew = false;
     Entity* e = er.getEntityByID(networkID);
-    if (e == NULL)
+    if (e == nullptr)
     {
         EntityInstanceDef eid(networkID, fourCCName, 0, 0, false);
         e = ENTITY_MGR.createEntity(eid);
@@ -60,7 +60,7 @@ void ReplicationManagerClient::readAndDoCreateAction(InputMemoryBitStream& imbs,
 void ReplicationManagerClient::readAndDoUpdateAction(InputMemoryBitStream& imbs, EntityRegistry& er, uint32_t networkID)
 {
     Entity* e = er.getEntityByID(networkID);
-    assert(e != NULL);
+    assert(e != nullptr);
     
     e->networkController()->read(imbs);
 }
@@ -68,7 +68,7 @@ void ReplicationManagerClient::readAndDoUpdateAction(InputMemoryBitStream& imbs,
 void ReplicationManagerClient::readAndDoDestroyAction(InputMemoryBitStream& imbs, EntityRegistry& er, uint32_t networkID)
 {
     Entity* e = er.getEntityByID(networkID);
-    if (e != NULL)
+    if (e != nullptr)
     {
         er.deregisterEntity(e);
     }

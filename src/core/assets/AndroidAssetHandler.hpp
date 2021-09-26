@@ -16,7 +16,7 @@
 
 #include <jni.h>
 #include <android/asset_manager_jni.h>
-#include <assert.h>
+#include <cassert>
 
 class AndroidAssetHandler : public AssetHandler
 {
@@ -34,7 +34,7 @@ private:
     
     static AndroidAssetHandler& getInstance()
     {
-        assert(s_instance != NULL);
+        assert(s_instance != nullptr);
         return *s_instance;
     }
 

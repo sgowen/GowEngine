@@ -21,7 +21,7 @@
 #define GLFW_INCLUDE_NONE
 #include <GLFW/glfw3.h>
 
-Engine* _engine = NULL;
+Engine* _engine = nullptr;
 int joysticks[GLFW_JOYSTICK_LAST + 1];
 int joystick_count = 0;
 bool isDown = false;
@@ -132,7 +132,7 @@ int GlfwMain::exec(EngineController& engineController, const char* windowTitle)
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 2);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
 
-    GLFWmonitor* monitor = NULL;
+    GLFWmonitor* monitor = nullptr;
 
     int width = 800;
     int height = 480;
@@ -153,7 +153,7 @@ int GlfwMain::exec(EngineController& engineController, const char* windowTitle)
     }
 #endif
 
-    window = glfwCreateWindow(width, height, windowTitle, monitor, NULL);
+    window = glfwCreateWindow(width, height, windowTitle, monitor, nullptr);
     if (!window)
     {
         glfwTerminate();
@@ -282,7 +282,7 @@ int GlfwMain::exec(EngineController& engineController, const char* windowTitle)
     _engine->destroyDeviceDependentResources();
     
     delete _engine;
-    _engine = NULL;
+    _engine = nullptr;
 
     glfwDestroyWindow(window);
 

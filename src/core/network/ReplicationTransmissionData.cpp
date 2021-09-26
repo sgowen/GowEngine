@@ -9,16 +9,16 @@
 #include <GowEngine/GowEngine.hpp>
 
 ReplicationTransmissionData::ReplicationTransmissionData() :
-_replicationManagerServer(NULL),
-_entityRegistry(NULL),
-_poolRMTD(NULL)
+_replicationManagerServer(nullptr),
+_entityRegistry(nullptr),
+_poolRMTD(nullptr)
 {
     // Empty
 }
 
 void ReplicationTransmissionData::free()
 {
-    if (_poolRMTD != NULL)
+    if (_poolRMTD != nullptr)
     {
         _poolRMTD->free(this);
     }
@@ -78,11 +78,11 @@ void ReplicationTransmissionData::addTransmission(uint32_t networkID, Replicatio
 
 void ReplicationTransmissionData::handleCreateDeliveryFailure(uint32_t networkID) const
 {
-    assert(_replicationManagerServer != NULL);
-    assert(_entityRegistry != NULL);
+    assert(_replicationManagerServer != nullptr);
+    assert(_entityRegistry != nullptr);
     
     Entity* e = _entityRegistry->getEntityByID(networkID);
-    if (e != NULL)
+    if (e != nullptr)
     {
         _replicationManagerServer->replicateCreate(networkID, ALL_DIRTY_STATE);
     }
@@ -90,10 +90,10 @@ void ReplicationTransmissionData::handleCreateDeliveryFailure(uint32_t networkID
 
 void ReplicationTransmissionData::handleUpdateStateDeliveryFailure(uint32_t networkID, uint8_t dirtyState, DeliveryNotificationManager* dnm) const
 {
-    assert(_replicationManagerServer != NULL);
-    assert(_entityRegistry != NULL);
+    assert(_replicationManagerServer != nullptr);
+    assert(_entityRegistry != nullptr);
     
-    if (_entityRegistry->getEntityByID(networkID) != NULL)
+    if (_entityRegistry->getEntityByID(networkID) != nullptr)
     {
         for (const auto& inFlightPacket: dnm->getInFlightPackets())
         {

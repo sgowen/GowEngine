@@ -23,10 +23,10 @@ public:
         errno_t err;
         if ((err = fopen_s(&ret, filePath.c_str(), mode.c_str())) != 0)
     #else
-        if ((ret = fopen(filePath.c_str(), mode.c_str())) == NULL)
+        if ((ret = fopen(filePath.c_str(), mode.c_str())) == nullptr)
     #endif
         {
-            return NULL;
+            return nullptr;
         }
 
         return ret;

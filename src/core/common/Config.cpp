@@ -18,13 +18,13 @@ bool Config::hasValues()
 bool Config::hasValue(std::string key)
 {
     std::string* val = value(key);
-    return val != NULL;
+    return val != nullptr;
 }
 
 bool Config::getBool(std::string key)
 {
     std::string* val = value(key);
-    assert(val != NULL);
+    assert(val != nullptr);
     bool ret = StringUtil::stringToBool(*val);
     return ret;
 }
@@ -32,7 +32,7 @@ bool Config::getBool(std::string key)
 int32_t Config::getInt(std::string key)
 {
     std::string* val = value(key);
-    assert(val != NULL);
+    assert(val != nullptr);
     int32_t ret = StringUtil::stringToNumber<int32_t>(*val);
     return ret;
 }
@@ -40,7 +40,7 @@ int32_t Config::getInt(std::string key)
 uint32_t Config::getUInt(std::string key)
 {
     std::string* val = value(key);
-    assert(val != NULL);
+    assert(val != nullptr);
     uint32_t ret = StringUtil::stringToNumber<uint32_t>(*val);
     return ret;
 }
@@ -48,7 +48,7 @@ uint32_t Config::getUInt(std::string key)
 uint32_t Config::getUInt(std::string key, uint32_t defaultValue)
 {    
     std::string* val = value(key);
-    if (val != NULL)
+    if (val != nullptr)
     {
         return StringUtil::stringToNumber<uint32_t>(*val);
     }
@@ -59,7 +59,7 @@ uint32_t Config::getUInt(std::string key, uint32_t defaultValue)
 float Config::getFloat(std::string key)
 {
     std::string* val = value(key);
-    assert(val != NULL);
+    assert(val != nullptr);
     float ret = StringUtil::stringToNumber<float>(*val);
     return ret;
 }
@@ -67,7 +67,7 @@ float Config::getFloat(std::string key)
 double Config::getDouble(std::string key)
 {
     std::string* val = value(key);
-    assert(val != NULL);
+    assert(val != nullptr);
     double ret = StringUtil::stringToNumber<double>(*val);
     return ret;
 }
@@ -75,7 +75,7 @@ double Config::getDouble(std::string key)
 std::string Config::getString(std::string key)
 {
     std::string* val = value(key);
-    assert(val != NULL);
+    assert(val != nullptr);
     
     std::string ret = *val;
     return ret;
@@ -96,5 +96,5 @@ std::string* Config::value(std::string key)
         return &ret;
     }
 
-    return NULL;
+    return nullptr;
 }

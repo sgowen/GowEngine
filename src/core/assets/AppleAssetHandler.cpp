@@ -14,9 +14,9 @@
 
 void AppleAssetHandler::create(void* bundleRootFilePath)
 {
-    assert(s_instance == NULL);
+    assert(s_instance == nullptr);
     
-    assert(bundleRootFilePath != NULL);
+    assert(bundleRootFilePath != nullptr);
     
     std::string* bbp = static_cast<std::string*>(bundleRootFilePath);
     
@@ -25,20 +25,20 @@ void AppleAssetHandler::create(void* bundleRootFilePath)
 
 void AppleAssetHandler::destroy()
 {
-    assert(s_instance != NULL);
+    assert(s_instance != nullptr);
 
     delete s_instance;
-    s_instance = NULL;
+    s_instance = nullptr;
 }
 
-AppleAssetHandler* AppleAssetHandler::s_instance = NULL;
+AppleAssetHandler* AppleAssetHandler::s_instance = nullptr;
 
 FileData AppleAssetHandler::loadAsset(std::string filePath)
 {
     std::string bundlePath = getBundleFilePath(filePath);
 
     FILE* stream = OPEN_FILE(bundlePath, "r");
-    assert(stream != NULL);
+    assert(stream != nullptr);
 
     fseek(stream, 0, SEEK_END);
 
@@ -54,12 +54,12 @@ FileData AppleAssetHandler::loadAsset(std::string filePath)
     assert(ferror(stream) == 0);
     fclose(stream);
 
-    return FileData(size, buffer, NULL);
+    return FileData(size, buffer, nullptr);
 }
 
 void AppleAssetHandler::unloadAsset(const FileData& fileData)
 {
-    assert(fileData._data != NULL);
+    assert(fileData._data != nullptr);
 
     free((void *)fileData._data);
 }

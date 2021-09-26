@@ -15,7 +15,7 @@
 #include "LinuxAssetHandler.hpp"
 #include "WindowsAssetHandler.hpp"
 
-#include <assert.h>
+#include <cassert>
 #include <stdlib.h>
 
 #define ASSET_HANDLER AssetHandlerFactory::getInstance()

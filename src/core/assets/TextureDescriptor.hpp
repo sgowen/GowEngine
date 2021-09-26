@@ -38,7 +38,7 @@ struct TextureDescriptor
 
     TextureRegion* textureRegion(std::string key, uint16_t stateTime)
     {
-        TextureRegion* ret = NULL;
+        TextureRegion* ret = nullptr;
         
         const auto& qt = _textureRegions.find(key);
         if (qt != _textureRegions.end())

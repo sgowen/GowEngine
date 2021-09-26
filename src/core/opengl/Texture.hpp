@@ -24,7 +24,7 @@ struct Texture
     _width(0),
     _height(0),
     _numChannels(0),
-    _data(NULL),
+    _data(nullptr),
     _texture(0)
     {
         // Empty

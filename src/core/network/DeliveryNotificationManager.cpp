@@ -107,7 +107,7 @@ InFlightPacket* DeliveryNotificationManager::writeSequenceNumber(OutputMemoryBit
         return &_inFlightPackets.back();
     }
     
-    return NULL;
+    return nullptr;
 }
 
 void DeliveryNotificationManager::writeAckData(OutputMemoryBitStream& ombs)

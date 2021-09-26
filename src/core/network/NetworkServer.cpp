@@ -8,11 +8,11 @@
 
 #include <GowEngine/GowEngine.hpp>
 
-NetworkServer* NetworkServer::s_instance = NULL;
+NetworkServer* NetworkServer::s_instance = nullptr;
 
 void NetworkServer::create(uint16_t port, uint8_t maxNumPlayers, OnEntityRegisteredFunc oerf, OnEntityDeregisteredFunc oedf, HandleNewClientFunc hncf, HandleLostClientFunc hlcf)
 {
-    assert(s_instance == NULL);
+    assert(s_instance == nullptr);
     
     INST_REG.get<TimeTracker>(INSK_TIME_SRVR)->reset();
     INST_REG.get<EntityIDManager>(INSK_EID_SRVR)->resetNextNetworkEntityID();
@@ -28,10 +28,10 @@ NetworkServer * NetworkServer::getInstance()
 
 void NetworkServer::destroy()
 {
-    assert(s_instance != NULL);
+    assert(s_instance != nullptr);
     
     delete s_instance;
-    s_instance = NULL;
+    s_instance = nullptr;
 }
 
 void NetworkServer::processIncomingPackets()
@@ -109,7 +109,7 @@ ClientProxy* NetworkServer::getClientProxy(uint8_t playerID) const
         return it->second;
     }
     
-    return NULL;
+    return nullptr;
 }
 
 int NetworkServer::getMoveCount()
@@ -117,7 +117,7 @@ int NetworkServer::getMoveCount()
     int lowestMoveCount = 0;
     
     ClientProxy* cp = getClientProxy(1);
-    if (cp != NULL)
+    if (cp != nullptr)
     {
         lowestMoveCount = cp->getUnprocessedMoveList().getMoveCount();
     }
@@ -139,11 +139,11 @@ int NetworkServer::getMoveCount()
         for (auto& pair : _playerIDToClientMap)
         {
             ClientProxy* cp = pair.second;
-            assert(cp != NULL);
+            assert(cp != nullptr);
 
             MoveList& ml = cp->getUnprocessedMoveList();
             Move* m = ml.getMoveAtIndex(i);
-            assert(m != NULL);
+            assert(m != nullptr);
 
             if (expectedMoveIndex != m->getIndex())
             {
@@ -252,7 +252,7 @@ void NetworkServer::processPacket(InputMemoryBitStream& imbs, SocketAddress* fro
 void NetworkServer::removeProcessedMovesForPlayer(uint8_t playerID)
 {
     ClientProxy* cp = NW_SRVR->getClientProxy(playerID);
-    assert(cp != NULL);
+    assert(cp != nullptr);
 
     MoveList& ml = cp->getUnprocessedMoveList();
     ml.removeProcessedMoves(cb_inputStateRelease);
@@ -391,7 +391,7 @@ void NetworkServer::sendStatePacketToClient(ClientProxy& cp)
     cp.getReplicationManagerServer().write(ombs, rtd);
     
     TransmissionData* td = ifp->getTransmissionData('RPLM');
-    if (td != NULL)
+    if (td != nullptr)
     {
         td->free();
     }
@@ -418,7 +418,7 @@ void NetworkServer::handleInputPacket(ClientProxy& cp, InputMemoryBitStream& imb
     uint8_t moveCount = 0;
     imbs.readBits(moveCount, 4);
     
-	InputState* referenceInputState = NULL;
+	InputState* referenceInputState = nullptr;
 	bool isRefInputStateOrphaned = false;
     
     for (; moveCount > 0; --moveCount)
@@ -431,7 +431,7 @@ void NetworkServer::handleInputPacket(ClientProxy& cp, InputMemoryBitStream& imb
         imbs.read(isCopy);
         if (isCopy)
         {
-            assert(referenceInputState != NULL);
+            assert(referenceInputState != nullptr);
             
             uint32_t timeStamp;
             imbs.read(timeStamp);

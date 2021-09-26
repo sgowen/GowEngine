@@ -35,7 +35,7 @@ const char* ClipboardUtil::getClipboardString()
 #if IS_DESKTOP
 void ClipboardUtil::initWithWindow(GLFWwindow* window)
 {
-    assert(window != NULL);
+    assert(window != nullptr);
 
     _window = window;
 }

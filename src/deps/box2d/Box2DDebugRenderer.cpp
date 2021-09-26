@@ -129,9 +129,9 @@ void Box2DDebugRenderer::destroyDeviceDependentResources()
 
 void Box2DDebugRenderer::render(Shader* shader, mat4* matrix, b2World* world)
 {
-    assert(shader != NULL);
-    assert(matrix != NULL);
-    assert(world != NULL);
+    assert(shader != nullptr);
+    assert(matrix != nullptr);
+    assert(world != nullptr);
     
     _shader = shader;
     _matrix = matrix;

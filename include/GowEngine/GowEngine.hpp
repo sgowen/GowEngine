@@ -10,7 +10,7 @@
 
 /// System
 #include <algorithm>
-#include <assert.h>
+#include <cassert>
 #include <ctime>
 #include <math.h>
 #include <memory>

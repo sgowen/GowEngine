@@ -250,7 +250,7 @@ uint32_t OpenGLWrapper::loadVertexBuffer(size_t size)
     
     glGenBuffers(1, &ret);
     bindVertexBuffer(ret);
-    glBufferData(GL_ARRAY_BUFFER, size, NULL, GL_DYNAMIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, size, nullptr, GL_DYNAMIC_DRAW);
     unbindVertexBuffer();
     
     return ret;
@@ -286,7 +286,7 @@ void OpenGLWrapper::loadFramebuffer(Framebuffer& fb)
     int32_t currentFBO;
     glGetIntegerv(GL_FRAMEBUFFER_BINDING, &currentFBO);
     
-    texture = loadTexture(fb._width, fb._height, NULL, fb._filterMin, fb._filterMag, false);
+    texture = loadTexture(fb._width, fb._height, nullptr, fb._filterMin, fb._filterMag, false);
     
     glGenFramebuffers(1, &fbo);
     glBindFramebuffer(GL_FRAMEBUFFER, fbo);
@@ -315,7 +315,7 @@ void OpenGLWrapper::unloadFramebuffer(Framebuffer& fb)
 
 void OpenGLWrapper::loadTexture(Texture& t)
 {
-    assert(t._data != NULL);
+    assert(t._data != nullptr);
     
     t._texture = loadTexture(t._width, t._height, t._data, t._desc._filterMin, t._desc._filterMag, t._desc._mipMap);
 }
@@ -407,9 +407,9 @@ void OpenGLWrapper::unloadTexture(uint32_t texture)
 
 uint32_t OpenGLWrapper::loadShader(const uint8_t* vertexShaderSrc, const long vertexShaderSrcLength, const uint8_t* fragmentShaderSrc, const long fragmentShaderSrcLength)
 {
-    assert(vertexShaderSrc != NULL);
+    assert(vertexShaderSrc != nullptr);
     assert(vertexShaderSrcLength > 0);
-    assert(fragmentShaderSrc != NULL);
+    assert(fragmentShaderSrc != nullptr);
     assert(fragmentShaderSrcLength > 0);
 
     uint32_t ret;
@@ -448,7 +448,7 @@ void OpenGLWrapper::unloadShader(uint32_t program)
 
 uint32_t OpenGLWrapper::compileShader(const uint32_t type, const uint8_t* source, const int32_t length)
 {
-    assert(source != NULL);
+    assert(source != nullptr);
     assert(length > 0);
 
     uint32_t ret = glCreateShader(type);

@@ -14,7 +14,7 @@
 
 #include "core/openal/OpenALAudioEngine.hpp"
 
-#include <assert.h>
+#include <cassert>
 #include <stdlib.h>
 
 #define AUDIO_ENGINE AudioEngineFactory::getInstance()

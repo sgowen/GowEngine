@@ -14,7 +14,7 @@
 #include <sstream>
 #include <cstdarg>
 #include <stdarg.h>
-#include <assert.h>
+#include <cassert>
 
 #define LOG(...) StringUtil::log(__VA_ARGS__)
 

@@ -24,7 +24,7 @@ Entity* EntityRegistry::getEntityByID(uint32_t id) const
         return q->second;
     }
     
-    return NULL;
+    return nullptr;
 }
 
 void EntityRegistry::registerEntity(Entity* e)

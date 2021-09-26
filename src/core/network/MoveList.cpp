@@ -108,7 +108,7 @@ Move* MoveList::getMoveAtIndex(int index)
         return &_moves.at(index);
     }
     
-    return NULL;
+    return nullptr;
 }
 
 std::deque<Move>::const_iterator MoveList::begin() const

@@ -12,20 +12,20 @@ IMPL_RTTI(TopDownPhysicsController, EntityPhysicsController)
 IMPL_EntityController_create(TopDownPhysicsController, EntityPhysicsController)
 
 TopDownPhysicsController::TopDownPhysicsController(Entity* e) : EntityPhysicsController(e),
-_boundingBox(NULL),
-_bounds(NULL)
+_boundingBox(nullptr),
+_bounds(nullptr)
 {
     // Empty
 }
 
 TopDownPhysicsController::~TopDownPhysicsController()
 {
-    if (_boundingBox != NULL)
+    if (_boundingBox != nullptr)
     {
         delete _boundingBox;
     }
     
-    if (_bounds != NULL)
+    if (_bounds != nullptr)
     {
         delete _bounds;
     }
@@ -33,8 +33,8 @@ TopDownPhysicsController::~TopDownPhysicsController()
 
 void TopDownPhysicsController::updatePoseFromBody()
 {
-    if (_boundingBox == NULL ||
-        _bounds == NULL)
+    if (_boundingBox == nullptr ||
+        _bounds == nullptr)
     {
         return;
     }
@@ -44,8 +44,8 @@ void TopDownPhysicsController::updatePoseFromBody()
 
 void TopDownPhysicsController::updateBodyFromPose()
 {
-    if (_boundingBox == NULL ||
-        _bounds == NULL)
+    if (_boundingBox == nullptr ||
+        _bounds == nullptr)
     {
         return;
     }
@@ -90,8 +90,8 @@ void TopDownPhysicsController::processPhysics(TimeTracker* tt)
 
 void TopDownPhysicsController::processCollisions(std::vector<Entity*>& entities)
 {
-    if (_boundingBox == NULL ||
-        _bounds == NULL)
+    if (_boundingBox == nullptr ||
+        _bounds == nullptr)
     {
         return;
     }
@@ -104,7 +104,7 @@ void TopDownPhysicsController::processCollisions(std::vector<Entity*>& entities)
         }
         
         Rektangle* target = e->physicsController<TopDownPhysicsController>()->boundingBox();
-        if (target == NULL)
+        if (target == nullptr)
         {
             continue;
         }

@@ -69,7 +69,7 @@ void SimpleMultiPlayer::setupAudioStream(int32_t channelCount)
 
 void SimpleMultiPlayer::teardownAudioStream()
 {
-    if (_audioStream != NULL)
+    if (_audioStream != nullptr)
     {
         _audioStream->stop();
         _audioStream->close();

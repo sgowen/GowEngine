@@ -15,7 +15,7 @@
 FileData LinuxAssetHandler::loadAsset(std::string filePath)
 {
     FILE* stream = OPEN_FILE(filePath, "r");
-    assert(stream != NULL);
+    assert(stream != nullptr);
 
     fseek(stream, 0, SEEK_END);
 
@@ -31,12 +31,12 @@ FileData LinuxAssetHandler::loadAsset(std::string filePath)
     assert(ferror(stream) == 0);
     fclose(stream);
 
-    return FileData(size, buffer, NULL);
+    return FileData(size, buffer, nullptr);
 }
 
 void LinuxAssetHandler::unloadAsset(const FileData& fileData)
 {
-    assert(fileData._data != NULL);
+    assert(fileData._data != nullptr);
 
     free((void *)fileData._data);
 }

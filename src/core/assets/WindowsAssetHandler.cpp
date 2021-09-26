@@ -26,15 +26,15 @@ FileData WindowsAssetHandler::loadAsset(std::string filePath)
 	{
 		wchar_t moduleName[_MAX_PATH];
 
-		assert(GetModuleFileNameW(NULL, moduleName, _MAX_PATH));
+		assert(GetModuleFileNameW(nullptr, moduleName, _MAX_PATH));
 
 		wchar_t drive[_MAX_DRIVE];
 		wchar_t path[_MAX_PATH];
 
-		assert(!_wsplitpath_s(moduleName, drive, _MAX_DRIVE, path, _MAX_PATH, NULL, 0, NULL, 0));
+		assert(!_wsplitpath_s(moduleName, drive, _MAX_DRIVE, path, _MAX_PATH, nullptr, 0, nullptr, 0));
 
 		wchar_t filename[_MAX_PATH];
-		assert(!_wmakepath_s(filename, _MAX_PATH, drive, path, name, NULL));
+		assert(!_wmakepath_s(filename, _MAX_PATH, drive, path, name, nullptr));
 
 		fileStream.open(filename, std::ios::in | std::ios::binary | std::ios::ate);
 	}
@@ -62,7 +62,7 @@ FileData WindowsAssetHandler::loadAsset(std::string filePath)
 
 void WindowsAssetHandler::unloadAsset(const FileData& fileData)
 {
-	assert(fileData._fileHandle != NULL);
+	assert(fileData._fileHandle != nullptr);
 
     const std::vector<uint8_t>* handle = static_cast<const std::vector<uint8_t>*>(fileData._fileHandle);
     delete handle;

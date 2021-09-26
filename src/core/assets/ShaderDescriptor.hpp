@@ -32,7 +32,7 @@ struct ShaderDescriptor
     
     ShaderUniform& uniform(std::string name)
     {
-        ShaderUniform* ret = NULL;
+        ShaderUniform* ret = nullptr;
         
         for (auto& su : _uniforms)
         {
@@ -43,7 +43,7 @@ struct ShaderDescriptor
             }
         }
         
-        assert(ret != NULL);
+        assert(ret != nullptr);
         
         return *ret;
     }

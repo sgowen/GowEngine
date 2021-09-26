@@ -40,7 +40,7 @@ class Engine
 public:
     Engine(EngineController& engineController);
     
-    void createDeviceDependentResources(void* data = NULL);
+    void createDeviceDependentResources(void* data = nullptr);
     void onWindowSizeChanged(uint16_t screenWidth, uint16_t screenHeight, uint16_t cursorWidth = 0, uint16_t cursorHeight = 0);
     void destroyDeviceDependentResources();
     void onPause();

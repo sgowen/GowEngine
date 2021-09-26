@@ -11,7 +11,7 @@
 #define INST_REG (InstanceRegistry::getInstance())
 
 #include <map>
-#include <assert.h>
+#include <cassert>
 
 class InstanceRegistry
 {

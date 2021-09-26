@@ -36,7 +36,7 @@ DirectXTKAudioEngine::DirectXTKAudioEngine() : GowAudioEngine()
 {
 	using namespace DirectX;
 
-    CoInitializeEx(NULL, COINIT_MULTITHREADED);
+    CoInitializeEx(nullptr, COINIT_MULTITHREADED);
 
     AUDIO_ENGINE_FLAGS flags = AudioEngine_Default;
 #if IS_DEBUG

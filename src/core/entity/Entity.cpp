@@ -76,7 +76,7 @@ NetworkData& Entity::data()
 
 NetworkDataField& Entity::dataField(std::string name)
 {
-    NetworkDataField* ret = NULL;
+    NetworkDataField* ret = nullptr;
     NetworkData& nd = _entityDef._networkData;
     for (NetworkDataGroup& ndg : nd._data)
     {
@@ -89,7 +89,7 @@ NetworkDataField& Entity::dataField(std::string name)
         }
     }
     
-    assert(ret != NULL);
+    assert(ret != nullptr);
     
     return *ret;
 }

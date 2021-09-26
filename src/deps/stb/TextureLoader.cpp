@@ -21,7 +21,7 @@ void TextureLoader::loadTexture(Texture& t)
     }
     
     t._data = stbi_load_from_memory(fd._data, (int)fd._length, &t._width, &t._height, &t._numChannels, 0);
-    assert(t._data != NULL);
+    assert(t._data != nullptr);
 
     ASSET_HANDLER.unloadAsset(fd);
 }
@@ -29,5 +29,5 @@ void TextureLoader::loadTexture(Texture& t)
 void TextureLoader::unloadTexture(Texture& t)
 {
     stbi_image_free(t._data);
-    t._data = NULL;
+    t._data = nullptr;
 }

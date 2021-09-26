@@ -10,7 +10,7 @@
 
 #include "STLUtil.hpp"
 
-#include <assert.h>
+#include <cassert>
 #include <vector>
 #include <algorithm>
 
@@ -40,7 +40,7 @@ public:
     
     void free(T* object)
     {
-        assert(object != NULL);
+        assert(object != nullptr);
         assert(std::find(_objects.begin(), _objects.end(), object) == _objects.end());
         
         _objects.push_back(object);

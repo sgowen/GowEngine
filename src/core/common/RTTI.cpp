@@ -8,7 +8,7 @@
 
 #include <GowEngine/GowEngine.hpp>
 
-RTTI::RTTI(const std::string& className) : _className(className), _parentRTTI(NULL)
+RTTI::RTTI(const std::string& className) : _className(className), _parentRTTI(nullptr)
 {
     // Empty
 }
@@ -32,7 +32,7 @@ bool RTTI::isDerivedFrom(const RTTI& rtti) const
 {
     const RTTI* pRTTI = this;
     
-    while (pRTTI != NULL)
+    while (pRTTI != nullptr)
     {
         if (pRTTI == &rtti)
         {

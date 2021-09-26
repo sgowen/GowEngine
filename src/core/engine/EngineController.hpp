@@ -26,7 +26,7 @@ protected:
     void configureForNetwork(std::string entityManagerFilePath, std::string entityLayoutManagerFilePath, std::map<std::string, EntityControllerCreationFunc>& config);
     void configureForOffline(std::string entityManagerFilePath, std::string entityLayoutManagerFilePath, std::map<std::string, EntityControllerCreationFunc>& config);
     
-    EngineController(void* data1 = NULL, void* data2 = NULL);
+    EngineController(void* data1 = nullptr, void* data2 = nullptr);
     virtual ~EngineController();
     
 private:

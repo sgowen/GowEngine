@@ -88,7 +88,7 @@ void ReplicationManagerServer::write(OutputMemoryBitStream& ombs, ReplicationTra
 uint8_t ReplicationManagerServer::writeCreateAction(OutputMemoryBitStream& ombs, uint32_t networkID, uint8_t dirtyState)
 {
     Entity* e = _entityRegistry.getEntityByID(networkID);
-    assert(e != NULL);
+    assert(e != nullptr);
     
     ombs.write(e->entityDef()._key);
     
@@ -98,7 +98,7 @@ uint8_t ReplicationManagerServer::writeCreateAction(OutputMemoryBitStream& ombs,
 uint8_t ReplicationManagerServer::writeUpdateAction(OutputMemoryBitStream& ombs, uint32_t networkID, uint8_t dirtyState)
 {
     Entity* e = _entityRegistry.getEntityByID(networkID);
-    assert(e != NULL);
+    assert(e != nullptr);
     
     return e->networkController()->write(ombs, dirtyState);
 }

@@ -9,7 +9,7 @@
 #pragma once
 
 #include <string>
-#include <assert.h>
+#include <cassert>
 
 inline uint32_t sizeForType(std::string type)
 {

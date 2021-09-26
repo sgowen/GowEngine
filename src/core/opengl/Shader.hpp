@@ -20,8 +20,8 @@ struct Shader
     
     Shader(ShaderDescriptor desc) :
     _desc(desc),
-    _vertexShaderFileData(NULL),
-    _fragmentShaderFileData(NULL),
+    _vertexShaderFileData(nullptr),
+    _fragmentShaderFileData(nullptr),
     _program(0)
     {
         // Empty

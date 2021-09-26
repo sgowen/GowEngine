@@ -51,7 +51,7 @@ EntityLayout EntityLayoutLoader::initWithJSON(const char* data)
 void EntityLayoutLoader::loadEntityLayout(EntityLayoutDef& eld, bool isServer)
 {
     EntityIDManager* eidm = INST_REG.get<EntityIDManager>(isServer ? INSK_EID_SRVR : INSK_EID_CLNT);
-    assert(eidm != NULL);
+    assert(eidm != nullptr);
     eidm->resetNextLayoutEntityID();
     
     eld._entities.clear();
@@ -106,7 +106,7 @@ void EntityLayoutLoader::loadEntityLayout(EntityLayoutDef& eld, bool isServer)
 void EntityLayoutLoader::saveEntityLayout(EntityLayoutDef& eld)
 {
     FILE *file = OPEN_FILE(eld._filePath.c_str(), "w+");
-    if (file == NULL)
+    if (file == nullptr)
     {
         return;
     }
