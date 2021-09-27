@@ -8,8 +8,6 @@
 
 #pragma once
 
-#include <GowEngine/BuildMacros.hpp>
-
 #include <string>
 
 #define OPEN_FILE(filePath, mode) FileUtil::openFile(filePath, mode)
@@ -17,20 +15,5 @@
 class FileUtil
 {
 public:
-    static FILE* openFile(std::string filePath, std::string mode)
-    {
-        FILE *ret;
-
-    #if IS_WINDOWS
-        errno_t err;
-        if ((err = fopen_s(&ret, filePath.c_str(), mode.c_str())) != 0)
-    #else
-        if ((ret = fopen(filePath.c_str(), mode.c_str())) == nullptr)
-    #endif
-        {
-            return nullptr;
-        }
-
-        return ret;
-    }
+    static FILE* openFile(std::string filePath, std::string mode);
 };
