@@ -21,9 +21,6 @@
 #include <string>
 #include <vector>
 
-/// Needs to come first as it initializes the PLATFORM, IS_DEBUG, and IS_RELEASE macros
-#include "BuildMacros.hpp"
-
 /// Box2D Implementation
 #include "deps/box2d/Box2DDebugRenderer.hpp"
 #include "deps/box2d/Box2DPhysicsController.hpp"
