@@ -21,11 +21,11 @@
 #include <string>
 #include <vector>
 
-/// Box2D Implementation
+/// box2d Implementation
 #include "deps/box2d/Box2DDebugRenderer.hpp"
 #include "deps/box2d/Box2DPhysicsController.hpp"
 
-/// RapidJSON Implementation
+/// rapidjson Implementation
 #include "deps/rapidjson/AssetsLoader.hpp"
 #include "deps/rapidjson/ConfigLoader.hpp"
 #include "deps/rapidjson/EntityLayoutLoader.hpp"
