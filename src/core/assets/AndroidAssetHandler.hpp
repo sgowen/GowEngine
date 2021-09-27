@@ -8,11 +8,10 @@
 
 #pragma once
 
-#include "core/common/PlatformMacros.hpp"
+#include <GowEngine/BuildMacros.hpp>
+#if IS_ANDROID
 
 #include "AssetHandler.hpp"
-
-#if IS_ANDROID
 
 #include <jni.h>
 #include <android/asset_manager_jni.h>

@@ -8,10 +8,10 @@
 
 #pragma once
 
-#include "core/audio/GowAudioEngine.hpp"
-#include "core/common/PlatformMacros.hpp"
-
+#include <GowEngine/BuildMacros.hpp>
 #if IS_LINUX
+
+#include "core/audio/GowAudioEngine.hpp"
 
 class OpenALAudioEngine : public GowAudioEngine
 {

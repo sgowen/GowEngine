@@ -81,12 +81,14 @@ void EngineState::destroyDeviceDependentResources(Engine* e)
 
 void EngineState::pause(Engine *e)
 {
-    AUDIO_ENGINE.pause();
+    // fixme
+//    AUDIO_ENGINE.pause();
 }
 
 void EngineState::resume(Engine *e)
 {
-    AUDIO_ENGINE.resume();
+    // fixme
+//    AUDIO_ENGINE.resume();
 }
 
 void EngineState::update(Engine* e)
@@ -109,5 +111,6 @@ void EngineState::render(Engine* e)
     }
     
     _renderer.render();
-    AUDIO_ENGINE.render();
+    // fixme
+//    AUDIO_ENGINE.render();
 }

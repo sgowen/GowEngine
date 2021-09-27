@@ -8,7 +8,7 @@
 
 #pragma once
 
-#include "core/common/PlatformMacros.hpp"
+#include <GowEngine/BuildMacros.hpp>
 
 #include "AndroidAssetHandler.hpp"
 #include "AppleAssetHandler.hpp"

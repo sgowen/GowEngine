@@ -8,7 +8,7 @@
 
 #pragma once
 
-#include "core/common/PlatformMacros.hpp"
+#include <GowEngine/BuildMacros.hpp>
 
 #include <string>
 #include <sstream>

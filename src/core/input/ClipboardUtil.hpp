@@ -8,11 +8,12 @@
 
 #pragma once
 
-#include "core/common/PlatformMacros.hpp"
+#include <GowEngine/BuildMacros.hpp>
 
 #define CLIPBOARD_UTIL ClipboardUtil::getInstance()
 
 #if IS_DESKTOP
+    // fixme
     struct GLFWwindow;
 #endif
 
@@ -30,6 +31,7 @@ public:
     
 private:
 #if IS_DESKTOP
+    // fixme
     GLFWwindow* _window;
     
     void initWithWindow(GLFWwindow* window);

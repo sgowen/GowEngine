@@ -6,7 +6,8 @@
 //  Copyright © 2021 Stephen Gowen. All rights reserved.
 //
 
-#include "core/common/PlatformMacros.hpp"
+#include <GowEngine/BuildMacros.hpp>
+
 #if IS_IOS
     #include <OpenGLES/ES3/gl.h>
 #elif IS_MACOS

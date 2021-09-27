@@ -10,7 +10,6 @@
 
 #include "core/entity/Entity.hpp"
 #include "core/entity/EntityRenderController.hpp"
-#include "core/audio/AudioEngineFactory.hpp"
 
 #include <stdint.h>
 
@@ -24,7 +23,8 @@ public:
             return;
         }
         
-        AUDIO_ENGINE.playSound(e.renderController()->getSoundMapping(toState));
+        // fixme
+//        AUDIO_ENGINE.playSound(e.renderController()->getSoundMapping(toState));
     }
     
 private:

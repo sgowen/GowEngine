@@ -8,7 +8,7 @@
 
 #pragma once
 
-#include "core/common/PlatformMacros.hpp"
+#include "BuildMacros.hpp"
 
 #if IS_APPLE
     #if IS_IOS

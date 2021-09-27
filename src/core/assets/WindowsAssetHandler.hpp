@@ -8,11 +8,10 @@
 
 #pragma once
 
-#include "core/common/PlatformMacros.hpp"
+#include <GowEngine/BuildMacros.hpp>
+#if IS_WINDOWS
 
 #include "AssetHandler.hpp"
-
-#if IS_WINDOWS
 
 class WindowsAssetHandler : public AssetHandler
 {

@@ -8,6 +8,8 @@
 
 #pragma once
 
+#include <GowEngine/BuildMacros.hpp>
+
 #include <string>
 
 #define OPEN_FILE(filePath, mode) FileUtil::openFile(filePath, mode)

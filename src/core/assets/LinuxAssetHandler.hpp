@@ -8,11 +8,10 @@
 
 #pragma once
 
-#include "core/common/PlatformMacros.hpp"
+#include <GowEngine/BuildMacros.hpp>
+#if IS_LINUX
 
 #include "AssetHandler.hpp"
-
-#if IS_LINUX
 
 class LinuxAssetHandler : public AssetHandler
 {

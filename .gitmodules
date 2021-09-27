@@ -1,12 +1,6 @@
-[submodule "deps/DirectXTK"]
-	path = deps/DirectXTK
-	url = https://github.com/microsoft/DirectXTK.git
-[submodule "deps/ObjectAL-for-iPhone"]
-	path = deps/ObjectAL-for-iPhone
-	url = https://github.com/kstenerud/ObjectAL-for-iPhone.git
-[submodule "deps/oboe"]
-	path = deps/oboe
-	url = https://github.com/google/oboe
+[submodule "deps/box2d"]
+	path = deps/box2d
+	url = https://github.com/erincatto/box2d.git
 [submodule "deps/rapidjson"]
 	path = deps/rapidjson
 	url = https://github.com/Tencent/rapidjson.git
@@ -16,9 +10,3 @@
 [submodule "deps/stb"]
 	path = deps/stb
 	url = https://github.com/nothings/stb.git
-[submodule "deps/box2d"]
-	path = deps/box2d
-	url = https://github.com/erincatto/box2d.git
-[submodule "deps/glfw"]
-	path = deps/glfw
-	url = https://github.com/glfw/glfw.git

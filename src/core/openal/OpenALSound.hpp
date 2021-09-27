@@ -8,10 +8,10 @@
 
 #pragma once
 
-#include "core/audio/Sound.hpp"
-#include "core/common/PlatformMacros.hpp"
-
+#include <GowEngine/BuildMacros.hpp>
 #if IS_LINUX
+
+#include "core/audio/Sound.hpp"
 
 #include <AL/al.h>
 

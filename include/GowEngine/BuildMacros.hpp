@@ -39,14 +39,10 @@
 #define IS_MOBILE IS_IOS || IS_ANDROID
 #define IS_APPLE IS_IOS || IS_MACOS
 
-#if !defined(_DEBUG) && !defined(DEBUG)
-    #define IS_RELEASE 1
-#else
-    #define IS_RELEASE 0
-#endif
-
 #if defined(_DEBUG) || defined(DEBUG)
     #define IS_DEBUG 1
+    #define IS_RELEASE 0
 #else
     #define IS_DEBUG 0
+    #define IS_RELEASE 1
 #endif

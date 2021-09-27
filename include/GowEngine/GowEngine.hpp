@@ -21,37 +21,12 @@
 #include <string>
 #include <vector>
 
+/// Needs to come first as it initializes the PLATFORM, IS_DEBUG, and IS_RELEASE macros
+#include "BuildMacros.hpp"
+
 /// Box2D Implementation
 #include "deps/box2d/Box2DDebugRenderer.hpp"
 #include "deps/box2d/Box2DPhysicsController.hpp"
-
-/// DirectXTK Implementation
-#include "deps/DirectXTK/DirectXTKAudioEngine.hpp"
-#include "deps/DirectXTK/DirectXTKSound.hpp"
-#include "deps/DirectXTK/DirectXTKSoundWrapper.hpp"
-
-/// GLFW Implementation
-#include "deps/glfw/GlfwMain.hpp"
-
-/// ObjectAL-for-iPhone Implementation
-#include "deps/ObjectAL-for-iPhone/ObjectALAudioEngine.hpp"
-#include "deps/ObjectAL-for-iPhone/ObjectALHelper.hpp"
-#include "deps/ObjectAL-for-iPhone/ObjectALSound.hpp"
-#include "deps/ObjectAL-for-iPhone/ObjectALSoundWrapper.hpp"
-
-/// Oboe Implementation
-#include "deps/oboe/InputStream.hpp"
-#include "deps/oboe/OboeAudioEngine.hpp"
-#include "deps/oboe/OboeSound.hpp"
-#include "deps/oboe/OboeSoundWrapper.hpp"
-#include "deps/oboe/SampleBuffer.hpp"
-#include "deps/oboe/SampleSource.hpp"
-#include "deps/oboe/SimpleMultiPlayer.hpp"
-#include "deps/oboe/WavChunkHeader.hpp"
-#include "deps/oboe/WavFmtChunkHeader.hpp"
-#include "deps/oboe/WavRIFFChunkHeader.hpp"
-#include "deps/oboe/WavStreamReader.hpp"
-#include "deps/oboe/WavTypes.hpp"
 
 /// RapidJSON Implementation
 #include "deps/rapidjson/AssetsLoader.hpp"
@@ -84,7 +59,6 @@
 #include "core/assets/WindowsAssetHandler.hpp"
 
 /// Core Audio
-#include "core/audio/AudioEngineFactory.hpp"
 #include "core/audio/GowAudioEngine.hpp"
 #include "core/audio/Sound.hpp"
 #include "core/audio/SoundManager.hpp"
@@ -97,7 +71,6 @@
 #include "core/common/FixedSizePool.hpp"
 #include "core/common/InstanceRegistry.hpp"
 #include "core/common/Macros.hpp"
-#include "core/common/PlatformMacros.hpp"
 #include "core/common/Pool.hpp"
 #include "core/common/RTTI.hpp"
 #include "core/common/STLUtil.hpp"
