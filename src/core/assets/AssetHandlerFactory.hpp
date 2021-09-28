@@ -8,35 +8,12 @@
 
 #pragma once
 
-#include <GowEngine/BuildMacros.hpp>
-
-#include "AndroidAssetHandler.hpp"
-#include "AppleAssetHandler.hpp"
-#include "LinuxAssetHandler.hpp"
-#include "WindowsAssetHandler.hpp"
-
-#include <cassert>
-#include <stdlib.h>
-
 #define ASSET_HANDLER AssetHandlerFactory::getInstance()
 
 class AssetHandlerFactory
 {
 public:
-    static AssetHandler& getInstance()
-    {
-#if IS_APPLE
-        return AppleAssetHandler::getInstance();
-#elif IS_ANDROID
-        return AndroidAssetHandler::getInstance();
-#elif IS_LINUX
-        return LinuxAssetHandler::getInstance();
-#elif IS_WINDOWS
-        return WindowsAssetHandler::getInstance();
-#else
-        #error Need to add AssetHandler implementation
-#endif
-    }
+    static AssetHandler& getInstance();
 
 private:
     AssetHandlerFactory();

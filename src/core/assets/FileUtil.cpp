@@ -6,8 +6,7 @@
 //  Copyright © 2021 Stephen Gowen. All rights reserved.
 //
 
-#include "FileUtil.hpp"
-
+#include <GowEngine/GowEngine.hpp>
 #include <GowEngine/BuildMacros.hpp>
 
 FILE* FileUtil::openFile(std::string filePath, std::string mode)
