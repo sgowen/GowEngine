@@ -22,6 +22,7 @@
 
 #define NUM_SUPPORTED_GAMEPADS 16
 
+class ClipboardHandler;
 struct Matrix;
 
 class InputManager
@@ -42,6 +43,8 @@ public:
     std::vector<KeyboardEvent*>& getKeyboardEvents();
     Vector2& convert(CursorEvent* ce);
     Vector2& convert(Vector2& v);
+    void setClipboardHandler(ClipboardHandler* clipboardHandler);
+    const char* getClipboardString();
     void setCursorSize(int cursorWidth, int cursorHeight);
     void setMatrix(Matrix* m);
     void setLoggingEnabled(bool isLoggingEnabled);
@@ -55,6 +58,7 @@ private:
     std::vector<uint16_t> _supportedKeys;
     std::map<uint16_t, bool> _lastKnownKeyStates;
     std::map<uint8_t, bool> _lastKnownGamepadButtonStates[NUM_SUPPORTED_GAMEPADS];
+    ClipboardHandler* _clipboardHandler;
     Vector2 _lastConvertedCursorPos;
     int _cursorWidth;
     int _cursorHeight;

@@ -23,9 +23,9 @@ _cursorHeight(0)
     // Empty
 }
 
-void Engine::createDeviceDependentResources(void* data)
+void Engine::createDeviceDependentResources(ClipboardHandler* clipboardHandler)
 {
-    CLIPBOARD_UTIL.init(data);
+    INPUT_MGR.setClipboardHandler(clipboardHandler);
     
     execute(ERSA_CREATE_RESOURCES);
 }

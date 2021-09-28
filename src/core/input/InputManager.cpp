@@ -144,6 +144,18 @@ Vector2& InputManager::convert(Vector2& v)
     return _lastConvertedCursorPos;
 }
 
+void InputManager::setClipboardHandler(ClipboardHandler* clipboardHandler)
+{
+    _clipboardHandler = clipboardHandler;
+}
+
+const char* InputManager::getClipboardString()
+{
+    assert(_clipboardHandler != nullptr);
+    
+    return _clipboardHandler->getClipboardString();
+}
+
 void InputManager::setCursorSize(int cursorWidth, int cursorHeight)
 {
     _cursorWidth = cursorWidth;
@@ -188,6 +200,7 @@ _poolKeyboard(4096),
 _lastConvertedCursorPos(),
 _cursorWidth(1),
 _cursorHeight(1),
+_clipboardHandler(nullptr),
 _matrix(nullptr),
 _isLoggingEnabled(false)
 {
