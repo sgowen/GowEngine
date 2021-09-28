@@ -58,10 +58,10 @@ private:
     std::vector<uint16_t> _supportedKeys;
     std::map<uint16_t, bool> _lastKnownKeyStates;
     std::map<uint8_t, bool> _lastKnownGamepadButtonStates[NUM_SUPPORTED_GAMEPADS];
-    ClipboardHandler* _clipboardHandler;
     Vector2 _lastConvertedCursorPos;
     int _cursorWidth;
     int _cursorHeight;
+    ClipboardHandler* _clipboardHandler;
     Matrix* _matrix;
     bool _isLoggingEnabled;
     

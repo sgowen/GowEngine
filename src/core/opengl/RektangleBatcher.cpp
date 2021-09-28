@@ -70,13 +70,13 @@ void RektangleBatcher::end(Shader& s, mat4& matrix, const Color& c)
 
     if (_isFill)
     {
-        OGL.drawIndexed(OpenGLWrapper::MODE_TRIANGLES, _indexBuffer, numQuads);
+        OGL.drawIndexed(OpenGLUtil::MODE_TRIANGLES, _indexBuffer, numQuads);
     }
     else
     {
         for (uint32_t i = 0; i < numQuads; ++i)
         {
-            OGL.drawIndexed(OpenGLWrapper::MODE_LINE_STRIP, _indexBuffer, 1, i);
+            OGL.drawIndexed(OpenGLUtil::MODE_LINE_STRIP, _indexBuffer, 1, i);
         }
     }
 

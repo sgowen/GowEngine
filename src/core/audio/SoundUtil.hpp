@@ -23,8 +23,7 @@ public:
             return;
         }
         
-        // fixme
-//        AUDIO_ENGINE.playSound(e.renderController()->getSoundMapping(toState));
+        AUDIO_ENGINE.playSound(e.renderController()->getSoundMapping(toState));
     }
     
 private:

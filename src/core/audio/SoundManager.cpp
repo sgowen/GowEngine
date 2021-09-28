@@ -67,9 +67,8 @@ void SoundManager::loadSound(uint16_t soundID, std::string filePath, uint8_t num
 {
     assert(_sounds.find(soundID) == _sounds.end());
     
-    // fixme
-//    SoundWrapper* sw = AUDIO_ENGINE.loadSound(filePath, numInstances);
-//    _sounds.emplace(soundID, sw);
+    SoundWrapper* sw = AUDIO_ENGINE.loadSound(filePath, numInstances);
+    _sounds.emplace(soundID, sw);
 }
 
 void SoundManager::unloadSound(uint16_t soundID)
@@ -84,8 +83,7 @@ void SoundManager::loadMusic(std::string filePath)
 {
     unloadMusic();
     
-    // fixme
-//    _music = AUDIO_ENGINE.loadMusic(filePath);
+    _music = AUDIO_ENGINE.loadMusic(filePath);
 }
 
 void SoundManager::unloadMusic()

@@ -63,12 +63,12 @@ void TriangleBatcher::end(Shader& s, mat4& matrix, const Color& c)
     
     if (_isFill)
     {
-        OGL.draw(OpenGLWrapper::MODE_TRIANGLES, 0, (int)_vertices.size());
+        OGL.draw(OpenGLUtil::MODE_TRIANGLES, 0, (int)_vertices.size());
     }
     else
     {
         // FIXME, leaves out the last side for some reason, call drawIndexed instead?
-        OGL.draw(OpenGLWrapper::MODE_LINE_STRIP, 0, (int)_vertices.size());
+        OGL.draw(OpenGLUtil::MODE_LINE_STRIP, 0, (int)_vertices.size());
     }
     
     OGL.unbindShader(s);

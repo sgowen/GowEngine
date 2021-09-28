@@ -10,3 +10,15 @@
 [submodule "deps/stb"]
 	path = deps/stb
 	url = https://github.com/nothings/stb.git
+[submodule "deps/DirectXTK"]
+	path = deps/DirectXTK
+	url = git@github.com:microsoft/DirectXTK.git
+[submodule "deps/ObjectAL-for-iPhone"]
+	path = deps/ObjectAL-for-iPhone
+	url = git@github.com:kstenerud/ObjectAL-for-iPhone.git
+[submodule "deps/glfw"]
+	path = deps/glfw
+	url = git@github.com:glfw/glfw.git
+[submodule "deps/oboe"]
+	path = deps/oboe
+	url = git@github.com:google/oboe.git

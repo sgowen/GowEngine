@@ -25,6 +25,34 @@
 #include "deps/box2d/Box2DDebugRenderer.hpp"
 #include "deps/box2d/Box2DPhysicsController.hpp"
 
+/// DirectXTK Implementation
+#include "deps/DirectXTK/DirectXTKAudioEngine.hpp"
+#include "deps/DirectXTK/DirectXTKSound.hpp"
+#include "deps/DirectXTK/DirectXTKSoundWrapper.hpp"
+
+/// GLFW Implementation
+#include "deps/glfw/GlfwMain.hpp"
+
+/// ObjectAL-for-iPhone Implementation
+#include "deps/ObjectAL-for-iPhone/ObjectALAudioEngine.hpp"
+#include "deps/ObjectAL-for-iPhone/ObjectALHelper.hpp"
+#include "deps/ObjectAL-for-iPhone/ObjectALSound.hpp"
+#include "deps/ObjectAL-for-iPhone/ObjectALSoundWrapper.hpp"
+
+/// Oboe Implementation
+#include "deps/oboe/InputStream.hpp"
+#include "deps/oboe/OboeAudioEngine.hpp"
+#include "deps/oboe/OboeSound.hpp"
+#include "deps/oboe/OboeSoundWrapper.hpp"
+#include "deps/oboe/SampleBuffer.hpp"
+#include "deps/oboe/SampleSource.hpp"
+#include "deps/oboe/SimpleMultiPlayer.hpp"
+#include "deps/oboe/WavChunkHeader.hpp"
+#include "deps/oboe/WavFmtChunkHeader.hpp"
+#include "deps/oboe/WavRIFFChunkHeader.hpp"
+#include "deps/oboe/WavStreamReader.hpp"
+#include "deps/oboe/WavTypes.hpp"
+
 /// rapidjson Implementation
 #include "deps/rapidjson/AssetsLoader.hpp"
 #include "deps/rapidjson/ConfigLoader.hpp"
@@ -56,6 +84,7 @@
 #include "core/assets/WindowsAssetHandler.hpp"
 
 /// Core Audio
+#include "core/audio/AudioEngineFactory.hpp"
 #include "core/audio/GowAudioEngine.hpp"
 #include "core/audio/Sound.hpp"
 #include "core/audio/SoundManager.hpp"
@@ -149,7 +178,7 @@
 #include "core/opengl/LightRenderer.hpp"
 #include "core/opengl/LineBatcher.hpp"
 #include "core/opengl/Matrix.hpp"
-#include "core/opengl/OpenGLWrapper.hpp"
+#include "core/opengl/OpenGLUtil.hpp"
 #include "core/opengl/RektangleBatcher.hpp"
 #include "core/opengl/Renderer.hpp"
 #include "core/opengl/ScreenRenderer.hpp"

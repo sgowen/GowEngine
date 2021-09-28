@@ -103,7 +103,7 @@ void LightRenderer::render(Shader& s, mat4& matrix, Framebuffer& texture, Frameb
     OGL.bindTexture(s, "u_Texture", 0, texture._texture);
     OGL.bindTexture(s, "u_NormalMap", 1, normalMap._texture);
 
-    OGL.drawIndexed(OpenGLWrapper::MODE_TRIANGLES, _indexBuffer, 1);
+    OGL.drawIndexed(OpenGLUtil::MODE_TRIANGLES, _indexBuffer, 1);
 
     OGL.unbindTexture(0);
     OGL.unbindTexture(1);

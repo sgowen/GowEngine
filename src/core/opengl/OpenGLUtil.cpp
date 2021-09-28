@@ -1,42 +1,21 @@
 //
-//  OpenGLWrapper.cpp
+//  OpenGLUtil.cpp
 //  GowEngine
 //
 //  Created by Stephen Gowen on 4/23/20.
 //  Copyright © 2021 Stephen Gowen. All rights reserved.
 //
 
-#include <GowEngine/BuildMacros.hpp>
-
-#if IS_IOS
-    #include <OpenGLES/ES3/gl.h>
-#elif IS_MACOS
-    #include <OpenGL/OpenGL.h>
-    #include <OpenGL/gl.h>
-#elif IS_ANDROID
-    #ifdef GL3
-        #include <GLES3/gl3.h>
-    #elif GL3_2
-        #include <GLES3/gl32.h>
-    #else
-        #include <GLES2/gl2.h>
-        #include <GLES2/gl2ext.h>
-    #endif
-#elif IS_LINUX
-    #include <GL/glew.h>
-#elif IS_WINDOWS
-    #include <glad/gl.h>
-#endif
-
 #include <GowEngine/GowEngine.hpp>
+#include <GowEngine/OpenGLWrapper.hpp>
 
-uint32_t OpenGLWrapper::TEXTURE_SLOTS[NUM_SUPPORTED_TEXTURE_SLOTS] = {GL_TEXTURE0, GL_TEXTURE1, GL_TEXTURE2, GL_TEXTURE3};
-uint32_t OpenGLWrapper::MODE_LINES = GL_LINES;
-uint32_t OpenGLWrapper::MODE_LINE_STRIP = GL_LINE_STRIP;
-uint32_t OpenGLWrapper::MODE_TRIANGLES = GL_TRIANGLES;
-uint32_t OpenGLWrapper::MODE_TRIANGLE_STRIP = GL_TRIANGLE_STRIP;
+uint32_t OpenGLUtil::TEXTURE_SLOTS[NUM_SUPPORTED_TEXTURE_SLOTS] = {GL_TEXTURE0, GL_TEXTURE1, GL_TEXTURE2, GL_TEXTURE3};
+uint32_t OpenGLUtil::MODE_LINES = GL_LINES;
+uint32_t OpenGLUtil::MODE_LINE_STRIP = GL_LINE_STRIP;
+uint32_t OpenGLUtil::MODE_TRIANGLES = GL_TRIANGLES;
+uint32_t OpenGLUtil::MODE_TRIANGLE_STRIP = GL_TRIANGLE_STRIP;
 
-void OpenGLWrapper::enableBlending(bool srcAlpha)
+void OpenGLUtil::enableBlending(bool srcAlpha)
 {
     uint32_t src = srcAlpha ? GL_SRC_ALPHA : GL_ONE;
     glEnable(GL_BLEND);
@@ -44,12 +23,12 @@ void OpenGLWrapper::enableBlending(bool srcAlpha)
     glBlendEquationSeparate(GL_FUNC_ADD, GL_FUNC_ADD);
 }
 
-void OpenGLWrapper::disableBlending()
+void OpenGLUtil::disableBlending()
 {
     glDisable(GL_BLEND);
 }
 
-void OpenGLWrapper::bindShader(Shader& s)
+void OpenGLUtil::bindShader(Shader& s)
 {
     assert(s._program > 0);
     
@@ -63,7 +42,7 @@ void OpenGLWrapper::bindShader(Shader& s)
     }
 }
 
-void OpenGLWrapper::unbindShader(Shader& s)
+void OpenGLUtil::unbindShader(Shader& s)
 {
     std::vector<ShaderAttribute>& attributes = s._desc._attributes;
     for (const auto& sa : attributes)
@@ -74,7 +53,7 @@ void OpenGLWrapper::unbindShader(Shader& s)
     glUseProgram(0);
 }
 
-void OpenGLWrapper::bindMatrix(Shader& s, std::string uniformName, mat4& matrix)
+void OpenGLUtil::bindMatrix(Shader& s, std::string uniformName, mat4& matrix)
 {
     ShaderUniform& su = s._desc.uniform(uniformName);
     assert(su._type == "mat4");
@@ -82,7 +61,7 @@ void OpenGLWrapper::bindMatrix(Shader& s, std::string uniformName, mat4& matrix)
     glUniformMatrix4fv(su._location, 1, GL_FALSE, (GLfloat*)matrix);
 }
 
-void OpenGLWrapper::bindColor(Shader& s, std::string uniformName, const Color& c)
+void OpenGLUtil::bindColor(Shader& s, std::string uniformName, const Color& c)
 {
     ShaderUniform& su = s._desc.uniform(uniformName);
     assert(su._type == "vec4");
@@ -90,7 +69,7 @@ void OpenGLWrapper::bindColor(Shader& s, std::string uniformName, const Color& c
     glUniform4f(su._location, c._red, c._green, c._blue, c._alpha);
 }
 
-void OpenGLWrapper::bindInt4(Shader& s, std::string uniformName, ivec4& value)
+void OpenGLUtil::bindInt4(Shader& s, std::string uniformName, ivec4& value)
 {
     ShaderUniform& su = s._desc.uniform(uniformName);
     assert(su._type == "ivec4");
@@ -98,7 +77,7 @@ void OpenGLWrapper::bindInt4(Shader& s, std::string uniformName, ivec4& value)
     glUniform4i(su._location, value[0], value[1], value[2], value[3]);
 }
 
-void OpenGLWrapper::bindFloat4(Shader& s, std::string uniformName, vec4& value)
+void OpenGLUtil::bindFloat4(Shader& s, std::string uniformName, vec4& value)
 {
     ShaderUniform& su = s._desc.uniform(uniformName);
     assert(su._type == "vec4");
@@ -106,7 +85,7 @@ void OpenGLWrapper::bindFloat4(Shader& s, std::string uniformName, vec4& value)
     glUniform4f(su._location, value[0], value[1], value[2], value[3]);
 }
 
-void OpenGLWrapper::bindFloat4Array(Shader& s, std::string uniformName, int count, vec4* value)
+void OpenGLUtil::bindFloat4Array(Shader& s, std::string uniformName, int count, vec4* value)
 {
     ShaderUniform& su = s._desc.uniform(uniformName);
     assert(su._type == "vec4");
@@ -114,12 +93,12 @@ void OpenGLWrapper::bindFloat4Array(Shader& s, std::string uniformName, int coun
     glUniform4fv(su._location, count, (const GLfloat*)value);
 }
 
-void OpenGLWrapper::bindTexture(Shader& s, std::string uniformName, uint32_t index, Texture& t)
+void OpenGLUtil::bindTexture(Shader& s, std::string uniformName, uint32_t index, Texture& t)
 {
     bindTexture(s, uniformName, index, t._texture);
 }
 
-void OpenGLWrapper::bindTexture(Shader& s, std::string uniformName, uint32_t index, uint32_t texture)
+void OpenGLUtil::bindTexture(Shader& s, std::string uniformName, uint32_t index, uint32_t texture)
 {
     assert(index < NUM_SUPPORTED_TEXTURE_SLOTS);
     assert(texture > 0);
@@ -133,7 +112,7 @@ void OpenGLWrapper::bindTexture(Shader& s, std::string uniformName, uint32_t ind
     glUniform1i(su._location, index);
 }
 
-void OpenGLWrapper::unbindTexture(uint32_t index)
+void OpenGLUtil::unbindTexture(uint32_t index)
 {
     assert(index < NUM_SUPPORTED_TEXTURE_SLOTS);
     
@@ -142,25 +121,25 @@ void OpenGLWrapper::unbindTexture(uint32_t index)
     glDisable(GL_TEXTURE_2D);
 }
 
-void OpenGLWrapper::bindVertexBuffer(uint32_t buffer)
+void OpenGLUtil::bindVertexBuffer(uint32_t buffer)
 {
     assert(buffer > 0);
     
     glBindBuffer(GL_ARRAY_BUFFER, buffer);
 }
 
-void OpenGLWrapper::bindVertexBuffer(uint32_t buffer, size_t size, const void* data)
+void OpenGLUtil::bindVertexBuffer(uint32_t buffer, size_t size, const void* data)
 {
     bindVertexBuffer(buffer);
     glBufferSubData(GL_ARRAY_BUFFER, 0, size, data);
 }
 
-void OpenGLWrapper::unbindVertexBuffer()
+void OpenGLUtil::unbindVertexBuffer()
 {
     glBindBuffer(GL_ARRAY_BUFFER, 0);
 }
 
-void OpenGLWrapper::bindScreenFramebuffer(int32_t width, int32_t height, const Color& clearColor)
+void OpenGLUtil::bindScreenFramebuffer(int32_t width, int32_t height, const Color& clearColor)
 {
     Framebuffer fb(width, height);
     
@@ -173,7 +152,7 @@ void OpenGLWrapper::bindScreenFramebuffer(int32_t width, int32_t height, const C
     bindFramebuffer(fb);
 }
 
-void OpenGLWrapper::bindFramebuffer(Framebuffer& fb, const Color& c)
+void OpenGLUtil::bindFramebuffer(Framebuffer& fb, const Color& c)
 {
     assert(fb._width > 0);
     assert(fb._height > 0);
@@ -187,25 +166,25 @@ void OpenGLWrapper::bindFramebuffer(Framebuffer& fb, const Color& c)
     clearFramebuffer(c);
 }
 
-void OpenGLWrapper::clearFramebuffer(const Color& c)
+void OpenGLUtil::clearFramebuffer(const Color& c)
 {
     clearFramebuffer(c._red, c._green, c._blue, c._alpha);
 }
 
-void OpenGLWrapper::clearFramebuffer(float red, float green, float blue, float alpha)
+void OpenGLUtil::clearFramebuffer(float red, float green, float blue, float alpha)
 {
     glClearColor(red, green, blue, alpha);
     glClear(GL_COLOR_BUFFER_BIT);
 }
 
-void OpenGLWrapper::draw(uint32_t mode, uint32_t first, uint32_t count)
+void OpenGLUtil::draw(uint32_t mode, uint32_t first, uint32_t count)
 {
     assert(count > 0);
     
     glDrawArrays(mode, first, count);
 }
 
-void OpenGLWrapper::drawIndexed(uint32_t mode, uint32_t indexBuffer, uint32_t count, size_t first)
+void OpenGLUtil::drawIndexed(uint32_t mode, uint32_t indexBuffer, uint32_t count, size_t first)
 {
     assert(indexBuffer > 0);
     assert(count > 0);
@@ -215,7 +194,7 @@ void OpenGLWrapper::drawIndexed(uint32_t mode, uint32_t indexBuffer, uint32_t co
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 }
 
-uint32_t OpenGLWrapper::loadRektangleIndexBuffer(int numRektangles)
+uint32_t OpenGLUtil::loadRektangleIndexBuffer(int numRektangles)
 {
     assert(numRektangles > 0);
     
@@ -243,7 +222,7 @@ uint32_t OpenGLWrapper::loadRektangleIndexBuffer(int numRektangles)
     return ret;
 }
 
-uint32_t OpenGLWrapper::loadVertexBuffer(size_t size)
+uint32_t OpenGLUtil::loadVertexBuffer(size_t size)
 {
     assert(size > 0);
     
@@ -257,7 +236,7 @@ uint32_t OpenGLWrapper::loadVertexBuffer(size_t size)
     return ret;
 }
 
-uint32_t OpenGLWrapper::loadVertexBuffer(size_t size, const void* data)
+uint32_t OpenGLUtil::loadVertexBuffer(size_t size, const void* data)
 {
     assert(size > 0);
     
@@ -271,7 +250,7 @@ uint32_t OpenGLWrapper::loadVertexBuffer(size_t size, const void* data)
     return ret;
 }
 
-void OpenGLWrapper::unloadBuffer(uint32_t& buffer)
+void OpenGLUtil::unloadBuffer(uint32_t& buffer)
 {
     assert(buffer > 0);
     
@@ -279,7 +258,7 @@ void OpenGLWrapper::unloadBuffer(uint32_t& buffer)
     buffer = 0;
 }
 
-void OpenGLWrapper::loadFramebuffer(Framebuffer& fb)
+void OpenGLUtil::loadFramebuffer(Framebuffer& fb)
 {
     uint32_t texture;
     uint32_t fbo;
@@ -302,7 +281,7 @@ void OpenGLWrapper::loadFramebuffer(Framebuffer& fb)
     fb._fbo = fbo;
 }
 
-void OpenGLWrapper::unloadFramebuffer(Framebuffer& fb)
+void OpenGLUtil::unloadFramebuffer(Framebuffer& fb)
 {
     assert(fb._texture > 0);
     assert(fb._fbo > 0);
@@ -314,20 +293,20 @@ void OpenGLWrapper::unloadFramebuffer(Framebuffer& fb)
     fb._fbo = 0;
 }
 
-void OpenGLWrapper::loadTexture(Texture& t)
+void OpenGLUtil::loadTexture(Texture& t)
 {
     assert(t._data != nullptr);
     
     t._texture = loadTexture(t._width, t._height, t._data, t._desc._filterMin, t._desc._filterMag, t._desc._mipMap);
 }
 
-void OpenGLWrapper::unloadTexture(Texture& t)
+void OpenGLUtil::unloadTexture(Texture& t)
 {
     unloadTexture(t._texture);
     t._texture = 0;
 }
 
-void OpenGLWrapper::loadShader(Shader& s)
+void OpenGLUtil::loadShader(Shader& s)
 {
     const uint8_t* vertexShaderSrc = s._vertexShaderFileData->_data;
     const long vertexShaderSrcLength = s._vertexShaderFileData->_length;
@@ -359,13 +338,13 @@ void OpenGLWrapper::loadShader(Shader& s)
     }
 }
 
-void OpenGLWrapper::unloadShader(Shader& s)
+void OpenGLUtil::unloadShader(Shader& s)
 {
     unloadShader(s._program);
     s._program = 0;
 }
 
-uint32_t OpenGLWrapper::loadTexture(int width, int height, uint8_t* data, std::string filterMin, std::string filterMag, bool mipmap)
+uint32_t OpenGLUtil::loadTexture(int width, int height, uint8_t* data, std::string filterMin, std::string filterMag, bool mipmap)
 {
     assert(width > 0);
     assert(height > 0);
@@ -399,14 +378,14 @@ uint32_t OpenGLWrapper::loadTexture(int width, int height, uint8_t* data, std::s
     return ret;
 }
 
-void OpenGLWrapper::unloadTexture(uint32_t texture)
+void OpenGLUtil::unloadTexture(uint32_t texture)
 {
     assert(texture > 0);
     
     glDeleteTextures(1, &texture);
 }
 
-uint32_t OpenGLWrapper::loadShader(const uint8_t* vertexShaderSrc, const long vertexShaderSrcLength, const uint8_t* fragmentShaderSrc, const long fragmentShaderSrcLength)
+uint32_t OpenGLUtil::loadShader(const uint8_t* vertexShaderSrc, const long vertexShaderSrcLength, const uint8_t* fragmentShaderSrc, const long fragmentShaderSrcLength)
 {
     assert(vertexShaderSrc != nullptr);
     assert(vertexShaderSrcLength > 0);
@@ -440,14 +419,14 @@ uint32_t OpenGLWrapper::loadShader(const uint8_t* vertexShaderSrc, const long ve
     return ret;
 }
 
-void OpenGLWrapper::unloadShader(uint32_t program)
+void OpenGLUtil::unloadShader(uint32_t program)
 {
     assert(program > 0);
     
     glDeleteProgram(program);
 }
 
-uint32_t OpenGLWrapper::compileShader(const uint32_t type, const uint8_t* source, const int32_t length)
+uint32_t OpenGLUtil::compileShader(const uint32_t type, const uint8_t* source, const int32_t length)
 {
     assert(source != nullptr);
     assert(length > 0);

@@ -1,5 +1,5 @@
 //
-//  OpenGLWrapper.hpp
+//  OpenGLUtil.hpp
 //  GowEngine
 //
 //  Created by Stephen Gowen on 4/23/20.
@@ -23,9 +23,9 @@ struct Texture;
 #define NUM_INDICES_PER_RECTANGLE 6
 #define NUM_SUPPORTED_TEXTURE_SLOTS 4
 
-#define OGL OpenGLWrapper::getInstance()
+#define OGL OpenGLUtil::getInstance()
 
-class OpenGLWrapper
+class OpenGLUtil
 {
 public:
     static uint32_t TEXTURE_SLOTS[NUM_SUPPORTED_TEXTURE_SLOTS];
@@ -34,9 +34,9 @@ public:
     static uint32_t MODE_TRIANGLES;
     static uint32_t MODE_TRIANGLE_STRIP;
 
-    static OpenGLWrapper& getInstance()
+    static OpenGLUtil& getInstance()
     {
-        static OpenGLWrapper ret = OpenGLWrapper();
+        static OpenGLUtil ret = OpenGLUtil();
         return ret;
     }
 
@@ -79,8 +79,8 @@ private:
     void unloadShader(uint32_t program);
     uint32_t compileShader(const uint32_t type, const uint8_t* source, const int32_t length);
 
-    OpenGLWrapper() {}
-    ~OpenGLWrapper() {}
-    OpenGLWrapper(const OpenGLWrapper&);
-    OpenGLWrapper& operator=(const OpenGLWrapper&);
+    OpenGLUtil() {}
+    ~OpenGLUtil() {}
+    OpenGLUtil(const OpenGLUtil&);
+    OpenGLUtil& operator=(const OpenGLUtil&);
 };

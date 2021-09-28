@@ -10,6 +10,8 @@
 
 #define AUDIO_ENGINE AudioEngineFactory::getInstance()
 
+class GowAudioEngine;
+
 class AudioEngineFactory
 {
 public:
