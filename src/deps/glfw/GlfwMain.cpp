@@ -6,14 +6,14 @@
 //  Copyright © 2021 Stephen Gowen. All rights reserved.
 //
 
-#include <GowEngine/GowEngine.hpp>
-
-#if IS_DESKTOP
-
+#include <GowEngine/BuildMacros.hpp>
 #if IS_WINDOWS
     #define GLAD_GL_IMPLEMENTATION
 #endif
-#include <GowEngine/OpenGLWrapper.hpp>
+
+#if IS_DESKTOP
+
+#include <GowEngine/GowEngine.hpp>
 
 #define GLFW_INCLUDE_NONE
 #include <GLFW/glfw3.h>

@@ -179,6 +179,7 @@
 #include "core/opengl/LineBatcher.hpp"
 #include "core/opengl/Matrix.hpp"
 #include "core/opengl/OpenGLUtil.hpp"
+#include "core/opengl/OpenGLWrapper.hpp"
 #include "core/opengl/RektangleBatcher.hpp"
 #include "core/opengl/Renderer.hpp"
 #include "core/opengl/ScreenRenderer.hpp"
