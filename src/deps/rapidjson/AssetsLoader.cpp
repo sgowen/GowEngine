@@ -29,14 +29,14 @@ Assets AssetsLoader::initWithJSON(const char* json)
     d.Parse<kParseStopWhenDoneFlag>(json);
     assert(d.IsObject());
 
-    std::vector<uint16_t> soundIDsAdded;
+    std::vector<std::string> soundIDsAdded;
     if (d.HasMember("music"))
     {
         Value& v = d["music"];
         assert(v.IsObject());
 
         std::string filePath = RapidJSONUtil::getString(v, "filePath");
-        uint16_t soundID = 1337;
+        std::string soundID = "music";
         ret._soundDescriptors.emplace_back(soundID, filePath, 1);
         soundIDsAdded.emplace_back(soundID);
     }
@@ -50,7 +50,7 @@ Assets AssetsLoader::initWithJSON(const char* json)
             const Value& iv = v[i];
             assert(iv.IsObject());
 
-            uint16_t soundID = RapidJSONUtil::getUInt(iv, "soundID");
+            std::string soundID = RapidJSONUtil::getString(iv, "soundID");
             std::string filePath = RapidJSONUtil::getString(iv, "filePath");
             uint8_t numInstances = RapidJSONUtil::getUInt(iv, "numInstances");
 

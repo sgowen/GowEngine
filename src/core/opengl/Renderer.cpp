@@ -9,22 +9,9 @@
 #include <GowEngine/GowEngine.hpp>
 
 Renderer::Renderer() :
-_renderFunc(nullptr),
 _screenRenderer()
 {
     // Empty
-}
-
-void Renderer::setRenderFunc(RenderFunc rf)
-{
-    _renderFunc = rf;
-}
-
-void Renderer::render()
-{
-    assert(_renderFunc != nullptr);
-    
-    _renderFunc(*this);
 }
 
 void Renderer::createDeviceDependentResources()
@@ -139,7 +126,7 @@ void Renderer::renderImageViews(float angle, bool flipX, std::string matrixKey, 
     for (auto& pair : _imageViews)
     {
         ImageView& iv = pair.second;
-        renderSprite(iv._textureName, iv._textureRegionName, w * iv._xWeight, h * iv._yWeight, w * iv._widthWeight, h * iv._heightWeight, angle, flipX, matrixKey, shaderKey, spriteBatcherKey);
+        renderSprite(iv._textureName, iv._textureRegionName, w * iv._xWeight, h * iv._yWeight, w * iv._widthWeight, h * iv._heightWeight, 0, angle, flipX, matrixKey, shaderKey, spriteBatcherKey);
     }
 }
 
@@ -169,13 +156,13 @@ void Renderer::rektangleBatcherEnd(const Color& c, std::string matrixKey, std::s
     rb.end(s, m._matrix, c);
 }
 
-void Renderer::renderSprite(std::string textureKey, std::string textureRegionKey, float x, float y, float width, float height, float angle, bool flipX, std::string matrixKey, std::string shaderKey, std::string spriteBatcherKey)
+void Renderer::renderSprite(std::string textureKey, std::string textureRegionKey, float x, float y, float width, float height, uint16_t stateTime, float angle, bool flipX, std::string matrixKey, std::string shaderKey, std::string spriteBatcherKey)
 {
     SpriteBatcher& sb = spriteBatcher(spriteBatcherKey);
     Matrix& m = matrix(matrixKey);
     Shader& s = ASSETS.shader(shaderKey);
     Texture& t = ASSETS.texture(textureKey);
-    TextureRegion& tr = ASSETS.textureRegion(textureRegionKey);
+    TextureRegion& tr = ASSETS.textureRegion(textureRegionKey, stateTime);
     
     sb.begin();
     sb.addSprite(tr, x, y, width, height, angle, flipX);

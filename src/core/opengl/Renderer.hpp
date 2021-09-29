@@ -21,8 +21,6 @@
 
 #include <map>
 
-typedef void (*RenderFunc)(Renderer& r);
-
 class Entity;
 
 class Renderer
@@ -32,8 +30,6 @@ class Renderer
 public:
     Renderer();
     
-    void setRenderFunc(RenderFunc rf);
-    void render();
     void createDeviceDependentResources();
     void onWindowSizeChanged(uint16_t screenWidth, uint16_t screenHeight);
     void destroyDeviceDependentResources();
@@ -51,7 +47,7 @@ public:
     void rektangleBatcherAddRektangle(Rektangle& r, std::string rektangleBatcherKey = "main");
     void rektangleBatcherEnd(const Color& c, std::string matrixKey = "main", std::string shaderKey = "geometry", std::string rektangleBatcherKey = "main");
     
-    void renderSprite(std::string textureKey, std::string textureRegionKey, float x, float y, float width, float height, float angle = 0, bool flipX = false, std::string matrixKey = "main", std::string shaderKey = "texture", std::string spriteBatcherKey = "main");
+    void renderSprite(std::string textureKey, std::string textureRegionKey, float x, float y, float width, float height, uint16_t stateTime = 0, float angle = 0, bool flipX = false, std::string matrixKey = "main", std::string shaderKey = "texture", std::string spriteBatcherKey = "main");
     void spriteBatcherBegin(std::string spriteBatcherKey = "main");
     void spriteBatcherAddEntities(std::vector<Entity*>& entities, std::string spriteBatcherKey = "main");
     void addSpriteForEntity(Entity* e, std::string spriteBatcherKey = "main");
@@ -75,7 +71,6 @@ public:
     TriangleBatcher& triangleBatcher(std::string key = "main");
     
 private:
-    RenderFunc _renderFunc;
     std::map<std::string, CircleBatcher> _circleBatchers;
     std::map<std::string, FontBatcher> _fontBatchers;
     std::map<std::string, Framebuffer> _framebuffers;

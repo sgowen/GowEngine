@@ -24,7 +24,11 @@ _config(nullptr)
     AUDIO_ENGINE.setSoundsDisabled(_config->getBool("soundsDisabled", false));
     AUDIO_ENGINE.setMusicDisabled(_config->getBool("musicDisabled", false));
     
-    ASSETS.registerAssets("global", AssetsLoader::initWithJSONFile("data/json/assets_global.json"));
+    std::string assetsFilePath = _config->getString("assetsFilePath", "");
+    if (!assetsFilePath.empty())
+    {
+        ASSETS.registerAssets("engine", AssetsLoader::initWithJSONFile(assetsFilePath));
+    }
     
     static TimeTracker TIMS(getFrameRate());
     static EntityIDManager EIMS;

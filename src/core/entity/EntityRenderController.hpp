@@ -24,7 +24,7 @@ public:
     
     virtual std::string getTextureMapping();
     virtual std::string getTextureMapping(uint8_t state, uint8_t stateFlags = 0);
-    virtual uint16_t getSoundMapping(uint8_t state);
+    virtual std::string getSoundMapping(uint8_t state);
     
 protected:
     Entity* _entity;

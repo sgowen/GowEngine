@@ -86,7 +86,7 @@ void EntityManagerLoader::initWithJSON(EntityManager& em, const char* json)
             textureMappings.emplace(state, stateFlagMappings);
         }
         
-        std::map<uint8_t, uint16_t> soundMappings;
+        std::map<uint8_t, std::string> soundMappings;
         if (iv.HasMember("soundMappings"))
         {
             const Value& v = iv["soundMappings"];
@@ -97,12 +97,12 @@ void EntityManagerLoader::initWithJSON(EntityManager& em, const char* json)
                 uint16_t nameVal = StringUtil::stringToNumber<uint16_t>(name);
                 uint8_t state = (uint8_t)nameVal;
                 assert(i->value.IsUint());
-                uint16_t soundID = i->value.GetUint();
+                std::string soundID = i->value.GetString();
                 soundMappings.emplace(state, soundID);
             }
         }
         
-        std::map<uint8_t, std::vector<uint16_t> > soundRandomMappings;
+        std::map<uint8_t, std::vector<std::string> > soundRandomMappings;
         if (iv.HasMember("soundRandomMappings"))
         {
             const Value& v = iv["soundRandomMappings"];
@@ -111,12 +111,12 @@ void EntityManagerLoader::initWithJSON(EntityManager& em, const char* json)
             {
                 assert(i->value.IsArray());
                 const Value& array = i->value.GetArray();
-                std::vector<uint16_t> soundCollection;
+                std::vector<std::string> soundCollection;
                 for (SizeType i = 0; i < array.Size(); ++i)
                 {
                     const Value& iv = array[i];
                     assert(iv.IsUint());
-                    soundCollection.push_back(iv.GetUint());
+                    soundCollection.push_back(iv.GetString());
                 }
                 std::string name = i->name.GetString();
                 uint16_t nameVal = StringUtil::stringToNumber<uint16_t>(name);

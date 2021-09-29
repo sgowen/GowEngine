@@ -12,8 +12,8 @@ void SoundManager::loadSounds(std::vector<SoundDescriptor>& soundDescriptors)
 {
     for (SoundDescriptor& sd : soundDescriptors)
     {
-        uint16_t soundID = sd._soundID;
-        if (soundID == 1337)
+        std::string soundID = sd._soundID;
+        if (soundID == "music")
         {
             loadMusic(sd._filePath.c_str());
         }
@@ -28,8 +28,8 @@ void SoundManager::unloadSounds(std::vector<SoundDescriptor>& soundDescriptors)
 {
     for (SoundDescriptor& sd : soundDescriptors)
     {
-        uint16_t soundID = sd._soundID;
-        if (soundID == 1337)
+        std::string soundID = sd._soundID;
+        if (soundID == "music")
         {
             unloadMusic();
         }
@@ -40,7 +40,7 @@ void SoundManager::unloadSounds(std::vector<SoundDescriptor>& soundDescriptors)
     }
 }
 
-SoundWrapper* SoundManager::sound(uint16_t soundID)
+SoundWrapper* SoundManager::sound(std::string soundID)
 {
     SoundWrapper* ret = nullptr;
     
@@ -53,7 +53,7 @@ SoundWrapper* SoundManager::sound(uint16_t soundID)
     return ret;
 }
 
-std::map<uint16_t, SoundWrapper*>& SoundManager::sounds()
+std::map<std::string, SoundWrapper*>& SoundManager::sounds()
 {
     return _sounds;
 }
@@ -63,7 +63,7 @@ SoundWrapper* SoundManager::music()
     return _music;
 }
 
-void SoundManager::loadSound(uint16_t soundID, std::string filePath, uint8_t numInstances)
+void SoundManager::loadSound(std::string soundID, std::string filePath, uint8_t numInstances)
 {
     assert(_sounds.find(soundID) == _sounds.end());
     
@@ -71,7 +71,7 @@ void SoundManager::loadSound(uint16_t soundID, std::string filePath, uint8_t num
     _sounds.emplace(soundID, sw);
 }
 
-void SoundManager::unloadSound(uint16_t soundID)
+void SoundManager::unloadSound(std::string soundID)
 {
     auto q = _sounds.find(soundID);
     assert(q != _sounds.end());

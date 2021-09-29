@@ -15,6 +15,7 @@
 #include <string>
 
 class Engine;
+class Config;
 
 class EngineState : public State<Engine>
 {
@@ -22,22 +23,25 @@ public:
     virtual void onEnter(Engine* e) = 0;
     virtual void onExit(Engine* e) = 0;
     virtual void onUpdate(Engine* e) = 0;
+    virtual void onRender(Renderer& r) = 0;
     
     virtual void enter(Engine* e);
     virtual void execute(Engine* e);
     virtual void exit(Engine* e);
     
 protected:
-    Assets _assets;
-    Renderer _renderer;
-    std::string _assetsFilePath;
+    Config _config;
     
-    EngineState(std::string assetsFilePath, std::string rendererFilePath, RenderFunc rf);
+    EngineState(std::string configFilePath);
     virtual ~EngineState() {}
     EngineState(const EngineState&);
     EngineState& operator=(const EngineState&);
     
 private:
+    std::string _assetsFilePath;
+    Assets _assets;
+    Renderer _renderer;
+    
     void createDeviceDependentResources(Engine* e);
     void onWindowSizeChanged(Engine* e);
     void destroyDeviceDependentResources(Engine* e);

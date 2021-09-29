@@ -26,10 +26,10 @@ public:
     void pause();
     void resume();
     void render();
-    void playSound(uint16_t soundID, float volume = 1.0f, bool isLooping = false);
-    void stopSound(uint16_t soundID);
-    void pauseSound(uint16_t soundID);
-    void resumeSound(uint16_t soundID);
+    void playSound(std::string soundID, float volume = 1.0f, bool isLooping = false);
+    void stopSound(std::string soundID);
+    void pauseSound(std::string soundID);
+    void resumeSound(std::string soundID);
     void stopAllSounds();
     void pauseAllSounds();
     void resumeAllSounds();

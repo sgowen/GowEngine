@@ -54,12 +54,13 @@ void EngineState::exit(Engine* e)
     onExit(e);
 }
 
-EngineState::EngineState(std::string assetsFilePath, std::string rendererFilePath, RenderFunc rf) : State<Engine>(),
-_assets(AssetsLoader::initWithJSONFile(assetsFilePath)),
-_renderer(RendererLoader::initWithJSONFile(rendererFilePath)),
-_assetsFilePath(assetsFilePath)
+EngineState::EngineState(std::string configFilePath) : State<Engine>(),
+_config(ConfigLoader::initWithJSONFile(configFilePath)),
+_assetsFilePath(_config.getString("assetsFilePath")),
+_assets(AssetsLoader::initWithJSONFile(_assetsFilePath)),
+_renderer(RendererLoader::initWithJSONFile(_config.getString("rendererFilePath")))
 {
-    _renderer.setRenderFunc(rf);
+    // Empty
 }
 
 void EngineState::createDeviceDependentResources(Engine* e)
@@ -108,6 +109,6 @@ void EngineState::render(Engine* e)
         return;
     }
     
-    _renderer.render();
     AUDIO_ENGINE.render();
+    onRender(_renderer);
 }

@@ -12,11 +12,11 @@
 
 struct SoundDescriptor
 {
-    const uint16_t _soundID;
+    const std::string _soundID;
     const std::string _filePath;
     const uint8_t _numInstances;
     
-    SoundDescriptor(uint16_t soundID, std::string filePath, uint8_t numInstances) :
+    SoundDescriptor(std::string soundID, std::string filePath, uint8_t numInstances) :
     _soundID(soundID),
     _filePath(filePath),
     _numInstances(numInstances)

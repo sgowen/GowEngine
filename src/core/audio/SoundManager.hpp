@@ -20,16 +20,16 @@ class SoundManager
 public:
     void loadSounds(std::vector<SoundDescriptor>& soundDescriptors);
     void unloadSounds(std::vector<SoundDescriptor>& soundDescriptors);
-    SoundWrapper* sound(uint16_t soundID);
-    std::map<uint16_t, SoundWrapper*>& sounds();
+    SoundWrapper* sound(std::string soundID);
+    std::map<std::string, SoundWrapper*>& sounds();
     SoundWrapper* music();
     
 private:
-    std::map<uint16_t, SoundWrapper*> _sounds;
+    std::map<std::string, SoundWrapper*> _sounds;
     SoundWrapper* _music;
     
-    void loadSound(uint16_t soundID, std::string filePath, uint8_t numInstances = 1);
-    void unloadSound(uint16_t soundID);
+    void loadSound(std::string soundID, std::string filePath, uint8_t numInstances = 1);
+    void unloadSound(std::string soundID);
     void loadMusic(std::string filePath);
     void unloadMusic();
 };

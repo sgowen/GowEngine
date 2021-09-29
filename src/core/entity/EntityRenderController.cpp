@@ -36,7 +36,7 @@ std::string EntityRenderController::getTextureMapping(uint8_t state, uint8_t sta
     return q2->second;
 }
 
-uint16_t EntityRenderController::getSoundMapping(uint8_t state)
+std::string EntityRenderController::getSoundMapping(uint8_t state)
 {
     Entity& e = *_entity;
     auto q1 = e.entityDef()._soundMappings.find(state);
@@ -48,7 +48,7 @@ uint16_t EntityRenderController::getSoundMapping(uint8_t state)
     auto q2 = e.entityDef()._soundRandomMappings.find(state);
     if (q2 != e.entityDef()._soundRandomMappings.end())
     {
-        std::vector<uint16_t> soundCollection = q2->second;
+        std::vector<std::string> soundCollection = q2->second;
         
         int index = rand() % soundCollection.size();
         return soundCollection[index];

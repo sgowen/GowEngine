@@ -51,7 +51,7 @@ void GowAudioEngine::render()
     _soundsToResume.clear();
 }
 
-void GowAudioEngine::playSound(uint16_t soundID, float volume, bool isLooping)
+void GowAudioEngine::playSound(std::string soundID, float volume, bool isLooping)
 {
     if (_soundsDisabled || _soundsToPlay.size() >= MAX_SOUNDS_TO_PLAY_PER_FRAME)
     {
@@ -71,7 +71,7 @@ void GowAudioEngine::playSound(uint16_t soundID, float volume, bool isLooping)
     _soundsToPlay.push_back(s);
 }
 
-void GowAudioEngine::stopSound(uint16_t soundID)
+void GowAudioEngine::stopSound(std::string soundID)
 {
     if (_soundsDisabled)
     {
@@ -91,7 +91,7 @@ void GowAudioEngine::stopSound(uint16_t soundID)
     }
 }
 
-void GowAudioEngine::pauseSound(uint16_t soundID)
+void GowAudioEngine::pauseSound(std::string soundID)
 {
     if (_soundsDisabled)
     {
@@ -111,7 +111,7 @@ void GowAudioEngine::pauseSound(uint16_t soundID)
     }
 }
 
-void GowAudioEngine::resumeSound(uint16_t soundID)
+void GowAudioEngine::resumeSound(std::string soundID)
 {
     if (_soundsDisabled)
     {
@@ -138,7 +138,7 @@ void GowAudioEngine::stopAllSounds()
         return;
     }
     
-    std::map<uint16_t, SoundWrapper*>& sounds = ASSETS.sounds();
+    std::map<std::string, SoundWrapper*>& sounds = ASSETS.sounds();
     for (auto& pair : sounds)
     {
         for (auto* s : pair.second->getSounds())
@@ -155,7 +155,7 @@ void GowAudioEngine::pauseAllSounds()
         return;
     }
     
-    std::map<uint16_t, SoundWrapper*>& sounds = ASSETS.sounds();
+    std::map<std::string, SoundWrapper*>& sounds = ASSETS.sounds();
     for (auto& pair : sounds)
     {
         for (auto* s : pair.second->getSounds())
@@ -175,7 +175,7 @@ void GowAudioEngine::resumeAllSounds()
         return;
     }
     
-    std::map<uint16_t, SoundWrapper*>& sounds = ASSETS.sounds();
+    std::map<std::string, SoundWrapper*>& sounds = ASSETS.sounds();
     for (auto& pair : sounds)
     {
         for (auto* s : pair.second->getSounds())
