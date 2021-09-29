@@ -21,6 +21,9 @@
 #include <string>
 #include <vector>
 
+/// compiler variables
+#include "BuildMacros.hpp"
+
 /// box2d Implementation
 #include "deps/box2d/Box2DDebugRenderer.hpp"
 #include "deps/box2d/Box2DPhysicsController.hpp"
@@ -70,6 +73,7 @@
 /// Core Assets
 #include "core/assets/AndroidAssetHandler.hpp"
 #include "core/assets/AppleAssetHandler.hpp"
+#include "core/assets/AppleBundleUtil.hpp"
 #include "core/assets/AssetHandler.hpp"
 #include "core/assets/AssetHandlerFactory.hpp"
 #include "core/assets/Assets.hpp"
@@ -108,7 +112,7 @@
 /// Core Engine
 #include "core/engine/DefaultEngineState.hpp"
 #include "core/engine/Engine.hpp"
-#include "core/engine/EngineController.hpp"
+#include "core/engine/EngineConfig.hpp"
 #include "core/engine/EngineState.hpp"
 
 /// Core Entity

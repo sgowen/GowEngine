@@ -6,21 +6,20 @@
 //  Copyright © 2021 Stephen Gowen. All rights reserved.
 //
 
-#include <GowEngine/GowEngine.hpp>
-
+#include <GowEngine/BuildMacros.hpp>
 #if IS_APPLE
+
+#include <GowEngine/GowEngine.hpp>
 
 #include <fstream>
 
-void AppleAssetHandler::create(void* bundleRootFilePath)
+void AppleAssetHandler::create(std::string configFilePath)
 {
     assert(s_instance == nullptr);
     
-    assert(bundleRootFilePath != nullptr);
+    std::string bundleRootFilePath = getBundleRootFilePath(configFilePath.c_str());
     
-    std::string* bbp = static_cast<std::string*>(bundleRootFilePath);
-    
-    s_instance = new AppleAssetHandler(*bbp);
+    s_instance = new AppleAssetHandler(bundleRootFilePath);
 }
 
 void AppleAssetHandler::destroy()

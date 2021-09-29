@@ -12,22 +12,24 @@
 #include <string>
 
 class Config
-{
-    friend class ConfigLoader;
-    friend class EntityManagerLoader;
-    
+{    
 public:
     static const Config EMPTY;
     
     bool hasValues();
     bool hasValue(std::string key);
     bool getBool(std::string key);
+    bool getBool(std::string key, bool defaultValue);
     int32_t getInt(std::string key);
+    int32_t getInt(std::string key, int32_t defaultValue);
     uint32_t getUInt(std::string key);
     uint32_t getUInt(std::string key, uint32_t defaultValue);
     float getFloat(std::string key);
+    float getFloat(std::string key, float defaultValue);
     double getDouble(std::string key);
+    double getDouble(std::string key, double defaultValue);
     std::string getString(std::string key);
+    std::string getString(std::string key, std::string defaultValue);
     void putString(std::string key, std::string value);
     
 private:

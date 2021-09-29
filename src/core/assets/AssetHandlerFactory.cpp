@@ -7,7 +7,6 @@
 //
 
 #include <GowEngine/GowEngine.hpp>
-#include <GowEngine/BuildMacros.hpp>
 
 AssetHandler& AssetHandlerFactory::getInstance()
 {

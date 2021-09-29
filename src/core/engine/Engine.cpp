@@ -8,12 +8,12 @@
 
 #include <GowEngine/GowEngine.hpp>
 
-Engine::Engine(EngineController& ec) :
-_initialState(ec.getInitialState()),
+Engine::Engine(EngineConfig& engineConfig, State<Engine>& initialEngineState) :
+_initialState(initialEngineState),
 _stateMachine(this, &ENGINE_STATE_DEFAULT),
 _requestedStateAction(ERSA_DEFAULT),
 _requestedHostAction(ERHA_DEFAULT),
-_frameRate(ec.getFrameRate()),
+_frameRate(engineConfig.getFrameRate()),
 _stateTime(0),
 _screenWidth(0),
 _screenHeight(0),

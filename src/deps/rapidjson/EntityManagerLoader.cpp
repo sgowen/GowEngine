@@ -181,7 +181,7 @@ void EntityManagerLoader::initWithJSON(EntityManager& em, const char* json)
             {
                 assert(i->value.IsString());
                 
-                metadata._keyValues[i->name.GetString()] = i->value.GetString();
+                metadata.putString(i->name.GetString(), i->value.GetString());
             }
         }
         

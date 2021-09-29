@@ -6,7 +6,6 @@
 //  Copyright © 2021 Stephen Gowen. All rights reserved.
 //
 
-#include <GowEngine/BuildMacros.hpp>
 #include <GowEngine/GowEngine.hpp>
 
 GowAudioEngine& AudioEngineFactory::getInstance()

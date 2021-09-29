@@ -11,16 +11,17 @@
 #include <GowEngine/BuildMacros.hpp>
 #if IS_DESKTOP
 
-class EngineController;
+class EngineConfig;
+class EngineState;
 struct GLFWwindow;
 
 class GlfwMain
 {
 public:
-    static void exec(EngineController& engineController, const char* windowTitle);
+    static void exec(EngineConfig& engineConfig, EngineState& initialEngineState);
 
 private:
-    static void runEngine(EngineController& engineController, GLFWwindow* window);
+    static void runEngine(EngineConfig& engineConfig, EngineState& initialEngineState, GLFWwindow* window);
     
     GlfwMain();
     ~GlfwMain();

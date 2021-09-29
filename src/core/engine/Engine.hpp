@@ -31,7 +31,7 @@ enum EngineRequestedHostAction
 
 #include <stdint.h>
 
-class EngineController;
+class EngineConfig;
 class Config;
 
 class Engine
@@ -39,7 +39,7 @@ class Engine
     friend class DefaultEngineState;
     
 public:
-    Engine(EngineController& engineController);
+    Engine(EngineConfig& engineConfig, State<Engine>& initialEngineState);
     
     void createDeviceDependentResources(ClipboardHandler* clipboardHandler = &NullClipboardHandler::getInstance());
     void onWindowSizeChanged(uint16_t screenWidth, uint16_t screenHeight, uint16_t cursorWidth = 0, uint16_t cursorHeight = 0);

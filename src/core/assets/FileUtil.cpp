@@ -7,7 +7,6 @@
 //
 
 #include <GowEngine/GowEngine.hpp>
-#include <GowEngine/BuildMacros.hpp>
 
 FILE* FileUtil::openFile(std::string filePath, std::string mode)
 {

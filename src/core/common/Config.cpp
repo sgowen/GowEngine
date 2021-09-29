@@ -25,24 +25,41 @@ bool Config::getBool(std::string key)
 {
     std::string* val = value(key);
     assert(val != nullptr);
-    bool ret = StringUtil::stringToBool(*val);
-    return ret;
+    return StringUtil::stringToBool(*val);
+}
+
+bool Config::getBool(std::string key, bool defaultValue)
+{
+    std::string* val = value(key);
+    if (val != nullptr)
+    {
+        return StringUtil::stringToBool(*val);
+    }
+    return defaultValue;
 }
 
 int32_t Config::getInt(std::string key)
 {
     std::string* val = value(key);
     assert(val != nullptr);
-    int32_t ret = StringUtil::stringToNumber<int32_t>(*val);
-    return ret;
+    return StringUtil::stringToNumber<int32_t>(*val);
+}
+
+int32_t Config::getInt(std::string key, int32_t defaultValue)
+{
+    std::string* val = value(key);
+    if (val != nullptr)
+    {
+        return StringUtil::stringToNumber<int32_t>(*val);
+    }
+    return defaultValue;
 }
 
 uint32_t Config::getUInt(std::string key)
 {
     std::string* val = value(key);
     assert(val != nullptr);
-    uint32_t ret = StringUtil::stringToNumber<uint32_t>(*val);
-    return ret;
+    return StringUtil::stringToNumber<uint32_t>(*val);
 }
 
 uint32_t Config::getUInt(std::string key, uint32_t defaultValue)
@@ -52,7 +69,6 @@ uint32_t Config::getUInt(std::string key, uint32_t defaultValue)
     {
         return StringUtil::stringToNumber<uint32_t>(*val);
     }
-        
     return defaultValue;
 }
 
@@ -60,16 +76,34 @@ float Config::getFloat(std::string key)
 {
     std::string* val = value(key);
     assert(val != nullptr);
-    float ret = StringUtil::stringToNumber<float>(*val);
-    return ret;
+    return StringUtil::stringToNumber<float>(*val);
+}
+
+float Config::getFloat(std::string key, float defaultValue)
+{
+    std::string* val = value(key);
+    if (val != nullptr)
+    {
+        return StringUtil::stringToNumber<float>(*val);
+    }
+    return defaultValue;
 }
 
 double Config::getDouble(std::string key)
 {
     std::string* val = value(key);
     assert(val != nullptr);
-    double ret = StringUtil::stringToNumber<double>(*val);
-    return ret;
+    return StringUtil::stringToNumber<double>(*val);
+}
+
+double Config::getDouble(std::string key, double defaultValue)
+{
+    std::string* val = value(key);
+    if (val != nullptr)
+    {
+        return StringUtil::stringToNumber<double>(*val);
+    }
+    return defaultValue;
 }
 
 std::string Config::getString(std::string key)
@@ -79,6 +113,16 @@ std::string Config::getString(std::string key)
     
     std::string ret = *val;
     return ret;
+}
+
+std::string Config::getString(std::string key, std::string defaultValue)
+{
+    std::string* val = value(key);
+    if (val != nullptr)
+    {
+        return *val;
+    }
+    return defaultValue;
 }
 
 void Config::putString(std::string key, std::string value)

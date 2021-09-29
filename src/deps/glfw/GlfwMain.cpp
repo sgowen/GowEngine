@@ -132,7 +132,7 @@ private:
     GLFWwindow* _window;
 };
 
-void GlfwMain::exec(EngineController& engineController, const char* windowTitle)
+void GlfwMain::exec(EngineConfig& engineConfig, EngineState& initialEngineState)
 {
     memset(joysticks, 0, sizeof(joysticks));
 
@@ -169,7 +169,7 @@ void GlfwMain::exec(EngineController& engineController, const char* windowTitle)
     }
 #endif
 
-    window = glfwCreateWindow(width, height, windowTitle, monitor, nullptr);
+    window = glfwCreateWindow(width, height, engineConfig.getWindowTitle().c_str(), monitor, nullptr);
     if (window == nullptr)
     {
         glfwTerminate();
@@ -200,7 +200,7 @@ void GlfwMain::exec(EngineController& engineController, const char* windowTitle)
     
     glfwSwapInterval(1);
     
-    runEngine(engineController, window);
+    runEngine(engineConfig, initialEngineState, window);
 
     glfwDestroyWindow(window);
 
@@ -208,10 +208,10 @@ void GlfwMain::exec(EngineController& engineController, const char* windowTitle)
     exit(EXIT_SUCCESS);
 }
 
-void GlfwMain::runEngine(EngineController& engineController, GLFWwindow* window)
+void GlfwMain::runEngine(EngineConfig& engineConfig, EngineState& initialEngineState, GLFWwindow* window)
 {
+    Engine engine(engineConfig, initialEngineState);
     GlfwClipboardHandler clipboardHandler(window);
-    Engine engine(engineController);
     engine.createDeviceDependentResources(&clipboardHandler);
     _engine = &engine;
     

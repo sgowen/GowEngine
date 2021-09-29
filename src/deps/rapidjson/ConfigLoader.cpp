@@ -32,7 +32,7 @@ Config ConfigLoader::initWithJSON(const char* json)
     {
         assert(i->value.IsString());
         
-        ret._keyValues[i->name.GetString()] = i->value.GetString();
+        ret.putString(i->name.GetString(), i->value.GetString());
     }
     
     return ret;
