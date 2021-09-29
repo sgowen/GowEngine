@@ -19,6 +19,11 @@ _config(nullptr)
     
     _config = new Config(ConfigLoader::initWithJSONFile(configFilePath));
     
+    SOCKET_UTIL.setLoggingEnabled(_config->getBool("networkLoggingEnabled", false));
+    INPUT_MGR.setLoggingEnabled(_config->getBool("inputLoggingEnabled", false));
+    AUDIO_ENGINE.setSoundsDisabled(_config->getBool("soundsDisabled", false));
+    AUDIO_ENGINE.setMusicDisabled(_config->getBool("musicDisabled", false));
+    
     ASSETS.registerAssets("global", AssetsLoader::initWithJSONFile("data/json/assets_global.json"));
     
     static TimeTracker TIMS(getFrameRate());
