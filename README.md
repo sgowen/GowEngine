@@ -25,9 +25,9 @@ See [GowEngineMount](https://github.com/sgowindie/GowEngineMount)
 
 ## Development Plan
 
-### GowEngine (this repo)
+### GowEngine
 * Written in C++
-* Supports only OpenGL rendering
+* Uses OpenGL 2.0 and ES 3.0 rendering
 * Dependencies:
     * box2d is a 2D physics engine for games
     * DirectXTK for XAudio2 on Windows (no need for d3d lib though as XAudio2 is packaged with Windows 10)
@@ -39,7 +39,8 @@ See [GowEngineMount](https://github.com/sgowindie/GowEngineMount)
     * stb for image loading on all platforms
 * Will eventually:
     * be configured to use CMake build system
-    * implement openal-soft
+    * implement openal-soft (which will allow me to remove the platform specific audio dependencies)
     * feature a memory tracker (using malloc with placement new operator, zero unique/shared pointers)
+    * add support for latest OpenGL(ES) rendering
     * add support for Vulkan rendering
     * add support for Nintendo Switch
