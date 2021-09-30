@@ -55,7 +55,7 @@ void AssetsManager::update()
 
     if (areAssetsLoaded())
     {
-        THREAD_MGR.tearDownThread("AssetsManager");
+        THREAD_MGR.tearDownThreadIfRunning("AssetsManager");
         _isLoaded = true;
     }
 }

@@ -65,7 +65,7 @@ _renderer(RendererLoader::initWithJSONFile(_config.getString("rendererFilePath")
 
 void EngineState::createDeviceDependentResources(Engine* e)
 {
-    ASSETS.createDeviceDependentResourcesAsync();
+    ASSETS.createDeviceDependentResources();
     _renderer.createDeviceDependentResources();
 }
 

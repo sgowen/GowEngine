@@ -15,6 +15,16 @@ void ThreadManager::spawnThread(std::string threadID, void (*func)(void *), void
     _threads.emplace(threadID, new std::thread {func, arg});
 }
 
+void ThreadManager::tearDownThreadIfRunning(std::string threadID)
+{
+    if (!isThreadRunning(threadID))
+    {
+        return;
+    }
+    
+    tearDownThread(threadID);
+}
+
 void ThreadManager::tearDownThread(std::string threadID)
 {
     auto q = _threads.find(threadID);
