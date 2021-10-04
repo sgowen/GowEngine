@@ -71,10 +71,36 @@ public:
         
         return std::string(temp);
     }
+    
+#if IS_WINDOWS == 0
+    static void OutputDebugStringA(const char* inString)
+    {
+#if IS_ANDROID
+        __android_log_print(ANDROID_LOG_DEBUG, "GowEngine", "%s", inString);
+#else
+        printf("%s", inString);
+#endif
+    }
+#endif
 
     static void log(const char* format, ...)
     {
         // TODO, replace with spdlog
+        char temp[4096];
+        
+        va_list args;
+        va_start (args, format);
+        
+    #if _WIN32
+        _vsnprintf_s(temp, 4096, 4096, format, args);
+    #elif defined __ANDROID__
+        __android_log_vprint(ANDROID_LOG_DEBUG, "GowEngine", format, args);
+    #else
+        vsnprintf(temp, 4096, format, args);
+    #endif
+        
+        OutputDebugStringA(temp);
+        OutputDebugStringA("\n");
     }
 
     static std::string stringFromFourChar(uint32_t fourCC)
