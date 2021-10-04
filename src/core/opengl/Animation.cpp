@@ -56,6 +56,8 @@ TextureRegion& Animation::textureRegionAtKeyFrame(uint16_t frameIndex)
 
 uint16_t Animation::frameIndex(uint16_t stateTime)
 {
+    uint16_t i = 0;
+    
     if (stateTime >= _cycleTime)
     {
         if (_isLooping)
@@ -63,7 +65,7 @@ uint16_t Animation::frameIndex(uint16_t stateTime)
             uint16_t cycleTime = _cycleTime;
             if (_firstLoopingFrame > 0)
             {
-                for (uint16_t i = 0; i < _firstLoopingFrame; ++i)
+                for ( ; i < _firstLoopingFrame; ++i)
                 {
                     cycleTime -= _frameTimes.at(i);
                 }
@@ -77,7 +79,7 @@ uint16_t Animation::frameIndex(uint16_t stateTime)
         }
     }
 
-    for (uint16_t i = 0; i < _frameTimes.size(); ++i)
+    for ( ; i < _frameTimes.size(); ++i)
     {
         uint16_t frameTime = _frameTimes.at(i);
 
