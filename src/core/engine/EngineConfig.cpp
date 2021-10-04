@@ -8,7 +8,7 @@
 
 #include <GowEngine/GowEngine.hpp>
 
-EngineConfig::EngineConfig(std::string configFilePath, std::map<std::string, EntityControllerCreationFunc>& entityControllers, void* data1, void* data2) :
+EngineConfig::EngineConfig(std::string configFilePath, void* data1, void* data2) :
 _config(nullptr)
 {
 #if IS_ANDROID
@@ -40,26 +40,26 @@ _config(nullptr)
     INST_REG.registerInstance(INSK_TIME_CLNT, &TIMC);
     INST_REG.registerInstance(INSK_EID_CLNT, &EIMC);
     
-    std::string filePathEntityLayout = _config->getString("filePathEntityLayout", "");
-    if (!filePathEntityLayout.empty())
-    {
-        static EntityLayout ELMS = EntityLayoutLoader::initWithJSONFile(filePathEntityLayout);
-        INST_REG.registerInstance(INSK_ELM_SRVR, &ELMS);
-        
-        static EntityLayout ELMC = EntityLayoutLoader::initWithJSONFile(filePathEntityLayout);
-        INST_REG.registerInstance(INSK_ELM_CLNT, &ELMC);
-    }
-    
-    std::string filePathEntityManager = _config->getString("filePathEntityManager", "");
-    if (!filePathEntityManager.empty())
-    {
-        EntityManagerLoader::initWithJSONFile(ENTITY_MGR, filePathEntityManager);
-        
-        for (auto& pair: entityControllers)
-        {
-            ENTITY_MGR.registerController(pair.first, pair.second);
-        }
-    }
+//    std::string filePathEntityLayout = _config->getString("filePathEntityLayout", "");
+//    if (!filePathEntityLayout.empty())
+//    {
+//        static EntityLayout ELMS = EntityLayoutLoader::initWithJSONFile(filePathEntityLayout);
+//        INST_REG.registerInstance(INSK_ELM_SRVR, &ELMS);
+//        
+//        static EntityLayout ELMC = EntityLayoutLoader::initWithJSONFile(filePathEntityLayout);
+//        INST_REG.registerInstance(INSK_ELM_CLNT, &ELMC);
+//    }
+//    
+//    std::string filePathEntityManager = _config->getString("filePathEntityManager", "");
+//    if (!filePathEntityManager.empty())
+//    {
+//        EntityManagerLoader::initWithJSONFile(ENTITY_MGR, filePathEntityManager);
+//        
+//        for (auto& pair: entityControllers)
+//        {
+//            ENTITY_MGR.registerController(pair.first, pair.second);
+//        }
+//    }
 }
 
 EngineConfig::~EngineConfig()

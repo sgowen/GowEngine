@@ -26,7 +26,7 @@ void EngineState::execute(Engine* e)
         case ERSA_WINDOW_SIZE_CHANGED:
             onWindowSizeChanged(e);
             break;
-        case ERSA_RELEASE_RESOURCES:
+        case ERSA_DESTROY_RESOURCES:
             destroyDeviceDependentResources(e);
             break;
         case ERSA_PAUSE:
@@ -111,6 +111,6 @@ void EngineState::render(Engine* e)
         return;
     }
     
-    AUDIO_ENGINE.render();
     onRender(_renderer);
+    AUDIO_ENGINE.render();
 }

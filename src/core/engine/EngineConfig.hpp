@@ -8,9 +8,6 @@
 
 #pragma once
 
-#include "core/entity/EntityManager.hpp"
-
-#include <map>
 #include <string>
 
 class Config;
@@ -18,7 +15,7 @@ class Config;
 class EngineConfig
 {
 public:
-    EngineConfig(std::string configFilePath, std::map<std::string, EntityControllerCreationFunc>& entityControllers, void* data1 = nullptr, void* data2 = nullptr);
+    EngineConfig(std::string configFilePath, void* data1 = nullptr, void* data2 = nullptr);
     ~EngineConfig();
     
     std::string getWindowTitle();

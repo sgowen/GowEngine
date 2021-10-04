@@ -44,7 +44,7 @@ void Engine::onWindowSizeChanged(uint16_t screenWidth, uint16_t screenHeight, ui
 
 void Engine::destroyDeviceDependentResources()
 {
-    execute(ERSA_RELEASE_RESOURCES);
+    execute(ERSA_DESTROY_RESOURCES);
 }
 
 void Engine::onPause()
