@@ -10,7 +10,7 @@
 
 void EngineState::enter(Engine* e)
 {
-    ASSETS.registerAssets(_assetsFilePath, _assets);
+    ASSETS.registerAssets(_filePathAssets, _assets);
     createDeviceDependentResources(e);
     onWindowSizeChanged(e);
     onEnter(e);
@@ -50,15 +50,16 @@ void EngineState::execute(Engine* e)
 void EngineState::exit(Engine* e)
 {
     destroyDeviceDependentResources(e);
-    ASSETS.deregisterAssets(_assetsFilePath);
+    ASSETS.deregisterAssets(_filePathAssets);
     onExit(e);
 }
 
 EngineState::EngineState(std::string configFilePath) : State<Engine>(),
 _config(ConfigLoader::initWithJSONFile(configFilePath)),
-_assetsFilePath(_config.getString("assetsFilePath")),
-_assets(AssetsLoader::initWithJSONFile(_assetsFilePath)),
-_renderer(RendererLoader::initWithJSONFile(_config.getString("rendererFilePath")))
+_stateTime(0),
+_filePathAssets(_config.getString("filePathAssets")),
+_assets(AssetsLoader::initWithJSONFile(_filePathAssets)),
+_renderer(RendererLoader::initWithJSONFile(_config.getString("filePathRenderer")))
 {
     // Empty
 }
@@ -99,6 +100,7 @@ void EngineState::update(Engine* e)
     }
     
     onUpdate(e);
+    ++_stateTime;
 }
 
 void EngineState::render(Engine* e)

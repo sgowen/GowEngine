@@ -22,3 +22,6 @@
 [submodule "deps/stb"]
 	path = deps/stb
 	url = git@github.com:nothings/stb.git
+[submodule "deps/efsw"]
+	path = deps/efsw
+	url = git@github.com:jackbackrack/efsw.git

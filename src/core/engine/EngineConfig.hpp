@@ -18,7 +18,7 @@ class Config;
 class EngineConfig
 {
 public:
-    EngineConfig(std::string configFilePath, void* data1 = nullptr, void* data2 = nullptr);
+    EngineConfig(std::string configFilePath, std::map<std::string, EntityControllerCreationFunc>& entityControllers, void* data1 = nullptr, void* data2 = nullptr);
     ~EngineConfig();
     
     std::string getWindowTitle();
@@ -26,6 +26,4 @@ public:
     
 private:
     Config* _config;
-    
-    void registerControllers(std::string entityManagerFilePath, std::map<std::string, EntityControllerCreationFunc>& config);
 };

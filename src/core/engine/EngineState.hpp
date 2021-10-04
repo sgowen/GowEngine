@@ -31,6 +31,7 @@ public:
     
 protected:
     Config _config;
+    uint32_t _stateTime;
     
     EngineState(std::string configFilePath);
     virtual ~EngineState() {}
@@ -38,7 +39,7 @@ protected:
     EngineState& operator=(const EngineState&);
     
 private:
-    std::string _assetsFilePath;
+    std::string _filePathAssets;
     Assets _assets;
     Renderer _renderer;
     

@@ -8,7 +8,7 @@
 
 #include <GowEngine/GowEngine.hpp>
 
-EngineConfig::EngineConfig(std::string configFilePath, void* data1, void* data2) :
+EngineConfig::EngineConfig(std::string configFilePath, std::map<std::string, EntityControllerCreationFunc>& entityControllers, void* data1, void* data2) :
 _config(nullptr)
 {
 #if IS_ANDROID
@@ -24,10 +24,10 @@ _config(nullptr)
     AUDIO_ENGINE.setSoundsDisabled(_config->getBool("soundsDisabled", false));
     AUDIO_ENGINE.setMusicDisabled(_config->getBool("musicDisabled", false));
     
-    std::string assetsFilePath = _config->getString("assetsFilePath", "");
-    if (!assetsFilePath.empty())
+    std::string filePathAssets = _config->getString("filePathAssets", "");
+    if (!filePathAssets.empty())
     {
-        ASSETS.registerAssets("engine", AssetsLoader::initWithJSONFile(assetsFilePath));
+        ASSETS.registerAssets("engine", AssetsLoader::initWithJSONFile(filePathAssets));
     }
     
     static TimeTracker TIMS(getFrameRate());
@@ -40,14 +40,25 @@ _config(nullptr)
     INST_REG.registerInstance(INSK_TIME_CLNT, &TIMC);
     INST_REG.registerInstance(INSK_EID_CLNT, &EIMC);
     
-    std::string entityLayoutManagerFilePath = _config->getString("entityLayoutManagerFilePath", "");
-    if (!entityLayoutManagerFilePath.empty())
+    std::string filePathEntityLayout = _config->getString("filePathEntityLayout", "");
+    if (!filePathEntityLayout.empty())
     {
-        static EntityLayout ELMS = EntityLayoutLoader::initWithJSONFile(entityLayoutManagerFilePath);
+        static EntityLayout ELMS = EntityLayoutLoader::initWithJSONFile(filePathEntityLayout);
         INST_REG.registerInstance(INSK_ELM_SRVR, &ELMS);
         
-        static EntityLayout ELMC = EntityLayoutLoader::initWithJSONFile(entityLayoutManagerFilePath);
+        static EntityLayout ELMC = EntityLayoutLoader::initWithJSONFile(filePathEntityLayout);
         INST_REG.registerInstance(INSK_ELM_CLNT, &ELMC);
+    }
+    
+    std::string filePathEntityManager = _config->getString("filePathEntityManager", "");
+    if (!filePathEntityManager.empty())
+    {
+        EntityManagerLoader::initWithJSONFile(ENTITY_MGR, filePathEntityManager);
+        
+        for (auto& pair: entityControllers)
+        {
+            ENTITY_MGR.registerController(pair.first, pair.second);
+        }
     }
 }
 
@@ -70,14 +81,4 @@ std::string EngineConfig::getWindowTitle()
 double EngineConfig::getFrameRate()
 {
     return 1.0 / _config->getUInt("framesPerSecond", 60);
-}
-
-void EngineConfig::registerControllers(std::string entityManagerFilePath, std::map<std::string, EntityControllerCreationFunc>& config)
-{
-    EntityManagerLoader::initWithJSONFile(ENTITY_MGR, entityManagerFilePath);
-    
-    for (auto& pair: config)
-    {
-        ENTITY_MGR.registerController(pair.first, pair.second);
-    }
 }
