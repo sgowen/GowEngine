@@ -1,0 +1,43 @@
+//
+//  InputProcessor.hpp
+//  GowEngine
+//
+//  Created by Stephen Gowen on 10/07/21.
+//  Copyright © 2021 Stephen Gowen. All rights reserved.
+//
+
+enum InputProcessorState
+{
+    IPS_DEFAULT,
+    IPS_EXIT,
+    IPS_ACTION,
+    IPS_TEXT_INPUT_READY
+};
+
+// TODO This needs to be json driven
+// certain touch regions could be defined by name instead of coordinates, a useful feature considering that the button view's size and position would be defined in a renderer.json file
+class InputProcessor
+{
+public:
+    InputProcessor(uint8_t maxTextInputLength);
+    virtual ~InputProcessor();
+    
+    void registerActionForKey(uint16_t key, uint8_t action);
+    
+    uint8_t update();
+    uint8_t updateReadText();
+    
+    uint8_t getAction();
+    std::string getTextInput();
+    void setTextInput(std::string textInput);
+    void clearTextInput();
+    
+private:
+    std::map<uint16_t, uint8_t> _keyMappings;
+    uint8_t _maxTextInputLength;
+    uint8_t _action;
+    std::string _textInput;
+    bool _isControlHeldDown;
+    
+    void acceptKeyInput(uint16_t key);
+};

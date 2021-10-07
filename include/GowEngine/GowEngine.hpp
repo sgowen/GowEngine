@@ -131,6 +131,7 @@
 #include "core/input/CursorEvent.hpp"
 #include "core/input/GamepadEvent.hpp"
 #include "core/input/InputManager.hpp"
+#include "core/input/InputProcessor.hpp"
 #include "core/input/InputState.hpp"
 #include "core/input/KeyboardEvent.hpp"
 

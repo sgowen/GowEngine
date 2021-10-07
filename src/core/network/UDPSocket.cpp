@@ -21,12 +21,18 @@ int UDPSocket::bindSocket(const SocketAddress& bindAddress)
     return error;
 }
 
-int UDPSocket::sendToAddress(const void* toSend, int length, const SocketAddress& toAddress)
+int UDPSocket::sendToAddress(const void* toSend, int length, const SocketAddress* toAddress)
 {
+    if (toAddress == nullptr)
+    {
+        LOG("toAddress is nullptr");
+        return -SOCKET_UTIL.getLastError();
+    }
+    
     long byteSentCount = sendto(_socket,
                                 static_cast<const char*>(toSend),
                                 length,
-                                0, &toAddress._socketAddress, toAddress.getSize());
+                                0, &toAddress->_socketAddress, toAddress->getSize());
     
     if (byteSentCount <= 0)
     {
@@ -34,7 +40,7 @@ int UDPSocket::sendToAddress(const void* toSend, int length, const SocketAddress
         
         if (IS_NETWORK_LOGGING_ENABLED())
         {
-            LOG("Error UDPSocket::sendToAddress %s", toAddress.toString().c_str());
+            LOG("Error UDPSocket::sendToAddress %s", toAddress->toString().c_str());
         }
         
         return -SOCKET_UTIL.getLastError();

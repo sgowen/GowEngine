@@ -54,7 +54,7 @@ void PacketHandler::processIncomingPackets()
 
 void PacketHandler::sendPacket(const OutputMemoryBitStream& ombs, SocketAddress* toAddress)
 {
-    int sentByteCount = _socket->sendToAddress(ombs.getBufferPtr(), ombs.getByteLength(), *toAddress);
+    int sentByteCount = _socket->sendToAddress(ombs.getBufferPtr(), ombs.getByteLength(), toAddress);
     if (sentByteCount > 0)
     {
         _bytesSentThisFrame += sentByteCount;
