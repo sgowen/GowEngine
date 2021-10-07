@@ -22,7 +22,7 @@ class StringUtil
 {
 public:
     template<typename T>
-    static std::string toString(const T& n)
+    static std::string numberToString(const T& n)
     {
         std::ostringstream ss;
         ss << n;
@@ -40,6 +40,11 @@ public:
         }
 
         return value;
+    }
+    
+    static std::string boolToString(bool value)
+    {
+        return value ? "true" : "false";
     }
     
     static bool stringToBool(const std::string& str, bool defaultValue = false)

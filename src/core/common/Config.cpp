@@ -130,6 +130,11 @@ void Config::putString(std::string key, std::string value)
     _keyValues.emplace(key, value);
 }
 
+void Config::putBool(std::string key, bool value)
+{
+    putString(key, StringUtil::boolToString(value));
+}
+
 std::string* Config::value(std::string key)
 {
     auto q = _keyValues.find(key);

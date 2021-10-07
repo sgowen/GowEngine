@@ -31,6 +31,7 @@ public:
     std::string getString(std::string key);
     std::string getString(std::string key, std::string defaultValue);
     void putString(std::string key, std::string value);
+    void putBool(std::string key, bool value);
     
 private:
     std::map<std::string, std::string> _keyValues;
