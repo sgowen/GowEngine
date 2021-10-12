@@ -14,8 +14,8 @@
 
 #include <box2d/b2_draw.h>
 
+class Box2DWorld;
 struct Shader;
-class b2World;
 
 class Box2DDebugRenderer : public b2Draw
 {
@@ -43,7 +43,7 @@ public:
     
     void createDeviceDependentResources();
     void destroyDeviceDependentResources();
-    void render(Shader* shader, mat4* matrix, b2World* world);
+    void render(Box2DWorld& world, mat4* matrix, Shader* shader);
     
 private:
     CircleBatcher _circleBatcher;
@@ -51,6 +51,6 @@ private:
     RektangleBatcher _boundsRektangleBatcher;
     TriangleBatcher _fillTriangleBatcher;
     TriangleBatcher _boundsTriangleBatcher;
-    Shader* _shader;
     mat4* _matrix;
+    Shader* _shader;
 };

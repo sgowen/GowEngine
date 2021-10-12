@@ -27,6 +27,7 @@
 /// box2d Implementation
 #include "deps/box2d/Box2DDebugRenderer.hpp"
 #include "deps/box2d/Box2DPhysicsController.hpp"
+#include "deps/box2d/Box2DWorld.hpp"
 
 /// DirectXTK Implementation
 #include "deps/DirectXTK/DirectXTKAudioEngine.hpp"

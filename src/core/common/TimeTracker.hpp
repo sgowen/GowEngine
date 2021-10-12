@@ -12,10 +12,10 @@
 
 struct TimeTracker
 {
-    double _frameRate;
+    float _frameRate;
     uint32_t _time;
     
-    TimeTracker(double frameRate) :
+    TimeTracker(float frameRate) :
     _frameRate(frameRate),
     _time(0)
     {
@@ -39,6 +39,6 @@ struct TimeTracker
     
     float realTime(uint32_t time)
     {
-        return static_cast<float>(time * _frameRate);
+        return time * _frameRate;
     }
 };

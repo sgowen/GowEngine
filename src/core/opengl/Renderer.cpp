@@ -9,6 +9,7 @@
 #include <GowEngine/GowEngine.hpp>
 
 Renderer::Renderer() :
+_box2DDebugRenderer(2048),
 _screenRenderer()
 {
     // Empty
@@ -46,6 +47,7 @@ void Renderer::createDeviceDependentResources()
         pair.second.createDeviceDependentResources();
     }
     
+    _box2DDebugRenderer.createDeviceDependentResources();
     _screenRenderer.createDeviceDependentResources();
 }
 
@@ -86,6 +88,7 @@ void Renderer::destroyDeviceDependentResources()
         pair.second.destroyDeviceDependentResources();
     }
     
+    _box2DDebugRenderer.destroyDeviceDependentResources();
     _screenRenderer.destroyDeviceDependentResources();
 }
 
@@ -227,6 +230,13 @@ void Renderer::renderTextViews(std::string fontBatcherKey, std::string shaderKey
         fb.addText(*this, pair.second);
     }
     fb.end(*this, s);
+}
+
+void Renderer::renderBox2D(Box2DWorld& box2DWorld, std::string matrixKey, std::string shaderKey)
+{
+    Matrix& m = matrix(matrixKey);
+    Shader& s = ASSETS.shader(shaderKey);
+    _box2DDebugRenderer.render(box2DWorld, &m._matrix, &s);
 }
 
 void Renderer::renderToScreen(std::string framebufferKey, std::string shaderKey)

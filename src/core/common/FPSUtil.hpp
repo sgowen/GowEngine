@@ -19,14 +19,14 @@ public:
         return ret;
     }
     
-    void update(double deltaTime);
+    void update(float deltaTime);
     int getFPS() const;
     
 private:
     FPSUtil();
     ~FPSUtil() {}
     
-    double _stateTime;
+    float _stateTime;
     int _fPS;
     int _numFrames;
 };

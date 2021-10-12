@@ -46,7 +46,7 @@ void Entity::update()
         ++_state._stateTime;
     }
     
-    _controller->update();
+    _controller->onUpdate();
 }
 
 void Entity::message(uint16_t message)

@@ -54,5 +54,5 @@ std::string EntityRenderController::getSoundMapping(uint8_t state)
         return soundCollection[index];
     }
     
-    return 0;
+    return "";
 }

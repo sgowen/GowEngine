@@ -31,6 +31,17 @@ TopDownPhysicsController::~TopDownPhysicsController()
     }
 }
 
+Vector2 TopDownPhysicsController::velocity()
+{
+    // FIXME
+    return VECTOR2_ZERO;
+}
+
+void TopDownPhysicsController::setVelocity(Vector2 v)
+{
+    // FIXME
+}
+
 void TopDownPhysicsController::updatePoseFromBody()
 {
     if (_boundingBox == nullptr ||

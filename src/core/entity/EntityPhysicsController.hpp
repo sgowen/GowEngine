@@ -10,6 +10,7 @@
 
 #include "core/common/RTTI.hpp"
 #include "core/common/Macros.hpp"
+#include "core/math/Vector2.hpp"
 
 class Entity;
 
@@ -21,6 +22,9 @@ class EntityPhysicsController
 public:
     EntityPhysicsController(Entity* e);
     virtual ~EntityPhysicsController() {}
+    
+    virtual Vector2 velocity() { return VECTOR2_ZERO; }
+    virtual void setVelocity(Vector2 v) {}
     
     virtual void updatePoseFromBody() {}
     virtual void updateBodyFromPose() {}

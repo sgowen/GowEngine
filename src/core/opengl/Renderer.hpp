@@ -19,8 +19,11 @@
 #include "TriangleBatcher.hpp"
 #include "ScreenRenderer.hpp"
 
+#include "deps/box2d/Box2DDebugRenderer.hpp"
+
 #include <map>
 
+class Box2DWorld;
 class Entity;
 
 class Renderer
@@ -58,6 +61,8 @@ public:
     void hideAllText();
     void renderTextViews(std::string fontBatcherKey = "main", std::string shaderKey = "texture");
     
+    void renderBox2D(Box2DWorld& box2DWorld, std::string matrixKey = "main", std::string shaderKey = "geometry");
+    
     void renderToScreen(std::string framebufferKey = "main", std::string shaderKey = "framebuffer");
     
     CircleBatcher& circleBatcher(std::string key = "main");
@@ -80,6 +85,7 @@ private:
     std::map<std::string, SpriteBatcher> _spriteBatchers;
     std::map<std::string, TextView> _textViews;
     std::map<std::string, TriangleBatcher> _triangleBatchers;
+    Box2DDebugRenderer _box2DDebugRenderer;
     ScreenRenderer _screenRenderer;
     
     void addSpriteForEntity(SpriteBatcher& sb, Entity& e);

@@ -26,6 +26,8 @@ public:
     Box2DPhysicsController(Entity* e);
     virtual ~Box2DPhysicsController() {}
     
+    virtual Vector2 velocity() override;
+    virtual void setVelocity(Vector2 v) override;
     virtual void updatePoseFromBody() override;
     virtual void updateBodyFromPose() override;
     
@@ -36,7 +38,7 @@ public:
     void deinitPhysics();
     b2Body* getBody();
     
-protected:
+private:
     b2Body* _body;
     std::vector<b2Fixture*> _fixtures;
     b2Fixture* _groundSensorFixture;

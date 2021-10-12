@@ -23,6 +23,17 @@ _isBodyFacingLeft(false)
     // Empty
 }
 
+Vector2 Box2DPhysicsController::velocity()
+{
+    b2Vec2 bodyVelocity = _body->GetLinearVelocity();
+    return Vector2(bodyVelocity.x, bodyVelocity.y);
+}
+
+void Box2DPhysicsController::setVelocity(Vector2 v)
+{
+    _body->SetLinearVelocity(b2Vec2(v._x, v._y));
+}
+
 void Box2DPhysicsController::updatePoseFromBody()
 {
     if (_body == nullptr)
@@ -64,10 +75,11 @@ bool Box2DPhysicsController::shouldCollide(Entity *e, b2Fixture* fixtureA, b2Fix
 {
     if (fixtureA == _groundSensorFixture)
     {
+        // Don't collide with yourself
         return e != _entity;
     }
     
-    return false;
+    return true;
 }
 
 void Box2DPhysicsController::handleBeginContact(Entity* e, b2Fixture* fixtureA, b2Fixture* fixtureB)
@@ -76,7 +88,6 @@ void Box2DPhysicsController::handleBeginContact(Entity* e, b2Fixture* fixtureA, 
         !fixtureB->IsSensor())
     {
         _entity->pose()._numGroundContacts = CLAMP(_entity->pose()._numGroundContacts + 1, 0, 15);
-        return;
     }
 }
 
@@ -86,7 +97,6 @@ void Box2DPhysicsController::handleEndContact(Entity* e, b2Fixture* fixtureA, b2
         !fixtureB->IsSensor())
     {
         _entity->pose()._numGroundContacts = CLAMP(_entity->pose()._numGroundContacts - 1, 0, 15);
-        return;
     }
 }
 
@@ -98,7 +108,7 @@ void Box2DPhysicsController::initPhysics(b2World& world)
     bodyDef.position.Set(_entity->position()._x, _entity->position()._y);
     bodyDef.type = _entity->isStatic() ? b2_staticBody : b2_dynamicBody;
     bodyDef.fixedRotation = _entity->isFixedRotation();
-    bodyDef.userData.pointer = (uintptr_t)this;
+    bodyDef.userData.pointer = (uintptr_t)_entity;
     _body = world.CreateBody(&bodyDef);
     
     createFixtures();
@@ -177,7 +187,7 @@ void Box2DPhysicsController::createFixtures()
         b2fd.density = fd._density;
         b2fd.friction = fd._friction;
         b2fd.restitution = fd._restitution;
-        b2fd.userData.pointer = (uintptr_t)this;
+        b2fd.userData.pointer = (uintptr_t)_entity;
         
         b2Fixture* fixture = _body->CreateFixture(&b2fd);
         

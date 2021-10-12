@@ -57,7 +57,7 @@ void Engine::onResume()
     execute(ERSA_RESUME);
 }
 
-EngineRequestedHostAction Engine::update(double deltaTime)
+EngineRequestedHostAction Engine::update(float deltaTime)
 {
     FPS_UTIL.update(deltaTime);
     

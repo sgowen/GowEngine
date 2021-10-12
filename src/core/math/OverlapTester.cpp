@@ -156,22 +156,22 @@ float OverlapTester::calcAreaOfTriangle(float x1, float y1, float x2, float y2, 
     return sqrtf(sp * (sp - sideADistance) * (sp - sideBDistance) * (sp - sideCDistance));
 }
 
-bool OverlapTester::doLinesIntersect(double x1, double y1, double x2, double y2, double x3, double y3, double x4, double y4)
+bool OverlapTester::doLinesIntersect(float x1, float y1, float x2, float y2, float x3, float y3, float x4, float y4)
 {
     if ((x1 == x2 && y1 == y2) || (x3 == x4 && y3 == y4))
     {
         return false;
     }
     
-    double ax = x2 - x1;
-    double ay = y2 - y1;
-    double bx = x3 - x4;
-    double by = y3 - y4;
-    double cx = x1 - x3;
-    double cy = y1 - y3;
+    float ax = x2 - x1;
+    float ay = y2 - y1;
+    float bx = x3 - x4;
+    float by = y3 - y4;
+    float cx = x1 - x3;
+    float cy = y1 - y3;
     
-    double alphaNumerator = by * cx - bx * cy;
-    double commonDenominator = ay * bx - ax * by;
+    float alphaNumerator = by * cx - bx * cy;
+    float commonDenominator = ay * bx - ax * by;
     if (commonDenominator > 0)
     {
         if (alphaNumerator < 0 || alphaNumerator > commonDenominator)
@@ -186,7 +186,7 @@ bool OverlapTester::doLinesIntersect(double x1, double y1, double x2, double y2,
             return false;
         }
     }
-    double betaNumerator = ax * cy - ay * cx;
+    float betaNumerator = ax * cy - ay * cx;
     if (commonDenominator > 0)
     {
         if (betaNumerator < 0 || betaNumerator > commonDenominator)
@@ -203,8 +203,8 @@ bool OverlapTester::doLinesIntersect(double x1, double y1, double x2, double y2,
     }
     if (commonDenominator == 0)
     {
-        double y3LessY1 = y3 - y1;
-        double collinearityTestForP3 = x1 * (y2 - y3) + x2 * (y3LessY1) + x3 * (y1 - y2);
+        float y3LessY1 = y3 - y1;
+        float collinearityTestForP3 = x1 * (y2 - y3) + x2 * (y3LessY1) + x3 * (y1 - y2);
         if (collinearityTestForP3 == 0)
         {
             if ((x1 >= x3 && x1 <= x4) || (x1 <= x3 && x1 >= x4) || (x2 >= x3 && x2 <= x4) || (x2 <= x3 && x2 >= x4) || (x3 >= x1 && x3 <= x2) || (x3 <= x1 && x3 >= x2))

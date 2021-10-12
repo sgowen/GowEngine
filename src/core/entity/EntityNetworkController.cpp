@@ -40,9 +40,8 @@ void EntityNetworkController::read(InputMemoryBitStream& imbs)
             imbs.read(e._pose._angle);
         }
         
-        if (!e.physicsController()->getRTTI().isDerivedFrom(TopDownPhysicsController::rtti))
+        if (e.physicsController()->getRTTI().isDerivedFrom(Box2DPhysicsController::rtti))
         {
-            // FIXME, this is a hacky way to determine that we are using the Box2D physics controller
             imbs.readBits(e._pose._numGroundContacts, 4);
         }
         
@@ -107,9 +106,8 @@ uint8_t EntityNetworkController::write(OutputMemoryBitStream& ombs, uint8_t dirt
             ombs.write(e._pose._angle);
         }
         
-        if (!e.physicsController()->getRTTI().isDerivedFrom(TopDownPhysicsController::rtti))
+        if (e.physicsController()->getRTTI().isDerivedFrom(Box2DPhysicsController::rtti))
         {
-            // FIXME, this is a hacky way to determine that we are using the Box2D physics controller
             ombs.writeBits(e._pose._numGroundContacts, 4);
         }
         

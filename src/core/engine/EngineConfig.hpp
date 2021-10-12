@@ -16,11 +16,11 @@ class EngineConfig
 {
 public:
     EngineConfig(std::string configFilePath, void* data1 = nullptr, void* data2 = nullptr);
-    ~EngineConfig();
+    virtual ~EngineConfig();
     
     std::string getWindowTitle();
-    double getFrameRate();
+    float getFrameRate();
     
-private:
+protected:
     Config* _config;
 };

@@ -39,27 +39,6 @@ _config(nullptr)
     static EntityIDManager EIMC;
     INST_REG.registerInstance(INSK_TIME_CLNT, &TIMC);
     INST_REG.registerInstance(INSK_EID_CLNT, &EIMC);
-    
-//    std::string filePathEntityLayout = _config->getString("filePathEntityLayout", "");
-//    if (!filePathEntityLayout.empty())
-//    {
-//        static EntityLayout ELMS = EntityLayoutLoader::initWithJSONFile(filePathEntityLayout);
-//        INST_REG.registerInstance(INSK_ELM_SRVR, &ELMS);
-//        
-//        static EntityLayout ELMC = EntityLayoutLoader::initWithJSONFile(filePathEntityLayout);
-//        INST_REG.registerInstance(INSK_ELM_CLNT, &ELMC);
-//    }
-//    
-//    std::string filePathEntityManager = _config->getString("filePathEntityManager", "");
-//    if (!filePathEntityManager.empty())
-//    {
-//        EntityManagerLoader::initWithJSONFile(ENTITY_MGR, filePathEntityManager);
-//        
-//        for (auto& pair: entityControllers)
-//        {
-//            ENTITY_MGR.registerController(pair.first, pair.second);
-//        }
-//    }
 }
 
 EngineConfig::~EngineConfig()
@@ -78,7 +57,7 @@ std::string EngineConfig::getWindowTitle()
     return _config->getString("windowTitle", "GowEngineMount");
 }
 
-double EngineConfig::getFrameRate()
+float EngineConfig::getFrameRate()
 {
     return 1.0 / _config->getUInt("framesPerSecond", 60);
 }

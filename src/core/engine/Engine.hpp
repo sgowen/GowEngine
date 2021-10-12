@@ -46,7 +46,7 @@ public:
     void destroyDeviceDependentResources();
     void onPause();
     void onResume();
-    EngineRequestedHostAction update(double deltaTime);
+    EngineRequestedHostAction update(float deltaTime);
     void render();
     
     void onCursorDown(float x, float y, bool isAlt = false);
@@ -73,8 +73,8 @@ private:
     StateMachine<Engine> _stateMachine;
     EngineRequestedStateAction _requestedStateAction;
     EngineRequestedHostAction _requestedHostAction;
-    double _frameRate;
-    double _stateTime;
+    float _frameRate;
+    float _stateTime;
     uint16_t _screenWidth;
     uint16_t _screenHeight;
     uint16_t _cursorWidth;

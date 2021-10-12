@@ -22,7 +22,7 @@ public:
     EntityController(Entity* e);
     virtual ~EntityController() {}
     
-    virtual void update() {}
+    virtual void onUpdate() {}
     virtual void onMessage(uint16_t message) {}
     virtual void onCollision(Entity* e) {}
     
