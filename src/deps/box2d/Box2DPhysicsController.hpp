@@ -24,7 +24,7 @@ class Box2DPhysicsController : public EntityPhysicsController
     
 public:
     Box2DPhysicsController(Entity* e);
-    virtual ~Box2DPhysicsController() {}
+    virtual ~Box2DPhysicsController();
     
     virtual Vector2 velocity() override;
     virtual void setVelocity(Vector2 v) override;

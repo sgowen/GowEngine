@@ -21,13 +21,12 @@ class EntityPhysicsController
     
 public:
     EntityPhysicsController(Entity* e);
-    virtual ~EntityPhysicsController() {}
+    virtual ~EntityPhysicsController();
     
-    virtual Vector2 velocity() { return VECTOR2_ZERO; }
-    virtual void setVelocity(Vector2 v) {}
-    
-    virtual void updatePoseFromBody() {}
-    virtual void updateBodyFromPose() {}
+    virtual Vector2 velocity();
+    virtual void setVelocity(Vector2 v);
+    virtual void updatePoseFromBody();
+    virtual void updateBodyFromPose();
     
 protected:
     Entity* _entity;

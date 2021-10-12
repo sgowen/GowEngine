@@ -96,32 +96,9 @@ void EntityManagerLoader::initWithJSON(EntityManager& em, const char* json)
                 std::string name = i->name.GetString();
                 uint16_t nameVal = StringUtil::stringToNumber<uint16_t>(name);
                 uint8_t state = (uint8_t)nameVal;
-                assert(i->value.IsUint());
+                assert(i->value.IsString());
                 std::string soundID = i->value.GetString();
                 soundMappings.emplace(state, soundID);
-            }
-        }
-        
-        std::map<uint8_t, std::vector<std::string> > soundRandomMappings;
-        if (iv.HasMember("soundRandomMappings"))
-        {
-            const Value& v = iv["soundRandomMappings"];
-            assert(v.IsObject());
-            for (Value::ConstMemberIterator i = v.MemberBegin(); i != v.MemberEnd(); ++i)
-            {
-                assert(i->value.IsArray());
-                const Value& array = i->value.GetArray();
-                std::vector<std::string> soundCollection;
-                for (SizeType i = 0; i < array.Size(); ++i)
-                {
-                    const Value& iv = array[i];
-                    assert(iv.IsUint());
-                    soundCollection.push_back(iv.GetString());
-                }
-                std::string name = i->name.GetString();
-                uint16_t nameVal = StringUtil::stringToNumber<uint16_t>(name);
-                uint8_t state = (uint8_t)nameVal;
-                soundRandomMappings.emplace(state, soundCollection);
             }
         }
         
@@ -220,6 +197,6 @@ void EntityManagerLoader::initWithJSON(EntityManager& em, const char* json)
         }
         NetworkData nd(networkDataGroups);
         
-        em._entityDescriptorsMap.emplace(key, EntityDef{key, name, keyName, controller, networkController, physicsController, renderController, textureMappings, soundMappings, soundRandomMappings, fixtures, bodyFlags, width, height, metadata, nd});
+        em._entityDescriptorsMap.emplace(key, EntityDef{key, name, keyName, controller, networkController, physicsController, renderController, textureMappings, soundMappings, fixtures, bodyFlags, width, height, metadata, nd});
     }
 }

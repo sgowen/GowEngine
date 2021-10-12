@@ -16,3 +16,30 @@ _entity(e)
 {
     // Empty
 }
+
+EntityPhysicsController::~EntityPhysicsController()
+{
+    // Empty
+}
+
+Vector2 EntityPhysicsController::velocity()
+{
+    // TODO
+    return VECTOR2_ZERO;
+}
+
+void EntityPhysicsController::setVelocity(Vector2 v)
+{
+    // TODO
+    UNUSED(v);
+}
+
+void EntityPhysicsController::updatePoseFromBody()
+{
+    // TODO
+}
+
+void EntityPhysicsController::updateBodyFromPose()
+{
+    // TODO
+}

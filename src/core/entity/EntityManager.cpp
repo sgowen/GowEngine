@@ -98,7 +98,5 @@ EntityManager::EntityManager()
     registerController("Default", EntityController::create);
     registerNetworkController("Default", EntityNetworkController::create);
     registerPhysicsController("Default", EntityPhysicsController::create);
-    registerPhysicsController("TopDown", TopDownPhysicsController::create);
-    registerPhysicsController("Box2D", Box2DPhysicsController::create);
     registerRenderController("Default", EntityRenderController::create);
 }

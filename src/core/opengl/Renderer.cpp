@@ -182,14 +182,14 @@ void Renderer::spriteBatcherAddEntities(std::vector<Entity*>& entities, std::str
     SpriteBatcher& sb = spriteBatcher(spriteBatcherKey);
     for (Entity* e : entities)
     {
-        addSpriteForEntity(sb, *e);
+        spriteBatcherAddEntity(sb, *e);
     }
 }
 
-void Renderer::addSpriteForEntity(Entity* e, std::string spriteBatcherKey)
+void Renderer::spriteBatcherAddEntity(Entity* e, std::string spriteBatcherKey)
 {
     SpriteBatcher& sb = spriteBatcher(spriteBatcherKey);
-    addSpriteForEntity(sb, *e);
+    spriteBatcherAddEntity(sb, *e);
 }
 
 void Renderer::spriteBatcherEnd(std::string textureKey, std::string matrixKey, std::string shaderKey, std::string spriteBatcherKey, const Color& colorFactor)
@@ -308,7 +308,7 @@ TriangleBatcher& Renderer::triangleBatcher(std::string key)
     return q->second;
 }
 
-void Renderer::addSpriteForEntity(SpriteBatcher& sb, Entity& e)
+void Renderer::spriteBatcherAddEntity(SpriteBatcher& sb, Entity& e)
 {
     TextureRegion tr = ASSETS.textureRegion(e.renderController()->getTextureMapping(), e.stateTime());
     sb.addSprite(tr, e.position()._x, e.position()._y, e.width(), e.height(), e.angle(), e.isXFlipped());

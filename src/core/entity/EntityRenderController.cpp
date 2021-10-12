@@ -45,14 +45,5 @@ std::string EntityRenderController::getSoundMapping(uint8_t state)
         return q1->second;
     }
     
-    auto q2 = e.entityDef()._soundRandomMappings.find(state);
-    if (q2 != e.entityDef()._soundRandomMappings.end())
-    {
-        std::vector<std::string> soundCollection = q2->second;
-        
-        int index = rand() % soundCollection.size();
-        return soundCollection[index];
-    }
-    
     return "";
 }

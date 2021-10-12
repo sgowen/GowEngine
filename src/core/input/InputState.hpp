@@ -23,7 +23,7 @@ public:
         
     public:
         uint8_t _playerID;
-        uint8_t _inputState;
+        uint16_t _inputState;
         
         PlayerInputState();
         

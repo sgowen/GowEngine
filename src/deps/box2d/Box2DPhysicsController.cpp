@@ -23,6 +23,11 @@ _isBodyFacingLeft(false)
     // Empty
 }
 
+Box2DPhysicsController::~Box2DPhysicsController()
+{
+    // Empty
+}
+
 Vector2 Box2DPhysicsController::velocity()
 {
     b2Vec2 bodyVelocity = _body->GetLinearVelocity();
@@ -44,8 +49,8 @@ void Box2DPhysicsController::updatePoseFromBody()
     b2Vec2 bodyVelocity = _body->GetLinearVelocity();
     b2Vec2 bodyPosition = _body->GetPosition();
     
-    _entity->pose()._velocity.set(bodyVelocity.x, bodyVelocity.y);
-    _entity->pose()._position.set(bodyPosition.x, bodyPosition.y);
+    _entity->velocity().set(bodyVelocity.x, bodyVelocity.y);
+    _entity->position().set(bodyPosition.x, bodyPosition.y);
     _entity->pose()._angle = _body->GetAngle();
 }
 

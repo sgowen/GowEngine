@@ -53,7 +53,7 @@ public:
     void renderSprite(std::string textureKey, std::string textureRegionKey, float x, float y, float width, float height, uint16_t stateTime = 0, float angle = 0, bool flipX = false, std::string matrixKey = "main", std::string shaderKey = "texture", std::string spriteBatcherKey = "main");
     void spriteBatcherBegin(std::string spriteBatcherKey = "main");
     void spriteBatcherAddEntities(std::vector<Entity*>& entities, std::string spriteBatcherKey = "main");
-    void addSpriteForEntity(Entity* e, std::string spriteBatcherKey = "main");
+    void spriteBatcherAddEntity(Entity* e, std::string spriteBatcherKey = "main");
     void spriteBatcherEnd(std::string textureKey, std::string matrixKey = "main", std::string shaderKey = "texture", std::string spriteBatcherKey = "main", const Color& colorFactor = Color::ONE);
     
     void setTextVisible(std::string textViewKey, bool isVisible);
@@ -88,5 +88,5 @@ private:
     Box2DDebugRenderer _box2DDebugRenderer;
     ScreenRenderer _screenRenderer;
     
-    void addSpriteForEntity(SpriteBatcher& sb, Entity& e);
+    void spriteBatcherAddEntity(SpriteBatcher& sb, Entity& e);
 };

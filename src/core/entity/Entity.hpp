@@ -259,7 +259,6 @@ struct EntityDef
     std::string _renderController;
     std::map<uint8_t, std::map<uint8_t, std::string> > _textureMappings;
     std::map<uint8_t, std::string> _soundMappings;
-    std::map<uint8_t, std::vector<std::string> > _soundRandomMappings;
     std::vector<FixtureDef> _fixtures;
     uint8_t _bodyFlags;
     uint8_t _width;
@@ -276,7 +275,6 @@ struct EntityDef
               std::string renderController,
               std::map<uint8_t, std::map<uint8_t, std::string> > textureMappings,
               std::map<uint8_t, std::string> soundMappings,
-              std::map<uint8_t, std::vector<std::string> > soundRandomMappings,
               std::vector<FixtureDef> fixtures,
               uint8_t bodyFlags,
               uint8_t width,
@@ -292,7 +290,6 @@ struct EntityDef
     _renderController(renderController),
     _textureMappings(textureMappings),
     _soundMappings(soundMappings),
-    _soundRandomMappings(soundRandomMappings),
     _fixtures(fixtures),
     _bodyFlags(bodyFlags),
     _width(width),
