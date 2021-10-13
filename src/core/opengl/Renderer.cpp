@@ -124,12 +124,14 @@ void Renderer::clearFramebuffer(const Color& c)
 void Renderer::renderImageViews(float angle, bool flipX, std::string matrixKey, std::string shaderKey, std::string spriteBatcherKey)
 {
     Matrix& m = matrix();
+    float l = m._desc._left;
+    float b = m._desc._bottom;
     float w = m._desc.width();
     float h = m._desc.height();
     for (auto& pair : _imageViews)
     {
         ImageView& iv = pair.second;
-        renderSprite(iv._textureName, iv._textureRegionName, w * iv._xWeight, h * iv._yWeight, w * iv._widthWeight, h * iv._heightWeight, 0, angle, flipX, matrixKey, shaderKey, spriteBatcherKey);
+        renderSprite(iv._textureName, iv._textureRegionName, l + w * iv._xWeight, b + h * iv._yWeight, w * iv._widthWeight, h * iv._heightWeight, 0, angle, flipX, matrixKey, shaderKey, spriteBatcherKey);
     }
 }
 

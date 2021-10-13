@@ -72,7 +72,7 @@ void EntityNetworkController::read(InputMemoryBitStream& imbs)
         }
     }
     
-    uint8_t playerID = _entity->metadata().getUInt("playerID", 0);
+    uint8_t playerID = _entity->dataField("playerID").valueUInt8(0);
     if (!NW_CLNT->isPlayerIDLocal(playerID))
     {
         SoundUtil::playSoundForStateIfChanged(e, fromState, e.state()._state);

@@ -125,10 +125,24 @@ Renderer RendererLoader::initWithJSON(const char* json)
             
             std::string key = i->name.GetString();
             
-            uint32_t width = RapidJSONUtil::getUInt(iv, "width");
-            uint32_t height = RapidJSONUtil::getUInt(iv, "height");
-            
-            ret._matrices.emplace(key, Matrix{MatrixDescriptor(width, height)});
+            if (iv.HasMember("width"))
+            {
+                uint32_t width = RapidJSONUtil::getUInt(iv, "width");
+                uint32_t height = RapidJSONUtil::getUInt(iv, "height");
+                
+                ret._matrices.emplace(key, Matrix{MatrixDescriptor(width, height)});
+            }
+            else
+            {
+                float left = RapidJSONUtil::getFloat(iv, "left");
+                float right = RapidJSONUtil::getFloat(iv, "right");
+                float bottom = RapidJSONUtil::getFloat(iv, "bottom");
+                float top = RapidJSONUtil::getFloat(iv, "top");
+                float near = RapidJSONUtil::getFloat(iv, "near", -1);
+                float far = RapidJSONUtil::getFloat(iv, "far", 1);
+                
+                ret._matrices.emplace(key, Matrix{MatrixDescriptor(left, right, bottom, top, near, far)});
+            }
         }
     }
     

@@ -54,43 +54,43 @@ void MemoryBitStreamUtil::read(InputMemoryBitStream& imbs, NetworkDataField& ndf
     switch (ndf._type)
     {
         case NDFT_BOOL:
-            imbs.read(ndf.valueBool());
+            imbs.read(ndf.refBool());
             break;
         case NDFT_UINT8:
-            imbs.read(ndf.valueUInt8());
+            imbs.read(ndf.refUInt8());
             break;
         case NDFT_UINT16:
-            imbs.read(ndf.valueUInt16());
+            imbs.read(ndf.refUInt16());
             break;
         case NDFT_UINT32:
-            imbs.read(ndf.valueUInt32());
+            imbs.read(ndf.refUInt32());
             break;
         case NDFT_UINT64:
-            imbs.read(ndf.valueUInt64());
+            imbs.read(ndf.refUInt64());
             break;
         case NDFT_INT8:
-            imbs.read(ndf.valueInt8());
+            imbs.read(ndf.refInt8());
             break;
         case NDFT_INT16:
-            imbs.read(ndf.valueInt16());
+            imbs.read(ndf.refInt16());
             break;
         case NDFT_INT32:
-            imbs.read(ndf.valueInt32());
+            imbs.read(ndf.refInt32());
             break;
         case NDFT_INT64:
-            imbs.read(ndf.valueInt64());
+            imbs.read(ndf.refInt64());
             break;
         case NDFT_FLOAT:
-            imbs.read(ndf.valueFloat());
+            imbs.read(ndf.refFloat());
             break;
         case NDFT_DOUBLE:
-            imbs.read(ndf.valueDouble());
+            imbs.read(ndf.refDouble());
             break;
         case NDFT_SMALL_STRING:
-            imbs.readSmall(ndf.valueString());
+            imbs.readSmall(ndf.refString());
             break;
         case NDFT_LARGE_STRING:
-            imbs.readLarge(ndf.valueString());
+            imbs.readLarge(ndf.refString());
             break;
         default:
             break;
@@ -102,43 +102,43 @@ void MemoryBitStreamUtil::write(OutputMemoryBitStream& ombs, NetworkDataField& n
     switch (ndf._type)
     {
         case NDFT_BOOL:
-            ombs.write(ndf.valueBool());
+            ombs.write(ndf.refBool());
             break;
         case NDFT_UINT8:
-            ombs.write(ndf.valueUInt8());
+            ombs.write(ndf.refUInt8());
             break;
         case NDFT_UINT16:
-            ombs.write(ndf.valueUInt16());
+            ombs.write(ndf.refUInt16());
             break;
         case NDFT_UINT32:
-            ombs.write(ndf.valueUInt32());
+            ombs.write(ndf.refUInt32());
             break;
         case NDFT_UINT64:
-            ombs.write(ndf.valueUInt64());
+            ombs.write(ndf.refUInt64());
             break;
         case NDFT_INT8:
-            ombs.write(ndf.valueInt8());
+            ombs.write(ndf.refInt8());
             break;
         case NDFT_INT16:
-            ombs.write(ndf.valueInt16());
+            ombs.write(ndf.refInt16());
             break;
         case NDFT_INT32:
-            ombs.write(ndf.valueInt32());
+            ombs.write(ndf.refInt32());
             break;
         case NDFT_INT64:
-            ombs.write(ndf.valueInt64());
+            ombs.write(ndf.refInt64());
             break;
         case NDFT_FLOAT:
-            ombs.write(ndf.valueFloat());
+            ombs.write(ndf.refFloat());
             break;
         case NDFT_DOUBLE:
-            ombs.write(ndf.valueDouble());
+            ombs.write(ndf.refDouble());
             break;
         case NDFT_SMALL_STRING:
-            ombs.writeSmall(ndf.valueString());
+            ombs.writeSmall(ndf.refString());
             break;
         case NDFT_LARGE_STRING:
-            ombs.writeLarge(ndf.valueString());
+            ombs.writeLarge(ndf.refString());
             break;
         default:
             break;

@@ -152,62 +152,192 @@ struct NetworkDataField
         return !(a == b);
     }
     
-    bool& valueBool()
+    void setValueBool(bool value)
+    {
+        _valueBool[_name] = value;
+    }
+    
+    bool valueBool()
     {
         return _valueBool[_name];
     }
     
-    uint8_t& valueUInt8()
+    bool& refBool()
+    {
+        return _valueBool[_name];
+    }
+    
+    void setValueUInt8(uint8_t value)
+    {
+        _valueUInt8[_name] = value;
+    }
+    
+    uint8_t valueUInt8(uint8_t defaultValue = 0)
+    {
+        // TODO, add defaultValue for the other data types, too lazy rn
+        // querying for playerID is uint8, and I needed to pass a default
+        // value of 0 (which is an invalid playerID anyhow)
+        // that way, I can get the value if it exists and check it
+        // all in 1 line.
+        if (_valueUInt8.find(_name) == _valueUInt8.end())
+        {
+            return defaultValue;
+        }
+        
+        return _valueUInt8[_name];
+    }
+    
+    uint8_t& refUInt8()
     {
         return _valueUInt8[_name];
     }
     
-    uint16_t& valueUInt16()
+    void setValueUInt16(uint16_t value)
+    {
+        _valueUInt16[_name] = value;
+    }
+    
+    uint16_t valueUInt16()
     {
         return _valueUInt16[_name];
     }
     
-    uint32_t& valueUInt32()
+    uint16_t& refUInt16()
+    {
+        return _valueUInt16[_name];
+    }
+    
+    void setValueUInt32(uint32_t value)
+    {
+        _valueUInt32[_name] = value;
+    }
+    
+    uint32_t valueUInt32()
     {
         return _valueUInt32[_name];
     }
     
-    uint64_t& valueUInt64()
+    uint32_t& refUInt32()
+    {
+        return _valueUInt32[_name];
+    }
+    
+    void setValueUInt64(uint64_t value)
+    {
+        _valueUInt64[_name] = value;
+    }
+    
+    uint64_t valueUInt64()
     {
         return _valueUInt64[_name];
     }
     
-    int8_t& valueInt8()
+    uint64_t& refUInt64()
+    {
+        return _valueUInt64[_name];
+    }
+    
+    void setValueInt8(int8_t value)
+    {
+        _valueInt8[_name] = value;
+    }
+    
+    int8_t valueInt8()
     {
         return _valueInt8[_name];
     }
     
-    int16_t& valueInt16()
+    int8_t& refInt8()
+    {
+        return _valueInt8[_name];
+    }
+    
+    void setValueInt16(int16_t value)
+    {
+        _valueInt16[_name] = value;
+    }
+    
+    int16_t valueInt16()
     {
         return _valueInt16[_name];
     }
     
-    int32_t& valueInt32()
+    int16_t& refInt16()
+    {
+        return _valueInt16[_name];
+    }
+    
+    void setValueInt32(int32_t value)
+    {
+        _valueInt32[_name] = value;
+    }
+    
+    int32_t valueInt32()
     {
         return _valueInt32[_name];
     }
     
-    int64_t& valueInt64()
+    int32_t& refInt32()
+    {
+        return _valueInt32[_name];
+    }
+    
+    void setValueInt64(int64_t value)
+    {
+        _valueInt64[_name] = value;
+    }
+    
+    int64_t valueInt64()
     {
         return _valueInt64[_name];
     }
     
-    float& valueFloat()
+    int64_t& refInt64()
+    {
+        return _valueInt64[_name];
+    }
+    
+    void setValueFloat(float value)
+    {
+        _valueFloat[_name] = value;
+    }
+    
+    float valueFloat()
     {
         return _valueFloat[_name];
     }
     
-    double& valueDouble()
+    float& refFloat()
+    {
+        return _valueFloat[_name];
+    }
+    
+    void setValueDouble(double value)
+    {
+        _valueDouble[_name] = value;
+    }
+    
+    double valueDouble()
     {
         return _valueDouble[_name];
     }
     
-    std::string& valueString()
+    double& refDouble()
+    {
+        return _valueDouble[_name];
+    }
+    
+    void setValueString(std::string value)
+    {
+        _valueString[_name] = value;
+    }
+    
+    std::string valueString()
+    {
+        return _valueString[_name];
+    }
+    
+    std::string& refString()
     {
         return _valueString[_name];
     }
