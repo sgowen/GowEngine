@@ -146,7 +146,7 @@ void Renderer::updateMatrix(MatrixDescriptor& desc, std::string matrixKey)
     updateMatrix(desc._left, desc._right, desc._bottom, desc._top, desc._near, desc._far, matrixKey);
 }
 
-void Renderer::updateMatrixCenteredOnEntity(Entity* e, std::string matrixKey)
+void Renderer::updateMatrixCenteredOnEntity(Entity* e, float maxRight, float maxTop, std::string matrixKey)
 {
     if (e == nullptr)
     {
@@ -154,12 +154,26 @@ void Renderer::updateMatrixCenteredOnEntity(Entity* e, std::string matrixKey)
     }
     
     Matrix& m = matrix(matrixKey);
-    float halfWidth = m._desc.width() / 2;
-    float halfHeight = m._desc.height() / 2;
-    m._desc._left = e->position()._x - halfWidth;
-    m._desc._right = e->position()._x + halfWidth;
-    m._desc._bottom = e->position()._y - halfHeight;
-    m._desc._top = e->position()._y + halfHeight;
+    float width = m._desc.width();
+    float height = m._desc.height();
+    m._desc._right = CLAMP(e->position()._x + width / 2, 0, maxRight);
+    m._desc._top = CLAMP(e->position()._y + height / 2, 0, maxTop);
+    
+    m._desc._left = m._desc._right - width;
+    if (m._desc._left < 0)
+    {
+        float diff = -m._desc._left;
+        m._desc._left = 0;
+        m._desc._right += diff;
+    }
+    
+    m._desc._bottom = m._desc._top - height;
+    if (m._desc._bottom < 0)
+    {
+        float diff = -m._desc._bottom;
+        m._desc._bottom = 0;
+        m._desc._top += diff;
+    }
     
     updateMatrix(m._desc, matrixKey);
 }
@@ -338,6 +352,6 @@ TriangleBatcher& Renderer::triangleBatcher(std::string key)
 
 void Renderer::spriteBatcherAddEntity(SpriteBatcher& sb, Entity& e)
 {
-    TextureRegion tr = ASSETS.textureRegion(e.renderController()->getTextureMapping(), e.stateTime());
+    TextureRegion tr = ASSETS.textureRegion(e.renderController()->getTextureMapping(),  e.stateTime());
     sb.addSprite(tr, e.position()._x, e.position()._y, e.width(), e.height(), e.angle(), e.isXFlipped());
 }

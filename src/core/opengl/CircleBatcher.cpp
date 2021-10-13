@@ -15,12 +15,12 @@ CircleBatcher::CircleBatcher(uint32_t maxBatchSize) :
 _maxBatchSize(maxBatchSize),
 _vertexBuffer(0)
 {
-    _vertices.reserve(_maxBatchSize * NUM_VERTICES_PER_FULL_CIRCLE);
+    // Empty
 }
 
 void CircleBatcher::createDeviceDependentResources()
 {
-    _vertexBuffer = OGL.loadVertexBuffer(sizeof(VERTEX_2D) * _vertices.capacity());
+    _vertexBuffer = OGL.loadVertexBuffer(sizeof(VERTEX_2D) * _maxBatchSize * NUM_VERTICES_PER_FULL_CIRCLE);
 }
 
 void CircleBatcher::destroyDeviceDependentResources()

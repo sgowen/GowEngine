@@ -12,12 +12,12 @@ LineBatcher::LineBatcher(uint32_t maxBatchSize) :
 _maxBatchSize(maxBatchSize),
 _vertexBuffer(0)
 {
-    _vertices.reserve(_maxBatchSize * NUM_VERTICES_PER_LINE);
+    // Empty
 }
 
 void LineBatcher::createDeviceDependentResources()
 {
-    _vertexBuffer = OGL.loadVertexBuffer(sizeof(VERTEX_2D) * _vertices.capacity());
+    _vertexBuffer = OGL.loadVertexBuffer(sizeof(VERTEX_2D) * _maxBatchSize * NUM_VERTICES_PER_LINE);
 }
 
 void LineBatcher::destroyDeviceDependentResources()

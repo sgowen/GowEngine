@@ -13,12 +13,12 @@ _maxBatchSize(maxBatchSize),
 _vertexBuffer(0),
 _indexBuffer(0)
 {
-    _vertices.reserve(_maxBatchSize * NUM_VERTICES_PER_RECTANGLE);
+    // Empty
 }
 
 void SpriteBatcher::createDeviceDependentResources()
 {
-    _vertexBuffer = OGL.loadVertexBuffer(sizeof(VERTEX_2D_TEXTURE) * _vertices.capacity());
+    _vertexBuffer = OGL.loadVertexBuffer(sizeof(VERTEX_2D_TEXTURE) * _maxBatchSize * NUM_VERTICES_PER_RECTANGLE);
     _indexBuffer = OGL.loadRektangleIndexBuffer(_maxBatchSize);
 }
 

@@ -13,12 +13,12 @@ _maxBatchSize(maxBatchSize),
 _isFill(isFill),
 _vertexBuffer(0)
 {
-    _vertices.resize(_maxBatchSize * NUM_VERTICES_PER_TRIANGLE);
+    // Empty
 }
 
 void TriangleBatcher::createDeviceDependentResources()
 {
-    _vertexBuffer = OGL.loadVertexBuffer(sizeof(VERTEX_2D) * _vertices.capacity());
+    _vertexBuffer = OGL.loadVertexBuffer(sizeof(VERTEX_2D) * _maxBatchSize * NUM_VERTICES_PER_TRIANGLE);
 }
 
 void TriangleBatcher::destroyDeviceDependentResources()

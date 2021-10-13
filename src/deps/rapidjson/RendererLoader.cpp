@@ -127,21 +127,21 @@ Renderer RendererLoader::initWithJSON(const char* json)
             
             if (iv.HasMember("width"))
             {
-                uint32_t width = RapidJSONUtil::getUInt(iv, "width");
-                uint32_t height = RapidJSONUtil::getUInt(iv, "height");
+                uint32_t w = RapidJSONUtil::getUInt(iv, "width");
+                uint32_t h = RapidJSONUtil::getUInt(iv, "height");
                 
-                ret._matrices.emplace(key, Matrix{MatrixDescriptor(width, height)});
+                ret._matrices.emplace(key, Matrix{MatrixDescriptor(w, h)});
             }
             else
             {
-                float left = RapidJSONUtil::getFloat(iv, "left");
-                float right = RapidJSONUtil::getFloat(iv, "right");
-                float bottom = RapidJSONUtil::getFloat(iv, "bottom");
-                float top = RapidJSONUtil::getFloat(iv, "top");
-                float near = RapidJSONUtil::getFloat(iv, "near", -1);
-                float far = RapidJSONUtil::getFloat(iv, "far", 1);
+                float l = RapidJSONUtil::getFloat(iv, "left");
+                float r = RapidJSONUtil::getFloat(iv, "right");
+                float b = RapidJSONUtil::getFloat(iv, "bottom");
+                float t = RapidJSONUtil::getFloat(iv, "top");
+                float n = RapidJSONUtil::getFloat(iv, "near", -1);
+                float f = RapidJSONUtil::getFloat(iv, "far", 1);
                 
-                ret._matrices.emplace(key, Matrix{MatrixDescriptor(left, right, bottom, top, near, far)});
+                ret._matrices.emplace(key, Matrix{MatrixDescriptor(l, r, b, t, n, f)});
             }
         }
     }

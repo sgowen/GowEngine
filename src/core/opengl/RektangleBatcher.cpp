@@ -14,12 +14,12 @@ _isFill(isFill),
 _vertexBuffer(0),
 _indexBuffer(0)
 {
-    _vertices.reserve(_maxBatchSize * NUM_VERTICES_PER_RECTANGLE);
+    // Empty
 }
 
 void RektangleBatcher::createDeviceDependentResources()
 {
-    _vertexBuffer = OGL.loadVertexBuffer(sizeof(VERTEX_2D) * _vertices.capacity());
+    _vertexBuffer = OGL.loadVertexBuffer(sizeof(VERTEX_2D) * _maxBatchSize * NUM_VERTICES_PER_RECTANGLE);
     _indexBuffer = OGL.loadRektangleIndexBuffer(_maxBatchSize);
 }
 

@@ -16,6 +16,30 @@
 #include <stdarg.h>
 #include <cassert>
 
+#if IS_ANDROID
+    #include <android/log.h>
+#elif IS_WINDOWS
+    #define WIN32_LEAN_AND_MEAN
+    #include <windows.h>
+    #include <debugapi.h>
+#endif
+
+// OUT_Z_ARRAY indicates an output array that will be null-terminated.
+#if _MSC_VER >= 1600
+    // Include the annotation header file.
+    #include <sal.h>
+    #if _MSC_VER >= 1700
+        // VS 2012+
+        #define OUT_Z_ARRAY _Post_z_
+    #else
+        // VS 2010
+        #define OUT_Z_ARRAY _Deref_post_z_
+    #endif
+#else
+    // gcc, clang, old versions of VS
+    #define OUT_Z_ARRAY
+#endif
+
 #define LOG(...) StringUtil::log(__VA_ARGS__)
 
 class StringUtil
@@ -77,13 +101,15 @@ public:
         return std::string(temp);
     }
     
-#if IS_WINDOWS == 0
-    static void OutputDebugStringA(const char* inString)
+#if IS_WINDOWS
+    // OutputDebugStringA is included with the Windows API
+#else
+    static void OutputDebugStringA(const char* value)
     {
 #if IS_ANDROID
-        __android_log_print(ANDROID_LOG_DEBUG, "GowEngine", "%s", inString);
+        __android_log_print(ANDROID_LOG_DEBUG, "GowEngine", "%s", value);
 #else
-        printf("%s", inString);
+        printf("%s", value);
 #endif
     }
 #endif

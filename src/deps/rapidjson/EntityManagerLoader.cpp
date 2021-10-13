@@ -145,7 +145,7 @@ void EntityManagerLoader::initWithJSON(EntityManager& em, const char* json)
                 fixtures.push_back(fixtureDef);
             }
         }
-        uint8_t bodyFlags = RapidJSONUtil::getUInt(iv, "bodyFlags");
+        uint8_t bodyFlags = RapidJSONUtil::getUInt(iv, "bodyFlags", 0);
         uint8_t width = RapidJSONUtil::getUInt(iv, "width");
         uint8_t height = RapidJSONUtil::getUInt(iv, "height");
         
