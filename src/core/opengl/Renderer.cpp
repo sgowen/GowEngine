@@ -123,7 +123,7 @@ void Renderer::clearFramebuffer(const Color& c)
 
 void Renderer::renderImageViews(float angle, bool flipX, std::string matrixKey, std::string shaderKey, std::string spriteBatcherKey)
 {
-    Matrix& m = matrix();
+    Matrix& m = matrix(matrixKey);
     float l = m._desc._left;
     float b = m._desc._bottom;
     float w = m._desc.width();
@@ -138,8 +138,30 @@ void Renderer::renderImageViews(float angle, bool flipX, std::string matrixKey, 
 void Renderer::updateMatrix(float l, float r, float b, float t, float n, float f, std::string matrixKey)
 {
     Matrix& m = matrix(matrixKey);
-    m.identity();
     m.ortho(l, r, b, t, n, f);
+}
+
+void Renderer::updateMatrix(MatrixDescriptor& desc, std::string matrixKey)
+{
+    updateMatrix(desc._left, desc._right, desc._bottom, desc._top, desc._near, desc._far, matrixKey);
+}
+
+void Renderer::updateMatrixCenteredOnEntity(Entity* e, std::string matrixKey)
+{
+    if (e == nullptr)
+    {
+        return;
+    }
+    
+    Matrix& m = matrix(matrixKey);
+    float halfWidth = m._desc.width() / 2;
+    float halfHeight = m._desc.height() / 2;
+    m._desc._left = e->position()._x - halfWidth;
+    m._desc._right = e->position()._x + halfWidth;
+    m._desc._bottom = e->position()._y - halfHeight;
+    m._desc._top = e->position()._y + halfHeight;
+    
+    updateMatrix(m._desc, matrixKey);
 }
 
 void Renderer::rektangleBatcherBegin(std::string rektangleBatcherKey)
@@ -184,12 +206,16 @@ void Renderer::spriteBatcherAddEntities(std::vector<Entity*>& entities, std::str
     SpriteBatcher& sb = spriteBatcher(spriteBatcherKey);
     for (Entity* e : entities)
     {
+        assert(e != nullptr);
+        
         spriteBatcherAddEntity(sb, *e);
     }
 }
 
 void Renderer::spriteBatcherAddEntity(Entity* e, std::string spriteBatcherKey)
 {
+    assert(e != nullptr);
+    
     SpriteBatcher& sb = spriteBatcher(spriteBatcherKey);
     spriteBatcherAddEntity(sb, *e);
 }

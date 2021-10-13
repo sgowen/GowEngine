@@ -45,6 +45,8 @@ public:
     void renderImageViews(float angle = 0, bool flipX = false, std::string matrixKey = "main", std::string shaderKey = "texture", std::string spriteBatcherKey = "main");
     
     void updateMatrix(float l, float r, float b, float t, float n = -1, float f = 1, std::string matrixKey = "main");
+    void updateMatrix(MatrixDescriptor& desc, std::string matrixKey = "main");
+    void updateMatrixCenteredOnEntity(Entity* e, std::string matrixKey = "main");
     
     void rektangleBatcherBegin(std::string rektangleBatcherKey = "main");
     void rektangleBatcherAddRektangle(Rektangle& r, std::string rektangleBatcherKey = "main");

@@ -20,8 +20,7 @@ struct Matrix
     Matrix(MatrixDescriptor desc) :
     _desc(desc)
     {
-        identity();
-        ortho(_desc);
+        ortho(desc._left, desc._right, desc._bottom, desc._top, desc._near, desc._far);
     }
     
     void identity()
@@ -37,14 +36,11 @@ struct Matrix
             }
         }
     }
-
-    void ortho(MatrixDescriptor& desc)
-    {
-        ortho(desc._left, desc._right, desc._bottom, desc._top, desc._near, desc._far);
-    }
     
     void ortho(float l, float r, float b, float t, float n, float f)
     {
+        identity();
+        
         mat4& m = _matrix;
         
         m[0][0] = 2.f / (r - l);
@@ -60,5 +56,12 @@ struct Matrix
         m[3][1] = -(t + b) / (t - b);
         m[3][2] = -(f + n) / (f - n);
         m[3][3] = 1.f;
+        
+        _desc._left = l;
+        _desc._right = r;
+        _desc._bottom = b;
+        _desc._top = t;
+        _desc._near = n;
+        _desc._far = f;
     }
 };
