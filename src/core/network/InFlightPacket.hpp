@@ -32,5 +32,5 @@ private:
     uint32_t _timeDispatched;
     int _key;
     
-    std::map<int, TransmissionData*> _transmissionDataMap;
+    std::map<int, TransmissionData*> _transmissionDatas;
 };

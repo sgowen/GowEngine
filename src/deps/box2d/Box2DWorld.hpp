@@ -8,7 +8,7 @@
 
 #pragma once
 
-#include "core/entity/EntityLayout.hpp"
+#include "core/entity/EntityLayoutManager.hpp"
 
 struct TimeTracker;
 
@@ -26,7 +26,7 @@ public:
     void addNetworkEntity(Entity* e);
     void removeNetworkEntity(Entity* e);
     void recallCache();
-    void stepPhysics(TimeTracker* tt);
+    void stepPhysics(TimeTracker& tt);
     std::vector<Entity*> update();
     void reset();
     

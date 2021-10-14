@@ -21,11 +21,11 @@ class InputMemoryBitStream;
 class DeliveryNotificationManager
 {
 public:
-    DeliveryNotificationManager(TimeTracker* tt, bool shouldSendAcks, bool shouldProcessAcks);
+    DeliveryNotificationManager(TimeTracker& tt, bool shouldSendAcks, bool shouldProcessAcks);
     
     InFlightPacket* writeState(OutputMemoryBitStream& ombs);
     bool readAndProcessState(InputMemoryBitStream& imbs);
-    void processTimedOutPackets(uint32_t time);
+    void processTimedOutPackets();
     uint32_t getDroppedPacketCount() const;
     uint32_t getDeliveredPacketCount() const;
     uint32_t getDispatchedPacketCount() const;
@@ -33,7 +33,7 @@ public:
     void logStats();
     
 private:
-    TimeTracker* _timeTracker;
+    TimeTracker& _timeTracker;
     bool _shouldSendAcks;
     bool _shouldProcessAcks;
     std::deque<InFlightPacket> _inFlightPackets;

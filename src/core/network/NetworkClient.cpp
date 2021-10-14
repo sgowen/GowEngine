@@ -10,13 +10,11 @@
 
 NetworkClient* NetworkClient::s_instance = nullptr;
 
-void NetworkClient::create(std::string serverIPAddress, std::string username, uint16_t port, OnEntityRegisteredFunc oerf, OnEntityDeregisteredFunc oedf, RemoveProcessedMovesFunc rpmf, OnPlayerWelcomedFunc opwf)
+void NetworkClient::create(std::string serverIPAddress, std::string username, uint16_t port, TimeTracker& tt, OnEntityRegisteredFunc oerf, OnEntityDeregisteredFunc oedf, RemoveProcessedMovesFunc rpmf, OnPlayerWelcomedFunc opwf)
 {
     assert(s_instance == nullptr);
     
-    INST_REG.get<TimeTracker>(INSK_TIME_CLNT)->reset();
-    
-    s_instance = new NetworkClient(serverIPAddress, username, port, oerf, oedf, rpmf, opwf);
+    s_instance = new NetworkClient(serverIPAddress, username, port, tt, oerf, oedf, rpmf, opwf);
 }
 
 NetworkClient * NetworkClient::getInstance()
@@ -38,8 +36,7 @@ NetworkClientState NetworkClient::processIncomingPackets()
     
     _packetHandler.processIncomingPackets();
     
-    TimeTracker* tt = INST_REG.get<TimeTracker>(INSK_TIME_CLNT);
-    uint32_t time = tt->_time;
+    uint32_t time = _timeTracker._time;
     uint32_t dcTime = _lastServerCommunicationTimestamp + NW_SRVR_TIMEOUT;
     if (time > dcTime)
     {
@@ -79,7 +76,7 @@ void NetworkClient::requestToDropLocalPlayer(uint8_t index)
     
     _isRequestingToAddLocalPlayer = false;
     _isRequestingToDropLocalPlayer = index;
-    _indexToPlayerIDMap.erase(index);
+    _playerIDs.erase(index);
     updateNextIndex();
 }
 
@@ -105,7 +102,7 @@ float NetworkClient::getRoundTripTime() const
 
 bool NetworkClient::isPlayerIDLocal(uint8_t playerID) const
 {
-    for (auto const& entry : _indexToPlayerIDMap)
+    for (auto const& entry : _playerIDs)
     {
         if (entry.second == playerID)
         {
@@ -123,7 +120,7 @@ bool NetworkClient::hasReceivedNewState()
 
 std::map<uint8_t, uint8_t>& NetworkClient::getPlayerIDs()
 {
-    return _indexToPlayerIDMap;
+    return _playerIDs;
 }
 
 std::string& NetworkClient::getPlayerName()
@@ -160,8 +157,7 @@ void NetworkClient::processPacket(InputMemoryBitStream& imbs, SocketAddress* fro
         LOG("Client processPacket bit length: %d", imbs.getRemainingBitCount());
     }
     
-    TimeTracker* tt = INST_REG.get<TimeTracker>(INSK_TIME_CLNT);
-    _lastServerCommunicationTimestamp = tt->_time;
+    _lastServerCommunicationTimestamp = _timeTracker._time;
     
     uint8_t packetType;
     imbs.readBits(packetType, 4);
@@ -218,9 +214,7 @@ void NetworkClient::sendPacket(const OutputMemoryBitStream& ombs)
 
 void NetworkClient::updateSayingHello()
 {
-    TimeTracker* tt = INST_REG.get<TimeTracker>(INSK_TIME_CLNT);
-    uint32_t time = tt->_time;
-    
+    uint32_t time = _timeTracker._time;
     if (time > _timeOfLastHello + NW_CLNT_TIME_BETWEEN_HELLOS)
     {
         // FIXME, player name length (and this packet size)
@@ -246,8 +240,8 @@ void NetworkClient::handleWelcomePacket(InputMemoryBitStream& imbs)
     
     _state = NWCS_WELCOMED;
     
-    _indexToPlayerIDMap.clear();
-    _indexToPlayerIDMap[_nextIndex] = playerID;
+    _playerIDs.clear();
+    _playerIDs[_nextIndex] = playerID;
     
     if (IS_NETWORK_LOGGING_ENABLED())
     {
@@ -269,7 +263,7 @@ void NetworkClient::handleLocalPlayerAddedPacket(InputMemoryBitStream& imbs)
     uint8_t playerID;
     imbs.read(playerID);
     
-    _indexToPlayerIDMap[_nextIndex] = playerID;
+    _playerIDs[_nextIndex] = playerID;
     
     if (IS_NETWORK_LOGGING_ENABLED())
     {
@@ -313,8 +307,7 @@ void NetworkClient::handleStatePacket(InputMemoryBitStream& imbs)
     {
         imbs.read(_lastMoveProcessedByServerTimestamp);
         
-        TimeTracker* tt = INST_REG.get<TimeTracker>(INSK_TIME_CLNT);
-        float rtt = tt->realTime() - tt->realTime(_lastMoveProcessedByServerTimestamp);
+        float rtt = _timeTracker.realTime() - _timeTracker.realTime(_lastMoveProcessedByServerTimestamp);
         _avgRoundTripTime.update(rtt);
         
         _removeProcessedMovesFunc(_lastMoveProcessedByServerTimestamp);
@@ -356,9 +349,7 @@ void NetworkClient::updateAddLocalPlayerRequest()
         return;
     }
     
-    TimeTracker* tt = INST_REG.get<TimeTracker>(INSK_TIME_CLNT);
-    uint32_t time = tt->_time;
-    
+    uint32_t time = _timeTracker._time;
     if (time > _timeOfLastHello + NW_CLNT_TIME_BETWEEN_HELLOS)
     {
         OutputMemoryBitStream ombs(2);
@@ -390,7 +381,7 @@ void NetworkClient::updateDropLocalPlayerRequest()
 void NetworkClient::updateNextIndex()
 {
     _nextIndex = 0;
-    for (auto const& entry : _indexToPlayerIDMap)
+    for (auto const& entry : _playerIDs)
     {
         if (entry.first == _nextIndex)
         {
@@ -404,13 +395,14 @@ void cb_client_processPacket(InputMemoryBitStream& imbs, SocketAddress* fromAddr
     NW_CLNT->processPacket(imbs, fromAddress);
 }
 
-NetworkClient::NetworkClient(std::string serverIPAddress, std::string username, uint16_t port, OnEntityRegisteredFunc oerf, OnEntityDeregisteredFunc oedf, RemoveProcessedMovesFunc rpmf, OnPlayerWelcomedFunc opwf) :
-_packetHandler(INST_REG.get<TimeTracker>(INSK_TIME_CLNT), port, cb_client_processPacket),
+NetworkClient::NetworkClient(std::string serverIPAddress, std::string username, uint16_t port, TimeTracker& tt, OnEntityRegisteredFunc oerf, OnEntityDeregisteredFunc oedf, RemoveProcessedMovesFunc rpmf, OnPlayerWelcomedFunc opwf) :
+_timeTracker(tt),
+_packetHandler(_timeTracker, port, cb_client_processPacket),
 _serverAddress(SocketAddressFactory::createIPv4FromString(serverIPAddress)),
 _username(username),
 _removeProcessedMovesFunc(rpmf),
 _onPlayerWelcomedFunc(opwf),
-_deliveryNotificationManager(INST_REG.get<TimeTracker>(INSK_TIME_CLNT), true, false),
+_deliveryNotificationManager(_timeTracker, true, false),
 _entityRegistry(oerf, oedf),
 _replicationManagerClient(),
 _state(NWCS_SAYING_HELLO),
@@ -418,7 +410,7 @@ _timeOfLastHello(0),
 _nextIndex(0),
 _lastMoveProcessedByServerTimestamp(0),
 _lastServerCommunicationTimestamp(0),
-_avgRoundTripTime(INST_REG.get<TimeTracker>(INSK_TIME_CLNT), 1.0f),
+_avgRoundTripTime(_timeTracker, 1.0f),
 _isRequestingToAddLocalPlayer(false),
 _isRequestingToDropLocalPlayer(0),
 _hasReceivedNewState(false),

@@ -13,14 +13,14 @@ struct TimeTracker;
 class MovingAverage
 {
 public:
-    MovingAverage(TimeTracker* tt, float duration = 5.0f);
+    MovingAverage(TimeTracker& tt, float duration = 5.0f);
     
     void updatePerSecond(float value);
     void update(float value);
     float getValue() const;
     
 private:
-    TimeTracker* _timeTracker;
+    TimeTracker& _timeTracker;
     float _timeLastEntryMade;
     float _duration;
     float _value;

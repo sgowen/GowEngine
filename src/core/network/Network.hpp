@@ -40,16 +40,6 @@
 
 #define ALL_DIRTY_STATE 0xFFu
 
-enum InstanceKeys
-{
-    INSK_TIME_SRVR = 'TIMS',
-    INSK_TIME_CLNT = 'TIMC',
-    INSK_EID_SRVR = 'EIMS',
-    INSK_EID_CLNT = 'EIMC',
-    INSK_ELM_SRVR = 'ELMS',
-    INSK_ELM_CLNT = 'ELMC'
-};
-
 enum NetworkPacketType
 {
     NWPT_HELLO = 0x01u,

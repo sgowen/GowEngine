@@ -12,17 +12,13 @@
 #if IS_DESKTOP
 
 class EngineConfig;
-class EngineState;
-struct GLFWwindow;
 
 class GlfwMain
 {
 public:
-    static void exec(EngineConfig& engineConfig, EngineState& initialEngineState);
+    static void exec(EngineConfig& engineConfig, const char* windowTitle);
 
 private:
-    static void runEngine(EngineConfig& engineConfig, EngineState& initialEngineState, GLFWwindow* window);
-    
     GlfwMain();
     ~GlfwMain();
     GlfwMain(const GlfwMain&);

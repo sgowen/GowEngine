@@ -40,7 +40,7 @@ protected:
     WavFmtChunkHeader* _fmtChunk;
     WavChunkHeader* _dataChunk;
     long _audioDataStartPos;
-    std::map<RiffID, WavChunkHeader *>* _chunkMap;
+    std::map<RiffID, WavChunkHeader *>* _chunks;
 };
 
 #endif /* IS_ANDROID */

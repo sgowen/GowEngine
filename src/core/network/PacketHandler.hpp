@@ -24,7 +24,7 @@ typedef void (*ProcessPacketFunc)(InputMemoryBitStream& imbs, SocketAddress* fro
 class PacketHandler
 {
 public:
-    PacketHandler(TimeTracker* tt, uint16_t port, ProcessPacketFunc ppf);
+    PacketHandler(TimeTracker& tt, uint16_t port, ProcessPacketFunc ppf);
     ~PacketHandler();
     
     int connect();
@@ -37,10 +37,12 @@ public:
 private:
     class ReceivedPacket;
     
+    TimeTracker& _timeTracker;
+    MovingAverage _bytesReceivedPerSecond;
+    MovingAverage _bytesSentPerSecond;
     UDPSocket* _socket;
     SocketAddress _socketAddress;
     std::queue<ReceivedPacket, std::list<ReceivedPacket> > _packetQueue;
-    TimeTracker* _timeTracker;
     ProcessPacketFunc _processPacketFunc;
     int _bytesSentThisFrame;
     
@@ -63,8 +65,4 @@ private:
         InputMemoryBitStream _packetBuffer;
         SocketAddress _fromAddress;
     };
-    
-private:
-    MovingAverage _bytesReceivedPerSecond;
-    MovingAverage _bytesSentPerSecond;
 };

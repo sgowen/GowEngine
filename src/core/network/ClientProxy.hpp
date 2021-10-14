@@ -21,7 +21,7 @@ class SocketAddress;
 class ClientProxy
 {
 public:
-    ClientProxy(EntityRegistry& entityRegistry, SocketAddress* socketAddress, std::string username, uint8_t playerID);
+    ClientProxy(EntityRegistry& er, TimeTracker& tt, SocketAddress* sa, std::string username, uint8_t playerID);
     ~ClientProxy();
     
     SocketAddress* getSocketAddress() const;
@@ -40,6 +40,7 @@ public:
     uint8_t getNumPlayers();
     
 private:
+    TimeTracker& _timeTracker;
     DeliveryNotificationManager	_deliveryNotificationManager;
     ReplicationManagerServer _replicationManagerServer;
     SocketAddress* _socketAddress;

@@ -30,5 +30,5 @@ private:
     OnEntityRegisteredFunc _onEntityRegisteredFunc;
     OnEntityDeregisteredFunc _onEntityDeregisteredFunc;
     
-    std::map<uint32_t, Entity*> _entityMap;
+    std::map<uint32_t, Entity*> _entities;
 };

@@ -16,6 +16,7 @@
 #include <map>
 #include <string>
 
+struct TimeTracker;
 class ReplicationTransmissionData;
 class InputMemoryBitStream;
 class OutputMemoryBitStream;
@@ -33,7 +34,7 @@ typedef void (*HandleLostClientFunc)(ClientProxy& cp, uint8_t localPlayerIndex);
 class NetworkServer
 {
 public:
-    static void create(uint16_t port, uint8_t maxNumPlayers, OnEntityRegisteredFunc oerf, OnEntityDeregisteredFunc oedf, HandleNewClientFunc hncf, HandleLostClientFunc hlcf);
+    static void create(uint16_t port, uint8_t maxNumPlayers, EntityIDManager& eidm, TimeTracker& tt, OnEntityRegisteredFunc oerf, OnEntityDeregisteredFunc oedf, HandleNewClientFunc hncf, HandleLostClientFunc hlcf);
     static NetworkServer* getInstance();
     static void destroy();
     
@@ -61,6 +62,8 @@ public:
 private:
     static NetworkServer* s_instance;
     
+    EntityIDManager& _entityIDManager;
+    TimeTracker& _timeTracker;
     PacketHandler _packetHandler;
     OnEntityRegisteredFunc _onEntityRegisteredFunc;
     OnEntityDeregisteredFunc _onEntityDeregisteredFunc;
@@ -88,7 +91,7 @@ private:
     void handleClientDisconnected(ClientProxy& cp);
     void resetNextPlayerID();
     
-    NetworkServer(uint16_t port, uint8_t maxNumPlayers, OnEntityRegisteredFunc oerf, OnEntityDeregisteredFunc oedf, HandleNewClientFunc hncf, HandleLostClientFunc hlcf);
+    NetworkServer(uint16_t port, uint8_t maxNumPlayers, EntityIDManager& eidm, TimeTracker& tt, OnEntityRegisteredFunc oerf, OnEntityDeregisteredFunc oedf, HandleNewClientFunc hncf, HandleLostClientFunc hlcf);
     ~NetworkServer();
     NetworkServer(const NetworkServer&);
     NetworkServer& operator=(const NetworkServer&);

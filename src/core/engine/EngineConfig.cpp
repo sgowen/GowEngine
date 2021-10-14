@@ -8,56 +8,35 @@
 
 #include <GowEngine/GowEngine.hpp>
 
-EngineConfig::EngineConfig(std::string configFilePath, void* data1, void* data2) :
-_config(nullptr)
+EngineConfig::EngineConfig(std::string configFilePath, EngineState& initialEngineState) :
+_config(ConfigLoader::initWithJSONFile(configFilePath)),
+_initialEngineState(initialEngineState)
 {
-#if IS_ANDROID
-    AndroidAssetHandler::create(data1, data2);
-#elif IS_APPLE
-    AppleAssetHandler::create(configFilePath);
-#endif
+    std::string filePathAssets = _config.getString("filePathAssets", "");
+    std::string filePathEntityLayoutManager = _config.getString("filePathEntityLayoutManager", "");
+    std::string filePathEntityManager = _config.getString("filePathEntityManager", "");
     
-    _config = new Config(ConfigLoader::initWithJSONFile(configFilePath));
+    assert(!filePathAssets.empty());
+    assert(!filePathEntityLayoutManager.empty());
+    assert(!filePathEntityManager.empty());
     
-    SOCKET_UTIL.setLoggingEnabled(_config->getBool("networkLoggingEnabled", false));
-    INPUT_MGR.setLoggingEnabled(_config->getBool("inputLoggingEnabled", false));
-    AUDIO_ENGINE.setSoundsDisabled(_config->getBool("soundsDisabled", false));
-    AUDIO_ENGINE.setMusicDisabled(_config->getBool("musicDisabled", false));
+    ASSETS.registerAssets("engine", AssetsLoader::initWithJSONFile(filePathAssets));
+    EntityLayoutManagerLoader::initWithJSONFile(ENTITY_LAYOUT_MGR, filePathEntityLayoutManager);
+    EntityManagerLoader::initWithJSONFile(ENTITY_MGR, filePathEntityManager);
     
-    std::string filePathAssets = _config->getString("filePathAssets", "");
-    if (!filePathAssets.empty())
-    {
-        ASSETS.registerAssets("engine", AssetsLoader::initWithJSONFile(filePathAssets));
-    }
+    SOCKET_UTIL.setLoggingEnabled(_config.getBool("networkLoggingEnabled", false));
+    INPUT_MGR.setLoggingEnabled(_config.getBool("inputLoggingEnabled", false));
+    AUDIO_ENGINE.setSoundsDisabled(_config.getBool("soundsDisabled", false));
+    AUDIO_ENGINE.setMusicDisabled(_config.getBool("musicDisabled", false));
     
-    static TimeTracker TIMS(getFrameRate());
-    static EntityIDManager EIMS;
-    INST_REG.registerInstance(INSK_TIME_SRVR, &TIMS);
-    INST_REG.registerInstance(INSK_EID_SRVR, &EIMS);
-    
-    static TimeTracker TIMC(getFrameRate());
-    static EntityIDManager EIMC;
-    INST_REG.registerInstance(INSK_TIME_CLNT, &TIMC);
-    INST_REG.registerInstance(INSK_EID_CLNT, &EIMC);
+    // FIXME
+    // This is a silly thing to do
+    // Physics controller used should be based on
+    // the type of World class being used (e.g. Box2DWorld)
+    ENTITY_MGR.registerPhysicsController("Default", Box2DPhysicsController::create);
 }
 
-EngineConfig::~EngineConfig()
+EngineState& EngineConfig::initialEngineState()
 {
-    delete _config;
-    
-#if IS_ANDROID
-    AndroidAssetHandler::destroy();
-#elif IS_APPLE
-    AppleAssetHandler::destroy();
-#endif
-}
-
-std::string EngineConfig::getWindowTitle()
-{
-    return _config->getString("windowTitle", "GowEngineMount");
-}
-
-float EngineConfig::getFrameRate()
-{
-    return 1.0 / _config->getUInt("framesPerSecond", 60);
+    return _initialEngineState;
 }

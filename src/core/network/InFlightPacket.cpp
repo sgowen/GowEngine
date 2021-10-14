@@ -34,14 +34,14 @@ void InFlightPacket::setTransmissionData(int key, TransmissionData* transmission
 {
     _key = key;
     
-    _transmissionDataMap[key] = transmissionData;
+    _transmissionDatas[key] = transmissionData;
 }
 
 TransmissionData* InFlightPacket::getTransmissionData(int key) const
 {
-    auto it = _transmissionDataMap.find(key);
+    auto it = _transmissionDatas.find(key);
     
-    return it != _transmissionDataMap.end() ? it->second : nullptr;
+    return it != _transmissionDatas.end() ? it->second : nullptr;
 }
 
 uint16_t InFlightPacket::getSequenceNumber() const
@@ -56,7 +56,7 @@ uint32_t InFlightPacket::getTimeDispatched() const
 
 void InFlightPacket::handleDeliveryFailure(DeliveryNotificationManager* dnm) const
 {
-    for (const auto& pair : _transmissionDataMap)
+    for (const auto& pair : _transmissionDatas)
     {
         pair.second->handleDeliveryFailure(dnm);
     }
@@ -64,7 +64,7 @@ void InFlightPacket::handleDeliveryFailure(DeliveryNotificationManager* dnm) con
 
 void InFlightPacket::handleDeliverySuccess(DeliveryNotificationManager* dnm) const
 {
-    for (const auto& pair : _transmissionDataMap)
+    for (const auto& pair : _transmissionDatas)
     {
         pair.second->handleDeliverySuccess(dnm);
     }

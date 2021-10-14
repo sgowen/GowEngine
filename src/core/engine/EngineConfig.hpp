@@ -10,17 +10,18 @@
 
 #include <string>
 
-class Config;
+#include "core/common/Config.hpp"
+
+class EngineState;
 
 class EngineConfig
 {
 public:
-    EngineConfig(std::string configFilePath, void* data1 = nullptr, void* data2 = nullptr);
-    virtual ~EngineConfig();
+    EngineConfig(std::string configFilePath, EngineState& initialEngineState);
     
-    std::string getWindowTitle();
-    float getFrameRate();
+    EngineState& initialEngineState();
     
-protected:
-    Config* _config;
+private:
+    Config _config;
+    EngineState& _initialEngineState;
 };

@@ -8,7 +8,7 @@
 
 #include <GowEngine/GowEngine.hpp>
 
-DeliveryNotificationManager::DeliveryNotificationManager(TimeTracker* tt, bool shouldSendAcks, bool shouldProcessAcks) :
+DeliveryNotificationManager::DeliveryNotificationManager(TimeTracker& tt, bool shouldSendAcks, bool shouldProcessAcks) :
 _timeTracker(tt),
 _shouldSendAcks(shouldSendAcks),
 _shouldProcessAcks(shouldProcessAcks),
@@ -43,9 +43,9 @@ bool DeliveryNotificationManager::readAndProcessState(InputMemoryBitStream& imbs
     return ret;
 }
 
-void DeliveryNotificationManager::processTimedOutPackets(uint32_t time)
+void DeliveryNotificationManager::processTimedOutPackets()
 {
-    uint32_t timeoutTime = time - NW_ACK_TIMEOUT;
+    uint32_t timeoutTime = _timeTracker._time - NW_ACK_TIMEOUT;
     
     while (!_inFlightPackets.empty())
     {
@@ -102,7 +102,7 @@ InFlightPacket* DeliveryNotificationManager::writeSequenceNumber(OutputMemoryBit
     
     if (_shouldProcessAcks)
     {
-        _inFlightPackets.emplace_back(sequenceNumber, _timeTracker->_time);
+        _inFlightPackets.emplace_back(sequenceNumber, _timeTracker._time);
         
         return &_inFlightPackets.back();
     }

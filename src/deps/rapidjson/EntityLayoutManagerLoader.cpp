@@ -1,5 +1,5 @@
 //
-//  EntityLayoutLoader.cpp
+//  EntityLayoutManagerLoader.cpp
 //  GowEngine
 //
 //  Created by Stephen Gowen on 2/27/21.
@@ -11,18 +11,16 @@
 #include <rapidjson/document.h>
 #include <rapidjson/prettywriter.h>
 
-EntityLayout EntityLayoutLoader::initWithJSONFile(std::string filePath)
+void EntityLayoutManagerLoader::initWithJSONFile(EntityLayoutManager& elm, std::string filePath)
 {
     FileData fd = ASSET_HANDLER.loadAsset(filePath);
-    EntityLayout ret = initWithJSON((const char*)fd._data);
+    initWithJSON(elm, (const char*)fd._data);
     ASSET_HANDLER.unloadAsset(fd);
-    
-    return ret;
 }
 
-EntityLayout EntityLayoutLoader::initWithJSON(const char* data)
+void EntityLayoutManagerLoader::initWithJSON(EntityLayoutManager& elm, const char* data)
 {
-    EntityLayout ret;
+    elm._entityLayouts.clear();
     
     using namespace rapidjson;
     
@@ -38,21 +36,17 @@ EntityLayout EntityLayoutLoader::initWithJSON(const char* data)
         std::string name = i->name.GetString();
         uint32_t key = StringUtil::fourCharFromString(name);
         
-        assert(ret._entityLayouts.find(key) == ret._entityLayouts.end());
+        assert(elm._entityLayouts.find(key) == elm._entityLayouts.end());
         
         std::string filePath = iv.GetString();
         
-        ret._entityLayouts.emplace(key, EntityLayoutDef{key, name, filePath});
+        elm._entityLayouts.emplace(key, EntityLayoutDef{key, name, filePath});
     }
-    
-    return ret;
 }
 
-void EntityLayoutLoader::loadEntityLayout(EntityLayoutDef& eld, bool isServer)
+void EntityLayoutManagerLoader::loadEntityLayout(EntityLayoutDef& eld, EntityIDManager& eidm, bool isServer)
 {
-    EntityIDManager* eidm = INST_REG.get<EntityIDManager>(isServer ? INSK_EID_SRVR : INSK_EID_CLNT);
-    assert(eidm != nullptr);
-    eidm->resetNextLayoutEntityID();
+    eidm.resetNextLayoutEntityID();
     
     eld._entities.clear();
     eld._entitiesNetwork.clear();
@@ -78,7 +72,7 @@ void EntityLayoutLoader::loadEntityLayout(EntityLayoutDef& eld, bool isServer)
             uint32_t x = RapidJSONUtil::getUInt(iv, "x");
             uint32_t y = RapidJSONUtil::getUInt(iv, "y");
             
-            eld._entities.emplace_back(eidm->getNextLayoutEntityID(), StringUtil::fourCharFromString(key), x, y, isServer);
+            eld._entities.emplace_back(eidm.getNextLayoutEntityID(), StringUtil::fourCharFromString(key), x, y, isServer);
         }
     }
     
@@ -96,14 +90,14 @@ void EntityLayoutLoader::loadEntityLayout(EntityLayoutDef& eld, bool isServer)
             uint32_t x = RapidJSONUtil::getUInt(iv, "x");
             uint32_t y = RapidJSONUtil::getUInt(iv, "y");
             
-            eld._entitiesNetwork.emplace_back(eidm->getNextNetworkEntityID(), StringUtil::fourCharFromString(key), x, y, isServer);
+            eld._entitiesNetwork.emplace_back(eidm.getNextNetworkEntityID(), StringUtil::fourCharFromString(key), x, y, isServer);
         }
     }
     
     ASSET_HANDLER.unloadAsset(fd);
 }
 
-void EntityLayoutLoader::saveEntityLayout(EntityLayoutDef& eld)
+void EntityLayoutManagerLoader::saveEntityLayout(EntityLayoutDef& eld)
 {
     FILE *file = OPEN_FILE(eld._filePath.c_str(), "w+");
     if (file == nullptr)

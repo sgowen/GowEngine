@@ -8,9 +8,9 @@
 
 #include <GowEngine/GowEngine.hpp>
 
-MovingAverage::MovingAverage(TimeTracker* tt, float duration) :
+MovingAverage::MovingAverage(TimeTracker& tt, float duration) :
 _timeTracker(tt),
-_timeLastEntryMade(tt->realTime()),
+_timeLastEntryMade(_timeTracker.realTime()),
 _duration(duration),
 _value(0)
 {
@@ -24,7 +24,7 @@ void MovingAverage::updatePerSecond(float value)
         return;
     }
     
-    float time = _timeTracker->realTime();
+    float time = _timeTracker.realTime();
     float timeSinceLastEntry = CLAMP(time - _timeLastEntryMade, 0, 10);
     float valueOverTime = value / timeSinceLastEntry;
     float fractionOfDuration  = CLAMP(timeSinceLastEntry / _duration, 0, 1);
@@ -40,7 +40,7 @@ void MovingAverage::update(float value)
         return;
     }
     
-    float time = _timeTracker->realTime();
+    float time = _timeTracker.realTime();
     float timeSinceLastEntry = CLAMP(time - _timeLastEntryMade, 0, 10);
     float fractionOfDuration  = CLAMP(timeSinceLastEntry / _duration, 0, 1);
     

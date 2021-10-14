@@ -8,24 +8,16 @@
 
 #include <GowEngine/GowEngine.hpp>
 
-#define DEFAULT_MAX_NUM_PLAYERS 4
+#define MAX_NUM_PLAYERS 4
 
-InputState::InputState() :
-_maxNumPlayers(DEFAULT_MAX_NUM_PLAYERS)
+InputState::InputState()
 {
-    _playerInputStates.resize(_maxNumPlayers);
-}
-
-void InputState::setMaxNumPlayers(uint8_t maxNumPlayers)
-{
-    _maxNumPlayers = maxNumPlayers;
-    _playerInputStates.resize(_maxNumPlayers);
+    _playerInputStates.resize(MAX_NUM_PLAYERS);
 }
 
 void InputState::write(OutputMemoryBitStream& ombs) const
 {
-    ombs.writeBits(_maxNumPlayers, 4);
-    for (uint8_t i = 0; i < _maxNumPlayers; ++i)
+    for (uint8_t i = 0; i < MAX_NUM_PLAYERS; ++i)
     {
         bool isInputAssigned = _playerInputStates[i]._playerID != 0;
         ombs.write(isInputAssigned);
@@ -38,11 +30,7 @@ void InputState::write(OutputMemoryBitStream& ombs) const
 
 void InputState::read(InputMemoryBitStream& imbs)
 {
-    uint8_t maxNumPlayers;
-    imbs.readBits(maxNumPlayers, 4);
-    setMaxNumPlayers(maxNumPlayers);
-    
-    for (uint8_t i = 0; i < _maxNumPlayers; ++i)
+    for (uint8_t i = 0; i < MAX_NUM_PLAYERS; ++i)
     {
         bool isInputAssigned;
         imbs.read(isInputAssigned);
@@ -55,8 +43,6 @@ void InputState::read(InputMemoryBitStream& imbs)
 
 void InputState::reset()
 {
-    _maxNumPlayers = DEFAULT_MAX_NUM_PLAYERS;
-    
     for (PlayerInputState& pis : _playerInputStates)
     {
         pis._playerID = 0;
@@ -68,7 +54,7 @@ bool InputState::isEqual(InputState* inputState) const
 {
     InputState* is = static_cast<InputState*>(inputState);
     
-    for (uint8_t i = 0; i < _maxNumPlayers; ++i)
+    for (uint8_t i = 0; i < MAX_NUM_PLAYERS; ++i)
     {
         if (is->_playerInputStates[i]._playerID != _playerInputStates[i]._playerID)
         {
@@ -88,9 +74,7 @@ void InputState::copyTo(InputState* inputState) const
 {
     InputState* is = static_cast<InputState*>(inputState);
     
-    is->_maxNumPlayers = _maxNumPlayers;
-    
-    for (uint8_t i = 0; i < _maxNumPlayers; ++i)
+    for (uint8_t i = 0; i < MAX_NUM_PLAYERS; ++i)
     {
         is->_playerInputStates[i]._playerID = _playerInputStates[i]._playerID;
         is->_playerInputStates[i]._inputState = _playerInputStates[i]._inputState;
@@ -101,7 +85,7 @@ void InputState::activateNextPlayer(uint8_t playerID)
 {
     assert(playerID != 0);
     
-    for (uint8_t i = 0; i < _maxNumPlayers; ++i)
+    for (uint8_t i = 0; i < MAX_NUM_PLAYERS; ++i)
     {
         if (_playerInputStates[i]._playerID == 0)
         {
@@ -113,7 +97,7 @@ void InputState::activateNextPlayer(uint8_t playerID)
 
 InputState::PlayerInputState* InputState::playerInputStateForID(uint8_t playerID)
 {
-    for (uint8_t i = 0; i < _maxNumPlayers; ++i)
+    for (uint8_t i = 0; i < MAX_NUM_PLAYERS; ++i)
     {
         if (_playerInputStates[i]._playerID == playerID)
         {
@@ -126,7 +110,7 @@ InputState::PlayerInputState* InputState::playerInputStateForID(uint8_t playerID
 
 bool InputState::isRequestingToAddLocalPlayer() const
 {
-    for (int i = 1; i < _maxNumPlayers; ++i)
+    for (int i = 1; i < MAX_NUM_PLAYERS; ++i)
     {
         if (_playerInputStates[i]._playerID == 0 &&
             _playerInputStates[i]._inputState > 0)

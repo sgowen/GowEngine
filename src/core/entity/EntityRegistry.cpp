@@ -17,9 +17,9 @@ _onEntityDeregisteredFunc(oedf)
 
 Entity* EntityRegistry::getEntityByID(uint32_t id) const
 {
-    auto q = _entityMap.find(id);
+    auto q = _entities.find(id);
     
-    if (q != _entityMap.end())
+    if (q != _entities.end())
     {
         return q->second;
     }
@@ -29,25 +29,25 @@ Entity* EntityRegistry::getEntityByID(uint32_t id) const
 
 void EntityRegistry::registerEntity(Entity* e)
 {
-    _entityMap.emplace(e->getID(), e);
+    _entities.emplace(e->getID(), e);
     
     _onEntityRegisteredFunc(e);
 }
 
 void EntityRegistry::deregisterEntity(Entity* e)
 {
-    _entityMap.erase(e->getID());
+    _entities.erase(e->getID());
     
     _onEntityDeregisteredFunc(e);
 }
 
 void EntityRegistry::deregisterAll()
 {
-    for (auto i = _entityMap.begin(); i != _entityMap.end(); )
+    for (auto i = _entities.begin(); i != _entities.end(); )
     {
         Entity* e = i->second;
         
-        i = _entityMap.erase(i);
+        i = _entities.erase(i);
         
         _onEntityDeregisteredFunc(e);
     }
@@ -55,5 +55,5 @@ void EntityRegistry::deregisterAll()
 
 std::map<uint32_t, Entity*>& EntityRegistry::getMap()
 {
-    return _entityMap;
+    return _entities;
 }

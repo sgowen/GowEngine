@@ -132,85 +132,9 @@ private:
     GLFWwindow* _window;
 };
 
-void GlfwMain::exec(EngineConfig& engineConfig, EngineState& initialEngineState)
+void runEngine(EngineConfig& ec, GLFWwindow* window)
 {
-    memset(joysticks, 0, sizeof(joysticks));
-
-    GLFWwindow* window;
-
-    glfwSetErrorCallback(error_callback);
-
-    if (!glfwInit())
-    {
-        exit(EXIT_FAILURE);
-    }
-
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 2);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
-
-    GLFWmonitor* monitor = nullptr;
-
-    int width = 800;
-    int height = 480;
-
-#if IS_RELEASE
-    monitor = glfwGetPrimaryMonitor();
-    if (monitor)
-    {
-        const GLFWvidmode* mode = glfwGetVideoMode(monitor);
-
-        glfwWindowHint(GLFW_RED_BITS, mode->redBits);
-        glfwWindowHint(GLFW_GREEN_BITS, mode->greenBits);
-        glfwWindowHint(GLFW_BLUE_BITS, mode->blueBits);
-        glfwWindowHint(GLFW_REFRESH_RATE, mode->refreshRate);
-
-        width = mode->width;
-        height = mode->height;
-    }
-#endif
-
-    window = glfwCreateWindow(width, height, engineConfig.getWindowTitle().c_str(), monitor, nullptr);
-    if (window == nullptr)
-    {
-        glfwTerminate();
-        exit(EXIT_FAILURE);
-    }
-    
-    for (int jid = GLFW_JOYSTICK_1; jid <= GLFW_JOYSTICK_LAST; ++jid)
-    {
-        if (glfwJoystickPresent(jid))
-        {
-            joysticks[joystick_count++] = jid;
-        }
-    }
-
-    glfwSetWindowIconifyCallback(window, window_iconify_callback);
-    glfwSetJoystickCallback(joystick_callback);
-    glfwSetMouseButtonCallback(window, mouse_button_callback);
-    glfwSetCursorPosCallback(window, mouse_cursor_pos_callback);
-    glfwSetScrollCallback(window, mouse_scroll_callback);
-    glfwSetKeyCallback(window, key_callback);
-
-    glfwMakeContextCurrent(window);
-#if IS_WINDOWS
-    gladLoadGL(glfwGetProcAddress);
-#elif IS_LINUX
-    glewInit();
-#endif
-    
-    glfwSwapInterval(1);
-    
-    runEngine(engineConfig, initialEngineState, window);
-
-    glfwDestroyWindow(window);
-
-    glfwTerminate();
-    exit(EXIT_SUCCESS);
-}
-
-void GlfwMain::runEngine(EngineConfig& engineConfig, EngineState& initialEngineState, GLFWwindow* window)
-{
-    Engine engine(engineConfig, initialEngineState);
+    Engine engine(ec);
     GlfwClipboardHandler clipboardHandler(window);
     engine.createDeviceDependentResources(&clipboardHandler);
     _engine = &engine;
@@ -310,6 +234,82 @@ void GlfwMain::runEngine(EngineConfig& engineConfig, EngineState& initialEngineS
     }
 
     engine.destroyDeviceDependentResources();
+}
+
+void GlfwMain::exec(EngineConfig& ec, const char* windowTitle)
+{
+    memset(joysticks, 0, sizeof(joysticks));
+
+    GLFWwindow* window;
+
+    glfwSetErrorCallback(error_callback);
+
+    if (!glfwInit())
+    {
+        exit(EXIT_FAILURE);
+    }
+
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 2);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
+
+    GLFWmonitor* monitor = nullptr;
+
+    int width = 800;
+    int height = 480;
+
+#if IS_RELEASE
+    monitor = glfwGetPrimaryMonitor();
+    if (monitor)
+    {
+        const GLFWvidmode* mode = glfwGetVideoMode(monitor);
+
+        glfwWindowHint(GLFW_RED_BITS, mode->redBits);
+        glfwWindowHint(GLFW_GREEN_BITS, mode->greenBits);
+        glfwWindowHint(GLFW_BLUE_BITS, mode->blueBits);
+        glfwWindowHint(GLFW_REFRESH_RATE, mode->refreshRate);
+
+        width = mode->width;
+        height = mode->height;
+    }
+#endif
+
+    window = glfwCreateWindow(width, height, windowTitle, monitor, nullptr);
+    if (window == nullptr)
+    {
+        glfwTerminate();
+        exit(EXIT_FAILURE);
+    }
+    
+    for (int jid = GLFW_JOYSTICK_1; jid <= GLFW_JOYSTICK_LAST; ++jid)
+    {
+        if (glfwJoystickPresent(jid))
+        {
+            joysticks[joystick_count++] = jid;
+        }
+    }
+
+    glfwSetWindowIconifyCallback(window, window_iconify_callback);
+    glfwSetJoystickCallback(joystick_callback);
+    glfwSetMouseButtonCallback(window, mouse_button_callback);
+    glfwSetCursorPosCallback(window, mouse_cursor_pos_callback);
+    glfwSetScrollCallback(window, mouse_scroll_callback);
+    glfwSetKeyCallback(window, key_callback);
+
+    glfwMakeContextCurrent(window);
+#if IS_WINDOWS
+    gladLoadGL(glfwGetProcAddress);
+#elif IS_LINUX
+    glewInit();
+#endif
+    
+    glfwSwapInterval(1);
+    
+    runEngine(ec, window);
+
+    glfwDestroyWindow(window);
+
+    glfwTerminate();
+    exit(EXIT_SUCCESS);
 }
 
 #endif /* IS_DESKTOP */

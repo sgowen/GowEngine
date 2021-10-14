@@ -85,14 +85,14 @@ void Box2DWorld::recallCache()
     }
 }
 
-void Box2DWorld::stepPhysics(TimeTracker* tt)
+void Box2DWorld::stepPhysics(TimeTracker& tt)
 {
     static int32 velocityIterations = 6;
     static int32 positionIterations = 2;
     
     // Instruct the world to perform a single step of simulation.
     // It is generally best to keep the time step and iterations fixed.
-    _world->Step(tt->_frameRate, velocityIterations, positionIterations);
+    _world->Step(tt._frameRate, velocityIterations, positionIterations);
 }
 
 std::vector<Entity*> Box2DWorld::update()
@@ -166,15 +166,15 @@ void Box2DWorld::addEntity(Entity *e)
 {
     assert(!e->isPlayer() && !e->isDynamic());
     
-    Box2DPhysicsController* epc = e->physicsController<Box2DPhysicsController>();
-    epc->initPhysics(*_world);
-    
     if (e->isLayer())
     {
         _layers.push_back(e);
     }
     else if (e->isStatic())
     {
+        Box2DPhysicsController* epc = e->physicsController<Box2DPhysicsController>();
+        epc->initPhysics(*_world);
+        
         _staticEntities.push_back(e);
     }
 }
@@ -202,8 +202,11 @@ void Box2DWorld::removeEntity(Entity* e, std::vector<Entity*>& entities)
         Entity* entityToDelete = *i;
         if (entityToDelete == e)
         {
-            Box2DPhysicsController* epc = entityToDelete->physicsController<Box2DPhysicsController>();
-            epc->deinitPhysics();
+            if (!entityToDelete->isLayer())
+            {
+                Box2DPhysicsController* epc = entityToDelete->physicsController<Box2DPhysicsController>();
+                epc->deinitPhysics();
+            }
             
             delete entityToDelete;
             
@@ -218,8 +221,11 @@ void Box2DWorld::removeAllEntities(std::vector<Entity*>& entities)
     for (std::vector<Entity*>::iterator i = entities.begin(); i != entities.end(); )
     {
         Entity* entityToDelete = *i;
-        Box2DPhysicsController* epc = entityToDelete->physicsController<Box2DPhysicsController>();
-        epc->deinitPhysics();
+        if (!entityToDelete->isLayer())
+        {
+            Box2DPhysicsController* epc = entityToDelete->physicsController<Box2DPhysicsController>();
+            epc->deinitPhysics();
+        }
         
         delete entityToDelete;
         

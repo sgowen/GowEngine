@@ -22,7 +22,6 @@ public:
     
     void write(OutputMemoryBitStream& ombs) const;
     void read(InputMemoryBitStream& imbs);
-    bool isEqual(const Move* move) const;
     InputState* inputState() const;
     uint32_t getTimestamp() const;
     void setTimestamp(uint32_t timeStamp);

@@ -16,81 +16,81 @@ Entity* EntityManager::createEntity(EntityInstanceDef eid)
 
 EntityDef& EntityManager::getEntityDef(uint32_t fourCCName)
 {
-    auto q = _entityDescriptorsMap.find(fourCCName);
-    assert(q != _entityDescriptorsMap.end());
+    auto q = _entityDescriptors.find(fourCCName);
+    assert(q != _entityDescriptors.end());
     return q->second;
 }
 
 void EntityManager::registerController(std::string name, EntityControllerCreationFunc func)
 {
     assert(func != nullptr);
-    _entityControllerCreationFunctionMap[name] = func;
+    _entityControllerCreationFunctions[name] = func;
 }
 
 EntityController* EntityManager::createEntityController(EntityDef& ed, Entity* e)
 {
-    EntityControllerCreationFunc func = _entityControllerCreationFunctionMap[ed._controller];
+    EntityControllerCreationFunc func = _entityControllerCreationFunctions[ed._controller];
     assert(func != nullptr);
     return func(e);
 }
 
 const std::map<std::string, EntityControllerCreationFunc>& EntityManager::getEntityControllerMap()
 {
-    return _entityControllerCreationFunctionMap;
+    return _entityControllerCreationFunctions;
 }
 
 void EntityManager::registerNetworkController(std::string name, EntityNetworkControllerCreationFunc func)
 {
     assert(func != nullptr);
-    _entityNetworkControllerCreationFunctionMap[name] = func;
+    _entityNetworkControllerCreationFunctions[name] = func;
 }
 
 EntityNetworkController* EntityManager::createEntityNetworkController(EntityDef& ed, Entity* e)
 {
-    EntityNetworkControllerCreationFunc func = _entityNetworkControllerCreationFunctionMap[ed._networkController];
+    EntityNetworkControllerCreationFunc func = _entityNetworkControllerCreationFunctions[ed._networkController];
     assert(func != nullptr);
     return func(e);
 }
 
 const std::map<std::string, EntityNetworkControllerCreationFunc>& EntityManager::getEntityNetworkControllerMap()
 {
-    return _entityNetworkControllerCreationFunctionMap;
+    return _entityNetworkControllerCreationFunctions;
 }
 
 void EntityManager::registerPhysicsController(std::string name, EntityPhysicsControllerCreationFunc func)
 {
     assert(func != nullptr);
-    _entityPhysicsControllerCreationFunctionMap[name] = func;
+    _entityPhysicsControllerCreationFunctions[name] = func;
 }
 
 EntityPhysicsController* EntityManager::createEntityPhysicsController(EntityDef& ed, Entity* e)
 {
-    EntityPhysicsControllerCreationFunc func = _entityPhysicsControllerCreationFunctionMap[ed._physicsController];
+    EntityPhysicsControllerCreationFunc func = _entityPhysicsControllerCreationFunctions[ed._physicsController];
     assert(func != nullptr);
     return func(e);
 }
 
 const std::map<std::string, EntityPhysicsControllerCreationFunc>& EntityManager::getEntityPhysicsControllerMap()
 {
-    return _entityPhysicsControllerCreationFunctionMap;
+    return _entityPhysicsControllerCreationFunctions;
 }
 
 void EntityManager::registerRenderController(std::string name, EntityRenderControllerCreationFunc func)
 {
     assert(func != nullptr);
-    _entityRenderControllerCreationFunctionMap[name] = func;
+    _entityRenderControllerCreationFunctions[name] = func;
 }
 
 EntityRenderController* EntityManager::createEntityRenderController(EntityDef& ed, Entity* e)
 {
-    EntityRenderControllerCreationFunc func = _entityRenderControllerCreationFunctionMap[ed._renderController];
+    EntityRenderControllerCreationFunc func = _entityRenderControllerCreationFunctions[ed._renderController];
     assert(func != nullptr);
     return func(e);
 }
 
 const std::map<std::string, EntityRenderControllerCreationFunc>& EntityManager::getEntityRenderControllerMap()
 {
-    return _entityRenderControllerCreationFunctionMap;
+    return _entityRenderControllerCreationFunctions;
 }
 
 EntityManager::EntityManager()

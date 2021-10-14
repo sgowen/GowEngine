@@ -1,5 +1,5 @@
 //
-//  EntityLayout.hpp
+//  EntityLayoutManager.hpp
 //  GowEngine
 //
 //  Created by Stephen Gowen on 1/10/18.
@@ -48,15 +48,26 @@ struct EntityLayoutDef
     }
 };
 
-struct EntityLayout
+#define ENTITY_LAYOUT_MGR EntityLayoutManager::getInstance()
+
+class EntityLayoutManager
 {
+    friend class EntityLayoutManagerLoader;
+    
+public:
+    static EntityLayoutManager& getInstance()
+    {
+        static EntityLayoutManager ret = EntityLayoutManager();
+        return ret;
+    }
+    
+    EntityLayoutDef& entityLayoutDef(uint32_t key);
+    
+private:
     std::map<uint32_t, EntityLayoutDef> _entityLayouts;
     
-    EntityLayoutDef& entityLayoutDef(uint32_t key)
-    {
-        auto q = _entityLayouts.find(key);
-        assert(q != _entityLayouts.end());
-
-        return q->second;
-    }
+    EntityLayoutManager();
+    ~EntityLayoutManager() {}
+    EntityLayoutManager(const EntityLayoutManager&);
+    EntityLayoutManager& operator=(const EntityLayoutManager&);
 };

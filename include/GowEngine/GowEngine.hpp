@@ -60,7 +60,7 @@
 /// rapidjson Implementation
 #include "deps/rapidjson/AssetsLoader.hpp"
 #include "deps/rapidjson/ConfigLoader.hpp"
-#include "deps/rapidjson/EntityLayoutLoader.hpp"
+#include "deps/rapidjson/EntityLayoutManagerLoader.hpp"
 #include "deps/rapidjson/EntityManagerLoader.hpp"
 #include "deps/rapidjson/RapidJSONUtil.hpp"
 #include "deps/rapidjson/RendererLoader.hpp"
@@ -98,6 +98,7 @@
 
 /// Core Common
 #include "core/common/Config.hpp"
+#include "core/common/Constants.hpp"
 #include "core/common/FPSUtil.hpp"
 #include "core/common/FixedSizePool.hpp"
 #include "core/common/InstanceRegistry.hpp"
@@ -120,7 +121,7 @@
 #include "core/entity/Entity.hpp"
 #include "core/entity/EntityController.hpp"
 #include "core/entity/EntityIDManager.hpp"
-#include "core/entity/EntityLayout.hpp"
+#include "core/entity/EntityLayoutManager.hpp"
 #include "core/entity/EntityManager.hpp"
 #include "core/entity/EntityNetworkController.hpp"
 #include "core/entity/EntityPhysicsController.hpp"

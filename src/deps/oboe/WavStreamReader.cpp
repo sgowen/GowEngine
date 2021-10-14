@@ -16,15 +16,15 @@ _wavChunk(0),
 _fmtChunk(0),
 _dataChunk(0),
 _audioDataStartPos(-1),
-_chunkMap(new std::map<RiffID, WavChunkHeader*>())
+_chunks(new std::map<RiffID, WavChunkHeader*>())
 {
     // Empty
 }
 
 WavStreamReader::~WavStreamReader()
 {
-    STLUtil::cleanUpMapOfPointers(*_chunkMap);
-    delete _chunkMap;
+    STLUtil::cleanUpMapOfPointers(*_chunks);
+    delete _chunks;
 }
 
 void WavStreamReader::parse()
@@ -67,7 +67,7 @@ void WavStreamReader::parse()
             _inputStream->advance(chunk->_chunkSize);
         }
 
-        (*_chunkMap)[tag] = chunk;
+        (*_chunks)[tag] = chunk;
     }
 
     if (_dataChunk != 0)

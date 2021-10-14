@@ -25,9 +25,9 @@ public:
     template<typename T>
     T* get(uint32_t key)
     {
-        auto q = _instanceMap.find(key);
+        auto q = _instances.find(key);
         
-        assert(q != _instanceMap.end());
+        assert(q != _instances.end());
         
         void* ret = q->second;
         
@@ -36,11 +36,11 @@ public:
     
     void registerInstance(uint32_t key, void* instance)
     {
-        _instanceMap[key] = instance;
+        _instances[key] = instance;
     }
     
 private:
-    std::map<uint32_t, void*> _instanceMap;
+    std::map<uint32_t, void*> _instances;
     
     InstanceRegistry() {}
     ~InstanceRegistry() {}

@@ -10,15 +10,11 @@
 
 NetworkServer* NetworkServer::s_instance = nullptr;
 
-void NetworkServer::create(uint16_t port, uint8_t maxNumPlayers, OnEntityRegisteredFunc oerf, OnEntityDeregisteredFunc oedf, HandleNewClientFunc hncf, HandleLostClientFunc hlcf)
+void NetworkServer::create(uint16_t port, uint8_t maxNumPlayers, EntityIDManager& eidm, TimeTracker& tt, OnEntityRegisteredFunc oerf, OnEntityDeregisteredFunc oedf, HandleNewClientFunc hncf, HandleLostClientFunc hlcf)
 {
     assert(s_instance == nullptr);
     
-    INST_REG.get<TimeTracker>(INSK_TIME_SRVR)->reset();
-    INST_REG.get<EntityIDManager>(INSK_EID_SRVR)->resetNextNetworkEntityID();
-    INST_REG.get<EntityIDManager>(INSK_EID_SRVR)->resetNextPlayerEntityID();
-    
-    s_instance = new NetworkServer(port, maxNumPlayers, oerf, oedf, hncf, hlcf);
+    s_instance = new NetworkServer(port, maxNumPlayers, eidm, tt, oerf, oedf, hncf, hlcf);
 }
 
 NetworkServer * NetworkServer::getInstance()
@@ -40,8 +36,7 @@ void NetworkServer::processIncomingPackets()
     
     std::vector<ClientProxy*> clientsToDC;
     
-    TimeTracker* tt = INST_REG.get<TimeTracker>(INSK_TIME_SRVR);
-    uint32_t minAllowedLastPacketFromClientTime = tt->_time < NW_CLNT_TIMEOUT ? 0 : tt->_time - NW_CLNT_TIMEOUT;
+    uint32_t minAllowedLastPacketFromClientTime = _timeTracker._time < NW_CLNT_TIMEOUT ? 0 : _timeTracker._time - NW_CLNT_TIMEOUT;
     for (auto& pair: _addressHashToClientMap)
     {
         if (pair.second.getLastPacketFromClientTime() < minAllowedLastPacketFromClientTime)
@@ -62,8 +57,7 @@ void NetworkServer::sendOutgoingPackets()
     for (auto& pair: _addressHashToClientMap)
     {
         ClientProxy& cp = pair.second;
-        TimeTracker* tt = INST_REG.get<TimeTracker>(INSK_TIME_SRVR);
-        cp.getDeliveryNotificationManager().processTimedOutPackets(tt->_time);
+        cp.getDeliveryNotificationManager().processTimedOutPackets();
         
         sendStatePacketToClient(cp);
     }
@@ -76,7 +70,7 @@ void NetworkServer::registerEntity(Entity* e)
 
 void NetworkServer::registerNewEntity(uint32_t key, uint32_t x, uint32_t y)
 {
-    EntityInstanceDef eid(INST_REG.get<EntityIDManager>(INSK_EID_SRVR)->getNextNetworkEntityID(), key, x, y, true);
+    EntityInstanceDef eid(_entityIDManager.getNextNetworkEntityID(), key, x, y, true);
     Entity* e = ENTITY_MGR.createEntity(eid);
     registerEntity(e);
 }
@@ -295,7 +289,7 @@ void NetworkServer::handlePacketFromNewClient(InputMemoryBitStream& imbs, Socket
         
         _addressHashToClientMap.emplace(std::piecewise_construct,
                   std::forward_as_tuple(fromAddress->getHash()),
-                  std::forward_as_tuple(_entityRegistry, fromAddress, name, _nextPlayerID));
+                  std::forward_as_tuple(_entityRegistry, _timeTracker, fromAddress, name, _nextPlayerID));
         ClientProxy& cp = _addressHashToClientMap.at(fromAddress->getHash());
         std::string username = cp.getUsername();
         uint8_t playerID = cp.getPlayerID();
@@ -525,9 +519,8 @@ void NetworkServer::handleClientDisconnected(ClientProxy& cp)
     {
         deregisterAllEntities();
         
-        INST_REG.get<TimeTracker>(INSK_TIME_SRVR)->reset();
-        INST_REG.get<EntityIDManager>(INSK_EID_SRVR)->resetNextNetworkEntityID();
-        INST_REG.get<EntityIDManager>(INSK_EID_SRVR)->resetNextPlayerEntityID();
+        _entityIDManager.resetNextNetworkEntityID();
+        _entityIDManager.resetNextPlayerEntityID();
     }
 }
 
@@ -558,8 +551,10 @@ void cb_nw_srvr_onEntityDeregistered(Entity* e)
     NW_SRVR->onEntityDeregistered(e);
 }
 
-NetworkServer::NetworkServer(uint16_t port, uint8_t maxNumPlayers, OnEntityRegisteredFunc oerf, OnEntityDeregisteredFunc oedf, HandleNewClientFunc hncf, HandleLostClientFunc hlcf) :
-_packetHandler(INST_REG.get<TimeTracker>(INSK_TIME_SRVR), port, cb_nw_srvr_processPacket),
+NetworkServer::NetworkServer(uint16_t port, uint8_t maxNumPlayers, EntityIDManager& eidm, TimeTracker& tt, OnEntityRegisteredFunc oerf, OnEntityDeregisteredFunc oedf, HandleNewClientFunc hncf, HandleLostClientFunc hlcf) :
+_entityIDManager(eidm),
+_timeTracker(tt),
+_packetHandler(_timeTracker, port, cb_nw_srvr_processPacket),
 _onEntityRegisteredFunc(oerf),
 _onEntityDeregisteredFunc(oedf),
 _handleNewClientFunc(hncf),

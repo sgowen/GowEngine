@@ -33,7 +33,6 @@ public:
     
     InputState();
     
-    void setMaxNumPlayers(uint8_t maxNumPlayers);
     void write(OutputMemoryBitStream& ombs) const;
     void read(InputMemoryBitStream& imbs);
     void reset();
@@ -46,5 +45,4 @@ public:
     
 private:
     std::vector<PlayerInputState> _playerInputStates;
-    uint8_t _maxNumPlayers;
 };

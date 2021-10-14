@@ -40,11 +40,6 @@ void Move::read(InputMemoryBitStream& imbs)
     _inputState->read(imbs);
 }
 
-bool Move::isEqual(const Move* move) const
-{
-    return _inputState->isEqual(move->inputState());
-}
-
 InputState* Move::inputState() const
 {
     return _inputState;

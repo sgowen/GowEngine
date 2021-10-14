@@ -8,14 +8,14 @@
 
 #include <GowEngine/GowEngine.hpp>
 
-PacketHandler::PacketHandler(TimeTracker* tt, uint16_t port, ProcessPacketFunc ppf) :
+PacketHandler::PacketHandler(TimeTracker& tt, uint16_t port, ProcessPacketFunc ppf) :
+_timeTracker(tt),
+_bytesReceivedPerSecond(tt, 1.0f),
+_bytesSentPerSecond(tt, 1.0f),
 _socket(nullptr),
 _socketAddress(INADDR_ANY, port),
-_timeTracker(tt),
 _processPacketFunc(ppf),
-_bytesSentThisFrame(0),
-_bytesReceivedPerSecond(tt, 1.0f),
-_bytesSentPerSecond(tt, 1.0f)
+_bytesSentThisFrame(0)
 {
     // Empty
 }
@@ -92,7 +92,7 @@ void PacketHandler::readIncomingPacketsIntoQueue()
             ++receivedPacketCount;
             totalReadByteCount += readByteCount;
             
-            _packetQueue.emplace(_timeTracker->_time, imbs, fromAddress);
+            _packetQueue.emplace(_timeTracker._time, imbs, fromAddress);
         }
     }
 
@@ -107,7 +107,7 @@ void PacketHandler::processQueuedPackets()
     while (!_packetQueue.empty())
     {
         ReceivedPacket& nextPacket = _packetQueue.front();
-        if (_timeTracker->_time >= nextPacket.getReceivedTime())
+        if (_timeTracker._time >= nextPacket.getReceivedTime())
         {
             _processPacketFunc(nextPacket.getPacketBuffer(), &nextPacket.getFromAddress());
             _packetQueue.pop();
