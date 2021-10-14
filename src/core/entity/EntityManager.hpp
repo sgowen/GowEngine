@@ -58,7 +58,7 @@ public:
     const std::map<std::string, EntityRenderControllerCreationFunc>& getEntityRenderControllerMap();
     
 private:
-    std::map<uint32_t, EntityDef> _entityDescriptors;
+    std::map<uint32_t, EntityDef> _entityDefs;
     std::map<std::string, EntityControllerCreationFunc> _entityControllerCreationFunctions;
     std::map<std::string, EntityNetworkControllerCreationFunc> _entityNetworkControllerCreationFunctions;
     std::map<std::string, EntityPhysicsControllerCreationFunc> _entityPhysicsControllerCreationFunctions;

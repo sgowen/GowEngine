@@ -16,8 +16,8 @@ Entity* EntityManager::createEntity(EntityInstanceDef eid)
 
 EntityDef& EntityManager::getEntityDef(uint32_t fourCCName)
 {
-    auto q = _entityDescriptors.find(fourCCName);
-    assert(q != _entityDescriptors.end());
+    auto q = _entityDefs.find(fourCCName);
+    assert(q != _entityDefs.end());
     return q->second;
 }
 

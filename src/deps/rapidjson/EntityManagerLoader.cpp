@@ -19,7 +19,7 @@ void EntityManagerLoader::initWithJSONFile(EntityManager& em, std::string filePa
 
 void EntityManagerLoader::initWithJSON(EntityManager& em, const char* json)
 {
-    em._entityDescriptors.clear();
+    em._entityDefs.clear();
     
     using namespace rapidjson;
     
@@ -35,7 +35,7 @@ void EntityManagerLoader::initWithJSON(EntityManager& em, const char* json)
         std::string keyStr = i->name.GetString();
         uint32_t key = StringUtil::fourCharFromString(keyStr);
         
-        assert(em._entityDescriptors.find(key) == em._entityDescriptors.end());
+        assert(em._entityDefs.find(key) == em._entityDefs.end());
         
         std::string name = RapidJSONUtil::getString(iv, "name");
         std::string keyName = keyStr;
@@ -197,6 +197,6 @@ void EntityManagerLoader::initWithJSON(EntityManager& em, const char* json)
         }
         NetworkData nd(networkDataGroups);
         
-        em._entityDescriptors.emplace(key, EntityDef{key, name, keyName, controller, networkController, physicsController, renderController, textureMappings, soundMappings, fixtures, bodyFlags, width, height, metadata, nd});
+        em._entityDefs.emplace(key, EntityDef{key, name, keyName, controller, networkController, physicsController, renderController, textureMappings, soundMappings, fixtures, bodyFlags, width, height, metadata, nd});
     }
 }
