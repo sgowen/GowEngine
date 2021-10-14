@@ -69,8 +69,3 @@ void Move::setIndex(uint32_t index)
 {
     _index = index;
 }
-
-void Move::copyInputState(InputState* inputState)
-{
-    inputState->copyTo(_inputState);
-}

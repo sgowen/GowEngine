@@ -28,7 +28,6 @@ public:
     void setTimestamp(uint32_t timeStamp);
     uint32_t getIndex() const;
     void setIndex(uint32_t index);
-    void copyInputState(InputState* inputState);
     
 private:
     InputState* _inputState;

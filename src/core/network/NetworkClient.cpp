@@ -223,6 +223,8 @@ void NetworkClient::updateSayingHello()
     
     if (time > _timeOfLastHello + NW_CLNT_TIME_BETWEEN_HELLOS)
     {
+        // FIXME, player name length (and this packet size)
+        // should be configurable
         OutputMemoryBitStream ombs(64);
         ombs.writeBits(static_cast<uint8_t>(NWPT_HELLO), 4);
         ombs.writeSmall(getPlayerName());
@@ -334,26 +336,13 @@ void NetworkClient::updateSendingInputPacket(MoveList& ml)
     {
         int moveCount = ml.getNumMovesAfterTimestamp(_lastMoveProcessedByServerTimestamp);
         assert(moveCount <= NW_CLNT_MAX_NUM_MOVES);
-        ombs.writeBits(moveCount, 4);
+        ombs.writeBits(moveCount, 2);
         
         std::deque<Move>::const_iterator moveItr = ml.begin();
         
-        const Move* moveToCopy = nullptr;
         for (int i = 0; i < moveCount; ++i, ++moveItr)
         {
-            if (moveToCopy != nullptr && moveItr->isEqual(moveToCopy))
-            {
-                ombs.write(true);
-                ombs.write(moveItr->getTimestamp());
-                ombs.write(moveItr->getIndex());
-            }
-            else
-            {
-                ombs.write(false);
-                moveItr->write(ombs);
-                
-                moveToCopy = &(*moveItr);
-            }
+            moveItr->write(ombs);
         }
     }
     

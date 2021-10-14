@@ -37,11 +37,6 @@ public:
     static NetworkServer* getInstance();
     static void destroy();
     
-    static void cb_inputStateRelease(InputState* is)
-    {
-        s_instance->_poolInputState.free(is);
-    }
-    
     void processIncomingPackets();
     void sendOutgoingPackets();
     void registerEntity(Entity* e);

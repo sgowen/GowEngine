@@ -251,11 +251,11 @@ void NetworkServer::processPacket(InputMemoryBitStream& imbs, SocketAddress* fro
 
 void NetworkServer::removeProcessedMovesForPlayer(uint8_t playerID)
 {
-    ClientProxy* cp = NW_SRVR->getClientProxy(playerID);
+    ClientProxy* cp = getClientProxy(playerID);
     assert(cp != nullptr);
 
     MoveList& ml = cp->getUnprocessedMoveList();
-    ml.removeProcessedMoves(cb_inputStateRelease);
+    ml.removeProcessedMoves(_poolInputState);
 }
 
 void NetworkServer::onMovesProcessed(uint8_t moveCount)
@@ -416,48 +416,19 @@ void NetworkServer::handleInputPacket(ClientProxy& cp, InputMemoryBitStream& imb
     }
     
     uint8_t moveCount = 0;
-    imbs.readBits(moveCount, 4);
-    
-	InputState* referenceInputState = nullptr;
-	bool isRefInputStateOrphaned = false;
+    imbs.readBits(moveCount, 2);
     
     for (; moveCount > 0; --moveCount)
     {
         InputState* is = _poolInputState.obtain();
         is->reset();
         Move move = Move(is);
-        
-        bool isCopy;
-        imbs.read(isCopy);
-        if (isCopy)
-        {
-            assert(referenceInputState != nullptr);
-            
-            uint32_t timeStamp;
-            imbs.read(timeStamp);
-            move.setTimestamp(timeStamp);
-            uint32_t index;
-            imbs.read(index);
-            move.setIndex(index);
-            move.copyInputState(referenceInputState);
-        }
-        else
-        {
-            move.read(imbs);
-        }
+        move.read(imbs);
 
-		if (isRefInputStateOrphaned)
-		{
-            cb_inputStateRelease(referenceInputState);
-		}
-
-		referenceInputState = move.inputState();
-        isRefInputStateOrphaned = !cp.getUnprocessedMoveList().addMoveIfNew(move);
-    }
-    
-    if (isRefInputStateOrphaned)
-    {
-        cb_inputStateRelease(referenceInputState);
+        if (!cp.getUnprocessedMoveList().addMoveIfNew(move))
+        {
+            _poolInputState.free(is);
+        }
     }
 }
 

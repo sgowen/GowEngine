@@ -46,16 +46,16 @@ void MoveList::markMoveAsProcessed(Move* move)
     _lastProcessedMoveTimestamp = move->getTimestamp();
 }
 
-void MoveList::removeProcessedMoves(InputStateReleaseFunc isrf)
+void MoveList::removeProcessedMoves(Pool<InputState>& inputStatePool)
 {
-    removeProcessedMovesAtTimestamp(_lastProcessedMoveTimestamp, isrf);
+    removeProcessedMovesAtTimestamp(_lastProcessedMoveTimestamp, inputStatePool);
 }
 
-void MoveList::removeProcessedMovesAtTimestamp(uint32_t lastMoveProcessedOnServerTimestamp, InputStateReleaseFunc isrf)
+void MoveList::removeProcessedMovesAtTimestamp(uint32_t lastMoveProcessedOnServerTimestamp, Pool<InputState>& inputStatePool)
 {
     while (!_moves.empty() && _moves.front().getTimestamp() <= lastMoveProcessedOnServerTimestamp)
     {
-        isrf(_moves.front().inputState());
+        inputStatePool.free(_moves.front().inputState());
 
         _moves.pop_front();
     }
