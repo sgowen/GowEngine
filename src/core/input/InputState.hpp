@@ -18,9 +18,7 @@ class InputState
 {
 public:
     class PlayerInputState
-    {
-        friend class InputState;
-        
+    {        
     public:
         uint8_t _playerID;
         uint16_t _inputState;
