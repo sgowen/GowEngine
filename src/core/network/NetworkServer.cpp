@@ -126,7 +126,7 @@ int NetworkServer::getMoveCount()
 //    }
 //    return ret;
     
-    // Remote player advantage
+    // Remote player advantage, but no moves are skipped
     int lowestMoveCount = 0;
 
     ClientProxy* cp = getClientProxy(1);
