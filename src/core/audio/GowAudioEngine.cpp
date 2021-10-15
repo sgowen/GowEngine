@@ -58,7 +58,7 @@ void GowAudioEngine::playSound(std::string soundID, float volume, bool isLooping
         return;
     }
     
-    SoundWrapper* sw = ASSETS.sound(soundID);
+    SoundWrapper* sw = ASSETS_MGR.sound(soundID);
     if (sw == nullptr)
     {
         return;
@@ -78,7 +78,7 @@ void GowAudioEngine::stopSound(std::string soundID)
         return;
     }
     
-    SoundWrapper* sw = ASSETS.sound(soundID);
+    SoundWrapper* sw = ASSETS_MGR.sound(soundID);
     if (sw == nullptr)
     {
         return;
@@ -98,7 +98,7 @@ void GowAudioEngine::pauseSound(std::string soundID)
         return;
     }
     
-    SoundWrapper* sw = ASSETS.sound(soundID);
+    SoundWrapper* sw = ASSETS_MGR.sound(soundID);
     if (sw == nullptr)
     {
         return;
@@ -118,7 +118,7 @@ void GowAudioEngine::resumeSound(std::string soundID)
         return;
     }
     
-    SoundWrapper* sw = ASSETS.sound(soundID);
+    SoundWrapper* sw = ASSETS_MGR.sound(soundID);
     if (sw == nullptr)
     {
         return;
@@ -138,7 +138,7 @@ void GowAudioEngine::stopAllSounds()
         return;
     }
     
-    std::map<std::string, SoundWrapper*>& sounds = ASSETS.sounds();
+    std::map<std::string, SoundWrapper*>& sounds = ASSETS_MGR.sounds();
     for (auto& pair : sounds)
     {
         for (auto* s : pair.second->getSounds())
@@ -155,7 +155,7 @@ void GowAudioEngine::pauseAllSounds()
         return;
     }
     
-    std::map<std::string, SoundWrapper*>& sounds = ASSETS.sounds();
+    std::map<std::string, SoundWrapper*>& sounds = ASSETS_MGR.sounds();
     for (auto& pair : sounds)
     {
         for (auto* s : pair.second->getSounds())
@@ -175,7 +175,7 @@ void GowAudioEngine::resumeAllSounds()
         return;
     }
     
-    std::map<std::string, SoundWrapper*>& sounds = ASSETS.sounds();
+    std::map<std::string, SoundWrapper*>& sounds = ASSETS_MGR.sounds();
     for (auto& pair : sounds)
     {
         for (auto* s : pair.second->getSounds())
@@ -190,7 +190,7 @@ void GowAudioEngine::resumeAllSounds()
 
 void GowAudioEngine::playMusic(float volume, bool isLooping)
 {
-    SoundWrapper* music = ASSETS.music();
+    SoundWrapper* music = ASSETS_MGR.music();
     if (_musicDisabled || music == nullptr)
     {
         return;
@@ -204,7 +204,7 @@ void GowAudioEngine::playMusic(float volume, bool isLooping)
 
 void GowAudioEngine::setMusicVolume(float volume)
 {
-    SoundWrapper* music = ASSETS.music();
+    SoundWrapper* music = ASSETS_MGR.music();
     if (_musicDisabled || music == nullptr)
     {
         return;
@@ -215,7 +215,7 @@ void GowAudioEngine::setMusicVolume(float volume)
 
 void GowAudioEngine::stopMusic()
 {
-    SoundWrapper* music = ASSETS.music();
+    SoundWrapper* music = ASSETS_MGR.music();
     if (_musicDisabled || music == nullptr)
     {
         return;
@@ -226,7 +226,7 @@ void GowAudioEngine::stopMusic()
 
 void GowAudioEngine::pauseMusic()
 {
-    SoundWrapper* music = ASSETS.music();
+    SoundWrapper* music = ASSETS_MGR.music();
     if (_musicDisabled || music == nullptr)
     {
         return;
@@ -237,7 +237,7 @@ void GowAudioEngine::pauseMusic()
 
 void GowAudioEngine::resumeMusic()
 {
-    SoundWrapper* music = ASSETS.music();
+    SoundWrapper* music = ASSETS_MGR.music();
     if (_musicDisabled || music == nullptr)
     {
         return;
@@ -248,7 +248,7 @@ void GowAudioEngine::resumeMusic()
 
 bool GowAudioEngine::isMusicPlaying()
 {
-    SoundWrapper* music = ASSETS.music();
+    SoundWrapper* music = ASSETS_MGR.music();
     if (isMusicDisabled() ||
         music == nullptr)
     {

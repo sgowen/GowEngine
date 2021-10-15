@@ -17,6 +17,9 @@ _screenRenderer()
 
 void Renderer::createDeviceDependentResources()
 {
+    _box2DDebugRenderer.createDeviceDependentResources();
+    _screenRenderer.createDeviceDependentResources();
+    
     for (auto& pair : _circleBatchers)
     {
         pair.second.createDeviceDependentResources();
@@ -29,7 +32,7 @@ void Renderer::createDeviceDependentResources()
     
     for (auto& pair : _framebuffers)
     {
-        OGL.loadFramebuffer(pair.second);
+        pair.second.createDeviceDependentResources();
     }
     
     for (auto& pair : _rektangleBatchers)
@@ -46,9 +49,6 @@ void Renderer::createDeviceDependentResources()
     {
         pair.second.createDeviceDependentResources();
     }
-    
-    _box2DDebugRenderer.createDeviceDependentResources();
-    _screenRenderer.createDeviceDependentResources();
 }
 
 void Renderer::onWindowSizeChanged(uint16_t screenWidth, uint16_t screenHeight)
@@ -58,6 +58,9 @@ void Renderer::onWindowSizeChanged(uint16_t screenWidth, uint16_t screenHeight)
 
 void Renderer::destroyDeviceDependentResources()
 {
+    _box2DDebugRenderer.destroyDeviceDependentResources();
+    _screenRenderer.destroyDeviceDependentResources();
+    
     for (auto& pair : _circleBatchers)
     {
         pair.second.destroyDeviceDependentResources();
@@ -70,7 +73,7 @@ void Renderer::destroyDeviceDependentResources()
     
     for (auto& pair : _framebuffers)
     {
-        OGL.unloadFramebuffer(pair.second);
+        pair.second.destroyDeviceDependentResources();
     }
     
     for (auto& pair : _rektangleBatchers)
@@ -87,23 +90,20 @@ void Renderer::destroyDeviceDependentResources()
     {
         pair.second.destroyDeviceDependentResources();
     }
-    
-    _box2DDebugRenderer.destroyDeviceDependentResources();
-    _screenRenderer.destroyDeviceDependentResources();
 }
 
 void Renderer::renderLoadingScreen()
 {
     clearFramebuffer();
     
-    if (!ASSETS.isShaderLoaded("texture") ||
-        !ASSETS.isTextureLoaded("texture_font"))
+    if (!ASSETS_MGR.isShaderLoaded("texture") ||
+        !ASSETS_MGR.isTextureLoaded("texture_font"))
     {
         return;
     }
     
     FontBatcher& fb = fontBatcher("main");
-    Shader& s = ASSETS.shader("texture");
+    Shader& s = ASSETS_MGR.shader("texture");
     fb.begin();
     fb.addText(*this, "Loading...", 2, 0.98f, 0.02f, 0.012f);
     fb.end(*this, s);
@@ -192,7 +192,7 @@ void Renderer::rektangleBatcherEnd(const Color& c, std::string matrixKey, std::s
 {
     RektangleBatcher& rb = rektangleBatcher(rektangleBatcherKey);
     Matrix& m = matrix(matrixKey);
-    Shader& s = ASSETS.shader(shaderKey);
+    Shader& s = ASSETS_MGR.shader(shaderKey);
     
     rb.end(s, m._matrix, c);
 }
@@ -201,9 +201,9 @@ void Renderer::renderSprite(std::string textureKey, std::string textureRegionKey
 {
     SpriteBatcher& sb = spriteBatcher(spriteBatcherKey);
     Matrix& m = matrix(matrixKey);
-    Shader& s = ASSETS.shader(shaderKey);
-    Texture& t = ASSETS.texture(textureKey);
-    TextureRegion& tr = ASSETS.textureRegion(textureRegionKey, stateTime);
+    Shader& s = ASSETS_MGR.shader(shaderKey);
+    Texture& t = ASSETS_MGR.texture(textureKey);
+    TextureRegion& tr = ASSETS_MGR.textureRegion(textureRegionKey, stateTime);
     
     sb.begin();
     sb.addSprite(tr, x, y, width, height, angle, flipX);
@@ -238,8 +238,8 @@ void Renderer::spriteBatcherEnd(std::string textureKey, std::string matrixKey, s
 {
     SpriteBatcher& sb = spriteBatcher(spriteBatcherKey);
     Matrix& m = matrix(matrixKey);
-    Shader& s = ASSETS.shader(shaderKey);
-    Texture& t = ASSETS.texture(textureKey);
+    Shader& s = ASSETS_MGR.shader(shaderKey);
+    Texture& t = ASSETS_MGR.texture(textureKey);
     
     sb.end(s, m._matrix, t, colorFactor);
 }
@@ -265,7 +265,7 @@ void Renderer::hideAllText()
 void Renderer::renderTextViews(std::string fontBatcherKey, std::string shaderKey)
 {
     FontBatcher& fb = fontBatcher(fontBatcherKey);
-    Shader& s = ASSETS.shader(shaderKey);
+    Shader& s = ASSETS_MGR.shader(shaderKey);
     fb.begin();
     for (auto& pair : _textViews)
     {
@@ -277,13 +277,13 @@ void Renderer::renderTextViews(std::string fontBatcherKey, std::string shaderKey
 void Renderer::renderBox2D(Box2DWorld& box2DWorld, std::string matrixKey, std::string shaderKey)
 {
     Matrix& m = matrix(matrixKey);
-    Shader& s = ASSETS.shader(shaderKey);
+    Shader& s = ASSETS_MGR.shader(shaderKey);
     _box2DDebugRenderer.render(box2DWorld, &m._matrix, &s);
 }
 
 void Renderer::renderToScreen(std::string framebufferKey, std::string shaderKey)
 {
-    Shader& s = ASSETS.shader(shaderKey);
+    Shader& s = ASSETS_MGR.shader(shaderKey);
     _screenRenderer.renderToScreen(s, framebuffer(framebufferKey));
 }
 
@@ -352,6 +352,6 @@ TriangleBatcher& Renderer::triangleBatcher(std::string key)
 
 void Renderer::spriteBatcherAddEntity(SpriteBatcher& sb, Entity& e)
 {
-    TextureRegion tr = ASSETS.textureRegion(e.renderController()->getTextureMapping(),  e.stateTime());
+    TextureRegion tr = ASSETS_MGR.textureRegion(e.renderController()->getTextureMapping(),  e.stateTime());
     sb.addSprite(tr, e.position()._x, e.position()._y, e.width(), e.height(), e.angle(), e.isXFlipped());
 }

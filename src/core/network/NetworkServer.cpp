@@ -15,6 +15,8 @@ void NetworkServer::create(uint16_t port, uint8_t maxNumPlayers, EntityIDManager
     assert(s_instance == nullptr);
     
     s_instance = new NetworkServer(port, maxNumPlayers, eidm, tt, oerf, oedf, hncf, hlcf);
+    
+    assert(NW_SRVR != nullptr);
 }
 
 NetworkServer * NetworkServer::getInstance()

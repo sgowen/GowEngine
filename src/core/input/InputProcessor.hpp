@@ -19,7 +19,7 @@ enum InputProcessorState
 class InputProcessor
 {
 public:
-    InputProcessor(uint8_t maxTextInputLength);
+    InputProcessor();
     virtual ~InputProcessor();
     
     void registerActionForKey(uint16_t key, uint8_t action);
@@ -34,7 +34,6 @@ public:
     
 private:
     std::map<uint16_t, uint8_t> _keyMappings;
-    uint8_t _maxTextInputLength;
     uint8_t _action;
     std::string _textInput;
     bool _isControlHeldDown;

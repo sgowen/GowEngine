@@ -15,6 +15,8 @@ void NetworkClient::create(std::string serverIPAddress, std::string username, ui
     assert(s_instance == nullptr);
     
     s_instance = new NetworkClient(serverIPAddress, username, port, tt, oerf, oedf, rpmf, opwf);
+    
+    assert(NW_CLNT != nullptr);
 }
 
 NetworkClient * NetworkClient::getInstance()

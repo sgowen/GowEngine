@@ -12,17 +12,9 @@ EngineConfig::EngineConfig(std::string configFilePath, EngineState& initialEngin
 _config(ConfigLoader::initWithJSONFile(configFilePath)),
 _initialEngineState(initialEngineState)
 {
-    std::string filePathAssets = _config.getString("filePathAssets", "");
-    std::string filePathEntityLayoutManager = _config.getString("filePathEntityLayoutManager", "");
-    std::string filePathEntityManager = _config.getString("filePathEntityManager", "");
-    
-    assert(!filePathAssets.empty());
-    assert(!filePathEntityLayoutManager.empty());
-    assert(!filePathEntityManager.empty());
-    
-    ASSETS.registerAssets("engine", AssetsLoader::initWithJSONFile(filePathAssets));
-    EntityLayoutManagerLoader::initWithJSONFile(ENTITY_LAYOUT_MGR, filePathEntityLayoutManager);
-    EntityManagerLoader::initWithJSONFile(ENTITY_MGR, filePathEntityManager);
+    ASSETS_MGR.registerAssets("engine", AssetsLoader::initWithJSONFile(_config.getString("filePathAssets")));
+    EntityLayoutManagerLoader::initWithJSONFile(ENTITY_LAYOUT_MGR, _config.getString("filePathEntityLayoutManager"));
+    EntityManagerLoader::initWithJSONFile(ENTITY_MGR, _config.getString("filePathEntityManager"));
     
     SOCKET_UTIL.setLoggingEnabled(_config.getBool("networkLoggingEnabled", false));
     INPUT_MGR.setLoggingEnabled(_config.getBool("inputLoggingEnabled", false));

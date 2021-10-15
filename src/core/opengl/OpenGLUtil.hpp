@@ -13,7 +13,7 @@
 #include "ShaderInput.hpp"
 #include "Color.hpp"
 
-struct Framebuffer;
+class Framebuffer;
 struct Shader;
 struct Texture;
 

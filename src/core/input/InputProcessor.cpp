@@ -8,8 +8,7 @@
 
 #include <GowEngine/GowEngine.hpp>
 
-InputProcessor::InputProcessor(uint8_t maxTextInputLength) :
-_maxTextInputLength(maxTextInputLength),
+InputProcessor::InputProcessor() :
 _action(0),
 _textInput(""),
 _isControlHeldDown(false)
@@ -92,9 +91,9 @@ uint8_t InputProcessor::updateReadText()
                 {
                     const char* clipboard = INPUT_MGR.getClipboardString();
                     _textInput += clipboard;
-                    if (_textInput.length() >= _maxTextInputLength)
+                    if (_textInput.length() >= MAX_TEXT_INPUT_LENGTH)
                     {
-                        int remove = (int)_textInput.length() - _maxTextInputLength;
+                        int remove = (int)_textInput.length() - MAX_TEXT_INPUT_LENGTH;
                         _textInput.erase(_textInput.end() - remove, _textInput.end());
                     }
                     continue;
@@ -134,7 +133,7 @@ void InputProcessor::clearTextInput()
 
 void InputProcessor::acceptKeyInput(uint16_t key)
 {
-    if (_textInput.length() >= _maxTextInputLength)
+    if (_textInput.length() >= MAX_TEXT_INPUT_LENGTH)
     {
         return;
     }

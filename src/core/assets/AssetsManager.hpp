@@ -16,7 +16,7 @@
 
 #include <map>
 
-#define ASSETS AssetsManager::getInstance()
+#define ASSETS_MGR AssetsManager::getInstance()
 
 class AssetsManager
 {

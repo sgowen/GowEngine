@@ -10,8 +10,9 @@
 
 #include <stdint.h>
 
-struct Framebuffer
+class Framebuffer
 {
+public:
     uint16_t _width;
     uint16_t _height;
     const std::string _filterMin;
@@ -19,14 +20,7 @@ struct Framebuffer
     uint32_t _texture;
     uint32_t _fbo;
 
-    Framebuffer(uint16_t width, uint16_t height, std::string filterMin = "SMOOTH", std::string filterMag = "SMOOTH") :
-    _width(width),
-    _height(height),
-    _filterMin(filterMin),
-    _filterMag(filterMag),
-    _texture(0),
-    _fbo(0)
-    {
-        // Empty
-    }
+    Framebuffer(uint16_t width, uint16_t height, std::string filterMin = "SMOOTH", std::string filterMag = "SMOOTH");
+    void createDeviceDependentResources();
+    void destroyDeviceDependentResources();
 };

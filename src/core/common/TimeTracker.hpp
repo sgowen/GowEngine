@@ -8,6 +8,8 @@
 
 #pragma once
 
+#include "Constants.hpp"
+
 #include <stdint.h>
 
 struct TimeTracker
@@ -15,8 +17,8 @@ struct TimeTracker
     float _frameRate;
     uint32_t _time;
     
-    TimeTracker(float frameRate) :
-    _frameRate(frameRate),
+    TimeTracker() :
+    _frameRate(FRAME_RATE),
     _time(0)
     {
         // Empty

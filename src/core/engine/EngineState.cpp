@@ -10,7 +10,7 @@
 
 void EngineState::enter(Engine* e)
 {
-    ASSETS.registerAssets(_filePathAssets, _assets);
+    ASSETS_MGR.registerAssets(_filePathAssets, _assets);
     createDeviceDependentResources(e);
     onWindowSizeChanged(e);
     onEnter(e);
@@ -50,7 +50,7 @@ void EngineState::execute(Engine* e)
 void EngineState::exit(Engine* e)
 {
     destroyDeviceDependentResources(e);
-    ASSETS.deregisterAssets(_filePathAssets);
+    ASSETS_MGR.deregisterAssets(_filePathAssets);
     onExit(e);
 }
 
@@ -66,7 +66,7 @@ _renderer(RendererLoader::initWithJSONFile(_config.getString("filePathRenderer")
 
 void EngineState::createDeviceDependentResources(Engine* e)
 {
-    ASSETS.createDeviceDependentResources();
+    ASSETS_MGR.createDeviceDependentResources();
     _renderer.createDeviceDependentResources();
 }
 
@@ -78,7 +78,7 @@ void EngineState::onWindowSizeChanged(Engine* e)
 void EngineState::destroyDeviceDependentResources(Engine* e)
 {
     _renderer.destroyDeviceDependentResources();
-    ASSETS.destroyDeviceDependentResources();
+    ASSETS_MGR.destroyDeviceDependentResources();
 }
 
 void EngineState::pause(Engine *e)
@@ -93,8 +93,8 @@ void EngineState::resume(Engine *e)
 
 void EngineState::update(Engine* e)
 {
-    ASSETS.update();
-    if (!ASSETS.isLoaded())
+    ASSETS_MGR.update();
+    if (!ASSETS_MGR.isLoaded())
     {
         return;
     }
@@ -105,7 +105,7 @@ void EngineState::update(Engine* e)
 
 void EngineState::render(Engine* e)
 {
-    if (!ASSETS.isLoaded())
+    if (!ASSETS_MGR.isLoaded())
     {
         _renderer.renderLoadingScreen();
         return;

@@ -10,7 +10,8 @@
 
 #include <box2d/box2d.h>
 
-Box2DWorld::Box2DWorld() :
+Box2DWorld::Box2DWorld(TimeTracker& tt) :
+_timeTracker(tt),
 _world(new b2World(b2Vec2(0.0f, -44))),
 _entityContactListener(new EntityContactListener()),
 _entityContactFilter(new EntityContactFilter()),
@@ -85,14 +86,14 @@ void Box2DWorld::recallCache()
     }
 }
 
-void Box2DWorld::stepPhysics(TimeTracker& tt)
+void Box2DWorld::stepPhysics()
 {
     static int32 velocityIterations = 6;
     static int32 positionIterations = 2;
     
     // Instruct the world to perform a single step of simulation.
     // It is generally best to keep the time step and iterations fixed.
-    _world->Step(tt._frameRate, velocityIterations, positionIterations);
+    _world->Step(_timeTracker._frameRate, velocityIterations, positionIterations);
 }
 
 std::vector<Entity*> Box2DWorld::update()

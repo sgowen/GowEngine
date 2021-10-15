@@ -44,7 +44,7 @@ void FontBatcher::addText(Renderer& r, TextView& tv)
 
     if (_glyphs.empty())
     {
-        Texture& t = ASSETS.texture(_textureName);
+        Texture& t = ASSETS_MGR.texture(_textureName);
         int x = 0;
         int y = 0;
         for (int i = 0; i < 176; ++i)
@@ -132,6 +132,6 @@ void FontBatcher::addText(Renderer& r, std::string text, uint8_t alignment, floa
 void FontBatcher::end(Renderer& r, Shader& s)
 {
     Matrix& m = r.matrix(_matrixName);
-    Texture& t = ASSETS.texture(_textureName);
+    Texture& t = ASSETS_MGR.texture(_textureName);
     _spriteBatcher.end(s, m._matrix, t);
 }

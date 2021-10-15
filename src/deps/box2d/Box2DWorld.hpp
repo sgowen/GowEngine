@@ -19,14 +19,14 @@ class EntityContactFilter;
 class Box2DWorld
 {
 public:
-    Box2DWorld();
+    Box2DWorld(TimeTracker& tt);
     ~Box2DWorld();
     
     void populateFromEntityLayout(EntityLayoutDef& eld);
     void addNetworkEntity(Entity* e);
     void removeNetworkEntity(Entity* e);
     void recallCache();
-    void stepPhysics(TimeTracker& tt);
+    void stepPhysics();
     std::vector<Entity*> update();
     void reset();
     
@@ -39,6 +39,7 @@ public:
     b2World& getB2World();
     
 private:
+    TimeTracker& _timeTracker;
     b2World* _world;
     EntityContactListener* _entityContactListener;
     EntityContactFilter* _entityContactFilter;

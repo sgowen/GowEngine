@@ -9,3 +9,4 @@
 #pragma once
 
 #define FRAME_RATE 1.0f / 60.0f
+#define MAX_TEXT_INPUT_LENGTH 16

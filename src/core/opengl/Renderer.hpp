@@ -78,6 +78,8 @@ public:
     TriangleBatcher& triangleBatcher(std::string key = "main");
     
 private:
+    Box2DDebugRenderer _box2DDebugRenderer;
+    ScreenRenderer _screenRenderer;
     std::map<std::string, CircleBatcher> _circleBatchers;
     std::map<std::string, FontBatcher> _fontBatchers;
     std::map<std::string, Framebuffer> _framebuffers;
@@ -87,8 +89,6 @@ private:
     std::map<std::string, SpriteBatcher> _spriteBatchers;
     std::map<std::string, TextView> _textViews;
     std::map<std::string, TriangleBatcher> _triangleBatchers;
-    Box2DDebugRenderer _box2DDebugRenderer;
-    ScreenRenderer _screenRenderer;
     
     void spriteBatcherAddEntity(SpriteBatcher& sb, Entity& e);
 };

@@ -75,6 +75,7 @@ void AssetsManager::createDeviceDependentResourcesAsync()
         return;
     }
 
+    _isLoaded = false;
     THREAD_MGR.spawnThread("AssetsManager", thread_createDeviceDependentResources, this);
 }
 

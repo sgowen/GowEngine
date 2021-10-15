@@ -11,7 +11,7 @@
 #include <stdint.h>
 
 struct Shader;
-struct Framebuffer;
+class Framebuffer;
 
 class ScreenRenderer
 {
