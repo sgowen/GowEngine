@@ -119,12 +119,12 @@ void PacketHandler::processQueuedPackets()
     }
 }
 
-const MovingAverage& PacketHandler::getBytesReceivedPerSecond() const
+const MovingAverage& PacketHandler::bytesReceivedPerSecond() const
 {
     return _bytesReceivedPerSecond;
 }
 
-const MovingAverage& PacketHandler::getBytesSentPerSecond() const
+const MovingAverage& PacketHandler::bytesSentPerSecond() const
 {
     return _bytesSentPerSecond;
 }

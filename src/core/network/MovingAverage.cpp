@@ -48,7 +48,7 @@ void MovingAverage::update(float value)
     _timeLastEntryMade = time;
 }
 
-float MovingAverage::getValue() const
+float MovingAverage::value() const
 {
     return _value;
 }

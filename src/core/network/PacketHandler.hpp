@@ -31,8 +31,8 @@ public:
     void processIncomingPackets();
     void sendPacket(const OutputMemoryBitStream& ombs, SocketAddress* toAddress);
     SocketAddress& getSocketAddress();
-    const MovingAverage& getBytesReceivedPerSecond() const;
-    const MovingAverage& getBytesSentPerSecond() const;
+    const MovingAverage& bytesReceivedPerSecond() const;
+    const MovingAverage& bytesSentPerSecond() const;
     
 private:
     class ReceivedPacket;

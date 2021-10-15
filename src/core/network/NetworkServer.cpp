@@ -110,14 +110,31 @@ ClientProxy* NetworkServer::getClientProxy(uint8_t playerID) const
 
 int NetworkServer::getMoveCount()
 {
-    int lowestMoveCount = 0;
+    // FIXME
     
+    // Host advantage
+//    int ret = 0;
+//    for (auto& pair : _playerIDToClientMap)
+//    {
+//        int moveCount = pair.second->getUnprocessedMoveList().getMoveCount();
+//        ret += moveCount;
+//    }
+//    int numPlayers = getNumPlayersConnected();
+//    if (ret > 0 && numPlayers > 0)
+//    {
+//        ret /= numPlayers;
+//    }
+//    return ret;
+    
+    // Remote player advantage
+    int lowestMoveCount = 0;
+
     ClientProxy* cp = getClientProxy(1);
     if (cp != nullptr)
     {
         lowestMoveCount = cp->getUnprocessedMoveList().getMoveCount();
     }
-    
+
     for (auto& pair : _playerIDToClientMap)
     {
         int moveCount = pair.second->getUnprocessedMoveList().getMoveCount();
@@ -126,7 +143,7 @@ int NetworkServer::getMoveCount()
             lowestMoveCount = moveCount;
         }
     }
-    
+
     uint32_t expectedMoveIndex = getNumMovesProcessed();
     int validMoveCount = 0;
     for (int i = 0; i < lowestMoveCount; ++i)
@@ -154,9 +171,9 @@ int NetworkServer::getMoveCount()
             ++expectedMoveIndex;
         }
     }
-    
+
     assert(lowestMoveCount == validMoveCount);
-    
+
     return validMoveCount;
 }
 

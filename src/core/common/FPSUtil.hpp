@@ -20,7 +20,7 @@ public:
     }
     
     void update(float deltaTime);
-    int getFPS() const;
+    int fps() const;
     
 private:
     FPSUtil();

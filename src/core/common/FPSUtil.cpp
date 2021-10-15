@@ -22,7 +22,7 @@ void FPSUtil::update(float deltaTime)
     }
 }
 
-int FPSUtil::getFPS() const
+int FPSUtil::fps() const
 {
     return _fPS;
 }

@@ -49,10 +49,9 @@ public:
     void sendOutgoingPackets(MoveList& ml);
     void requestToAddLocalPlayer();
     void requestToDropLocalPlayer(uint8_t index);
-    const MovingAverage& getBytesReceivedPerSecond() const;
-    const MovingAverage& getBytesSentPerSecond() const;
-    const MovingAverage& getAvgRoundTripTime()	const;
-    float getRoundTripTime() const;
+    float bytesReceivedPerSecond() const;
+    float bytesSentPerSecond() const;
+    float avgRoundTripTime() const;
     bool isPlayerIDLocal(uint8_t playerID) const;
     bool hasReceivedNewState();
     std::map<uint8_t, uint8_t>& getPlayerIDs();

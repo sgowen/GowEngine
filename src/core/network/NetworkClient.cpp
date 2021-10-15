@@ -82,24 +82,19 @@ void NetworkClient::requestToDropLocalPlayer(uint8_t index)
     updateNextIndex();
 }
 
-const MovingAverage& NetworkClient::getBytesReceivedPerSecond() const
+float NetworkClient::bytesReceivedPerSecond() const
 {
-    return _packetHandler.getBytesReceivedPerSecond();
+    return _packetHandler.bytesReceivedPerSecond().value();
 }
 
-const MovingAverage& NetworkClient::getBytesSentPerSecond() const
+float NetworkClient::bytesSentPerSecond() const
 {
-    return _packetHandler.getBytesSentPerSecond();
+    return _packetHandler.bytesSentPerSecond().value();
 }
 
-const MovingAverage& NetworkClient::getAvgRoundTripTime() const
+float NetworkClient::avgRoundTripTime() const
 {
-    return _avgRoundTripTime;
-}
-
-float NetworkClient::getRoundTripTime() const
-{
-    return _avgRoundTripTime.getValue();
+    return _avgRoundTripTime.value() * 1000.0f;
 }
 
 bool NetworkClient::isPlayerIDLocal(uint8_t playerID) const

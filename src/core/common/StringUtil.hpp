@@ -41,6 +41,7 @@
 #endif
 
 #define LOG(...) StringUtil::log(__VA_ARGS__)
+#define STRING_FORMAT(...) StringUtil::format(__VA_ARGS__)
 
 class StringUtil
 {
@@ -87,15 +88,16 @@ public:
     
     static std::string format(const char* format, ...)
     {
-        char temp[4096];
+        static int size = 4096;
+        char temp[size];
         
         va_list args;
         va_start (args, format);
         
     #if IS_WINDOWS
-        _vsnprintf_s(temp, 4096, 4096, format, args);
+        _vsnprintf_s(temp, size, size, format, args);
     #else
-        vsnprintf(temp, 4096, format, args);
+        vsnprintf(temp, size, format, args);
     #endif
         
         return std::string(temp);
@@ -117,18 +119,19 @@ public:
     static void log(const char* format, ...)
     {
         // TODO, replace with spdlog
-        char temp[4096];
+        static int size = 4096;
+        char temp[size];
         
         va_list args;
         va_start (args, format);
         
-    #if _WIN32
-        _vsnprintf_s(temp, 4096, 4096, format, args);
-    #elif defined __ANDROID__
+#if IS_WINDOWS
+        _vsnprintf_s(temp, size, size, format, args);
+#elif IS_ANDROID
         __android_log_vprint(ANDROID_LOG_DEBUG, "GowEngine", format, args);
-    #else
-        vsnprintf(temp, 4096, format, args);
-    #endif
+#else
+        vsnprintf(temp, size, format, args);
+#endif
         
         OutputDebugStringA(temp);
         OutputDebugStringA("\n");

@@ -17,7 +17,7 @@ public:
     
     void updatePerSecond(float value);
     void update(float value);
-    float getValue() const;
+    float value() const;
     
 private:
     TimeTracker& _timeTracker;
