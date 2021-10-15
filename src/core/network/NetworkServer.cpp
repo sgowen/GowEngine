@@ -196,7 +196,7 @@ void NetworkServer::onEntityRegistered(Entity* e)
 {
     for (auto& pair: _addressHashToClientMap)
     {
-        pair.second.replicationManagerServer().replicateCreate(e->getID(), ALL_DIRTY_STATE);
+        pair.second.replicationManagerServer().replicateCreate(e->getID(), NW_ALL_DIRTY_STATE);
     }
     
     _onEntityRegisteredFunc(e);
@@ -303,7 +303,7 @@ void NetworkServer::handlePacketFromNewClient(InputMemoryBitStream& imbs, Socket
         
         for (auto& pair: _entityRegistry.getMap())
         {
-            cp.replicationManagerServer().replicateCreate(pair.first, ALL_DIRTY_STATE);
+            cp.replicationManagerServer().replicateCreate(pair.first, NW_ALL_DIRTY_STATE);
         }
         
         resetNextPlayerID();
@@ -412,7 +412,7 @@ void NetworkServer::handleInputPacket(ClientProxy& cp, InputMemoryBitStream& imb
     }
     
     uint8_t moveCount = 0;
-    imbs.readBits(moveCount, 2);
+    imbs.readBits(moveCount, NBITS(NW_CLNT_MAX_NUM_MOVES));
     
     for (; moveCount > 0; --moveCount)
     {

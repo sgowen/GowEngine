@@ -331,7 +331,7 @@ void NetworkClient::updateSendingInputPacket(MoveList& ml)
     {
         int moveCount = ml.getNumMovesAfterTimestamp(_lastMoveProcessedByServerTimestamp);
         assert(moveCount <= NW_CLNT_MAX_NUM_MOVES);
-        ombs.writeBits(moveCount, 2);
+        ombs.writeBits(moveCount, NBITS(NW_CLNT_MAX_NUM_MOVES));
         
         std::deque<Move>::const_iterator moveItr = ml.begin();
         

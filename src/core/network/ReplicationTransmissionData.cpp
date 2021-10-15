@@ -84,7 +84,7 @@ void ReplicationTransmissionData::handleCreateDeliveryFailure(uint32_t networkID
     Entity* e = _entityRegistry->getEntityByID(networkID);
     if (e != nullptr)
     {
-        _replicationManagerServer->replicateCreate(networkID, ALL_DIRTY_STATE);
+        _replicationManagerServer->replicateCreate(networkID, NW_ALL_DIRTY_STATE);
     }
 }
 
