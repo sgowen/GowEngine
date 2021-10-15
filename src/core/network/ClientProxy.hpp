@@ -30,7 +30,7 @@ public:
     void updateLastPacketTime();
     uint32_t getLastPacketFromClientTime()	const;
     DeliveryNotificationManager& getDeliveryNotificationManager();
-    ReplicationManagerServer& getReplicationManagerServer();
+    ReplicationManagerServer& replicationManagerServer();
     MoveList& getUnprocessedMoveList();
     void setLastMoveTimestampDirty(bool isDirty);
     bool isLastMoveTimestampDirty() const;

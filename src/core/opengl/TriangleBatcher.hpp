@@ -13,7 +13,7 @@
 #include <vector>
 #include <stdint.h>
 
-struct Vector2;
+class Vector2;
 struct Color;
 struct Triangle;
 struct Shader;

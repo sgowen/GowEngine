@@ -9,7 +9,7 @@
 #include <GowEngine/GowEngine.hpp>
 
 IMPL_RTTI_NOPARENT(EntityRenderController)
-IMPL_EntityController_NOPARENT_create(EntityRenderController)
+IMPL_EntityRenderController_create_NOPARENT
 
 EntityRenderController::EntityRenderController(Entity* e) :
 _entity(e)

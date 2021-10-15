@@ -8,7 +8,8 @@
 
 #include <GowEngine/GowEngine.hpp>
 
-IMPL_EntityController_NOPARENT_create(EntityNetworkController)
+IMPL_RTTI_NOPARENT(EntityNetworkController)
+IMPL_EntityNetworkController_create_NOPARENT
 
 EntityNetworkController::EntityNetworkController(Entity* e) :
 _entity(e)
@@ -72,11 +73,21 @@ void EntityNetworkController::read(InputMemoryBitStream& imbs)
         }
     }
     
-    uint8_t playerID = _entity->dataField("playerID").valueUInt8(0);
-    if (!NW_CLNT->isPlayerIDLocal(playerID))
+    if (_entity->isPlayer())
     {
-        SoundUtil::playSoundForStateIfChanged(e, fromState, e.state()._state);
+        uint8_t playerID = _entity->dataField("playerID").valueUInt8();
+        if (NW_CLNT->isPlayerIDLocal(playerID))
+        {
+            // Don't play any sounds, since
+            // the local player(s) already heard them
+            // * playing a sound after a nw read
+            // is only useful for server controlled
+            // or remote player controlled entities
+            return;
+        }
     }
+    
+    SoundUtil::playSoundForStateIfChanged(e, fromState, e.state()._state);
 }
 
 uint8_t EntityNetworkController::write(OutputMemoryBitStream& ombs, uint8_t dirtyState)

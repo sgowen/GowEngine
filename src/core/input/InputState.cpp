@@ -8,8 +8,6 @@
 
 #include <GowEngine/GowEngine.hpp>
 
-#define MAX_NUM_PLAYERS 4
-
 InputState::InputState()
 {
     _playerInputStates.resize(MAX_NUM_PLAYERS);

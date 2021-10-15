@@ -8,15 +8,27 @@
 
 #pragma once
 
+#define DECL_EntityRenderController_create                  \
+public:                                               \
+    static EntityRenderController* create(Entity* e)
+
+#define IMPL_EntityRenderController_create(type)            \
+EntityRenderController* type::create(Entity* e)             \
+{                                                     \
+    return new type(e);                               \
+}
+
+#define IMPL_EntityRenderController_create_NOPARENT         \
+IMPL_EntityRenderController_create(EntityRenderController)
+
 #include "core/common/RTTI.hpp"
-#include "core/common/Macros.hpp"
 
 class Entity;
 
 class EntityRenderController
 {
     DECL_RTTI_NOPARENT;
-    DECL_EntityController_create(EntityRenderController);
+    DECL_EntityRenderController_create;
     
 public:
     EntityRenderController(Entity* e);

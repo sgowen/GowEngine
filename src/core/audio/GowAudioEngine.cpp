@@ -8,8 +8,6 @@
 
 #include <GowEngine/GowEngine.hpp>
 
-#define MAX_SOUNDS_TO_PLAY_PER_FRAME 4
-
 void GowAudioEngine::pause()
 {
     pauseMusic();
@@ -53,7 +51,7 @@ void GowAudioEngine::render()
 
 void GowAudioEngine::playSound(std::string soundID, float volume, bool isLooping)
 {
-    if (_soundsDisabled || _soundsToPlay.size() >= MAX_SOUNDS_TO_PLAY_PER_FRAME)
+    if (_soundsDisabled || _soundsToPlay.size() >= MAX_NUM_SOUNDS_TO_PLAY_PER_FRAME)
     {
         return;
     }

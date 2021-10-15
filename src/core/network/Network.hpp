@@ -38,8 +38,6 @@
     const int SOCKET_ERROR = -1;
 #endif
 
-#define ALL_DIRTY_STATE 0xFFu
-
 enum NetworkPacketType
 {
     NWPT_HELLO = 0x01u,
@@ -59,14 +57,6 @@ enum SocketAddressFamily
     INET = AF_INET,
     INET6 = AF_INET6
 };
-
-#define NW_CLNT_TIME_BETWEEN_HELLOS 60
-#define NW_CLNT_TIMEOUT 60
-#define NW_SRVR_TIMEOUT 180
-#define NW_ACK_TIMEOUT 30
-#define NW_CLNT_MAX_NUM_MOVES 3
-#define NW_MAX_NUM_PACKETS_PER_FRAME 10
-#define NW_MAX_PACKET_SIZE 1200
 
 #ifndef htonll
 #define htonll(x) \

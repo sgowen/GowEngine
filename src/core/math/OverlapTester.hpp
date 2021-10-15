@@ -8,7 +8,7 @@
 
 #pragma once
 
-struct Vector2;
+class Vector2;
 struct Circle;
 struct Rektangle;
 struct Triangle;

@@ -10,11 +10,11 @@
 
 NetworkServer* NetworkServer::s_instance = nullptr;
 
-void NetworkServer::create(uint16_t port, uint8_t maxNumPlayers, EntityIDManager& eidm, TimeTracker& tt, OnEntityRegisteredFunc oerf, OnEntityDeregisteredFunc oedf, HandleNewClientFunc hncf, HandleLostClientFunc hlcf)
+void NetworkServer::create(uint16_t port, EntityIDManager& eidm, TimeTracker& tt, OnEntityRegisteredFunc oerf, OnEntityDeregisteredFunc oedf, HandleNewClientFunc hncf, HandleLostClientFunc hlcf)
 {
     assert(s_instance == nullptr);
     
-    s_instance = new NetworkServer(port, maxNumPlayers, eidm, tt, oerf, oedf, hncf, hlcf);
+    s_instance = new NetworkServer(port, eidm, tt, oerf, oedf, hncf, hlcf);
     
     assert(NW_SRVR != nullptr);
 }
@@ -93,7 +93,7 @@ void NetworkServer::setStateDirty(uint32_t networkID, uint8_t dirtyState)
     
     for (auto& pair: _addressHashToClientMap)
     {
-        pair.second.getReplicationManagerServer().setStateDirty(networkID, dirtyState);
+        pair.second.replicationManagerServer().setStateDirty(networkID, dirtyState);
     }
 }
 
@@ -196,7 +196,7 @@ void NetworkServer::onEntityRegistered(Entity* e)
 {
     for (auto& pair: _addressHashToClientMap)
     {
-        pair.second.getReplicationManagerServer().replicateCreate(e->getID(), ALL_DIRTY_STATE);
+        pair.second.replicationManagerServer().replicateCreate(e->getID(), ALL_DIRTY_STATE);
     }
     
     _onEntityRegisteredFunc(e);
@@ -206,7 +206,7 @@ void NetworkServer::onEntityDeregistered(Entity* e)
 {
     for (auto& pair: _addressHashToClientMap)
     {
-        pair.second.getReplicationManagerServer().replicateDestroy(e->getID());
+        pair.second.replicationManagerServer().replicateDestroy(e->getID());
     }
     
     _onEntityDeregisteredFunc(e);
@@ -222,7 +222,7 @@ void NetworkServer::processPacket(InputMemoryBitStream& imbs, SocketAddress* fro
     auto it = _addressHashToClientMap.find(fromAddress->getHash());
     if (it == _addressHashToClientMap.end())
     {
-        if (_playerIDToClientMap.size() < _maxNumPlayers)
+        if (_playerIDToClientMap.size() < MAX_NUM_PLAYERS)
         {
             if (IS_NETWORK_LOGGING_ENABLED())
             {
@@ -303,7 +303,7 @@ void NetworkServer::handlePacketFromNewClient(InputMemoryBitStream& imbs, Socket
         
         for (auto& pair: _entityRegistry.getMap())
         {
-            cp.getReplicationManagerServer().replicateCreate(pair.first, ALL_DIRTY_STATE);
+            cp.replicationManagerServer().replicateCreate(pair.first, ALL_DIRTY_STATE);
         }
         
         resetNextPlayerID();
@@ -382,9 +382,9 @@ void NetworkServer::sendStatePacketToClient(ClientProxy& cp)
     }
     
     ReplicationTransmissionData* rtd = _poolRMTD.obtain();
-    rtd->reset(&cp.getReplicationManagerServer(), &_entityRegistry, &_poolRMTD);
+    rtd->reset(&cp.replicationManagerServer(), &_entityRegistry, &_poolRMTD);
     
-    cp.getReplicationManagerServer().write(ombs, rtd);
+    cp.replicationManagerServer().write(ombs, rtd);
     
     TransmissionData* td = ifp->getTransmissionData('RPLM');
     if (td != nullptr)
@@ -430,7 +430,7 @@ void NetworkServer::handleInputPacket(ClientProxy& cp, InputMemoryBitStream& imb
 
 void NetworkServer::handleAddLocalPlayerPacket(ClientProxy& cp, InputMemoryBitStream& imbs)
 {
-    if (_playerIDToClientMap.size() < _maxNumPlayers)
+    if (_playerIDToClientMap.size() < MAX_NUM_PLAYERS)
     {
         uint8_t requestedIndex;
         imbs.read(requestedIndex);
@@ -553,7 +553,7 @@ void cb_nw_srvr_onEntityDeregistered(Entity* e)
     NW_SRVR->onEntityDeregistered(e);
 }
 
-NetworkServer::NetworkServer(uint16_t port, uint8_t maxNumPlayers, EntityIDManager& eidm, TimeTracker& tt, OnEntityRegisteredFunc oerf, OnEntityDeregisteredFunc oedf, HandleNewClientFunc hncf, HandleLostClientFunc hlcf) :
+NetworkServer::NetworkServer(uint16_t port, EntityIDManager& eidm, TimeTracker& tt, OnEntityRegisteredFunc oerf, OnEntityDeregisteredFunc oedf, HandleNewClientFunc hncf, HandleLostClientFunc hlcf) :
 _entityIDManager(eidm),
 _timeTracker(tt),
 _packetHandler(_timeTracker, port, cb_nw_srvr_processPacket),
@@ -563,7 +563,6 @@ _handleNewClientFunc(hncf),
 _handleLostClientFunc(hlcf),
 _entityRegistry(cb_nw_srvr_onEntityRegistered, cb_nw_srvr_onEntityDeregistered),
 _nextPlayerID(1),
-_maxNumPlayers(maxNumPlayers),
 _numMovesProcessed(0),
 _port(port)
 {

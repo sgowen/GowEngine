@@ -34,7 +34,7 @@ typedef void (*HandleLostClientFunc)(ClientProxy& cp, uint8_t localPlayerIndex);
 class NetworkServer
 {
 public:
-    static void create(uint16_t port, uint8_t maxNumPlayers, EntityIDManager& eidm, TimeTracker& tt, OnEntityRegisteredFunc oerf, OnEntityDeregisteredFunc oedf, HandleNewClientFunc hncf, HandleLostClientFunc hlcf);
+    static void create(uint16_t port, EntityIDManager& eidm, TimeTracker& tt, OnEntityRegisteredFunc oerf, OnEntityDeregisteredFunc oedf, HandleNewClientFunc hncf, HandleLostClientFunc hlcf);
     static NetworkServer* getInstance();
     static void destroy();
     
@@ -75,7 +75,6 @@ private:
     std::map<uint64_t, ClientProxy> _addressHashToClientMap;
     std::map<int, ClientProxy*> _playerIDToClientMap;
     uint8_t _nextPlayerID;
-    uint8_t _maxNumPlayers;
     uint32_t _numMovesProcessed;
     uint16_t _port;
     
@@ -91,7 +90,7 @@ private:
     void handleClientDisconnected(ClientProxy& cp);
     void resetNextPlayerID();
     
-    NetworkServer(uint16_t port, uint8_t maxNumPlayers, EntityIDManager& eidm, TimeTracker& tt, OnEntityRegisteredFunc oerf, OnEntityDeregisteredFunc oedf, HandleNewClientFunc hncf, HandleLostClientFunc hlcf);
+    NetworkServer(uint16_t port, EntityIDManager& eidm, TimeTracker& tt, OnEntityRegisteredFunc oerf, OnEntityDeregisteredFunc oedf, HandleNewClientFunc hncf, HandleLostClientFunc hlcf);
     ~NetworkServer();
     NetworkServer(const NetworkServer&);
     NetworkServer& operator=(const NetworkServer&);

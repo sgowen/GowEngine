@@ -57,7 +57,7 @@ DeliveryNotificationManager& ClientProxy::getDeliveryNotificationManager()
     return _deliveryNotificationManager;
 }
 
-ReplicationManagerServer& ClientProxy::getReplicationManagerServer()
+ReplicationManagerServer& ClientProxy::replicationManagerServer()
 {
     return _replicationManagerServer;
 }

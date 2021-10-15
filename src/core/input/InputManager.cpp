@@ -27,11 +27,11 @@ void InputManager::onCursorInput(CursorEventType type, float x, float y, bool is
 
 void InputManager::onGamepadInput(uint8_t button, uint8_t index, float x, float y)
 {
-    if (index >= NUM_SUPPORTED_GAMEPADS)
+    if (index >= MAX_NUM_SUPPORTED_GAMEPADS)
     {
         if (_isLoggingEnabled)
         {
-            LOG("Only %d gamepads supported!", NUM_SUPPORTED_GAMEPADS);
+            LOG("Only %d gamepads supported!", MAX_NUM_SUPPORTED_GAMEPADS);
         }
         return;
     }

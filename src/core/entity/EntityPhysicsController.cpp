@@ -9,7 +9,7 @@
 #include <GowEngine/GowEngine.hpp>
 
 IMPL_RTTI_NOPARENT(EntityPhysicsController)
-IMPL_EntityController_NOPARENT_create(EntityPhysicsController)
+IMPL_EntityPhysicsController_create_NOPARENT
 
 EntityPhysicsController::EntityPhysicsController(Entity* e) :
 _entity(e)
@@ -25,7 +25,7 @@ EntityPhysicsController::~EntityPhysicsController()
 Vector2 EntityPhysicsController::velocity()
 {
     // TODO
-    return VECTOR2_ZERO;
+    return Vector2::ZERO;
 }
 
 void EntityPhysicsController::setVelocity(Vector2 v)

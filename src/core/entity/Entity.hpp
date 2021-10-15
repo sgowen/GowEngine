@@ -172,18 +172,8 @@ struct NetworkDataField
         _valueUInt8[_name] = value;
     }
     
-    uint8_t valueUInt8(uint8_t defaultValue = 0)
+    uint8_t valueUInt8()
     {
-        // TODO, add defaultValue for the other data types, too lazy rn
-        // querying for playerID is uint8, and I needed to pass a default
-        // value of 0 (which is an invalid playerID anyhow)
-        // that way, I can get the value if it exists and check it
-        // all in 1 line.
-        if (_valueUInt8.find(_name) == _valueUInt8.end())
-        {
-            return defaultValue;
-        }
-        
         return _valueUInt8[_name];
     }
     
