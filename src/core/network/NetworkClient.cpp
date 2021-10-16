@@ -132,6 +132,11 @@ NetworkClientState NetworkClient::state() const
 
 bool NetworkClient::connect()
 {
+    if (_serverAddress == nullptr)
+    {
+        return false;
+    }
+    
     if (IS_NETWORK_LOGGING_ENABLED())
     {
         LOG("Client Initializing PacketHandler at port %hu", _port);
@@ -414,7 +419,11 @@ _hasReceivedNewState(false),
 _numMovesProcessed(0),
 _port(port)
 {
-    // Empty
+    if (_serverAddress == nullptr &&
+        IS_NETWORK_LOGGING_ENABLED())
+    {
+        LOG("Server Address invalid: %s", serverIPAddress.c_str());
+    }
 }
 
 NetworkClient::~NetworkClient()
@@ -425,8 +434,5 @@ NetworkClient::~NetworkClient()
     ombs.writeBits(static_cast<uint8_t>(NWPT_CLNT_EXIT), 4);
     sendPacket(ombs);
     
-    if (IS_NETWORK_LOGGING_ENABLED())
-    {
-        _deliveryNotificationManager.logStats();
-    }
+    _deliveryNotificationManager.logStats();
 }

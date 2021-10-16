@@ -85,7 +85,9 @@ const std::deque<InFlightPacket>& DeliveryNotificationManager::getInFlightPacket
 
 void DeliveryNotificationManager::logStats()
 {
-    if (_dispatchedPacketCount > 0 && _shouldProcessAcks)
+    if (_dispatchedPacketCount > 0 &&
+        _shouldProcessAcks &&
+        IS_NETWORK_LOGGING_ENABLED())
     {
         LOG("DeliveryNotificationManager stats: delivery rate %d%%, drop rate %d%%",
             (100 * _deliveredPacketCount) / _dispatchedPacketCount,

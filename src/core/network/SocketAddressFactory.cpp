@@ -49,6 +49,7 @@ SocketAddress* SocketAddressFactory::createIPv4FromString(const std::string& val
     
     if (!result->ai_addr)
     {
+        SOCKET_UTIL.reportError("SocketAddressFactory::createIPv4FromString");
         return nullptr;
     }
     

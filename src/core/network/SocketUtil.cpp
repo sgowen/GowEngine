@@ -41,17 +41,11 @@ bool SocketUtil::init()
 
 void SocketUtil::reportError(const char* operationDesc)
 {
-    if (!_isLoggingEnabled)
-    {
-        return;
-    }
-    
 #if IS_WINDOWS
     LPVOID lpMsgBuf;
     DWORD errorNum = getLastError();
     
-    FormatMessage(
-                  FORMAT_MESSAGE_ALLOCATE_BUFFER |
+    FormatMessage(FORMAT_MESSAGE_ALLOCATE_BUFFER |
                   FORMAT_MESSAGE_FROM_SYSTEM |
                   FORMAT_MESSAGE_IGNORE_INSERTS,
                   nullptr,
@@ -59,7 +53,6 @@ void SocketUtil::reportError(const char* operationDesc)
                   MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
                   (LPTSTR) &lpMsgBuf,
                   0, nullptr);
-    
     
     LOG("Error %s: %d- %s", operationDesc, errorNum, lpMsgBuf);
 #else

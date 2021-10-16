@@ -20,7 +20,7 @@ class Box2DWorld
 {
 public:
     static bool s_isClient;
-    static bool s_isLive;
+    static bool s_isLiveFrame;
     
     Box2DWorld(TimeTracker& tt);
     ~Box2DWorld();
