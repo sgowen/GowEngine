@@ -109,12 +109,12 @@ void Box2DPhysicsController::initPhysics(b2World& world)
 {
     assert(_body == nullptr);
     
-    b2BodyDef bodyDef;
-    bodyDef.position.Set(_entity->position()._x, _entity->position()._y);
-    bodyDef.type = _entity->isStatic() ? b2_staticBody : b2_dynamicBody;
-    bodyDef.fixedRotation = _entity->isFixedRotation();
-    bodyDef.userData.pointer = (uintptr_t)_entity;
-    _body = world.CreateBody(&bodyDef);
+    b2BodyDef bd;
+    bd.position.Set(_entity->position()._x, _entity->position()._y);
+    bd.type = _entity->isStatic() ? b2_staticBody : b2_dynamicBody;
+    bd.fixedRotation = _entity->isFixedRotation();
+    bd.userData.pointer = (uintptr_t)_entity;
+    _body = world.CreateBody(&bd);
     
     createFixtures();
 }

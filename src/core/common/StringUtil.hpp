@@ -88,7 +88,7 @@ public:
     
     static std::string format(const char* format, ...)
     {
-        static int size = 4096;
+        static const int size = 4096;
         char temp[size];
         
         va_list args;
@@ -119,7 +119,7 @@ public:
     static void log(const char* format, ...)
     {
         // TODO, replace with spdlog
-        static int size = 4096;
+        static const int size = 4096;
         char temp[size];
         
         va_list args;
