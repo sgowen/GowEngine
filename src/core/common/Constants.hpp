@@ -20,7 +20,7 @@
 // Same with max num players.
 // Upping NW_CLNT_MAX_NUM_MOVES would cause a crash
 // Since we are only using 2 bits to encode it.
-// So some of these values would need to move to NosFURa2 Constants.hpp
+// So some of these values would need to move to GowEngineMount Constants.hpp
 // Some could stay here
 // The rest could be loaded up via global engine config
 
