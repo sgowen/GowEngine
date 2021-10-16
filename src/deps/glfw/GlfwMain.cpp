@@ -217,7 +217,7 @@ void runEngine(EngineConfig& ec, GLFWwindow* window)
             }
         }
 
-        EngineRequestedHostAction requestedAction = engine.update(deltaTime);
+        EngineRequestedHostAction requestedAction = engine.update(static_cast<float>(deltaTime));
         switch (requestedAction)
         {
             case ERHA_EXIT:
