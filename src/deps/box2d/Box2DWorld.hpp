@@ -19,6 +19,9 @@ class EntityContactFilter;
 class Box2DWorld
 {
 public:
+    static bool s_isClient;
+    static bool s_isLive;
+    
     Box2DWorld(TimeTracker& tt);
     ~Box2DWorld();
     

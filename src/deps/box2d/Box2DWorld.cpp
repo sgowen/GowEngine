@@ -10,6 +10,9 @@
 
 #include <box2d/box2d.h>
 
+bool Box2DWorld::s_isClient = false;
+bool Box2DWorld::s_isLive = false;
+
 Box2DWorld::Box2DWorld(TimeTracker& tt) :
 _timeTracker(tt),
 _world(new b2World(b2Vec2(0.0f, -80))),
