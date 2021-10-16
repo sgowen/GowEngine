@@ -34,6 +34,12 @@ void EntityPhysicsController::setVelocity(Vector2 v)
     UNUSED(v);
 }
 
+void EntityPhysicsController::applyForce(Vector2 v)
+{
+    // TODO
+    UNUSED(v);
+}
+
 void EntityPhysicsController::updatePoseFromBody()
 {
     // TODO

@@ -39,6 +39,11 @@ void Box2DPhysicsController::setVelocity(Vector2 v)
     _body->SetLinearVelocity(b2Vec2(v._x, v._y));
 }
 
+void Box2DPhysicsController::applyForce(Vector2 v)
+{
+    _body->ApplyLinearImpulse(b2Vec2(v._x, v._y), _body->GetWorldCenter(), true);
+}
+
 void Box2DPhysicsController::updatePoseFromBody()
 {
     if (_body == nullptr)
