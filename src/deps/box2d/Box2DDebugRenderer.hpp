@@ -26,8 +26,8 @@ public:
     _boundsRektangleBatcher(maxBatchSize, false),
     _fillTriangleBatcher(maxBatchSize, true),
     _boundsTriangleBatcher(maxBatchSize, false),
-    _shader(nullptr),
-    _matrix(nullptr)
+    _matrix(nullptr),
+    _shader(nullptr)
     {
         // Empty
     }
