@@ -8,6 +8,7 @@
 
 #pragma once
 
+#include "Font.hpp"
 #include "ShaderDescriptor.hpp"
 #include "SoundDescriptor.hpp"
 #include "TextureDescriptor.hpp"
@@ -16,9 +17,25 @@
 
 struct Assets
 {
+    std::vector<Font> _fonts;
     std::vector<ShaderDescriptor> _shaderDescriptors;
     std::vector<SoundDescriptor> _soundDescriptors;
     std::vector<TextureDescriptor> _textureDescriptors;
+    
+    Font* font(std::string key)
+    {
+        Font* ret = nullptr;
+        
+        for (Font& f : _fonts)
+        {
+            if (f._name == key)
+            {
+                ret = &f;
+            }
+        }
+        
+        return ret;
+    }
     
     TextureRegion* textureRegion(std::string key, uint16_t stateTime)
     {

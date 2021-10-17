@@ -8,14 +8,10 @@
 
 #include <GowEngine/GowEngine.hpp>
 
-FontBatcher::FontBatcher(uint32_t maxBatchSize, std::string matrixName, std::string textureName, uint8_t glyphsPerRow, uint8_t glyphWidth, uint8_t glyphHeight) :
-_spriteBatcher(maxBatchSize),
-_matrixName(matrixName),
-_textureName(textureName),
-_glyphsPerRow(glyphsPerRow),
-_glyphWidth(glyphWidth),
-_glyphHeight(glyphHeight),
-_glyphWidthToHeightRatio(_glyphHeight / (float)_glyphWidth)
+FontBatcher::FontBatcher(std::string font, std::string matrix, uint32_t maxBatchSize) :
+_font(font),
+_matrix(matrix),
+_spriteBatcher(maxBatchSize)
 {
     // Empty
 }
@@ -42,21 +38,24 @@ void FontBatcher::addText(Renderer& r, TextView& tv)
         return;
     }
 
+    Font& f = ASSETS_MGR.font(_font);
+    float glyphWidthToHeightRatio = f._glyphWidthToHeightRatio;
+    
     if (_glyphs.empty())
     {
-        Texture& t = ASSETS_MGR.texture(_textureName);
+        Texture& t = ASSETS_MGR.texture(f._texture);
         int x = 0;
         int y = 0;
         for (int i = 0; i < 176; ++i)
         {
-            _glyphs.emplace_back(x, y, _glyphWidth, _glyphHeight, t._width, t._height);
+            _glyphs.emplace_back(x, y, f._glyphWidth, f._glyphHeight, t._width, t._height);
 
-            x += _glyphWidth;
+            x += f._glyphWidth;
 
-            if (x == _glyphsPerRow * _glyphWidth)
+            if (x == f._glyphsPerRow * f._glyphWidth)
             {
                 x = 0;
-                y += _glyphHeight;
+                y += f._glyphHeight;
             }
         }
     }
@@ -79,7 +78,7 @@ void FontBatcher::addText(Renderer& r, TextView& tv)
         ++rows[rowIndex];
     }
 
-    Matrix& m = r.matrix(_matrixName);
+    Matrix& m = r.matrix(_matrix);
     float matrixWidth = m._desc.width();
     float matrixHeight = m._desc.height();
     float y = matrixHeight * tv._yWeight;
@@ -89,7 +88,7 @@ void FontBatcher::addText(Renderer& r, TextView& tv)
     {
         float x = matrixWidth * tv._xWeight;
         float glyphWidth = matrixWidth * tv._glyphWidthWeight;
-        float glyphHeight = glyphWidth * _glyphWidthToHeightRatio;
+        float glyphHeight = glyphWidth * glyphWidthToHeightRatio;
 
         if (tv._alignment == TEXA_CENTER)
         {
@@ -131,7 +130,8 @@ void FontBatcher::addText(Renderer& r, std::string text, uint8_t alignment, floa
 
 void FontBatcher::end(Renderer& r, Shader& s)
 {
-    Matrix& m = r.matrix(_matrixName);
-    Texture& t = ASSETS_MGR.texture(_textureName);
+    Matrix& m = r.matrix(_matrix);
+    Font& f = ASSETS_MGR.font(_font);
+    Texture& t = ASSETS_MGR.texture(f._texture);
     _spriteBatcher.end(s, m._matrix, t);
 }

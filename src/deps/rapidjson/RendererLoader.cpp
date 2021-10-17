@@ -58,14 +58,11 @@ Renderer RendererLoader::initWithJSON(const char* json)
             
             std::string key = i->name.GetString();
             
+            std::string font = RapidJSONUtil::getString(iv, "font");
             std::string matrix = RapidJSONUtil::getString(iv, "matrix");
-            std::string texture = RapidJSONUtil::getString(iv, "texture");
             uint32_t maxBatchSize = RapidJSONUtil::getUInt(iv, "maxBatchSize");
-            uint8_t glyphsPerRow = RapidJSONUtil::getUInt(iv, "glyphsPerRow");
-            uint8_t glyphWidth = RapidJSONUtil::getUInt(iv, "glyphWidth");
-            uint8_t glyphHeight = RapidJSONUtil::getUInt(iv, "glyphHeight");
             
-            ret._fontBatchers.emplace(key, FontBatcher{maxBatchSize, matrix, texture, glyphsPerRow, glyphWidth, glyphHeight});
+            ret._fontBatchers.emplace(key, FontBatcher{font, matrix, maxBatchSize});
         }
     }
     

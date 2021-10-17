@@ -52,57 +52,57 @@ void OpenGLUtil::unbindShader(Shader& s)
     glUseProgram(0);
 }
 
-void OpenGLUtil::bindMatrix(Shader& s, std::string uniformName, mat4& matrix)
+void OpenGLUtil::bindMatrix(Shader& s, std::string uniform, mat4& matrix)
 {
-    ShaderUniform& su = s._desc.uniform(uniformName);
+    ShaderUniform& su = s._desc.uniform(uniform);
     assert(su._type == "mat4");
     
     glUniformMatrix4fv(su._location, 1, GL_FALSE, (GLfloat*)matrix);
 }
 
-void OpenGLUtil::bindColor(Shader& s, std::string uniformName, const Color& c)
+void OpenGLUtil::bindColor(Shader& s, std::string uniform, const Color& c)
 {
-    ShaderUniform& su = s._desc.uniform(uniformName);
+    ShaderUniform& su = s._desc.uniform(uniform);
     assert(su._type == "vec4");
     
     glUniform4f(su._location, c._red, c._green, c._blue, c._alpha);
 }
 
-void OpenGLUtil::bindInt4(Shader& s, std::string uniformName, ivec4& value)
+void OpenGLUtil::bindInt4(Shader& s, std::string uniform, ivec4& value)
 {
-    ShaderUniform& su = s._desc.uniform(uniformName);
+    ShaderUniform& su = s._desc.uniform(uniform);
     assert(su._type == "ivec4");
     
     glUniform4i(su._location, value[0], value[1], value[2], value[3]);
 }
 
-void OpenGLUtil::bindFloat4(Shader& s, std::string uniformName, vec4& value)
+void OpenGLUtil::bindFloat4(Shader& s, std::string uniform, vec4& value)
 {
-    ShaderUniform& su = s._desc.uniform(uniformName);
+    ShaderUniform& su = s._desc.uniform(uniform);
     assert(su._type == "vec4");
     
     glUniform4f(su._location, value[0], value[1], value[2], value[3]);
 }
 
-void OpenGLUtil::bindFloat4Array(Shader& s, std::string uniformName, int count, vec4* value)
+void OpenGLUtil::bindFloat4Array(Shader& s, std::string uniform, int count, vec4* value)
 {
-    ShaderUniform& su = s._desc.uniform(uniformName);
+    ShaderUniform& su = s._desc.uniform(uniform);
     assert(su._type == "vec4");
     
     glUniform4fv(su._location, count, (const GLfloat*)value);
 }
 
-void OpenGLUtil::bindTexture(Shader& s, std::string uniformName, uint32_t index, Texture& t)
+void OpenGLUtil::bindTexture(Shader& s, std::string uniform, uint32_t index, Texture& t)
 {
-    bindTexture(s, uniformName, index, t._texture);
+    bindTexture(s, uniform, index, t._texture);
 }
 
-void OpenGLUtil::bindTexture(Shader& s, std::string uniformName, uint32_t index, uint32_t texture)
+void OpenGLUtil::bindTexture(Shader& s, std::string uniform, uint32_t index, uint32_t texture)
 {
     assert(index < NUM_SUPPORTED_TEXTURE_SLOTS);
     assert(texture > 0);
     
-    ShaderUniform& su = s._desc.uniform(uniformName);
+    ShaderUniform& su = s._desc.uniform(uniform);
     assert(su._type == "sampler2D");
     
     glActiveTexture(TEXTURE_SLOTS[index]);

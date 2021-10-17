@@ -81,6 +81,7 @@
 #include "core/assets/AssetsManager.hpp"
 #include "core/assets/FileData.hpp"
 #include "core/assets/FileUtil.hpp"
+#include "core/assets/Font.hpp"
 #include "core/assets/LinuxAssetHandler.hpp"
 #include "core/assets/MatrixDescriptor.hpp"
 #include "core/assets/ShaderDescriptor.hpp"

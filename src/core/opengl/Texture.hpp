@@ -19,8 +19,8 @@ struct Texture
     uint8_t* _data;
     uint32_t _texture;
     
-    Texture(TextureDescriptor desc) :
-    _desc(desc),
+    Texture(TextureDescriptor td) :
+    _desc(td),
     _width(0),
     _height(0),
     _numChannels(0),

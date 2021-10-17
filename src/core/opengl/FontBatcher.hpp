@@ -24,7 +24,7 @@ struct TextureRegion;
 class FontBatcher
 {
 public:
-	FontBatcher(uint32_t maxBatchSize, std::string matrixName, std::string textureName, uint8_t glyphsPerRow, uint8_t glyphWidth, uint8_t glyphHeight);
+	FontBatcher(std::string font, std::string matrix, uint32_t maxBatchSize);
     
     void createDeviceDependentResources();
     void destroyDeviceDependentResources();
@@ -34,12 +34,8 @@ public:
     void end(Renderer& r, Shader& s);
 
 private:
-    SpriteBatcher _spriteBatcher;
-    std::string _matrixName;
-    std::string _textureName;
     std::vector<TextureRegion> _glyphs;
-    uint8_t _glyphsPerRow;
-    uint8_t _glyphWidth;
-    uint8_t _glyphHeight;
-    float _glyphWidthToHeightRatio;
+    std::string _font;
+    std::string _matrix;
+    SpriteBatcher _spriteBatcher;
 };

@@ -8,6 +8,7 @@
 
 #pragma once
 
+#include "core/assets/Font.hpp"
 #include "core/opengl/ShaderManager.hpp"
 #include "core/audio/SoundManager.hpp"
 #include "core/opengl/TextureManager.hpp"
@@ -38,6 +39,7 @@ public:
     SoundWrapper* sound(std::string soundID);
     std::map<std::string, SoundWrapper*>& sounds();
     SoundWrapper* music();
+    Font& font(std::string name);
     Texture& texture(std::string name);
     bool isTextureLoaded(std::string name);
     TextureRegion& textureRegion(std::string key, uint16_t stateTime = 0);

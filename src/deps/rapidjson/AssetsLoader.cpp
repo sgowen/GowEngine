@@ -112,6 +112,25 @@ Assets AssetsLoader::initWithJSON(const char* json)
             }
         }
     }
+    
+    if (d.HasMember("fonts"))
+    {
+        Value& v = d["fonts"];
+        assert(v.IsArray());
+        for (SizeType i = 0; i < v.Size(); ++i)
+        {
+            const Value& iv = v[i];
+            assert(iv.IsObject());
+
+            std::string name = RapidJSONUtil::getString(iv, "name");
+            std::string texture = RapidJSONUtil::getString(iv, "texture");
+            uint8_t glyphsPerRow = RapidJSONUtil::getUInt(iv, "glyphsPerRow");
+            uint8_t glyphWidth = RapidJSONUtil::getUInt(iv, "glyphWidth");
+            uint8_t glyphHeight = RapidJSONUtil::getUInt(iv, "glyphHeight");
+
+            ret._fonts.emplace_back(name, texture, glyphsPerRow, glyphWidth, glyphHeight);
+        }
+    }
 
     if (d.HasMember("textures"))
     {
@@ -123,7 +142,7 @@ Assets AssetsLoader::initWithJSON(const char* json)
             assert(iv.IsObject());
 
             std::string name = RapidJSONUtil::getString(iv, "name");
-            std::string normalMapName = RapidJSONUtil::getString(iv, "normalMapName");
+            std::string normalMap = RapidJSONUtil::getString(iv, "normalMap");
             std::string filePath = RapidJSONUtil::getString(iv, "filePath");
             std::string filterMin = RapidJSONUtil::getString(iv, "filterMin", "SHARP");
             assert(filterMin == "SHARP" || filterMin == "SMOOTH");
@@ -131,7 +150,7 @@ Assets AssetsLoader::initWithJSON(const char* json)
             assert(filterMag == "SHARP" || filterMag == "SMOOTH");
             bool mipMap = RapidJSONUtil::getBool(iv, "mipMap", true);
 
-            ret._textureDescriptors.emplace_back(name, normalMapName, filePath, filterMin, filterMag, mipMap);
+            ret._textureDescriptors.emplace_back(name, normalMap, filePath, filterMin, filterMag, mipMap);
 
             if (iv.HasMember("mappings"))
             {

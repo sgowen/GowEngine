@@ -17,7 +17,7 @@
 struct TextureDescriptor
 {
     const std::string _name;
-    const std::string _normalMapName;
+    const std::string _normalMap;
     const std::string _filePath;
     const std::string _filterMin;
     const std::string _filterMag;
@@ -25,9 +25,9 @@ struct TextureDescriptor
     std::map<std::string, TextureRegion> _textureRegions;
     std::map<std::string, Animation> _animations;
     
-    TextureDescriptor(std::string name, std::string normalMapName, std::string filePath, std::string filterMin, std::string filterMag, bool mipMap) :
+    TextureDescriptor(std::string name, std::string normalMap, std::string filePath, std::string filterMin, std::string filterMag, bool mipMap) :
     _name(name),
-    _normalMapName(normalMapName),
+    _normalMap(normalMap),
     _filePath(filePath),
     _filterMin(filterMin),
     _filterMag(filterMag),

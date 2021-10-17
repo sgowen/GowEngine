@@ -18,17 +18,17 @@ enum ImageVisibility
 
 struct ImageView
 {
-    std::string _textureName;
-    std::string _textureRegionName;
+    std::string _texture;
+    std::string _textureRegion;
     float _xWeight;
     float _yWeight;
     float _widthWeight;
     float _heightWeight;
     uint8_t _visibility;
     
-    ImageView(std::string textureName, std::string textureRegionName, float xWeight, float yWeight, float widthWeight, float heightWeight) :
-    _textureName(textureName),
-    _textureRegionName(textureRegionName),
+    ImageView(std::string texture, std::string textureRegion, float xWeight, float yWeight, float widthWeight, float heightWeight) :
+    _texture(texture),
+    _textureRegion(textureRegion),
     _xWeight(xWeight),
     _yWeight(yWeight),
     _widthWeight(widthWeight),

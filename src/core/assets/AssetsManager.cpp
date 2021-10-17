@@ -127,6 +127,26 @@ SoundWrapper* AssetsManager::music()
     return _soundMgr.music();
 }
 
+Font& AssetsManager::font(std::string name)
+{
+    Font* ret = nullptr;
+    
+    for (auto& pair : _assets)
+    {
+        Assets& a = pair.second;
+        Font* f = a.font(name);
+        if (f != nullptr)
+        {
+            ret = f;
+            break;
+        }
+    }
+    
+    assert(ret != nullptr);
+    
+    return *ret;
+}
+
 Texture& AssetsManager::texture(std::string name)
 {
     return _textureMgr.texture(name);

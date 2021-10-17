@@ -131,7 +131,7 @@ void Renderer::renderImageViews(float angle, bool flipX, std::string matrixKey, 
     for (auto& pair : _imageViews)
     {
         ImageView& iv = pair.second;
-        renderSprite(iv._textureName, iv._textureRegionName, l + w * iv._xWeight, b + h * iv._yWeight, w * iv._widthWeight, h * iv._heightWeight, 0, angle, flipX, matrixKey, shaderKey, spriteBatcherKey);
+        renderSprite(iv._texture, iv._textureRegion, l + w * iv._xWeight, b + h * iv._yWeight, w * iv._widthWeight, h * iv._heightWeight, 0, angle, flipX, matrixKey, shaderKey, spriteBatcherKey);
     }
 }
 
