@@ -377,7 +377,7 @@ struct EntityDef
     std::string _networkController;
     std::string _physicsController;
     std::string _renderController;
-    std::map<uint8_t, std::map<uint8_t, std::string> > _textureMappings;
+    std::map<uint8_t, std::string> _textureMappings;
     std::map<uint8_t, std::string> _soundMappings;
     std::vector<FixtureDef> _fixtures;
     uint8_t _bodyFlags;
@@ -393,7 +393,7 @@ struct EntityDef
               std::string networkController,
               std::string physicsController,
               std::string renderController,
-              std::map<uint8_t, std::map<uint8_t, std::string> > textureMappings,
+              std::map<uint8_t, std::string> textureMappings,
               std::map<uint8_t, std::string> soundMappings,
               std::vector<FixtureDef> fixtures,
               uint8_t bodyFlags,

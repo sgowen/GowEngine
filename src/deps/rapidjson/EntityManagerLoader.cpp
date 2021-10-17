@@ -44,7 +44,7 @@ void EntityManagerLoader::initWithJSON(EntityManager& em, const char* json)
         std::string physicsController = RapidJSONUtil::getString(iv, "physicsController", "Default");
         std::string renderController = RapidJSONUtil::getString(iv, "renderController", "Default");
         
-        std::map<uint8_t, std::map<uint8_t, std::string> > textureMappings;
+        std::map<uint8_t, std::string> textureMappings;
         if (iv.HasMember("textureMappings"))
         {
             const Value& v = iv["textureMappings"];
@@ -55,24 +55,9 @@ void EntityManagerLoader::initWithJSON(EntityManager& em, const char* json)
                 uint16_t nameVal = StringUtil::stringToNumber<uint16_t>(name);
                 uint8_t state = (uint8_t)nameVal;
                 const Value& value = i->value;
-                std::map<uint8_t, std::string> stateFlagMappings;
-                if (value.IsObject())
-                {
-                    for (Value::ConstMemberIterator i = value.MemberBegin(); i != value.MemberEnd(); ++i)
-                    {
-                        std::string name = i->name.GetString();
-                        uint16_t nameVal = StringUtil::stringToNumber<uint16_t>(name);
-                        uint8_t stateFlag = (uint8_t)nameVal;
-                        std::string stateFlagMapping = i->value.GetString();
-                        stateFlagMappings.emplace(stateFlag, stateFlagMapping);
-                    }
-                }
-                else
-                {
-                    std::string stateMapping = value.GetString();
-                    stateFlagMappings.emplace(0, stateMapping);
-                }
-                textureMappings.emplace(state, stateFlagMappings);
+                assert(value.IsString());
+                std::string stateMapping = value.GetString();
+                textureMappings.emplace(state, stateMapping);
             }
         }
         else if (iv.HasMember("textureMapping"))
@@ -81,9 +66,7 @@ void EntityManagerLoader::initWithJSON(EntityManager& em, const char* json)
             assert(v.IsString());
             uint8_t state = 0;
             std::string stateMapping = v.GetString();
-            std::map<uint8_t, std::string> stateFlagMappings;
-            stateFlagMappings.emplace(0, stateMapping);
-            textureMappings.emplace(state, stateFlagMappings);
+            textureMappings.emplace(state, stateMapping);
         }
         
         std::map<uint8_t, std::string> soundMappings;

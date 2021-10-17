@@ -20,29 +20,25 @@ _entity(e)
 std::string EntityRenderController::getTextureMapping()
 {
     Entity& e = *_entity;
-    return getTextureMapping(e._state._state, e._state._stateFlags);
+    return getTextureMapping(e._state._state);
 }
 
-std::string EntityRenderController::getTextureMapping(uint8_t state, uint8_t stateFlags)
+std::string EntityRenderController::getTextureMapping(uint8_t state)
 {
     Entity& e = *_entity;
     auto q = e.entityDef()._textureMappings.find(state);
     assert (q != e.entityDef()._textureMappings.end());
     
-    std::map<uint8_t, std::string>& stateTextureMappings = q->second;
-    auto q2 = stateTextureMappings.find(stateFlags);
-    assert (q2 != stateTextureMappings.end());
-    
-    return q2->second;
+    return q->second;
 }
 
 std::string EntityRenderController::getSoundMapping(uint8_t state)
 {
     Entity& e = *_entity;
-    auto q1 = e.entityDef()._soundMappings.find(state);
-    if (q1 != e.entityDef()._soundMappings.end())
+    auto q = e.entityDef()._soundMappings.find(state);
+    if (q != e.entityDef()._soundMappings.end())
     {
-        return q1->second;
+        return q->second;
     }
     
     return "";

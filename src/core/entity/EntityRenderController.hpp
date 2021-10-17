@@ -35,7 +35,7 @@ public:
     virtual ~EntityRenderController() {}
     
     virtual std::string getTextureMapping();
-    virtual std::string getTextureMapping(uint8_t state, uint8_t stateFlags = 0);
+    virtual std::string getTextureMapping(uint8_t state);
     virtual std::string getSoundMapping(uint8_t state);
     
 protected:
