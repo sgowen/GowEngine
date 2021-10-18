@@ -25,7 +25,7 @@
 // The rest could be loaded up via global engine config
 
 /// Engine
-#define TIME_SCALE 1
+#define TIME_SCALE 2
 #define FRAMES_PER_SECOND (30 * TIME_SCALE)
 #define FRAME_RATE 1.0f / FRAMES_PER_SECOND
 #define MAX_NUM_PLAYERS 2

@@ -42,7 +42,7 @@ void Box2DPhysicsController::setVelocity(Vector2 v)
 void Box2DPhysicsController::applyForce(Vector2 v)
 {
     float mass = _body->GetMass();
-    _body->ApplyLinearImpulse(b2Vec2(v._x * mass, v._y * mass), _body->GetWorldCenter(), true);
+    _body->ApplyLinearImpulseToCenter(b2Vec2(v._x * mass, v._y * mass), true);
 }
 
 void Box2DPhysicsController::updatePoseFromBody()

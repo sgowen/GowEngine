@@ -15,7 +15,7 @@ bool Box2DWorld::s_isLiveFrame = false;
 
 Box2DWorld::Box2DWorld(TimeTracker& tt) :
 _timeTracker(tt),
-_world(new b2World(b2Vec2(0.0f, -80))),
+_world(new b2World(b2Vec2(0.0f, -120))),
 _entityContactListener(new EntityContactListener()),
 _entityContactFilter(new EntityContactFilter()),
 _entityLayout()
