@@ -194,7 +194,7 @@ Assets AssetsLoader::initWithJSON(const char* json)
                             for (SizeType i = 0; i < va.Size(); ++i)
                             {
                                 const Value& iva = va[i];
-                                frameTimes.push_back(iva.GetUint());
+                                frameTimes.push_back(iva.GetUint() * TIME_SCALE);
                             }
 
                             numFrames = frameTimes.size();
@@ -207,7 +207,7 @@ Assets AssetsLoader::initWithJSON(const char* json)
                             frameTimes.reserve(numFrames);
                             for (size_t i = 0; i < numFrames; ++i)
                             {
-                                frameTimes.push_back(frameTime);
+                                frameTimes.push_back(frameTime * TIME_SCALE);
                             }
                         }
 
