@@ -26,6 +26,7 @@
 
 /// Engine
 #define FRAMES_PER_SECOND 30
+#define TIME_SCALE (FRAMES_PER_SECOND / 30)
 #define FRAME_RATE 1.0f / FRAMES_PER_SECOND
 #define MAX_NUM_PLAYERS 2
 
