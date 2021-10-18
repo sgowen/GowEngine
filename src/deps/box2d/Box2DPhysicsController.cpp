@@ -98,6 +98,11 @@ void Box2DPhysicsController::handleBeginContact(Entity* e, b2Fixture* fixtureA, 
         !fixtureB->IsSensor())
     {
         _entity->pose()._numGroundContacts = CLAMP(_entity->pose()._numGroundContacts + 1, 0, 15);
+        
+        if (IS_PHYSICS_LOGGING_ENABLED())
+        {
+            LOG("_numGroundContacts: %d", _entity->pose()._numGroundContacts);
+        }
     }
 }
 
@@ -107,6 +112,11 @@ void Box2DPhysicsController::handleEndContact(Entity* e, b2Fixture* fixtureA, b2
         !fixtureB->IsSensor())
     {
         _entity->pose()._numGroundContacts = CLAMP(_entity->pose()._numGroundContacts - 1, 0, 15);
+        
+        if (IS_PHYSICS_LOGGING_ENABLED())
+        {
+            LOG("_numGroundContacts: %d", _entity->pose()._numGroundContacts);
+        }
     }
 }
 

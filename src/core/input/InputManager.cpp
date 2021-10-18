@@ -19,7 +19,7 @@ void InputManager::onCursorInput(CursorEventType type, float x, float y, bool is
     
     _poolCursor.add(e);
     
-    if (_isLoggingEnabled)
+    if (IS_INPUT_LOGGING_ENABLED())
     {
         LOG("onCursorInput %d %f %f %d", type, x, y, isAlt);
     }
@@ -29,7 +29,7 @@ void InputManager::onGamepadInput(uint8_t button, uint8_t index, float x, float 
 {
     if (index >= MAX_NUM_SUPPORTED_GAMEPADS)
     {
-        if (_isLoggingEnabled)
+        if (IS_INPUT_LOGGING_ENABLED())
         {
             LOG("Only %d gamepads supported!", MAX_NUM_SUPPORTED_GAMEPADS);
         }
@@ -64,7 +64,7 @@ void InputManager::onGamepadInput(uint8_t button, uint8_t index, float x, float 
     
     _poolGamepad.add(e);
     
-    if (_isLoggingEnabled)
+    if (IS_INPUT_LOGGING_ENABLED())
     {
         LOG("onGamepadInput %d %d %f %f", button, index, x, y);
     }
@@ -74,7 +74,7 @@ void InputManager::onKeyboardInput(uint16_t key, bool isUp)
 {
     if (!isKeySupported(key))
     {
-        if (_isLoggingEnabled)
+        if (IS_INPUT_LOGGING_ENABLED())
         {
             LOG("Key not supported %d", key);
         }
@@ -101,7 +101,7 @@ void InputManager::onKeyboardInput(uint16_t key, bool isUp)
     
     _poolKeyboard.add(e);
     
-    if (_isLoggingEnabled)
+    if (IS_INPUT_LOGGING_ENABLED())
     {
         LOG("onKeyboardInput %d %d", key, isUp);
     }
@@ -167,11 +167,6 @@ void InputManager::setMatrix(Matrix* m)
     _matrix = m;
 }
 
-void InputManager::setLoggingEnabled(bool loggingEnabled)
-{
-    _isLoggingEnabled = loggingEnabled;
-}
-
 bool InputManager::isKeyNumerical(uint16_t key)
 {
     std::vector<uint16_t>& keys = _numericalKeys;
@@ -201,8 +196,7 @@ _lastConvertedCursorPos(),
 _cursorWidth(1),
 _cursorHeight(1),
 _clipboardHandler(nullptr),
-_matrix(nullptr),
-_isLoggingEnabled(false)
+_matrix(nullptr)
 {
     _numericalKeys.push_back(GOW_KEY_0);
     _numericalKeys.push_back(GOW_KEY_1);

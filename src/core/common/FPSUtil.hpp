@@ -23,10 +23,12 @@ public:
     int fps() const;
     
 private:
-    FPSUtil();
-    ~FPSUtil() {}
-    
     float _stateTime;
     int _fPS;
     int _numFrames;
+    
+    FPSUtil();
+    ~FPSUtil() {}
+    FPSUtil(const FPSUtil&);
+    FPSUtil& operator=(const FPSUtil&);
 };

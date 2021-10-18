@@ -16,8 +16,9 @@ _initialEngineState(initialEngineState)
     EntityLayoutManagerLoader::initWithJSONFile(ENTITY_LAYOUT_MGR, _config.getString("filePathEntityLayoutManager"));
     EntityManagerLoader::initWithJSONFile(ENTITY_MGR, _config.getString("filePathEntityManager"));
     
-    SOCKET_UTIL.setLoggingEnabled(_config.getBool("networkLoggingEnabled", false));
-    INPUT_MGR.setLoggingEnabled(_config.getBool("inputLoggingEnabled", false));
+    LOGGING_UTIL.setInputLoggingEnabled(_config.getBool("inputLoggingEnabled", false));
+    LOGGING_UTIL.setNetworkLoggingEnabled(_config.getBool("networkLoggingEnabled", false));
+    LOGGING_UTIL.setPhysicsLoggingEnabled(_config.getBool("physicsLoggingEnabled", false));
     AUDIO_ENGINE.setSoundsDisabled(_config.getBool("soundsDisabled", false));
     AUDIO_ENGINE.setMusicDisabled(_config.getBool("musicDisabled", false));
     

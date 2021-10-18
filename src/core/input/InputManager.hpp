@@ -45,7 +45,7 @@ public:
     const char* getClipboardString();
     void setCursorSize(int cursorWidth, int cursorHeight);
     void setMatrix(Matrix* m);
-    void setLoggingEnabled(bool isLoggingEnabled);
+    
     
 private:
     FixedSizePool<CursorEvent> _poolCursor;
@@ -61,7 +61,6 @@ private:
     int _cursorHeight;
     ClipboardHandler* _clipboardHandler;
     Matrix* _matrix;
-    bool _isLoggingEnabled;
     
     bool isKeyNumerical(uint16_t key);
     bool isKeySuitableForTextInput(uint16_t key);

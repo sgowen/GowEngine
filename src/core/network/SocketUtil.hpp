@@ -11,7 +11,6 @@
 #include "Network.hpp"
 
 #define SOCKET_UTIL (SocketUtil::getInstance())
-#define IS_NETWORK_LOGGING_ENABLED SOCKET_UTIL.isLoggingEnabled
 
 class UDPSocket;
 
@@ -24,12 +23,9 @@ public:
     void reportError(const char* operationDesc);
     int getLastError();
     UDPSocket* createUDPSocket(SocketAddressFamily saf);
-    void setLoggingEnabled(bool isLoggingEnabled);
-    bool isLoggingEnabled();
     
 private:
     bool _isConnected;
-    bool _isLoggingEnabled;
     
     SocketUtil();
     ~SocketUtil();

@@ -85,19 +85,8 @@ UDPSocket* SocketUtil::createUDPSocket(SocketAddressFamily saf)
     }
 }
 
-void SocketUtil::setLoggingEnabled(bool isLoggingEnabled)
-{
-    _isLoggingEnabled = isLoggingEnabled;
-}
-
-bool SocketUtil::isLoggingEnabled()
-{
-    return _isLoggingEnabled;
-}
-
 SocketUtil::SocketUtil() :
-_isConnected(false),
-_isLoggingEnabled(false)
+_isConnected(false)
 {
     // Empty
 }
