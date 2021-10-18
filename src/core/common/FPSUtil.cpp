@@ -17,7 +17,7 @@ void FPSUtil::update(float deltaTime)
     {
         _fPS = _numFrames;
         
-        _stateTime = 0;
+        _stateTime -= 1.0;
         _numFrames = 0;
     }
 }
