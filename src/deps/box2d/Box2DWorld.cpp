@@ -96,7 +96,14 @@ void Box2DWorld::stepPhysics()
     
     // Instruct the world to perform a single step of simulation.
     // It is generally best to keep the time step and iterations fixed.
-    _world->Step(_timeTracker._frameRate, velocityIterations, positionIterations);
+    _world->Step(FRAME_RATE_PHYSICS, velocityIterations, positionIterations);
+    if (TIME_SCALE == 1)
+    {
+        // FRAME_RATE_PHYSICS is 60 FPS
+        // so need to step again when running
+        // in 30 FPS mode
+        _world->Step(FRAME_RATE_PHYSICS, velocityIterations, positionIterations);
+    }
 }
 
 std::vector<Entity*> Box2DWorld::update()
