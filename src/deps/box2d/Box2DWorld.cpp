@@ -91,7 +91,7 @@ void Box2DWorld::recallCache()
 
 void Box2DWorld::stepPhysics()
 {
-    static int32 velocityIterations = 6;
+    static int32 velocityIterations = 4;
     static int32 positionIterations = 2;
     
     // Instruct the world to perform a single step of simulation.
