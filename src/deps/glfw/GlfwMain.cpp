@@ -18,6 +18,11 @@
 #define GLFW_INCLUDE_NONE
 #include <GLFW/glfw3.h>
 
+#include <chrono>
+
+using namespace std;
+using namespace std::chrono;
+
 Engine* _engine = nullptr;
 int joysticks[GLFW_JOYSTICK_LAST + 1];
 int joystick_count = 0;
@@ -147,6 +152,8 @@ void runEngine(EngineConfig& ec, GLFWwindow* window)
 
     while (!glfwWindowShouldClose(window))
     {
+        auto frameStart = high_resolution_clock::now();
+        
         double deltaTime = glfwGetTime() - lastTime;
         lastTime = glfwGetTime();
         
@@ -217,6 +224,7 @@ void runEngine(EngineConfig& ec, GLFWwindow* window)
             }
         }
 
+        auto updateStart = high_resolution_clock::now();
         EngineRequestedHostAction requestedAction = engine.update(static_cast<float>(deltaTime));
         switch (requestedAction)
         {
@@ -227,10 +235,30 @@ void runEngine(EngineConfig& ec, GLFWwindow* window)
             default:
                 break;
         }
+        if (IS_GLFW_LOGGING_ENABLED())
+        {
+            auto updateStop = high_resolution_clock::now();
+            auto updateDur = duration_cast<microseconds>(updateStop - updateStart);
+            LOG("UPDATE took: %d microseconds", updateDur.count());
+        }
 
+        auto renderStart = high_resolution_clock::now();
         engine.render();
+        if (IS_GLFW_LOGGING_ENABLED())
+        {
+            auto renderStop = high_resolution_clock::now();
+            auto renderDur = duration_cast<microseconds>(renderStop - renderStart);
+            LOG("RENDER took: %d microseconds", renderDur.count());
+        }
 
         glfwSwapBuffers(window);
+        
+        if (IS_GLFW_LOGGING_ENABLED())
+        {
+            auto frameStop = high_resolution_clock::now();
+            auto frameDur = duration_cast<microseconds>(frameStop - frameStart);
+            LOG("FRAME took: %d microseconds", frameDur.count());
+        }
     }
 
     engine.destroyDeviceDependentResources();
@@ -302,7 +330,7 @@ void GlfwMain::exec(EngineConfig& ec, const char* windowTitle)
     glewInit();
 #endif
     
-    glfwSwapInterval(1);
+    glfwSwapInterval(ec.config().getInt("glfwSwapInterval", 1));
     
     runEngine(ec, window);
 

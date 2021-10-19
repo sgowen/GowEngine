@@ -8,6 +8,16 @@
 
 #include <GowEngine/GowEngine.hpp>
 
+void LoggingUtil::setGlfwLoggingEnabled(bool isEnabled)
+{
+    _isGlfwLoggingEnabled = isEnabled;
+}
+
+bool LoggingUtil::isGlfwLoggingEnabled()
+{
+    return _isGlfwLoggingEnabled;
+}
+
 void LoggingUtil::setInputLoggingEnabled(bool isEnabled)
 {
     _isInputLoggingEnabled = isEnabled;
@@ -39,6 +49,7 @@ bool LoggingUtil::isPhysicsLoggingEnabled()
 }
 
 LoggingUtil::LoggingUtil() :
+_isGlfwLoggingEnabled(false),
 _isInputLoggingEnabled(false),
 _isNetworkLoggingEnabled(false),
 _isPhysicsLoggingEnabled(false)

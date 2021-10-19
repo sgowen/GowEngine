@@ -19,6 +19,7 @@ class EngineConfig
 public:
     EngineConfig(std::string configFilePath, EngineState& initialEngineState);
     
+    Config& config();
     EngineState& initialEngineState();
     
 private:

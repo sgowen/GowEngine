@@ -16,6 +16,7 @@ _initialEngineState(initialEngineState)
     EntityLayoutManagerLoader::initWithJSONFile(ENTITY_LAYOUT_MGR, _config.getString("filePathEntityLayoutManager"));
     EntityManagerLoader::initWithJSONFile(ENTITY_MGR, _config.getString("filePathEntityManager"));
     
+    LOGGING_UTIL.setGlfwLoggingEnabled(_config.getBool("glfwLoggingEnabled", false));
     LOGGING_UTIL.setInputLoggingEnabled(_config.getBool("inputLoggingEnabled", false));
     LOGGING_UTIL.setNetworkLoggingEnabled(_config.getBool("networkLoggingEnabled", false));
     LOGGING_UTIL.setPhysicsLoggingEnabled(_config.getBool("physicsLoggingEnabled", false));
@@ -27,6 +28,11 @@ _initialEngineState(initialEngineState)
     // Physics controller used should be based on
     // the type of World class being used (e.g. Box2DWorld)
     ENTITY_MGR.registerPhysicsController("Default", Box2DPhysicsController::create);
+}
+
+Config& EngineConfig::config()
+{
+    return _config;
 }
 
 EngineState& EngineConfig::initialEngineState()
