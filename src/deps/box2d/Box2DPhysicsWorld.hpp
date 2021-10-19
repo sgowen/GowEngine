@@ -1,5 +1,5 @@
 //
-//  Box2DWorld.hpp
+//  Box2DPhysicsWorld.hpp
 //  GowEngine
 //
 //  Created by Stephen Gowen on 1/29/21.
@@ -16,14 +16,14 @@ class b2World;
 class EntityContactListener;
 class EntityContactFilter;
 
-class Box2DWorld
+class Box2DPhysicsWorld
 {
 public:
     static bool s_isClient;
     static bool s_isLiveFrame;
     
-    Box2DWorld(TimeTracker& tt);
-    ~Box2DWorld();
+    Box2DPhysicsWorld(TimeTracker& tt);
+    ~Box2DPhysicsWorld();
     
     void populateFromEntityLayout(EntityLayoutDef& eld);
     void addNetworkEntity(Entity* e);

@@ -1,5 +1,5 @@
 //
-//  Box2DDebugRenderer.hpp
+//  NosPhysicsRenderer.hpp
 //  GowEngine
 //
 //  Created by Stephen Gowen on 12/22/17.
@@ -12,15 +12,13 @@
 #include "core/opengl/RektangleBatcher.hpp"
 #include "core/opengl/TriangleBatcher.hpp"
 
-#include <box2d/b2_draw.h>
-
-class Box2DWorld;
+class NosPhysicsWorld;
 struct Shader;
 
-class Box2DDebugRenderer : public b2Draw
+class NosPhysicsRenderer
 {
 public:
-    Box2DDebugRenderer(uint32_t maxBatchSize) :
+    NosPhysicsRenderer(uint32_t maxBatchSize) :
     _circleBatcher(maxBatchSize),
     _fillRektangleBatcher(maxBatchSize, true),
     _boundsRektangleBatcher(maxBatchSize, false),
@@ -31,19 +29,11 @@ public:
     {
         // Empty
     }
-    virtual ~Box2DDebugRenderer() {}
-    
-    virtual void DrawPolygon(const b2Vec2* vertices, int32 vertexCount, const b2Color& color);
-    virtual void DrawSolidPolygon(const b2Vec2* vertices, int32 vertexCount, const b2Color& color);
-    virtual void DrawCircle(const b2Vec2& center, float radius, const b2Color& color);
-    virtual void DrawSolidCircle(const b2Vec2& center, float radius, const b2Vec2& axis, const b2Color& color);
-    virtual void DrawSegment(const b2Vec2& p1, const b2Vec2& p2, const b2Color& color) {}
-    virtual void DrawTransform(const b2Transform& xf) {}
-    virtual void DrawPoint(const b2Vec2& p, float size, const b2Color& color) {}
+    virtual ~NosPhysicsRenderer() {}
     
     void createDeviceDependentResources();
     void destroyDeviceDependentResources();
-    void render(Box2DWorld& world, mat4* matrix, Shader* shader);
+    void render(NosPhysicsWorld& world, mat4* matrix, Shader* shader);
     
 private:
     CircleBatcher _circleBatcher;

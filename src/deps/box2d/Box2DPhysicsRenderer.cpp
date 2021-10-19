@@ -1,5 +1,5 @@
 //
-//  Box2DDebugRenderer.cpp
+//  Box2DPhysicsRenderer.cpp
 //  GowEngine
 //
 //  Created by Stephen Gowen on 12/22/17.
@@ -10,7 +10,7 @@
 
 #include <box2d/box2d.h>
 
-void Box2DDebugRenderer::DrawPolygon(const b2Vec2* vertices, int32 vertexCount, const b2Color& color)
+void Box2DPhysicsRenderer::DrawPolygon(const b2Vec2* vertices, int32 vertexCount, const b2Color& color)
 {
     Color c = Color(color.r, color.g, color.b, 0.3f);
     
@@ -38,7 +38,7 @@ void Box2DDebugRenderer::DrawPolygon(const b2Vec2* vertices, int32 vertexCount, 
     _boundsTriangleBatcher.end(*_shader, *_matrix, c);
 }
 
-void Box2DDebugRenderer::DrawSolidPolygon(const b2Vec2* vertices, int32 vertexCount, const b2Color& color)
+void Box2DPhysicsRenderer::DrawSolidPolygon(const b2Vec2* vertices, int32 vertexCount, const b2Color& color)
 {
     {
         Color c = Color(color.r, color.g, color.b, 0.3f);
@@ -93,7 +93,7 @@ void Box2DDebugRenderer::DrawSolidPolygon(const b2Vec2* vertices, int32 vertexCo
     }
 }
 
-void Box2DDebugRenderer::DrawCircle(const b2Vec2& center, float radius, const b2Color& color)
+void Box2DPhysicsRenderer::DrawCircle(const b2Vec2& center, float radius, const b2Color& color)
 {
     Color c = Color(color.r, color.g, color.b, 0.3f);
     _circleBatcher.begin();
@@ -101,7 +101,7 @@ void Box2DDebugRenderer::DrawCircle(const b2Vec2& center, float radius, const b2
     _circleBatcher.end(*_shader, *_matrix, c);
 }
 
-void Box2DDebugRenderer::DrawSolidCircle(const b2Vec2& center, float radius, const b2Vec2& axis, const b2Color& color)
+void Box2DPhysicsRenderer::DrawSolidCircle(const b2Vec2& center, float radius, const b2Vec2& axis, const b2Color& color)
 {
     Color c = Color(color.r, color.g, color.b, 0.3f);
     _circleBatcher.begin();
@@ -109,7 +109,7 @@ void Box2DDebugRenderer::DrawSolidCircle(const b2Vec2& center, float radius, con
     _circleBatcher.end(*_shader, *_matrix, c);
 }
 
-void Box2DDebugRenderer::createDeviceDependentResources()
+void Box2DPhysicsRenderer::createDeviceDependentResources()
 {
     _circleBatcher.createDeviceDependentResources();
     _fillRektangleBatcher.createDeviceDependentResources();
@@ -118,7 +118,7 @@ void Box2DDebugRenderer::createDeviceDependentResources()
     _boundsTriangleBatcher.createDeviceDependentResources();
 }
 
-void Box2DDebugRenderer::destroyDeviceDependentResources()
+void Box2DPhysicsRenderer::destroyDeviceDependentResources()
 {
     _circleBatcher.destroyDeviceDependentResources();
     _fillRektangleBatcher.destroyDeviceDependentResources();
@@ -127,7 +127,7 @@ void Box2DDebugRenderer::destroyDeviceDependentResources()
     _boundsTriangleBatcher.destroyDeviceDependentResources();
 }
 
-void Box2DDebugRenderer::render(Box2DWorld& world, mat4* matrix, Shader* shader)
+void Box2DPhysicsRenderer::render(Box2DPhysicsWorld& world, mat4* matrix, Shader* shader)
 {
     assert(shader != nullptr);
     assert(matrix != nullptr);

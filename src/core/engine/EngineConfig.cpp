@@ -20,13 +20,14 @@ _initialEngineState(initialEngineState)
     LOGGING_UTIL.setInputLoggingEnabled(_config.getBool("inputLoggingEnabled", false));
     LOGGING_UTIL.setNetworkLoggingEnabled(_config.getBool("networkLoggingEnabled", false));
     LOGGING_UTIL.setPhysicsLoggingEnabled(_config.getBool("physicsLoggingEnabled", false));
+    
     AUDIO_ENGINE.setSoundsDisabled(_config.getBool("soundsDisabled", false));
     AUDIO_ENGINE.setMusicDisabled(_config.getBool("musicDisabled", false));
     
     // FIXME
     // This is a silly thing to do
     // Physics controller used should be based on
-    // the type of World class being used (e.g. Box2DWorld)
+    // the type of World class being used (e.g. Box2DPhysicsWorld)
     ENTITY_MGR.registerPhysicsController("Default", Box2DPhysicsController::create);
 }
 

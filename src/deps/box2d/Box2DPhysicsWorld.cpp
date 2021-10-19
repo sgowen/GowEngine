@@ -1,5 +1,5 @@
 //
-//  Box2DWorld.cpp
+//  Box2DPhysicsWorld.cpp
 //  GowEngine
 //
 //  Created by Stephen Gowen on 1/29/21.
@@ -10,10 +10,10 @@
 
 #include <box2d/box2d.h>
 
-bool Box2DWorld::s_isClient = false;
-bool Box2DWorld::s_isLiveFrame = false;
+bool Box2DPhysicsWorld::s_isClient = false;
+bool Box2DPhysicsWorld::s_isLiveFrame = false;
 
-Box2DWorld::Box2DWorld(TimeTracker& tt) :
+Box2DPhysicsWorld::Box2DPhysicsWorld(TimeTracker& tt) :
 _timeTracker(tt),
 _world(new b2World(b2Vec2(0.0f, -120))),
 _entityContactListener(new EntityContactListener()),
@@ -24,7 +24,7 @@ _entityLayout()
     _world->SetContactFilter(_entityContactFilter);
 }
 
-Box2DWorld::~Box2DWorld()
+Box2DPhysicsWorld::~Box2DPhysicsWorld()
 {
     reset();
     
@@ -33,7 +33,7 @@ Box2DWorld::~Box2DWorld()
     delete _world;
 }
 
-void Box2DWorld::populateFromEntityLayout(EntityLayoutDef& eld)
+void Box2DPhysicsWorld::populateFromEntityLayout(EntityLayoutDef& eld)
 {
     reset();
     
@@ -45,7 +45,7 @@ void Box2DWorld::populateFromEntityLayout(EntityLayoutDef& eld)
     }
 }
 
-void Box2DWorld::addNetworkEntity(Entity* e)
+void Box2DPhysicsWorld::addNetworkEntity(Entity* e)
 {
     assert(!e->isLayer() && !e->isStatic());
     
@@ -62,7 +62,7 @@ void Box2DWorld::addNetworkEntity(Entity* e)
     }
 }
 
-void Box2DWorld::removeNetworkEntity(Entity* e)
+void Box2DPhysicsWorld::removeNetworkEntity(Entity* e)
 {
     assert(!e->isLayer() && !e->isStatic());
     
@@ -76,7 +76,7 @@ void Box2DWorld::removeNetworkEntity(Entity* e)
     }
 }
 
-void Box2DWorld::recallCache()
+void Box2DPhysicsWorld::recallCache()
 {
     for (Entity* e : _players)
     {
@@ -89,7 +89,7 @@ void Box2DWorld::recallCache()
     }
 }
 
-void Box2DWorld::stepPhysics()
+void Box2DPhysicsWorld::stepPhysics()
 {
     static int32 velocityIterations = 4;
     static int32 positionIterations = 2;
@@ -106,7 +106,7 @@ void Box2DWorld::stepPhysics()
     }
 }
 
-std::vector<Entity*> Box2DWorld::update()
+std::vector<Entity*> Box2DPhysicsWorld::update()
 {
     std::vector<Entity*> toDelete;
     for (Entity* e : _players)
@@ -130,7 +130,7 @@ std::vector<Entity*> Box2DWorld::update()
     return toDelete;
 }
 
-void Box2DWorld::reset()
+void Box2DPhysicsWorld::reset()
 {
     _entityLayout = EntityLayoutDef();
     
@@ -138,42 +138,42 @@ void Box2DWorld::reset()
     removeAllEntities(_staticEntities);
 }
 
-bool Box2DWorld::isEntityLayoutLoaded()
+bool Box2DPhysicsWorld::isEntityLayoutLoaded()
 {
     return _entityLayout._key > 0;
 }
 
-EntityLayoutDef& Box2DWorld::getEntityLayout()
+EntityLayoutDef& Box2DPhysicsWorld::getEntityLayout()
 {
     return _entityLayout;
 }
 
-std::vector<Entity*>& Box2DWorld::getLayers()
+std::vector<Entity*>& Box2DPhysicsWorld::getLayers()
 {
     return _layers;
 }
 
-std::vector<Entity*>& Box2DWorld::getStaticEntities()
+std::vector<Entity*>& Box2DPhysicsWorld::getStaticEntities()
 {
     return _staticEntities;
 }
 
-std::vector<Entity*>& Box2DWorld::getNetworkEntities()
+std::vector<Entity*>& Box2DPhysicsWorld::getNetworkEntities()
 {
     return _networkEntities;
 }
 
-std::vector<Entity*>& Box2DWorld::getPlayers()
+std::vector<Entity*>& Box2DPhysicsWorld::getPlayers()
 {
     return _players;
 }
 
-b2World& Box2DWorld::getB2World()
+b2World& Box2DPhysicsWorld::getB2World()
 {
     return *_world;
 }
 
-void Box2DWorld::addEntity(Entity *e)
+void Box2DPhysicsWorld::addEntity(Entity *e)
 {
     assert(!e->isPlayer() && !e->isDynamic());
     
@@ -190,7 +190,7 @@ void Box2DWorld::addEntity(Entity *e)
     }
 }
 
-void Box2DWorld::removeEntity(Entity* e)
+void Box2DPhysicsWorld::removeEntity(Entity* e)
 {
     assert(!e->isDynamic());
     
@@ -204,7 +204,7 @@ void Box2DWorld::removeEntity(Entity* e)
     }
 }
 
-void Box2DWorld::removeEntity(Entity* e, std::vector<Entity*>& entities)
+void Box2DPhysicsWorld::removeEntity(Entity* e, std::vector<Entity*>& entities)
 {
     assert(e != nullptr);
     
@@ -227,7 +227,7 @@ void Box2DWorld::removeEntity(Entity* e, std::vector<Entity*>& entities)
     }
 }
 
-void Box2DWorld::removeAllEntities(std::vector<Entity*>& entities)
+void Box2DPhysicsWorld::removeAllEntities(std::vector<Entity*>& entities)
 {
     for (std::vector<Entity*>::iterator i = entities.begin(); i != entities.end(); )
     {

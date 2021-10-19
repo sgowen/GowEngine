@@ -274,7 +274,7 @@ void Renderer::renderTextViews(std::string fontBatcherKey, std::string shaderKey
     fb.end(*this, s);
 }
 
-void Renderer::renderBox2D(Box2DWorld& box2DWorld, std::string matrixKey, std::string shaderKey)
+void Renderer::renderBox2D(Box2DPhysicsWorld& box2DWorld, std::string matrixKey, std::string shaderKey)
 {
     Matrix& m = matrix(matrixKey);
     Shader& s = ASSETS_MGR.shader(shaderKey);

@@ -25,9 +25,9 @@
 #include "BuildMacros.hpp"
 
 /// box2d Implementation
-#include "deps/box2d/Box2DDebugRenderer.hpp"
 #include "deps/box2d/Box2DPhysicsController.hpp"
-#include "deps/box2d/Box2DWorld.hpp"
+#include "deps/box2d/Box2DPhysicsRenderer.hpp"
+#include "deps/box2d/Box2DPhysicsWorld.hpp"
 
 /// DirectXTK Implementation
 #include "deps/DirectXTK/DirectXTKAudioEngine.hpp"
@@ -206,4 +206,6 @@
 #include "core/opengl/TriangleBatcher.hpp"
 
 /// Core Physics
-// TODO, implement home grown alternative to Box2D
+#include "core/physics/NosPhysicsController.hpp"
+#include "core/physics/NosPhysicsRenderer.hpp"
+#include "core/physics/NosPhysicsWorld.hpp"
