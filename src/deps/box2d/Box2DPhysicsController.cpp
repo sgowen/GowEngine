@@ -15,6 +15,7 @@ IMPL_RTTI(Box2DPhysicsController, EntityPhysicsController)
 Box2DPhysicsController::Box2DPhysicsController(Entity* e, b2World& world) : EntityPhysicsController(e),
 _body(nullptr),
 _groundSensorFixture(nullptr),
+_numGroundContacts(0),
 _isBodyFacingLeft(false)
 {
     b2BodyDef bd;
@@ -59,6 +60,7 @@ void Box2DPhysicsController::updatePoseFromBody()
     
     _entity->velocity().set(bodyVelocity.x, bodyVelocity.y);
     _entity->position().set(bodyPosition.x, bodyPosition.y);
+    _entity->pose()._numGroundContacts = _numGroundContacts;
 }
 
 void Box2DPhysicsController::updateBodyFromPose()
@@ -73,6 +75,7 @@ void Box2DPhysicsController::updateBodyFromPose()
     
     _body->SetLinearVelocity(bodyVelocity);
     _body->SetTransform(bodyPosition, 0);
+    _numGroundContacts = _entity->pose()._numGroundContacts;
     
     if (_isBodyFacingLeft != _entity->isXFlipped())
     {
@@ -97,11 +100,11 @@ void Box2DPhysicsController::handleBeginContact(Entity* e, b2Fixture* fixtureA, 
     if (fixtureA == _groundSensorFixture &&
         !fixtureB->IsSensor())
     {
-        _entity->pose()._numGroundContacts = CLAMP(_entity->pose()._numGroundContacts + 1, 0, 15);
+        _numGroundContacts = CLAMP(_numGroundContacts + 1, 0, 15);
         
         if (IS_PHYSICS_LOGGING_ENABLED())
         {
-            LOG("_numGroundContacts: %d", _entity->pose()._numGroundContacts);
+            LOG("_numGroundContacts: %d", _numGroundContacts);
         }
     }
 }
@@ -111,11 +114,11 @@ void Box2DPhysicsController::handleEndContact(Entity* e, b2Fixture* fixtureA, b2
     if (fixtureA == _groundSensorFixture &&
         !fixtureB->IsSensor())
     {
-        _entity->pose()._numGroundContacts = CLAMP(_entity->pose()._numGroundContacts - 1, 0, 15);
+        _numGroundContacts = CLAMP(_numGroundContacts - 1, 0, 15);
         
         if (IS_PHYSICS_LOGGING_ENABLED())
         {
-            LOG("_numGroundContacts: %d", _entity->pose()._numGroundContacts);
+            LOG("_numGroundContacts: %d", _numGroundContacts);
         }
     }
 }
@@ -131,7 +134,8 @@ void Box2DPhysicsController::createFixtures()
     float bodyWidth = _entity->width();
     float bodyHeight = _entity->height();
     
-    for (std::vector<FixtureDef>::iterator i = _entity->entityDef()._fixtures.begin(); i != _entity->entityDef()._fixtures.end(); ++i)
+    std::vector<FixtureDef>& fixtures = _entity->entityDef()._fixtures;
+    for (std::vector<FixtureDef>::iterator i = fixtures.begin(); i != fixtures.end(); ++i)
     {
         FixtureDef fd = *i;
         if (_isBodyFacingLeft)

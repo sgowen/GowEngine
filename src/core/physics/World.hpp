@@ -48,15 +48,15 @@ public:
     std::vector<Entity*>& getPlayers();
     
 protected:
-    virtual EntityPhysicsController* createPhysicsController(Entity* e) = 0;
-    
-private:
     EntityLayoutDef _entityLayout;
     std::vector<Entity*> _layers;
     std::vector<Entity*> _staticEntities;
     std::vector<Entity*> _networkEntities;
     std::vector<Entity*> _players;
     
+    virtual EntityPhysicsController* createPhysicsController(Entity* e) = 0;
+    
+private:
     void addEntity(Entity* e);
     void removeEntity(Entity* e);
     void removeEntity(Entity* e, std::vector<Entity*>& entities);

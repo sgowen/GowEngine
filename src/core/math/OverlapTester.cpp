@@ -41,8 +41,8 @@ bool OverlapTester::doRektanglesOverlap(Rektangle& r1, Rektangle& r2)
         float x4 = -halfWidth * cos - halfHeight * sin;
         float y4 = -halfWidth * sin + halfHeight * cos;
         
-        float x = r1.left() + r1._width / 2;
-        float y = r1.bottom() + r1._height / 2;
+        float x = r1.left() + halfWidth;
+        float y = r1.bottom() + halfHeight;
         
         x1 += x;
         y1 += y;
