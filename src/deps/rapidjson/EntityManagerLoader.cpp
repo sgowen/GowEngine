@@ -94,21 +94,6 @@ void EntityManagerLoader::initWithJSON(EntityManager& em, const char* json)
                 const Value& iv = v[i];
                 assert(iv.IsObject());
                 FixtureDef fixtureDef;
-                fixtureDef._flags = RapidJSONUtil::getInt(iv, "flags", 0);
-                
-                if (iv.HasMember("vertices"))
-                {
-                    const Value& iiv = iv["vertices"];
-                    assert(iiv.IsArray());
-                    for (SizeType i = 0; i < iiv.Size(); ++i)
-                    {
-                        const Value& iiiv = iiv[i];
-                        assert(iiiv.IsObject());
-                        float x = RapidJSONUtil::getFloat(iiiv, "x");
-                        float y = RapidJSONUtil::getFloat(iiiv, "y");
-                        fixtureDef._vertices.emplace_back(x, y);
-                    }
-                }
                 
                 float x = 0;
                 float y = 0;
@@ -120,6 +105,10 @@ void EntityManagerLoader::initWithJSON(EntityManager& em, const char* json)
                     y = RapidJSONUtil::getFloat(iiv, "y");
                 }
                 fixtureDef._center.set(x, y);
+                
+                fixtureDef._halfWidth = RapidJSONUtil::getFloat(iv, "halfWidth", 0.5f);
+                fixtureDef._halfHeight = RapidJSONUtil::getFloat(iv, "halfHeight", 0.5f);
+                fixtureDef._flags = RapidJSONUtil::getInt(iv, "flags", 0);
                 
                 fixtures.push_back(fixtureDef);
             }

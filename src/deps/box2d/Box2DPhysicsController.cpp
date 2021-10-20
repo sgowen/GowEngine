@@ -139,29 +139,14 @@ void Box2DPhysicsController::createFixtures()
             fd._center._x = -fd._center._x;
         }
         
+        float wFactor = bodyWidth * fd._halfWidth;
+        float hFactor = bodyHeight * fd._halfHeight;
+        fd._center.set(fd._center._x * bodyWidth, fd._center._y * bodyHeight);
+        
+        b2Vec2 center = b2Vec2(fd._center._x, fd._center._y);
+        
         b2PolygonShape shape;
-        if (IS_BIT_SET(fd._flags, FIXF_BOX))
-        {
-            float wFactor = bodyWidth * fd._vertices[0]._x;
-            float hFactor = bodyHeight * fd._vertices[0]._y;
-            fd._center.set(fd._center._x * bodyWidth, fd._center._y * bodyHeight);
-            
-            b2Vec2 center = b2Vec2(fd._center._x, fd._center._y);
-            shape.SetAsBox(wFactor, hFactor, center, 0);
-        }
-        else
-        {
-            std::vector<b2Vec2> bodyVertices;
-            for (std::vector<Vector2>::iterator i = fd._vertices.begin(); i != fd._vertices.end(); ++i)
-            {
-                Vector2& vertex = (*i);
-                vertex.set(vertex._x * bodyWidth, vertex._y * bodyHeight);
-                bodyVertices.emplace_back(vertex._x, vertex._y);
-            }
-            
-            int count = static_cast<int>(bodyVertices.size());
-            shape.Set(&bodyVertices[0], count);
-        }
+        shape.SetAsBox(wFactor, hFactor, center, 0);
         
         b2FixtureDef b2fd;
         b2fd.shape = &shape;

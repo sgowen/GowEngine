@@ -21,15 +21,15 @@
 
 enum FixtureFlags
 {
-    FIXF_BOX =            1 << 0,
-    FIXF_SENSOR =         1 << 1,
-    FIXF_GROUND_CONTACT = 1 << 2
+    FIXF_SENSOR =         1 << 0,
+    FIXF_GROUND_CONTACT = 1 << 1
 };
 
 struct FixtureDef
 {
-    std::vector<Vector2> _vertices;
     Vector2 _center;
+    float _halfWidth;
+    float _halfHeight;
     int _flags;
 };
 
