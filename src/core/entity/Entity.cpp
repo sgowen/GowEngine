@@ -15,10 +15,13 @@ _controller(ENTITY_MGR.createEntityController(ed, this)),
 _networkController(ENTITY_MGR.createEntityNetworkController(ed, this)),
 _physicsController(nullptr),
 _renderController(ENTITY_MGR.createEntityRenderController(ed, this)),
-_pose(eid._x + ed._width / 2.0f, eid._y + ed._height / 2.0f, ed._width, ed._height),
+_pose(eid._x + ed._width / 2.0f, eid._y + ed._height / 2.0f),
 _poseCache(_pose),
 _state(),
 _stateCache(_state),
+_width(ed._width),
+_height(ed._height),
+_angle(0),
 _isRequestingDeletion(false)
 {
     // Empty
@@ -115,39 +118,34 @@ Vector2& Entity::velocity()
     return _pose._velocity;
 }
 
+bool Entity::isGrounded()
+{
+    return _pose._numGroundContacts > 0;
+}
+
+bool Entity::isXFlipped()
+{
+    return _pose._isXFlipped;
+}
+
 float Entity::width()
 {
-    return _pose._width;
+    return _width;
 }
 
 float Entity::height()
 {
-    return _pose._height;
-}
-
-void Entity::resetWidth()
-{
-    _pose._width = _entityDef._width;
-}
-
-void Entity::resetHeight()
-{
-    _pose._height = _entityDef._height;
+    return _height;
 }
 
 float Entity::angle()
 {
-    return _pose._angle;
+    return _angle;
 }
 
 const uint32_t Entity::getID()
 {
     return _entityInstanceDef._ID;
-}
-
-bool Entity::isGrounded()
-{
-    return _pose._numGroundContacts > 0;
 }
 
 void Entity::requestDeletion()
@@ -165,24 +163,14 @@ bool Entity::isRequestingDeletion()
     return _isRequestingDeletion;
 }
 
-bool Entity::isXFlipped()
-{
-    return _pose._isXFlipped;
-}
-
-bool Entity::isBody()
-{
-    return _entityDef._bodyFlags > 0;
-}
-
 bool Entity::isLayer()
 {
-    return !isBody();
+    return _entityDef._fixtures.empty();
 }
 
 bool Entity::isStatic()
 {
-    return IS_BIT_SET(_entityDef._bodyFlags, BODF_STATIC);
+    return !IS_BIT_SET(_entityDef._bodyFlags, BODF_DYNAMIC);
 }
 
 bool Entity::isDynamic()
@@ -193,16 +181,6 @@ bool Entity::isDynamic()
 bool Entity::isPlayer()
 {
     return IS_BIT_SET(_entityDef._bodyFlags, BODF_PLAYER);
-}
-
-bool Entity::isDynamicSize()
-{
-    return IS_BIT_SET(_entityDef._bodyFlags, BODF_DYNAMIC_SIZE);
-}
-
-bool Entity::isFixedRotation()
-{
-    return IS_BIT_SET(_entityDef._bodyFlags, BODF_FIXED_ROTATION);
 }
 
 Entity::Pose& Entity::pose()

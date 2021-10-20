@@ -23,27 +23,20 @@ enum FixtureFlags
 {
     FIXF_BOX =            1 << 0,
     FIXF_SENSOR =         1 << 1,
-    FIXF_GROUND_CONTACT = 1 << 2,
-    FIXF_CIRCLE =         1 << 3
+    FIXF_GROUND_CONTACT = 1 << 2
 };
 
 struct FixtureDef
 {
     std::vector<Vector2> _vertices;
     Vector2 _center;
-    float _restitution;
-    float _density;
-    float _friction;
     int _flags;
 };
 
 enum BodyFlags
 {
-    BODF_STATIC =         1 << 0,
-    BODF_DYNAMIC =        1 << 1,
-    BODF_FIXED_ROTATION = 1 << 2,
-    BODF_PLAYER         = 1 << 3,
-    BODF_DYNAMIC_SIZE   = 1 << 4
+    BODF_DYNAMIC = 1 << 0,
+    BODF_PLAYER =  1 << 1
 };
 
 enum NetworkDataFieldType
@@ -443,21 +436,16 @@ public:
     uint16_t stateTime();
     Vector2& position();
     Vector2& velocity();
-    float width();
-    float height();
-    void resetWidth();
-    void resetHeight();
-    float angle();
-    const uint32_t getID();
     bool isGrounded();
     bool isXFlipped();
-    bool isBody();
+    float width();
+    float height();
+    float angle();
+    const uint32_t getID();
     bool isLayer();
     bool isStatic();
     bool isDynamic();
     bool isPlayer();
-    bool isDynamicSize();
-    bool isFixedRotation();
     bool isServer();
     
     template<typename T = EntityController>
@@ -497,18 +485,12 @@ public:
     {
         Vector2 _position;
         Vector2 _velocity;
-        float _width;
-        float _height;
-        float _angle;
         uint8_t _numGroundContacts;
         bool _isXFlipped;
         
-        Pose(float x, float y, float width, float height) :
+        Pose(float x, float y) :
         _position(x, y),
         _velocity(VECTOR2_ZERO),
-        _width(width),
-        _height(height),
-        _angle(0),
         _numGroundContacts(0),
         _isXFlipped(false)
         {
@@ -520,9 +502,6 @@ public:
             return
             a._position          == b._position &&
             a._velocity          == b._velocity &&
-            a._width             == b._width &&
-            a._height            == b._height &&
-            a._angle             == b._angle &&
             a._numGroundContacts == b._numGroundContacts &&
             a._isXFlipped        == b._isXFlipped;
         }
@@ -578,5 +557,8 @@ private:
     Pose _poseCache;
     State _state;
     State _stateCache;
+    float _width;
+    float _height;
+    float _angle;
     bool _isRequestingDeletion;
 };

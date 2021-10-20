@@ -94,10 +94,7 @@ void EntityManagerLoader::initWithJSON(EntityManager& em, const char* json)
                 const Value& iv = v[i];
                 assert(iv.IsObject());
                 FixtureDef fixtureDef;
-                fixtureDef._restitution = RapidJSONUtil::getFloat(iv, "restitution");
-                fixtureDef._density = RapidJSONUtil::getFloat(iv, "density");
-                fixtureDef._friction = RapidJSONUtil::getFloat(iv, "friction");
-                fixtureDef._flags = RapidJSONUtil::getInt(iv, "flags");
+                fixtureDef._flags = RapidJSONUtil::getInt(iv, "flags", 0);
                 
                 if (iv.HasMember("vertices"))
                 {

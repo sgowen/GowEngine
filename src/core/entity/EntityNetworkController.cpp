@@ -30,19 +30,7 @@ void EntityNetworkController::read(InputMemoryBitStream& imbs)
         MemoryBitStreamUtil::read(imbs, e._pose._position._x, e._pose._position._y);
         MemoryBitStreamUtil::read(imbs, e._pose._velocity._x, e._pose._velocity._y);
         
-        if (e.isDynamicSize())
-        {
-            imbs.read(e._pose._width);
-            imbs.read(e._pose._height);
-        }
-        
-        if (!e.isFixedRotation())
-        {
-            imbs.read(e._pose._angle);
-        }
-        
         imbs.readBits(e._pose._numGroundContacts, 4);
-        
         imbs.read(e._pose._isXFlipped);
         
         e._poseCache = e._pose;
@@ -103,19 +91,7 @@ uint8_t EntityNetworkController::write(OutputMemoryBitStream& ombs, uint8_t dirt
         MemoryBitStreamUtil::write(ombs, e._pose._position._x, e._pose._position._y);
         MemoryBitStreamUtil::write(ombs, e._pose._velocity._x, e._pose._velocity._y);
         
-        if (e.isDynamicSize())
-        {
-            ombs.write(e._pose._width);
-            ombs.write(e._pose._height);
-        }
-        
-        if (!e.isFixedRotation())
-        {
-            ombs.write(e._pose._angle);
-        }
-        
         ombs.writeBits(e._pose._numGroundContacts, 4);
-        
         ombs.write(e._pose._isXFlipped);
         
         ret |= RSTF_POSE;
