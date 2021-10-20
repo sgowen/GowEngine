@@ -32,11 +32,11 @@ class EntityController
     
 public:
     EntityController(Entity* e);
-    virtual ~EntityController() {}
+    virtual ~EntityController();
     
-    virtual void onUpdate() {}
-    virtual void onMessage(uint16_t message) {}
-    virtual void onCollision(Entity* e) {}
+    virtual void onUpdate();
+    virtual void onMessage(uint16_t message);
+    virtual void onCollision(Entity* e);
     
 protected:
     Entity* _entity;

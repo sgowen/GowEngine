@@ -16,3 +16,23 @@ _entity(e)
 {
     // Empty
 }
+
+EntityController::~EntityController()
+{
+    // Empty
+}
+
+void EntityController::onUpdate()
+{
+    // Empty
+}
+
+void EntityController::onMessage(uint16_t message)
+{
+    // Empty
+}
+
+void EntityController::onCollision(Entity* e)
+{
+    // Empty
+}

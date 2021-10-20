@@ -15,8 +15,6 @@ IMPL_RTTI(Box2DPhysicsController, EntityPhysicsController)
 Box2DPhysicsController::Box2DPhysicsController(Entity* e, b2World& world) : EntityPhysicsController(e),
 _body(nullptr),
 _groundSensorFixture(nullptr),
-_bodyWidth(0),
-_bodyHeight(0),
 _isBodyFacingLeft(false)
 {
     b2BodyDef bd;
@@ -49,12 +47,6 @@ void Box2DPhysicsController::setVelocity(Vector2 v)
     _body->SetLinearVelocity(b2Vec2(v._x, v._y));
 }
 
-void Box2DPhysicsController::applyForce(Vector2 v)
-{
-    float mass = _body->GetMass();
-    _body->ApplyLinearImpulseToCenter(b2Vec2(v._x * mass, v._y * mass), true);
-}
-
 void Box2DPhysicsController::updatePoseFromBody()
 {
     if (_body == nullptr)
@@ -82,9 +74,7 @@ void Box2DPhysicsController::updateBodyFromPose()
     _body->SetLinearVelocity(bodyVelocity);
     _body->SetTransform(bodyPosition, 0);
     
-    if (_isBodyFacingLeft != _entity->isXFlipped() ||
-        _bodyWidth != _entity->width() ||
-        _bodyHeight != _entity->height())
+    if (_isBodyFacingLeft != _entity->isXFlipped())
     {
         destroyFixtures();
         createFixtures();
@@ -138,8 +128,8 @@ b2Body* Box2DPhysicsController::getBody()
 void Box2DPhysicsController::createFixtures()
 {
     _isBodyFacingLeft = _entity->isXFlipped();
-    _bodyWidth = _entity->width();
-    _bodyHeight = _entity->height();
+    float bodyWidth = _entity->width();
+    float bodyHeight = _entity->height();
     
     for (std::vector<FixtureDef>::iterator i = _entity->entityDef()._fixtures.begin(); i != _entity->entityDef()._fixtures.end(); ++i)
     {
@@ -152,9 +142,9 @@ void Box2DPhysicsController::createFixtures()
         b2PolygonShape shape;
         if (IS_BIT_SET(fd._flags, FIXF_BOX))
         {
-            float wFactor = _bodyWidth * fd._vertices[0]._x;
-            float hFactor = _bodyHeight * fd._vertices[0]._y;
-            fd._center.set(fd._center._x * _bodyWidth, fd._center._y * _bodyHeight);
+            float wFactor = bodyWidth * fd._vertices[0]._x;
+            float hFactor = bodyHeight * fd._vertices[0]._y;
+            fd._center.set(fd._center._x * bodyWidth, fd._center._y * bodyHeight);
             
             b2Vec2 center = b2Vec2(fd._center._x, fd._center._y);
             shape.SetAsBox(wFactor, hFactor, center, 0);
@@ -165,7 +155,7 @@ void Box2DPhysicsController::createFixtures()
             for (std::vector<Vector2>::iterator i = fd._vertices.begin(); i != fd._vertices.end(); ++i)
             {
                 Vector2& vertex = (*i);
-                vertex.set(vertex._x * _bodyWidth, vertex._y * _bodyHeight);
+                vertex.set(vertex._x * bodyWidth, vertex._y * bodyHeight);
                 bodyVertices.emplace_back(vertex._x, vertex._y);
             }
             

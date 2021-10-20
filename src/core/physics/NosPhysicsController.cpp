@@ -11,8 +11,6 @@
 IMPL_RTTI(NosPhysicsController, EntityPhysicsController)
 
 NosPhysicsController::NosPhysicsController(Entity* e) : EntityPhysicsController(e),
-_bodyWidth(0),
-_bodyHeight(0),
 _isBodyFacingLeft(false)
 {
     // Empty
@@ -29,11 +27,6 @@ Vector2 NosPhysicsController::velocity()
 }
 
 void NosPhysicsController::setVelocity(Vector2 v)
-{
-    // TODO
-}
-
-void NosPhysicsController::applyForce(Vector2 v)
 {
     // TODO
 }

@@ -23,7 +23,6 @@ public:
     
     virtual Vector2 velocity();
     virtual void setVelocity(Vector2 v);
-    virtual void applyForce(Vector2 v);
     virtual void updatePoseFromBody();
     virtual void updateBodyFromPose();
     

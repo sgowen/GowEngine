@@ -24,12 +24,9 @@ public:
     
     virtual Vector2 velocity() override;
     virtual void setVelocity(Vector2 v) override;
-    virtual void applyForce(Vector2 v) override;
     virtual void updatePoseFromBody() override;
     virtual void updateBodyFromPose() override;
     
 private:
-    float _bodyWidth;
-    float _bodyHeight;
     bool _isBodyFacingLeft;
 };
