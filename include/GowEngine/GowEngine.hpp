@@ -209,3 +209,4 @@
 #include "core/physics/NosPhysicsController.hpp"
 #include "core/physics/NosPhysicsRenderer.hpp"
 #include "core/physics/NosPhysicsWorld.hpp"
+#include "core/physics/World.hpp"

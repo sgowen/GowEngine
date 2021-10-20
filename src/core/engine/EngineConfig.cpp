@@ -24,11 +24,8 @@ _initialEngineState(initialEngineState)
     AUDIO_ENGINE.setSoundsDisabled(_config.getBool("soundsDisabled", false));
     AUDIO_ENGINE.setMusicDisabled(_config.getBool("musicDisabled", false));
     
-    // FIXME
-    // This is a silly thing to do
-    // Physics controller used should be based on
-    // the type of World class being used (e.g. Box2DPhysicsWorld)
-    ENTITY_MGR.registerPhysicsController("Default", Box2DPhysicsController::create);
+    std::string physics = _config.getString("physics", "BOX2D");
+    World::s_worldType = physics == "BOX2D" ? BOX2D : NOSFURA2;
 }
 
 Config& EngineConfig::config()

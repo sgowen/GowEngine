@@ -11,21 +11,31 @@
 #include <box2d/box2d.h>
 
 IMPL_RTTI(Box2DPhysicsController, EntityPhysicsController)
-IMPL_EntityPhysicsController_create(Box2DPhysicsController)
 
-Box2DPhysicsController::Box2DPhysicsController(Entity* e) : EntityPhysicsController(e),
+Box2DPhysicsController::Box2DPhysicsController(Entity* e, b2World& world) : EntityPhysicsController(e),
 _body(nullptr),
 _groundSensorFixture(nullptr),
 _bodyWidth(0),
 _bodyHeight(0),
 _isBodyFacingLeft(false)
 {
-    // Empty
+    b2BodyDef bd;
+    bd.position.Set(_entity->position()._x, _entity->position()._y);
+    bd.type = _entity->isStatic() ? b2_staticBody : b2_dynamicBody;
+    bd.fixedRotation = _entity->isFixedRotation();
+    bd.userData.pointer = (uintptr_t)_entity;
+    _body = world.CreateBody(&bd);
+    
+    createFixtures();
 }
 
 Box2DPhysicsController::~Box2DPhysicsController()
 {
-    // Empty
+    destroyFixtures();
+    
+    b2World* world = _body->GetWorld();
+    world->DestroyBody(_body);
+    _body = nullptr;
 }
 
 Vector2 Box2DPhysicsController::velocity()
@@ -119,31 +129,6 @@ void Box2DPhysicsController::handleEndContact(Entity* e, b2Fixture* fixtureA, b2
             LOG("_numGroundContacts: %d", _entity->pose()._numGroundContacts);
         }
     }
-}
-
-void Box2DPhysicsController::initPhysics(b2World& world)
-{
-    assert(_body == nullptr);
-    
-    b2BodyDef bd;
-    bd.position.Set(_entity->position()._x, _entity->position()._y);
-    bd.type = _entity->isStatic() ? b2_staticBody : b2_dynamicBody;
-    bd.fixedRotation = _entity->isFixedRotation();
-    bd.userData.pointer = (uintptr_t)_entity;
-    _body = world.CreateBody(&bd);
-    
-    createFixtures();
-}
-
-void Box2DPhysicsController::deinitPhysics()
-{
-    assert(_body != nullptr);
-    
-    destroyFixtures();
-    
-    b2World* world = _body->GetWorld();
-    world->DestroyBody(_body);
-    _body = nullptr;
 }
 
 b2Body* Box2DPhysicsController::getBody()

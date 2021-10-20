@@ -163,8 +163,6 @@ void EntityNetworkController::recallCache()
     {
         ndg._data = ndg._dataCache;
     }
-    
-    e.physicsController()->updateBodyFromPose();
 }
 
 uint8_t EntityNetworkController::refreshDirtyState()

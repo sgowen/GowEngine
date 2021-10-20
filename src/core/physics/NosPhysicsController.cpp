@@ -9,7 +9,6 @@
 #include <GowEngine/GowEngine.hpp>
 
 IMPL_RTTI(NosPhysicsController, EntityPhysicsController)
-IMPL_EntityPhysicsController_create(NosPhysicsController)
 
 NosPhysicsController::NosPhysicsController(Entity* e) : EntityPhysicsController(e),
 _bodyWidth(0),

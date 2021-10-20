@@ -274,11 +274,11 @@ void Renderer::renderTextViews(std::string fontBatcherKey, std::string shaderKey
     fb.end(*this, s);
 }
 
-void Renderer::renderBox2D(Box2DPhysicsWorld& box2DWorld, std::string matrixKey, std::string shaderKey)
+void Renderer::renderBox2D(Box2DPhysicsWorld* world, std::string matrixKey, std::string shaderKey)
 {
     Matrix& m = matrix(matrixKey);
     Shader& s = ASSETS_MGR.shader(shaderKey);
-    _box2DDebugRenderer.render(box2DWorld, &m._matrix, &s);
+    _box2DDebugRenderer.render(world, &m._matrix, &s);
 }
 
 void Renderer::renderToScreen(std::string framebufferKey, std::string shaderKey)

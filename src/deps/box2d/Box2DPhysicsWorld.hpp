@@ -8,54 +8,31 @@
 
 #pragma once
 
-#include "core/entity/EntityLayoutManager.hpp"
-
-struct TimeTracker;
+#include "core/physics/World.hpp"
 
 class b2World;
 class EntityContactListener;
 class EntityContactFilter;
 
-class Box2DPhysicsWorld
+class Box2DPhysicsWorld : public World
 {
-public:
-    static bool s_isClient;
-    static bool s_isLiveFrame;
+    DECL_RTTI;
     
-    Box2DPhysicsWorld(TimeTracker& tt);
-    ~Box2DPhysicsWorld();
+public:    
+    Box2DPhysicsWorld();
+    virtual ~Box2DPhysicsWorld();
     
-    void populateFromEntityLayout(EntityLayoutDef& eld);
-    void addNetworkEntity(Entity* e);
-    void removeNetworkEntity(Entity* e);
-    void recallCache();
-    void stepPhysics();
-    std::vector<Entity*> update();
-    void reset();
+    virtual void stepPhysics(float deltaTime) override;
     
-    bool isEntityLayoutLoaded();
-    EntityLayoutDef& getEntityLayout();
-    std::vector<Entity*>& getLayers();
-    std::vector<Entity*>& getStaticEntities();
-    std::vector<Entity*>& getNetworkEntities();
-    std::vector<Entity*>& getPlayers();
     b2World& getB2World();
     
+protected:
+    virtual EntityPhysicsController* createPhysicsController(Entity* e) override;
+    
 private:
-    TimeTracker& _timeTracker;
     b2World* _world;
     EntityContactListener* _entityContactListener;
     EntityContactFilter* _entityContactFilter;
-    EntityLayoutDef _entityLayout;
-    std::vector<Entity*> _layers;
-    std::vector<Entity*> _staticEntities;
-    std::vector<Entity*> _networkEntities;
-    std::vector<Entity*> _players;
-    
-    void addEntity(Entity* e);
-    void removeEntity(Entity* e);
-    void removeEntity(Entity* e, std::vector<Entity*>& entities);
-    void removeAllEntities(std::vector<Entity*>& entities);
 };
 
 #include <box2d/b2_world_callbacks.h>

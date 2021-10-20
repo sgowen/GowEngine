@@ -43,7 +43,7 @@ public:
     
     void createDeviceDependentResources();
     void destroyDeviceDependentResources();
-    void render(Box2DPhysicsWorld& world, mat4* matrix, Shader* shader);
+    void render(Box2DPhysicsWorld* world, mat4* matrix, Shader* shader);
     
 private:
     CircleBatcher _circleBatcher;

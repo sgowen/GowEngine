@@ -1,0 +1,64 @@
+//
+//  World.hpp
+//  GowEngine
+//
+//  Created by Stephen Gowen on 1/29/21.
+//  Copyright © 2021 Stephen Gowen. All rights reserved.
+//
+
+#pragma once
+
+#include "core/common/RTTI.hpp"
+#include "core/entity/EntityLayoutManager.hpp"
+
+enum WorldType
+{
+    NOSFURA2,
+    BOX2D
+};
+
+class World
+{
+    DECL_RTTI_NOPARENT;
+    
+public:
+    static WorldType s_worldType;
+    static bool s_isClient;
+    static bool s_isLiveFrame;
+    
+    static World* create();
+    
+    World();
+    virtual ~World();
+    
+    virtual void stepPhysics(float deltaTime) = 0;
+    
+    void populateFromEntityLayout(EntityLayoutDef& eld);
+    void addNetworkEntity(Entity* e);
+    void removeNetworkEntity(Entity* e);
+    void recallCache();
+    std::vector<Entity*> update();
+    void reset();
+    
+    bool isEntityLayoutLoaded();
+    EntityLayoutDef& getEntityLayout();
+    std::vector<Entity*>& getLayers();
+    std::vector<Entity*>& getStaticEntities();
+    std::vector<Entity*>& getNetworkEntities();
+    std::vector<Entity*>& getPlayers();
+    
+protected:
+    virtual EntityPhysicsController* createPhysicsController(Entity* e) = 0;
+    
+private:
+    EntityLayoutDef _entityLayout;
+    std::vector<Entity*> _layers;
+    std::vector<Entity*> _staticEntities;
+    std::vector<Entity*> _networkEntities;
+    std::vector<Entity*> _players;
+    
+    void addEntity(Entity* e);
+    void removeEntity(Entity* e);
+    void removeEntity(Entity* e, std::vector<Entity*>& entities);
+    void removeAllEntities(std::vector<Entity*>& entities);
+};

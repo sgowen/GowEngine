@@ -57,24 +57,6 @@ const std::map<std::string, EntityNetworkControllerCreationFunc>& EntityManager:
     return _entityNetworkControllerCreationFunctions;
 }
 
-void EntityManager::registerPhysicsController(std::string name, EntityPhysicsControllerCreationFunc func)
-{
-    assert(func != nullptr);
-    _entityPhysicsControllerCreationFunctions[name] = func;
-}
-
-EntityPhysicsController* EntityManager::createEntityPhysicsController(EntityDef& ed, Entity* e)
-{
-    EntityPhysicsControllerCreationFunc func = _entityPhysicsControllerCreationFunctions[ed._physicsController];
-    assert(func != nullptr);
-    return func(e);
-}
-
-const std::map<std::string, EntityPhysicsControllerCreationFunc>& EntityManager::getEntityPhysicsControllerMap()
-{
-    return _entityPhysicsControllerCreationFunctions;
-}
-
 void EntityManager::registerRenderController(std::string name, EntityRenderControllerCreationFunc func)
 {
     assert(func != nullptr);
@@ -97,6 +79,5 @@ EntityManager::EntityManager()
 {
     registerController("Default", EntityController::create);
     registerNetworkController("Default", EntityNetworkController::create);
-    registerPhysicsController("Default", EntityPhysicsController::create);
     registerRenderController("Default", EntityRenderController::create);
 }

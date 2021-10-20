@@ -375,7 +375,6 @@ struct EntityDef
     std::string _keyName;
     std::string _controller;
     std::string _networkController;
-    std::string _physicsController;
     std::string _renderController;
     std::map<uint8_t, std::string> _textureMappings;
     std::map<uint8_t, std::string> _soundMappings;
@@ -391,7 +390,6 @@ struct EntityDef
               std::string keyName,
               std::string controller,
               std::string networkController,
-              std::string physicsController,
               std::string renderController,
               std::map<uint8_t, std::string> textureMappings,
               std::map<uint8_t, std::string> soundMappings,
@@ -406,7 +404,6 @@ struct EntityDef
     _keyName(keyName),
     _controller(controller),
     _networkController(networkController),
-    _physicsController(physicsController),
     _renderController(renderController),
     _textureMappings(textureMappings),
     _soundMappings(soundMappings),
@@ -466,24 +463,33 @@ public:
     template<typename T = EntityController>
     T* controller()
     {
+        assert(_controller != nullptr);
         return static_cast<T*>(_controller);
     }
     
     template<typename T = EntityNetworkController>
     T* networkController()
     {
+        assert(_networkController != nullptr);
         return static_cast<T*>(_networkController);
     }
 
+    void setPhysicsController(EntityPhysicsController* physicsController)
+    {
+        _physicsController = physicsController;
+    }
+    
     template<typename T = EntityPhysicsController>
     T* physicsController()
     {
+        assert(_physicsController != nullptr);
         return static_cast<T*>(_physicsController);
     }
     
     template<typename T = EntityRenderController>
     T* renderController()
     {
+        assert(_renderController != nullptr);
         return static_cast<T*>(_renderController);
     }
     

@@ -8,19 +8,6 @@
 
 #pragma once
 
-#define DECL_EntityPhysicsController_create                  \
-public:                                               \
-    static EntityPhysicsController* create(Entity* e)
-
-#define IMPL_EntityPhysicsController_create(type)            \
-EntityPhysicsController* type::create(Entity* e)             \
-{                                                     \
-    return new type(e);                               \
-}
-
-#define IMPL_EntityPhysicsController_create_NOPARENT         \
-IMPL_EntityPhysicsController_create(EntityPhysicsController)
-
 #include "core/common/RTTI.hpp"
 #include "core/math/Vector2.hpp"
 
@@ -29,7 +16,6 @@ class Entity;
 class EntityPhysicsController
 {
     DECL_RTTI_NOPARENT;
-    DECL_EntityPhysicsController_create;
     
 public:
     EntityPhysicsController(Entity* e);

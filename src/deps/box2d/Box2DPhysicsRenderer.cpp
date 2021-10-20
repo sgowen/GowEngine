@@ -127,16 +127,18 @@ void Box2DPhysicsRenderer::destroyDeviceDependentResources()
     _boundsTriangleBatcher.destroyDeviceDependentResources();
 }
 
-void Box2DPhysicsRenderer::render(Box2DPhysicsWorld& world, mat4* matrix, Shader* shader)
+void Box2DPhysicsRenderer::render(Box2DPhysicsWorld* world, mat4* matrix, Shader* shader)
 {
-    assert(shader != nullptr);
+    assert(world != nullptr);
     assert(matrix != nullptr);
+    assert(shader != nullptr);
     
     _matrix = matrix;
     _shader = shader;
     
-    world.getB2World().SetDebugDraw(this);
+    b2World& w = world->getB2World();
+    w.SetDebugDraw(this);
     AppendFlags(e_shapeBit);
-    world.getB2World().DebugDraw();
-    world.getB2World().SetDebugDraw(nullptr);
+    w.DebugDraw();
+    w.SetDebugDraw(nullptr);
 }

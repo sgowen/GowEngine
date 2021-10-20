@@ -63,7 +63,7 @@ public:
     void hideAllText();
     void renderTextViews(std::string fontBatcherKey = "main", std::string shaderKey = "texture");
     
-    void renderBox2D(Box2DPhysicsWorld& box2DWorld, std::string matrixKey = "main", std::string shaderKey = "geometry");
+    void renderBox2D(Box2DPhysicsWorld* world, std::string matrixKey = "main", std::string shaderKey = "geometry");
     
     void renderToScreen(std::string framebufferKey = "main", std::string shaderKey = "framebuffer");
     

@@ -13,7 +13,7 @@ _entityDef(ed),
 _entityInstanceDef(eid),
 _controller(ENTITY_MGR.createEntityController(ed, this)),
 _networkController(ENTITY_MGR.createEntityNetworkController(ed, this)),
-_physicsController(ENTITY_MGR.createEntityPhysicsController(ed, this)),
+_physicsController(nullptr),
 _renderController(ENTITY_MGR.createEntityRenderController(ed, this)),
 _pose(eid._x + ed._width / 2.0f, eid._y + ed._height / 2.0f, ed._width, ed._height),
 _poseCache(_pose),
@@ -28,7 +28,10 @@ Entity::~Entity()
 {
     delete _controller;
     delete _networkController;
-    delete _physicsController;
+    if (_physicsController != nullptr)
+    {
+        delete _physicsController;
+    }
     delete _renderController;
 }
 
@@ -39,7 +42,10 @@ void Entity::update()
         return;
     }
     
-    _physicsController->updatePoseFromBody();
+    if (_physicsController != nullptr)
+    {
+        _physicsController->updatePoseFromBody();
+    }
     
     if (isDynamic())
     {

@@ -41,7 +41,6 @@ void EntityManagerLoader::initWithJSON(EntityManager& em, const char* json)
         std::string keyName = keyStr;
         std::string controller = RapidJSONUtil::getString(iv, "controller", "Default");
         std::string networkController = RapidJSONUtil::getString(iv, "networkController", "Default");
-        std::string physicsController = RapidJSONUtil::getString(iv, "physicsController", "Default");
         std::string renderController = RapidJSONUtil::getString(iv, "renderController", "Default");
         
         std::map<uint8_t, std::string> textureMappings;
@@ -180,6 +179,6 @@ void EntityManagerLoader::initWithJSON(EntityManager& em, const char* json)
         }
         NetworkData nd(networkDataGroups);
         
-        em._entityDefs.emplace(key, EntityDef{key, name, keyName, controller, networkController, physicsController, renderController, textureMappings, soundMappings, fixtures, bodyFlags, width, height, metadata, nd});
+        em._entityDefs.emplace(key, EntityDef{key, name, keyName, controller, networkController, renderController, textureMappings, soundMappings, fixtures, bodyFlags, width, height, metadata, nd});
     }
 }

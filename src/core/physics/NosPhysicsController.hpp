@@ -17,7 +17,6 @@ class Entity;
 class NosPhysicsController : public EntityPhysicsController
 {
     DECL_RTTI;
-    DECL_EntityPhysicsController_create;
     
 public:
     NosPhysicsController(Entity* e);

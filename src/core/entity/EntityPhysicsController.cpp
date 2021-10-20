@@ -9,7 +9,6 @@
 #include <GowEngine/GowEngine.hpp>
 
 IMPL_RTTI_NOPARENT(EntityPhysicsController)
-IMPL_EntityPhysicsController_create_NOPARENT
 
 EntityPhysicsController::EntityPhysicsController(Entity* e) :
 _entity(e)

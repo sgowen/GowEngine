@@ -8,47 +8,18 @@
 
 #pragma once
 
-#include "core/entity/EntityLayoutManager.hpp"
+#include "core/physics/World.hpp"
 
-struct TimeTracker;
-
-class EntityContactListener;
-class EntityContactFilter;
-
-class NosPhysicsWorld
+class NosPhysicsWorld : public World
 {
+    DECL_RTTI;
+    
 public:
-    static bool s_isClient;
-    static bool s_isLiveFrame;
+    NosPhysicsWorld();
+    virtual ~NosPhysicsWorld();
     
-    NosPhysicsWorld(TimeTracker& tt);
-    ~NosPhysicsWorld();
+    virtual void stepPhysics(float deltaTime) override;
     
-    void populateFromEntityLayout(EntityLayoutDef& eld);
-    void addNetworkEntity(Entity* e);
-    void removeNetworkEntity(Entity* e);
-    void recallCache();
-    void stepPhysics();
-    std::vector<Entity*> update();
-    void reset();
-    
-    bool isEntityLayoutLoaded();
-    EntityLayoutDef& getEntityLayout();
-    std::vector<Entity*>& getLayers();
-    std::vector<Entity*>& getStaticEntities();
-    std::vector<Entity*>& getNetworkEntities();
-    std::vector<Entity*>& getPlayers();
-    
-private:
-    TimeTracker& _timeTracker;
-    EntityLayoutDef _entityLayout;
-    std::vector<Entity*> _layers;
-    std::vector<Entity*> _staticEntities;
-    std::vector<Entity*> _networkEntities;
-    std::vector<Entity*> _players;
-    
-    void addEntity(Entity* e);
-    void removeEntity(Entity* e);
-    void removeEntity(Entity* e, std::vector<Entity*>& entities);
-    void removeAllEntities(std::vector<Entity*>& entities);
+protected:
+    virtual EntityPhysicsController* createPhysicsController(Entity* e) override;
 };
