@@ -12,7 +12,7 @@ IMPL_RTTI(NosPhysicsWorld, World)
 
 NosPhysicsWorld::NosPhysicsWorld() : World(),
 _gravity(-120.0f),
-_friction(96.0f)
+_friction(-96.0f)
 {
     // Empty
 }

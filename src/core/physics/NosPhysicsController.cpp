@@ -61,13 +61,27 @@ void NosPhysicsController::updateBodyFromPose()
 
 void NosPhysicsController::step(float gravity, float friction, float deltaTime)
 {
+    int flag = 0;
+    if (_velocity._x < 0)
+    {
+        flag = -1;
+    }
+    else if (_velocity._x > 0)
+    {
+        flag = 1;
+    }
+    
     if (_entity->isGrounded())
     {
-        if (_velocity._x > 0)
+        if (flag == -1)
         {
             friction = -friction;
         }
-        else if (_velocity._x == 0)
+        else if (flag == 1)
+        {
+            friction = -friction;
+        }
+        else
         {
             friction = 0;
         }
@@ -115,24 +129,26 @@ void NosPhysicsController::processCollisions(std::vector<Entity*>& entities)
                     }
                     else
                     {
-                        if (OverlapTester::doLineAndRektangleOverlap(myBounds._left, yourBoundingBox))
-                        {
-                            _position.add(yourBoundingBox.right() - myBoundingBox.left(), 0);
-                        }
-                        
-                        if (OverlapTester::doLineAndRektangleOverlap(myBounds._right, yourBoundingBox))
-                        {
-                            _position.sub(myBoundingBox.right() - yourBoundingBox.right(), 0);
-                        }
-                        
                         if (OverlapTester::doLineAndRektangleOverlap(myBounds._bottom, yourBoundingBox))
                         {
                             _position.add(0, yourBoundingBox.top() - myBoundingBox.bottom());
                         }
-                        
-                        if (OverlapTester::doLineAndRektangleOverlap(myBounds._top, yourBoundingBox))
+                        else
                         {
-                            _position.sub(0, myBoundingBox.top() - yourBoundingBox.bottom());
+                            if (OverlapTester::doLineAndRektangleOverlap(myBounds._left, yourBoundingBox))
+                            {
+                                _position.add(yourBoundingBox.right() - myBoundingBox.left(), 0);
+                            }
+                            
+                            if (OverlapTester::doLineAndRektangleOverlap(myBounds._right, yourBoundingBox))
+                            {
+                                _position.sub(myBoundingBox.right() - yourBoundingBox.right(), 0);
+                            }
+                            
+                            if (OverlapTester::doLineAndRektangleOverlap(myBounds._top, yourBoundingBox))
+                            {
+                                _position.sub(0, myBoundingBox.top() - yourBoundingBox.bottom());
+                            }
                         }
                     }
                 }
