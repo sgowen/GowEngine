@@ -66,8 +66,8 @@ void EntityNetworkController::read(InputMemoryBitStream& imbs)
         uint8_t playerID = _entity->dataField("playerID").valueUInt8();
         if (NW_CLNT->isPlayerIDLocal(playerID))
         {
-            // Don't play any sounds, since
-            // the local player(s) already heard them
+            // Don't play any sounds for local player(s)
+            // since they already heard them
             // * playing a sound after a nw read
             // is only useful for server controlled
             // or remote player controlled entities

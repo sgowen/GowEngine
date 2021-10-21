@@ -22,7 +22,8 @@ _stateCache(_state),
 _width(ed._width),
 _height(ed._height),
 _angle(0),
-_isRequestingDeletion(false)
+_isRequestingDeletion(false),
+_world(nullptr)
 {
     // Empty
 }
@@ -148,21 +149,6 @@ const uint32_t Entity::getID()
     return _entityInstanceDef._ID;
 }
 
-void Entity::requestDeletion()
-{
-    if (!isServer())
-    {
-        return;
-    }
-    
-    _isRequestingDeletion = true;
-}
-
-bool Entity::isRequestingDeletion()
-{
-    return _isRequestingDeletion;
-}
-
 bool Entity::isLayer()
 {
     return _entityDef._fixtures.empty();
@@ -181,6 +167,11 @@ bool Entity::isDynamic()
 bool Entity::isPlayer()
 {
     return IS_BIT_SET(_entityDef._bodyFlags, BODF_PLAYER);
+}
+
+bool Entity::isServer()
+{
+    return _entityInstanceDef._isServer;
 }
 
 Entity::Pose& Entity::pose()
@@ -203,7 +194,27 @@ Entity::State& Entity::stateCache()
     return _stateCache;
 }
 
-bool Entity::isServer()
+void Entity::requestDeletion()
 {
-    return _entityInstanceDef._isServer;
+    if (!isServer())
+    {
+        return;
+    }
+    
+    _isRequestingDeletion = true;
+}
+
+bool Entity::isRequestingDeletion()
+{
+    return _isRequestingDeletion;
+}
+
+void Entity::setWorld(World* w)
+{
+    _world = w;
+}
+
+World* Entity::world()
+{
+    return _world;
 }

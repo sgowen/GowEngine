@@ -415,6 +415,7 @@ class EntityController;
 class EntityNetworkController;
 class EntityPhysicsController;
 class EntityRenderController;
+class World;
 
 class Entity
 {
@@ -546,6 +547,9 @@ public:
     void requestDeletion();
     bool isRequestingDeletion();
     
+    void setWorld(World* w);
+    World* world();
+    
 private:
     EntityDef _entityDef;
     EntityInstanceDef _entityInstanceDef;
@@ -561,4 +565,5 @@ private:
     float _height;
     float _angle;
     bool _isRequestingDeletion;
+    World* _world;
 };

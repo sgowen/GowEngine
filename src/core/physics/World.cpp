@@ -60,6 +60,7 @@ void World::addNetworkEntity(Entity* e)
 {
     assert(!e->isLayer() && !e->isStatic());
     
+    e->setWorld(this);
     e->setPhysicsController(createPhysicsController(e));
     
     if (e->isPlayer())
@@ -166,6 +167,8 @@ std::vector<Entity*>& World::getPlayers()
 void World::addEntity(Entity *e)
 {
     assert(!e->isPlayer() && !e->isDynamic());
+    
+    e->setWorld(this);
     
     if (e->isLayer())
     {
