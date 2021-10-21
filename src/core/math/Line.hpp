@@ -21,4 +21,11 @@ struct Line
     {
         // Empty
     }
+    
+    Line() :
+    _origin(0, 0),
+    _end(0, 0)
+    {
+        // Empty
+    }
 };

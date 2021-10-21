@@ -14,6 +14,58 @@
 
 #include <vector>
 
+struct Bounds
+{
+    float _centerX;
+    float _centerY;
+    float _halfWidth;
+    float _halfHeight;
+    Rektangle _boundingBox;
+    Line _left;
+    Line _right;
+    Line _bottom;
+    Line _top;
+    
+    Bounds(float centerX, float centerY, float halfWidth, float halfHeight) :
+    _centerX(centerX),
+    _centerY(centerY),
+    _halfWidth(halfWidth),
+    _halfHeight(halfHeight),
+    _boundingBox(0, 0, halfWidth * 2, halfHeight * 2),
+    _left(),
+    _right(),
+    _bottom(),
+    _top()
+    {
+        // Empty
+    }
+    
+    void update()
+    {
+        float l = _boundingBox.left();
+        float r = _boundingBox.right();
+        float b = _boundingBox.bottom();
+        float t = _boundingBox.top();
+        
+        _left._origin.set(l, b);
+        _left._end.set(l, t);
+        _right._origin.set(r, b);
+        _right._end.set(r, t);
+        _bottom._origin.set(l, b);
+        _bottom._end.set(r, b);
+        _top._origin.set(l, t);
+        _top._end.set(r, t);
+    }
+    
+    void updateForPosition(Vector2 pos)
+    {
+        float l = _centerX - _halfWidth;
+        float b = _centerY - _halfHeight;
+        _boundingBox._lowerLeft.set(pos._x + l, pos._y + b);
+        update();
+    }
+};
+
 class Entity;
 
 class NosPhysicsController : public EntityPhysicsController
@@ -29,14 +81,15 @@ public:
     virtual void updatePoseFromBody() override;
     virtual void updateBodyFromPose() override;
     
-    void step(float gravity, float deltaTime);
+    void step(float gravity, float friction, float deltaTime);
     void processCollisions(std::vector<Entity*>& entities);
+    std::vector<Bounds>& bounds();
     
 private:
-    std::vector<Rektangle> _boundingBoxes;
+    std::vector<Bounds> _bounds;
     Vector2 _velocity;
     Vector2 _position;
-    Rektangle* _groundSensor;
+    Bounds* _groundSensor;
     uint8_t _numGroundContacts;
     bool _isBodyFacingLeft;
     

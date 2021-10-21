@@ -9,7 +9,8 @@
 #include <GowEngine/GowEngine.hpp>
 
 Renderer::Renderer() :
-_box2DDebugRenderer(2048),
+_box2DPhysicsRenderer(2048),
+_nosPhysicsRenderer(2048),
 _screenRenderer()
 {
     // Empty
@@ -17,7 +18,8 @@ _screenRenderer()
 
 void Renderer::createDeviceDependentResources()
 {
-    _box2DDebugRenderer.createDeviceDependentResources();
+    _box2DPhysicsRenderer.createDeviceDependentResources();
+    _nosPhysicsRenderer.createDeviceDependentResources();
     _screenRenderer.createDeviceDependentResources();
     
     for (auto& pair : _circleBatchers)
@@ -58,7 +60,8 @@ void Renderer::onWindowSizeChanged(uint16_t screenWidth, uint16_t screenHeight)
 
 void Renderer::destroyDeviceDependentResources()
 {
-    _box2DDebugRenderer.destroyDeviceDependentResources();
+    _box2DPhysicsRenderer.destroyDeviceDependentResources();
+    _nosPhysicsRenderer.destroyDeviceDependentResources();
     _screenRenderer.destroyDeviceDependentResources();
     
     for (auto& pair : _circleBatchers)
@@ -274,11 +277,18 @@ void Renderer::renderTextViews(std::string fontBatcherKey, std::string shaderKey
     fb.end(*this, s);
 }
 
-void Renderer::renderBox2D(Box2DPhysicsWorld* world, std::string matrixKey, std::string shaderKey)
+void Renderer::renderBox2DPhysics(Box2DPhysicsWorld* world, std::string matrixKey, std::string shaderKey)
 {
     Matrix& m = matrix(matrixKey);
     Shader& s = ASSETS_MGR.shader(shaderKey);
-    _box2DDebugRenderer.render(world, &m._matrix, &s);
+    _box2DPhysicsRenderer.render(world, &m._matrix, &s);
+}
+
+void Renderer::renderNosPhysics(NosPhysicsWorld* world, std::string matrixKey, std::string shaderKey)
+{
+    Matrix& m = matrix(matrixKey);
+    Shader& s = ASSETS_MGR.shader(shaderKey);
+    _nosPhysicsRenderer.render(world, &m._matrix, &s);
 }
 
 void Renderer::renderToScreen(std::string framebufferKey, std::string shaderKey)

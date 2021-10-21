@@ -26,13 +26,52 @@ void NosPhysicsRenderer::destroyDeviceDependentResources()
     _boundsTriangleBatcher.destroyDeviceDependentResources();
 }
 
-void NosPhysicsRenderer::render(NosPhysicsWorld& world, mat4* matrix, Shader* shader)
+void NosPhysicsRenderer::render(NosPhysicsWorld* world, mat4* matrix, Shader* shader)
 {
+    assert(world  != nullptr);
     assert(shader != nullptr);
     assert(matrix != nullptr);
     
     _matrix = matrix;
     _shader = shader;
     
-    // TODO
+    Color c = Color(0.5f, 0.9f, 0.5f, 0.3f);
+    
+    _fillRektangleBatcher.begin();
+    for (Entity* e : world->getPlayers())
+    {
+        NosPhysicsController* epc = e->physicsController<NosPhysicsController>();
+        
+        std::vector<Bounds>& bounds = epc->bounds();
+        
+        for (Bounds& b : bounds)
+        {
+            _fillRektangleBatcher.addRektangle(b._boundingBox);
+        }
+    }
+    for (Entity* e : world->getNetworkEntities())
+    {
+        NosPhysicsController* epc = e->physicsController<NosPhysicsController>();
+        
+        std::vector<Bounds>& bounds = epc->bounds();
+        
+        for (Bounds& b : bounds)
+        {
+            _fillRektangleBatcher.addRektangle(b._boundingBox);
+        }
+    }
+    for (Entity* e : world->getStaticEntities())
+    {
+        NosPhysicsController* epc = e->physicsController<NosPhysicsController>();
+        
+        std::vector<Bounds>& bounds = epc->bounds();
+        
+        for (Bounds& b : bounds)
+        {
+            _fillRektangleBatcher.addRektangle(b._boundingBox);
+        }
+    }
+    _fillRektangleBatcher.end(*_shader, *_matrix, c);
+    
+    // TODO ?
 }

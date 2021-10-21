@@ -33,7 +33,7 @@ public:
     
     void createDeviceDependentResources();
     void destroyDeviceDependentResources();
-    void render(NosPhysicsWorld& world, mat4* matrix, Shader* shader);
+    void render(NosPhysicsWorld* world, mat4* matrix, Shader* shader);
     
 private:
     CircleBatcher _circleBatcher;

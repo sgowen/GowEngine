@@ -11,7 +11,8 @@
 IMPL_RTTI(NosPhysicsWorld, World)
 
 NosPhysicsWorld::NosPhysicsWorld() : World(),
-_gravity(-120)
+_gravity(-120.0f),
+_friction(96.0f)
 {
     // Empty
 }
@@ -27,14 +28,14 @@ void NosPhysicsWorld::stepPhysics(float deltaTime)
     {
         NosPhysicsController* epc = e->physicsController<NosPhysicsController>();
         
-        epc->step(_gravity, deltaTime);
+        epc->step(_gravity, _friction, deltaTime);
     }
     
     for (Entity* e : _networkEntities)
     {
         NosPhysicsController* epc = e->physicsController<NosPhysicsController>();
         
-        epc->step(_gravity, deltaTime);
+        epc->step(_gravity, _friction, deltaTime);
     }
     
     for (Entity* e : _players)

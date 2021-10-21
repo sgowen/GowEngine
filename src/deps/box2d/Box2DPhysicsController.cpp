@@ -88,7 +88,7 @@ bool Box2DPhysicsController::shouldCollide(Entity *e, b2Fixture* fixtureA, b2Fix
 {
     if (fixtureA == _groundSensorFixture)
     {
-        // Don't collide with yourself
+        // Don't collide with myself
         return e != _entity;
     }
     
@@ -143,8 +143,8 @@ void Box2DPhysicsController::createFixtures()
             fd._center._x = -fd._center._x;
         }
         
-        float wFactor = bodyWidth * fd._halfWidth;
-        float hFactor = bodyHeight * fd._halfHeight;
+        float wFactor = bodyWidth * fd._halfWidthFactor;
+        float hFactor = bodyHeight * fd._halfHeightFactor;
         fd._center.set(fd._center._x * bodyWidth, fd._center._y * bodyHeight);
         
         b2Vec2 center = b2Vec2(fd._center._x, fd._center._y);

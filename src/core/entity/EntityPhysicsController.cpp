@@ -20,23 +20,3 @@ EntityPhysicsController::~EntityPhysicsController()
 {
     // Empty
 }
-
-Vector2 EntityPhysicsController::velocity()
-{
-    return Vector2::ZERO;
-}
-
-void EntityPhysicsController::setVelocity(Vector2 v)
-{
-    UNUSED(v);
-}
-
-void EntityPhysicsController::updatePoseFromBody()
-{
-    // Empty
-}
-
-void EntityPhysicsController::updateBodyFromPose()
-{
-    // Empty
-}

@@ -106,8 +106,8 @@ void EntityManagerLoader::initWithJSON(EntityManager& em, const char* json)
                 }
                 fixtureDef._center.set(x, y);
                 
-                fixtureDef._halfWidth = RapidJSONUtil::getFloat(iv, "halfWidth", 0.5f);
-                fixtureDef._halfHeight = RapidJSONUtil::getFloat(iv, "halfHeight", 0.5f);
+                fixtureDef._halfWidthFactor = RapidJSONUtil::getFloat(iv, "halfWidthFactor", 0.5f);
+                fixtureDef._halfHeightFactor = RapidJSONUtil::getFloat(iv, "halfHeightFactor", 0.5f);
                 fixtureDef._flags = RapidJSONUtil::getInt(iv, "flags", 0);
                 
                 fixtures.push_back(fixtureDef);

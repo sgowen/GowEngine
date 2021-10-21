@@ -28,8 +28,8 @@ enum FixtureFlags
 struct FixtureDef
 {
     Vector2 _center;
-    float _halfWidth;
-    float _halfHeight;
+    float _halfWidthFactor;
+    float _halfHeightFactor;
     int _flags;
 };
 

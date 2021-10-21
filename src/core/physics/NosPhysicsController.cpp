@@ -46,49 +46,112 @@ void NosPhysicsController::updateBodyFromPose()
 {
     _velocity.set(_entity->velocity());
     _position.set(_entity->position());
-    _numGroundContacts = _entity->pose()._numGroundContacts;
     
     if (_isBodyFacingLeft != _entity->isXFlipped())
     {
         destroyFixtures();
         createFixtures();
     }
+    
+    for (Bounds& b : _bounds)
+    {
+        b.updateForPosition(_position);
+    }
 }
 
-void NosPhysicsController::step(float gravity, float deltaTime)
+void NosPhysicsController::step(float gravity, float friction, float deltaTime)
 {
-    _velocity.add(0, gravity * deltaTime);
+    if (_entity->isGrounded())
+    {
+        if (_velocity._x > 0)
+        {
+            friction = -friction;
+        }
+        else if (_velocity._x == 0)
+        {
+            friction = 0;
+        }
+    }
+    else
+    {
+        friction = 0;
+    }
+    
+    _velocity.add(friction, gravity * deltaTime);
     _position.add(_velocity._x * deltaTime, _velocity._y * deltaTime);
     _numGroundContacts = 0;
 }
 
 void NosPhysicsController::processCollisions(std::vector<Entity*>& entities)
 {
+//    static float fudgeFactor = 0.001f;
+    
     for (Entity* e : entities)
     {
         if (_entity == e)
         {
-            // Don't collide with yourself
+            // Don't collide with myself
             continue;
         }
         
         NosPhysicsController* epc = e->physicsController<NosPhysicsController>();
         
-        for (Rektangle& myBoundingBox : _boundingBoxes)
+        for (Bounds& myBounds : _bounds)
         {
-            bool isGroundSensor = _groundSensor == &myBoundingBox;
+            Rektangle& myBoundingBox = myBounds._boundingBox;
+            bool isGroundSensor = _groundSensor == &myBounds;
             
-            for (Rektangle& yourBoundingBox : epc->_boundingBoxes)
+            for (Bounds& yourBounds : epc->_bounds)
             {
-                
+                Rektangle& yourBoundingBox = yourBounds._boundingBox;
+                if (OverlapTester::doRektanglesOverlap(myBoundingBox, yourBoundingBox))
+                {
+                    if (isGroundSensor)
+                    {
+                        if (OverlapTester::doLineAndRektangleOverlap(myBounds._bottom, yourBoundingBox))
+                        {
+                            ++_numGroundContacts;
+                        }
+                    }
+                    else
+                    {
+                        if (OverlapTester::doLineAndRektangleOverlap(myBounds._left, yourBoundingBox))
+                        {
+                            _position.add(yourBoundingBox.right() - myBoundingBox.left(), 0);
+                        }
+                        
+                        if (OverlapTester::doLineAndRektangleOverlap(myBounds._right, yourBoundingBox))
+                        {
+                            _position.sub(myBoundingBox.right() - yourBoundingBox.right(), 0);
+                        }
+                        
+                        if (OverlapTester::doLineAndRektangleOverlap(myBounds._bottom, yourBoundingBox))
+                        {
+                            _position.add(0, yourBoundingBox.top() - myBoundingBox.bottom());
+                        }
+                        
+                        if (OverlapTester::doLineAndRektangleOverlap(myBounds._top, yourBoundingBox))
+                        {
+                            _position.sub(0, myBoundingBox.top() - yourBoundingBox.bottom());
+                        }
+                    }
+                }
             }
+            
+            myBounds.updateForPosition(_position);
         }
     }
+}
+
+std::vector<Bounds>& NosPhysicsController::bounds()
+{
+    return _bounds;
 }
 
 void NosPhysicsController::createFixtures()
 {
     _isBodyFacingLeft = _entity->isXFlipped();
+    
     float bodyWidth = _entity->width();
     float bodyHeight = _entity->height();
     
@@ -101,24 +164,24 @@ void NosPhysicsController::createFixtures()
             fd._center._x = -fd._center._x;
         }
         
-        float wFactor = bodyWidth * fd._halfWidth;
-        float hFactor = bodyHeight * fd._halfHeight;
-        float x = fd._center._x - wFactor;
-        float y = fd._center._y - hFactor;
+        float centerX = fd._center._x * bodyWidth;
+        float centerY = fd._center._y * bodyHeight;
+        float halfWidth = bodyWidth * fd._halfWidthFactor;
+        float halfHeight = bodyHeight * fd._halfHeightFactor;
         
-        Rektangle r(x, y, wFactor * 2, hFactor * 2);
-        
-        _boundingBoxes.push_back(r);
+        _bounds.emplace_back(centerX, centerY, halfWidth, halfHeight);
+        Bounds& b = _bounds.back();
+        b.updateForPosition(_entity->position());
         if (IS_BIT_SET(fd._flags, FIXF_GROUND_CONTACT))
         {
-            _groundSensor = &_boundingBoxes.back();
+            _groundSensor = &_bounds.back();
         }
     }
 }
 
 void NosPhysicsController::destroyFixtures()
 {
-    _boundingBoxes.clear();
+    _bounds.clear();
     
     _groundSensor = nullptr;
 }

@@ -21,10 +21,10 @@ public:
     EntityPhysicsController(Entity* e);
     virtual ~EntityPhysicsController();
     
-    virtual Vector2 velocity();
-    virtual void setVelocity(Vector2 v);
-    virtual void updatePoseFromBody();
-    virtual void updateBodyFromPose();
+    virtual Vector2 velocity() = 0;
+    virtual void setVelocity(Vector2 v) = 0;
+    virtual void updatePoseFromBody() = 0;
+    virtual void updateBodyFromPose() = 0;
     
 protected:
     Entity* _entity;
