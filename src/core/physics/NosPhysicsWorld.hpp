@@ -25,5 +25,4 @@ protected:
     
 private:
     float _gravity;
-    float _friction;
 };

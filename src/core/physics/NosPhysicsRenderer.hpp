@@ -9,6 +9,7 @@
 #pragma once
 
 #include "core/opengl/CircleBatcher.hpp"
+#include "core/opengl/LineBatcher.hpp"
 #include "core/opengl/RektangleBatcher.hpp"
 #include "core/opengl/TriangleBatcher.hpp"
 
@@ -18,18 +19,8 @@ struct Shader;
 class NosPhysicsRenderer
 {
 public:
-    NosPhysicsRenderer(uint32_t maxBatchSize) :
-    _circleBatcher(maxBatchSize),
-    _fillRektangleBatcher(maxBatchSize, true),
-    _boundsRektangleBatcher(maxBatchSize, false),
-    _fillTriangleBatcher(maxBatchSize, true),
-    _boundsTriangleBatcher(maxBatchSize, false),
-    _matrix(nullptr),
-    _shader(nullptr)
-    {
-        // Empty
-    }
-    virtual ~NosPhysicsRenderer() {}
+    NosPhysicsRenderer(uint32_t maxBatchSize);
+    virtual ~NosPhysicsRenderer();
     
     void createDeviceDependentResources();
     void destroyDeviceDependentResources();
@@ -39,8 +30,6 @@ private:
     CircleBatcher _circleBatcher;
     RektangleBatcher _fillRektangleBatcher;
     RektangleBatcher _boundsRektangleBatcher;
-    TriangleBatcher _fillTriangleBatcher;
-    TriangleBatcher _boundsTriangleBatcher;
     mat4* _matrix;
     Shader* _shader;
 };

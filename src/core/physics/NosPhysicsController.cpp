@@ -46,6 +46,7 @@ void NosPhysicsController::updateBodyFromPose()
 {
     _velocity.set(_entity->velocity());
     _position.set(_entity->position());
+    _numGroundContacts = _entity->pose()._numGroundContacts;
     
     if (_isBodyFacingLeft != _entity->isXFlipped())
     {
@@ -59,46 +60,25 @@ void NosPhysicsController::updateBodyFromPose()
     }
 }
 
-void NosPhysicsController::step(float gravity, float friction, float deltaTime)
+void NosPhysicsController::step(float gravity, float deltaTime)
 {
-    int flag = 0;
-    if (_velocity._x < 0)
-    {
-        flag = -1;
-    }
-    else if (_velocity._x > 0)
-    {
-        flag = 1;
-    }
-    
-    if (_entity->isGrounded())
-    {
-        if (flag == -1)
-        {
-            friction = -friction;
-        }
-        else if (flag == 1)
-        {
-            friction = -friction;
-        }
-        else
-        {
-            friction = 0;
-        }
-    }
-    else
-    {
-        friction = 0;
-    }
-    
-    _velocity.add(friction, gravity * deltaTime);
+    _velocity.add(0, gravity * deltaTime);
     _position.add(_velocity._x * deltaTime, _velocity._y * deltaTime);
+    for (Bounds& b : _bounds)
+    {
+        b.updateForPosition(_position);
+    }
+    
+    if (_numGroundContacts > 0 && _velocity._y < 0)
+    {
+        _velocity._y = 0;
+    }
     _numGroundContacts = 0;
 }
 
 void NosPhysicsController::processCollisions(std::vector<Entity*>& entities)
 {
-//    static float fudgeFactor = 0.001f;
+    static float ff = 0.001f; // fudgeFactor
     
     for (Entity* e : entities)
     {
@@ -113,48 +93,93 @@ void NosPhysicsController::processCollisions(std::vector<Entity*>& entities)
         for (Bounds& myBounds : _bounds)
         {
             Rektangle& myBoundingBox = myBounds._boundingBox;
-            bool isGroundSensor = _groundSensor == &myBounds;
+            if (_groundSensor == &myBounds)
+            {
+                continue;
+            }
             
             for (Bounds& yourBounds : epc->_bounds)
             {
                 Rektangle& yourBoundingBox = yourBounds._boundingBox;
                 if (OverlapTester::doRektanglesOverlap(myBoundingBox, yourBoundingBox))
                 {
-                    if (isGroundSensor)
                     {
-                        if (OverlapTester::doLineAndRektangleOverlap(myBounds._bottom, yourBoundingBox))
+                        float mt = myBoundingBox.top();
+                        float mb = myBoundingBox.bottom();
+                        
+                        float mr = myBoundingBox.right();
+                        float ml = myBoundingBox.left();
+                        
+                        float yt = yourBoundingBox.top();
+                        float yb = yourBoundingBox.bottom();
+                        
+                        float yr = yourBoundingBox.right();
+                        float yl = yourBoundingBox.left();
+                        
+                        bool t = mt > yb && mb < yb && (mr > yl || ml < yr);
+                        bool b = mb < yt && mt > yt && (mr > yl || ml < yr);
+                        
+                        if (t)
                         {
-                            ++_numGroundContacts;
+                            _position.sub(0, mt - yb);
+                            myBounds.updateForPosition(_position);
+                        }
+                        else if (b)
+                        {
+                            _position.add(0, yt - mb);
+                            myBounds.updateForPosition(_position);
                         }
                     }
-                    else
+                    
                     {
-                        if (OverlapTester::doLineAndRektangleOverlap(myBounds._bottom, yourBoundingBox))
+                        float mt = myBoundingBox.top();
+                        float mb = myBoundingBox.bottom();
+                        
+                        float mr = myBoundingBox.right();
+                        float ml = myBoundingBox.left();
+                        
+                        float yt = yourBoundingBox.top();
+                        float yb = yourBoundingBox.bottom();
+                        
+                        float yr = yourBoundingBox.right();
+                        float yl = yourBoundingBox.left();
+                        
+                        bool r = mr > yl && ml < yl && (mt > yb || mb < yt);
+                        bool l = ml < yr && mr > yr && (mt > yb || mb < yt);
+                        
+                        if (r)
                         {
-                            _position.add(0, yourBoundingBox.top() - myBoundingBox.bottom());
+                            _position.sub(mr - yl, 0);
+                            myBounds.updateForPosition(_position);
                         }
-                        else
+                        else if (l)
                         {
-                            if (OverlapTester::doLineAndRektangleOverlap(myBounds._left, yourBoundingBox))
-                            {
-                                _position.add(yourBoundingBox.right() - myBoundingBox.left(), 0);
-                            }
-                            
-                            if (OverlapTester::doLineAndRektangleOverlap(myBounds._right, yourBoundingBox))
-                            {
-                                _position.sub(myBoundingBox.right() - yourBoundingBox.right(), 0);
-                            }
-                            
-                            if (OverlapTester::doLineAndRektangleOverlap(myBounds._top, yourBoundingBox))
-                            {
-                                _position.sub(0, myBoundingBox.top() - yourBoundingBox.bottom());
-                            }
+                            _position.add(yr - ml, 0);
+                            myBounds.updateForPosition(_position);
                         }
                     }
                 }
             }
+        }
+        
+        for (Bounds& myBounds : _bounds)
+        {
+            Rektangle& myBoundingBox = myBounds._boundingBox;
+            if (_groundSensor != &myBounds)
+            {
+                continue;
+            }
             
             myBounds.updateForPosition(_position);
+            
+            for (Bounds& yourBounds : epc->_bounds)
+            {
+                Rektangle& yourBoundingBox = yourBounds._boundingBox;
+                if (OverlapTester::doRektanglesOverlap(myBoundingBox, yourBoundingBox))
+                {
+                    ++_numGroundContacts;
+                }
+            }
         }
     }
 }

@@ -47,14 +47,14 @@ struct Bounds
         float b = _boundingBox.bottom();
         float t = _boundingBox.top();
         
-        _left._origin.set(l, b);
-        _left._end.set(l, t);
-        _right._origin.set(r, b);
-        _right._end.set(r, t);
-        _bottom._origin.set(l, b);
-        _bottom._end.set(r, b);
-        _top._origin.set(l, t);
-        _top._end.set(r, t);
+        _left._origin.set(l, b + 0.1f);
+        _left._end.set(l, t - 0.1f);
+        _right._origin.set(r, b + 0.1f);
+        _right._end.set(r, t - 0.1f);
+        _bottom._origin.set(l + 0.1f, b);
+        _bottom._end.set(r - 0.1f, b);
+        _top._origin.set(l + 0.1f, t);
+        _top._end.set(r - 0.1f, t);
     }
     
     void updateForPosition(Vector2 pos)
@@ -62,7 +62,7 @@ struct Bounds
         float l = _centerX - _halfWidth;
         float b = _centerY - _halfHeight;
         _boundingBox._lowerLeft.set(pos._x + l, pos._y + b);
-        update();
+//        update();
     }
 };
 
@@ -81,7 +81,7 @@ public:
     virtual void updatePoseFromBody() override;
     virtual void updateBodyFromPose() override;
     
-    void step(float gravity, float friction, float deltaTime);
+    void step(float gravity, float deltaTime);
     void processCollisions(std::vector<Entity*>& entities);
     std::vector<Bounds>& bounds();
     
