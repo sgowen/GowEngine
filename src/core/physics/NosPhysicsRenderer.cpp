@@ -46,8 +46,6 @@ void NosPhysicsRenderer::render(NosPhysicsWorld* world, mat4* matrix, Shader* sh
     _shader = shader;
     
     {
-        Color c = Color(0.5f, 0.9f, 0.5f, 0.3f);
-        
         _fillRektangleBatcher.begin();
         for (Entity* e : world->getPlayers())
         {
@@ -71,6 +69,12 @@ void NosPhysicsRenderer::render(NosPhysicsWorld* world, mat4* matrix, Shader* sh
                 _fillRektangleBatcher.addRektangle(b._boundingBox);
             }
         }
+        Color c = Color(0.5f, 0.9f, 0.5f, 0.4f);
+        _fillRektangleBatcher.end(*_shader, *_matrix, c);
+    }
+    
+    {
+        _fillRektangleBatcher.begin();
         for (Entity* e : world->getStaticEntities())
         {
             NosPhysicsController* epc = e->physicsController<NosPhysicsController>();
@@ -82,6 +86,7 @@ void NosPhysicsRenderer::render(NosPhysicsWorld* world, mat4* matrix, Shader* sh
                 _fillRektangleBatcher.addRektangle(b._boundingBox);
             }
         }
+        Color c = Color(0.5f, 0.9f, 0.5f, 0.2f);
         _fillRektangleBatcher.end(*_shader, *_matrix, c);
     }
     

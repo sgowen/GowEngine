@@ -93,6 +93,9 @@ private:
     uint8_t _numGroundContacts;
     bool _isBodyFacingLeft;
     
+    bool crossesBottomEdge(float yourBottom, float myTop);
+    bool crossesTopEdge(float yourTop, float myBottom);
+    bool isInside(float yourBottom, float yourTop, float myBottom, float myTop);
     void createFixtures();
     void destroyFixtures();
 };

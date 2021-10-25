@@ -78,8 +78,6 @@ void NosPhysicsController::step(float gravity, float deltaTime)
 
 void NosPhysicsController::processCollisions(std::vector<Entity*>& entities)
 {
-    static float ff = 0.001f; // fudgeFactor
-    
     for (Entity* e : entities)
     {
         if (_entity == e)
@@ -116,18 +114,26 @@ void NosPhysicsController::processCollisions(std::vector<Entity*>& entities)
                         float yr = yourBoundingBox.right();
                         float yl = yourBoundingBox.left();
                         
-                        bool t = mt > yb && mb < yb && (mr > yl || ml < yr);
-                        bool b = mb < yt && mt > yt && (mr > yl || ml < yr);
+                        bool t = crossesBottomEdge(yb, mt) && mb < yb && (mr > yl || ml < yr);
+                        bool b = crossesTopEdge(yt, mb) && mt > yt && (mr > yl || ml < yr);
                         
                         if (t)
                         {
                             _position.sub(0, mt - yb);
                             myBounds.updateForPosition(_position);
+                            if (IS_PHYSICS_LOGGING_ENABLED())
+                            {
+                                LOG("top");
+                            }
                         }
                         else if (b)
                         {
                             _position.add(0, yt - mb);
                             myBounds.updateForPosition(_position);
+                            if (IS_PHYSICS_LOGGING_ENABLED())
+                            {
+                                LOG("bottom");
+                            }
                         }
                     }
                     
@@ -144,18 +150,32 @@ void NosPhysicsController::processCollisions(std::vector<Entity*>& entities)
                         float yr = yourBoundingBox.right();
                         float yl = yourBoundingBox.left();
                         
-                        bool r = mr > yl && ml < yl && (mt > yb || mb < yt);
-                        bool l = ml < yr && mr > yr && (mt > yb || mb < yt);
+                        bool i = isInside(yb, yt, mb, mt);
+                        if (IS_PHYSICS_LOGGING_ENABLED())
+                        {
+                            LOG("isInside: %d", i);
+                        }
+                        
+                        bool r = mr > yl && ml < yl && i;
+                        bool l = ml < yr && mr > yr && i;
                         
                         if (r)
                         {
                             _position.sub(mr - yl, 0);
                             myBounds.updateForPosition(_position);
+                            if (IS_PHYSICS_LOGGING_ENABLED())
+                            {
+                                LOG("right");
+                            }
                         }
                         else if (l)
                         {
                             _position.add(yr - ml, 0);
                             myBounds.updateForPosition(_position);
+                            if (IS_PHYSICS_LOGGING_ENABLED())
+                            {
+                                LOG("left");
+                            }
                         }
                     }
                 }
@@ -187,6 +207,21 @@ void NosPhysicsController::processCollisions(std::vector<Entity*>& entities)
 std::vector<Bounds>& NosPhysicsController::bounds()
 {
     return _bounds;
+}
+
+bool NosPhysicsController::crossesBottomEdge(float yourBottom, float myTop)
+{
+    return areFloatsPracticallyEqual(myTop, yourBottom) ? false : myTop > yourBottom && myTop < yourBottom + 1;
+}
+
+bool NosPhysicsController::crossesTopEdge(float yourTop, float myBottom)
+{
+    return areFloatsPracticallyEqual(myBottom, yourTop) ? false : myBottom < yourTop && myBottom > yourTop - 1;
+}
+
+bool NosPhysicsController::isInside(float yourBottom, float yourTop, float myBottom, float myTop)
+{
+    return myBottom < yourTop || (myTop > yourBottom && myTop < yourTop);
 }
 
 void NosPhysicsController::createFixtures()
