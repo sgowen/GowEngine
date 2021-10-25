@@ -211,12 +211,12 @@ std::vector<Bounds>& NosPhysicsController::bounds()
 
 bool NosPhysicsController::crossesBottomEdge(float yourBottom, float myTop)
 {
-    return areFloatsPracticallyEqual(myTop, yourBottom) ? false : myTop > yourBottom && myTop < yourBottom + 1;
+    return areFloatsPracticallyEqual(myTop, yourBottom) ? false : myTop > yourBottom && myTop < yourBottom + 3;
 }
 
 bool NosPhysicsController::crossesTopEdge(float yourTop, float myBottom)
 {
-    return areFloatsPracticallyEqual(myBottom, yourTop) ? false : myBottom < yourTop && myBottom > yourTop - 1;
+    return areFloatsPracticallyEqual(myBottom, yourTop) ? false : myBottom < yourTop && myBottom > yourTop - 3;
 }
 
 bool NosPhysicsController::isInside(float yourBottom, float yourTop, float myBottom, float myTop)
