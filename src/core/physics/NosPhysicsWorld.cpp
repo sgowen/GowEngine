@@ -38,7 +38,6 @@ void NosPhysicsWorld::stepPhysics(float deltaTime)
     for (Entity* e : _players)
     {
         NosPhysicsController* epc = e->physicsController<NosPhysicsController>();
-        epc->processCollisions(_players);
         epc->processCollisions(_networkEntities);
         epc->processCollisions(_staticEntities);
     }
