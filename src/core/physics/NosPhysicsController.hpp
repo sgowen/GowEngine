@@ -91,6 +91,7 @@ private:
     Vector2 _position;
     Bounds* _groundSensor;
     float _gravity;
+    float _tolerance;
     uint8_t _numGroundContacts;
     bool _isBodyFacingLeft;
     

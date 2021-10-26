@@ -64,6 +64,7 @@ void NosPhysicsController::updateBodyFromPose()
 void NosPhysicsController::step(float deltaTime)
 {
     _velocity.add(0, _gravity * deltaTime);
+    _tolerance = fabsf(_velocity._y * deltaTime * 2);
     _position.add(_velocity._x * deltaTime, _velocity._y * deltaTime);
     for (Bounds& b : _bounds)
     {
@@ -75,6 +76,11 @@ void NosPhysicsController::step(float deltaTime)
         _velocity._y = 0;
     }
     _numGroundContacts = 0;
+    
+    if (IS_PHYSICS_LOGGING_ENABLED())
+    {
+        LOG("_velocity: %f, %f", _velocity._x, _velocity._y);
+    }
 }
 
 void NosPhysicsController::processCollisions(std::vector<Entity*>& entities)
@@ -115,8 +121,8 @@ void NosPhysicsController::processCollisions(std::vector<Entity*>& entities)
                         float yr = yourBoundingBox.right();
                         float yl = yourBoundingBox.left();
                         
-                        bool t = crossesBottomEdge(yb, mt) && mb < yb && (mr > yl || ml < yr);
-                        bool b = crossesTopEdge(yt, mb, 3) && mt > yt && (mr > yl || ml < yr);
+                        bool t = crossesBottomEdge(yb, mt, _tolerance) && mb < yb && (mr > yl || ml < yr);
+                        bool b = crossesTopEdge(yt, mb, _tolerance) && mt > yt && (mr > yl || ml < yr);
                         
                         if (t)
                         {
