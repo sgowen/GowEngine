@@ -26,13 +26,13 @@ void NosPhysicsWorld::stepPhysics(float deltaTime)
     for (Entity* e : _players)
     {
         NosPhysicsController* epc = e->physicsController<NosPhysicsController>();
-        epc->step(_gravity, deltaTime);
+        epc->step(deltaTime);
     }
     
     for (Entity* e : _networkEntities)
     {
         NosPhysicsController* epc = e->physicsController<NosPhysicsController>();
-        epc->step(_gravity, deltaTime);
+        epc->step(deltaTime);
     }
     
     for (Entity* e : _players)
@@ -53,5 +53,5 @@ void NosPhysicsWorld::stepPhysics(float deltaTime)
 
 EntityPhysicsController* NosPhysicsWorld::createPhysicsController(Entity* e)
 {
-    return new NosPhysicsController(e);
+    return new NosPhysicsController(e, _gravity);
 }

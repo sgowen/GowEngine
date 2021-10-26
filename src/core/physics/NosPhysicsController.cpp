@@ -10,10 +10,11 @@
 
 IMPL_RTTI(NosPhysicsController, EntityPhysicsController)
 
-NosPhysicsController::NosPhysicsController(Entity* e) : EntityPhysicsController(e),
+NosPhysicsController::NosPhysicsController(Entity* e, float gravity) : EntityPhysicsController(e),
 _velocity(e->velocity()),
 _position(e->position()),
 _groundSensor(nullptr),
+_gravity(gravity),
 _numGroundContacts(0),
 _isBodyFacingLeft(false)
 {
@@ -60,9 +61,9 @@ void NosPhysicsController::updateBodyFromPose()
     }
 }
 
-void NosPhysicsController::step(float gravity, float deltaTime)
+void NosPhysicsController::step(float deltaTime)
 {
-    _velocity.add(0, gravity * deltaTime);
+    _velocity.add(0, _gravity * deltaTime);
     _position.add(_velocity._x * deltaTime, _velocity._y * deltaTime);
     for (Bounds& b : _bounds)
     {
@@ -115,7 +116,7 @@ void NosPhysicsController::processCollisions(std::vector<Entity*>& entities)
                         float yl = yourBoundingBox.left();
                         
                         bool t = crossesBottomEdge(yb, mt) && mb < yb && (mr > yl || ml < yr);
-                        bool b = crossesTopEdge(yt, mb) && mt > yt && (mr > yl || ml < yr);
+                        bool b = crossesTopEdge(yt, mb, 3) && mt > yt && (mr > yl || ml < yr);
                         
                         if (t)
                         {
@@ -209,14 +210,14 @@ std::vector<Bounds>& NosPhysicsController::bounds()
     return _bounds;
 }
 
-bool NosPhysicsController::crossesBottomEdge(float yourBottom, float myTop)
+bool NosPhysicsController::crossesBottomEdge(float yourBottom, float myTop, float tolerance)
 {
-    return areFloatsPracticallyEqual(myTop, yourBottom) ? false : myTop > yourBottom && myTop < yourBottom + 3;
+    return areFloatsPracticallyEqual(myTop, yourBottom) ? false : myTop > yourBottom && myTop < yourBottom + tolerance;
 }
 
-bool NosPhysicsController::crossesTopEdge(float yourTop, float myBottom)
+bool NosPhysicsController::crossesTopEdge(float yourTop, float myBottom, float tolerance)
 {
-    return areFloatsPracticallyEqual(myBottom, yourTop) ? false : myBottom < yourTop && myBottom > yourTop - 3;
+    return areFloatsPracticallyEqual(myBottom, yourTop) ? false : myBottom < yourTop && myBottom > yourTop - tolerance;
 }
 
 bool NosPhysicsController::isInside(float yourBottom, float yourTop, float myBottom, float myTop)

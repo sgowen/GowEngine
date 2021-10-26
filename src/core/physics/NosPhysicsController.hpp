@@ -73,7 +73,7 @@ class NosPhysicsController : public EntityPhysicsController
     DECL_RTTI;
     
 public:
-    NosPhysicsController(Entity* e);
+    NosPhysicsController(Entity* e, float gravity);
     virtual ~NosPhysicsController();
     
     virtual Vector2 velocity() override;
@@ -81,7 +81,7 @@ public:
     virtual void updatePoseFromBody() override;
     virtual void updateBodyFromPose() override;
     
-    void step(float gravity, float deltaTime);
+    void step(float deltaTime);
     void processCollisions(std::vector<Entity*>& entities);
     std::vector<Bounds>& bounds();
     
@@ -90,11 +90,12 @@ private:
     Vector2 _velocity;
     Vector2 _position;
     Bounds* _groundSensor;
+    float _gravity;
     uint8_t _numGroundContacts;
     bool _isBodyFacingLeft;
     
-    bool crossesBottomEdge(float yourBottom, float myTop);
-    bool crossesTopEdge(float yourTop, float myBottom);
+    bool crossesBottomEdge(float yourBottom, float myTop, float tolerance = 1.0f);
+    bool crossesTopEdge(float yourTop, float myBottom, float tolerance = 1.0f);
     bool isInside(float yourBottom, float yourTop, float myBottom, float myTop);
     void createFixtures();
     void destroyFixtures();
