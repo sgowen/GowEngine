@@ -48,10 +48,27 @@ void RektangleBatcher::addRektangle(float left, float bottom, float right, float
 {
     assert((_vertices.size() / NUM_VERTICES_PER_RECTANGLE) < _maxBatchSize);
 
-    _vertices.emplace_back(left, bottom);
-    _vertices.emplace_back(left, top);
-    _vertices.emplace_back(right, top);
-    _vertices.emplace_back(right, bottom);
+    if (_isFill)
+    {
+        _vertices.emplace_back(left, bottom);
+        _vertices.emplace_back(left, top);
+        _vertices.emplace_back(right, top);
+        _vertices.emplace_back(right, bottom);
+    }
+    else
+    {
+        _vertices.emplace_back(left, bottom);
+        _vertices.emplace_back(left, top);
+        
+        _vertices.emplace_back(left, top);
+        _vertices.emplace_back(right, top);
+        
+        _vertices.emplace_back(right, top);
+        _vertices.emplace_back(right, bottom);
+        
+        _vertices.emplace_back(right, bottom);
+        _vertices.emplace_back(left, bottom);
+    }
 }
 
 void RektangleBatcher::end(Shader& s, mat4& matrix, const Color& c)
@@ -61,8 +78,6 @@ void RektangleBatcher::end(Shader& s, mat4& matrix, const Color& c)
         return;
     }
 
-    uint32_t numQuads = (uint32_t)_vertices.size() / NUM_VERTICES_PER_RECTANGLE;
-
     OGL.bindVertexBuffer(_vertexBuffer, sizeof(VERTEX_2D) * _vertices.size(), &_vertices[0]);
     OGL.bindShader(s);
     OGL.bindMatrix(s, "u_Matrix", matrix);
@@ -70,14 +85,12 @@ void RektangleBatcher::end(Shader& s, mat4& matrix, const Color& c)
 
     if (_isFill)
     {
+        uint32_t numQuads = (uint32_t)_vertices.size() / NUM_VERTICES_PER_RECTANGLE;
         OGL.drawIndexed(OpenGLUtil::MODE_TRIANGLES, _indexBuffer, numQuads);
     }
     else
     {
-        for (uint32_t i = 0; i < numQuads; ++i)
-        {
-            OGL.drawIndexed(OpenGLUtil::MODE_LINE_STRIP, _indexBuffer, 1, i);
-        }
+        OGL.draw(OpenGLUtil::MODE_LINES, 0, (int)_vertices.size());
     }
 
     OGL.unbindShader(s);

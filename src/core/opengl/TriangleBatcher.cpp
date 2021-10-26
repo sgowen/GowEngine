@@ -44,9 +44,23 @@ void TriangleBatcher::addTriangle(float leftX, float leftY, float topX, float to
 {
     assert((_vertices.size() / NUM_VERTICES_PER_TRIANGLE) < _maxBatchSize);
     
-    _vertices.emplace_back(leftX, leftY);
-    _vertices.emplace_back(topX, topY);
-    _vertices.emplace_back(rightX, rightY);
+    if (_isFill)
+    {
+        _vertices.emplace_back(leftX, leftY);
+        _vertices.emplace_back(topX, topY);
+        _vertices.emplace_back(rightX, rightY);
+    }
+    else
+    {
+        _vertices.emplace_back(leftX, leftY);
+        _vertices.emplace_back(topX, topY);
+        
+        _vertices.emplace_back(topX, topY);
+        _vertices.emplace_back(rightX, rightY);
+        
+        _vertices.emplace_back(rightX, rightY);
+        _vertices.emplace_back(leftX, leftY);
+    }
 }
 
 void TriangleBatcher::end(Shader& s, mat4& matrix, const Color& c)
@@ -67,8 +81,7 @@ void TriangleBatcher::end(Shader& s, mat4& matrix, const Color& c)
     }
     else
     {
-        // FIXME, leaves out the last side for some reason, call drawIndexed instead?
-        OGL.draw(OpenGLUtil::MODE_LINE_STRIP, 0, (int)_vertices.size());
+        OGL.draw(OpenGLUtil::MODE_LINES, 0, (int)_vertices.size());
     }
     
     OGL.unbindShader(s);
