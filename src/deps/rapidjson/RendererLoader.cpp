@@ -80,8 +80,10 @@ Renderer RendererLoader::initWithJSON(const char* json)
             
             uint16_t width = RapidJSONUtil::getUInt(iv, "width");
             uint16_t height = RapidJSONUtil::getUInt(iv, "height");
-            std::string filterMin = RapidJSONUtil::getString(iv, "filterMin");
-            std::string filterMag = RapidJSONUtil::getString(iv, "filterMag");
+            std::string filterMin = RapidJSONUtil::getString(iv, "filterMin", "SHARP");
+            assert(filterMin == "SHARP" || filterMin == "SMOOTH");
+            std::string filterMag = RapidJSONUtil::getString(iv, "filterMag", "SHARP");
+            assert(filterMag == "SHARP" || filterMag == "SMOOTH");
             
             ret._framebuffers.emplace(key, Framebuffer{width, height, filterMin, filterMag});
         }
