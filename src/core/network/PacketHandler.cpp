@@ -92,7 +92,7 @@ void PacketHandler::readIncomingPacketsIntoQueue()
             ++receivedPacketCount;
             totalReadByteCount += readByteCount;
             
-            _packetQueue.emplace(_timeTracker._time, imbs, fromAddress);
+            _packetQueue.emplace(_timeTracker._time + NW_SIMULATED_LATENCY, imbs, fromAddress);
         }
     }
 
