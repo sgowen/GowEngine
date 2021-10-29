@@ -8,6 +8,9 @@
 
 #include <GowEngine/GowEngine.hpp>
 
+#define INACTIVE_PLAYER_ID 0
+#define NO_INPUT 0
+
 InputState::InputState()
 {
     _playerInputStates.resize(MAX_NUM_PLAYERS);
@@ -17,7 +20,7 @@ void InputState::write(OutputMemoryBitStream& ombs) const
 {
     for (uint8_t i = 0; i < MAX_NUM_PLAYERS; ++i)
     {
-        bool isInputAssigned = _playerInputStates[i]._playerID != 0;
+        bool isInputAssigned = _playerInputStates[i]._playerID != INACTIVE_PLAYER_ID;
         ombs.write(isInputAssigned);
         if (isInputAssigned)
         {
@@ -43,8 +46,8 @@ void InputState::reset()
 {
     for (PlayerInputState& pis : _playerInputStates)
     {
-        pis._playerID = 0;
-        pis._inputState = 0;
+        pis._playerID = INACTIVE_PLAYER_ID;
+        pis._inputState = NO_INPUT;
     }
 }
 
@@ -81,11 +84,11 @@ void InputState::copyTo(InputState* inputState) const
 
 void InputState::activateNextPlayer(uint8_t playerID)
 {
-    assert(playerID != 0);
+    assert(playerID != INACTIVE_PLAYER_ID);
     
     for (uint8_t i = 0; i < MAX_NUM_PLAYERS; ++i)
     {
-        if (_playerInputStates[i]._playerID == 0)
+        if (_playerInputStates[i]._playerID == INACTIVE_PLAYER_ID)
         {
             _playerInputStates[i]._playerID = playerID;
             return;
@@ -110,8 +113,8 @@ bool InputState::isRequestingToAddLocalPlayer() const
 {
     for (int i = 1; i < MAX_NUM_PLAYERS; ++i)
     {
-        if (_playerInputStates[i]._playerID == 0 &&
-            _playerInputStates[i]._inputState > 0)
+        if (_playerInputStates[i]._playerID == INACTIVE_PLAYER_ID &&
+            _playerInputStates[i]._inputState != NO_INPUT)
         {
             return true;
         }
