@@ -110,23 +110,6 @@ ClientProxy* NetworkServer::getClientProxy(uint8_t playerID) const
 
 int NetworkServer::getMoveCount()
 {
-    // FIXME
-    
-    // Host advantage
-//    int ret = 0;
-//    for (auto& pair : _playerIDToClientMap)
-//    {
-//        int moveCount = pair.second->getUnprocessedMoveList().getMoveCount();
-//        ret += moveCount;
-//    }
-//    int numPlayers = getNumPlayersConnected();
-//    if (ret > 0 && numPlayers > 0)
-//    {
-//        ret /= numPlayers;
-//    }
-//    return ret;
-    
-    // Remote player advantage, but no moves are skipped
     int lowestMoveCount = 0;
 
     ClientProxy* cp = getClientProxy(1);
