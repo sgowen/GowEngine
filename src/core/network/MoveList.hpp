@@ -20,6 +20,7 @@ public:
     const Move& addMove(InputState* inputState, uint32_t timestamp, uint32_t index);
     bool addMoveIfNew(const Move& move);
     void markMoveAsProcessed(Move* move);
+    bool isMoveProcessed(Move* move);
     void removeProcessedMoves(Pool<InputState>& inputStatePool);
     void removeProcessedMovesAtTimestamp(uint32_t lastMoveProcessedOnServerTimestamp, Pool<InputState>& inputStatePool);
     uint32_t getLastMoveTimestamp() const;

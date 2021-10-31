@@ -46,6 +46,11 @@ void MoveList::markMoveAsProcessed(Move* move)
     _lastProcessedMoveTimestamp = move->getTimestamp();
 }
 
+bool MoveList::isMoveProcessed(Move* move)
+{
+    return _lastProcessedMoveTimestamp >= move->getTimestamp();
+}
+
 void MoveList::removeProcessedMoves(Pool<InputState>& inputStatePool)
 {
     removeProcessedMovesAtTimestamp(_lastProcessedMoveTimestamp, inputStatePool);
