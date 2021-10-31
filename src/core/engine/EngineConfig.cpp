@@ -23,9 +23,6 @@ _initialEngineState(initialEngineState)
     
     AUDIO_ENGINE.setSoundsDisabled(_config.getBool("soundsDisabled", false));
     AUDIO_ENGINE.setMusicDisabled(_config.getBool("musicDisabled", false));
-    
-    std::string physics = _config.getString("physics", "BOX2D");
-    World::s_worldType = physics == "BOX2D" ? BOX2D : NOSFURA2;
 }
 
 Config& EngineConfig::config()

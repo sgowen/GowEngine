@@ -11,18 +11,11 @@
 #include "core/common/RTTI.hpp"
 #include "core/entity/EntityLayoutManager.hpp"
 
-enum WorldType
-{
-    NOSFURA2,
-    BOX2D
-};
-
 class World
 {
     DECL_RTTI_NOPARENT;
     
 public:
-    static WorldType s_worldType;
     static bool s_isClient;
     static bool s_isLiveFrame;
     

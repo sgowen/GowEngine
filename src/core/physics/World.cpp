@@ -10,28 +10,8 @@
 
 IMPL_RTTI_NOPARENT(World)
 
-WorldType World::s_worldType = NOSFURA2;
 bool World::s_isClient = false;
 bool World::s_isLiveFrame = false;
-
-World* World::create()
-{
-    World* ret = nullptr;
-    
-    switch (s_worldType)
-    {
-        case BOX2D:
-            ret = new Box2DPhysicsWorld();
-            break;
-        case NOSFURA2:
-        default:
-            ret = new NosPhysicsWorld();
-            break;
-    }
-    
-    assert(ret != nullptr);
-    return ret;
-}
 
 World::World() :
 _entityLayout()

@@ -10,9 +10,6 @@
 [submodule "deps/oboe"]
 	path = deps/oboe
 	url = git@github.com:google/oboe.git
-[submodule "deps/box2d"]
-	path = deps/box2d
-	url = git@github.com:erincatto/box2d.git
 [submodule "deps/rapidjson"]
 	path = deps/rapidjson
 	url = git@github.com:Tencent/rapidjson.git

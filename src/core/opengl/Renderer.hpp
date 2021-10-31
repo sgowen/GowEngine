@@ -19,13 +19,11 @@
 #include "TriangleBatcher.hpp"
 #include "ScreenRenderer.hpp"
 
-#include "deps/box2d/Box2DPhysicsRenderer.hpp"
 #include "core/physics/NosPhysicsRenderer.hpp"
 
 #include <map>
 
 class Entity;
-class Box2DPhysicsWorld;
 class NosPhysicsWorld;
 
 class Renderer
@@ -65,7 +63,6 @@ public:
     void hideAllText();
     void renderTextViews(std::string fontBatcherKey = "main", std::string shaderKey = "texture");
     
-    void renderBox2DPhysics(Box2DPhysicsWorld* world, std::string matrixKey = "main", std::string shaderKey = "geometry");
     void renderNosPhysics(NosPhysicsWorld* world, std::string matrixKey = "main", std::string shaderKey = "geometry");
     
     void renderToScreen(std::string framebufferKey = "main", std::string shaderKey = "framebuffer");
@@ -81,7 +78,6 @@ public:
     TriangleBatcher& triangleBatcher(std::string key = "main");
     
 private:
-    Box2DPhysicsRenderer _box2DPhysicsRenderer;
     NosPhysicsRenderer _nosPhysicsRenderer;
     ScreenRenderer _screenRenderer;
     std::map<std::string, CircleBatcher> _circleBatchers;
