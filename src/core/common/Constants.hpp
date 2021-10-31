@@ -47,6 +47,7 @@
 #define NW_ACK_TIMEOUT (FRAMES_PER_SECOND / 2)
 #define NW_CLNT_MAX_NUM_MOVES 7
 #define NW_MAX_NUM_PACKETS_PER_FRAME 5
-#define NW_SIMULATED_LATENCY (1 * TIME_SCALE) // delays all packets by 33ms
+#define NW_SIMULATED_LATENCY (0 * TIME_SCALE) // delays all packets by 33ms
+#define NW_INPUT_DELAY 0
 #define NW_MAX_PACKET_SIZE 1200
 #define NW_ALL_DIRTY_STATE 0xFFu
