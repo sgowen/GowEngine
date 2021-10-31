@@ -34,102 +34,102 @@ void EngineConfig::destroy()
 
 uint8_t EngineConfig::glfwSwapInterval()
 {
-    return _config.getUInt("glfwSwapInterval", 1);
+    return _glfwSwapInterval;
 }
 
 uint8_t EngineConfig::framesPerSecond()
 {
-    return _config.getUInt("framesPerSecond", 60);
+    return _framesPerSecond;
 }
 
 std::string EngineConfig::filePathEngineAssets()
 {
-    return _config.getString("filePathEngineAssets");
+    return _filePathEngineAssets;
 }
 
 std::string EngineConfig::filePathEntityLayoutManager()
 {
-    return _config.getString("filePathEntityLayoutManager");
+    return _filePathEntityLayoutManager;
 }
 
 std::string EngineConfig::filePathEntityManager()
 {
-    return _config.getString("filePathEntityManager");
+    return _filePathEntityManager;
 }
 
 bool EngineConfig::glfwLoggingEnabled()
 {
-    return _config.getBool("glfwLoggingEnabled", false);
+    return _glfwLoggingEnabled;
 }
 
 bool EngineConfig::inputLoggingEnabled()
 {
-    return _config.getBool("inputLoggingEnabled", false);
+    return _inputLoggingEnabled;
 }
 
 bool EngineConfig::networkLoggingEnabled()
 {
-    return _config.getBool("networkLoggingEnabled", false);
+    return _networkLoggingEnabled;
 }
 
 bool EngineConfig::physicsLoggingEnabled()
 {
-    return _config.getBool("physicsLoggingEnabled", false);
+    return _physicsLoggingEnabled;
 }
 
 bool EngineConfig::soundsDisabled()
 {
-    return _config.getBool("soundsDisabled", false);
+    return _soundsDisabled;
 }
 
 bool EngineConfig::musicDisabled()
 {
-    return _config.getBool("musicDisabled", false);
+    return _musicDisabled;
 }
 
 uint8_t EngineConfig::maxNumPlayers()
 {
-    return _config.getUInt("maxNumPlayers", 2);
+    return _maxNumPlayers;
 }
 
 uint8_t EngineConfig::maxTextInputLength()
 {
-    return _config.getUInt("maxTextInputLength", 16);
+    return _maxTextInputLength;
 }
 
 uint8_t EngineConfig::maxNumSoundsToPlayPerFrame()
 {
-    return _config.getUInt("maxNumSoundsToPlayPerFrame", 3);
+    return _maxNumSoundsToPlayPerFrame;
 }
 
 uint16_t EngineConfig::clientPortHost()
 {
-    return _config.getUInt("clientPortHost", 1337);
+    return _clientPortHost;
 }
 
 uint16_t EngineConfig::clientPortJoin()
 {
-    return _config.getUInt("clientPortJoin", 1338);
+    return _clientPortJoin;
 }
 
 uint16_t EngineConfig::serverPort()
 {
-    return _config.getUInt("serverPort", 9999);
+    return _serverPort;
 }
 
 uint8_t EngineConfig::maxNumMoves()
 {
-    return _config.getUInt("maxNumMoves", 7);
+    return _maxNumMoves;
 }
 
 uint8_t EngineConfig::maxNumPacketsToProcessPerFrame()
 {
-    return _config.getUInt("maxNumPacketsToProcessPerFrame", maxNumPlayers() * 2);
+    return _maxNumPacketsToProcessPerFrame;
 }
 
 uint8_t EngineConfig::numFramesOfSimulatedLatency()
 {
-    return _config.getUInt("numFramesOfSimulatedLatency", 2);
+    return _numFramesOfSimulatedLatency;
 }
 
 float EngineConfig::frameRate()
@@ -144,10 +144,30 @@ uint8_t EngineConfig::timeScale()
 
 EngineConfig::EngineConfig(std::string configFilePath) :
 _config(ConfigLoader::initWithJSONFile(configFilePath)),
-_frameRate(1.0f / framesPerSecond()),
-_timeScale(framesPerSecond() == 60 ? 2 : framesPerSecond() == 30 ? 1 : 0)
+_glfwSwapInterval(_config.getUInt("glfwSwapInterval", 1)),
+_framesPerSecond(_config.getUInt("framesPerSecond", 60)),
+_filePathEngineAssets(_config.getString("filePathEngineAssets")),
+_filePathEntityLayoutManager(_config.getString("filePathEntityLayoutManager")),
+_filePathEntityManager(_config.getString("filePathEntityManager")),
+_glfwLoggingEnabled(_config.getBool("glfwLoggingEnabled", false)),
+_inputLoggingEnabled(_config.getBool("inputLoggingEnabled", false)),
+_networkLoggingEnabled(_config.getBool("networkLoggingEnabled", false)),
+_physicsLoggingEnabled(_config.getBool("physicsLoggingEnabled", false)),
+_soundsDisabled(_config.getBool("soundsDisabled", false)),
+_musicDisabled(_config.getBool("musicDisabled", false)),
+_maxNumPlayers(_config.getUInt("maxNumPlayers", 2)),
+_maxTextInputLength(_config.getUInt("maxTextInputLength", 16)),
+_maxNumSoundsToPlayPerFrame(_config.getUInt("maxNumSoundsToPlayPerFrame", 3)),
+_clientPortHost(_config.getUInt("clientPortHost", 1337)),
+_clientPortJoin(_config.getUInt("clientPortJoin", 1338)),
+_serverPort(_config.getUInt("serverPort", 9999)),
+_maxNumMoves(_config.getUInt("maxNumMoves", 7)),
+_maxNumPacketsToProcessPerFrame(_config.getUInt("maxNumPacketsToProcessPerFrame", maxNumPlayers() * 2)),
+_numFramesOfSimulatedLatency(_config.getUInt("numFramesOfSimulatedLatency", 0)),
+_frameRate(1.0f / _framesPerSecond),
+_timeScale(_framesPerSecond == 60 ? 2 : _framesPerSecond == 30 ? 1 : 0)
 {
-    assert(_timeScale > 0);
+    assert(_timeScale == 2 || _timeScale == 1);
 }
 
 EngineConfig::~EngineConfig()
