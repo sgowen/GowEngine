@@ -30,7 +30,7 @@
 #include "deps/DirectXTK/DirectXTKSoundWrapper.hpp"
 
 /// GLFW Implementation
-#include "deps/glfw/GlfwMain.hpp"
+#include "deps/glfw/GlfwEngine.hpp"
 
 /// ObjectAL-for-iPhone Implementation
 #include "deps/ObjectAL-for-iPhone/ObjectALAudioEngine.hpp"
@@ -94,11 +94,9 @@
 
 /// Core Common
 #include "core/common/Config.hpp"
-#include "core/common/Constants.hpp"
 #include "core/common/FPSUtil.hpp"
 #include "core/common/FixedSizePool.hpp"
 #include "core/common/InstanceRegistry.hpp"
-#include "core/common/LoggingUtil.hpp"
 #include "core/common/Macros.hpp"
 #include "core/common/Pool.hpp"
 #include "core/common/RTTI.hpp"

@@ -39,18 +39,12 @@ public:
     void pauseMusic();
     void resumeMusic();
     bool isMusicPlaying();
-    bool isMusicDisabled();
-    void setMusicDisabled(bool value);
-    bool areSoundsDisabled();
-    void setSoundsDisabled(bool value);
     
 protected:
     GowAudioEngine();
-    virtual ~GowAudioEngine() {}
+    virtual ~GowAudioEngine();
     
 private:
-    bool _musicDisabled;
-    bool _soundsDisabled;
     std::vector<Sound*> _soundsToPlay;
     std::vector<Sound*> _soundsToStop;
     std::vector<Sound*> _soundsToPause;

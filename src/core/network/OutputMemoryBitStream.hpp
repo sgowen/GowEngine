@@ -15,15 +15,15 @@
 class OutputMemoryBitStream
 {
 public:
-    OutputMemoryBitStream(uint32_t initialBufferByteSize);
+    OutputMemoryBitStream(uint16_t initialBufferByteSize);
     ~OutputMemoryBitStream();
     
     const char* getBufferPtr() const;
-    uint32_t getBitLength() const;
-    uint32_t getByteLength() const;
-    void writeBits(uint8_t data, uint32_t bitCount);
-    void writeBits(const void* data, uint32_t bitCount);
-    void writeBytes(const void* data, uint32_t byteCount);
+    uint16_t getBitLength() const;
+    uint16_t getByteLength() const;
+    void writeBits(uint8_t data, uint16_t bitCount);
+    void writeBits(const void* data, uint16_t bitCount);
+    void writeBytes(const void* data, uint16_t byteCount);
     void write(uint64_t data);
     void write(uint32_t data);
     void write(uint16_t data);
@@ -41,8 +41,8 @@ public:
     
 private:
     char* _buffer;
-    uint32_t _bitHead;
-    uint32_t _bitCapacity;
+    uint16_t _bitHead;
+    uint16_t _bitCapacity;
     
-    void reallocBuffer(uint32_t newBitCapacity);
+    void reallocBuffer(uint16_t newBitCapacity);
 };

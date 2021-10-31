@@ -19,7 +19,7 @@ void InputManager::onCursorInput(CursorEventType type, float x, float y, bool is
     
     _poolCursor.add(e);
     
-    if (IS_INPUT_LOGGING_ENABLED())
+    if (ENGINE_CFG.inputLoggingEnabled())
     {
         LOG("onCursorInput %d %f %f %d", type, x, y, isAlt);
     }
@@ -27,11 +27,13 @@ void InputManager::onCursorInput(CursorEventType type, float x, float y, bool is
 
 void InputManager::onGamepadInput(uint8_t button, uint8_t index, float x, float y)
 {
-    if (index >= MAX_NUM_SUPPORTED_GAMEPADS)
+    uint8_t maxNumPlayers = ENGINE_CFG.maxNumPlayers();
+    
+    if (index >= maxNumPlayers)
     {
-        if (IS_INPUT_LOGGING_ENABLED())
+        if (ENGINE_CFG.inputLoggingEnabled())
         {
-            LOG("Only %d gamepads supported!", MAX_NUM_SUPPORTED_GAMEPADS);
+            LOG("Only %d gamepads supported!", maxNumPlayers);
         }
         return;
     }
@@ -64,7 +66,7 @@ void InputManager::onGamepadInput(uint8_t button, uint8_t index, float x, float 
     
     _poolGamepad.add(e);
     
-    if (IS_INPUT_LOGGING_ENABLED())
+    if (ENGINE_CFG.inputLoggingEnabled())
     {
         LOG("onGamepadInput %d %d %f %f", button, index, x, y);
     }
@@ -74,7 +76,7 @@ void InputManager::onKeyboardInput(uint16_t key, bool isUp)
 {
     if (!isKeySupported(key))
     {
-        if (IS_INPUT_LOGGING_ENABLED())
+        if (ENGINE_CFG.inputLoggingEnabled())
         {
             LOG("Key not supported %d", key);
         }
@@ -101,7 +103,7 @@ void InputManager::onKeyboardInput(uint16_t key, bool isUp)
     
     _poolKeyboard.add(e);
     
-    if (IS_INPUT_LOGGING_ENABLED())
+    if (ENGINE_CFG.inputLoggingEnabled())
     {
         LOG("onKeyboardInput %d %d", key, isUp);
     }

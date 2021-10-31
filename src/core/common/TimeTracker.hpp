@@ -8,7 +8,7 @@
 
 #pragma once
 
-#include "Constants.hpp"
+#include "core/engine/EngineConfig.hpp"
 
 #include <stdint.h>
 
@@ -18,7 +18,7 @@ struct TimeTracker
     uint32_t _time;
     
     TimeTracker() :
-    _frameRate(FRAME_RATE),
+    _frameRate(ENGINE_CFG.frameRate()),
     _time(0)
     {
         // Empty

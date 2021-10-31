@@ -21,7 +21,7 @@ class ReplicationManagerServer
 public:
     ReplicationManagerServer(EntityRegistry& entityRegistry);
     
-    void replicateCreate(uint32_t networkID, uint8_t initialDirtyState);
+    void replicateCreate(uint32_t networkID);
     void replicateDestroy(uint32_t networkID);
     void setStateDirty(uint32_t networkID, uint8_t dirtyState);
     void handleCreateAckd(uint32_t networkID);

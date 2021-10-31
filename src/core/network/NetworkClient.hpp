@@ -26,7 +26,7 @@ class SocketAddress;
 class Entity;
 class MoveList;
 
-#define NW_CLNT (NetworkClient::getInstance())
+#define NW_CLNT NetworkClient::getInstance()
 
 typedef void (*RemoveProcessedMovesFunc)(uint32_t lastMoveProcessedByServerTimestamp);
 typedef void (*OnPlayerWelcomedFunc)(uint8_t playerID);

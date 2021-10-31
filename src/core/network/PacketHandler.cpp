@@ -77,7 +77,9 @@ void PacketHandler::readIncomingPacketsIntoQueue()
     int receivedPacketCount = 0;
     int totalReadByteCount = 0;
 
-    while (receivedPacketCount < NW_MAX_NUM_PACKETS_PER_FRAME)
+    uint8_t maxNumPacketsToProcessPerFrame = ENGINE_CFG.maxNumPacketsToProcessPerFrame();
+    uint8_t numFramesOfSimulatedLatency = ENGINE_CFG.numFramesOfSimulatedLatency();
+    while (receivedPacketCount < maxNumPacketsToProcessPerFrame)
     {
         int readByteCount = _socket->receiveFromAddress(packetMem, NW_MAX_PACKET_SIZE, fromAddress);
         assert(readByteCount <= NW_MAX_PACKET_SIZE);
@@ -92,7 +94,7 @@ void PacketHandler::readIncomingPacketsIntoQueue()
             ++receivedPacketCount;
             totalReadByteCount += readByteCount;
             
-            _packetQueue.emplace(_timeTracker._time + NW_SIMULATED_LATENCY, imbs, fromAddress);
+            _packetQueue.emplace(_timeTracker._time + numFramesOfSimulatedLatency, imbs, fromAddress);
         }
     }
 

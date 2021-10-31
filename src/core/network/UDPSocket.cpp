@@ -21,7 +21,7 @@ int UDPSocket::bindSocket(const SocketAddress& bindAddress)
     return error;
 }
 
-int UDPSocket::sendToAddress(const void* toSend, int length, const SocketAddress* toAddress)
+int UDPSocket::sendToAddress(const void* toSend, uint16_t length, const SocketAddress* toAddress)
 {
     assert(toAddress != nullptr);
     
@@ -42,7 +42,7 @@ int UDPSocket::sendToAddress(const void* toSend, int length, const SocketAddress
     }
 }
 
-int UDPSocket::receiveFromAddress(void* toReceive, int maxLength, SocketAddress& fromAddress)
+int UDPSocket::receiveFromAddress(void* toReceive, uint16_t maxLength, SocketAddress& fromAddress)
 {
     socklen_t fromLength = fromAddress.getSize();
     
@@ -65,7 +65,7 @@ int UDPSocket::receiveFromAddress(void* toReceive, int maxLength, SocketAddress&
         }
         else if (error == WSAECONNRESET)
         {
-            if (IS_NETWORK_LOGGING_ENABLED())
+            if (ENGINE_CFG.networkLoggingEnabled())
             {
                 LOG("Connection reset from %s", fromAddress.toString().c_str());
             }

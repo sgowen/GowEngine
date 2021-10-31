@@ -1,5 +1,5 @@
 //
-//  GlfwMain.cpp
+//  GlfwEngine.cpp
 //  GowEngine
 //
 //  Created by Stephen Gowen on 11/16/17.
@@ -137,13 +137,14 @@ private:
     GLFWwindow* _window;
 };
 
-void runEngine(EngineConfig& ec, GLFWwindow* window)
+void runEngine(std::string configFilePath, EngineState& initialEngineState, GLFWwindow* window)
 {
-    Engine engine(ec);
+    Engine engine(configFilePath, initialEngineState);
     GlfwClipboardHandler clipboardHandler(window);
     engine.createDeviceDependentResources(&clipboardHandler);
     _engine = &engine;
     
+    glfwSwapInterval(ENGINE_CFG.glfwSwapInterval());
     glfwSetTime(0.0);
 
     double lastTime = glfwGetTime();
@@ -235,7 +236,7 @@ void runEngine(EngineConfig& ec, GLFWwindow* window)
             default:
                 break;
         }
-        if (IS_GLFW_LOGGING_ENABLED())
+        if (ENGINE_CFG.glfwLoggingEnabled())
         {
             auto updateStop = high_resolution_clock::now();
             auto updateDur = duration_cast<microseconds>(updateStop - updateStart);
@@ -244,7 +245,7 @@ void runEngine(EngineConfig& ec, GLFWwindow* window)
 
         auto renderStart = high_resolution_clock::now();
         engine.render();
-        if (IS_GLFW_LOGGING_ENABLED())
+        if (ENGINE_CFG.glfwLoggingEnabled())
         {
             auto renderStop = high_resolution_clock::now();
             auto renderDur = duration_cast<microseconds>(renderStop - renderStart);
@@ -253,7 +254,7 @@ void runEngine(EngineConfig& ec, GLFWwindow* window)
 
         glfwSwapBuffers(window);
         
-        if (IS_GLFW_LOGGING_ENABLED())
+        if (ENGINE_CFG.glfwLoggingEnabled())
         {
             auto frameStop = high_resolution_clock::now();
             auto frameDur = duration_cast<microseconds>(frameStop - frameStart);
@@ -264,7 +265,7 @@ void runEngine(EngineConfig& ec, GLFWwindow* window)
     engine.destroyDeviceDependentResources();
 }
 
-void GlfwMain::exec(EngineConfig& ec, const char* windowTitle)
+void GlfwEngine::exec(std::string configFilePath, EngineState& initialEngineState, const char* windowTitle)
 {
     memset(joysticks, 0, sizeof(joysticks));
 
@@ -330,9 +331,7 @@ void GlfwMain::exec(EngineConfig& ec, const char* windowTitle)
     glewInit();
 #endif
     
-    glfwSwapInterval(ec.config().getInt("glfwSwapInterval", 1));
-    
-    runEngine(ec, window);
+    runEngine(configFilePath, initialEngineState, window);
 
     glfwDestroyWindow(window);
 

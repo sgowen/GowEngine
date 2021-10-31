@@ -45,7 +45,8 @@ bool DeliveryNotificationManager::readAndProcessState(InputMemoryBitStream& imbs
 
 void DeliveryNotificationManager::processTimedOutPackets()
 {
-    uint32_t timeoutTime = _timeTracker._time - NW_ACK_TIMEOUT;
+    uint32_t timeout = ENGINE_CFG.framesPerSecond() / 2;
+    uint32_t timeoutTime = _timeTracker._time - timeout;
     
     while (!_inFlightPackets.empty())
     {
@@ -87,7 +88,7 @@ void DeliveryNotificationManager::logStats()
 {
     if (_dispatchedPacketCount > 0 &&
         _shouldProcessAcks &&
-        IS_NETWORK_LOGGING_ENABLED())
+        ENGINE_CFG.networkLoggingEnabled())
     {
         LOG("DeliveryNotificationManager stats: delivery rate %d%%, drop rate %d%%",
             (100 * _deliveredPacketCount) / _dispatchedPacketCount,

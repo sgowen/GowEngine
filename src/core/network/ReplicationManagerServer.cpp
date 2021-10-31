@@ -8,15 +8,17 @@
 
 #include <GowEngine/GowEngine.hpp>
 
+#define NW_ALL_DIRTY_STATE 0xFFu
+
 ReplicationManagerServer::ReplicationManagerServer(EntityRegistry& entityRegistry) :
 _entityRegistry(entityRegistry)
 {
     // Empty
 }
 
-void ReplicationManagerServer::replicateCreate(uint32_t networkID, uint8_t initialDirtyState)
+void ReplicationManagerServer::replicateCreate(uint32_t networkID)
 {
-    _networkIDToReplicationCommand.emplace(networkID, ReplicationCommand{initialDirtyState});
+    _networkIDToReplicationCommand.emplace(networkID, ReplicationCommand{NW_ALL_DIRTY_STATE});
 }
 
 void ReplicationManagerServer::replicateDestroy(uint32_t networkID)

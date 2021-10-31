@@ -8,7 +8,7 @@
 
 #include <GowEngine/GowEngine.hpp>
 
-OutputMemoryBitStream::OutputMemoryBitStream(uint32_t initialBufferByteSize) :
+OutputMemoryBitStream::OutputMemoryBitStream(uint16_t initialBufferByteSize) :
 _buffer(nullptr),
 _bitHead(0)
 {
@@ -25,17 +25,17 @@ const char* OutputMemoryBitStream::getBufferPtr() const
     return _buffer;
 }
 
-uint32_t OutputMemoryBitStream::getBitLength() const
+uint16_t OutputMemoryBitStream::getBitLength() const
 {
     return _bitHead;
 }
 
-uint32_t OutputMemoryBitStream::getByteLength() const
+uint16_t OutputMemoryBitStream::getByteLength() const
 {
     return (_bitHead + 7) >> 3;
 }
 
-void OutputMemoryBitStream::writeBits(uint8_t data, uint32_t bitCount)
+void OutputMemoryBitStream::writeBits(uint8_t data, uint16_t bitCount)
 {
     uint32_t nextBitHead = _bitHead + bitCount;
 
@@ -60,7 +60,7 @@ void OutputMemoryBitStream::writeBits(uint8_t data, uint32_t bitCount)
     _bitHead = nextBitHead;
 }
 
-void OutputMemoryBitStream::writeBits(const void* data, uint32_t bitCount)
+void OutputMemoryBitStream::writeBits(const void* data, uint16_t bitCount)
 {
     const char* srcByte = static_cast<const char*>(data);
     
@@ -77,7 +77,7 @@ void OutputMemoryBitStream::writeBits(const void* data, uint32_t bitCount)
     }
 }
 
-void OutputMemoryBitStream::writeBytes(const void* data, uint32_t byteCount)
+void OutputMemoryBitStream::writeBytes(const void* data, uint16_t byteCount)
 {
     writeBits(data, byteCount << 3);
 }
@@ -171,7 +171,7 @@ void OutputMemoryBitStream::writeSmall(const std::string& value)
     }
 }
 
-void OutputMemoryBitStream::reallocBuffer(uint32_t newBitLength)
+void OutputMemoryBitStream::reallocBuffer(uint16_t newBitLength)
 {
     if (_buffer == nullptr)
     {

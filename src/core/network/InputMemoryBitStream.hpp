@@ -15,15 +15,15 @@
 class InputMemoryBitStream
 {
 public:
-    InputMemoryBitStream(char* buffer, uint32_t byteCount);
+    InputMemoryBitStream(char* buffer, uint16_t byteCount);
     InputMemoryBitStream(const InputMemoryBitStream& other);
     ~InputMemoryBitStream();
     
     const char*	getBufferPtr() const;
-    uint32_t getRemainingBitCount() const;
-    void readBits(uint8_t& outData, uint32_t bitCount);
-    void readBits(void* outData, uint32_t bitCount);
-    void readBytes(void* outData, uint32_t byteCount);
+    uint16_t getRemainingBitCount() const;
+    void readBits(uint8_t& outData, uint16_t bitCount);
+    void readBits(void* outData, uint16_t bitCount);
+    void readBytes(void* outData, uint16_t byteCount);
     void read(uint64_t& data);
     void read(uint32_t& data);
     void read(uint16_t& data);
@@ -36,13 +36,13 @@ public:
     void read(float& data);
     void read(char& data);
     void read(bool& data);
-    void resetToCapacity(uint32_t byteCapacity);
+    void resetToCapacity(uint16_t byteCapacity);
     void readLarge(std::string& value);
     void readSmall(std::string& value);
     
 private:
     char* _buffer;
-    uint32_t _bitHead;
-    uint32_t _bitCapacity;
+    uint16_t _bitHead;
+    uint16_t _bitCapacity;
     bool _isBufferOwner;
 };

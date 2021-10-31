@@ -8,19 +8,32 @@
 
 #include <GowEngine/GowEngine.hpp>
 
-Engine::Engine(EngineConfig& ec) :
-_initialState(ec.initialEngineState()),
+#define ENGINE_ASSETS "engine"
+
+Engine::Engine(std::string configFilePath, EngineState& initialEngineState) :
+_initialState(initialEngineState),
 _stateMachine(this, &ENGINE_STATE_DEFAULT),
 _requestedStateAction(ERSA_DEFAULT),
 _requestedHostAction(ERHA_DEFAULT),
-_frameRate(FRAME_RATE),
+_frameRate(0),
 _stateTime(0),
 _screenWidth(0),
 _screenHeight(0),
 _cursorWidth(0),
 _cursorHeight(0)
 {
-    // Empty
+    EngineConfig::create(configFilePath);
+    _frameRate = ENGINE_CFG.frameRate();
+    ASSETS_MGR.registerAssets(ENGINE_ASSETS, AssetsLoader::initWithJSONFile(ENGINE_CFG.filePathEngineAssets()));
+    EntityLayoutManagerLoader::initWithJSONFile(ENTITY_LAYOUT_MGR, ENGINE_CFG.filePathEntityLayoutManager());
+    EntityManagerLoader::initWithJSONFile(ENTITY_MGR, ENGINE_CFG.filePathEntityManager());
+}
+
+Engine::~Engine()
+{
+    EngineConfig::destroy();
+    
+    ASSETS_MGR.deregisterAssets(ENGINE_ASSETS);
 }
 
 void Engine::createDeviceDependentResources(ClipboardHandler* clipboardHandler)

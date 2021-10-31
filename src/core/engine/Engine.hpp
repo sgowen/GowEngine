@@ -28,18 +28,20 @@ enum EngineRequestedHostAction
 
 #include "core/common/StateMachine.hpp"
 #include "core/input/ClipboardHandler.hpp"
+#include "EngineConfig.hpp"
 
 #include <stdint.h>
 
-class EngineConfig;
 class Config;
+class EngineState;
 
 class Engine
 {
     friend class DefaultEngineState;
     
 public:
-    Engine(EngineConfig& ec);
+    Engine(std::string configFilePath, EngineState& initialEngineState);
+    ~Engine();
     
     void createDeviceDependentResources(ClipboardHandler* clipboardHandler = &NullClipboardHandler::getInstance());
     void onWindowSizeChanged(uint16_t screenWidth, uint16_t screenHeight, uint16_t cursorWidth = 0, uint16_t cursorHeight = 0);

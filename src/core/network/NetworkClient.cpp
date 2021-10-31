@@ -39,7 +39,8 @@ NetworkClientState NetworkClient::processIncomingPackets()
     _packetHandler.processIncomingPackets();
     
     uint32_t time = _timeTracker._time;
-    uint32_t dcTime = _lastServerCommunicationTimestamp + NW_SRVR_TIMEOUT;
+    uint32_t timeout = ENGINE_CFG.framesPerSecond() * 2;
+    uint32_t dcTime = _lastServerCommunicationTimestamp + timeout;
     if (time > dcTime)
     {
         _state = NWCS_DISCONNECTED;
@@ -137,14 +138,14 @@ bool NetworkClient::connect()
         return false;
     }
     
-    if (IS_NETWORK_LOGGING_ENABLED())
+    if (ENGINE_CFG.networkLoggingEnabled())
     {
         LOG("Client Initializing PacketHandler at port %hu", _port);
     }
     
     int error = _packetHandler.connect();
     if (error != NO_ERROR &&
-        IS_NETWORK_LOGGING_ENABLED())
+        ENGINE_CFG.networkLoggingEnabled())
     {
         LOG("Client connect failed. Error code %d", error);
     }
@@ -154,7 +155,7 @@ bool NetworkClient::connect()
 
 void NetworkClient::processPacket(InputMemoryBitStream& imbs, SocketAddress* fromAddress)
 {
-    if (IS_NETWORK_LOGGING_ENABLED())
+    if (ENGINE_CFG.networkLoggingEnabled())
     {
         LOG("Client processPacket bit length: %d", imbs.getRemainingBitCount());
     }
@@ -179,14 +180,14 @@ void NetworkClient::processPacket(InputMemoryBitStream& imbs, SocketAddress* fro
             handleStatePacket(imbs);
             break;
         case NWPT_SRVR_EXIT:
-            if (IS_NETWORK_LOGGING_ENABLED())
+            if (ENGINE_CFG.networkLoggingEnabled())
             {
                 LOG("Server has shut down");
             }
             _state = NWCS_DISCONNECTED;
             break;
         default:
-            if (IS_NETWORK_LOGGING_ENABLED())
+            if (ENGINE_CFG.networkLoggingEnabled())
             {
                 LOG("Unknown packet type received from %s", fromAddress->toString().c_str());
             }
@@ -206,7 +207,7 @@ uint32_t NetworkClient::getNumMovesProcessed()
 
 void NetworkClient::sendPacket(const OutputMemoryBitStream& ombs)
 {
-    if (IS_NETWORK_LOGGING_ENABLED())
+    if (ENGINE_CFG.networkLoggingEnabled())
     {
         LOG("Client    sendPacket bit length: %d", ombs.getBitLength());
     }
@@ -217,7 +218,8 @@ void NetworkClient::sendPacket(const OutputMemoryBitStream& ombs)
 void NetworkClient::updateSayingHello()
 {
     uint32_t time = _timeTracker._time;
-    if (time > _timeOfLastHello + NW_CLNT_TIME_BETWEEN_HELLOS)
+    uint32_t timeBetweenHellos = ENGINE_CFG.framesPerSecond();
+    if (time > _timeOfLastHello + timeBetweenHellos)
     {
         // FIXME, player name length (and this packet size)
         // should be configurable
@@ -245,7 +247,7 @@ void NetworkClient::handleWelcomePacket(InputMemoryBitStream& imbs)
     _playerIDs.clear();
     _playerIDs[_nextIndex] = playerID;
     
-    if (IS_NETWORK_LOGGING_ENABLED())
+    if (ENGINE_CFG.networkLoggingEnabled())
     {
         LOG("Client '%s' was welcomed as player %d", getPlayerName().c_str(), playerID);
     }
@@ -267,7 +269,7 @@ void NetworkClient::handleLocalPlayerAddedPacket(InputMemoryBitStream& imbs)
     
     _playerIDs[_nextIndex] = playerID;
     
-    if (IS_NETWORK_LOGGING_ENABLED())
+    if (ENGINE_CFG.networkLoggingEnabled())
     {
         LOG("'%s(%d)' was welcomed on client as player %d", getPlayerName().c_str(), _nextIndex, playerID);
     }
@@ -281,7 +283,7 @@ void NetworkClient::handleLocalPlayerAddedPacket(InputMemoryBitStream& imbs)
 
 void NetworkClient::handleLocalPlayerDeniedPacket()
 {
-    if (IS_NETWORK_LOGGING_ENABLED())
+    if (ENGINE_CFG.networkLoggingEnabled())
     {
         LOG("'%s(%d)' was denied on client...", getPlayerName().c_str(), _nextIndex);
     }
@@ -329,9 +331,10 @@ void NetworkClient::updateSendingInputPacket(MoveList& ml)
     ombs.write(ml.hasMoves());
     if (ml.hasMoves())
     {
+        uint8_t maxNumMoves = ENGINE_CFG.maxNumMoves();
         int moveCount = ml.getNumMovesAfterTimestamp(_lastMoveProcessedByServerTimestamp);
-        assert(moveCount <= NW_CLNT_MAX_NUM_MOVES);
-        ombs.writeBits(moveCount, NBITS(NW_CLNT_MAX_NUM_MOVES));
+        assert(moveCount <= maxNumMoves);
+        ombs.writeBits(moveCount, NBITS(maxNumMoves));
         
         std::deque<Move>::const_iterator moveItr = ml.begin();
         
@@ -352,7 +355,8 @@ void NetworkClient::updateAddLocalPlayerRequest()
     }
     
     uint32_t time = _timeTracker._time;
-    if (time > _timeOfLastHello + NW_CLNT_TIME_BETWEEN_HELLOS)
+    uint32_t timeBetweenHellos = ENGINE_CFG.framesPerSecond();
+    if (time > _timeOfLastHello + timeBetweenHellos)
     {
         OutputMemoryBitStream ombs(2);
         ombs.writeBits(static_cast<uint8_t>(NWPT_ADD_LOCAL_PLAYER), 4);
@@ -420,7 +424,7 @@ _numMovesProcessed(0),
 _port(port)
 {
     if (_serverAddress == nullptr &&
-        IS_NETWORK_LOGGING_ENABLED())
+        ENGINE_CFG.networkLoggingEnabled())
     {
         LOG("Server Address invalid: %s", serverIPAddress.c_str());
     }

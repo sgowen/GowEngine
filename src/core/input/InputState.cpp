@@ -13,12 +13,14 @@
 
 InputState::InputState()
 {
-    _playerInputStates.resize(MAX_NUM_PLAYERS);
+    uint8_t maxNumPlayers = ENGINE_CFG.maxNumPlayers();
+    _playerInputStates.resize(maxNumPlayers);
 }
 
 void InputState::write(OutputMemoryBitStream& ombs) const
 {
-    for (uint8_t i = 0; i < MAX_NUM_PLAYERS; ++i)
+    uint8_t maxNumPlayers = ENGINE_CFG.maxNumPlayers();
+    for (uint8_t i = 0; i < maxNumPlayers; ++i)
     {
         bool isInputAssigned = _playerInputStates[i]._playerID != INACTIVE_PLAYER_ID;
         ombs.write(isInputAssigned);
@@ -31,7 +33,8 @@ void InputState::write(OutputMemoryBitStream& ombs) const
 
 void InputState::read(InputMemoryBitStream& imbs)
 {
-    for (uint8_t i = 0; i < MAX_NUM_PLAYERS; ++i)
+    uint8_t maxNumPlayers = ENGINE_CFG.maxNumPlayers();
+    for (uint8_t i = 0; i < maxNumPlayers; ++i)
     {
         bool isInputAssigned;
         imbs.read(isInputAssigned);
@@ -55,7 +58,8 @@ bool InputState::isEqual(InputState* inputState) const
 {
     InputState* is = static_cast<InputState*>(inputState);
     
-    for (uint8_t i = 0; i < MAX_NUM_PLAYERS; ++i)
+    uint8_t maxNumPlayers = ENGINE_CFG.maxNumPlayers();
+    for (uint8_t i = 0; i < maxNumPlayers; ++i)
     {
         if (is->_playerInputStates[i]._playerID != _playerInputStates[i]._playerID)
         {
@@ -75,7 +79,8 @@ void InputState::copyTo(InputState* inputState) const
 {
     InputState* is = static_cast<InputState*>(inputState);
     
-    for (uint8_t i = 0; i < MAX_NUM_PLAYERS; ++i)
+    uint8_t maxNumPlayers = ENGINE_CFG.maxNumPlayers();
+    for (uint8_t i = 0; i < maxNumPlayers; ++i)
     {
         is->_playerInputStates[i]._playerID = _playerInputStates[i]._playerID;
         is->_playerInputStates[i]._inputState = _playerInputStates[i]._inputState;
@@ -86,7 +91,8 @@ void InputState::activateNextPlayer(uint8_t playerID)
 {
     assert(playerID != INACTIVE_PLAYER_ID);
     
-    for (uint8_t i = 0; i < MAX_NUM_PLAYERS; ++i)
+    uint8_t maxNumPlayers = ENGINE_CFG.maxNumPlayers();
+    for (uint8_t i = 0; i < maxNumPlayers; ++i)
     {
         if (_playerInputStates[i]._playerID == INACTIVE_PLAYER_ID)
         {
@@ -98,7 +104,8 @@ void InputState::activateNextPlayer(uint8_t playerID)
 
 InputState::PlayerInputState* InputState::playerInputStateForID(uint8_t playerID)
 {
-    for (uint8_t i = 0; i < MAX_NUM_PLAYERS; ++i)
+    uint8_t maxNumPlayers = ENGINE_CFG.maxNumPlayers();
+    for (uint8_t i = 0; i < maxNumPlayers; ++i)
     {
         if (_playerInputStates[i]._playerID == playerID)
         {
@@ -111,7 +118,8 @@ InputState::PlayerInputState* InputState::playerInputStateForID(uint8_t playerID
 
 bool InputState::isRequestingToAddLocalPlayer() const
 {
-    for (int i = 1; i < MAX_NUM_PLAYERS; ++i)
+    uint8_t maxNumPlayers = ENGINE_CFG.maxNumPlayers();
+    for (int i = 1; i < maxNumPlayers; ++i)
     {
         if (_playerInputStates[i]._playerID == INACTIVE_PLAYER_ID &&
             _playerInputStates[i]._inputState != NO_INPUT)

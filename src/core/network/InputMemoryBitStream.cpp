@@ -8,7 +8,7 @@
 
 #include <GowEngine/GowEngine.hpp>
 
-InputMemoryBitStream::InputMemoryBitStream(char* buffer, uint32_t byteCount) :
+InputMemoryBitStream::InputMemoryBitStream(char* buffer, uint16_t byteCount) :
 _buffer(buffer),
 _bitHead(0),
 _bitCapacity(byteCount * 8),
@@ -40,12 +40,12 @@ const char*	InputMemoryBitStream::getBufferPtr() const
     return _buffer;
 }
 
-uint32_t InputMemoryBitStream::getRemainingBitCount() const
+uint16_t InputMemoryBitStream::getRemainingBitCount() const
 {
     return _bitCapacity - _bitHead;
 }
 
-void InputMemoryBitStream::readBits(uint8_t& outData, uint32_t bitCount)
+void InputMemoryBitStream::readBits(uint8_t& outData, uint16_t bitCount)
 {
     uint32_t byteOffset = _bitHead >> 3;
     uint32_t bitOffset = _bitHead & 0x7;
@@ -63,7 +63,7 @@ void InputMemoryBitStream::readBits(uint8_t& outData, uint32_t bitCount)
     _bitHead += bitCount;
 }
 
-void InputMemoryBitStream::readBits(void* outData, uint32_t bitCount)
+void InputMemoryBitStream::readBits(void* outData, uint16_t bitCount)
 {
     uint8_t* destByte = reinterpret_cast< uint8_t* >(outData);
     
@@ -80,7 +80,7 @@ void InputMemoryBitStream::readBits(void* outData, uint32_t bitCount)
     }
 }
 
-void InputMemoryBitStream::readBytes(void* outData, uint32_t byteCount)
+void InputMemoryBitStream::readBytes(void* outData, uint16_t byteCount)
 {
     readBits(outData, byteCount << 3);
 }
@@ -153,7 +153,7 @@ void InputMemoryBitStream::read(bool& data)
     readBits(&data, 1);
 }
 
-void InputMemoryBitStream::resetToCapacity(uint32_t byteCapacity)
+void InputMemoryBitStream::resetToCapacity(uint16_t byteCapacity)
 {
     _bitCapacity = byteCapacity << 3;
     _bitHead = 0;

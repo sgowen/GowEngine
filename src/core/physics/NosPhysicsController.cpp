@@ -77,7 +77,7 @@ void NosPhysicsController::step(float deltaTime)
     }
     _numGroundContacts = 0;
     
-    if (IS_PHYSICS_LOGGING_ENABLED())
+    if (ENGINE_CFG.physicsLoggingEnabled())
     {
         LOG("_velocity: %f, %f", _velocity._x, _velocity._y);
     }
@@ -128,7 +128,7 @@ void NosPhysicsController::processCollisions(std::vector<Entity*>& entities)
                         {
                             _position.sub(0, mt - yb);
                             myBounds.updateForPosition(_position);
-                            if (IS_PHYSICS_LOGGING_ENABLED())
+                            if (ENGINE_CFG.physicsLoggingEnabled())
                             {
                                 LOG("top");
                             }
@@ -137,7 +137,7 @@ void NosPhysicsController::processCollisions(std::vector<Entity*>& entities)
                         {
                             _position.add(0, yt - mb);
                             myBounds.updateForPosition(_position);
-                            if (IS_PHYSICS_LOGGING_ENABLED())
+                            if (ENGINE_CFG.physicsLoggingEnabled())
                             {
                                 LOG("bottom");
                             }
@@ -158,7 +158,7 @@ void NosPhysicsController::processCollisions(std::vector<Entity*>& entities)
                         float yl = yourBoundingBox.left();
                         
                         bool i = isInside(yb, yt, mb, mt);
-                        if (IS_PHYSICS_LOGGING_ENABLED())
+                        if (ENGINE_CFG.physicsLoggingEnabled())
                         {
                             LOG("isInside: %d", i);
                         }
@@ -170,7 +170,7 @@ void NosPhysicsController::processCollisions(std::vector<Entity*>& entities)
                         {
                             _position.sub(mr - yl, 0);
                             myBounds.updateForPosition(_position);
-                            if (IS_PHYSICS_LOGGING_ENABLED())
+                            if (ENGINE_CFG.physicsLoggingEnabled())
                             {
                                 LOG("right");
                             }
@@ -179,7 +179,7 @@ void NosPhysicsController::processCollisions(std::vector<Entity*>& entities)
                         {
                             _position.add(yr - ml, 0);
                             myBounds.updateForPosition(_position);
-                            if (IS_PHYSICS_LOGGING_ENABLED())
+                            if (ENGINE_CFG.physicsLoggingEnabled())
                             {
                                 LOG("left");
                             }

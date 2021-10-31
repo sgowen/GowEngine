@@ -26,7 +26,7 @@ class ClientProxy;
 class InputState;
 class Entity;
 
-#define NW_SRVR (NetworkServer::getInstance())
+#define NW_SRVR NetworkServer::getInstance()
 
 typedef void (*HandleNewClientFunc)(std::string username, uint8_t playerID);
 typedef void (*HandleLostClientFunc)(ClientProxy& cp, uint8_t localPlayerIndex);

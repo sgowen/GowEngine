@@ -51,7 +51,9 @@ void GowAudioEngine::render()
 
 void GowAudioEngine::playSound(std::string soundID, float volume, bool isLooping)
 {
-    if (_soundsDisabled || _soundsToPlay.size() >= MAX_NUM_SOUNDS_TO_PLAY_PER_FRAME)
+    bool soundsDisabled = ENGINE_CFG.soundsDisabled();
+    uint8_t maxNumSoundsToPlayPerFrame = ENGINE_CFG.maxNumSoundsToPlayPerFrame();
+    if (soundsDisabled || _soundsToPlay.size() >= maxNumSoundsToPlayPerFrame)
     {
         return;
     }
@@ -71,7 +73,8 @@ void GowAudioEngine::playSound(std::string soundID, float volume, bool isLooping
 
 void GowAudioEngine::stopSound(std::string soundID)
 {
-    if (_soundsDisabled)
+    bool soundsDisabled = ENGINE_CFG.soundsDisabled();
+    if (soundsDisabled)
     {
         return;
     }
@@ -91,7 +94,8 @@ void GowAudioEngine::stopSound(std::string soundID)
 
 void GowAudioEngine::pauseSound(std::string soundID)
 {
-    if (_soundsDisabled)
+    bool soundsDisabled = ENGINE_CFG.soundsDisabled();
+    if (soundsDisabled)
     {
         return;
     }
@@ -111,7 +115,8 @@ void GowAudioEngine::pauseSound(std::string soundID)
 
 void GowAudioEngine::resumeSound(std::string soundID)
 {
-    if (_soundsDisabled)
+    bool soundsDisabled = ENGINE_CFG.soundsDisabled();
+    if (soundsDisabled)
     {
         return;
     }
@@ -131,7 +136,8 @@ void GowAudioEngine::resumeSound(std::string soundID)
 
 void GowAudioEngine::stopAllSounds()
 {
-    if (_soundsDisabled)
+    bool soundsDisabled = ENGINE_CFG.soundsDisabled();
+    if (soundsDisabled)
     {
         return;
     }
@@ -148,7 +154,8 @@ void GowAudioEngine::stopAllSounds()
 
 void GowAudioEngine::pauseAllSounds()
 {
-    if (_soundsDisabled)
+    bool soundsDisabled = ENGINE_CFG.soundsDisabled();
+    if (soundsDisabled)
     {
         return;
     }
@@ -168,7 +175,8 @@ void GowAudioEngine::pauseAllSounds()
 
 void GowAudioEngine::resumeAllSounds()
 {
-    if (_soundsDisabled)
+    bool soundsDisabled = ENGINE_CFG.soundsDisabled();
+    if (soundsDisabled)
     {
         return;
     }
@@ -188,8 +196,9 @@ void GowAudioEngine::resumeAllSounds()
 
 void GowAudioEngine::playMusic(float volume, bool isLooping)
 {
+    bool musicDisabled = ENGINE_CFG.musicDisabled();
     SoundWrapper* music = ASSETS_MGR.music();
-    if (_musicDisabled || music == nullptr)
+    if (musicDisabled || music == nullptr)
     {
         return;
     }
@@ -202,8 +211,9 @@ void GowAudioEngine::playMusic(float volume, bool isLooping)
 
 void GowAudioEngine::setMusicVolume(float volume)
 {
+    bool musicDisabled = ENGINE_CFG.musicDisabled();
     SoundWrapper* music = ASSETS_MGR.music();
-    if (_musicDisabled || music == nullptr)
+    if (musicDisabled || music == nullptr)
     {
         return;
     }
@@ -213,8 +223,9 @@ void GowAudioEngine::setMusicVolume(float volume)
 
 void GowAudioEngine::stopMusic()
 {
+    bool musicDisabled = ENGINE_CFG.musicDisabled();
     SoundWrapper* music = ASSETS_MGR.music();
-    if (_musicDisabled || music == nullptr)
+    if (musicDisabled || music == nullptr)
     {
         return;
     }
@@ -224,8 +235,9 @@ void GowAudioEngine::stopMusic()
 
 void GowAudioEngine::pauseMusic()
 {
+    bool musicDisabled = ENGINE_CFG.musicDisabled();
     SoundWrapper* music = ASSETS_MGR.music();
-    if (_musicDisabled || music == nullptr)
+    if (musicDisabled || music == nullptr)
     {
         return;
     }
@@ -235,8 +247,9 @@ void GowAudioEngine::pauseMusic()
 
 void GowAudioEngine::resumeMusic()
 {
+    bool musicDisabled = ENGINE_CFG.musicDisabled();
     SoundWrapper* music = ASSETS_MGR.music();
-    if (_musicDisabled || music == nullptr)
+    if (musicDisabled || music == nullptr)
     {
         return;
     }
@@ -246,9 +259,9 @@ void GowAudioEngine::resumeMusic()
 
 bool GowAudioEngine::isMusicPlaying()
 {
+    bool musicDisabled = ENGINE_CFG.musicDisabled();
     SoundWrapper* music = ASSETS_MGR.music();
-    if (isMusicDisabled() ||
-        music == nullptr)
+    if (musicDisabled || music == nullptr)
     {
         return false;
     }
@@ -256,29 +269,12 @@ bool GowAudioEngine::isMusicPlaying()
     return music->isPlaying();
 }
 
-bool GowAudioEngine::isMusicDisabled()
+GowAudioEngine::GowAudioEngine()
 {
-    return _musicDisabled;
+    // Empty
 }
 
-void GowAudioEngine::setMusicDisabled(bool value)
-{
-    _musicDisabled = value;
-}
-
-bool GowAudioEngine::areSoundsDisabled()
-{
-    return _soundsDisabled;
-}
-
-void GowAudioEngine::setSoundsDisabled(bool value)
-{
-    _soundsDisabled = value;
-}
-
-GowAudioEngine::GowAudioEngine() :
-_musicDisabled(false),
-_soundsDisabled(false)
+GowAudioEngine::~GowAudioEngine()
 {
     // Empty
 }

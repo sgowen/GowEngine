@@ -38,7 +38,8 @@ void NetworkServer::processIncomingPackets()
     
     std::vector<ClientProxy*> clientsToDC;
     
-    uint32_t minAllowedLastPacketFromClientTime = _timeTracker._time < NW_CLNT_TIMEOUT ? 0 : _timeTracker._time - NW_CLNT_TIMEOUT;
+    uint32_t timeout = ENGINE_CFG.framesPerSecond() / 2;
+    uint32_t minAllowedLastPacketFromClientTime = _timeTracker._time < timeout ? 0 : _timeTracker._time - timeout;
     for (auto& pair: _addressHashToClientMap)
     {
         if (pair.second.getLastPacketFromClientTime() < minAllowedLastPacketFromClientTime)
@@ -177,14 +178,14 @@ SocketAddress& NetworkServer::getServerAddress()
 
 bool NetworkServer::connect()
 {
-    if (IS_NETWORK_LOGGING_ENABLED())
+    if (ENGINE_CFG.networkLoggingEnabled())
     {
         LOG("Server Initializing PacketHandler at port %hu", _port);
     }
     
     int error = _packetHandler.connect();
     if (error != NO_ERROR &&
-        IS_NETWORK_LOGGING_ENABLED())
+        ENGINE_CFG.networkLoggingEnabled())
     {
         LOG("Server connect failed. Error code %d", error);
     }
@@ -196,7 +197,7 @@ void NetworkServer::onEntityRegistered(Entity* e)
 {
     for (auto& pair: _addressHashToClientMap)
     {
-        pair.second.replicationManagerServer().replicateCreate(e->getID(), NW_ALL_DIRTY_STATE);
+        pair.second.replicationManagerServer().replicateCreate(e->getID());
     }
     
     _onEntityRegisteredFunc(e);
@@ -214,7 +215,7 @@ void NetworkServer::onEntityDeregistered(Entity* e)
 
 void NetworkServer::processPacket(InputMemoryBitStream& imbs, SocketAddress* fromAddress)
 {
-    if (IS_NETWORK_LOGGING_ENABLED())
+    if (ENGINE_CFG.networkLoggingEnabled())
     {
         LOG("Server processPacket bit length: %d", imbs.getRemainingBitCount());
     }
@@ -222,9 +223,10 @@ void NetworkServer::processPacket(InputMemoryBitStream& imbs, SocketAddress* fro
     auto it = _addressHashToClientMap.find(fromAddress->getHash());
     if (it == _addressHashToClientMap.end())
     {
-        if (_playerIDToClientMap.size() < MAX_NUM_PLAYERS)
+        uint8_t maxNumPlayers = ENGINE_CFG.maxNumPlayers();
+        if (_playerIDToClientMap.size() < maxNumPlayers)
         {
-            if (IS_NETWORK_LOGGING_ENABLED())
+            if (ENGINE_CFG.networkLoggingEnabled())
             {
                 LOG("Server is processing new client from %s", fromAddress->toString().c_str());
             }
@@ -233,7 +235,7 @@ void NetworkServer::processPacket(InputMemoryBitStream& imbs, SocketAddress* fro
         }
         else
         {
-            if (IS_NETWORK_LOGGING_ENABLED())
+            if (ENGINE_CFG.networkLoggingEnabled())
             {
                 LOG("Server is at max capacity, blocking new client...");
             }
@@ -271,7 +273,7 @@ const std::map<int, ClientProxy*>& NetworkServer::playerIDToClientMap()
 
 void NetworkServer::sendPacket(const OutputMemoryBitStream& ombs, SocketAddress* fromAddress)
 {
-    if (IS_NETWORK_LOGGING_ENABLED())
+    if (ENGINE_CFG.networkLoggingEnabled())
     {
         LOG("Server    sendPacket bit length: %d", ombs.getBitLength());
     }
@@ -303,14 +305,14 @@ void NetworkServer::handlePacketFromNewClient(InputMemoryBitStream& imbs, Socket
         
         for (auto& pair: _entityRegistry.getMap())
         {
-            cp.replicationManagerServer().replicateCreate(pair.first, NW_ALL_DIRTY_STATE);
+            cp.replicationManagerServer().replicateCreate(pair.first);
         }
         
         resetNextPlayerID();
     }
     else
     {
-        if (IS_NETWORK_LOGGING_ENABLED())
+        if (ENGINE_CFG.networkLoggingEnabled())
         {
             LOG("Unknown packet type received from %s", fromAddress->toString().c_str());
         }
@@ -342,7 +344,7 @@ void NetworkServer::processPacket(ClientProxy& cp, InputMemoryBitStream& imbs)
             handleClientDisconnected(cp);
             break;
         default:
-            if (IS_NETWORK_LOGGING_ENABLED())
+            if (ENGINE_CFG.networkLoggingEnabled())
             {
                 LOG("Unknown packet type received from %s", cp.getSocketAddress()->toString().c_str());
             }
@@ -357,7 +359,7 @@ void NetworkServer::sendWelcomePacket(ClientProxy& cp)
     ombs.writeBits(cp.getPlayerID(), 3);
     sendPacket(ombs, cp.getSocketAddress());
     
-    if (IS_NETWORK_LOGGING_ENABLED())
+    if (ENGINE_CFG.networkLoggingEnabled())
     {
         LOG("Server welcoming new client '%s' as player %d", cp.getUsername().c_str(), cp.getPlayerID());
     }
@@ -412,7 +414,8 @@ void NetworkServer::handleInputPacket(ClientProxy& cp, InputMemoryBitStream& imb
     }
     
     uint8_t moveCount = 0;
-    imbs.readBits(moveCount, NBITS(NW_CLNT_MAX_NUM_MOVES));
+    uint8_t maxNumMoves = ENGINE_CFG.maxNumMoves();
+    imbs.readBits(moveCount, NBITS(maxNumMoves));
     
     for (; moveCount > 0; --moveCount)
     {
@@ -430,7 +433,8 @@ void NetworkServer::handleInputPacket(ClientProxy& cp, InputMemoryBitStream& imb
 
 void NetworkServer::handleAddLocalPlayerPacket(ClientProxy& cp, InputMemoryBitStream& imbs)
 {
-    if (_playerIDToClientMap.size() < MAX_NUM_PLAYERS)
+    uint8_t maxNumPlayers = ENGINE_CFG.maxNumPlayers();
+    if (_playerIDToClientMap.size() < maxNumPlayers)
     {
         uint8_t requestedIndex;
         imbs.read(requestedIndex);
@@ -471,7 +475,7 @@ void NetworkServer::sendLocalPlayerAddedPacket(ClientProxy& cp)
     sendPacket(ombs, cp.getSocketAddress());
     
     std::string localPlayerName = StringUtil::format("%s(%d)", cp.getUsername().c_str(), index);
-    if (IS_NETWORK_LOGGING_ENABLED())
+    if (ENGINE_CFG.networkLoggingEnabled())
     {
         LOG("Server welcoming new client local player '%s' as player %d", localPlayerName.c_str(), playerID);
     }
@@ -501,7 +505,7 @@ void NetworkServer::handleDropLocalPlayerPacket(ClientProxy& cp, InputMemoryBitS
 
 void NetworkServer::handleClientDisconnected(ClientProxy& cp)
 {
-    if (IS_NETWORK_LOGGING_ENABLED())
+    if (ENGINE_CFG.networkLoggingEnabled())
     {
         LOG("Client is leaving the server");
     }
