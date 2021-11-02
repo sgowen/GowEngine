@@ -29,7 +29,6 @@ See [GowEngineMount](https://github.com/sgowindie/GowEngineMount)
 * Written in C++
 * Uses OpenGL 2.0 and ES 3.0 rendering
 * Dependencies:
-    * box2d is a 2D physics engine for games
     * DirectXTK for XAudio2 on Windows (no need for d3d lib though as XAudio2 is packaged with Windows 10)
     * glfw for windowing, input, and awesomeness on macOS, Linux, and Windows
     * ObjectAL-for-iPhone for OpenAL audio rendering on iOS and macOS
