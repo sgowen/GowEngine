@@ -8,8 +8,6 @@
 
 #pragma once
 
-#define FPS_UTIL FPSUtil::getInstance()
-
 class FPSUtil
 {
 public:

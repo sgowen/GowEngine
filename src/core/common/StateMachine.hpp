@@ -9,11 +9,10 @@
 #pragma once
 
 #include "Config.hpp"
+#include "Constants.hpp"
 
 #include <stack>
 #include <cassert>
-
-#define ARG_OVERWRITE_STATE "ARG_OVERWRITE_STATE"
 
 template <class T>
 class State

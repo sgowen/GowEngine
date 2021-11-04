@@ -21,8 +21,6 @@ class UDPSocket;
 
 typedef void (*ProcessPacketFunc)(InputMemoryBitStream& imbs, SocketAddress* fromAddress);
 
-#define NW_MAX_PACKET_SIZE 1200
-
 class PacketHandler
 {
 public:

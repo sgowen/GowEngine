@@ -17,14 +17,6 @@ class Framebuffer;
 struct Shader;
 struct Texture;
 
-#define NUM_VERTICES_PER_LINE 2
-#define NUM_VERTICES_PER_TRIANGLE 3
-#define NUM_VERTICES_PER_RECTANGLE 4
-#define NUM_INDICES_PER_RECTANGLE 6
-#define NUM_SUPPORTED_TEXTURE_SLOTS 4
-
-#define OGL OpenGLUtil::getInstance()
-
 class OpenGLUtil
 {
 public:

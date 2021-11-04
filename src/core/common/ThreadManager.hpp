@@ -12,8 +12,6 @@
 #include <string>
 #include <thread>
 
-#define THREAD_MGR ThreadManager::getInstance()
-
 class ThreadManager
 {
 public:

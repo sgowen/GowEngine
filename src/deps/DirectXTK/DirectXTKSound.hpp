@@ -8,7 +8,7 @@
 
 #pragma once
 
-#include <GowEngine/BuildMacros.hpp>
+#include <GowEngine/BuildConstants.hpp>
 #if IS_WINDOWS
 
 #include "core/audio/Sound.hpp"

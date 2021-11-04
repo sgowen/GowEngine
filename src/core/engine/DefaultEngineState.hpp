@@ -12,8 +12,6 @@
 
 class Engine;
 
-#define ENGINE_STATE_DEFAULT DefaultEngineState::getInstance()
-
 class DefaultEngineState : public State<Engine>
 {
 public:

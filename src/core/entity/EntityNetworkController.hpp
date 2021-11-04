@@ -8,19 +8,6 @@
 
 #pragma once
 
-#define DECL_EntityNetworkController_create                  \
-public:                                               \
-    static EntityNetworkController* create(Entity* e)
-
-#define IMPL_EntityNetworkController_create(type)            \
-EntityNetworkController* type::create(Entity* e)             \
-{                                                     \
-    return new type(e);                               \
-}
-
-#define IMPL_EntityNetworkController_create_NOPARENT         \
-IMPL_EntityNetworkController_create(EntityNetworkController)
-
 #include "core/common/RTTI.hpp"
 
 #include <stdint.h>

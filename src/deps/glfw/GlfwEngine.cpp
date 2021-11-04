@@ -6,7 +6,7 @@
 //  Copyright © 2021 Stephen Gowen. All rights reserved.
 //
 
-#include <GowEngine/BuildMacros.hpp>
+#include <GowEngine/BuildConstants.hpp>
 #if IS_WINDOWS
     #define GLAD_GL_IMPLEMENTATION
 #endif

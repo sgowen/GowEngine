@@ -18,8 +18,6 @@
 #include <map>
 #include <vector>
 
-#define INPUT_MGR InputManager::getInstance()
-
 class ClipboardHandler;
 struct Matrix;
 

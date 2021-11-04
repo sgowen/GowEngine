@@ -8,7 +8,7 @@
 
 #pragma once
 
-#include <GowEngine/BuildMacros.hpp>
+#include <GowEngine/BuildConstants.hpp>
 #if IS_ANDROID
 
 #include "AssetHandler.hpp"

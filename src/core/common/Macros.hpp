@@ -19,6 +19,8 @@
 #define GOW_MAX(a, b) (((a) > (b)) ? (a) : (b))
 #define GOW_MIN(a, b) (((a) < (b)) ? (a) : (b))
 #define CLAMP(x, lower, upper) (GOW_MIN(upper, GOW_MAX(x, lower)))
+#define DEGREES_TO_RADIANS(angle) ( (angle) / 180.0f * M_PI )
+#define RADIANS_TO_DEGREES(angle) ( (angle) / M_PI * 180.0f )
 
 /// Handy for determining num bits required given a specific value
 #define NBITS2(n)  ((n&2)?1:0)
@@ -27,3 +29,86 @@
 #define NBITS16(n) ((n&0xFF00)?(8+NBITS8(n>>8)):(NBITS8(n)))
 #define NBITS32(n) ((n&0xFFFF0000)?(16+NBITS16(n>>16)):(NBITS16(n)))
 #define NBITS(n)   (n==0?0:NBITS32(n)+1)
+
+/// Handy singleton accessors
+#define ASSET_HANDLER AssetHandlerFactory::getInstance()
+#define ASSETS_MGR AssetsManager::getInstance()
+#define AUDIO_ENGINE AudioEngineFactory::getInstance()
+#define FPS_UTIL FPSUtil::getInstance()
+#define INST_REG InstanceRegistry::getInstance()
+#define THREAD_MGR ThreadManager::getInstance()
+#define ENGINE_STATE_DEFAULT DefaultEngineState::getInstance()
+#define ENGINE_CFG EngineConfig::getInstance()
+#define ENTITY_LAYOUT_MGR EntityLayoutManager::getInstance()
+#define ENTITY_MGR EntityManager::getInstance()
+#define INPUT_MGR InputManager::getInstance()
+#define NW_CLNT NetworkClient::getInstance()
+#define NW_SRVR NetworkServer::getInstance()
+#define OGL OpenGLUtil::getInstance()
+#define SOCKET_UTIL SocketUtil::getInstance()
+
+/// Handy static functions
+#define OPEN_FILE(filePath, mode) FileUtil::openFile(filePath, mode)
+#define LOG(...) StringUtil::log(__VA_ARGS__)
+#define STRING_FORMAT(...) StringUtil::format(__VA_ARGS__)
+
+/// RTTI
+#define DECL_RTTI_NOPARENT                      \
+public:                                         \
+    static const RTTI rtti;                     \
+    virtual const RTTI& getRTTI()
+
+#define DECL_RTTI                               \
+public:                                         \
+    static const RTTI rtti;                     \
+    virtual const RTTI& getRTTI() override
+
+#define IMPL_RTTI_NOPARENT(name)                \
+    const RTTI name::rtti(#name);               \
+    const RTTI& name::getRTTI() { return rtti; }
+
+#define IMPL_RTTI(name,parent)                  \
+    const RTTI name::rtti(#name, parent::rtti); \
+    const RTTI& name::getRTTI() { return rtti; }
+
+/// EntityController
+#define DECL_EntityController_create          \
+public:                                       \
+    static EntityController* create(Entity* e)
+
+#define IMPL_EntityController_create(type)    \
+EntityController* type::create(Entity* e)     \
+{                                             \
+    return new type(e);                       \
+}
+
+#define IMPL_EntityController_create_NOPARENT \
+IMPL_EntityController_create(EntityController)
+
+/// EntityNetworkController
+#define DECL_EntityNetworkController_create                \
+public:                                                    \
+    static EntityNetworkController* create(Entity* e)
+
+#define IMPL_EntityNetworkController_create(type)          \
+EntityNetworkController* type::create(Entity* e)           \
+{                                                          \
+    return new type(e);                                    \
+}
+
+#define IMPL_EntityNetworkController_create_NOPARENT       \
+IMPL_EntityNetworkController_create(EntityNetworkController)
+
+/// EntityRenderController
+#define DECL_EntityRenderController_create               \
+public:                                                  \
+    static EntityRenderController* create(Entity* e)
+
+#define IMPL_EntityRenderController_create(type)         \
+EntityRenderController* type::create(Entity* e)          \
+{                                                        \
+    return new type(e);                                  \
+}
+
+#define IMPL_EntityRenderController_create_NOPARENT      \
+IMPL_EntityRenderController_create(EntityRenderController)

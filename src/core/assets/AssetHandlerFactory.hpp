@@ -8,8 +8,6 @@
 
 #pragma once
 
-#define ASSET_HANDLER AssetHandlerFactory::getInstance()
-
 class AssetHandler;
 
 class AssetHandlerFactory

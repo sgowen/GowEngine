@@ -10,8 +10,6 @@
 
 #include "MathUtil.hpp"
 
-#define VECTOR2_ZERO 0.0f, 0.0f
-
 class Vector2
 {
 public:

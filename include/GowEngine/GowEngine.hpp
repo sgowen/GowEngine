@@ -12,6 +12,7 @@
 #include <algorithm>
 #include <cassert>
 #include <ctime>
+#define _USE_MATH_DEFINES
 #include <math.h>
 #include <memory>
 #include <sstream>
@@ -22,7 +23,7 @@
 #include <vector>
 
 /// compiler variables
-#include "BuildMacros.hpp"
+#include "BuildConstants.hpp"
 
 /// DirectXTK Implementation
 #include "deps/DirectXTK/DirectXTKAudioEngine.hpp"
@@ -94,6 +95,7 @@
 
 /// Core Common
 #include "core/common/Config.hpp"
+#include "core/common/Constants.hpp"
 #include "core/common/FPSUtil.hpp"
 #include "core/common/FixedSizePool.hpp"
 #include "core/common/InstanceRegistry.hpp"

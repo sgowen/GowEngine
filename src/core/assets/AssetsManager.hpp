@@ -17,8 +17,6 @@
 
 #include <map>
 
-#define ASSETS_MGR AssetsManager::getInstance()
-
 class AssetsManager
 {
 public:

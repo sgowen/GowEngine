@@ -8,8 +8,6 @@
 
 #include <GowEngine/GowEngine.hpp>
 
-#define ENGINE_ASSETS "engine"
-
 Engine::Engine(std::string configFilePath, EngineState& initialEngineState) :
 _initialState(initialEngineState),
 _stateMachine(this, &ENGINE_STATE_DEFAULT),

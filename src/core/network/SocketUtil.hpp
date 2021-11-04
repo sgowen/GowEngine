@@ -10,8 +10,6 @@
 
 #include "Network.hpp"
 
-#define SOCKET_UTIL (SocketUtil::getInstance())
-
 class UDPSocket;
 
 class SocketUtil

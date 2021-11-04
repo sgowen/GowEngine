@@ -48,8 +48,6 @@ struct EntityLayoutDef
     }
 };
 
-#define ENTITY_LAYOUT_MGR EntityLayoutManager::getInstance()
-
 class EntityLayoutManager
 {
     friend class EntityLayoutManagerLoader;

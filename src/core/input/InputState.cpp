@@ -8,9 +8,6 @@
 
 #include <GowEngine/GowEngine.hpp>
 
-#define INACTIVE_PLAYER_ID 0
-#define NO_INPUT 0
-
 InputState::InputState()
 {
     uint8_t maxNumPlayers = ENGINE_CFG.maxNumPlayers();

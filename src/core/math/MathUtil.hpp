@@ -8,12 +8,7 @@
 
 #pragma once
 
-#define _USE_MATH_DEFINES
-#include <math.h>
 #include <float.h>
-
-#define DEGREES_TO_RADIANS(angle) ( (angle) / 180.0f * M_PI )
-#define RADIANS_TO_DEGREES(angle) ( (angle) / M_PI * 180.0f )
 
 inline float sanitizeCloseToZeroValue(float x, float distanceFromZero)
 {

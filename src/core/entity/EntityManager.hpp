@@ -24,8 +24,6 @@ typedef EntityController* (*EntityControllerCreationFunc)(Entity* e);
 typedef EntityNetworkController* (*EntityNetworkControllerCreationFunc)(Entity* e);
 typedef EntityRenderController* (*EntityRenderControllerCreationFunc)(Entity* e);
 
-#define ENTITY_MGR EntityManager::getInstance()
-
 class EntityManager
 {
     friend class EntityManagerLoader;

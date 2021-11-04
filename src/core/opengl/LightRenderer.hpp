@@ -16,8 +16,6 @@ struct Shader;
 struct Texture;
 class Framebuffer;
 
-#define NUM_LIGHTS 12
-
 class LightRenderer
 {
 public:

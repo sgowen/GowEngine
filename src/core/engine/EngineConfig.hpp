@@ -12,8 +12,6 @@
 
 #include "core/common/Config.hpp"
 
-#define ENGINE_CFG EngineConfig::getInstance()
-
 class EngineConfig
 {
 public:

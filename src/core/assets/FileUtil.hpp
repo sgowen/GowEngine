@@ -10,8 +10,6 @@
 
 #include <string>
 
-#define OPEN_FILE(filePath, mode) FileUtil::openFile(filePath, mode)
-
 class FileUtil
 {
 public:

@@ -8,19 +8,6 @@
 
 #pragma once
 
-#define DECL_EntityController_create                  \
-public:                                               \
-    static EntityController* create(Entity* e)
-
-#define IMPL_EntityController_create(type)            \
-EntityController* type::create(Entity* e)             \
-{                                                     \
-    return new type(e);                               \
-}
-
-#define IMPL_EntityController_create_NOPARENT         \
-IMPL_EntityController_create(EntityController)
-
 #include "core/common/RTTI.hpp"
 
 class Entity;

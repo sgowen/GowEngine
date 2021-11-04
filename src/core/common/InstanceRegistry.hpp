@@ -8,8 +8,6 @@
 
 #pragma once
 
-#define INST_REG (InstanceRegistry::getInstance())
-
 #include <map>
 #include <cassert>
 

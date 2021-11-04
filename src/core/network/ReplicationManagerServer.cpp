@@ -8,8 +8,6 @@
 
 #include <GowEngine/GowEngine.hpp>
 
-#define NW_ALL_DIRTY_STATE 0xFFu
-
 ReplicationManagerServer::ReplicationManagerServer(EntityRegistry& entityRegistry) :
 _entityRegistry(entityRegistry)
 {

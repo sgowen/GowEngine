@@ -8,17 +8,6 @@
 
 #pragma once
 
-#define COLOR_CLEAR 0.0f, 0.0f, 0.0f, 0.0f
-#define COLOR_WHITE 1.0f, 1.0f, 1.0f, 1.0f
-#define COLOR_BLACK 0.0f, 0.0f, 0.0f, 1.0f
-#define COLOR_RED 1.0f, 0.0f, 0.0f, 1.0f
-#define COLOR_GREEN 0.0f, 1.0f, 0.0f, 1.0f
-#define COLOR_BLUE 0.0f, 0.0f, 1.0f, 1.0f
-#define COLOR_HALF 0.5f, 0.5f, 0.5f, 0.5f
-#define COLOR_DIM 0.1f, 0.1f, 0.1f, 0.9f
-#define COLOR_DOUBLE 2.0f, 2.0f, 2.0f, 1.0f
-#define COLOR_ONE 1.0f, 1.0f, 1.0f, 1.0f
-
 struct Color
 {
     static const Color CLEAR;
