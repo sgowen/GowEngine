@@ -56,7 +56,7 @@ public:
         
         exit();
         
-        if (args.hasValue(ARG_OVERWRITE_STATE) && args.getBool(ARG_OVERWRITE_STATE))
+        if (args.getBool(ARG_OVERWRITE_STATE, false))
         {
             _states.pop();
         }

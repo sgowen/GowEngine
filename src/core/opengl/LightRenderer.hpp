@@ -32,8 +32,8 @@ public:
 private:
     uint32_t _vertexBuffer;
     uint32_t _indexBuffer;
-    vec4 _lightPositions[NUM_LIGHTS];
-    vec4 _lightColors[NUM_LIGHTS];
+    vec4 _lightPositions[NUM_SUPPORTED_LIGHTS];
+    vec4 _lightColors[NUM_SUPPORTED_LIGHTS];
     vec4 _ambientColor;
     vec4 _fallOff;
     ivec4 _numLights;

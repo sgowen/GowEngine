@@ -8,9 +8,6 @@
 
 #pragma once
 
-#define UNUSED(x) (void)(x)
-#define BUFFER_OFFSET(i) ((void*)(i))
-
 /// Bit Flag Utils
 #define SET_BIT(val, bit, set) val = (val & ~bit) | (set ? bit : 0)
 #define IS_BIT_SET(val, bit) (val & bit)
@@ -51,6 +48,10 @@
 #define OPEN_FILE(filePath, mode) FileUtil::openFile(filePath, mode)
 #define LOG(...) StringUtil::log(__VA_ARGS__)
 #define STRING_FORMAT(...) StringUtil::format(__VA_ARGS__)
+
+/// Miscellaneous
+#define UNUSED(x) (void)(x)
+#define BUFFER_OFFSET(i) ((void*)(i))
 
 /// RTTI
 #define DECL_RTTI_NOPARENT                      \

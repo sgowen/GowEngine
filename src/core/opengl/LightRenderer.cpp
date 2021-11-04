@@ -30,7 +30,7 @@ void LightRenderer::destroyDeviceDependentResources()
 
 void LightRenderer::resetLights()
 {
-    for (int i = 0; i < NUM_LIGHTS; ++i)
+    for (int i = 0; i < NUM_SUPPORTED_LIGHTS; ++i)
     {
         _lightPositions[i][0] = 0;
         _lightPositions[i][1] = 0;

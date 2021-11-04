@@ -17,7 +17,7 @@ _vertexBuffer(0)
 
 void CircleBatcher::createDeviceDependentResources()
 {
-    _vertexBuffer = OGL.loadVertexBuffer(sizeof(VERTEX_2D) * _maxBatchSize * NUM_VERTICES_PER_FULL_CIRCLE);
+    _vertexBuffer = OGL.loadVertexBuffer(sizeof(VERTEX_2D) * _maxBatchSize * NUM_VERTICES_PER_CIRCLE);
 }
 
 void CircleBatcher::destroyDeviceDependentResources()
@@ -38,11 +38,11 @@ void CircleBatcher::addCircle(Circle& c)
 
 void CircleBatcher::addCircle(float x, float y, float radius)
 {
-    assert((_vertices.size() / NUM_VERTICES_PER_FULL_CIRCLE) < _maxBatchSize);
+    assert((_vertices.size() / NUM_VERTICES_PER_CIRCLE) < _maxBatchSize);
     
     size_t numExistingPoints = _vertices.size();
     
-    for (int i = 0; i <= 360; i += DEGREE_SPACING)
+    for (int i = 0; i <= 360; i += CIRCLE_DEGREE_SPACING)
     {
         float rad = static_cast<float>(DEGREES_TO_RADIANS(i));
         float cos = cosf(rad);
@@ -63,11 +63,11 @@ void CircleBatcher::addPartialCircle(Circle& c, int arcDegrees)
 
 void CircleBatcher::addPartialCircle(float x, float y, float radius, int arcDegrees)
 {
-    assert((_vertices.size() / NUM_VERTICES_PER_FULL_CIRCLE) < _maxBatchSize);
+    assert((_vertices.size() / NUM_VERTICES_PER_CIRCLE) < _maxBatchSize);
     
     size_t numExistingPoints = _vertices.size();
     
-    for (int i = 90; i < (450 - arcDegrees); i += DEGREE_SPACING)
+    for (int i = 90; i < (450 - arcDegrees); i += CIRCLE_DEGREE_SPACING)
     {
         float rad = static_cast<float>(DEGREES_TO_RADIANS(i));
         float cos = cosf(rad);
