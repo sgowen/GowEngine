@@ -16,45 +16,22 @@
 
 struct Bounds
 {
+    uint32_t _flags;
     float _centerX;
     float _centerY;
     float _halfWidth;
     float _halfHeight;
     Rektangle _boundingBox;
-    Line _left;
-    Line _right;
-    Line _bottom;
-    Line _top;
     
-    Bounds(float centerX, float centerY, float halfWidth, float halfHeight) :
+    Bounds(uint32_t flags, float centerX, float centerY, float halfWidth, float halfHeight) :
+    _flags(flags),
     _centerX(centerX),
     _centerY(centerY),
     _halfWidth(halfWidth),
     _halfHeight(halfHeight),
-    _boundingBox(0, 0, halfWidth * 2, halfHeight * 2),
-    _left(),
-    _right(),
-    _bottom(),
-    _top()
+    _boundingBox(0, 0, halfWidth * 2, halfHeight * 2)
     {
         // Empty
-    }
-    
-    void update()
-    {
-        float l = _boundingBox.left();
-        float r = _boundingBox.right();
-        float b = _boundingBox.bottom();
-        float t = _boundingBox.top();
-        
-        _left._origin.set(l, b + 0.1f);
-        _left._end.set(l, t - 0.1f);
-        _right._origin.set(r, b + 0.1f);
-        _right._end.set(r, t - 0.1f);
-        _bottom._origin.set(l + 0.1f, b);
-        _bottom._end.set(r - 0.1f, b);
-        _top._origin.set(l + 0.1f, t);
-        _top._end.set(r - 0.1f, t);
     }
     
     void updateForPosition(Vector2 pos)
@@ -62,7 +39,6 @@ struct Bounds
         float l = _centerX - _halfWidth;
         float b = _centerY - _halfHeight;
         _boundingBox._lowerLeft.set(pos._x + l, pos._y + b);
-//        update();
     }
 };
 
@@ -89,7 +65,6 @@ private:
     std::vector<Bounds> _bounds;
     Vector2 _velocity;
     Vector2 _position;
-    Bounds* _groundSensor;
     float _gravity;
     float _tolerance;
     uint8_t _numGroundContacts;

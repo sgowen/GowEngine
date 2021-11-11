@@ -13,7 +13,6 @@ IMPL_RTTI(NosPhysicsController, EntityPhysicsController)
 NosPhysicsController::NosPhysicsController(Entity* e, float gravity) : EntityPhysicsController(e),
 _velocity(e->velocity()),
 _position(e->position()),
-_groundSensor(nullptr),
 _gravity(gravity),
 _numGroundContacts(0),
 _isBodyFacingLeft(false)
@@ -95,17 +94,23 @@ void NosPhysicsController::processCollisions(std::vector<Entity*>& entities)
         
         NosPhysicsController* epc = e->physicsController<NosPhysicsController>();
         
+        bool t = false;
+        bool b = false;
+        bool r = false;
+        bool l = false;
+        
         for (Bounds& myBounds : _bounds)
         {
-            Rektangle& myBoundingBox = myBounds._boundingBox;
-            if (_groundSensor == &myBounds)
+            if (IS_BIT_SET(myBounds._flags, FIXF_GROUND_SENSOR))
             {
                 continue;
             }
             
+            Rektangle& myBoundingBox = myBounds._boundingBox;
             for (Bounds& yourBounds : epc->_bounds)
             {
                 Rektangle& yourBoundingBox = yourBounds._boundingBox;
+                uint32_t yourFlags = yourBounds._flags;
                 if (OverlapTester::doRektanglesOverlap(myBoundingBox, yourBoundingBox))
                 {
                     {
@@ -121,8 +126,13 @@ void NosPhysicsController::processCollisions(std::vector<Entity*>& entities)
                         float yr = yourBoundingBox.right();
                         float yl = yourBoundingBox.left();
                         
-                        bool t = crossesBottomEdge(yb, mt, _tolerance) && mb < yb && (mr > yl || ml < yr);
-                        bool b = crossesTopEdge(yt, mb, _tolerance) && mt > yt && (mr > yl || ml < yr);
+                        t = !IS_BIT_SET(yourFlags, FIXF_IGNORE_BOTTOM) &&
+                        crossesBottomEdge(yb, mt, _tolerance) &&
+                        mb < yb && (mr > yl || ml < yr);
+                        
+                        b = _velocity._y <= 0 &&
+                        crossesTopEdge(yt, mb, _tolerance) &&
+                        mt > yt && (mr > yl || ml < yr);
                         
                         if (t)
                         {
@@ -163,8 +173,11 @@ void NosPhysicsController::processCollisions(std::vector<Entity*>& entities)
                             LOG("isInside: %d", i);
                         }
                         
-                        bool r = mr > yl && ml < yl && i;
-                        bool l = ml < yr && mr > yr && i;
+                        r = !IS_BIT_SET(yourFlags, FIXF_IGNORE_LEFT) &&
+                        mr > yl && ml < yl && i;
+                        
+                        l = !IS_BIT_SET(yourFlags, FIXF_IGNORE_RIGHT) &&
+                        ml < yr && mr > yr && i;
                         
                         if (r)
                         {
@@ -191,18 +204,18 @@ void NosPhysicsController::processCollisions(std::vector<Entity*>& entities)
         
         for (Bounds& myBounds : _bounds)
         {
-            Rektangle& myBoundingBox = myBounds._boundingBox;
-            if (_groundSensor != &myBounds)
+            if (!IS_BIT_SET(myBounds._flags, FIXF_GROUND_SENSOR))
             {
                 continue;
             }
             
             myBounds.updateForPosition(_position);
-            
+            Rektangle& myBoundingBox = myBounds._boundingBox;
             for (Bounds& yourBounds : epc->_bounds)
             {
                 Rektangle& yourBoundingBox = yourBounds._boundingBox;
-                if (OverlapTester::doRektanglesOverlap(myBoundingBox, yourBoundingBox))
+                if (b &&
+                    OverlapTester::doRektanglesOverlap(myBoundingBox, yourBoundingBox))
                 {
                     ++_numGroundContacts;
                 }
@@ -252,19 +265,13 @@ void NosPhysicsController::createFixtures()
         float halfWidth = bodyWidth * fd._halfWidthFactor;
         float halfHeight = bodyHeight * fd._halfHeightFactor;
         
-        _bounds.emplace_back(centerX, centerY, halfWidth, halfHeight);
+        _bounds.emplace_back(fd._flags, centerX, centerY, halfWidth, halfHeight);
         Bounds& b = _bounds.back();
         b.updateForPosition(_entity->position());
-        if (IS_BIT_SET(fd._flags, FIXF_GROUND_CONTACT))
-        {
-            _groundSensor = &_bounds.back();
-        }
     }
 }
 
 void NosPhysicsController::destroyFixtures()
 {
     _bounds.clear();
-    
-    _groundSensor = nullptr;
 }

@@ -22,7 +22,10 @@
 enum FixtureFlags
 {
     FIXF_SENSOR =         1 << 0,
-    FIXF_GROUND_CONTACT = 1 << 1
+    FIXF_GROUND_SENSOR =  1 << 1,
+    FIXF_IGNORE_LEFT =    1 << 2,
+    FIXF_IGNORE_RIGHT =   1 << 3,
+    FIXF_IGNORE_BOTTOM =  1 << 4
 };
 
 struct FixtureDef
@@ -30,7 +33,7 @@ struct FixtureDef
     Vector2 _center;
     float _halfWidthFactor;
     float _halfHeightFactor;
-    int _flags;
+    uint32_t _flags;
 };
 
 enum BodyFlags
