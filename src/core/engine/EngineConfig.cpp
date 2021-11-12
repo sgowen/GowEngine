@@ -165,9 +165,9 @@ _maxNumMoves(_config.getUInt("maxNumMoves", 7)),
 _maxNumPacketsToProcessPerFrame(_config.getUInt("maxNumPacketsToProcessPerFrame", maxNumPlayers() * 2)),
 _numFramesOfSimulatedLatency(_config.getUInt("numFramesOfSimulatedLatency", 0)),
 _frameRate(1.0f / _framesPerSecond),
-_timeScale(_framesPerSecond == 60 ? 2 : _framesPerSecond == 30 ? 1 : 0)
+_timeScale(_framesPerSecond == 120 ? 4 : _framesPerSecond == 60 ? 2 : _framesPerSecond == 30 ? 1 : 0)
 {
-    assert(_timeScale == 2 || _timeScale == 1);
+    assert(_timeScale == 4 || _timeScale == 2 || _timeScale == 1);
 }
 
 EngineConfig::~EngineConfig()
