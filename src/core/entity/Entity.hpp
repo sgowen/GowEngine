@@ -19,13 +19,18 @@
 #include <map>
 #include <vector>
 
-enum FixtureFlags
+enum DynamicFixtureFlags
 {
-    FIXF_SENSOR =         1 << 0,
-    FIXF_GROUND_SENSOR =  1 << 1,
-    FIXF_IGNORE_LEFT =    1 << 2,
-    FIXF_IGNORE_RIGHT =   1 << 3,
-    FIXF_IGNORE_BOTTOM =  1 << 4
+    FIXF_GROUND_CONTACT = 1 << 0,
+    FIXF_SENSOR =         1 << 1
+};
+
+enum StaticFixtureFlags
+{
+    FIXF_IGNORE_LEFT =    1 << 0,
+    FIXF_IGNORE_RIGHT =   1 << 1,
+    FIXF_IGNORE_BOTTOM =  1 << 2,
+    FIXF_IGNORE_TOP =     1 << 3
 };
 
 struct FixtureDef

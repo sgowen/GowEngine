@@ -67,7 +67,7 @@ private:
     Vector2 _position;
     float _gravity;
     float _tolerance;
-    uint8_t _numGroundContacts;
+    bool _isGrounded;
     bool _isBodyFacingLeft;
     
     bool crossesBottomEdge(float yourBottom, float myTop, float tolerance = 1.0f);

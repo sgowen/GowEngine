@@ -70,7 +70,7 @@ void NosPhysicsController::step(float deltaTime)
         b.updateForPosition(_position);
     }
     
-    _numGroundContacts = 0;
+    _isGrounded = false;
     
     if (ENGINE_CFG.physicsLoggingEnabled())
     {
@@ -199,26 +199,6 @@ void NosPhysicsController::processCollisions(std::vector<Entity*>& entities)
                             }
                         }
                     }
-                }
-            }
-        }
-        
-        for (Bounds& myBounds : _bounds)
-        {
-            if (!IS_BIT_SET(myBounds._flags, FIXF_GROUND_SENSOR))
-            {
-                continue;
-            }
-            
-            myBounds.updateForPosition(_position);
-            Rektangle& myBoundingBox = myBounds._boundingBox;
-            for (Bounds& yourBounds : epc->_bounds)
-            {
-                Rektangle& yourBoundingBox = yourBounds._boundingBox;
-                if (b &&
-                    OverlapTester::doRektanglesOverlap(myBoundingBox, yourBoundingBox))
-                {
-                    ++_numGroundContacts;
                 }
             }
         }
