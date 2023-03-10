@@ -10,6 +10,7 @@
 
 void EngineState::enter(Engine* e)
 {
+    // Should be able to load everything asynchronously, including the config
     ASSETS_MGR.registerAssets(_filePathAssets, _assets);
     createDeviceDependentResources(e);
     onWindowSizeChanged(e);
@@ -55,6 +56,7 @@ void EngineState::exit(Engine* e)
 }
 
 EngineState::EngineState(std::string configFilePath) : State<Engine>(),
+// Yeah, this config should be loaded async.
 _config(ConfigLoader::initWithJSONFile(configFilePath)),
 _stateTime(0),
 _filePathAssets(_config.getString("filePathAssets")),
@@ -94,10 +96,6 @@ void EngineState::resume(Engine *e)
 void EngineState::update(Engine* e)
 {
     ASSETS_MGR.update();
-    if (!ASSETS_MGR.isLoaded())
-    {
-        return;
-    }
     
     onUpdate(e);
     ++_stateTime;
@@ -105,12 +103,6 @@ void EngineState::update(Engine* e)
 
 void EngineState::render(Engine* e)
 {
-    if (!ASSETS_MGR.isLoaded())
-    {
-        _renderer.renderLoadingScreen();
-        return;
-    }
-    
     onRender(_renderer);
     AUDIO_ENGINE.render();
 }

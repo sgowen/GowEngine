@@ -13,11 +13,11 @@
 
 #include <fstream>
 
-void AppleAssetHandler::create(std::string configFilePath)
+void AppleAssetHandler::create()
 {
     assert(s_instance == nullptr);
     
-    std::string bundleRootFilePath = getBundleRootFilePath(configFilePath.c_str());
+    std::string bundleRootFilePath = getBundleRootFilePath();
     
     s_instance = new AppleAssetHandler(bundleRootFilePath);
 }

@@ -19,7 +19,7 @@ class AppleAssetHandler : public AssetHandler
     friend class ObjectALSound;
     
 public:
-    static void create(std::string configFilePath);
+    static void create();
     static void destroy();
     
     virtual FileData loadAsset(std::string filePath);

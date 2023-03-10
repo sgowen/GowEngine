@@ -16,15 +16,17 @@
     #import <Cocoa/Cocoa.h>
 #endif
 
-std::string getBundleRootFilePath(const char* configFilePath)
+std::string getBundleRootFilePath()
 {
-    assert(configFilePath != nullptr);
+    NSString* bundlePath = [[NSBundle mainBundle] bundlePath];
     
-    NSBundle* bundleToUse = [NSBundle mainBundle];
-    NSString* dataPath = [[NSString alloc] initWithCString:configFilePath encoding:NSASCIIStringEncoding];
-    std::string dataBundlePath = [[bundleToUse pathForResource:dataPath ofType:nil] fileSystemRepresentation];
-    std::size_t dataIndex = dataBundlePath.find(configFilePath);
-    std::string ret = dataBundlePath.substr(0, dataIndex);
+    // Okay, back to C++ as fast as possible, love that for me
+    std::string ret = [bundlePath fileSystemRepresentation];
+#if IS_DESKTOP
+    ret += "/Contents/Resources";
+#endif
+    ret += "/";
+    
     return ret;
 }
 

@@ -13,6 +13,6 @@
 
 #include <string>
 
-std::string getBundleRootFilePath(const char* configFilePath);
+std::string getBundleRootFilePath();
 
 #endif /* IS_APPLE */

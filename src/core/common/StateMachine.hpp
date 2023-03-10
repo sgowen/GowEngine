@@ -56,13 +56,19 @@ public:
         
         exit();
         
-        if (args.getBool(ARG_OVERWRITE_STATE, false))
-        {
-            _states.pop();
-        }
+        _states.pop();
         
         _states.push(state);
         
+        enter(args);
+    }
+    
+    void overwriteState(State<T>* state, Config args = Config::EMPTY)
+    {
+        assert(state != nullptr);
+        
+        _states.pop();
+        _states.push(state);
         enter(args);
     }
     

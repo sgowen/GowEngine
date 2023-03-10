@@ -61,6 +61,7 @@ public:
     void onGamepadInputTrigger(uint8_t index, float triggerLeft, float triggerRight);
     void onGamepadInputButton(uint8_t index, uint8_t gamepadEventType, uint8_t isPressed);
     void onKeyboardInput(uint16_t key, bool isUp);
+    void overwriteState(State<Engine>* state, const Config& args = Config::EMPTY);
     void changeState(State<Engine>* state, const Config& args = Config::EMPTY);
     void revertToPreviousState();
     void setRequestedHostAction(EngineRequestedHostAction value);
@@ -75,7 +76,6 @@ private:
     StateMachine<Engine> _stateMachine;
     EngineRequestedStateAction _requestedStateAction;
     EngineRequestedHostAction _requestedHostAction;
-    float _frameRate;
     float _stateTime;
     uint16_t _screenWidth;
     uint16_t _screenHeight;
