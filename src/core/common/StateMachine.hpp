@@ -50,13 +50,11 @@ public:
         }
     }
     
-    void changeState(State<T>* state, Config args = Config::EMPTY)
+    void pushState(State<T>* state, Config args = Config::EMPTY)
     {
         assert(state != nullptr);
         
         exit();
-        
-        _states.pop();
         
         _states.push(state);
         
@@ -67,12 +65,15 @@ public:
     {
         assert(state != nullptr);
         
+        exit();
+        
         _states.pop();
         _states.push(state);
+        
         enter(args);
     }
     
-    void revertToPreviousState()
+    void popState()
     {
         exit();
         

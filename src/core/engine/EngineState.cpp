@@ -103,6 +103,12 @@ void EngineState::update(Engine* e)
 
 void EngineState::render(Engine* e)
 {
+    if (!ASSETS_MGR.isLoaded())
+    {
+        _renderer.renderLoadingView();
+        return;
+    }
+    
     onRender(_renderer);
     AUDIO_ENGINE.render();
 }

@@ -62,8 +62,8 @@ public:
     void onGamepadInputButton(uint8_t index, uint8_t gamepadEventType, uint8_t isPressed);
     void onKeyboardInput(uint16_t key, bool isUp);
     void overwriteState(State<Engine>* state, const Config& args = Config::EMPTY);
-    void changeState(State<Engine>* state, const Config& args = Config::EMPTY);
-    void revertToPreviousState();
+    void pushState(State<Engine>* state, const Config& args = Config::EMPTY);
+    void popState();
     void setRequestedHostAction(EngineRequestedHostAction value);
     EngineRequestedStateAction requestedStateAction();
     uint16_t screenWidth();

@@ -148,14 +148,14 @@ void Engine::overwriteState(State<Engine>* state, const Config& args)
     _stateMachine.overwriteState(state, args);
 }
 
-void Engine::changeState(State<Engine>* state, const Config& args)
+void Engine::pushState(State<Engine>* state, const Config& args)
 {
-    _stateMachine.changeState(state, args);
+    _stateMachine.pushState(state, args);
 }
 
-void Engine::revertToPreviousState()
+void Engine::popState()
 {
-    _stateMachine.revertToPreviousState();
+    _stateMachine.popState();
 }
 
 void Engine::setRequestedHostAction(EngineRequestedHostAction value)
