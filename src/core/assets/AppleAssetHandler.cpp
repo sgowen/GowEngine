@@ -17,9 +17,7 @@ void AppleAssetHandler::create()
 {
     assert(s_instance == nullptr);
     
-    std::string bundleRootFilePath = getBundleRootFilePath();
-    
-    s_instance = new AppleAssetHandler(bundleRootFilePath);
+    s_instance = new AppleAssetHandler();
 }
 
 void AppleAssetHandler::destroy()
@@ -36,6 +34,7 @@ FileData AppleAssetHandler::loadAsset(std::string filePath)
 {
     std::string bundlePath = getBundleFilePath(filePath);
 
+    // TODO, AppleAssetHandler should extend LinuxAssetHandler!
     FILE* stream = OPEN_FILE(bundlePath, "r");
     assert(stream != nullptr);
 
@@ -68,8 +67,8 @@ std::string AppleAssetHandler::getBundleFilePath(std::string filePath)
     return _bundleRootFilePath + filePath;
 }
 
-AppleAssetHandler::AppleAssetHandler(std::string bundleRootFilePath) : AssetHandler(),
-_bundleRootFilePath(bundleRootFilePath)
+AppleAssetHandler::AppleAssetHandler() : AssetHandler(),
+_bundleRootFilePath(getBundleRootFilePath())
 {
     // Empty
 }

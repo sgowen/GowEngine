@@ -16,7 +16,7 @@
 class AppleAssetHandler : public AssetHandler
 {
     friend class AssetHandlerFactory;
-    friend class ObjectALSound;
+    friend class ObjectALSound; // TODO, this is odd
     
 public:
     static void create();
@@ -38,7 +38,7 @@ private:
     
     std::string _bundleRootFilePath;
     
-    AppleAssetHandler(std::string bundleRootFilePath);
+    AppleAssetHandler();
     virtual ~AppleAssetHandler() {}
 };
 
