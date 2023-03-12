@@ -13,7 +13,7 @@
 ObjectALSound::ObjectALSound(std::string filePath, bool isMusic, float volume) : Sound(),
 _bufferKey(0)
 {
-    std::string bundleFilePath = AppleAssetHandler::getInstance().getBundleFilePath(filePath);
+    std::string bundleFilePath = getBundleFilePath(filePath);
     if (isMusic)
     {
         loadMusic(bundleFilePath.c_str());

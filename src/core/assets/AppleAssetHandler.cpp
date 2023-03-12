@@ -11,66 +11,11 @@
 
 #include <GowEngine/GowEngine.hpp>
 
-#include <fstream>
-
-void AppleAssetHandler::create()
-{
-    assert(s_instance == nullptr);
-    
-    s_instance = new AppleAssetHandler();
-}
-
-void AppleAssetHandler::destroy()
-{
-    assert(s_instance != nullptr);
-
-    delete s_instance;
-    s_instance = nullptr;
-}
-
-AppleAssetHandler* AppleAssetHandler::s_instance = nullptr;
-
 FileData AppleAssetHandler::loadAsset(std::string filePath)
 {
     std::string bundlePath = getBundleFilePath(filePath);
 
-    // TODO, AppleAssetHandler should extend LinuxAssetHandler!
-    FILE* stream = OPEN_FILE(bundlePath, "r");
-    assert(stream != nullptr);
-
-    fseek(stream, 0, SEEK_END);
-
-    long size = ftell(stream);
-
-    fseek(stream, 0, SEEK_SET);
-
-    uint8_t* buffer = (uint8_t*) malloc(size);
-    
-    rewind(stream);
-    fread(buffer, size, 1, stream);
-
-    assert(ferror(stream) == 0);
-    fclose(stream);
-
-    return FileData(size, buffer, nullptr);
-}
-
-void AppleAssetHandler::unloadAsset(const FileData& fileData)
-{
-    assert(fileData._data != nullptr);
-
-    free((void *)fileData._data);
-}
-
-std::string AppleAssetHandler::getBundleFilePath(std::string filePath)
-{
-    return _bundleRootFilePath + filePath;
-}
-
-AppleAssetHandler::AppleAssetHandler() : AssetHandler(),
-_bundleRootFilePath(getBundleRootFilePath())
-{
-    // Empty
+    return LinuxAssetHandler::loadAsset(bundlePath);
 }
 
 #endif /* IS_APPLE */

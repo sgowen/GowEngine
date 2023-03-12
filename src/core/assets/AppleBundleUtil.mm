@@ -22,12 +22,17 @@ std::string getBundleRootFilePath()
     
     // Okay, back to C++ as fast as possible, love that for me
     std::string ret = [bundlePath fileSystemRepresentation];
-#if IS_DESKTOP
+#if IS_MACOS
     ret += "/Contents/Resources";
 #endif
     ret += "/";
     
     return ret;
+}
+
+std::string getBundleFilePath(std::string filePath)
+{
+    return getBundleRootFilePath() + filePath;
 }
 
 #endif /* IS_APPLE */

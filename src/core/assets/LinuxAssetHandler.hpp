@@ -9,7 +9,7 @@
 #pragma once
 
 #include <GowEngine/BuildConstants.hpp>
-#if IS_LINUX
+#if IS_LINUX || IS_APPLE
 
 #include "AssetHandler.hpp"
 
@@ -21,15 +21,16 @@ public:
     virtual FileData loadAsset(std::string filePath);
     virtual void unloadAsset(const FileData& fileData);
     
+protected:
+    LinuxAssetHandler() : AssetHandler() {}
+    virtual ~LinuxAssetHandler() {}
+    
 private:
     static LinuxAssetHandler& getInstance()
     {
         static LinuxAssetHandler ret = LinuxAssetHandler();
         return ret;
     }
-    
-    LinuxAssetHandler() : AssetHandler() {}
-    virtual ~LinuxAssetHandler() {}
 };
 
-#endif /* IS_LINUX */
+#endif /* IS_LINUX || IS_APPLE */

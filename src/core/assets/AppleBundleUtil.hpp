@@ -15,4 +15,6 @@
 
 std::string getBundleRootFilePath();
 
+std::string getBundleFilePath(std::string filePath);
+
 #endif /* IS_APPLE */
