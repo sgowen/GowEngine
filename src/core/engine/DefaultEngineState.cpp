@@ -18,15 +18,14 @@ void DefaultEngineState::execute(Engine* e)
         case ERSA_WINDOW_SIZE_CHANGED:
             ERSA_WINDOW_SIZE_CHANGED_called = true;
             break;
-        case ERSA_UPDATE:
-            if (ERSA_CREATE_RESOURCES_called && ERSA_WINDOW_SIZE_CHANGED_called)
-            {
-                e->overwriteState(&e->_initialState);
-            }
-            break;
         case ERSA_DEFAULT:
         default:
             break;
+    }
+    
+    if (ERSA_CREATE_RESOURCES_called && ERSA_WINDOW_SIZE_CHANGED_called)
+    {
+        e->overwriteState(&e->_initialState);
     }
 }
 
