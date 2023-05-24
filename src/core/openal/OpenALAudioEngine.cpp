@@ -8,9 +8,9 @@
 
 #include <GowEngine/GowEngine.hpp>
 
-#if IS_LINUX
+#if IS_LINUX || IS_APPLE
 
-#include <AL/alut.h>
+#include "alhelpers.h"
 
 SoundWrapper* OpenALAudioEngine::loadSound(std::string filePath, uint8_t numInstances)
 {
@@ -22,25 +22,17 @@ SoundWrapper* OpenALAudioEngine::loadMusic(std::string filePath)
     return loadSound(filePath);
 }
 
-static void reportError()
-{
-    fprintf(stderr, "ALUT error: %s\n", alutGetErrorString(alutGetError()));
-}
-
 OpenALAudioEngine::OpenALAudioEngine() : GowAudioEngine()
 {
-    if (!alutInit(nullptr, nullptr))
+    if (!InitAL(nullptr, nullptr))
     {
-        reportError();
+        // wtf
     }
 }
 
 OpenALAudioEngine::~OpenALAudioEngine()
 {
-    if (!alutExit())
-    {
-        reportError();
-    }
+    CloseAL();
 }
 
 #endif /* IS_LINUX */

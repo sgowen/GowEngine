@@ -22,3 +22,9 @@
 [submodule "deps/efsw"]
 	path = deps/efsw
 	url = git@github.com:jackbackrack/efsw.git
+[submodule "deps/openal-soft"]
+	path = deps/openal-soft
+	url = git@github.com:kcat/openal-soft.git
+[submodule "deps/libsndfile"]
+	path = deps/libsndfile
+	url = git@github.com:libsndfile/libsndfile.git
