@@ -92,7 +92,7 @@ void Renderer::destroyDeviceDependentResources()
     }
 }
 
-void Renderer::renderLoadingScreen()
+void Renderer::renderLoadingView()
 {
     clearFramebuffer();
     

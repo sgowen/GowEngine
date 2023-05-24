@@ -48,9 +48,6 @@
 /// Vector
 #define VECTOR2_ZERO 0.0f, 0.0f
 
-/// State Machine
-#define ARG_OVERWRITE_STATE "ARG_OVERWRITE_STATE"
-
 /// Network
 #define NW_MAX_PACKET_SIZE 1200
 #define NW_ALL_DIRTY_STATE 0xFFu

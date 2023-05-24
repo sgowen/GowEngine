@@ -25,9 +25,7 @@ void DefaultEngineState::execute(Engine* e)
     
     if (ERSA_CREATE_RESOURCES_called && ERSA_WINDOW_SIZE_CHANGED_called)
     {
-        Config args;
-        args.putBool(ARG_OVERWRITE_STATE, true);
-        e->_stateMachine.changeState(&e->_initialState, args);
+        e->overwriteState(&e->_initialState);
     }
 }
 

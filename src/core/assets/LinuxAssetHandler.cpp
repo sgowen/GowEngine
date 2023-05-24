@@ -8,7 +8,7 @@
 
 #include <GowEngine/GowEngine.hpp>
 
-#if IS_LINUX
+#if IS_LINUX || IS_APPLE
 
 #include <fstream>
 
@@ -41,4 +41,4 @@ void LinuxAssetHandler::unloadAsset(const FileData& fileData)
     free((void *)fileData._data);
 }
 
-#endif /* IS_LINUX */
+#endif /* IS_LINUX || IS_APPLE */

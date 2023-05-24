@@ -50,23 +50,30 @@ public:
         }
     }
     
-    void changeState(State<T>* state, Config args = Config::EMPTY)
+    void pushState(State<T>* state, Config args = Config::EMPTY)
     {
         assert(state != nullptr);
         
         exit();
-        
-        if (args.getBool(ARG_OVERWRITE_STATE, false))
-        {
-            _states.pop();
-        }
         
         _states.push(state);
         
         enter(args);
     }
     
-    void revertToPreviousState()
+    void overwriteState(State<T>* state, Config args = Config::EMPTY)
+    {
+        assert(state != nullptr);
+        
+        exit();
+        
+        _states.pop();
+        _states.push(state);
+        
+        enter(args);
+    }
+    
+    void popState()
     {
         exit();
         

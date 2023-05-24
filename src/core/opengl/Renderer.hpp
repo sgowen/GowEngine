@@ -37,7 +37,7 @@ public:
     void onWindowSizeChanged(uint16_t screenWidth, uint16_t screenHeight);
     void destroyDeviceDependentResources();
     
-    void renderLoadingScreen();
+    void renderLoadingView();
     
     void bindFramebuffer(std::string framebufferKey = "main", bool enableBlending = true);
     void clearFramebuffer(const Color& c = Color::CLEAR);

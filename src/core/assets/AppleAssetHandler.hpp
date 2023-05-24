@@ -11,34 +11,23 @@
 #include <GowEngine/BuildConstants.hpp>
 #if IS_APPLE
 
-#include "AssetHandler.hpp"
+#include "LinuxAssetHandler.hpp"
 
-class AppleAssetHandler : public AssetHandler
+class AppleAssetHandler : public LinuxAssetHandler
 {
     friend class AssetHandlerFactory;
-    friend class ObjectALSound;
     
 public:
-    static void create(std::string configFilePath);
-    static void destroy();
-    
     virtual FileData loadAsset(std::string filePath);
-    virtual void unloadAsset(const FileData& fileData);
-    
-    std::string getBundleFilePath(std::string filePath);
     
 private:
-    static AppleAssetHandler* s_instance;
-    
     static AppleAssetHandler& getInstance()
     {
-        assert(s_instance != nullptr);
-        return *s_instance;
+        static AppleAssetHandler ret = AppleAssetHandler();
+        return ret;
     }
     
-    std::string _bundleRootFilePath;
-    
-    AppleAssetHandler(std::string bundleRootFilePath);
+    AppleAssetHandler() : LinuxAssetHandler() {}
     virtual ~AppleAssetHandler() {}
 };
 

@@ -13,7 +13,6 @@ _initialState(initialEngineState),
 _stateMachine(this, &ENGINE_STATE_DEFAULT),
 _requestedStateAction(ERSA_DEFAULT),
 _requestedHostAction(ERHA_DEFAULT),
-_frameRate(0),
 _stateTime(0),
 _screenWidth(0),
 _screenHeight(0),
@@ -21,8 +20,10 @@ _cursorWidth(0),
 _cursorHeight(0)
 {
     EngineConfig::create(configFilePath);
-    _frameRate = ENGINE_CFG.frameRate();
+    
     ASSETS_MGR.registerAssets(ENGINE_ASSETS, AssetsLoader::initWithJSONFile(ENGINE_CFG.filePathEngineAssets()));
+    // Okay, this stuff is only relevant to the game, not the entire engine.
+    // This needs to be loaded on an as-needed basis
     EntityLayoutManagerLoader::initWithJSONFile(ENTITY_LAYOUT_MGR, ENGINE_CFG.filePathEntityLayoutManager());
     EntityManagerLoader::initWithJSONFile(ENTITY_MGR, ENGINE_CFG.filePathEntityManager());
 }
@@ -70,12 +71,14 @@ void Engine::onResume()
 
 EngineRequestedHostAction Engine::update(float deltaTime)
 {
+    static float frameRate = ENGINE_CFG.frameRate();
+    
     FPS_UTIL.update(deltaTime);
     
     _stateTime += deltaTime;
-    while (_stateTime >= _frameRate)
+    while (_stateTime >= frameRate)
     {
-        _stateTime -= _frameRate;
+        _stateTime -= frameRate;
         
         INPUT_MGR.process();
         
@@ -143,14 +146,19 @@ void Engine::onKeyboardInput(uint16_t key, bool isUp)
     INPUT_MGR.onKeyboardInput(key, isUp);
 }
 
-void Engine::changeState(State<Engine>* state, const Config& args)
+void Engine::overwriteState(State<Engine>* state, const Config& args)
 {
-    _stateMachine.changeState(state, args);
+    _stateMachine.overwriteState(state, args);
 }
 
-void Engine::revertToPreviousState()
+void Engine::pushState(State<Engine>* state, const Config& args)
 {
-    _stateMachine.revertToPreviousState();
+    _stateMachine.pushState(state, args);
+}
+
+void Engine::popState()
+{
+    _stateMachine.popState();
 }
 
 void Engine::setRequestedHostAction(EngineRequestedHostAction value)
