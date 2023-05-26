@@ -10,7 +10,7 @@
 
 FILE* FileUtil::openFile(std::string filePath, std::string mode)
 {
-    FILE *ret;
+    FILE* ret;
 
 #if IS_WINDOWS
     errno_t err;

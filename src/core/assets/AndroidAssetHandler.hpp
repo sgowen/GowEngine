@@ -39,7 +39,7 @@ private:
 
     AAssetManager* _assetManager;
 
-    AndroidAssetHandler(JNIEnv *jniEnv, jobject assetManager);
+    AndroidAssetHandler(JNIEnv* jniEnv, jobject assetManager);
     virtual ~AndroidAssetHandler() {}
     AndroidAssetHandler(const AndroidAssetHandler&);
     AndroidAssetHandler& operator=(const AndroidAssetHandler&);

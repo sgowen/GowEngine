@@ -21,7 +21,7 @@ public:
         return ret;
     }
     
-    void spawnThread(std::string threadID, void (*func)(void *), void* arg);
+    void spawnThread(std::string threadID, void (*func)(void*), void* arg);
     void tearDownThreadIfRunning(std::string threadID);
     void tearDownThread(std::string threadID);
     bool isThreadRunning(std::string threadID);

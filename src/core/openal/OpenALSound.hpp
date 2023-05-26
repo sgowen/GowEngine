@@ -9,7 +9,7 @@
 #pragma once
 
 #include <GowEngine/BuildConstants.hpp>
-#if IS_LINUX || IS_APPLE
+#if IS_LINUX || IS_APPLE || IS_ANDROID
 
 #include "core/audio/Sound.hpp"
 

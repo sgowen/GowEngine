@@ -83,12 +83,12 @@ void EngineState::destroyDeviceDependentResources(Engine* e)
     ASSETS_MGR.destroyDeviceDependentResources();
 }
 
-void EngineState::pause(Engine *e)
+void EngineState::pause(Engine* e)
 {
     AUDIO_ENGINE.pause();
 }
 
-void EngineState::resume(Engine *e)
+void EngineState::resume(Engine* e)
 {
     AUDIO_ENGINE.resume();
 }

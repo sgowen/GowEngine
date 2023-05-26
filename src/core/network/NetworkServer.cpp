@@ -19,7 +19,7 @@ void NetworkServer::create(uint16_t port, EntityIDManager& eidm, TimeTracker& tt
     assert(NW_SRVR != nullptr);
 }
 
-NetworkServer * NetworkServer::getInstance()
+NetworkServer* NetworkServer::getInstance()
 {
     return s_instance;
 }

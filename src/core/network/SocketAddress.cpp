@@ -55,9 +55,9 @@ std::string SocketAddress::toString() const
     {
         case AF_INET:
         {
-            const sockaddr_in *addr_in = getAsSockAddrIn();
+            const sockaddr_in* addr_in = getAsSockAddrIn();
     #if IS_WINDOWS
-            void *addr = (void*) &(addr_in->sin_addr);
+            void* addr = (void*) &(addr_in->sin_addr);
             inet_ntop(AF_INET, addr, buffer, INET_ADDRSTRLEN);
     #else
             inet_ntop(AF_INET, &(addr_in->sin_addr), buffer, INET_ADDRSTRLEN);
@@ -69,7 +69,7 @@ std::string SocketAddress::toString() const
         {
             const sockaddr_in6 *addr_in6 = getAsSockAddrIn6();
     #if IS_WINDOWS
-            void *addr = (void*) &(addr_in6->sin6_addr);
+            void* addr = (void*) &(addr_in6->sin6_addr);
             inet_ntop(AF_INET6, addr, buffer, INET6_ADDRSTRLEN);
     #else
             inet_ntop(AF_INET6, &(addr_in6->sin6_addr), buffer, INET6_ADDRSTRLEN);
