@@ -12,7 +12,6 @@ GowAudioEngine& AudioEngineFactory::getInstance()
 {
 #if IS_APPLE
     return OpenALAudioEngine::getInstance();
-//    return ObjectALAudioEngine::getInstance();
 #elif IS_ANDROID
     return OboeAudioEngine::getInstance();
 #elif IS_LINUX

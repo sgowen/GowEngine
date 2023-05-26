@@ -14,6 +14,10 @@
 
 SoundWrapper* OpenALAudioEngine::loadSound(std::string filePath, uint8_t numInstances)
 {
+#if IS_APPLE
+    filePath = getBundleFilePath(filePath);
+#endif
+    
     return new OpenALSoundWrapper(filePath, numInstances);
 }
 

@@ -33,12 +33,6 @@
 /// GLFW Implementation
 #include "deps/glfw/GlfwEngine.hpp"
 
-/// ObjectAL-for-iPhone Implementation
-#include "deps/ObjectAL-for-iPhone/ObjectALAudioEngine.hpp"
-#include "deps/ObjectAL-for-iPhone/ObjectALHelper.hpp"
-#include "deps/ObjectAL-for-iPhone/ObjectALSound.hpp"
-#include "deps/ObjectAL-for-iPhone/ObjectALSoundWrapper.hpp"
-
 /// Oboe Implementation
 #include "deps/oboe/InputStream.hpp"
 #include "deps/oboe/OboeAudioEngine.hpp"

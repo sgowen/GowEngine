@@ -27,7 +27,7 @@ enum FormatType {
 /* LoadBuffer loads the named audio file into an OpenAL buffer object, and
  * returns the new buffer ID.
  */
-static ALuint LoadSound(const char *filename)
+ALuint loadSound(const char *filename)
 {
     enum FormatType sample_format = Int16;
     ALint byteblockalign = 0;
@@ -41,6 +41,7 @@ static ALuint LoadSound(const char *filename)
     void* membuf;
 
     /* Open the audio file and check that it's usable. */
+    // TODO will need to implement sf_open_virtual so Android can load from AssetsManager buffer
     sndfile = sf_open(filename, SFM_READ, &sfinfo);
     if (!sndfile)
     {
@@ -280,7 +281,7 @@ OpenALSound::OpenALSound(std::string filePath, float volume) : Sound(),
 _buf(0),
 _src(0)
 {
-    _buf = LoadSound(filePath.c_str());
+    _buf = loadSound(filePath.c_str());
     assert(_buf != AL_NONE);
 
     alGenSources(1, &_src);

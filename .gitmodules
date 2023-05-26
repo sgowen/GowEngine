@@ -1,9 +1,6 @@
 [submodule "deps/DirectXTK"]
 	path = deps/DirectXTK
 	url = git@github.com:microsoft/DirectXTK.git
-[submodule "deps/ObjectAL-for-iPhone"]
-	path = deps/ObjectAL-for-iPhone
-	url = git@github.com:kstenerud/ObjectAL-for-iPhone.git
 [submodule "deps/glfw"]
 	path = deps/glfw
 	url = git@github.com:glfw/glfw.git
@@ -28,3 +25,6 @@
 [submodule "deps/libsndfile"]
 	path = deps/libsndfile
 	url = git@github.com:libsndfile/libsndfile.git
+[submodule "deps/ios-cmake"]
+	path = deps/ios-cmake
+	url = git@github.com:leetal/ios-cmake.git
