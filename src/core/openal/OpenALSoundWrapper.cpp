@@ -8,8 +8,6 @@
 
 #include <GowEngine/GowEngine.hpp>
 
-#if IS_LINUX || IS_APPLE || IS_ANDROID
-
 OpenALSoundWrapper::OpenALSoundWrapper(std::string filePath, uint8_t numInstances) : SoundWrapper(numInstances)
 {
     for (int i = 0; i < _numInstances; ++i)
@@ -17,5 +15,3 @@ OpenALSoundWrapper::OpenALSoundWrapper(std::string filePath, uint8_t numInstance
         _sounds.push_back(new OpenALSound(filePath));
     }
 }
-
-#endif /* IS_LINUX */

@@ -25,11 +25,6 @@
 /// compiler variables
 #include "BuildConstants.hpp"
 
-/// DirectXTK Implementation
-#include "deps/DirectXTK/DirectXTKAudioEngine.hpp"
-#include "deps/DirectXTK/DirectXTKSound.hpp"
-#include "deps/DirectXTK/DirectXTKSoundWrapper.hpp"
-
 /// GLFW Implementation
 #include "deps/glfw/GlfwEngine.hpp"
 
@@ -64,14 +59,6 @@
 #include "core/assets/SoundDescriptor.hpp"
 #include "core/assets/TextureDescriptor.hpp"
 #include "core/assets/WindowsAssetHandler.hpp"
-
-/// Core Audio
-#include "core/audio/AudioEngineFactory.hpp"
-#include "core/audio/GowAudioEngine.hpp"
-#include "core/audio/Sound.hpp"
-#include "core/audio/SoundManager.hpp"
-#include "core/audio/SoundUtil.hpp"
-#include "core/audio/SoundWrapper.hpp"
 
 /// Core Common
 #include "core/common/Config.hpp"
@@ -149,9 +136,14 @@
 #include "core/network/UDPSocket.hpp"
 
 /// Core OpenAL
+#include "core/openal/GowAudioEngine.hpp"
 #include "core/openal/OpenALAudioEngine.hpp"
 #include "core/openal/OpenALSound.hpp"
 #include "core/openal/OpenALSoundWrapper.hpp"
+#include "core/openal/Sound.hpp"
+#include "core/openal/SoundManager.hpp"
+#include "core/openal/SoundUtil.hpp"
+#include "core/openal/SoundWrapper.hpp"
 
 /// Core OpenGL
 #include "core/opengl/Animation.hpp"

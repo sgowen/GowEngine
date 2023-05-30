@@ -8,10 +8,7 @@
 
 #pragma once
 
-#include <GowEngine/BuildConstants.hpp>
-#if IS_LINUX || IS_APPLE || IS_ANDROID
-
-#include "core/audio/SoundWrapper.hpp"
+#include "core/openal/SoundWrapper.hpp"
 
 class OpenALSoundWrapper : public SoundWrapper
 {
@@ -19,5 +16,3 @@ public:
     OpenALSoundWrapper(std::string filePath, uint8_t numInstances = 1);
     virtual ~OpenALSoundWrapper() {}
 };
-
-#endif /* IS_LINUX */

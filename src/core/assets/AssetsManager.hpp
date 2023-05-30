@@ -10,7 +10,7 @@
 
 #include "core/assets/Font.hpp"
 #include "core/opengl/ShaderManager.hpp"
-#include "core/audio/SoundManager.hpp"
+#include "core/openal/SoundManager.hpp"
 #include "core/opengl/TextureManager.hpp"
 
 #include "Assets.hpp"

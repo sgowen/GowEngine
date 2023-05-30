@@ -8,8 +8,6 @@
 
 #include <GowEngine/GowEngine.hpp>
 
-#if IS_LINUX || IS_APPLE || IS_ANDROID
-
 #include "sndfile.h"
 
 #include "AL/al.h"
@@ -524,6 +522,3 @@ bool OpenALSound::isPaused()
 {
     return !isPlaying();
 }
-
-#endif /* IS_LINUX */
-

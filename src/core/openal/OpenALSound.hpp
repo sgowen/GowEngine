@@ -8,10 +8,7 @@
 
 #pragma once
 
-#include <GowEngine/BuildConstants.hpp>
-#if IS_LINUX || IS_APPLE || IS_ANDROID
-
-#include "core/audio/Sound.hpp"
+#include "core/openal/Sound.hpp"
 
 #include <AL/al.h>
 
@@ -34,5 +31,3 @@ private:
     ALuint _buf;
     ALuint _src;
 };
-
-#endif /* IS_LINUX */

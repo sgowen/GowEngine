@@ -8,32 +8,25 @@
 
 #pragma once
 
-#include <GowEngine/BuildConstants.hpp>
-#if IS_LINUX || IS_APPLE || IS_ANDROID
-
-#include "core/audio/GowAudioEngine.hpp"
+#include "core/openal/GowAudioEngine.hpp"
 
 class OpenALAudioEngine : public GowAudioEngine
 {
-    friend class AudioEngineFactory;
-    
 public:
-    virtual SoundWrapper* loadSound(std::string filePath, uint8_t numInstances = 1);
-    virtual SoundWrapper* loadMusic(std::string filePath);
-    virtual void onPause() {}
-    virtual void onResume() {}
-
-private:
     static GowAudioEngine& getInstance()
     {
         static OpenALAudioEngine ret = OpenALAudioEngine();
         return ret;
     }
     
+    virtual SoundWrapper* loadSound(std::string filePath, uint8_t numInstances = 1);
+    virtual SoundWrapper* loadMusic(std::string filePath);
+    virtual void onPause() {}
+    virtual void onResume() {}
+
+private:
     OpenALAudioEngine();
     ~OpenALAudioEngine();
     OpenALAudioEngine(const OpenALAudioEngine&);
     OpenALAudioEngine& operator=(const OpenALAudioEngine&);
 };
-
-#endif /* IS_LINUX */

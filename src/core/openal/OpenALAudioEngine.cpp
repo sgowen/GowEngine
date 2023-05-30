@@ -8,8 +8,6 @@
 
 #include <GowEngine/GowEngine.hpp>
 
-#if IS_LINUX || IS_APPLE || IS_ANDROID
-
 #include <stdio.h>
 #include <errno.h>
 #include <string.h>
@@ -120,5 +118,3 @@ OpenALAudioEngine::~OpenALAudioEngine()
 {
     CloseAL();
 }
-
-#endif /* IS_LINUX */
