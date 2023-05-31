@@ -34,9 +34,9 @@ public:
     void destroyDeviceDependentResources();
     Shader& shader(std::string name);
     bool isShaderLoaded(std::string name);
-    SoundWrapper* sound(std::string soundID);
-    std::map<std::string, SoundWrapper*>& sounds();
-    SoundWrapper* music();
+    OpenALSoundWrapper* sound(std::string soundID);
+    std::map<std::string, OpenALSoundWrapper*>& sounds();
+    OpenALSoundWrapper* music();
     Font& font(std::string name);
     Texture& texture(std::string name);
     bool isTextureLoaded(std::string name);

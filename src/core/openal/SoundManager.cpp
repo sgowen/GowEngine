@@ -40,9 +40,9 @@ void SoundManager::unloadSounds(std::vector<SoundDescriptor>& soundDescriptors)
     }
 }
 
-SoundWrapper* SoundManager::sound(std::string soundID)
+OpenALSoundWrapper* SoundManager::sound(std::string soundID)
 {
-    SoundWrapper* ret = nullptr;
+    OpenALSoundWrapper* ret = nullptr;
     
     auto q = _sounds.find(soundID);
     if (q != _sounds.end())
@@ -53,12 +53,12 @@ SoundWrapper* SoundManager::sound(std::string soundID)
     return ret;
 }
 
-std::map<std::string, SoundWrapper*>& SoundManager::sounds()
+std::map<std::string, OpenALSoundWrapper*>& SoundManager::sounds()
 {
     return _sounds;
 }
 
-SoundWrapper* SoundManager::music()
+OpenALSoundWrapper* SoundManager::music()
 {
     return _music;
 }
@@ -67,7 +67,7 @@ void SoundManager::loadSound(std::string soundID, std::string filePath, uint8_t 
 {
     assert(_sounds.find(soundID) == _sounds.end());
     
-    SoundWrapper* sw = AUDIO_ENGINE.loadSound(filePath, numInstances);
+    OpenALSoundWrapper* sw = AUDIO_ENGINE.loadSound(filePath, numInstances);
     _sounds.emplace(soundID, sw);
 }
 

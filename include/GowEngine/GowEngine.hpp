@@ -136,14 +136,11 @@
 #include "core/network/UDPSocket.hpp"
 
 /// Core OpenAL
-#include "core/openal/GowAudioEngine.hpp"
 #include "core/openal/OpenALAudioEngine.hpp"
 #include "core/openal/OpenALSound.hpp"
 #include "core/openal/OpenALSoundWrapper.hpp"
-#include "core/openal/Sound.hpp"
 #include "core/openal/SoundManager.hpp"
 #include "core/openal/SoundUtil.hpp"
-#include "core/openal/SoundWrapper.hpp"
 
 /// Core OpenGL
 #include "core/opengl/Animation.hpp"
