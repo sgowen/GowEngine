@@ -86,7 +86,6 @@ void OutputDebugStringA(const char* value)
 
 void StringUtil::log(const char* format, ...)
 {
-    // TODO, replace with spdlog
     static const int size = 4096;
     char temp[size];
     

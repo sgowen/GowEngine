@@ -10,22 +10,14 @@
 
 #include <GowEngine/BuildConstants.hpp>
 
-#if IS_IOS
-    #include <OpenGLES/ES3/gl.h>
-#elif IS_MACOS
-    #include <OpenGL/OpenGL.h>
-    #include <OpenGL/gl.h>
-#elif IS_ANDROID
-    #ifdef GL3
-        #include <GLES3/gl3.h>
-    #elif GL3_2
-        #include <GLES3/gl32.h>
-    #else
-        #include <GLES2/gl2.h>
-        #include <GLES2/gl2ext.h>
+#if IS_ANDROID
+    #include <GLES2/gl2.h>
+#elif IS_APPLE
+    #if IS_IOS
+        #include <OpenGLES/ES2/gl.h>
+    #elif IS_MACOS
+        #include <OpenGL/gl.h>
     #endif
-#elif IS_LINUX
-    #include <GL/glew.h>
-#elif IS_WINDOWS
+#elif IS_LINUX || IS_WINDOWS
     #include <glad/gl.h>
 #endif

@@ -8,31 +8,28 @@
 
 #pragma once
 
-#include <GowEngine/BuildConstants.hpp>
-#if IS_LINUX
-
-#include "core/audio/Sound.hpp"
+#include <stdint.h>
 
 #include <AL/al.h>
 
-class OpenALSound : public Sound
+class OpenALSound
 {
 public:
     OpenALSound(std::string filePath, float volume = 1.0f);
-    virtual ~OpenALSound();
+    ~OpenALSound();
 
-    virtual void play();
-    virtual void resume();
-    virtual void pause();
-    virtual void stop();
-    virtual void setVolume(float volume);
-    virtual bool isLooping();
-    virtual bool isPlaying();
-    virtual bool isPaused();
+    void play();
+    void resume();
+    void pause();
+    void stop();
+    void setVolume(float volume);
+    bool isLooping();
+    bool isPlaying();
+    bool isPaused();
+    void setLooping(bool isLooping);
 
 private:
     ALuint _buf;
     ALuint _src;
+    bool _isLooping;
 };
-
-#endif /* IS_LINUX */

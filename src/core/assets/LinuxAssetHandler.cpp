@@ -38,7 +38,7 @@ void LinuxAssetHandler::unloadAsset(const FileData& fileData)
 {
     assert(fileData._data != nullptr);
 
-    free((void *)fileData._data);
+    free((void*)fileData._data);
 }
 
 #endif /* IS_LINUX || IS_APPLE */

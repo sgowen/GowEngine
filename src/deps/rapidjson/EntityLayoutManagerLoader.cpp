@@ -99,7 +99,7 @@ void EntityLayoutManagerLoader::loadEntityLayout(EntityLayoutDef& eld, EntityIDM
 
 void EntityLayoutManagerLoader::saveEntityLayout(EntityLayoutDef& eld)
 {
-    FILE *file = OPEN_FILE(eld._filePath.c_str(), "w+");
+    FILE* file = OPEN_FILE(eld._filePath.c_str(), "w+");
     if (file == nullptr)
     {
         return;

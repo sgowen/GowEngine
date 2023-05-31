@@ -8,7 +8,7 @@
 
 #include <GowEngine/GowEngine.hpp>
 
-void ThreadManager::spawnThread(std::string threadID, void (*func)(void *), void* arg)
+void ThreadManager::spawnThread(std::string threadID, void (*func)(void*), void* arg)
 {
     assert(_threads.find(threadID) == _threads.end());
     

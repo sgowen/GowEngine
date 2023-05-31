@@ -34,7 +34,7 @@ AndroidAssetHandler* AndroidAssetHandler::s_instance = nullptr;
 
 FileData AndroidAssetHandler::loadAsset(std::string filePath)
 {
-    AAsset *asset = AAssetManager_open(_assetManager, filePath.c_str(), AASSET_MODE_STREAMING);
+    AAsset* asset = AAssetManager_open(_assetManager, filePath.c_str(), AASSET_MODE_STREAMING);
     if (asset == nullptr)
     {
         LOG("Unable to load %s from AssetManager", filePath.c_str());
@@ -51,7 +51,7 @@ void AndroidAssetHandler::unloadAsset(const FileData& fileData)
     AAsset_close((AAsset*)fileData._fileHandle);
 }
 
-AndroidAssetHandler::AndroidAssetHandler(JNIEnv *jniEnv, jobject assetManager) : AssetHandler()
+AndroidAssetHandler::AndroidAssetHandler(JNIEnv* jniEnv, jobject assetManager) : AssetHandler()
 {
     assert(jniEnv != nullptr);
     

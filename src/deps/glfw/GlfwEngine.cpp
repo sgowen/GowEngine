@@ -7,7 +7,7 @@
 //
 
 #include <GowEngine/BuildConstants.hpp>
-#if IS_WINDOWS
+#if IS_LINUX || IS_WINDOWS
     #define GLAD_GL_IMPLEMENTATION
 #endif
 
@@ -325,10 +325,8 @@ void GlfwEngine::exec(std::string configFilePath, EngineState& initialEngineStat
     glfwSetKeyCallback(window, key_callback);
 
     glfwMakeContextCurrent(window);
-#if IS_WINDOWS
+#if IS_LINUX || IS_WINDOWS
     gladLoadGL(glfwGetProcAddress);
-#elif IS_LINUX
-    glewInit();
 #endif
     
     runEngine(configFilePath, initialEngineState, window);

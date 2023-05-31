@@ -8,39 +8,372 @@
 
 #include <GowEngine/GowEngine.hpp>
 
-#if IS_LINUX
+#include <stdio.h>
+#include <errno.h>
+#include <string.h>
 
-#include <AL/alut.h>
+#include "AL/al.h"
+#include "AL/alc.h"
+#include "AL/alext.h"
 
-SoundWrapper* OpenALAudioEngine::loadSound(std::string filePath, uint8_t numInstances)
+/* InitAL opens a device and sets up a context using default attributes, making
+ * the program ready to call OpenAL functions. */
+int InitAL(char ***argv, int *argc)
+{
+    const ALCchar *name;
+    ALCdevice *device;
+    ALCcontext *ctx;
+
+    /* Open and initialize a device */
+    device = NULL;
+    if (argc && argv && *argc > 1 && strcmp((*argv)[0], "-device") == 0)
+    {
+        device = alcOpenDevice((*argv)[1]);
+        if (!device)
+        {
+            fprintf(stderr, "Failed to open \"%s\", trying default\n", (*argv)[1]);
+        }
+        (*argv) += 2;
+        (*argc) -= 2;
+    }
+    
+    if (!device)
+    {
+        device = alcOpenDevice(NULL);
+    }
+    
+    if (!device)
+    {
+        fprintf(stderr, "Could not open a device!\n");
+        return 1;
+    }
+
+    ctx = alcCreateContext(device, NULL);
+    if (ctx == NULL || alcMakeContextCurrent(ctx) == ALC_FALSE)
+    {
+        if (ctx != NULL)
+        {
+            alcDestroyContext(ctx);
+        }
+        alcCloseDevice(device);
+        fprintf(stderr, "Could not set a context!\n");
+        return 1;
+    }
+
+    name = NULL;
+    if (alcIsExtensionPresent(device, "ALC_ENUMERATE_ALL_EXT"))
+    {
+        name = alcGetString(device, ALC_ALL_DEVICES_SPECIFIER);
+    }
+    
+    if (!name || alcGetError(device) != AL_NO_ERROR)
+    {
+        name = alcGetString(device, ALC_DEVICE_SPECIFIER);
+    }
+    
+    printf("Opened \"%s\"\n", name);
+
+    return 0;
+}
+
+/* CloseAL closes the device belonging to the current context, and destroys the
+ * context. */
+void CloseAL(void)
+{
+    ALCdevice *device;
+    ALCcontext *ctx;
+
+    ctx = alcGetCurrentContext();
+    if (ctx == NULL)
+    {
+        return;
+    }
+
+    device = alcGetContextsDevice(ctx);
+
+    alcMakeContextCurrent(NULL);
+    alcDestroyContext(ctx);
+    alcCloseDevice(device);
+}
+
+OpenALSoundWrapper* OpenALAudioEngine::loadSound(std::string filePath, uint8_t numInstances)
 {
     return new OpenALSoundWrapper(filePath, numInstances);
 }
 
-SoundWrapper* OpenALAudioEngine::loadMusic(std::string filePath)
+OpenALSoundWrapper* OpenALAudioEngine::loadMusic(std::string filePath)
 {
     return loadSound(filePath);
 }
 
-static void reportError()
+void OpenALAudioEngine::pause()
 {
-    fprintf(stderr, "ALUT error: %s\n", alutGetErrorString(alutGetError()));
+    pauseMusic();
+    pauseAllSounds();
 }
 
-OpenALAudioEngine::OpenALAudioEngine() : GowAudioEngine()
+void OpenALAudioEngine::resume()
 {
-    if (!alutInit(nullptr, nullptr))
+    resumeMusic();
+    resumeAllSounds();
+}
+
+void OpenALAudioEngine::render()
+{
+    for (OpenALSound* s : _soundsToPlay)
     {
-        reportError();
+        s->play();
+    }
+    _soundsToPlay.clear();
+    
+    for (OpenALSound* s : _soundsToStop)
+    {
+        s->stop();
+    }
+    _soundsToStop.clear();
+
+    for (OpenALSound* s : _soundsToPause)
+    {
+        s->pause();
+    }
+    _soundsToPause.clear();
+
+    for (OpenALSound* s : _soundsToResume)
+    {
+        s->resume();
+    }
+    _soundsToResume.clear();
+}
+
+void OpenALAudioEngine::playSound(std::string soundID, float volume, bool isLooping)
+{
+    bool soundsDisabled = ENGINE_CFG.soundsDisabled();
+    uint8_t maxNumSoundsToPlayPerFrame = ENGINE_CFG.maxNumSoundsToPlayPerFrame();
+    if (soundsDisabled || _soundsToPlay.size() >= maxNumSoundsToPlayPerFrame)
+    {
+        return;
+    }
+    
+    OpenALSoundWrapper* sw = ASSETS_MGR.sound(soundID);
+    if (sw == nullptr)
+    {
+        return;
+    }
+    
+    OpenALSound* s = sw->nextSoundInstance();
+    s->setVolume(CLAMP(volume, 0, 1));
+    s->setLooping(isLooping);
+    
+    _soundsToPlay.push_back(s);
+}
+
+void OpenALAudioEngine::stopSound(std::string soundID)
+{
+    bool soundsDisabled = ENGINE_CFG.soundsDisabled();
+    if (soundsDisabled)
+    {
+        return;
+    }
+    
+    OpenALSoundWrapper* sw = ASSETS_MGR.sound(soundID);
+    if (sw == nullptr)
+    {
+        return;
+    }
+    
+    for (uint8_t i = 0; i < sw->numInstances(); ++i)
+    {
+        OpenALSound* s = sw->soundInstance(i);
+        _soundsToStop.push_back(s);
+    }
+}
+
+void OpenALAudioEngine::pauseSound(std::string soundID)
+{
+    bool soundsDisabled = ENGINE_CFG.soundsDisabled();
+    if (soundsDisabled)
+    {
+        return;
+    }
+    
+    OpenALSoundWrapper* sw = ASSETS_MGR.sound(soundID);
+    if (sw == nullptr)
+    {
+        return;
+    }
+    
+    for (uint8_t i = 0; i < sw->numInstances(); ++i)
+    {
+        OpenALSound* s = sw->soundInstance(i);
+        _soundsToPause.push_back(s);
+    }
+}
+
+void OpenALAudioEngine::resumeSound(std::string soundID)
+{
+    bool soundsDisabled = ENGINE_CFG.soundsDisabled();
+    if (soundsDisabled)
+    {
+        return;
+    }
+    
+    OpenALSoundWrapper* sw = ASSETS_MGR.sound(soundID);
+    if (sw == nullptr)
+    {
+        return;
+    }
+    
+    for (uint8_t i = 0; i < sw->numInstances(); ++i)
+    {
+        OpenALSound* s = sw->soundInstance(i);
+        _soundsToResume.push_back(s);
+    }
+}
+
+void OpenALAudioEngine::stopAllSounds()
+{
+    bool soundsDisabled = ENGINE_CFG.soundsDisabled();
+    if (soundsDisabled)
+    {
+        return;
+    }
+    
+    std::map<std::string, OpenALSoundWrapper*>& sounds = ASSETS_MGR.sounds();
+    for (auto& pair : sounds)
+    {
+        for (auto* s : pair.second->getSounds())
+        {
+            _soundsToStop.push_back(s);
+        }
+    }
+}
+
+void OpenALAudioEngine::pauseAllSounds()
+{
+    bool soundsDisabled = ENGINE_CFG.soundsDisabled();
+    if (soundsDisabled)
+    {
+        return;
+    }
+    
+    std::map<std::string, OpenALSoundWrapper*>& sounds = ASSETS_MGR.sounds();
+    for (auto& pair : sounds)
+    {
+        for (auto* s : pair.second->getSounds())
+        {
+            if (s->isPlaying())
+            {
+                _soundsToPause.push_back(s);
+            }
+        }
+    }
+}
+
+void OpenALAudioEngine::resumeAllSounds()
+{
+    bool soundsDisabled = ENGINE_CFG.soundsDisabled();
+    if (soundsDisabled)
+    {
+        return;
+    }
+    
+    std::map<std::string, OpenALSoundWrapper*>& sounds = ASSETS_MGR.sounds();
+    for (auto& pair : sounds)
+    {
+        for (auto* s : pair.second->getSounds())
+        {
+            if (s->isPaused())
+            {
+                _soundsToResume.push_back(s);
+            }
+        }
+    }
+}
+
+void OpenALAudioEngine::playMusic(float volume, bool isLooping)
+{
+    bool musicDisabled = ENGINE_CFG.musicDisabled();
+    OpenALSoundWrapper* music = ASSETS_MGR.music();
+    if (musicDisabled || music == nullptr)
+    {
+        return;
+    }
+    
+    music->setVolume(CLAMP(volume, 0, 1));
+    music->setLooping(isLooping);
+    
+    _soundsToPlay.push_back(music->soundInstance());
+}
+
+void OpenALAudioEngine::setMusicVolume(float volume)
+{
+    bool musicDisabled = ENGINE_CFG.musicDisabled();
+    OpenALSoundWrapper* music = ASSETS_MGR.music();
+    if (musicDisabled || music == nullptr)
+    {
+        return;
+    }
+    
+    music->setVolume(CLAMP(volume, 0, 1));
+}
+
+void OpenALAudioEngine::stopMusic()
+{
+    bool musicDisabled = ENGINE_CFG.musicDisabled();
+    OpenALSoundWrapper* music = ASSETS_MGR.music();
+    if (musicDisabled || music == nullptr)
+    {
+        return;
+    }
+    
+    _soundsToStop.push_back(music->soundInstance());
+}
+
+void OpenALAudioEngine::pauseMusic()
+{
+    bool musicDisabled = ENGINE_CFG.musicDisabled();
+    OpenALSoundWrapper* music = ASSETS_MGR.music();
+    if (musicDisabled || music == nullptr)
+    {
+        return;
+    }
+    
+    _soundsToPause.push_back(music->soundInstance());
+}
+
+void OpenALAudioEngine::resumeMusic()
+{
+    bool musicDisabled = ENGINE_CFG.musicDisabled();
+    OpenALSoundWrapper* music = ASSETS_MGR.music();
+    if (musicDisabled || music == nullptr)
+    {
+        return;
+    }
+    
+    _soundsToResume.push_back(music->soundInstance());
+}
+
+bool OpenALAudioEngine::isMusicPlaying()
+{
+    bool musicDisabled = ENGINE_CFG.musicDisabled();
+    OpenALSoundWrapper* music = ASSETS_MGR.music();
+    if (musicDisabled || music == nullptr)
+    {
+        return false;
+    }
+    
+    return music->isPlaying();
+}
+
+OpenALAudioEngine::OpenALAudioEngine()
+{
+    if (!InitAL(nullptr, nullptr))
+    {
+        // wtf
     }
 }
 
 OpenALAudioEngine::~OpenALAudioEngine()
 {
-    if (!alutExit())
-    {
-        reportError();
-    }
+    CloseAL();
 }
-
-#endif /* IS_LINUX */

@@ -21,4 +21,7 @@ void ShaderLoader::unloadShader(Shader& s)
     
     ASSET_HANDLER.unloadAsset(*s._vertexShaderFileData);
     ASSET_HANDLER.unloadAsset(*s._fragmentShaderFileData);
+    
+    delete s._vertexShaderFileData;
+    delete s._fragmentShaderFileData;
 }

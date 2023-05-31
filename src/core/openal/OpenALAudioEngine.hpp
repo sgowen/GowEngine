@@ -8,32 +8,50 @@
 
 #pragma once
 
-#include <GowEngine/BuildConstants.hpp>
-#if IS_LINUX
+#include <stdint.h>
+#include <vector>
+#include <string>
 
-#include "core/audio/GowAudioEngine.hpp"
+class OpenALSoundWrapper;
+class OpenALSound;
 
-class OpenALAudioEngine : public GowAudioEngine
+class OpenALAudioEngine
 {
-    friend class AudioEngineFactory;
-    
 public:
-    virtual SoundWrapper* loadSound(std::string filePath, uint8_t numInstances = 1);
-    virtual SoundWrapper* loadMusic(std::string filePath);
-    virtual void onPause() {}
-    virtual void onResume() {}
-
-private:
-    static GowAudioEngine& getInstance()
+    static OpenALAudioEngine& getInstance()
     {
         static OpenALAudioEngine ret = OpenALAudioEngine();
         return ret;
     }
+    
+    OpenALSoundWrapper* loadSound(std::string filePath, uint8_t numInstances = 1);
+    OpenALSoundWrapper* loadMusic(std::string filePath);
+    
+    void pause();
+    void resume();
+    void render();
+    void playSound(std::string soundID, float volume = 1.0f, bool isLooping = false);
+    void stopSound(std::string soundID);
+    void pauseSound(std::string soundID);
+    void resumeSound(std::string soundID);
+    void stopAllSounds();
+    void pauseAllSounds();
+    void resumeAllSounds();
+    void playMusic(float volume = 1.0f, bool isLooping = true);
+    void setMusicVolume(float volume);
+    void stopMusic();
+    void pauseMusic();
+    void resumeMusic();
+    bool isMusicPlaying();
+
+private:
+    std::vector<OpenALSound*> _soundsToPlay;
+    std::vector<OpenALSound*> _soundsToStop;
+    std::vector<OpenALSound*> _soundsToPause;
+    std::vector<OpenALSound*> _soundsToResume;
     
     OpenALAudioEngine();
     ~OpenALAudioEngine();
     OpenALAudioEngine(const OpenALAudioEngine&);
     OpenALAudioEngine& operator=(const OpenALAudioEngine&);
 };
-
-#endif /* IS_LINUX */

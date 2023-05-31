@@ -8,16 +8,34 @@
 
 #pragma once
 
-#include <GowEngine/BuildConstants.hpp>
-#if IS_LINUX
+#include <vector>
+#include <stdint.h>
 
-#include "core/audio/SoundWrapper.hpp"
+class OpenALSound;
 
-class OpenALSoundWrapper : public SoundWrapper
+class OpenALSoundWrapper
 {
 public:
     OpenALSoundWrapper(std::string filePath, uint8_t numInstances = 1);
-    virtual ~OpenALSoundWrapper() {}
+    ~OpenALSoundWrapper();
+    
+    void play();
+    void resume();
+    void pause();
+    void stop();
+    void setVolume(float volume);
+    bool isLooping();
+    bool isPlaying();
+    bool isPaused();
+    void setLooping(bool isLooping);
+    OpenALSound* nextSoundInstance();
+    OpenALSound* soundInstance(uint8_t soundIndex);
+    OpenALSound* soundInstance();
+    std::vector<OpenALSound *>& getSounds();
+    uint8_t numInstances();
+    
+private:
+    std::vector<OpenALSound *> _sounds;
+    uint8_t _soundIndex;
+    uint8_t _numInstances;
 };
-
-#endif /* IS_LINUX */

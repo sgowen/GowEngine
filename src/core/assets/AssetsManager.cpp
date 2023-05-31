@@ -112,17 +112,17 @@ bool AssetsManager::isShaderLoaded(std::string name)
     return _shaderMgr.isShaderLoaded(name);
 }
 
-SoundWrapper* AssetsManager::sound(std::string soundID)
+OpenALSoundWrapper* AssetsManager::sound(std::string soundID)
 {
     return _soundMgr.sound(soundID);
 }
 
-std::map<std::string, SoundWrapper*>& AssetsManager::sounds()
+std::map<std::string, OpenALSoundWrapper*>& AssetsManager::sounds()
 {
     return _soundMgr.sounds();
 }
 
-SoundWrapper* AssetsManager::music()
+OpenALSoundWrapper* AssetsManager::music()
 {
     return _soundMgr.music();
 }
@@ -198,7 +198,7 @@ bool AssetsManager::areAssetsLoaded()
         return false;
     }
 
-    std::map<std::string, SoundWrapper*>& sounds = _soundMgr.sounds();
+    std::map<std::string, OpenALSoundWrapper*>& sounds = _soundMgr.sounds();
     size_t expectedNumSounds = sounds.size();
     if (_soundMgr.music() != nullptr)
     {

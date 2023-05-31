@@ -25,33 +25,11 @@
 /// compiler variables
 #include "BuildConstants.hpp"
 
-/// DirectXTK Implementation
-#include "deps/DirectXTK/DirectXTKAudioEngine.hpp"
-#include "deps/DirectXTK/DirectXTKSound.hpp"
-#include "deps/DirectXTK/DirectXTKSoundWrapper.hpp"
-
-/// GLFW Implementation
+/// glfw Implementation
 #include "deps/glfw/GlfwEngine.hpp"
 
-/// ObjectAL-for-iPhone Implementation
-#include "deps/ObjectAL-for-iPhone/ObjectALAudioEngine.hpp"
-#include "deps/ObjectAL-for-iPhone/ObjectALHelper.hpp"
-#include "deps/ObjectAL-for-iPhone/ObjectALSound.hpp"
-#include "deps/ObjectAL-for-iPhone/ObjectALSoundWrapper.hpp"
-
-/// Oboe Implementation
-#include "deps/oboe/InputStream.hpp"
-#include "deps/oboe/OboeAudioEngine.hpp"
-#include "deps/oboe/OboeSound.hpp"
-#include "deps/oboe/OboeSoundWrapper.hpp"
-#include "deps/oboe/SampleBuffer.hpp"
-#include "deps/oboe/SampleSource.hpp"
-#include "deps/oboe/SimpleMultiPlayer.hpp"
-#include "deps/oboe/WavChunkHeader.hpp"
-#include "deps/oboe/WavFmtChunkHeader.hpp"
-#include "deps/oboe/WavRIFFChunkHeader.hpp"
-#include "deps/oboe/WavStreamReader.hpp"
-#include "deps/oboe/WavTypes.hpp"
+/// libsndfile Implementation
+#include "deps/libsndfile/SoundLoader.hpp"
 
 /// rapidjson Implementation
 #include "deps/rapidjson/AssetsLoader.hpp"
@@ -60,9 +38,6 @@
 #include "deps/rapidjson/EntityManagerLoader.hpp"
 #include "deps/rapidjson/RapidJSONUtil.hpp"
 #include "deps/rapidjson/RendererLoader.hpp"
-
-/// spdlog Implementation
-#include "deps/spdlog/Logger.hpp"
 
 /// stb Implementation
 #include "deps/stb/TextureLoader.hpp"
@@ -84,14 +59,6 @@
 #include "core/assets/SoundDescriptor.hpp"
 #include "core/assets/TextureDescriptor.hpp"
 #include "core/assets/WindowsAssetHandler.hpp"
-
-/// Core Audio
-#include "core/audio/AudioEngineFactory.hpp"
-#include "core/audio/GowAudioEngine.hpp"
-#include "core/audio/Sound.hpp"
-#include "core/audio/SoundManager.hpp"
-#include "core/audio/SoundUtil.hpp"
-#include "core/audio/SoundWrapper.hpp"
 
 /// Core Common
 #include "core/common/Config.hpp"
@@ -172,6 +139,8 @@
 #include "core/openal/OpenALAudioEngine.hpp"
 #include "core/openal/OpenALSound.hpp"
 #include "core/openal/OpenALSoundWrapper.hpp"
+#include "core/openal/SoundManager.hpp"
+#include "core/openal/SoundUtil.hpp"
 
 /// Core OpenGL
 #include "core/opengl/Animation.hpp"

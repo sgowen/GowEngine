@@ -19,7 +19,7 @@ void NetworkClient::create(std::string serverIPAddress, std::string username, ui
     assert(NW_CLNT != nullptr);
 }
 
-NetworkClient * NetworkClient::getInstance()
+NetworkClient* NetworkClient::getInstance()
 {
     return s_instance;
 }

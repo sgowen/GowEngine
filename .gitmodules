@@ -1,24 +1,18 @@
-[submodule "deps/DirectXTK"]
-	path = deps/DirectXTK
-	url = git@github.com:microsoft/DirectXTK.git
-[submodule "deps/ObjectAL-for-iPhone"]
-	path = deps/ObjectAL-for-iPhone
-	url = git@github.com:kstenerud/ObjectAL-for-iPhone.git
 [submodule "deps/glfw"]
 	path = deps/glfw
 	url = git@github.com:glfw/glfw.git
-[submodule "deps/oboe"]
-	path = deps/oboe
-	url = git@github.com:google/oboe.git
 [submodule "deps/rapidjson"]
 	path = deps/rapidjson
 	url = git@github.com:Tencent/rapidjson.git
-[submodule "deps/spdlog"]
-	path = deps/spdlog
-	url = git@github.com:gabime/spdlog.git
 [submodule "deps/stb"]
 	path = deps/stb
 	url = git@github.com:nothings/stb.git
-[submodule "deps/efsw"]
-	path = deps/efsw
-	url = git@github.com:jackbackrack/efsw.git
+[submodule "deps/openal-soft"]
+	path = deps/openal-soft
+	url = git@github.com:kcat/openal-soft.git
+[submodule "deps/libsndfile"]
+	path = deps/libsndfile
+	url = git@github.com:libsndfile/libsndfile.git
+[submodule "deps/ios-cmake"]
+	path = deps/ios-cmake
+	url = git@github.com:leetal/ios-cmake.git
