@@ -13,7 +13,6 @@
 #if IS_IOS
     #include <OpenGLES/ES3/gl.h>
 #elif IS_MACOS
-    
     #include <OpenGL/gl.h>
 #elif IS_ANDROID
     #ifdef GL3
