@@ -2,7 +2,7 @@
 A basic no nonsense LGPL 2.1 licensed portable C++ 2D game engine
 
 ## Demo
-![Demo](https://file.io/Isa1VANXnuVu)
+![Demo](https://github.com/sgowen/GowEngine/blob/main/demo.gif)
 
 ## Features
 * Written in portable C++11
