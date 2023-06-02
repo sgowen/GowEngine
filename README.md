@@ -1,6 +1,7 @@
 # GowEngine
 A basic no nonsense LGPL 2.1 licensed portable C++ 2D game engine
 
+## Demo
 ![Demo](https://file.io/Isa1VANXnuVu)
 
 ## Basics
@@ -17,15 +18,16 @@ A basic no nonsense LGPL 2.1 licensed portable C++ 2D game engine
 * Windows
 
 ## Dependencies
-* **glfw**: windowing, input, and general awesomeness on macOS, Linux, and Windows
-* **ios-cmake**: compiling libsndfile and openal-soft for iOS and macOS
-* **libsndfile**: loading sound files
-* **openal-soft**: audio rendering
-* **rapidjson**: loading json files
-* **stb**: loading textures
+* [glfw](https://github.com/glfw/glfw): windowing, input, and general awesomeness on macOS, Linux, and Windows
+* [ios-cmake](https://github.com/leetal/ios-cmake): compiling libsndfile and openal-soft for iOS and macOS
+* [libsndfile](https://github.com/libsndfile/libsndfile): loading sound files
+* [openal-soft](https://github.com/kcat/openal-soft): audio rendering
+* [rapidjson](https://github.com/Tencent/rapidjson): loading json files
+* [stb](https://github.com/nothings/stb): loading textures
 
 ## Building
-See [GowEngineMount](https://github.com/sgowen/GowEngineMount)
+* Template projects for various platforms in [GowEngineMount](https://github.com/sgowen/GowEngineMount)
+* Regardless of target platform, CMake and Python must be installed in order to build GowEngine's dependencies
 
 ## Development Plan
 * Configure to use CMake
