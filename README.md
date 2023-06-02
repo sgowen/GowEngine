@@ -4,10 +4,13 @@ A basic no nonsense LGPL 2.1 licensed portable C++ 2D game engine
 ## Demo
 ![Demo](https://file.io/Isa1VANXnuVu)
 
-## Basics
+## Features
 * Written in portable C++11
 * Graphics rendered with OpenGL 2.0 and OpenGL ES 2.0
 * Audio rendered with OpenAL
+* Real-time multiplayer networking with UDP sockets
+* JSON data-driven architecture
+* Basic Physics
 * All LGPL licensed dependencies are compiled into shared libraries that can be swapped out by end users
 
 ## Supported Platforms
@@ -28,6 +31,6 @@ A basic no nonsense LGPL 2.1 licensed portable C++ 2D game engine
 ## Building
 * Template projects for various platforms reside in [GowEngineMount](https://github.com/sgowen/GowEngineMount), simply clone it into the same directory as GowEngine side by side
 
-## Development Plan
+## Roadmap
 * Configure to use CMake
 * Implement a memory tracker via logging calls to malloc with placement new operator
