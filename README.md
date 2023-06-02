@@ -26,7 +26,7 @@ A basic no nonsense LGPL 2.1 licensed portable C++ 2D game engine
 * [stb](https://github.com/nothings/stb): loading textures
 
 ## Building
-* Template projects for various platforms in [GowEngineMount](https://github.com/sgowen/GowEngineMount), clone into the same directory as GowEngine side by side
+* Template projects for various platforms reside in [GowEngineMount](https://github.com/sgowen/GowEngineMount), simply clone it into the same directory as GowEngine side by side
 * Regardless of target platform, CMake and Python must be installed in order to build GowEngine's dependencies
 
 ## Development Plan
