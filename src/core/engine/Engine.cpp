@@ -13,7 +13,7 @@ _initialState(initialEngineState),
 _stateMachine(this, &ENGINE_STATE_DEFAULT),
 _requestedStateAction(ERSA_DEFAULT),
 _requestedHostAction(ERHA_DEFAULT),
-_stateTime(0),
+_stateTime(0.0),
 _screenWidth(0),
 _screenHeight(0),
 _cursorWidth(0),
@@ -69,9 +69,9 @@ void Engine::onResume()
     execute(ERSA_RESUME);
 }
 
-EngineRequestedHostAction Engine::update(float deltaTime)
+EngineRequestedHostAction Engine::update(double deltaTime)
 {
-    static float frameRate = ENGINE_CFG.frameRate();
+    static double frameRate = ENGINE_CFG.frameRate();
     
     FPS_UTIL.update(deltaTime);
     

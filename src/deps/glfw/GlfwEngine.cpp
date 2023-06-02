@@ -137,12 +137,12 @@ private:
     GLFWwindow* _window;
 };
 
-void runEngine(std::string configFilePath, EngineState& initialEngineState, GLFWwindow* window)
+void runEngine(Engine* engine, GLFWwindow* window)
 {
-    Engine engine(configFilePath, initialEngineState);
+    _engine = engine;
+    
     GlfwClipboardHandler clipboardHandler(window);
-    engine.createDeviceDependentResources(&clipboardHandler);
-    _engine = &engine;
+    engine->createDeviceDependentResources(&clipboardHandler);
     
     glfwSwapInterval(ENGINE_CFG.glfwSwapInterval());
     glfwSetTime(0.0);
@@ -167,7 +167,7 @@ void runEngine(std::string configFilePath, EngineState& initialEngineState, GLFW
             int screenHeight = 0;
             glfwGetWindowSize(window, &screenWidth, &screenHeight);
             
-            engine.onWindowSizeChanged(width, height, screenWidth, screenHeight);
+            engine->onWindowSizeChanged(width, height, screenWidth, screenHeight);
 
             lastKnownWidth = width;
             lastKnownHeight = height;
@@ -215,18 +215,18 @@ void runEngine(std::string configFilePath, EngineState& initialEngineState, GLFW
                 }
             }
 
-            engine.onGamepadInputStickLeft(i, stickLeftX, stickLeftY);
-            engine.onGamepadInputStickRight(i, stickRightX, stickRightY);
-            engine.onGamepadInputTrigger(i, triggerLeft, triggerRight);
+            engine->onGamepadInputStickLeft(i, stickLeftX, stickLeftY);
+            engine->onGamepadInputStickRight(i, stickRightX, stickRightY);
+            engine->onGamepadInputTrigger(i, triggerLeft, triggerRight);
 
             for (j = 0; j < button_count; ++j)
             {
-                engine.onGamepadInputButton(i, j, buttons[j]);
+                engine->onGamepadInputButton(i, j, buttons[j]);
             }
         }
 
         auto updateStart = high_resolution_clock::now();
-        EngineRequestedHostAction requestedAction = engine.update(static_cast<float>(deltaTime));
+        EngineRequestedHostAction requestedAction = engine->update(deltaTime);
         switch (requestedAction)
         {
             case ERHA_EXIT:
@@ -244,7 +244,7 @@ void runEngine(std::string configFilePath, EngineState& initialEngineState, GLFW
         }
 
         auto renderStart = high_resolution_clock::now();
-        engine.render();
+        engine->render();
         if (ENGINE_CFG.glfwLoggingEnabled())
         {
             auto renderStop = high_resolution_clock::now();
@@ -262,10 +262,10 @@ void runEngine(std::string configFilePath, EngineState& initialEngineState, GLFW
         }
     }
 
-    engine.destroyDeviceDependentResources();
+    engine->destroyDeviceDependentResources();
 }
 
-void GlfwEngine::exec(std::string configFilePath, EngineState& initialEngineState, const char* windowTitle)
+void GlfwEngine::exec(Engine* engine, const char* windowTitle)
 {
     memset(joysticks, 0, sizeof(joysticks));
 
@@ -329,7 +329,9 @@ void GlfwEngine::exec(std::string configFilePath, EngineState& initialEngineStat
     gladLoadGL(glfwGetProcAddress);
 #endif
     
-    runEngine(configFilePath, initialEngineState, window);
+    runEngine(engine, window);
+    
+    delete engine;
 
     glfwDestroyWindow(window);
 

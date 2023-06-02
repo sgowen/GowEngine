@@ -41,7 +41,7 @@ public:
     uint8_t numFramesOfSimulatedLatency();
     
     /// Derived Values
-    float frameRate();
+    double frameRate();
     uint8_t timeScale();
     
 private:

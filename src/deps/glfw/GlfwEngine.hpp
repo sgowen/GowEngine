@@ -11,12 +11,12 @@
 #include <GowEngine/BuildConstants.hpp>
 #if IS_DESKTOP
 
-class EngineState;
+class Engine;
 
 class GlfwEngine
 {
 public:
-    static void exec(std::string configFilePath, EngineState& initialEngineState, const char* windowTitle);
+    static void exec(Engine* engine, const char* windowTitle);
 
 private:
     GlfwEngine();
