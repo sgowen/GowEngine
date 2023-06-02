@@ -15,11 +15,13 @@
 #include "ShaderInput.hpp"
 #include "TextView.hpp"
 #include "ShaderInput.hpp"
+#include "Color.hpp"
 
 class Renderer;
 struct Shader;
 struct Texture;
 struct TextureRegion;
+struct Color;
 
 class FontBatcher
 {
@@ -31,7 +33,7 @@ public:
     void begin();
     void addText(Renderer& r, TextView& tv);
 	void addText(Renderer& r, std::string text, uint8_t alignment, float xWeight, float yWeight, float glyphWidthWeight);
-    void end(Renderer& r, Shader& s);
+    void end(Renderer& r, Shader& s, Color& c = Color::ONE);
 
 private:
     std::vector<TextureRegion> _glyphs;

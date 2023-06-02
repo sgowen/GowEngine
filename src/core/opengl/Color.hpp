@@ -10,16 +10,16 @@
 
 struct Color
 {
-    static const Color CLEAR;
-    static const Color WHITE;
-    static const Color BLACK;
-    static const Color RED;
-    static const Color GREEN;
-    static const Color BLUE;
-    static const Color HALF;
-    static const Color DIM;
-    static const Color DOUBLE;
-    static const Color ONE;
+    static Color CLEAR;
+    static Color WHITE;
+    static Color BLACK;
+    static Color RED;
+    static Color GREEN;
+    static Color BLUE;
+    static Color HALF;
+    static Color DIM;
+    static Color DOUBLE;
+    static Color ONE;
     
     float _red;
     float _green;

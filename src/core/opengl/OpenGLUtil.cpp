@@ -60,7 +60,7 @@ void OpenGLUtil::bindMatrix(Shader& s, std::string uniform, mat4& matrix)
     glUniformMatrix4fv(su._location, 1, GL_FALSE, (GLfloat*)matrix);
 }
 
-void OpenGLUtil::bindColor(Shader& s, std::string uniform, const Color& c)
+void OpenGLUtil::bindColor(Shader& s, std::string uniform, Color& c)
 {
     ShaderUniform& su = s._desc.uniform(uniform);
     assert(su._type == "vec4");
@@ -138,7 +138,7 @@ void OpenGLUtil::unbindVertexBuffer()
     glBindBuffer(GL_ARRAY_BUFFER, 0);
 }
 
-void OpenGLUtil::bindScreenFramebuffer(int32_t width, int32_t height, const Color& clearColor)
+void OpenGLUtil::bindScreenFramebuffer(int32_t width, int32_t height, Color& clearColor)
 {
     Framebuffer fb(width, height);
     
@@ -151,7 +151,7 @@ void OpenGLUtil::bindScreenFramebuffer(int32_t width, int32_t height, const Colo
     bindFramebuffer(fb);
 }
 
-void OpenGLUtil::bindFramebuffer(Framebuffer& fb, const Color& c)
+void OpenGLUtil::bindFramebuffer(Framebuffer& fb, Color& c)
 {
     assert(fb._width > 0);
     assert(fb._height > 0);
@@ -165,7 +165,7 @@ void OpenGLUtil::bindFramebuffer(Framebuffer& fb, const Color& c)
     clearFramebuffer(c);
 }
 
-void OpenGLUtil::clearFramebuffer(const Color& c)
+void OpenGLUtil::clearFramebuffer(Color& c)
 {
     clearFramebuffer(c._red, c._green, c._blue, c._alpha);
 }

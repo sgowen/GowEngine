@@ -116,7 +116,7 @@ void Renderer::bindFramebuffer(std::string framebufferKey, bool enableBlending)
     OGL.enableBlending(enableBlending);
 }
 
-void Renderer::clearFramebuffer(const Color& c)
+void Renderer::clearFramebuffer(Color& c)
 {
     OGL.clearFramebuffer(c);
 }
@@ -188,7 +188,7 @@ void Renderer::rektangleBatcherAddRektangle(Rektangle& r, std::string rektangleB
     rektangleBatcher(rektangleBatcherKey).addRektangle(r);
 }
 
-void Renderer::rektangleBatcherEnd(const Color& c, std::string matrixKey, std::string shaderKey, std::string rektangleBatcherKey)
+void Renderer::rektangleBatcherEnd(Color& c, std::string matrixKey, std::string shaderKey, std::string rektangleBatcherKey)
 {
     RektangleBatcher& rb = rektangleBatcher(rektangleBatcherKey);
     Matrix& m = matrix(matrixKey);
@@ -234,7 +234,7 @@ void Renderer::spriteBatcherAddEntity(Entity* e, std::string spriteBatcherKey)
     spriteBatcherAddEntity(sb, *e);
 }
 
-void Renderer::spriteBatcherEnd(std::string textureKey, std::string matrixKey, std::string shaderKey, std::string spriteBatcherKey, const Color& colorFactor)
+void Renderer::spriteBatcherEnd(std::string textureKey, std::string matrixKey, std::string shaderKey, std::string spriteBatcherKey, Color& colorFactor)
 {
     SpriteBatcher& sb = spriteBatcher(spriteBatcherKey);
     Matrix& m = matrix(matrixKey);
@@ -262,7 +262,7 @@ void Renderer::hideAllText()
     }
 }
 
-void Renderer::renderTextViews(std::string fontBatcherKey, std::string shaderKey)
+void Renderer::renderTextViews(std::string fontBatcherKey, std::string shaderKey, Color& colorFactor)
 {
     FontBatcher& fb = fontBatcher(fontBatcherKey);
     Shader& s = ASSETS_MGR.shader(shaderKey);
@@ -271,7 +271,7 @@ void Renderer::renderTextViews(std::string fontBatcherKey, std::string shaderKey
     {
         fb.addText(*this, pair.second);
     }
-    fb.end(*this, s);
+    fb.end(*this, s, colorFactor);
 }
 
 void Renderer::renderNosPhysics(NosPhysicsWorld* world, std::string matrixKey, std::string shaderKey)

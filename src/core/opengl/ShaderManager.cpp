@@ -33,7 +33,10 @@ void ShaderManager::unloadShaders(std::vector<ShaderDescriptor>& sds)
     for (std::map<std::string, Shader>::iterator i = _shaders.begin(); i != _shaders.end(); ++i)
     {
         Shader& s = i->second;
-        OGL.unloadShader(s);
+        if (isShaderLoaded(s))
+        {
+            OGL.unloadShader(s);
+        }
     }
     _shaders.clear();
 }
@@ -50,10 +53,15 @@ bool ShaderManager::isShaderLoaded(std::string name)
     auto q = _shaders.find(name);
     if (q != _shaders.end())
     {
-        return q->second._program != 0;
+        return isShaderLoaded(q->second);
     }
     
     return false;
+}
+
+bool ShaderManager::isShaderLoaded(Shader& shader)
+{
+    return shader._program != 0;
 }
 
 std::map<std::string, Shader>& ShaderManager::shaders()

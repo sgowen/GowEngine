@@ -37,7 +37,7 @@ public:
     void bindShader(Shader& s);
     void unbindShader(Shader& s);
     void bindMatrix(Shader& s, std::string uniform, mat4& matrix);
-    void bindColor(Shader& s, std::string uniform, const Color& c);
+    void bindColor(Shader& s, std::string uniform, Color& c);
     void bindInt4(Shader& s, std::string uniform, ivec4& value);
     void bindFloat4(Shader& s, std::string uniform, vec4& value);
     void bindFloat4Array(Shader& s, std::string uniform, int count, vec4* value);
@@ -47,9 +47,9 @@ public:
     void bindVertexBuffer(uint32_t buffer);
     void bindVertexBuffer(uint32_t buffer, size_t size, const void* data);
     void unbindVertexBuffer();
-    void bindScreenFramebuffer(int32_t width, int32_t height, const Color& clearColor = Color::CLEAR);
-    void bindFramebuffer(Framebuffer& fb, const Color& c = Color::CLEAR);
-    void clearFramebuffer(const Color& c = Color::CLEAR);
+    void bindScreenFramebuffer(int32_t width, int32_t height, Color& clearColor = Color::CLEAR);
+    void bindFramebuffer(Framebuffer& fb, Color& c = Color::CLEAR);
+    void clearFramebuffer(Color& c = Color::CLEAR);
     void clearFramebuffer(float red, float green, float blue, float alpha);
     void draw(uint32_t mode, uint32_t first, uint32_t count);
     void drawIndexed(uint32_t mode, uint32_t indexBuffer, uint32_t count, size_t first = 0);

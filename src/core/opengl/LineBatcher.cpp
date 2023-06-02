@@ -48,7 +48,7 @@ void LineBatcher::addLine(float oX, float oY, float eX, float eY)
     _vertices.emplace_back(eX, eY);
 }
 
-void LineBatcher::end(Shader& s, mat4& matrix, const Color& c)
+void LineBatcher::end(Shader& s, mat4& matrix, Color& c)
 {
     if (_vertices.empty())
     {

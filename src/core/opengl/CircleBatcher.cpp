@@ -88,7 +88,7 @@ void CircleBatcher::addPartialCircle(float x, float y, float radius, int arcDegr
     _circles.push_back(numPoints);
 }
 
-void CircleBatcher::end(Shader& s, mat4& matrix, const Color& c)
+void CircleBatcher::end(Shader& s, mat4& matrix, Color& c)
 {
     if (_circles.empty())
     {

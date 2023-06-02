@@ -22,6 +22,7 @@ public:
     void unloadTextures(std::vector<TextureDescriptor>& tds);
     Texture& texture(std::string name);
     bool isTextureLoaded(std::string name);
+    bool isTextureLoaded(Texture& texture);
     std::map<std::string, Texture>& textures();
     
 private:

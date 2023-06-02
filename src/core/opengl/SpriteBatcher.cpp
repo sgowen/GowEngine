@@ -118,7 +118,7 @@ void SpriteBatcher::addSprite(TextureRegion& tr, float x, float y, float width, 
     _vertices.emplace_back(xFinal[3], yFinal[3], uFinal[3], tr._v2);
 }
 
-void SpriteBatcher::end(Shader& s, mat4& matrix, Texture& t, const Color& colorFactor)
+void SpriteBatcher::end(Shader& s, mat4& matrix, Texture& t, Color& colorFactor)
 {
     if (_vertices.empty())
     {

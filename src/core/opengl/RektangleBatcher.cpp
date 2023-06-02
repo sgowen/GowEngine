@@ -71,7 +71,7 @@ void RektangleBatcher::addRektangle(float left, float bottom, float right, float
     }
 }
 
-void RektangleBatcher::end(Shader& s, mat4& matrix, const Color& c)
+void RektangleBatcher::end(Shader& s, mat4& matrix, Color& c)
 {
     if (_vertices.empty())
     {

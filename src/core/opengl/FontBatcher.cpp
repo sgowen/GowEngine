@@ -128,10 +128,10 @@ void FontBatcher::addText(Renderer& r, std::string text, uint8_t alignment, floa
     addText(r, tv);
 }
 
-void FontBatcher::end(Renderer& r, Shader& s)
+void FontBatcher::end(Renderer& r, Shader& s, Color& c)
 {
     Matrix& m = r.matrix(_matrix);
     Font& f = ASSETS_MGR.font(_font);
     Texture& t = ASSETS_MGR.texture(f._texture);
-    _spriteBatcher.end(s, m._matrix, t);
+    _spriteBatcher.end(s, m._matrix, t, c);
 }

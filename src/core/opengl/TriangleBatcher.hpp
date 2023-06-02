@@ -28,7 +28,7 @@ public:
     void begin();
     void addTriangle(Triangle& t);
     void addTriangle(float leftX, float leftY, float topX, float topY, float rightX, float rightY);
-    void end(Shader& s, mat4& matrix, const Color& c);
+    void end(Shader& s, mat4& matrix, Color& c);
 
 private:
     uint32_t _maxBatchSize;

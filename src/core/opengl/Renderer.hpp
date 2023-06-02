@@ -40,7 +40,7 @@ public:
     void renderLoadingView();
     
     void bindFramebuffer(std::string framebufferKey = "main", bool enableBlending = true);
-    void clearFramebuffer(const Color& c = Color::CLEAR);
+    void clearFramebuffer(Color& c = Color::CLEAR);
     
     void renderImageViews(float angle = 0, bool flipX = false, std::string matrixKey = "main", std::string shaderKey = "texture", std::string spriteBatcherKey = "main");
     
@@ -50,18 +50,18 @@ public:
     
     void rektangleBatcherBegin(std::string rektangleBatcherKey = "main");
     void rektangleBatcherAddRektangle(Rektangle& r, std::string rektangleBatcherKey = "main");
-    void rektangleBatcherEnd(const Color& c, std::string matrixKey = "main", std::string shaderKey = "geometry", std::string rektangleBatcherKey = "main");
+    void rektangleBatcherEnd(Color& c, std::string matrixKey = "main", std::string shaderKey = "geometry", std::string rektangleBatcherKey = "main");
     
     void renderSprite(std::string textureKey, std::string textureRegionKey, float x, float y, float width, float height, uint16_t stateTime = 0, float angle = 0, bool flipX = false, std::string matrixKey = "main", std::string shaderKey = "texture", std::string spriteBatcherKey = "main");
     void spriteBatcherBegin(std::string spriteBatcherKey = "main");
     void spriteBatcherAddEntities(std::vector<Entity*>& entities, std::string spriteBatcherKey = "main");
     void spriteBatcherAddEntity(Entity* e, std::string spriteBatcherKey = "main");
-    void spriteBatcherEnd(std::string textureKey, std::string matrixKey = "main", std::string shaderKey = "texture", std::string spriteBatcherKey = "main", const Color& colorFactor = Color::ONE);
+    void spriteBatcherEnd(std::string textureKey, std::string matrixKey = "main", std::string shaderKey = "texture", std::string spriteBatcherKey = "main", Color& colorFactor = Color::ONE);
     
     void setTextVisible(std::string textViewKey, bool isVisible);
     void setText(std::string textViewKey, std::string text);
     void hideAllText();
-    void renderTextViews(std::string fontBatcherKey = "main", std::string shaderKey = "texture");
+    void renderTextViews(std::string fontBatcherKey = "main", std::string shaderKey = "texture", Color& colorFactor = Color::ONE);
     
     void renderNosPhysics(NosPhysicsWorld* world, std::string matrixKey = "main", std::string shaderKey = "geometry");
     

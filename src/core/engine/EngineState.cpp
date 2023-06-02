@@ -63,7 +63,7 @@ _filePathAssets(_config.getString("filePathAssets")),
 _assets(AssetsLoader::initWithJSONFile(_filePathAssets)),
 _renderer(RendererLoader::initWithJSONFile(_config.getString("filePathRenderer")))
 {
-    // Empty
+    INPUT_MGR.setMatrix(&_renderer.matrix());
 }
 
 void EngineState::createDeviceDependentResources(Engine* e)

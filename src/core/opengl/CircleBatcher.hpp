@@ -29,7 +29,7 @@ public:
     void addCircle(float x, float y, float radius);
     void addPartialCircle(Circle& c, int arcDegrees);
     void addPartialCircle(float x, float y, float radius, int arcDegrees);
-    void end(Shader& s, mat4& matrix, const Color& c);
+    void end(Shader& s, mat4& matrix, Color& c);
 
 private:
     uint32_t _maxBatchSize;

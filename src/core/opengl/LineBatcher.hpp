@@ -27,7 +27,7 @@ public:
     void begin();
     void addLine(Line &line);
     void addLine(float oX, float oY, float eX, float eY);
-    void end(Shader& s, mat4& matrix, const Color& c);
+    void end(Shader& s, mat4& matrix, Color& c);
 
 private:
     uint32_t _maxBatchSize;

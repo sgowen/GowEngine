@@ -22,6 +22,7 @@ public:
     void unloadShaders(std::vector<ShaderDescriptor>& sds);
     Shader& shader(std::string name);
     bool isShaderLoaded(std::string name);
+    bool isShaderLoaded(Shader& shader);
     std::map<std::string, Shader>& shaders();
     
 private:

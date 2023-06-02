@@ -8,13 +8,13 @@
 
 #include <GowEngine/GowEngine.hpp>
 
-const Color Color::CLEAR = Color(COLOR_CLEAR);
-const Color Color::WHITE = Color(COLOR_WHITE);
-const Color Color::BLACK = Color(COLOR_BLACK);
-const Color Color::RED = Color(COLOR_RED);
-const Color Color::GREEN = Color(COLOR_GREEN);
-const Color Color::BLUE = Color(COLOR_BLUE);
-const Color Color::HALF = Color(COLOR_HALF);
-const Color Color::DIM = Color(COLOR_DIM);
-const Color Color::DOUBLE = Color(COLOR_DOUBLE);
-const Color Color::ONE = Color(COLOR_ONE);
+Color Color::CLEAR = Color(COLOR_CLEAR);
+Color Color::WHITE = Color(COLOR_WHITE);
+Color Color::BLACK = Color(COLOR_BLACK);
+Color Color::RED = Color(COLOR_RED);
+Color Color::GREEN = Color(COLOR_GREEN);
+Color Color::BLUE = Color(COLOR_BLUE);
+Color Color::HALF = Color(COLOR_HALF);
+Color Color::DIM = Color(COLOR_DIM);
+Color Color::DOUBLE = Color(COLOR_DOUBLE);
+Color Color::ONE = Color(COLOR_ONE);

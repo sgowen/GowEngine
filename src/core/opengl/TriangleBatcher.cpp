@@ -63,7 +63,7 @@ void TriangleBatcher::addTriangle(float leftX, float leftY, float topX, float to
     }
 }
 
-void TriangleBatcher::end(Shader& s, mat4& matrix, const Color& c)
+void TriangleBatcher::end(Shader& s, mat4& matrix, Color& c)
 {
     if (_vertices.empty())
     {
