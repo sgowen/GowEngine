@@ -11,6 +11,7 @@
 void EngineState::enter(Engine* e)
 {
     // Should be able to load everything asynchronously, including the config
+    _assetsLoaded = false;
     ASSETS_MGR.registerAssets(_filePathAssets, _assets);
     createDeviceDependentResources(e);
     onWindowSizeChanged(e);
@@ -61,14 +62,15 @@ _config(ConfigLoader::initWithJSONFile(configFilePath)),
 _stateTime(0),
 _filePathAssets(_config.getString("filePathAssets")),
 _assets(AssetsLoader::initWithJSONFile(_filePathAssets)),
-_renderer(RendererLoader::initWithJSONFile(_config.getString("filePathRenderer")))
+_renderer(RendererLoader::initWithJSONFile(_config.getString("filePathRenderer"))),
+_assetsLoaded(false)
 {
     INPUT_MGR.setMatrix(&_renderer.matrix());
 }
 
 void EngineState::createDeviceDependentResources(Engine* e)
 {
-    ASSETS_MGR.createDeviceDependentResources();
+    ASSETS_MGR.createDeviceDependentResourcesAsync();
     _renderer.createDeviceDependentResources();
 }
 
@@ -97,15 +99,28 @@ void EngineState::update(Engine* e)
 {
     ASSETS_MGR.update();
     
+    if (!_assetsLoaded)
+    {
+        _assetsLoaded = ASSETS_MGR.isLoaded();
+        if (_assetsLoaded)
+        {
+            onAssetsLoaded(e);
+        }
+        else
+        {
+            return;
+        }
+    }
+    
     onUpdate(e);
     ++_stateTime;
 }
 
 void EngineState::render(Engine* e)
 {
-    if (!ASSETS_MGR.isLoaded())
+    if (!_assetsLoaded)
     {
-        _renderer.renderLoadingView();
+        _renderer.renderLoadingView(ASSETS_MGR.getStateTime());
         return;
     }
     

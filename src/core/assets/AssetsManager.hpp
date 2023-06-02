@@ -41,6 +41,7 @@ public:
     Texture& texture(std::string name);
     bool isTextureLoaded(std::string name);
     TextureRegion& textureRegion(std::string key, uint16_t stateTime = 0);
+    uint32_t getStateTime();
     bool isLoaded();
 
 private:
@@ -48,6 +49,7 @@ private:
     ShaderManager _shaderMgr;
     SoundManager _soundMgr;
     TextureManager _textureMgr;
+    uint32_t _stateTime;
     bool _isLoaded;
     
     bool areAssetsLoaded();

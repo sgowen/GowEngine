@@ -92,7 +92,7 @@ void Renderer::destroyDeviceDependentResources()
     }
 }
 
-void Renderer::renderLoadingView()
+void Renderer::renderLoadingView(uint32_t stateTime)
 {
     clearFramebuffer();
     
@@ -102,10 +102,17 @@ void Renderer::renderLoadingView()
         return;
     }
     
+    std::string loadingText = "Loading";
+    int numDots = stateTime % 32 / 8;
+    for (int i = 0; i < numDots; ++i)
+    {
+        loadingText += ".";
+    }
+    
     FontBatcher& fb = fontBatcher("main");
     Shader& s = ASSETS_MGR.shader("texture");
     fb.begin();
-    fb.addText(*this, "Loading...", 2, 0.98f, 0.02f, 0.012f);
+    fb.addText(*this, loadingText, TEXA_LEFT, 0.80f, 0.04f, 0.02f);
     fb.end(*this, s);
 }
 

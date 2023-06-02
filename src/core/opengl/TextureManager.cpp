@@ -22,7 +22,7 @@ void TextureManager::loadTextures(std::vector<TextureDescriptor>& tds)
     }
 }
 
-void TextureManager::loadTexture(Texture& t)
+void TextureManager::loadTextureIntoOpenGL(Texture& t)
 {
     OGL.loadTexture(t);
     _loader.unloadTexture(t);

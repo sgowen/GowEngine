@@ -22,7 +22,7 @@ void ShaderManager::loadShaders(std::vector<ShaderDescriptor>& sds)
     }
 }
 
-void ShaderManager::loadShader(Shader &s)
+void ShaderManager::loadShaderIntoOpenGL(Shader &s)
 {
     OGL.loadShader(s);
     _loader.unloadShader(s);

@@ -23,6 +23,8 @@ void AssetsManager::deregisterAssets(std::string key)
 
 void AssetsManager::update()
 {
+    ++_stateTime;
+    
     if (_isLoaded)
     {
         return;
@@ -36,7 +38,7 @@ void AssetsManager::update()
             s._vertexShaderFileData != nullptr &&
             s._fragmentShaderFileData != nullptr)
         {
-            _shaderMgr.loadShader(s);
+            _shaderMgr.loadShaderIntoOpenGL(s);
             return;
         }
     }
@@ -48,7 +50,7 @@ void AssetsManager::update()
         if (t._texture == 0 &&
             t._data != nullptr)
         {
-            _textureMgr.loadTexture(t);
+            _textureMgr.loadTextureIntoOpenGL(t);
             return;
         }
     }
@@ -75,12 +77,14 @@ void AssetsManager::createDeviceDependentResourcesAsync()
         return;
     }
 
+    _stateTime = 0;
     _isLoaded = false;
     THREAD_MGR.spawnThread("AssetsManager", thread_createDeviceDependentResources, this);
 }
 
 void AssetsManager::createDeviceDependentResources()
 {
+    _stateTime = 0;
     _isLoaded = false;
     for (auto& pair : _assets)
     {
@@ -175,6 +179,11 @@ TextureRegion& AssetsManager::textureRegion(std::string key, uint16_t stateTime)
     return *ret;
 }
 
+uint32_t AssetsManager::getStateTime()
+{
+    return _stateTime;
+}
+
 bool AssetsManager::isLoaded()
 {
     return _isLoaded;
@@ -238,6 +247,7 @@ AssetsManager::AssetsManager() :
 _shaderMgr(),
 _soundMgr(),
 _textureMgr(),
+_stateTime(0),
 _isLoaded(false)
 {
     // Empty

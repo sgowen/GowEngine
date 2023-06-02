@@ -21,6 +21,7 @@ class EngineState : public State<Engine>
 {
 public:
     virtual void onEnter(Engine* e) = 0;
+    virtual void onAssetsLoaded(Engine* e) = 0;
     virtual void onExit(Engine* e) = 0;
     virtual void onUpdate(Engine* e) = 0;
     virtual void onRender(Renderer& r) = 0;
@@ -42,6 +43,7 @@ private:
     std::string _filePathAssets;
     Assets _assets;
     Renderer _renderer;
+    bool _assetsLoaded;
     
     void createDeviceDependentResources(Engine* e);
     void onWindowSizeChanged(Engine* e);
