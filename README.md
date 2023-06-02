@@ -5,7 +5,7 @@ A basic no nonsense LGPL 2.1 licensed portable C++ 2D game engine
 * Written in portable C++11
 * Graphics rendered with OpenGL 2.0 and OpenGL ES 2.0
 * Audio rendered with OpenAL
-* All LGPL 2.1 licensed dependencies are compiled into shared libraries that can be swapped out by end users
+* All LGPL licensed dependencies are compiled into shared libraries that can be swapped out by end users
 
 ## Supported Platforms
 * Android
