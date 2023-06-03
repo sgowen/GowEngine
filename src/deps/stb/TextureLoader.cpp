@@ -20,6 +20,7 @@ void TextureLoader::loadTexture(Texture& t)
         stbi_convert_iphone_png_to_rgb(1);
     }
     
+    // TODO, apparently this causes a memory leak!
     t._data = stbi_load_from_memory(fd._data, (int)fd._length, &t._width, &t._height, &t._numChannels, 0);
     assert(t._data != nullptr);
 
