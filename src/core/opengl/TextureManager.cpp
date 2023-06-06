@@ -18,14 +18,15 @@ void TextureManager::loadTextures(std::vector<TextureDescriptor>& tds)
     for (std::map<std::string, Texture>::iterator i = _textures.begin(); i != _textures.end(); ++i)
     {
         Texture& t = i->second;
-        _loader.loadTexture(t);
+        loadTextureIntoOpenGL(t);
     }
 }
 
 void TextureManager::loadTextureIntoOpenGL(Texture& t)
 {
-    OGL.loadTexture(t);
-    _loader.unloadTexture(t);
+    _loader.loadTexture(t);
+//    OGL.loadTexture(t);
+//    _loader.unloadTexture(t);
 }
 
 void TextureManager::unloadTextures(std::vector<TextureDescriptor>& tds)

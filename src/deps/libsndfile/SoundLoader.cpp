@@ -146,7 +146,7 @@ static sf_count_t gowengine_sf_vio_tell (void* user_data)
 
 ALuint SoundLoader::loadSound(const char *filePath)
 {
-    // TODO, isolate OpenAL to it's own class, similar to OpenGLUtil
+    // TODO isolate OpenAL to it's own class, similar to OpenGLUtil
     enum FormatType sample_format = Int16;
     ALint byteblockalign = 0;
     ALint splblockalign = 0;
@@ -172,7 +172,6 @@ ALuint SoundLoader::loadSound(const char *filePath)
     file.length = soundData._length;
     file.curpos = 0;
     
-    /* Open the audio file and check that it's usable. */
     sndfile = sf_open_virtual (&io, SFM_READ, &sfinfo, &file);
     if (!sndfile)
     {
@@ -188,10 +187,6 @@ ALuint SoundLoader::loadSound(const char *filePath)
         return 0;
     }
 
-    /* Detect a suitable format to load. Formats like Vorbis and Opus use float
-     * natively, so load as float to avoid clipping when possible. Formats
-     * larger than 16-bit can also use float to preserve a bit more precision.
-     */
     switch ((sfinfo.format&SF_FORMAT_SUBMASK))
     {
         case SF_FORMAT_PCM_24:
@@ -203,19 +198,15 @@ ALuint SoundLoader::loadSound(const char *filePath)
         case SF_FORMAT_ALAC_20:
         case SF_FORMAT_ALAC_24:
         case SF_FORMAT_ALAC_32:
-        case 0x0080/*SF_FORMAT_MPEG_LAYER_I*/:
-        case 0x0081/*SF_FORMAT_MPEG_LAYER_II*/:
-        case 0x0082/*SF_FORMAT_MPEG_LAYER_III*/:
+        case SF_FORMAT_MPEG_LAYER_I:
+        case SF_FORMAT_MPEG_LAYER_II:
+        case SF_FORMAT_MPEG_LAYER_III:
             if (alIsExtensionPresent("AL_EXT_FLOAT32"))
             {
                 sample_format = Float;
             }
             break;
         case SF_FORMAT_IMA_ADPCM:
-            /* ADPCM formats require setting a block alignment as specified in the
-             * file, which needs to be read from the wave 'fmt ' chunk manually
-             * since libsndfile doesn't provide it in a format-agnostic way.
-             */
             if (sfinfo.channels <= 2 && (sfinfo.format&SF_FORMAT_TYPEMASK) == SF_FORMAT_WAV
                 && alIsExtensionPresent("AL_EXT_IMA4")
                 && alIsExtensionPresent("AL_SOFT_block_alignment"))
@@ -235,15 +226,9 @@ ALuint SoundLoader::loadSound(const char *filePath)
 
     if (sample_format == IMA4 || sample_format == MSADPCM)
     {
-        /* For ADPCM, lookup the wave file's "fmt " chunk, which is a
-         * WAVEFORMATEX-based structure for the audio format.
-         */
         SF_CHUNK_INFO inf = { "fmt ", 4, 0, NULL };
         SF_CHUNK_ITERATOR *iter = sf_get_chunk_iterator(sndfile, &inf);
 
-        /* If there's an issue getting the chunk or block alignment, load as
-         * 16-bit and have libsndfile do the conversion.
-         */
         if (!iter || sf_get_chunk_size(iter, &inf) != SF_ERR_NO_ERROR || inf.datalen < 14)
         {
             sample_format = Int16;
@@ -258,10 +243,6 @@ ALuint SoundLoader::loadSound(const char *filePath)
             }
             else
             {
-                /* Read the nBlockAlign field, and convert from bytes- to
-                 * samples-per-block (verifying it's valid by converting back
-                 * and comparing to the original value).
-                 */
                 byteblockalign = fmtbuf[12] | (fmtbuf[13]<<8);
                 if (sample_format == IMA4)
                 {
@@ -297,7 +278,6 @@ ALuint SoundLoader::loadSound(const char *filePath)
         byteblockalign = sfinfo.channels * 4;
     }
 
-    /* Figure out the OpenAL format from the file and desired sample type. */
     format = AL_NONE;
     if (sfinfo.channels == 1)
     {
@@ -382,7 +362,6 @@ ALuint SoundLoader::loadSound(const char *filePath)
         return 0;
     }
 
-    /* Decode the whole audio file to a buffer. */
     membuf = malloc((size_t)(sfinfo.frames / splblockalign * byteblockalign));
 
     if (sample_format == Int16)
@@ -416,9 +395,8 @@ ALuint SoundLoader::loadSound(const char *filePath)
     printf("Loading: %s (%s, %dhz)\n", filePath, FormatName(format), sfinfo.samplerate);
     fflush(stdout);
 
-    /* Buffer the audio data into a new buffer object, then free the data and
-     * close the file.
-     */
+    // TODO consider moving the below into an OpenALUtil class.
+    
     buffer = 0;
     alGenBuffers(1, &buffer);
     if (splblockalign > 1)
@@ -427,11 +405,12 @@ ALuint SoundLoader::loadSound(const char *filePath)
     }
     alBufferData(buffer, format, membuf, num_bytes, sfinfo.samplerate);
 
+    // TODO consider moving the below into an another method to be called from the SoundManager after invoking OpenALUtil
+    
     free(membuf);
     sf_close(sndfile);
     ASSET_HANDLER.unloadAsset(soundData);
 
-    /* Check if an error occured, and clean up if so. */
     err = alGetError();
     if (err != AL_NO_ERROR)
     {

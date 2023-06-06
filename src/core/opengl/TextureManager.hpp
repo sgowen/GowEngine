@@ -8,7 +8,7 @@
 
 #pragma once
 
-#include "deps/stb/TextureLoader.hpp"
+#include "deps/libpng/TextureLoader.hpp"
 #include "Texture.hpp"
 
 #include <map>

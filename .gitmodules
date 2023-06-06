@@ -4,9 +4,6 @@
 [submodule "deps/rapidjson"]
 	path = deps/rapidjson
 	url = git@github.com:Tencent/rapidjson.git
-[submodule "deps/stb"]
-	path = deps/stb
-	url = git@github.com:nothings/stb.git
 [submodule "deps/openal-soft"]
 	path = deps/openal-soft
 	url = git@github.com:kcat/openal-soft.git
@@ -16,3 +13,6 @@
 [submodule "deps/ios-cmake"]
 	path = deps/ios-cmake
 	url = git@github.com:leetal/ios-cmake.git
+[submodule "deps/libpng"]
+	path = deps/libpng
+	url = git@github.com:glennrp/libpng.git
