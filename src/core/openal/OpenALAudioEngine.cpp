@@ -16,86 +16,6 @@
 #include "AL/alc.h"
 #include "AL/alext.h"
 
-/* InitAL opens a device and sets up a context using default attributes, making
- * the program ready to call OpenAL functions. */
-int InitAL(char ***argv, int *argc)
-{
-    const ALCchar *name;
-    ALCdevice *device;
-    ALCcontext *ctx;
-
-    /* Open and initialize a device */
-    device = NULL;
-    if (argc && argv && *argc > 1 && strcmp((*argv)[0], "-device") == 0)
-    {
-        device = alcOpenDevice((*argv)[1]);
-        if (!device)
-        {
-            fprintf(stderr, "Failed to open \"%s\", trying default\n", (*argv)[1]);
-        }
-        (*argv) += 2;
-        (*argc) -= 2;
-    }
-    
-    if (!device)
-    {
-        device = alcOpenDevice(NULL);
-    }
-    
-    if (!device)
-    {
-        fprintf(stderr, "Could not open a device!\n");
-        return 1;
-    }
-
-    ctx = alcCreateContext(device, NULL);
-    if (ctx == NULL || alcMakeContextCurrent(ctx) == ALC_FALSE)
-    {
-        if (ctx != NULL)
-        {
-            alcDestroyContext(ctx);
-        }
-        alcCloseDevice(device);
-        fprintf(stderr, "Could not set a context!\n");
-        return 1;
-    }
-
-    name = NULL;
-    if (alcIsExtensionPresent(device, "ALC_ENUMERATE_ALL_EXT"))
-    {
-        name = alcGetString(device, ALC_ALL_DEVICES_SPECIFIER);
-    }
-    
-    if (!name || alcGetError(device) != AL_NO_ERROR)
-    {
-        name = alcGetString(device, ALC_DEVICE_SPECIFIER);
-    }
-    
-    printf("Opened \"%s\"\n", name);
-
-    return 0;
-}
-
-/* CloseAL closes the device belonging to the current context, and destroys the
- * context. */
-void CloseAL(void)
-{
-    ALCdevice *device;
-    ALCcontext *ctx;
-
-    ctx = alcGetCurrentContext();
-    if (ctx == NULL)
-    {
-        return;
-    }
-
-    device = alcGetContextsDevice(ctx);
-
-    alcMakeContextCurrent(NULL);
-    alcDestroyContext(ctx);
-    alcCloseDevice(device);
-}
-
 OpenALSoundWrapper* OpenALAudioEngine::loadSound(std::string filePath, uint8_t numInstances)
 {
     return new OpenALSoundWrapper(filePath, numInstances);
@@ -367,13 +287,56 @@ bool OpenALAudioEngine::isMusicPlaying()
 
 OpenALAudioEngine::OpenALAudioEngine()
 {
-    if (!InitAL(nullptr, nullptr))
+    const ALCchar *name;
+    ALCdevice *device;
+    ALCcontext *ctx;
+
+    device = alcOpenDevice(nullptr);
+    
+    if (!device)
     {
-        // wtf
+        fprintf(stderr, "Could not open a device!\n");
+        assert(false);
     }
+
+    ctx = alcCreateContext(device, nullptr);
+    if (ctx == nullptr || alcMakeContextCurrent(ctx) == ALC_FALSE)
+    {
+        if (ctx != nullptr)
+        {
+            alcDestroyContext(ctx);
+        }
+        alcCloseDevice(device);
+        fprintf(stderr, "Could not set a context!\n");
+        assert(false);
+    }
+
+    name = nullptr;
+    if (alcIsExtensionPresent(device, "ALC_ENUMERATE_ALL_EXT"))
+    {
+        name = alcGetString(device, ALC_ALL_DEVICES_SPECIFIER);
+    }
+    
+    if (!name || alcGetError(device) != AL_NO_ERROR)
+    {
+        name = alcGetString(device, ALC_DEVICE_SPECIFIER);
+    }
+    
+    LOG("Opened \"%s\"\n", name);
 }
 
 OpenALAudioEngine::~OpenALAudioEngine()
 {
-    CloseAL();
+    ALCdevice *device;
+    ALCcontext *ctx;
+
+    ctx = alcGetCurrentContext();
+    if (ctx != nullptr)
+    {
+        device = alcGetContextsDevice(ctx);
+
+        alcMakeContextCurrent(nullptr);
+        alcDestroyContext(ctx);
+        alcCloseDevice(device);
+    }
 }

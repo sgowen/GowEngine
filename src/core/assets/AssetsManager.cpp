@@ -23,14 +23,14 @@ void AssetsManager::deregisterAssets(std::string key)
 
 void AssetsManager::update()
 {
-    ++_stateTime;
-    
-    if (_isLoadingData)
+    if (_isLoadedIntoEngine)
     {
         return;
     }
     
-    if (_isLoadedIntoEngine)
+    ++_stateTime;
+    
+    if (_isLoadingData)
     {
         return;
     }
@@ -54,11 +54,24 @@ void AssetsManager::update()
         Shader& s = pair.second;
         _shaderMgr.loadShaderIntoOpenGL(s);
     }
-
-    for (auto& pair : _assets)
+    
+    std::map<std::string, Texture>& textures = _textureMgr.textures();
+    if (textures.empty())
     {
-        Assets& a = pair.second;
-        _textureMgr.loadTextures(a._textureDescriptors);
+        return;
+    }
+    for (auto& pair : textures)
+    {
+        Texture& t = pair.second;
+        if (t._data == nullptr)
+        {
+            return;
+        }
+    }
+    for (auto& pair : textures)
+    {
+        Texture& t = pair.second;
+        _textureMgr.loadTextureIntoOpenGL(t);
     }
     
     THREAD_MGR.tearDownThreadIfRunning("AssetsManager");
@@ -98,7 +111,7 @@ void AssetsManager::createDeviceDependentResources()
         Assets& a = pair.second;
         _shaderMgr.loadShaders(a._shaderDescriptors);
         _soundMgr.loadSounds(a._soundDescriptors);
-//        _textureMgr.loadTextures(a._textureDescriptors);
+        _textureMgr.loadTextures(a._textureDescriptors);
     }
     
     _isLoadingData = false;

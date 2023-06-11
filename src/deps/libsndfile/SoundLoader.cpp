@@ -12,7 +12,8 @@
 
 #include <AL/alext.h>
 
-enum FormatType {
+enum FormatType
+{
     Int16,
     Float,
     IMA4,
@@ -91,11 +92,11 @@ static sf_count_t gowengine_sf_vio_get_filelen (void *user_data)
 static sf_count_t gowengine_sf_vio_read (void *ptr, sf_count_t count, void *user_data)
 {
     struct gowengine_sf_file *file = (struct gowengine_sf_file*) user_data;
-    if( count + file->curpos > file->length )
+    if (count + file->curpos > file->length)
     {
         count = file->length - file->curpos;
     }
-    if(count > 0)
+    if (count > 0)
     {
         memcpy(ptr, file->buffer + file->curpos, count);
     }
@@ -113,7 +114,7 @@ static sf_count_t gowengine_sf_vio_seek (sf_count_t offset, int whence, void *us
     struct gowengine_sf_file* file = (struct gowengine_sf_file*) user_data;
     
     sf_count_t newpos = 0;
-    switch(whence)
+    switch (whence)
     {
         case SEEK_SET:
             newpos = offset;
@@ -146,7 +147,6 @@ static sf_count_t gowengine_sf_vio_tell (void* user_data)
 
 ALuint SoundLoader::loadSound(const char *filePath)
 {
-    // TODO isolate OpenAL to it's own class, similar to OpenGLUtil
     enum FormatType sample_format = Int16;
     ALint byteblockalign = 0;
     ALint splblockalign = 0;
@@ -226,7 +226,7 @@ ALuint SoundLoader::loadSound(const char *filePath)
 
     if (sample_format == IMA4 || sample_format == MSADPCM)
     {
-        SF_CHUNK_INFO inf = { "fmt ", 4, 0, NULL };
+        SF_CHUNK_INFO inf = { "fmt ", 4, 0, nullptr };
         SF_CHUNK_ITERATOR *iter = sf_get_chunk_iterator(sndfile, &inf);
 
         if (!iter || sf_get_chunk_size(iter, &inf) != SF_ERR_NO_ERROR || inf.datalen < 14)
@@ -319,7 +319,7 @@ ALuint SoundLoader::loadSound(const char *filePath)
     }
     else if (sfinfo.channels == 3)
     {
-        if (sf_command(sndfile, SFC_WAVEX_GET_AMBISONIC, NULL, 0) == SF_AMBISONIC_B_FORMAT)
+        if (sf_command(sndfile, SFC_WAVEX_GET_AMBISONIC, nullptr, 0) == SF_AMBISONIC_B_FORMAT)
         {
             if (sample_format == Int16)
             {
@@ -333,7 +333,7 @@ ALuint SoundLoader::loadSound(const char *filePath)
     }
     else if(sfinfo.channels == 4)
     {
-        if (sf_command(sndfile, SFC_WAVEX_GET_AMBISONIC, NULL, 0) == SF_AMBISONIC_B_FORMAT)
+        if (sf_command(sndfile, SFC_WAVEX_GET_AMBISONIC, nullptr, 0) == SF_AMBISONIC_B_FORMAT)
         {
             if (sample_format == Int16)
             {
