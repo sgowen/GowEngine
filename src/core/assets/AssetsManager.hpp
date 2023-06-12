@@ -50,9 +50,8 @@ private:
     SoundManager _soundMgr;
     TextureManager _textureMgr;
     uint32_t _stateTime;
-    bool _isLoaded;
-    
-    bool areAssetsLoaded();
+    bool _isLoadingData;
+    bool _isLoadedIntoEngine;
     
     AssetsManager();
     ~AssetsManager() {}

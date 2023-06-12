@@ -265,7 +265,7 @@ void OpenGLUtil::loadFramebuffer(Framebuffer& fb)
     int32_t currentFBO;
     glGetIntegerv(GL_FRAMEBUFFER_BINDING, &currentFBO);
     
-    texture = loadTexture(fb._width, fb._height, nullptr, fb._filterMin, fb._filterMag, false);
+    texture = loadTexture(fb._width, fb._height, nullptr, fb._filterMin, fb._filterMag, GL_RGBA, false, false);
     
     glGenFramebuffers(1, &fbo);
     glBindFramebuffer(GL_FRAMEBUFFER, fbo);
@@ -296,7 +296,7 @@ void OpenGLUtil::loadTexture(Texture& t)
 {
     assert(t._data != nullptr);
     
-    t._texture = loadTexture(t._width, t._height, t._data, t._desc._filterMin, t._desc._filterMag, t._desc._mipMap);
+    t._texture = loadTexture(t._width, t._height, t._data, t._desc._filterMin, t._desc._filterMag, t._format, false, t._desc._mipMap);
 }
 
 void OpenGLUtil::unloadTexture(Texture& t)
@@ -343,7 +343,7 @@ void OpenGLUtil::unloadShader(Shader& s)
     s._program = 0;
 }
 
-uint32_t OpenGLUtil::loadTexture(int width, int height, uint8_t* data, std::string filterMin, std::string filterMag, bool mipmap)
+uint32_t OpenGLUtil::loadTexture(int width, int height, uint8_t* data, std::string filterMin, std::string filterMag, uint32_t type, bool repeat_s, bool mipmap)
 {
     assert(width > 0);
     assert(height > 0);
@@ -362,10 +362,10 @@ uint32_t OpenGLUtil::loadTexture(int width, int height, uint8_t* data, std::stri
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, mipmap ? (filterMinSharp ? GL_LINEAR_MIPMAP_NEAREST : GL_LINEAR_MIPMAP_LINEAR) : (filterMinSharp ? GL_NEAREST : GL_LINEAR));
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, filterMagSharp ? GL_NEAREST : GL_LINEAR);
     
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, repeat_s ? GL_REPEAT : GL_CLAMP_TO_EDGE);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
+    glTexImage2D(GL_TEXTURE_2D, 0, type, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
 
     if (mipmap)
     {

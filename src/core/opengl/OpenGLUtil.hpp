@@ -65,7 +65,7 @@ public:
     void unloadShader(Shader& s);
 
 private:
-    uint32_t loadTexture(int width, int height, uint8_t* data, std::string filterMin, std::string filterMag, bool mipmap);
+    uint32_t loadTexture(int width, int height, uint8_t* data, std::string filterMin, std::string filterMag, uint32_t type, bool repeat_s, bool mipmap);
     void unloadTexture(uint32_t texture);
     uint32_t loadShader(const uint8_t* vertexShaderSrc, const long vertexShaderSrcLength, const uint8_t* fragmentShaderSrc, const long fragmentShaderSrcLength);
     void unloadShader(uint32_t program);
