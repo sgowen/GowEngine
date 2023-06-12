@@ -15,30 +15,30 @@ extern "C"
 
 struct PngImageData
 {
-    const int width;
-    const int height;
-    const int size;
-    const GLenum gl_color_format;
-    const void* data;
+    int width;
+    int height;
+    int size;
+    GLenum gl_color_format;
+    void* data;
 };
 
 struct DataHandle
 {
-    const png_byte* data;
-    const png_size_t size;
+    png_byte* data;
+    png_size_t size;
 };
 
 struct ReadDataHandle
 {
-    const DataHandle data;
+    DataHandle data;
     png_size_t offset;
 };
 
 struct PngInfo
 {
-    const png_uint_32 width;
-    const png_uint_32 height;
-    const int color_type;
+    png_uint_32 width;
+    png_uint_32 height;
+    int color_type;
 };
 
 static void readPngDataCallback(png_structp png_ptr, png_byte* raw_data, png_size_t read_length)
@@ -91,10 +91,12 @@ static PngInfo readAndUpdateInfo(const png_structp png_ptr, const png_infop info
     
     color_type = png_get_color_type(png_ptr, info_ptr);
     
-    return (PngInfo)
-    {
-        width, height, color_type
-    };
+    PngInfo ret;
+    ret.width = width;
+    ret.height = height;
+    ret.color_type = color_type;
+    
+    return ret;
 }
 
 static DataHandle readEntirePngImage(const png_structp png_ptr, const png_infop info_ptr, const png_uint_32 height)
@@ -116,10 +118,11 @@ static DataHandle readEntirePngImage(const png_structp png_ptr, const png_infop 
     
     png_read_image(png_ptr, &row_ptrs[0]);
     
-    return (DataHandle)
-    {
-        raw_image, static_cast<png_size_t>(data_length)
-    };
+    DataHandle ret;
+    ret.data = raw_image;
+    ret.size = static_cast<png_size_t>(data_length);
+    
+    return ret;
 }
 
 static GLenum getGlColorFormat(const int png_color_format)
@@ -149,12 +152,14 @@ static PngImageData getPngImageDataFromFileData(const void* png_data, const int 
     png_infop info_ptr = png_create_info_struct(png_ptr);
     assert(info_ptr != nullptr);
     
-    ReadDataHandle png_data_handle = (ReadDataHandle)
-    {
-        {
-            (png_byte*) png_data, static_cast<png_size_t>(png_data_size)
-        }, 0
-    };
+    DataHandle data_handle;
+    data_handle.data = (png_byte*) png_data;
+    data_handle.size = static_cast<png_size_t>(png_data_size);
+    
+    ReadDataHandle png_data_handle;
+    png_data_handle.data = data_handle;
+    png_data_handle.offset = 0;
+    
     png_set_read_fn(png_ptr, &png_data_handle, readPngDataCallback);
     
     assert(setjmp(png_jmpbuf(png_ptr)) == 0);
@@ -165,14 +170,14 @@ static PngImageData getPngImageDataFromFileData(const void* png_data, const int 
     png_read_end(png_ptr, info_ptr);
     png_destroy_read_struct(&png_ptr, &info_ptr, nullptr);
     
-    return (PngImageData)
-    {
-        static_cast<int>(png_info.width),
-        static_cast<int>(png_info.height),
-        (int) raw_image.size,
-        getGlColorFormat(png_info.color_type),
-        raw_image.data
-    };
+    PngImageData ret;
+    ret.width = static_cast<int>(png_info.width);
+    ret.height = static_cast<int>(png_info.height);
+    ret.size = (int) raw_image.size;
+    ret.gl_color_format = getGlColorFormat(png_info.color_type);
+    ret.data = raw_image.data;
+    
+    return ret;
 }
 
 void TextureLoader::loadTexture(Texture& t)
