@@ -108,7 +108,8 @@ static DataHandle readEntirePngImage(const png_structp png_ptr, const png_infop 
     png_byte* raw_image = (png_byte*) malloc(data_length);
     assert(raw_image != nullptr);
     
-    png_byte *row_ptrs[height];
+    std::vector <png_byte*> row_ptrs;
+    row_ptrs.resize(height);
     
     png_uint_32 i;
     for (i = 0; i < height; ++i)
