@@ -111,8 +111,7 @@ static DataHandle readEntirePngImage(const png_structp png_ptr, const png_infop 
     std::vector <png_byte*> row_ptrs;
     row_ptrs.resize(height);
     
-    png_uint_32 i;
-    for (i = 0; i < height; ++i)
+    for (png_uint_32 i = 0; i < height; ++i)
     {
         row_ptrs[i] = raw_image + i * row_size;
     }
