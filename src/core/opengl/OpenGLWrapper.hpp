@@ -1,5 +1,5 @@
 //
-//  OpenGLWrapper.cpp
+//  OpenGLWrapper.hpp
 //  GowEngine
 //
 //  Created by Stephen Gowen on 4/23/20.
