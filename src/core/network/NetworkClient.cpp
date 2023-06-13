@@ -434,6 +434,8 @@ NetworkClient::~NetworkClient()
 {
     _entityRegistry.deregisterAll();
     
+    delete _serverAddress;
+    
     OutputMemoryBitStream ombs(1);
     ombs.writeBits(static_cast<uint8_t>(NWPT_CLNT_EXIT), 4);
     sendPacket(ombs);
