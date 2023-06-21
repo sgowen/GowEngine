@@ -29,8 +29,6 @@ public:
         void read(InputMemoryBitStream& imbs);
     };
     
-    InputState();
-    
     void write(OutputMemoryBitStream& ombs) const;
     void read(InputMemoryBitStream& imbs);
     void reset();
@@ -42,5 +40,5 @@ public:
     PlayerInputState& playerInputState(uint8_t index);
     
 private:
-    std::vector<PlayerInputState> _playerInputStates;
+    PlayerInputState _playerInputStates[4];
 };

@@ -23,6 +23,7 @@ public:
     bool isMoveProcessed(Move* move);
     void removeProcessedMoves(Pool<InputState>& inputStatePool);
     void removeProcessedMovesAtTimestamp(uint32_t lastMoveProcessedOnServerTimestamp, Pool<InputState>& inputStatePool);
+    void removeAllMoves(Pool<InputState>& inputStatePool);
     uint32_t getLastMoveTimestamp() const;
     uint32_t getLastProcessedMoveTimestamp() const;
     void clear();

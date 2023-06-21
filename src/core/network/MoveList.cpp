@@ -66,6 +66,16 @@ void MoveList::removeProcessedMovesAtTimestamp(uint32_t lastMoveProcessedOnServe
     }
 }
 
+void MoveList::removeAllMoves(Pool<InputState>& inputStatePool)
+{
+    while (!_moves.empty())
+    {
+        inputStatePool.free(_moves.front().inputState());
+
+        _moves.pop_front();
+    }
+}
+
 uint32_t MoveList::getLastMoveTimestamp() const
 {
     return _lastMoveTimestamp;

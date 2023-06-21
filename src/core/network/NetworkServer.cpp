@@ -129,10 +129,8 @@ int NetworkServer::getMoveCount()
     }
 
     uint32_t expectedMoveIndex = getNumMovesProcessed();
-    int validMoveCount = 0;
     for (int i = 0; i < lowestMoveCount; ++i)
     {
-        bool isMoveValid = true;
         for (auto& pair : _playerIDToClientMap)
         {
             ClientProxy* cp = pair.second;
@@ -144,21 +142,14 @@ int NetworkServer::getMoveCount()
 
             if (expectedMoveIndex != m->getIndex())
             {
-                isMoveValid = false;
+                LOG("Disconnecting player with invalid move index: %d, expectedMoveIndex: %d", m->getIndex(), expectedMoveIndex);
+                handleClientDisconnected(*cp);
                 break;
             }
         }
-
-        if (isMoveValid)
-        {
-            ++validMoveCount;
-            ++expectedMoveIndex;
-        }
     }
 
-    assert(lowestMoveCount == validMoveCount);
-
-    return validMoveCount;
+    return lowestMoveCount;
 }
 
 uint8_t NetworkServer::getNumClientsConnected()
@@ -515,9 +506,12 @@ void NetworkServer::handleClientDisconnected(ClientProxy& cp)
         _playerIDToClientMap.erase(cp.getPlayerID(i));
     }
     
-    _handleLostClientFunc(cp, 0);
+    MoveList& ml = cp.getUnprocessedMoveList();
+    ml.removeAllMoves(_poolInputState);
     
     _addressHashToClientMap.erase(cp.getSocketAddress()->getHash());
+    
+    _handleLostClientFunc(cp, 0);
     
     resetNextPlayerID();
     
@@ -579,11 +573,14 @@ NetworkServer::~NetworkServer()
     {
         ClientProxy& cp = pair.second;
         
+        MoveList& ml = cp.getUnprocessedMoveList();
+        ml.removeAllMoves(_poolInputState);
+        
         OutputMemoryBitStream ombs(1);
         ombs.writeBits(static_cast<uint8_t>(NWPT_SRVR_EXIT), 4);
         sendPacket(ombs, cp.getSocketAddress());
     }
-    
+
     _addressHashToClientMap.clear();
     _playerIDToClientMap.clear();
     

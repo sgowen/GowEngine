@@ -8,12 +8,6 @@
 
 #include <GowEngine/GowEngine.hpp>
 
-InputState::InputState()
-{
-    uint8_t maxNumPlayers = ENGINE_CFG.maxNumPlayers();
-    _playerInputStates.resize(maxNumPlayers);
-}
-
 void InputState::write(OutputMemoryBitStream& ombs) const
 {
     uint8_t maxNumPlayers = ENGINE_CFG.maxNumPlayers();
