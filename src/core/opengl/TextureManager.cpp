@@ -24,6 +24,8 @@ void TextureManager::loadTextures(std::vector<TextureDescriptor>& tds)
 
 void TextureManager::loadTextureIntoOpenGL(Texture& t)
 {
+    LOG("loadTextureIntoOpenGL %s", t._desc._filePath.c_str());
+    
     OGL.loadTexture(t);
     _loader.unloadTexture(t);
 }

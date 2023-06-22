@@ -31,7 +31,7 @@ bool isAlt = false;
 
 void error_callback(int error, const char* description)
 {
-    fprintf(stderr, "Error: %s\n", description);
+    LOG("GLFW Error: %s", description);
 }
 
 void window_iconify_callback(GLFWwindow* window, int iconified)

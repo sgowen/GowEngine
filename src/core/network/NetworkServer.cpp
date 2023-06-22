@@ -128,7 +128,7 @@ int NetworkServer::getMoveCount()
         }
     }
 
-    uint32_t expectedMoveIndex = getNumMovesProcessed();
+    uint32_t expectedMoveStartIndex = getNumMovesProcessed();
     for (int i = 0; i < lowestMoveCount; ++i)
     {
         for (auto& pair : _playerIDToClientMap)
@@ -140,6 +140,7 @@ int NetworkServer::getMoveCount()
             Move* m = ml.getMoveAtIndex(i);
             assert(m != nullptr);
 
+            uint32_t expectedMoveIndex = expectedMoveStartIndex + i;
             if (expectedMoveIndex != m->getIndex())
             {
                 LOG("Disconnecting player with invalid move index: %d, expectedMoveIndex: %d", m->getIndex(), expectedMoveIndex);

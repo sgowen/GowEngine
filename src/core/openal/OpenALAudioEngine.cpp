@@ -295,7 +295,7 @@ OpenALAudioEngine::OpenALAudioEngine()
     
     if (!device)
     {
-        fprintf(stderr, "Could not open a device!\n");
+        LOG("Could not open a device!");
         assert(false);
     }
 
@@ -307,7 +307,7 @@ OpenALAudioEngine::OpenALAudioEngine()
             alcDestroyContext(ctx);
         }
         alcCloseDevice(device);
-        fprintf(stderr, "Could not set a context!\n");
+        LOG("Could not set a context!");
         assert(false);
     }
 

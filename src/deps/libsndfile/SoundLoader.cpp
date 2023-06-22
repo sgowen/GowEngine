@@ -175,13 +175,13 @@ ALuint SoundLoader::loadSound(const char *filePath)
     sndfile = sf_open_virtual (&io, SFM_READ, &sfinfo, &file);
     if (!sndfile)
     {
-        fprintf(stderr, "Could not open audio in %s: %s\n", filePath, sf_strerror(sndfile));
+        LOG("Could not open audio in %s: %s", filePath, sf_strerror(sndfile));
         return 0;
     }
     
     if (sfinfo.frames < 1)
     {
-        fprintf(stderr, "Bad sample count in %s (%" PRId64 ")\n", filePath, sfinfo.frames);
+        LOG("Bad sample count in %s (%" PRId64 ")", filePath, sfinfo.frames);
         sf_close(sndfile);
         ASSET_HANDLER.unloadAsset(soundData);
         return 0;
@@ -348,7 +348,7 @@ ALuint SoundLoader::loadSound(const char *filePath)
     
     if (!format)
     {
-        fprintf(stderr, "Unsupported channel count: %d\n", sfinfo.channels);
+        LOG("Unsupported channel count: %d", sfinfo.channels);
         sf_close(sndfile);
         ASSET_HANDLER.unloadAsset(soundData);
         return 0;
@@ -356,7 +356,7 @@ ALuint SoundLoader::loadSound(const char *filePath)
 
     if (sfinfo.frames/splblockalign > (sf_count_t)(INT_MAX/byteblockalign))
     {
-        fprintf(stderr, "Too many samples in %s (%" PRId64 ")\n", filePath, sfinfo.frames);
+        LOG("Too many samples in %s (%" PRId64 ")", filePath, sfinfo.frames);
         sf_close(sndfile);
         ASSET_HANDLER.unloadAsset(soundData);
         return 0;
@@ -387,13 +387,12 @@ ALuint SoundLoader::loadSound(const char *filePath)
         free(membuf);
         sf_close(sndfile);
         ASSET_HANDLER.unloadAsset(soundData);
-        fprintf(stderr, "Failed to read samples in %s (%" PRId64 ")\n", filePath, num_frames);
+        LOG("Failed to read samples in %s (%" PRId64 ")", filePath, num_frames);
         return 0;
     }
     num_bytes = (ALsizei)(num_frames / splblockalign * byteblockalign);
 
-    printf("Loading: %s (%s, %dhz)\n", filePath, FormatName(format), sfinfo.samplerate);
-    fflush(stdout);
+    LOG("Loading: %s (%s, %dhz)", filePath, FormatName(format), sfinfo.samplerate);
 
     // TODO consider moving the below into an OpenALUtil class.
     
@@ -414,7 +413,7 @@ ALuint SoundLoader::loadSound(const char *filePath)
     err = alGetError();
     if (err != AL_NO_ERROR)
     {
-        fprintf(stderr, "OpenAL Error: %s\n", alGetString(err));
+        LOG("OpenAL Error: %s", alGetString(err));
         if (buffer && alIsBuffer(buffer))
         {
             alDeleteBuffers(1, &buffer);

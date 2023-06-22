@@ -182,6 +182,13 @@ static PngImageData getPngImageDataFromFileData(const void* png_data, const int 
 
 void TextureLoader::loadTexture(Texture& t)
 {
+    if (t._data != nullptr)
+    {
+        return;
+    }
+    
+    LOG("loadTexture %s", t._desc._filePath.c_str());
+    
     const FileData fd = ASSET_HANDLER.loadAsset(t._desc._filePath);
     
     const PngImageData pngImageData = getPngImageDataFromFileData(fd._data, (int)fd._length);
@@ -198,6 +205,12 @@ void TextureLoader::loadTexture(Texture& t)
 
 void TextureLoader::unloadTexture(Texture& t)
 {
+    if (t._data == nullptr)
+    {
+        return;
+    }
+    
+    LOG("unloadTexture %s", t._desc._filePath.c_str());
     free((void*)t._data);
     t._data = nullptr;
 }
