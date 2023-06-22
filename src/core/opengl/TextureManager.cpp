@@ -13,11 +13,7 @@ void TextureManager::loadTextures(std::vector<TextureDescriptor>& tds)
     for (auto& td : tds)
     {
         _textures.emplace(td._name, Texture{td});
-    }
-    
-    for (std::map<std::string, Texture>::iterator i = _textures.begin(); i != _textures.end(); ++i)
-    {
-        Texture& t = i->second;
+        Texture& t = texture(td._name);
         _loader.loadTexture(t);
     }
 }

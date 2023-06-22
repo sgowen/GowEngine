@@ -28,9 +28,6 @@
 /// glfw Implementation
 #include "deps/glfw/GlfwEngine.hpp"
 
-/// libpng Implementation
-#include "deps/libpng/TextureLoader.hpp"
-
 /// libsndfile Implementation
 #include "deps/libsndfile/SoundLoader.hpp"
 
@@ -41,6 +38,9 @@
 #include "deps/rapidjson/EntityManagerLoader.hpp"
 #include "deps/rapidjson/RapidJSONUtil.hpp"
 #include "deps/rapidjson/RendererLoader.hpp"
+
+/// stb Implementation
+#include "deps/stb/TextureLoader.hpp"
 
 /// Core Assets
 #include "core/assets/AndroidAssetHandler.hpp"

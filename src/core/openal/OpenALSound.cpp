@@ -13,6 +13,7 @@ _buf(0),
 _src(0),
 _isLooping(false)
 {
+    // TODO Consider refactoring to match architecture of TextureManager/TextureLoader
     _buf = SoundLoader::loadSound(filePath.c_str());
     assert(_buf != AL_NONE);
 
