@@ -40,5 +40,5 @@ public:
     PlayerInputState& playerInputState(uint8_t index);
     
 private:
-    PlayerInputState _playerInputStates[4];
+    PlayerInputState _playerInputStates[MAX_NUM_PLAYERS];
 };

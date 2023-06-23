@@ -92,11 +92,6 @@ bool EngineConfig::musicDisabled()
     return _musicDisabled;
 }
 
-uint8_t EngineConfig::maxNumPlayers()
-{
-    return _maxNumPlayers;
-}
-
 uint8_t EngineConfig::maxTextInputLength()
 {
     return _maxTextInputLength;
@@ -161,14 +156,13 @@ _networkLoggingEnabled(_config.getBool("networkLoggingEnabled", false)),
 _physicsLoggingEnabled(_config.getBool("physicsLoggingEnabled", false)),
 _soundsDisabled(_config.getBool("soundsDisabled", false)),
 _musicDisabled(_config.getBool("musicDisabled", false)),
-_maxNumPlayers(_config.getUInt("maxNumPlayers", 2)),
 _maxTextInputLength(_config.getUInt("maxTextInputLength", 16)),
 _maxNumSoundsToPlayPerFrame(_config.getUInt("maxNumSoundsToPlayPerFrame", 3)),
 _clientPortHost(_config.getUInt("clientPortHost", 1337)),
 _clientPortJoin(_config.getUInt("clientPortJoin", 1338)),
 _serverPort(_config.getUInt("serverPort", 9999)),
 _maxNumMoves(_config.getUInt("maxNumMoves", 7)),
-_maxNumPacketsToProcessPerFrame(_config.getUInt("maxNumPacketsToProcessPerFrame", maxNumPlayers() * 2)),
+_maxNumPacketsToProcessPerFrame(_config.getUInt("maxNumPacketsToProcessPerFrame", 4)),
 _numFramesOfSimulatedLatency(_config.getUInt("numFramesOfSimulatedLatency", 0)),
 _frameRate(1.0 / _framesPerSecond),
 _timeScale(_framesPerSecond == 120 ? 4 : _framesPerSecond == 60 ? 2 : _framesPerSecond == 30 ? 1 : 0)

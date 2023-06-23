@@ -53,7 +53,7 @@ private:
     std::vector<uint16_t> _textKeys;
     std::vector<uint16_t> _supportedKeys;
     std::map<uint16_t, bool> _lastKnownKeyStates;
-    std::map<uint8_t, bool> _lastKnownGamepadButtonStates[16];
+    std::map<uint8_t, bool> _lastKnownGamepadButtonStates[MAX_NUM_PLAYERS];
     Vector2 _lastConvertedCursorPos;
     int _cursorWidth;
     int _cursorHeight;

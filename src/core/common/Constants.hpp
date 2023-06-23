@@ -10,6 +10,7 @@
 
 /// Engine
 #define ENGINE_ASSETS "engine"
+#define MAX_NUM_PLAYERS 4
 
 /// Entity ID
 #define  LAYOUT_ENTITY_ID_BEGIN 0x00000000u

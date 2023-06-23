@@ -215,8 +215,7 @@ void NetworkServer::processPacket(InputMemoryBitStream& imbs, SocketAddress* fro
     auto it = _addressHashToClientMap.find(fromAddress->getHash());
     if (it == _addressHashToClientMap.end())
     {
-        uint8_t maxNumPlayers = ENGINE_CFG.maxNumPlayers();
-        if (_playerIDToClientMap.size() < maxNumPlayers)
+        if (_playerIDToClientMap.size() < MAX_NUM_PLAYERS)
         {
             if (ENGINE_CFG.networkLoggingEnabled())
             {
@@ -425,8 +424,7 @@ void NetworkServer::handleInputPacket(ClientProxy& cp, InputMemoryBitStream& imb
 
 void NetworkServer::handleAddLocalPlayerPacket(ClientProxy& cp, InputMemoryBitStream& imbs)
 {
-    uint8_t maxNumPlayers = ENGINE_CFG.maxNumPlayers();
-    if (_playerIDToClientMap.size() < maxNumPlayers)
+    if (_playerIDToClientMap.size() < MAX_NUM_PLAYERS)
     {
         uint8_t requestedIndex;
         imbs.read(requestedIndex);

@@ -27,13 +27,11 @@ void InputManager::onCursorInput(CursorEventType type, float x, float y, bool is
 
 void InputManager::onGamepadInput(uint8_t button, uint8_t index, float x, float y)
 {
-    uint8_t maxNumPlayers = ENGINE_CFG.maxNumPlayers();
-    
-    if (index >= maxNumPlayers)
+    if (index >= MAX_NUM_PLAYERS)
     {
         if (ENGINE_CFG.inputLoggingEnabled())
         {
-            LOG("Only %d gamepads supported!", maxNumPlayers);
+            LOG("Only %d gamepads supported!", MAX_NUM_PLAYERS);
         }
         return;
     }
