@@ -303,7 +303,7 @@ void OpenGLUtil::loadTexture(Texture& t)
     
     assert(t._data != nullptr);
     
-    t._texture = loadTexture(t._width, t._height, t._data, t._desc._filterMin, t._desc._filterMag, GL_RGBA, false, t._desc._mipMap);
+    t._texture = loadTexture(t._width, t._height, t._data, t._desc._filterMin, t._desc._filterMag, GL_RGBA, t._desc._repeatS, t._desc._mipMap);
 }
 
 void OpenGLUtil::unloadTexture(Texture& t)

@@ -148,9 +148,10 @@ Assets AssetsLoader::initWithJSON(const char* json)
             assert(filterMin == "SHARP" || filterMin == "SMOOTH");
             std::string filterMag = RapidJSONUtil::getString(iv, "filterMag", "SHARP");
             assert(filterMag == "SHARP" || filterMag == "SMOOTH");
+            bool repeatS = RapidJSONUtil::getBool(iv, "repeatS", false);
             bool mipMap = RapidJSONUtil::getBool(iv, "mipMap", false);
 
-            ret._textureDescriptors.emplace_back(name, normalMap, filePath, filterMin, filterMag, mipMap);
+            ret._textureDescriptors.emplace_back(name, normalMap, filePath, filterMin, filterMag, repeatS, mipMap);
 
             if (iv.HasMember("mappings"))
             {
