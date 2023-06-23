@@ -23,51 +23,6 @@ OpenALSoundWrapper::~OpenALSoundWrapper()
     STLUtil::cleanUpVectorOfPointers(_sounds);
 }
 
-void OpenALSoundWrapper::play()
-{
-    soundInstance()->play();
-}
-
-void OpenALSoundWrapper::resume()
-{
-    soundInstance()->resume();
-}
-
-void OpenALSoundWrapper::pause()
-{
-    soundInstance()->pause();
-}
-
-void OpenALSoundWrapper::stop()
-{
-    soundInstance()->stop();
-}
-
-void OpenALSoundWrapper::setVolume(float volume)
-{
-    soundInstance()->setVolume(volume);
-}
-
-bool OpenALSoundWrapper::isLooping()
-{
-    return soundInstance()->isLooping();
-}
-
-bool OpenALSoundWrapper::isPlaying()
-{
-    return soundInstance()->isPlaying();
-}
-
-bool OpenALSoundWrapper::isPaused()
-{
-    return soundInstance()->isPaused();
-}
-
-void OpenALSoundWrapper::setLooping(bool isLooping)
-{
-    soundInstance()->setLooping(isLooping);
-}
-
 OpenALSound* OpenALSoundWrapper::nextSoundInstance()
 {
     ++_soundIndex;
@@ -91,7 +46,7 @@ OpenALSound* OpenALSoundWrapper::soundInstance()
     return soundInstance(_soundIndex);
 }
 
-std::vector<OpenALSound *>& OpenALSoundWrapper::getSounds()
+std::vector<OpenALSound*>& OpenALSoundWrapper::getSounds()
 {
     return _sounds;
 }

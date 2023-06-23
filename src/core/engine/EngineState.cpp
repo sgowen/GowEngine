@@ -106,10 +106,8 @@ void EngineState::update(Engine* e)
         {
             onAssetsLoaded(e);
         }
-        else
-        {
-            return;
-        }
+        
+        return;
     }
     
     onUpdate(e);

@@ -8,13 +8,11 @@
 
 #pragma once
 
-#include <AL/al.h>
-
 class SoundLoader
 {
 public:
     /* LoadBuffer loads the named audio file into an OpenAL buffer object, and
      * returns the new buffer ID.
      */
-    static ALuint loadSound(const char *filePath);
+    static uint32_t loadSound(const char *filePath);
 };

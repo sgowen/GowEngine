@@ -20,6 +20,7 @@ void SoundUtil::playSoundForStateIfChanged(Entity& e, uint8_t fromState, uint8_t
 
 void SoundUtil::playSound(Vector2& position, World* world, std::string soundID)
 {
+    // TODO, use OpenAL's distance attenuated sound implementation
     if (soundID.empty())
     {
         return;

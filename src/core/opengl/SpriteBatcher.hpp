@@ -10,13 +10,13 @@
 
 #include "ShaderInput.hpp"
 #include "Color.hpp"
-#include "TextureRegion.hpp"
 
 #include <stdint.h>
 #include <vector>
 
 struct Shader;
 struct Texture;
+struct TextureRegion;
 
 class SpriteBatcher
 {

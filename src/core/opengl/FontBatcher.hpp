@@ -19,7 +19,6 @@
 
 class Renderer;
 struct Shader;
-struct Texture;
 struct TextureRegion;
 struct Color;
 

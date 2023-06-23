@@ -13,7 +13,6 @@
 #include <stdint.h>
 
 struct Shader;
-struct Texture;
 class Framebuffer;
 
 class LightRenderer

@@ -8,28 +8,13 @@
 
 #pragma once
 
-#include <stdint.h>
-
-#include <AL/al.h>
-
 class OpenALSound
 {
 public:
+    uint32_t _buf;
+    uint32_t _src;
+    bool _isLooping;
+    
     OpenALSound(std::string filePath, float volume = 1.0f);
     ~OpenALSound();
-
-    void play();
-    void resume();
-    void pause();
-    void stop();
-    void setVolume(float volume);
-    bool isLooping();
-    bool isPlaying();
-    bool isPaused();
-    void setLooping(bool isLooping);
-
-private:
-    ALuint _buf;
-    ALuint _src;
-    bool _isLooping;
 };

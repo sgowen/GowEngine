@@ -23,7 +23,10 @@ int UDPSocket::bindSocket(const SocketAddress& bindAddress)
 
 int UDPSocket::sendToAddress(const void* toSend, uint16_t length, const SocketAddress* toAddress)
 {
-    assert(toAddress != nullptr);
+    if (toAddress == nullptr)
+    {
+        return 0;
+    }
     
     long byteSentCount = sendto(_socket,
                                 static_cast<const char*>(toSend),

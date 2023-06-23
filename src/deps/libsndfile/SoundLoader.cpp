@@ -10,6 +10,7 @@
 
 #include "sndfile.h"
 
+#include <AL/al.h>
 #include <AL/alext.h>
 
 enum FormatType
@@ -145,7 +146,7 @@ static sf_count_t gowengine_sf_vio_tell (void* user_data)
     return file->curpos;
 }
 
-ALuint SoundLoader::loadSound(const char *filePath)
+uint32_t SoundLoader::loadSound(const char *filePath)
 {
     enum FormatType sample_format = Int16;
     ALint byteblockalign = 0;
@@ -423,6 +424,8 @@ ALuint SoundLoader::loadSound(const char *filePath)
         }
         return 0;
     }
+    
+    assert(buffer != AL_NONE);
 
     return buffer;
 }

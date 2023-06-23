@@ -12,10 +12,6 @@
 #include <errno.h>
 #include <string.h>
 
-#include <AL/al.h>
-#include <AL/alc.h>
-#include <AL/alext.h>
-
 OpenALSoundWrapper* OpenALAudioEngine::loadSound(std::string filePath, uint8_t numInstances)
 {
     return new OpenALSoundWrapper(filePath, numInstances);
@@ -42,25 +38,25 @@ void OpenALAudioEngine::render()
 {
     for (OpenALSound* s : _soundsToPlay)
     {
-        s->play();
+        OAL.play(*s);
     }
     _soundsToPlay.clear();
     
     for (OpenALSound* s : _soundsToStop)
     {
-        s->stop();
+        OAL.stop(*s);
     }
     _soundsToStop.clear();
 
     for (OpenALSound* s : _soundsToPause)
     {
-        s->pause();
+        OAL.pause(*s);
     }
     _soundsToPause.clear();
 
     for (OpenALSound* s : _soundsToResume)
     {
-        s->resume();
+        OAL.resume(*s);
     }
     _soundsToResume.clear();
 }
@@ -81,8 +77,8 @@ void OpenALAudioEngine::playSound(std::string soundID, float volume, bool isLoop
     }
     
     OpenALSound* s = sw->nextSoundInstance();
-    s->setVolume(CLAMP(volume, 0, 1));
-    s->setLooping(isLooping);
+    OAL.setVolume(*s, CLAMP(volume, 0, 1));
+    OAL.setLooping(*s, isLooping);
     
     _soundsToPlay.push_back(s);
 }
@@ -161,7 +157,7 @@ void OpenALAudioEngine::stopAllSounds()
     std::map<std::string, OpenALSoundWrapper*>& sounds = ASSETS_MGR.sounds();
     for (auto& pair : sounds)
     {
-        for (auto* s : pair.second->getSounds())
+        for (auto s : pair.second->getSounds())
         {
             _soundsToStop.push_back(s);
         }
@@ -179,9 +175,9 @@ void OpenALAudioEngine::pauseAllSounds()
     std::map<std::string, OpenALSoundWrapper*>& sounds = ASSETS_MGR.sounds();
     for (auto& pair : sounds)
     {
-        for (auto* s : pair.second->getSounds())
+        for (auto s : pair.second->getSounds())
         {
-            if (s->isPlaying())
+            if (OAL.isPlaying(*s))
             {
                 _soundsToPause.push_back(s);
             }
@@ -200,9 +196,9 @@ void OpenALAudioEngine::resumeAllSounds()
     std::map<std::string, OpenALSoundWrapper*>& sounds = ASSETS_MGR.sounds();
     for (auto& pair : sounds)
     {
-        for (auto* s : pair.second->getSounds())
+        for (auto s : pair.second->getSounds())
         {
-            if (s->isPaused())
+            if (OAL.isPaused(*s))
             {
                 _soundsToResume.push_back(s);
             }
@@ -219,10 +215,11 @@ void OpenALAudioEngine::playMusic(float volume, bool isLooping)
         return;
     }
     
-    music->setVolume(CLAMP(volume, 0, 1));
-    music->setLooping(isLooping);
+    OpenALSound* s = music->soundInstance();
+    OAL.setVolume(*s, CLAMP(volume, 0, 1));
+    OAL.setLooping(*s, isLooping);
     
-    _soundsToPlay.push_back(music->soundInstance());
+    _soundsToPlay.push_back(s);
 }
 
 void OpenALAudioEngine::setMusicVolume(float volume)
@@ -234,7 +231,8 @@ void OpenALAudioEngine::setMusicVolume(float volume)
         return;
     }
     
-    music->setVolume(CLAMP(volume, 0, 1));
+    OpenALSound* s = music->soundInstance();
+    OAL.setVolume(*s, CLAMP(volume, 0, 1));
 }
 
 void OpenALAudioEngine::stopMusic()
@@ -246,7 +244,8 @@ void OpenALAudioEngine::stopMusic()
         return;
     }
     
-    _soundsToStop.push_back(music->soundInstance());
+    OpenALSound* s = music->soundInstance();
+    _soundsToStop.push_back(s);
 }
 
 void OpenALAudioEngine::pauseMusic()
@@ -258,7 +257,8 @@ void OpenALAudioEngine::pauseMusic()
         return;
     }
     
-    _soundsToPause.push_back(music->soundInstance());
+    OpenALSound* s = music->soundInstance();
+    _soundsToPause.push_back(s);
 }
 
 void OpenALAudioEngine::resumeMusic()
@@ -270,7 +270,8 @@ void OpenALAudioEngine::resumeMusic()
         return;
     }
     
-    _soundsToResume.push_back(music->soundInstance());
+    OpenALSound* s = music->soundInstance();
+    _soundsToResume.push_back(s);
 }
 
 bool OpenALAudioEngine::isMusicPlaying()
@@ -282,61 +283,17 @@ bool OpenALAudioEngine::isMusicPlaying()
         return false;
     }
     
-    return music->isPlaying();
+    OpenALSound* s = music->soundInstance();
+    
+    return OAL.isPlaying(*s);
 }
 
 OpenALAudioEngine::OpenALAudioEngine()
 {
-    const ALCchar *name;
-    ALCdevice *device;
-    ALCcontext *ctx;
-
-    device = alcOpenDevice(nullptr);
-    
-    if (!device)
-    {
-        LOG("Could not open a device!");
-        assert(false);
-    }
-
-    ctx = alcCreateContext(device, nullptr);
-    if (ctx == nullptr || alcMakeContextCurrent(ctx) == ALC_FALSE)
-    {
-        if (ctx != nullptr)
-        {
-            alcDestroyContext(ctx);
-        }
-        alcCloseDevice(device);
-        LOG("Could not set a context!");
-        assert(false);
-    }
-
-    name = nullptr;
-    if (alcIsExtensionPresent(device, "ALC_ENUMERATE_ALL_EXT"))
-    {
-        name = alcGetString(device, ALC_ALL_DEVICES_SPECIFIER);
-    }
-    
-    if (!name || alcGetError(device) != AL_NO_ERROR)
-    {
-        name = alcGetString(device, ALC_DEVICE_SPECIFIER);
-    }
-    
-    LOG("Opened \"%s\"\n", name);
+    assert(OAL.openDeviceAndCreateContext());
 }
 
 OpenALAudioEngine::~OpenALAudioEngine()
 {
-    ALCdevice *device;
-    ALCcontext *ctx;
-
-    ctx = alcGetCurrentContext();
-    if (ctx != nullptr)
-    {
-        device = alcGetContextsDevice(ctx);
-
-        alcMakeContextCurrent(nullptr);
-        alcDestroyContext(ctx);
-        alcCloseDevice(device);
-    }
+    assert(OAL.destroyContextAndCloseDevice());
 }
