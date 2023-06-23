@@ -12,9 +12,9 @@
 #include <errno.h>
 #include <string.h>
 
-#include "AL/al.h"
-#include "AL/alc.h"
-#include "AL/alext.h"
+#include <AL/al.h>
+#include <AL/alc.h>
+#include <AL/alext.h>
 
 OpenALSoundWrapper* OpenALAudioEngine::loadSound(std::string filePath, uint8_t numInstances)
 {

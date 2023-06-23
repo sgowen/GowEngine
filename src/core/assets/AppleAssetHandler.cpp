@@ -6,10 +6,9 @@
 //  Copyright © 2021 Stephen Gowen. All rights reserved.
 //
 
-#include <GowEngine/BuildConstants.hpp>
-#if IS_APPLE
-
 #include <GowEngine/GowEngine.hpp>
+
+#if IS_APPLE
 
 FileData AppleAssetHandler::loadAsset(std::string filePath)
 {
