@@ -8,6 +8,8 @@
 
 #include <GowEngine/GowEngine.hpp>
 
+#include "core/opengl/OpenGLWrapper.hpp"
+
 uint32_t OpenGLUtil::TEXTURE_SLOTS[NUM_SUPPORTED_TEXTURE_SLOTS] = {GL_TEXTURE0, GL_TEXTURE1, GL_TEXTURE2, GL_TEXTURE3};
 uint32_t OpenGLUtil::MODE_LINES = GL_LINES;
 uint32_t OpenGLUtil::MODE_LINE_STRIP = GL_LINE_STRIP;

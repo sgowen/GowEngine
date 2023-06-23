@@ -6,14 +6,14 @@
 //  Copyright © 2021 Stephen Gowen. All rights reserved.
 //
 
-#include <GowEngine/BuildConstants.hpp>
-#if IS_LINUX || IS_WINDOWS
-    #define GLAD_GL_IMPLEMENTATION
-#endif
+#include <GowEngine/GowEngine.hpp>
 
 #if IS_DESKTOP
 
-#include <GowEngine/GowEngine.hpp>
+#if IS_LINUX || IS_WINDOWS
+#define GLAD_GL_IMPLEMENTATION
+#include "core/opengl/OpenGLWrapper.hpp"
+#endif
 
 #define GLFW_INCLUDE_NONE
 #include <GLFW/glfw3.h>
@@ -325,6 +325,7 @@ void GlfwEngine::exec(Engine* engine, const char* windowTitle)
     glfwSetKeyCallback(window, key_callback);
 
     glfwMakeContextCurrent(window);
+    
 #if IS_LINUX || IS_WINDOWS
     gladLoadGL(glfwGetProcAddress);
 #endif
