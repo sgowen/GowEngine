@@ -20,23 +20,21 @@ void TextureManager::loadTextures(std::vector<TextureDescriptor>& tds)
 
 void TextureManager::loadTextureIntoOpenGL(Texture& t)
 {
-    LOG("loadTextureIntoOpenGL %s", t._desc._filePath.c_str());
-    
     OGL.loadTexture(t);
     _loader.unloadTexture(t);
 }
 
 void TextureManager::unloadTextures(std::vector<TextureDescriptor>& tds)
 {
-    for (std::map<std::string, Texture>::iterator i = _textures.begin(); i != _textures.end(); ++i)
+    for (auto& td : tds)
     {
-        Texture& t = i->second;
+        Texture& t = texture(td._name);
         if (isTextureLoaded(t))
         {
             OGL.unloadTexture(t);
         }
+        _textures.erase(td._name);
     }
-    _textures.clear();
 }
 
 Texture& TextureManager::texture(std::string name)

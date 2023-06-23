@@ -62,6 +62,11 @@ bool EngineConfig::glfwLoggingEnabled()
     return _glfwLoggingEnabled;
 }
 
+bool EngineConfig::fileLoggingEnabled()
+{
+    return _fileLoggingEnabled;
+}
+
 bool EngineConfig::inputLoggingEnabled()
 {
     return _inputLoggingEnabled;
@@ -150,6 +155,7 @@ _filePathEngineAssets(_config.getString("filePathEngineAssets")),
 _filePathEntityLayoutManager(_config.getString("filePathEntityLayoutManager")),
 _filePathEntityManager(_config.getString("filePathEntityManager")),
 _glfwLoggingEnabled(_config.getBool("glfwLoggingEnabled", false)),
+_fileLoggingEnabled(_config.getBool("fileLoggingEnabled", false)),
 _inputLoggingEnabled(_config.getBool("inputLoggingEnabled", false)),
 _networkLoggingEnabled(_config.getBool("networkLoggingEnabled", false)),
 _physicsLoggingEnabled(_config.getBool("physicsLoggingEnabled", false)),

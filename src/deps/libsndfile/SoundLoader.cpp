@@ -392,7 +392,10 @@ ALuint SoundLoader::loadSound(const char *filePath)
     }
     num_bytes = (ALsizei)(num_frames / splblockalign * byteblockalign);
 
-    LOG("Loading: %s (%s, %dhz)", filePath, FormatName(format), sfinfo.samplerate);
+    if (ENGINE_CFG.fileLoggingEnabled())
+    {
+        LOG("SoundLoader::loadSound: %s (%s, %dhz)", filePath, FormatName(format), sfinfo.samplerate);
+    }
 
     // TODO consider moving the below into an OpenALUtil class.
     

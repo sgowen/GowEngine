@@ -73,6 +73,12 @@ void SoundManager::loadSound(std::string soundID, std::string filePath, uint8_t 
 
 void SoundManager::unloadSound(std::string soundID)
 {
+    if (ENGINE_CFG.fileLoggingEnabled())
+    {
+        // TODO, log the file path
+        LOG("SoundManager::unloadSound");
+    }
+    
     auto q = _sounds.find(soundID);
     assert(q != _sounds.end());
     delete q->second;
@@ -91,6 +97,12 @@ void SoundManager::unloadMusic()
     if (_music == nullptr)
     {
         return;
+    }
+    
+    if (ENGINE_CFG.fileLoggingEnabled())
+    {
+        // TODO, log the file path
+        LOG("SoundManager::unloadMusic");
     }
     
     delete _music;

@@ -13,7 +13,10 @@
 
 void TextureLoader::loadTexture(Texture& t)
 {
-    LOG("loadTexture %s", t._desc._filePath.c_str());
+    if (ENGINE_CFG.fileLoggingEnabled())
+    {
+        LOG("TextureLoader::loadTexture %s", t._desc._filePath.c_str());
+    }
     
     assert(t._data == nullptr);
     
@@ -32,7 +35,10 @@ void TextureLoader::loadTexture(Texture& t)
 
 void TextureLoader::unloadTexture(Texture& t)
 {
-    LOG("unloadTexture %s", t._desc._filePath.c_str());
+    if (ENGINE_CFG.fileLoggingEnabled())
+    {
+        LOG("TextureLoader::unloadTexture %s", t._desc._filePath.c_str());
+    }
     
     assert(t._data != nullptr);
     

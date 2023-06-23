@@ -25,6 +25,7 @@ public:
     std::string filePathEntityLayoutManager();
     std::string filePathEntityManager();
     bool glfwLoggingEnabled();
+    bool fileLoggingEnabled();
     bool inputLoggingEnabled();
     bool networkLoggingEnabled();
     bool physicsLoggingEnabled();
@@ -54,6 +55,7 @@ private:
     std::string _filePathEntityLayoutManager;
     std::string _filePathEntityManager;
     bool _glfwLoggingEnabled;
+    bool _fileLoggingEnabled;
     bool _inputLoggingEnabled;
     bool _networkLoggingEnabled;
     bool _physicsLoggingEnabled;

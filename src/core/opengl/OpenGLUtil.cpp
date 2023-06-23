@@ -294,6 +294,11 @@ void OpenGLUtil::unloadFramebuffer(Framebuffer& fb)
 
 void OpenGLUtil::loadTexture(Texture& t)
 {
+    if (ENGINE_CFG.fileLoggingEnabled())
+    {
+        LOG("OpenGLUtil::loadTexture %s", t._desc._filePath.c_str());
+    }
+    
     assert(t._data != nullptr);
     
     t._texture = loadTexture(t._width, t._height, t._data, t._desc._filterMin, t._desc._filterMag, GL_RGBA, false, t._desc._mipMap);
@@ -301,6 +306,11 @@ void OpenGLUtil::loadTexture(Texture& t)
 
 void OpenGLUtil::unloadTexture(Texture& t)
 {
+    if (ENGINE_CFG.fileLoggingEnabled())
+    {
+        LOG("OpenGLUtil::unloadTexture %s", t._desc._filePath.c_str());
+    }
+    
     unloadTexture(t._texture);
     t._texture = 0;
 }
