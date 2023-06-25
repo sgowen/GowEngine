@@ -24,6 +24,12 @@ void SoundManager::loadSounds(std::vector<SoundDescriptor>& soundDescriptors)
     }
 }
 
+void SoundManager::loadSoundIntoOpenAL(Sound &s)
+{
+    OGL.loadShader(s);
+    _loader.unloadShader(s);
+}
+
 void SoundManager::unloadSounds(std::vector<SoundDescriptor>& soundDescriptors)
 {
     for (SoundDescriptor& sd : soundDescriptors)

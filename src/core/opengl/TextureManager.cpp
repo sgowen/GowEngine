@@ -29,7 +29,7 @@ void TextureManager::unloadTextures(std::vector<TextureDescriptor>& tds)
     for (auto& td : tds)
     {
         Texture& t = texture(td._name);
-        if (isTextureLoaded(t))
+        if (isTextureLoadedIntoOpenGL(t))
         {
             OGL.unloadTexture(t);
         }
@@ -49,15 +49,15 @@ bool TextureManager::isTextureLoaded(std::string name)
     auto q = _textures.find(name);
     if (q != _textures.end())
     {
-        return isTextureLoaded(q->second);
+        return isTextureLoadedIntoOpenGL(q->second);
     }
     
     return false;
 }
 
-bool TextureManager::isTextureLoaded(Texture& texture)
+bool TextureManager::isTextureLoadedIntoOpenGL(Texture& texture)
 {
-    return texture._texture != 0;
+    return texture._glHandle != 0;
 }
 
 std::map<std::string, Texture>& TextureManager::textures()

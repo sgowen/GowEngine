@@ -78,6 +78,9 @@ void OpenALUtil::create(OpenALSound& sound)
 {
     alGenSources(1, &sound._src);
 
+    // TODO, consider using alGetSourcei(AL_BUFFER) instead of
+    // storing _buf into the Sound struct
+    // also, query for looping instead of storing it
     alSourcei(sound._src, AL_BUFFER, sound._buf);
     alSourcei(sound._src, AL_LOOPING, AL_FALSE);
 }
@@ -87,18 +90,7 @@ void OpenALUtil::destroy(OpenALSound& sound)
     stop(sound);
 
     alDeleteSources(1, &sound._src);
-    ALenum err = alGetError();
-    if (err != AL_NO_ERROR)
-    {
-        LOG("OpenAL Error: %s", alGetString(err));
-    }
-    
     alDeleteBuffers(1, &sound._buf);
-    err = alGetError();
-    if (err != AL_NO_ERROR)
-    {
-        LOG("OpenAL Error: %s", alGetString(err));
-    }
 }
 
 void OpenALUtil::play(OpenALSound& sound)

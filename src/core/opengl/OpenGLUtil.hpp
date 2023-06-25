@@ -17,20 +17,20 @@ class Framebuffer;
 struct Shader;
 struct Texture;
 
+typedef void (*GLADapiproc)(void);
+
+typedef GLADapiproc (*GLADloadfunc)(const char *name);
+
 class OpenGLUtil
 {
 public:
-    static uint32_t TEXTURE_SLOTS[NUM_SUPPORTED_TEXTURE_SLOTS];
-    static uint32_t MODE_LINES;
-    static uint32_t MODE_LINE_STRIP;
-    static uint32_t MODE_TRIANGLES;
-    static uint32_t MODE_TRIANGLE_STRIP;
-
     static OpenGLUtil& getInstance()
     {
         static OpenGLUtil ret = OpenGLUtil();
         return ret;
     }
+    
+    void loadOpenGL(GLADloadfunc load);
 
     void enableBlending(bool srcAlpha);
     void disableBlending();
@@ -51,8 +51,10 @@ public:
     void bindFramebuffer(Framebuffer& fb, Color& c = Color::CLEAR);
     void clearFramebuffer(Color& c = Color::CLEAR);
     void clearFramebuffer(float red, float green, float blue, float alpha);
-    void draw(uint32_t mode, uint32_t first, uint32_t count);
-    void drawIndexed(uint32_t mode, uint32_t indexBuffer, uint32_t count, size_t first = 0);
+    void drawLines(uint32_t first, uint32_t count);
+    void drawTriangles(uint32_t first, uint32_t count);
+    void drawTrianglesIndexed(uint32_t indexBuffer, uint32_t count, size_t first = 0);
+    void drawTriangleStrip(uint32_t first, uint32_t count);
     uint32_t loadRektangleIndexBuffer(int numRektangles);
     uint32_t loadVertexBuffer(size_t size);
     uint32_t loadVertexBuffer(size_t size, const void* data);
@@ -65,10 +67,13 @@ public:
     void unloadShader(Shader& s);
 
 private:
+    static uint32_t TEXTURE_SLOTS[NUM_SUPPORTED_TEXTURE_SLOTS];
+    
+    void draw(uint32_t mode, uint32_t first, uint32_t count);
+    void drawIndexed(uint32_t mode, uint32_t indexBuffer, uint32_t count, size_t first = 0);
+    
     uint32_t loadTexture(int width, int height, uint8_t* data, std::string filterMin, std::string filterMag, uint32_t type, bool repeat_s, bool mipmap);
-    void unloadTexture(uint32_t texture);
     uint32_t loadShader(const uint8_t* vertexShaderSrc, const long vertexShaderSrcLength, const uint8_t* fragmentShaderSrc, const long fragmentShaderSrcLength);
-    void unloadShader(uint32_t program);
     uint32_t compileShader(const uint32_t type, const uint8_t* source, const int32_t length);
 
     OpenGLUtil() {}

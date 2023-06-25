@@ -36,38 +36,17 @@ void AssetsManager::update()
     }
 
     std::map<std::string, Shader>& shaders = _shaderMgr.shaders();
-    if (shaders.empty())
-    {
-        return;
-    }
-    for (auto& pair : shaders)
-    {
-        Shader& s = pair.second;
-        if (s._vertexShaderFileData == nullptr ||
-            s._fragmentShaderFileData == nullptr)
-        {
-            return;
-        }
-    }
     for (auto& pair : shaders)
     {
         Shader& s = pair.second;
         _shaderMgr.loadShaderIntoOpenGL(s);
     }
     
+    // TODO, load all sounds into OpenAL here, on the main thread
+    // so there will be 1 frame of loading that causes the game to hang
+    // actual file io will be handled in the background
+    
     std::map<std::string, Texture>& textures = _textureMgr.textures();
-    if (textures.empty())
-    {
-        return;
-    }
-    for (auto& pair : textures)
-    {
-        Texture& t = pair.second;
-        if (t._data == nullptr)
-        {
-            return;
-        }
-    }
     for (auto& pair : textures)
     {
         Texture& t = pair.second;

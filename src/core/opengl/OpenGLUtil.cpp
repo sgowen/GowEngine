@@ -8,13 +8,27 @@
 
 #include <GowEngine/GowEngine.hpp>
 
-#include "core/opengl/OpenGLWrapper.hpp"
+#if IS_ANDROID
+    #include <GLES2/gl2.h>
+#elif IS_APPLE
+    #if IS_IOS
+        #include <OpenGLES/ES2/gl.h>
+    #elif IS_MACOS
+        #include <OpenGL/gl.h>
+    #endif
+#elif IS_LINUX || IS_WINDOWS
+    #define GLAD_GL_IMPLEMENTATION
+    #include <glad/gl.h>
+#endif
 
 uint32_t OpenGLUtil::TEXTURE_SLOTS[NUM_SUPPORTED_TEXTURE_SLOTS] = {GL_TEXTURE0, GL_TEXTURE1, GL_TEXTURE2, GL_TEXTURE3};
-uint32_t OpenGLUtil::MODE_LINES = GL_LINES;
-uint32_t OpenGLUtil::MODE_LINE_STRIP = GL_LINE_STRIP;
-uint32_t OpenGLUtil::MODE_TRIANGLES = GL_TRIANGLES;
-uint32_t OpenGLUtil::MODE_TRIANGLE_STRIP = GL_TRIANGLE_STRIP;
+
+void OpenGLUtil::loadOpenGL(GLADloadfunc load)
+{
+#if IS_LINUX || IS_WINDOWS
+    gladLoadGL(load);
+#endif
+}
 
 void OpenGLUtil::enableBlending(bool srcAlpha)
 {
@@ -31,9 +45,9 @@ void OpenGLUtil::disableBlending()
 
 void OpenGLUtil::bindShader(Shader& s)
 {
-    assert(s._program > 0);
+    assert(s._glHandle > 0);
     
-    glUseProgram(s._program);
+    glUseProgram(s._glHandle);
     
     std::vector<ShaderAttribute>& attributes = s._desc._attributes;
     for (const auto& sa : attributes)
@@ -96,7 +110,7 @@ void OpenGLUtil::bindFloat4Array(Shader& s, std::string uniform, int count, vec4
 
 void OpenGLUtil::bindTexture(Shader& s, std::string uniform, uint32_t index, Texture& t)
 {
-    bindTexture(s, uniform, index, t._texture);
+    bindTexture(s, uniform, index, t._glHandle);
 }
 
 void OpenGLUtil::bindTexture(Shader& s, std::string uniform, uint32_t index, uint32_t texture)
@@ -178,21 +192,24 @@ void OpenGLUtil::clearFramebuffer(float red, float green, float blue, float alph
     glClear(GL_COLOR_BUFFER_BIT);
 }
 
-void OpenGLUtil::draw(uint32_t mode, uint32_t first, uint32_t count)
+void OpenGLUtil::drawLines(uint32_t first, uint32_t count)
 {
-    assert(count > 0);
-    
-    glDrawArrays(mode, first, count);
+    draw(GL_LINES, first, count);
 }
 
-void OpenGLUtil::drawIndexed(uint32_t mode, uint32_t indexBuffer, uint32_t count, size_t first)
+void OpenGLUtil::drawTriangles(uint32_t first, uint32_t count)
 {
-    assert(indexBuffer > 0);
-    assert(count > 0);
-    
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBuffer);
-    glDrawElements(mode, count * NUM_INDICES_PER_RECTANGLE, GL_UNSIGNED_SHORT, BUFFER_OFFSET(first * NUM_INDICES_PER_RECTANGLE));
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+    draw(GL_TRIANGLES, first, count);
+}
+
+void OpenGLUtil::drawTrianglesIndexed(uint32_t indexBuffer, uint32_t count, size_t first)
+{
+    drawIndexed(GL_TRIANGLES, indexBuffer, count, first);
+}
+
+void OpenGLUtil::drawTriangleStrip(uint32_t first, uint32_t count)
+{
+    draw(GL_TRIANGLE_STRIP, first, count);
 }
 
 uint32_t OpenGLUtil::loadRektangleIndexBuffer(int numRektangles)
@@ -303,7 +320,7 @@ void OpenGLUtil::loadTexture(Texture& t)
     
     assert(t._data != nullptr);
     
-    t._texture = loadTexture(t._width, t._height, t._data, t._desc._filterMin, t._desc._filterMag, GL_RGBA, t._desc._repeatS, t._desc._mipMap);
+    t._glHandle = loadTexture(t._width, t._height, t._data, t._desc._filterMin, t._desc._filterMag, GL_RGBA, t._desc._repeatS, t._desc._mipMap);
 }
 
 void OpenGLUtil::unloadTexture(Texture& t)
@@ -313,8 +330,11 @@ void OpenGLUtil::unloadTexture(Texture& t)
         LOG("OpenGLUtil::unloadTexture %s", t._desc._filePath.c_str());
     }
     
-    unloadTexture(t._texture);
-    t._texture = 0;
+    uint32_t glHandle = t._glHandle;
+    assert(glHandle > 0);
+    
+    glDeleteTextures(1, &glHandle);
+    t._glHandle = 0;
 }
 
 void OpenGLUtil::loadShader(Shader& s)
@@ -323,12 +343,12 @@ void OpenGLUtil::loadShader(Shader& s)
     const long vertexShaderSrcLength = s._vertexShaderFileData->_length;
     const uint8_t* fragmentShaderSrc = s._fragmentShaderFileData->_data;
     const long fragmentShaderSrcLength = s._fragmentShaderFileData->_length;
-    s._program = loadShader(vertexShaderSrc, vertexShaderSrcLength, fragmentShaderSrc, fragmentShaderSrcLength);
+    s._glHandle = loadShader(vertexShaderSrc, vertexShaderSrcLength, fragmentShaderSrc, fragmentShaderSrcLength);
     
     std::vector<ShaderUniform>& uniforms = s._desc._uniforms;
     for (auto& su : uniforms)
     {
-        su._location = glGetUniformLocation(s._program, su._name.c_str());
+        su._location = glGetUniformLocation(s._glHandle, su._name.c_str());
     }
     
     size_t offset = 0;
@@ -345,14 +365,34 @@ void OpenGLUtil::loadShader(Shader& s)
     {
         sa._stride = totalSize * sizeof(GLfloat);
         
-        sa._location = glGetAttribLocation(s._program, sa._name.c_str());
+        sa._location = glGetAttribLocation(s._glHandle, sa._name.c_str());
     }
 }
 
 void OpenGLUtil::unloadShader(Shader& s)
 {
-    unloadShader(s._program);
-    s._program = 0;
+    uint32_t program = s._glHandle;
+    assert(program > 0);
+        
+    glDeleteProgram(program);
+    s._glHandle = 0;
+}
+
+void OpenGLUtil::draw(uint32_t mode, uint32_t first, uint32_t count)
+{
+    assert(count > 0);
+    
+    glDrawArrays(mode, first, count);
+}
+
+void OpenGLUtil::drawIndexed(uint32_t mode, uint32_t indexBuffer, uint32_t count, size_t first)
+{
+    assert(indexBuffer > 0);
+    assert(count > 0);
+    
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBuffer);
+    glDrawElements(mode, count * NUM_INDICES_PER_RECTANGLE, GL_UNSIGNED_SHORT, BUFFER_OFFSET(first * NUM_INDICES_PER_RECTANGLE));
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 }
 
 uint32_t OpenGLUtil::loadTexture(int width, int height, uint8_t* data, std::string filterMin, std::string filterMag, uint32_t type, bool repeat_s, bool mipmap)
@@ -389,13 +429,6 @@ uint32_t OpenGLUtil::loadTexture(int width, int height, uint8_t* data, std::stri
     return ret;
 }
 
-void OpenGLUtil::unloadTexture(uint32_t texture)
-{
-    assert(texture > 0);
-    
-    glDeleteTextures(1, &texture);
-}
-
 uint32_t OpenGLUtil::loadShader(const uint8_t* vertexShaderSrc, const long vertexShaderSrcLength, const uint8_t* fragmentShaderSrc, const long fragmentShaderSrcLength)
 {
     assert(vertexShaderSrc != nullptr);
@@ -428,13 +461,6 @@ uint32_t OpenGLUtil::loadShader(const uint8_t* vertexShaderSrc, const long verte
     glDeleteShader(fragmentShader);
     
     return ret;
-}
-
-void OpenGLUtil::unloadShader(uint32_t program)
-{
-    assert(program > 0);
-    
-    glDeleteProgram(program);
 }
 
 uint32_t OpenGLUtil::compileShader(const uint32_t type, const uint8_t* source, const int32_t length)

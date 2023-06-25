@@ -15,4 +15,7 @@ public:
      * returns the new buffer ID.
      */
     static uint32_t loadSound(const char *filePath);
+    
+//    void loadSound(Sound& s);
+//    void unloadSound(Sound& s);
 };

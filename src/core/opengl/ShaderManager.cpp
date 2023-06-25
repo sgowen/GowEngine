@@ -61,7 +61,7 @@ bool ShaderManager::isShaderLoaded(std::string name)
 
 bool ShaderManager::isShaderLoaded(Shader& shader)
 {
-    return shader._program != 0;
+    return shader._glHandle != 0;
 }
 
 std::map<std::string, Shader>& ShaderManager::shaders()

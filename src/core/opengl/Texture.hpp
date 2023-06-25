@@ -17,8 +17,7 @@ struct Texture
     int _height;
     int _numChannels;
     uint8_t* _data;
-    uint32_t _format;
-    uint32_t _texture;
+    uint32_t _glHandle;
     
     Texture(TextureDescriptor td) :
     _desc(td),
@@ -26,7 +25,7 @@ struct Texture
     _height(0),
     _numChannels(0),
     _data(nullptr),
-    _texture(0)
+    _glHandle(0)
     {
         // Empty
     }

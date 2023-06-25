@@ -10,11 +10,6 @@
 
 #if IS_DESKTOP
 
-#if IS_LINUX || IS_WINDOWS
-#define GLAD_GL_IMPLEMENTATION
-#include "core/opengl/OpenGLWrapper.hpp"
-#endif
-
 #define GLFW_INCLUDE_NONE
 #include <GLFW/glfw3.h>
 
@@ -139,6 +134,8 @@ private:
 
 void runEngine(Engine* engine, GLFWwindow* window)
 {
+    OGL.loadOpenGL(glfwGetProcAddress);
+    
     _engine = engine;
     
     GlfwClipboardHandler clipboardHandler(window);
@@ -325,10 +322,6 @@ void GlfwEngine::exec(Engine* engine, const char* windowTitle)
     glfwSetKeyCallback(window, key_callback);
 
     glfwMakeContextCurrent(window);
-    
-#if IS_LINUX || IS_WINDOWS
-    gladLoadGL(glfwGetProcAddress);
-#endif
     
     runEngine(engine, window);
     

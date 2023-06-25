@@ -51,7 +51,7 @@ void ScreenRenderer::renderFramebuffer(Shader& s, Framebuffer& fb)
     OGL.bindShader(s);
     OGL.bindTexture(s, "u_Texture", 0, fb._texture);
     
-    OGL.drawIndexed(OpenGLUtil::MODE_TRIANGLES, _indexBuffer, 1);
+    OGL.drawTrianglesIndexed(_indexBuffer, 1);
     
     OGL.unbindTexture(0);
     OGL.unbindShader(s);

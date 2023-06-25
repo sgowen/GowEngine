@@ -133,7 +133,7 @@ void SpriteBatcher::end(Shader& s, mat4& matrix, Texture& t, Color& colorFactor)
     OGL.bindColor(s, "u_ColorFactor", colorFactor);
     OGL.bindTexture(s, "u_Texture", 0, t);
     
-    OGL.drawIndexed(OpenGLUtil::MODE_TRIANGLES, _indexBuffer, numSprites);
+    OGL.drawTrianglesIndexed(_indexBuffer, numSprites);
     
     OGL.unbindTexture(0);
     OGL.unbindShader(s);

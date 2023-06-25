@@ -86,11 +86,11 @@ void RektangleBatcher::end(Shader& s, mat4& matrix, Color& c)
     if (_isFill)
     {
         uint32_t numQuads = (uint32_t)_vertices.size() / NUM_VERTICES_PER_RECTANGLE;
-        OGL.drawIndexed(OpenGLUtil::MODE_TRIANGLES, _indexBuffer, numQuads);
+        OGL.drawTrianglesIndexed(_indexBuffer, numQuads);
     }
     else
     {
-        OGL.draw(OpenGLUtil::MODE_LINES, 0, (int)_vertices.size());
+        OGL.drawLines(0, (uint32_t)_vertices.size());
     }
 
     OGL.unbindShader(s);

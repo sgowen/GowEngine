@@ -16,13 +16,13 @@ struct Shader
     ShaderDescriptor _desc;
     FileData* _vertexShaderFileData;
     FileData* _fragmentShaderFileData;
-    uint32_t _program;
+    uint32_t _glHandle;
     
     Shader(ShaderDescriptor desc) :
     _desc(desc),
     _vertexShaderFileData(nullptr),
     _fragmentShaderFileData(nullptr),
-    _program(0)
+    _glHandle(0)
     {
         // Empty
     }

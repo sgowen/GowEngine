@@ -77,11 +77,11 @@ void TriangleBatcher::end(Shader& s, mat4& matrix, Color& c)
     
     if (_isFill)
     {
-        OGL.draw(OpenGLUtil::MODE_TRIANGLES, 0, (int)_vertices.size());
+        OGL.drawTriangles(0, (uint32_t)_vertices.size());
     }
     else
     {
-        OGL.draw(OpenGLUtil::MODE_LINES, 0, (int)_vertices.size());
+        OGL.drawLines(0, (uint32_t)_vertices.size());
     }
     
     OGL.unbindShader(s);

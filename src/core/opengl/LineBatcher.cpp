@@ -60,7 +60,7 @@ void LineBatcher::end(Shader& s, mat4& matrix, Color& c)
     OGL.bindMatrix(s, "u_Matrix", matrix);
     OGL.bindColor(s, "u_Color", c);
     
-    OGL.draw(OpenGLUtil::MODE_LINES, 0, (int)_vertices.size());
+    OGL.drawLines(0, (uint32_t)_vertices.size());
     
     OGL.unbindShader(s);
     OGL.unbindVertexBuffer();

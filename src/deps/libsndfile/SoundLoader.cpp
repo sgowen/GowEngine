@@ -236,7 +236,7 @@ uint32_t SoundLoader::loadSound(const char *filePath)
         }
         else
         {
-            ALubyte *fmtbuf = static_cast<ALubyte*>(calloc(inf.datalen, 1));
+            unsigned char *fmtbuf = static_cast<unsigned char*>(calloc(inf.datalen, 1));
             inf.data = fmtbuf;
             if (sf_get_chunk_data(iter, &inf) != SF_ERR_NO_ERROR)
             {
