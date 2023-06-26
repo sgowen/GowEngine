@@ -17,13 +17,12 @@
 class TextureManager
 {
 public:
-    void loadTextures(std::vector<TextureDescriptor>& tds);
-    void loadTextureIntoOpenGL(Texture& t);
-    void unloadTextures(std::vector<TextureDescriptor>& tds);
+    void prepare(std::vector<TextureDescriptor>& tds);
+    void loadData();
+    void loadIntoOpenGLAndFreeData();
+    void reset();
     Texture& texture(std::string name);
     bool isTextureLoaded(std::string name);
-    bool isTextureLoadedIntoOpenGL(Texture& texture);
-    std::map<std::string, Texture>& textures();
     
 private:
     TextureLoader _loader;

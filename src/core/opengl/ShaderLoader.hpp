@@ -13,6 +13,6 @@ struct Shader;
 class ShaderLoader
 {
 public:    
-    void loadShader(Shader& s);
-    void unloadShader(Shader& s);
+    void loadData(Shader& s);
+    void freeData(Shader& s);
 };

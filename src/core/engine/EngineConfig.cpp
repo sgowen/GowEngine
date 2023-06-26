@@ -82,14 +82,9 @@ bool EngineConfig::physicsLoggingEnabled()
     return _physicsLoggingEnabled;
 }
 
-bool EngineConfig::soundsDisabled()
+bool EngineConfig::audioDisabled()
 {
-    return _soundsDisabled;
-}
-
-bool EngineConfig::musicDisabled()
-{
-    return _musicDisabled;
+    return _audioDisabled;
 }
 
 uint8_t EngineConfig::maxTextInputLength()
@@ -154,8 +149,7 @@ _fileLoggingEnabled(_config.getBool("fileLoggingEnabled", false)),
 _inputLoggingEnabled(_config.getBool("inputLoggingEnabled", false)),
 _networkLoggingEnabled(_config.getBool("networkLoggingEnabled", false)),
 _physicsLoggingEnabled(_config.getBool("physicsLoggingEnabled", false)),
-_soundsDisabled(_config.getBool("soundsDisabled", false)),
-_musicDisabled(_config.getBool("musicDisabled", false)),
+_audioDisabled(_config.getBool("audioDisabled", false)),
 _maxTextInputLength(_config.getUInt("maxTextInputLength", 16)),
 _maxNumSoundsToPlayPerFrame(_config.getUInt("maxNumSoundsToPlayPerFrame", 3)),
 _clientPortHost(_config.getUInt("clientPortHost", 1337)),

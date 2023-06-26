@@ -34,10 +34,10 @@ public:
     void destroyDeviceDependentResources();
     Shader& shader(std::string name);
     bool isShaderLoaded(std::string name);
-    OpenALSoundWrapper* sound(std::string soundID);
-    std::map<std::string, OpenALSoundWrapper*>& sounds();
-    OpenALSoundWrapper* music();
+    Sound& sound(std::string soundID);
+    std::map<std::string, Sound>& sounds();
     Font& font(std::string name);
+    bool isFontLoaded(std::string name);
     Texture& texture(std::string name);
     bool isTextureLoaded(std::string name);
     TextureRegion& textureRegion(std::string key, uint16_t stateTime = 0);
@@ -52,6 +52,8 @@ private:
     uint32_t _stateTime;
     bool _isLoadingData;
     bool _isLoadedIntoEngine;
+    
+    void beginLoad();
     
     AssetsManager();
     ~AssetsManager() {}

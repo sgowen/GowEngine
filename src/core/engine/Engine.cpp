@@ -20,8 +20,10 @@ _cursorWidth(0),
 _cursorHeight(0)
 {
     EngineConfig::create(configFilePath);
+    AudioEngine::create();
     
     ASSETS_MGR.registerAssets(ENGINE_ASSETS, AssetsLoader::initWithJSONFile(ENGINE_CFG.filePathEngineAssets()));
+    
     // Okay, this stuff is only relevant to the game, not the entire engine.
     // This needs to be loaded on an as-needed basis
     EntityLayoutManagerLoader::initWithJSONFile(ENTITY_LAYOUT_MGR, ENGINE_CFG.filePathEntityLayoutManager());
@@ -30,9 +32,10 @@ _cursorHeight(0)
 
 Engine::~Engine()
 {
-    EngineConfig::destroy();
-    
     ASSETS_MGR.deregisterAssets(ENGINE_ASSETS);
+    
+    AudioEngine::destroy();
+    EngineConfig::destroy();
 }
 
 void Engine::createDeviceDependentResources(ClipboardHandler* clipboardHandler)

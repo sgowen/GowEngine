@@ -34,24 +34,10 @@ void AssetsManager::update()
     {
         return;
     }
-
-    std::map<std::string, Shader>& shaders = _shaderMgr.shaders();
-    for (auto& pair : shaders)
-    {
-        Shader& s = pair.second;
-        _shaderMgr.loadShaderIntoOpenGL(s);
-    }
     
-    // TODO, load all sounds into OpenAL here, on the main thread
-    // so there will be 1 frame of loading that causes the game to hang
-    // actual file io will be handled in the background
-    
-    std::map<std::string, Texture>& textures = _textureMgr.textures();
-    for (auto& pair : textures)
-    {
-        Texture& t = pair.second;
-        _textureMgr.loadTextureIntoOpenGL(t);
-    }
+    _shaderMgr.loadIntoOpenGLAndFreeData();
+    _soundMgr.loadIntoOpenALAndFreeData();
+    _textureMgr.loadIntoOpenGLAndFreeData();
     
     THREAD_MGR.tearDownThreadIfRunning("AssetsManager");
     _isLoadedIntoEngine = true;
@@ -67,44 +53,37 @@ void thread_createDeviceDependentResources(void* arg)
 
 void AssetsManager::createDeviceDependentResourcesAsync()
 {
-    if (THREAD_MGR.isThreadRunning("AssetsManager"))
-    {
-        return;
-    }
+    assert(THREAD_MGR.isThreadRunning("AssetsManager") == false);
 
-    _stateTime = 0;
-    _isLoadingData = true;
-    _isLoadedIntoEngine = false;
+    beginLoad();
     
     THREAD_MGR.spawnThread("AssetsManager", thread_createDeviceDependentResources, this);
 }
 
 void AssetsManager::createDeviceDependentResources()
 {
-    _stateTime = 0;
-    _isLoadingData = true;
-    _isLoadedIntoEngine = false;
+    beginLoad();
     
     for (auto& pair : _assets)
     {
         Assets& a = pair.second;
-        _shaderMgr.loadShaders(a._shaderDescriptors);
-        _soundMgr.loadSounds(a._soundDescriptors);
-        _textureMgr.loadTextures(a._textureDescriptors);
+        _shaderMgr.prepare(a._shaderDescriptors);
+        _soundMgr.prepare(a._soundDescriptors);
+        _textureMgr.prepare(a._textureDescriptors);
     }
+    
+    _shaderMgr.loadData();
+    _soundMgr.loadData();
+    _textureMgr.loadData();
     
     _isLoadingData = false;
 }
 
 void AssetsManager::destroyDeviceDependentResources()
 {
-    for (auto& pair : _assets)
-    {
-        Assets& a = pair.second;
-        _shaderMgr.unloadShaders(a._shaderDescriptors);
-        _soundMgr.unloadSounds(a._soundDescriptors);
-        _textureMgr.unloadTextures(a._textureDescriptors);
-    }
+    _shaderMgr.reset();
+    _soundMgr.reset();
+    _textureMgr.reset();
 }
 
 Shader& AssetsManager::shader(std::string name)
@@ -117,19 +96,14 @@ bool AssetsManager::isShaderLoaded(std::string name)
     return _shaderMgr.isShaderLoaded(name);
 }
 
-OpenALSoundWrapper* AssetsManager::sound(std::string soundID)
+Sound& AssetsManager::sound(std::string soundID)
 {
     return _soundMgr.sound(soundID);
 }
 
-std::map<std::string, OpenALSoundWrapper*>& AssetsManager::sounds()
+std::map<std::string, Sound>& AssetsManager::sounds()
 {
     return _soundMgr.sounds();
-}
-
-OpenALSoundWrapper* AssetsManager::music()
-{
-    return _soundMgr.music();
 }
 
 Font& AssetsManager::font(std::string name)
@@ -150,6 +124,12 @@ Font& AssetsManager::font(std::string name)
     assert(ret != nullptr);
     
     return *ret;
+}
+
+bool AssetsManager::isFontLoaded(std::string name)
+{
+    Font& f = font(name);
+    return _textureMgr.isTextureLoaded(f._texture);
 }
 
 Texture& AssetsManager::texture(std::string name)
@@ -188,6 +168,13 @@ uint32_t AssetsManager::getStateTime()
 bool AssetsManager::isLoaded()
 {
     return _isLoadedIntoEngine;
+}
+
+void AssetsManager::beginLoad()
+{
+    _stateTime = 0;
+    _isLoadingData = true;
+    _isLoadedIntoEngine = false;
 }
 
 AssetsManager::AssetsManager() :

@@ -8,34 +8,45 @@
 
 #include <GowEngine/GowEngine.hpp>
 
-void ShaderManager::loadShaders(std::vector<ShaderDescriptor>& sds)
+void ShaderManager::prepare(std::vector<ShaderDescriptor>& sds)
 {
     for (auto& sd : sds)
     {
         _shaders.emplace(sd._name, Shader{sd});
     }
-    
-    for (std::map<std::string, Shader>::iterator i = _shaders.begin(); i != _shaders.end(); ++i)
+}
+
+void ShaderManager::loadData()
+{
+    for (auto& pair : _shaders)
     {
-        Shader& s = i->second;
-        _loader.loadShader(s);
+        Shader& s = pair.second;
+        _loader.loadData(s);
     }
 }
 
-void ShaderManager::loadShaderIntoOpenGL(Shader &s)
+void ShaderManager::loadIntoOpenGLAndFreeData()
 {
-    OGL.loadShader(s);
-    _loader.unloadShader(s);
+    for (auto& pair : _shaders)
+    {
+        Shader& s = pair.second;
+        OGL.loadShader(s);
+        _loader.freeData(s);
+    }
 }
 
-void ShaderManager::unloadShaders(std::vector<ShaderDescriptor>& sds)
+void ShaderManager::reset()
 {
-    for (std::map<std::string, Shader>::iterator i = _shaders.begin(); i != _shaders.end(); ++i)
+    for (auto& pair : _shaders)
     {
-        Shader& s = i->second;
-        if (isShaderLoaded(s))
+        Shader& s = pair.second;
+        if (s._glHandle > 0)
         {
             OGL.unloadShader(s);
+        }
+        if (s._vertexShaderFileData != nullptr)
+        {
+            _loader.freeData(s);
         }
     }
     _shaders.clear();
@@ -53,18 +64,9 @@ bool ShaderManager::isShaderLoaded(std::string name)
     auto q = _shaders.find(name);
     if (q != _shaders.end())
     {
-        return isShaderLoaded(q->second);
+        Shader& s = q->second;
+        return s._glHandle > 0;
     }
     
     return false;
-}
-
-bool ShaderManager::isShaderLoaded(Shader& shader)
-{
-    return shader._glHandle != 0;
-}
-
-std::map<std::string, Shader>& ShaderManager::shaders()
-{
-    return _shaders;
 }

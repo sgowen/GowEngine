@@ -136,10 +136,9 @@
 #include "core/network/UDPSocket.hpp"
 
 /// Core OpenAL
-#include "core/openal/OpenALAudioEngine.hpp"
-#include "core/openal/OpenALSound.hpp"
-#include "core/openal/OpenALSoundWrapper.hpp"
+#include "core/openal/AudioEngine.hpp"
 #include "core/openal/OpenALUtil.hpp"
+#include "core/openal/Sound.hpp"
 #include "core/openal/SoundManager.hpp"
 #include "core/openal/SoundUtil.hpp"
 

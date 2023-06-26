@@ -8,33 +8,48 @@
 
 #include <GowEngine/GowEngine.hpp>
 
-void TextureManager::loadTextures(std::vector<TextureDescriptor>& tds)
+void TextureManager::prepare(std::vector<TextureDescriptor>& tds)
 {
     for (auto& td : tds)
     {
         _textures.emplace(td._name, Texture{td});
-        Texture& t = texture(td._name);
-        _loader.loadTexture(t);
     }
 }
 
-void TextureManager::loadTextureIntoOpenGL(Texture& t)
+void TextureManager::loadData()
 {
-    OGL.loadTexture(t);
-    _loader.unloadTexture(t);
+    for (auto& pair : _textures)
+    {
+        Texture& t = pair.second;
+        _loader.loadData(t);
+    }
 }
 
-void TextureManager::unloadTextures(std::vector<TextureDescriptor>& tds)
+void TextureManager::loadIntoOpenGLAndFreeData()
 {
-    for (auto& td : tds)
+    for (auto& pair : _textures)
     {
-        Texture& t = texture(td._name);
-        if (isTextureLoadedIntoOpenGL(t))
+        Texture& t = pair.second;
+        OGL.loadTexture(t);
+        _loader.freeData(t);
+    }
+}
+
+void TextureManager::reset()
+{
+    for (auto& pair : _textures)
+    {
+        Texture& t = pair.second;
+        if (t._glHandle > 0)
         {
             OGL.unloadTexture(t);
         }
-        _textures.erase(td._name);
+        if (t._data != nullptr)
+        {
+            _loader.freeData(t);
+        }
     }
+    _textures.clear();
 }
 
 Texture& TextureManager::texture(std::string name)
@@ -49,18 +64,9 @@ bool TextureManager::isTextureLoaded(std::string name)
     auto q = _textures.find(name);
     if (q != _textures.end())
     {
-        return isTextureLoadedIntoOpenGL(q->second);
+        Texture& t = q->second;
+        return t._glHandle > 0;
     }
     
     return false;
-}
-
-bool TextureManager::isTextureLoadedIntoOpenGL(Texture& texture)
-{
-    return texture._glHandle != 0;
-}
-
-std::map<std::string, Texture>& TextureManager::textures()
-{
-    return _textures;
 }

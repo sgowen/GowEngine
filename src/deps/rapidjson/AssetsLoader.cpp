@@ -52,7 +52,7 @@ Assets AssetsLoader::initWithJSON(const char* json)
 
             std::string soundID = RapidJSONUtil::getString(iv, "soundID");
             std::string filePath = RapidJSONUtil::getString(iv, "filePath");
-            uint8_t numInstances = RapidJSONUtil::getUInt(iv, "numInstances");
+            uint8_t numInstances = RapidJSONUtil::getUInt(iv, "numInstances", 1);
 
             assert(std::find(soundIDsAdded.begin(), soundIDsAdded.end(), soundID) == soundIDsAdded.end());
 

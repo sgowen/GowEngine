@@ -8,28 +8,26 @@
 
 #pragma once
 
-#include "OpenALSoundWrapper.hpp"
-#include "core/assets/SoundDescriptor.hpp"
+#include "deps/libsndfile/SoundLoader.hpp"
+#include "Sound.hpp"
 
 #include <map>
-#include <vector>
 #include <string>
 
 class SoundManager
 {
 public:
-    void loadSounds(std::vector<SoundDescriptor>& soundDescriptors);
-    void unloadSounds(std::vector<SoundDescriptor>& soundDescriptors);
-    OpenALSoundWrapper* sound(std::string soundID);
-    std::map<std::string, OpenALSoundWrapper*>& sounds();
-    OpenALSoundWrapper* music();
+    void prepare(std::vector<SoundDescriptor>& soundDescriptors);
+    void loadData();
+    void loadIntoOpenALAndFreeData();
+    void reset();
+    Sound& sound(std::string soundID);
+    std::map<std::string, Sound>& sounds();
     
 private:
-    std::map<std::string, OpenALSoundWrapper*> _sounds;
-    OpenALSoundWrapper* _music;
+    SoundLoader _loader;
+    std::map<std::string, Sound> _sounds;
     
     void loadSound(std::string soundID, std::string filePath, uint8_t numInstances = 1);
     void unloadSound(std::string soundID);
-    void loadMusic(std::string filePath);
-    void unloadMusic();
 };

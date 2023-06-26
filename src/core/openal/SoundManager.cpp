@@ -8,109 +8,58 @@
 
 #include <GowEngine/GowEngine.hpp>
 
-void SoundManager::loadSounds(std::vector<SoundDescriptor>& soundDescriptors)
+void SoundManager::prepare(std::vector<SoundDescriptor>& sds)
 {
-    for (SoundDescriptor& sd : soundDescriptors)
+    for (auto& sd : sds)
     {
-        std::string soundID = sd._soundID;
-        if (soundID == "music")
-        {
-            loadMusic(sd._filePath.c_str());
-        }
-        else
-        {
-            loadSound(soundID, sd._filePath.c_str(), sd._numInstances);
-        }
+        _sounds.emplace(sd._soundID, Sound{sd});
     }
 }
 
-void SoundManager::loadSoundIntoOpenAL(Sound &s)
+void SoundManager::loadData()
 {
-    OGL.loadShader(s);
-    _loader.unloadShader(s);
+    for (auto& pair : _sounds)
+    {
+        Sound& s = pair.second;
+        _loader.loadData(s);
+    }
 }
 
-void SoundManager::unloadSounds(std::vector<SoundDescriptor>& soundDescriptors)
+void SoundManager::loadIntoOpenALAndFreeData()
 {
-    for (SoundDescriptor& sd : soundDescriptors)
+    for (auto& pair : _sounds)
     {
-        std::string soundID = sd._soundID;
-        if (soundID == "music")
+        Sound& s = pair.second;
+        OAL.loadSound(s);
+        _loader.freeData(s);
+    }
+}
+
+void SoundManager::reset()
+{
+    for (auto& pair : _sounds)
+    {
+        Sound& s = pair.second;
+        if (s._alHandles != nullptr)
         {
-            unloadMusic();
+            OAL.unloadSound(s);
         }
-        else
+        if (s._data != nullptr)
         {
-            unloadSound(soundID);
+            _loader.freeData(s);
         }
     }
+    _sounds.clear();
 }
 
-OpenALSoundWrapper* SoundManager::sound(std::string soundID)
+Sound& SoundManager::sound(std::string soundID)
 {
-    OpenALSoundWrapper* ret = nullptr;
-    
-    auto q = _sounds.find(soundID);
-    if (q != _sounds.end())
-    {
-        ret = q->second;
-    }
-    
-    return ret;
-}
-
-std::map<std::string, OpenALSoundWrapper*>& SoundManager::sounds()
-{
-    return _sounds;
-}
-
-OpenALSoundWrapper* SoundManager::music()
-{
-    return _music;
-}
-
-void SoundManager::loadSound(std::string soundID, std::string filePath, uint8_t numInstances)
-{
-    assert(_sounds.find(soundID) == _sounds.end());
-    
-    OpenALSoundWrapper* sw = AUDIO_ENGINE.loadSound(filePath, numInstances);
-    _sounds.emplace(soundID, sw);
-}
-
-void SoundManager::unloadSound(std::string soundID)
-{
-    if (ENGINE_CFG.fileLoggingEnabled())
-    {
-        // TODO, log the file path
-        LOG("SoundManager::unloadSound");
-    }
-    
     auto q = _sounds.find(soundID);
     assert(q != _sounds.end());
-    delete q->second;
-    _sounds.erase(q);
+    return q->second;
 }
 
-void SoundManager::loadMusic(std::string filePath)
+std::map<std::string, Sound>& SoundManager::sounds()
 {
-    unloadMusic();
-    
-    _music = AUDIO_ENGINE.loadMusic(filePath);
-}
-
-void SoundManager::unloadMusic()
-{
-    if (_music == nullptr)
-    {
-        return;
-    }
-    
-    if (ENGINE_CFG.fileLoggingEnabled())
-    {
-        // TODO, log the file path
-        LOG("SoundManager::unloadMusic");
-    }
-    
-    delete _music;
-    _music = nullptr;
+    return _sounds;
 }

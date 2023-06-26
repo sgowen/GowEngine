@@ -29,8 +29,7 @@ public:
     bool inputLoggingEnabled();
     bool networkLoggingEnabled();
     bool physicsLoggingEnabled();
-    bool soundsDisabled();
-    bool musicDisabled();
+    bool audioDisabled();
     uint8_t maxTextInputLength();
     uint8_t maxNumSoundsToPlayPerFrame();
     uint16_t clientPortHost();
@@ -58,8 +57,7 @@ private:
     bool _inputLoggingEnabled;
     bool _networkLoggingEnabled;
     bool _physicsLoggingEnabled;
-    bool _soundsDisabled;
-    bool _musicDisabled;
+    bool _audioDisabled;
     uint8_t _maxTextInputLength;
     uint8_t _maxNumSoundsToPlayPerFrame;
     uint16_t _clientPortHost;

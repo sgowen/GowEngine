@@ -8,7 +8,7 @@
 
 #pragma once
 
-class OpenALSound;
+struct Sound;
 
 class OpenALUtil
 {
@@ -19,21 +19,24 @@ public:
         return ret;
     }
     
-    bool openDeviceAndCreateContext();
-    bool destroyContextAndCloseDevice();
+    void openDeviceAndCreateContext();
+    void destroyContextAndCloseDevice();
     
-    void create(OpenALSound& sound);
-    void destroy(OpenALSound& sound);
-    void play(OpenALSound& sound);
-    void resume(OpenALSound& sound);
-    void pause(OpenALSound& sound);
-    void stop(OpenALSound& sound);
-    void setVolume(OpenALSound& sound, float volume);
-    bool isLooping(OpenALSound& sound);
-    bool isPlaying(OpenALSound& sound);
-    bool isPaused(OpenALSound& sound);
-    void setLooping(OpenALSound& sound, bool isLooping);
+    void loadSound(Sound& sound);
+    void unloadSound(Sound& sound);
+    
+    void play(uint32_t alHandle, bool isLooping = false);
+    void resume(uint32_t alHandle);
+    void pause(uint32_t alHandle);
+    void stop(uint32_t alHandle);
+    void setVolume(uint32_t alHandle, float volume);
+    bool isLooping(uint32_t alHandle);
+    void setLooping(uint32_t alHandle, bool isLooping);
 
+private:
+    bool isPlaying(uint32_t alHandle);
+    bool isPaused(uint32_t alHandle);
+    
     OpenALUtil() {}
     ~OpenALUtil() {}
     OpenALUtil(const OpenALUtil&);

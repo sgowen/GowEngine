@@ -11,16 +11,17 @@
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"
 
-void TextureLoader::loadTexture(Texture& t)
+void TextureLoader::loadData(Texture& t)
 {
+    std::string filePath = t._desc._filePath;
     if (ENGINE_CFG.fileLoggingEnabled())
     {
-        LOG("TextureLoader::loadTexture %s", t._desc._filePath.c_str());
+        LOG("TextureLoader::loadData %s", filePath.c_str());
     }
     
     assert(t._data == nullptr);
     
-    const FileData fd = ASSET_HANDLER.loadAsset(t._desc._filePath);
+    const FileData fd = ASSET_HANDLER.loadAsset(filePath);
     
     if (IS_IOS)
     {
@@ -33,11 +34,13 @@ void TextureLoader::loadTexture(Texture& t)
     ASSET_HANDLER.unloadAsset(fd);
 }
 
-void TextureLoader::unloadTexture(Texture& t)
+void TextureLoader::freeData(Texture& t)
 {
+    std::string filePath = t._desc._filePath;
+    
     if (ENGINE_CFG.fileLoggingEnabled())
     {
-        LOG("TextureLoader::unloadTexture %s", t._desc._filePath.c_str());
+        LOG("TextureLoader::freeData %s", filePath.c_str());
     }
     
     assert(t._data != nullptr);

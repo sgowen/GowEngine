@@ -30,7 +30,7 @@
 /// Handy singleton accessors
 #define ASSET_HANDLER AssetHandlerFactory::getInstance()
 #define ASSETS_MGR AssetsManager::getInstance()
-#define AUDIO_ENGINE OpenALAudioEngine::getInstance()
+#define AUDIO_ENGINE AudioEngine::getInstance()
 #define FPS_UTIL FPSUtil::getInstance()
 #define INST_REG InstanceRegistry::getInstance()
 #define THREAD_MGR ThreadManager::getInstance()

@@ -51,8 +51,8 @@ void EngineState::execute(Engine* e)
 
 void EngineState::exit(Engine* e)
 {
-    destroyDeviceDependentResources(e);
     ASSETS_MGR.deregisterAssets(_filePathAssets);
+    destroyDeviceDependentResources(e);
     onExit(e);
 }
 

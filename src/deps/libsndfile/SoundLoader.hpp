@@ -8,14 +8,11 @@
 
 #pragma once
 
+struct Sound;
+
 class SoundLoader
 {
 public:
-    /* LoadBuffer loads the named audio file into an OpenAL buffer object, and
-     * returns the new buffer ID.
-     */
-    static uint32_t loadSound(const char *filePath);
-    
-//    void loadSound(Sound& s);
-//    void unloadSound(Sound& s);
+    void loadData(Sound& s);
+    void freeData(Sound& s);
 };

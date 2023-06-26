@@ -97,7 +97,7 @@ void Renderer::renderLoadingView(uint32_t stateTime)
     clearFramebuffer();
     
     if (!ASSETS_MGR.isShaderLoaded("texture") ||
-        !ASSETS_MGR.isTextureLoaded("texture_font"))
+        !ASSETS_MGR.isFontLoaded("main"))
     {
         return;
     }
