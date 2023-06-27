@@ -23,6 +23,7 @@ public:
     void reset();
     Sound& sound(std::string soundID);
     std::map<std::string, Sound>& sounds();
+    bool areSoundsLoaded();
     
 private:
     SoundLoader _loader;

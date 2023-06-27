@@ -323,5 +323,9 @@ bool OpenALUtil::isPlaying(uint32_t alHandle)
 
 bool OpenALUtil::isPaused(uint32_t alHandle)
 {
-    return !isPlaying(alHandle);
+    ALint state;
+    alGetSourcei(alHandle, AL_SOURCE_STATE, &state);
+    crashIfError();
+
+    return state == AL_PAUSED;
 }

@@ -36,6 +36,7 @@ public:
     bool isShaderLoaded(std::string name);
     Sound& sound(std::string soundID);
     std::map<std::string, Sound>& sounds();
+    bool areSoundsLoaded();
     Font& font(std::string name);
     bool isFontLoaded(std::string name);
     Texture& texture(std::string name);

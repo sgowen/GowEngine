@@ -115,7 +115,11 @@ void AudioEngine::pauseSound(std::string soundID)
     
     for (uint8_t i = 0; i < s._desc._numInstances; ++i)
     {
-        _soundsToPause.push_back(s.nextSource());
+        uint32_t alHandle = s.nextSource();
+        if (OAL.isPlaying(alHandle))
+        {
+            _soundsToPause.push_back(alHandle);
+        }
     }
 }
 
@@ -130,7 +134,11 @@ void AudioEngine::resumeSound(std::string soundID)
     
     for (uint8_t i = 0; i < s._desc._numInstances; ++i)
     {
-        _soundsToResume.push_back(s.nextSource());
+        uint32_t alHandle = s.nextSource();
+        if (OAL.isPaused(alHandle))
+        {
+            _soundsToResume.push_back(alHandle);
+        }
     }
 }
 
@@ -141,13 +149,22 @@ void AudioEngine::stopAllSounds()
         return;
     }
     
+    if (!ASSETS_MGR.areSoundsLoaded())
+    {
+        return;
+    }
+    
     std::map<std::string, Sound>& sounds = ASSETS_MGR.sounds();
     for (auto& pair : sounds)
     {
         Sound& s = pair.second;
         for (uint8_t i = 0; i < s._desc._numInstances; ++i)
         {
-            _soundsToStop.push_back(s.nextSource());
+            uint32_t alHandle = s.nextSource();
+            if (OAL.isPlaying(alHandle))
+            {
+                _soundsToStop.push_back(alHandle);
+            }
         }
     }
 }
@@ -159,13 +176,22 @@ void AudioEngine::pauseAllSounds()
         return;
     }
     
+    if (!ASSETS_MGR.areSoundsLoaded())
+    {
+        return;
+    }
+    
     std::map<std::string, Sound>& sounds = ASSETS_MGR.sounds();
     for (auto& pair : sounds)
     {
         Sound& s = pair.second;
         for (uint8_t i = 0; i < s._desc._numInstances; ++i)
         {
-            _soundsToPause.push_back(s.nextSource());
+            uint32_t alHandle = s.nextSource();
+            if (OAL.isPlaying(alHandle))
+            {
+                _soundsToPause.push_back(alHandle);
+            }
         }
     }
 }
@@ -177,13 +203,22 @@ void AudioEngine::resumeAllSounds()
         return;
     }
     
+    if (!ASSETS_MGR.areSoundsLoaded())
+    {
+        return;
+    }
+    
     std::map<std::string, Sound>& sounds = ASSETS_MGR.sounds();
     for (auto& pair : sounds)
     {
         Sound& s = pair.second;
         for (uint8_t i = 0; i < s._desc._numInstances; ++i)
         {
-            _soundsToResume.push_back(s.nextSource());
+            uint32_t alHandle = s.nextSource();
+            if (OAL.isPaused(alHandle))
+            {
+                _soundsToResume.push_back(alHandle);
+            }
         }
     }
 }

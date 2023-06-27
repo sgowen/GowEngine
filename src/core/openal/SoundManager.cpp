@@ -63,3 +63,21 @@ std::map<std::string, Sound>& SoundManager::sounds()
 {
     return _sounds;
 }
+
+bool SoundManager::areSoundsLoaded()
+{
+    if (_sounds.empty())
+    {
+        return false;
+    }
+    
+    for (auto& pair : _sounds)
+    {
+        Sound& s = pair.second;
+        if (s._alHandles == nullptr)
+        {
+            return false;
+        }
+    }
+    return true;
+}

@@ -106,6 +106,11 @@ std::map<std::string, Sound>& AssetsManager::sounds()
     return _soundMgr.sounds();
 }
 
+bool AssetsManager::areSoundsLoaded()
+{
+    return _soundMgr.areSoundsLoaded();
+}
+
 Font& AssetsManager::font(std::string name)
 {
     Font* ret = nullptr;
