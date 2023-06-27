@@ -59,7 +59,6 @@ void EngineState::exit(Engine* e)
 EngineState::EngineState(std::string configFilePath) : State<Engine>(),
 // Yeah, this config should be loaded async.
 _config(ConfigLoader::initWithJSONFile(configFilePath)),
-_stateTime(0),
 _filePathAssets(_config.getString("filePathAssets")),
 _assets(AssetsLoader::initWithJSONFile(_filePathAssets)),
 _renderer(RendererLoader::initWithJSONFile(_config.getString("filePathRenderer"))),
@@ -111,7 +110,6 @@ void EngineState::update(Engine* e)
     }
     
     onUpdate(e);
-    ++_stateTime;
 }
 
 void EngineState::render(Engine* e)

@@ -32,7 +32,6 @@ public:
     
 protected:
     Config _config;
-    uint32_t _stateTime;
     
     EngineState(std::string configFilePath);
     virtual ~EngineState() {}
