@@ -136,30 +136,30 @@ void SoundLoader::loadData(Sound& s)
         case SF_FORMAT_MPEG_LAYER_I:
         case SF_FORMAT_MPEG_LAYER_II:
         case SF_FORMAT_MPEG_LAYER_III:
-            s._sampleFormat = Float;
+            s._formatType = FormatType_Float;
             break;
         case SF_FORMAT_IMA_ADPCM:
             if (sfinfo.channels <= 2 && (sfinfo.format&SF_FORMAT_TYPEMASK) == SF_FORMAT_WAV)
             {
-                s._sampleFormat = IMA4;
+                s._formatType = FormatType_IMA4;
             }
             break;
         case SF_FORMAT_MS_ADPCM:
             if (sfinfo.channels <= 2 && (sfinfo.format&SF_FORMAT_TYPEMASK) == SF_FORMAT_WAV)
             {
-                s._sampleFormat = MSADPCM;
+                s._formatType = FormatType_MSADPCM;
             }
             break;
     }
 
-    if (s._sampleFormat == IMA4 || s._sampleFormat == MSADPCM)
+    if (s._formatType == FormatType_IMA4 || s._formatType == FormatType_MSADPCM)
     {
         SF_CHUNK_INFO inf = { "fmt ", 4, 0, nullptr };
         SF_CHUNK_ITERATOR *iter = sf_get_chunk_iterator(sndfile, &inf);
 
         if (!iter || sf_get_chunk_size(iter, &inf) != SF_ERR_NO_ERROR || inf.datalen < 14)
         {
-            s._sampleFormat = Int16;
+            s._formatType = FormatType_Int16;
         }
         else
         {
@@ -167,18 +167,18 @@ void SoundLoader::loadData(Sound& s)
             inf.data = fmtbuf;
             if (sf_get_chunk_data(iter, &inf) != SF_ERR_NO_ERROR)
             {
-                s._sampleFormat = Int16;
+                s._formatType = FormatType_Int16;
             }
             else
             {
                 byteblockalign = fmtbuf[12] | (fmtbuf[13]<<8);
-                if (s._sampleFormat == IMA4)
+                if (s._formatType == FormatType_IMA4)
                 {
                     s._splblockalign = (byteblockalign/sfinfo.channels - 4)/4*8 + 1;
                     if (s._splblockalign < 1
                         || ((s._splblockalign-1)/2 + 4)*sfinfo.channels != byteblockalign)
                     {
-                        s._sampleFormat = Int16;
+                        s._formatType = FormatType_Int16;
                     }
                 }
                 else
@@ -187,7 +187,7 @@ void SoundLoader::loadData(Sound& s)
                     if (s._splblockalign < 2
                         || ((s._splblockalign-2)/2 + 7)*sfinfo.channels != byteblockalign)
                     {
-                        s._sampleFormat = Int16;
+                        s._formatType = FormatType_Int16;
                     }
                 }
             }
@@ -195,67 +195,67 @@ void SoundLoader::loadData(Sound& s)
         }
     }
 
-    if (s._sampleFormat == Int16)
+    if (s._formatType == FormatType_Int16)
     {
         s._splblockalign = 1;
         byteblockalign = sfinfo.channels * 2;
     }
-    else if (s._sampleFormat == Float)
+    else if (s._formatType == FormatType_Float)
     {
         s._splblockalign = 1;
         byteblockalign = sfinfo.channels * 4;
     }
 
-    s._format = SOUND_FORMAT_NONE;
+    s._format = Format_NONE;
     if (sfinfo.channels == 1)
     {
-        if (s._sampleFormat == Int16)
+        if (s._formatType == FormatType_Int16)
         {
-            s._format = SOUND_FORMAT_MONO16;
+            s._format = Format_MONO16;
         }
-        else if (s._sampleFormat == Float)
+        else if (s._formatType == FormatType_Float)
         {
-            s._format = SOUND_FORMAT_MONO_FLOAT32;
+            s._format = Format_MONO_FLOAT32;
         }
-        else if (s._sampleFormat == IMA4)
+        else if (s._formatType == FormatType_IMA4)
         {
-            s._format = SOUND_FORMAT_MONO_IMA4;
+            s._format = Format_MONO_IMA4;
         }
-        else if (s._sampleFormat == MSADPCM)
+        else if (s._formatType == FormatType_MSADPCM)
         {
-            s._format = SOUND_FORMAT_MONO_MSADPCM_SOFT;
+            s._format = Format_MONO_MSADPCM_SOFT;
         }
     }
     else if (sfinfo.channels == 2)
     {
-        if (s._sampleFormat == Int16)
+        if (s._formatType == FormatType_Int16)
         {
-            s._format = SOUND_FORMAT_STEREO16;
+            s._format = Format_STEREO16;
         }
-        else if (s._sampleFormat == Float)
+        else if (s._formatType == FormatType_Float)
         {
-            s._format = SOUND_FORMAT_STEREO_FLOAT32;
+            s._format = Format_STEREO_FLOAT32;
         }
-        else if (s._sampleFormat == IMA4)
+        else if (s._formatType == FormatType_IMA4)
         {
-            s._format = SOUND_FORMAT_STEREO_IMA4;
+            s._format = Format_STEREO_IMA4;
         }
-        else if (s._sampleFormat == MSADPCM)
+        else if (s._formatType == FormatType_MSADPCM)
         {
-            s._format = SOUND_FORMAT_STEREO_MSADPCM_SOFT;
+            s._format = Format_STEREO_MSADPCM_SOFT;
         }
     }
     else if (sfinfo.channels == 3)
     {
         if (sf_command(sndfile, SFC_WAVEX_GET_AMBISONIC, nullptr, 0) == SF_AMBISONIC_B_FORMAT)
         {
-            if (s._sampleFormat == Int16)
+            if (s._formatType == FormatType_Int16)
             {
-                s._format = SOUND_FORMAT_BFORMAT2D_16;
+                s._format = Format_BFORMAT2D_16;
             }
-            else if (s._sampleFormat == Float)
+            else if (s._formatType == FormatType_Float)
             {
-                s._format = SOUND_FORMAT_BFORMAT2D_FLOAT32;
+                s._format = Format_BFORMAT2D_FLOAT32;
             }
         }
     }
@@ -263,24 +263,24 @@ void SoundLoader::loadData(Sound& s)
     {
         if (sf_command(sndfile, SFC_WAVEX_GET_AMBISONIC, nullptr, 0) == SF_AMBISONIC_B_FORMAT)
         {
-            if (s._sampleFormat == Int16)
+            if (s._formatType == FormatType_Int16)
             {
-                s._format = SOUND_FORMAT_BFORMAT3D_16;
+                s._format = Format_BFORMAT3D_16;
             }
-            else if (s._sampleFormat == Float)
+            else if (s._formatType == FormatType_Float)
             {
-                s._format = SOUND_FORMAT_BFORMAT3D_FLOAT32;
+                s._format = Format_BFORMAT3D_FLOAT32;
             }
         }
     }
     
-    if (s._format == SOUND_FORMAT_NONE)
+    if (s._format == Format_NONE)
     {
         LOG("Unsupported channel count: %d", sfinfo.channels);
         sf_close(sndfile);
         ASSET_HANDLER.unloadAsset(soundData);
     }
-    assert(s._format != SOUND_FORMAT_NONE);
+    assert(s._format != Format_NONE);
 
     bool areSamplesInvalid = (sfinfo.frames / s._splblockalign) > (sf_count_t)(INT_MAX / byteblockalign);
     if (areSamplesInvalid)
@@ -293,11 +293,11 @@ void SoundLoader::loadData(Sound& s)
 
     s._data = malloc((size_t)(sfinfo.frames / s._splblockalign * byteblockalign));
 
-    if (s._sampleFormat == Int16)
+    if (s._formatType == FormatType_Int16)
     {
         num_frames = sf_readf_short(sndfile, static_cast<short*>(s._data), sfinfo.frames);
     }
-    else if (s._sampleFormat == Float)
+    else if (s._formatType == FormatType_Float)
     {
         num_frames = sf_readf_float(sndfile, static_cast<float*>(s._data), sfinfo.frames);
     }

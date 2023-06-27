@@ -139,6 +139,40 @@ const char* formatName(ALenum format)
     return "Unknown Format";
 }
 
+ALenum convertToOpenALFormat(Format format)
+{
+    switch (format)
+    {
+        case Format_MONO16:
+            return AL_FORMAT_MONO16;
+        case Format_MONO_FLOAT32:
+            return AL_FORMAT_MONO_FLOAT32;
+        case Format_MONO_IMA4:
+            return AL_FORMAT_MONO_IMA4;
+        case Format_MONO_MSADPCM_SOFT:
+            return AL_FORMAT_MONO_MSADPCM_SOFT;
+        case Format_STEREO16:
+            return AL_FORMAT_STEREO16;
+        case Format_STEREO_FLOAT32:
+            return AL_FORMAT_STEREO_FLOAT32;
+        case Format_STEREO_IMA4:
+            return AL_FORMAT_STEREO_IMA4;
+        case Format_STEREO_MSADPCM_SOFT:
+            return AL_FORMAT_STEREO_MSADPCM_SOFT;
+        case Format_BFORMAT2D_16:
+            return AL_FORMAT_BFORMAT2D_16;
+        case Format_BFORMAT2D_FLOAT32:
+            return AL_FORMAT_BFORMAT2D_FLOAT32;
+        case Format_BFORMAT3D_16:
+            return AL_FORMAT_BFORMAT3D_16;
+        case Format_BFORMAT3D_FLOAT32:
+            return AL_FORMAT_BFORMAT3D_FLOAT32;
+        case Format_NONE:
+        default:
+            return AL_NONE;
+    }
+}
+
 void crashIfError()
 {
     ALenum err = AL_NO_ERROR;
@@ -152,21 +186,22 @@ void crashIfError()
 
 void OpenALUtil::loadSound(Sound& s)
 {
+    ALenum format = convertToOpenALFormat(s._format);
     if (ENGINE_CFG.fileLoggingEnabled())
     {
-        LOG("OpenALUtil::loadSound: %s (%s, %dhz)", s._desc._filePath.c_str(), formatName(s._format), s._sampleRate);
+        LOG("OpenALUtil::loadSound: %s (%s, %dhz)", s._desc._filePath.c_str(), formatName(format), s._sampleRate);
     }
     
-    if (s._sampleFormat == Float)
+    if (s._formatType == FormatType_Float)
     {
         assert(alIsExtensionPresent("AL_EXT_FLOAT32"));
     }
-    else if (s._sampleFormat == IMA4)
+    else if (s._formatType == FormatType_IMA4)
     {
         assert(alIsExtensionPresent("AL_EXT_IMA4")
                && alIsExtensionPresent("AL_SOFT_block_alignment"));
     }
-    else if (s._sampleFormat == MSADPCM)
+    else if (s._formatType == FormatType_MSADPCM)
     {
         assert(alIsExtensionPresent("AL_SOFT_MSADPCM")
                && alIsExtensionPresent("AL_SOFT_block_alignment"));
@@ -183,7 +218,7 @@ void OpenALUtil::loadSound(Sound& s)
         crashIfError();
     }
     
-    alBufferData(buffer, s._format, s._data, s._numBytes, s._sampleRate);
+    alBufferData(buffer, format, s._data, s._numBytes, s._sampleRate);
     crashIfError();
     
     ALsizei numInstances = s._desc._numInstances;
@@ -194,9 +229,6 @@ void OpenALUtil::loadSound(Sound& s)
     for (int i = 0; i < numInstances; ++i)
     {
         alSourcei(s._alHandles[i], AL_BUFFER, buffer);
-        crashIfError();
-        
-        alSourcei(s._alHandles[i], AL_LOOPING, AL_FALSE);
         crashIfError();
     }
 }
@@ -229,11 +261,8 @@ void OpenALUtil::unloadSound(Sound& s)
     crashIfError();
 }
 
-void OpenALUtil::play(uint32_t alHandle, bool isLooping)
+void OpenALUtil::play(uint32_t alHandle)
 {
-    alSourcei(alHandle, AL_LOOPING, isLooping ? AL_TRUE : AL_FALSE);
-    crashIfError();
-    
     alSourcePlay(alHandle);
     crashIfError();
 }

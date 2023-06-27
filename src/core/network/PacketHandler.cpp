@@ -77,9 +77,8 @@ void PacketHandler::readIncomingPacketsIntoQueue()
     int receivedPacketCount = 0;
     int totalReadByteCount = 0;
 
-    uint8_t maxNumPacketsToProcessPerFrame = ENGINE_CFG.maxNumPacketsToProcessPerFrame();
     uint8_t numFramesOfSimulatedLatency = ENGINE_CFG.numFramesOfSimulatedLatency();
-    while (receivedPacketCount < maxNumPacketsToProcessPerFrame)
+    while (true)
     {
         int readByteCount = _socket->receiveFromAddress(packetMem, NW_MAX_PACKET_SIZE, fromAddress);
         assert(readByteCount <= NW_MAX_PACKET_SIZE);

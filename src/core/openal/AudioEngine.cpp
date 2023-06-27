@@ -75,9 +75,7 @@ void AudioEngine::render()
 
 void AudioEngine::playSound(std::string soundID, float volume, bool isLooping)
 {
-    bool audioDisabled = ENGINE_CFG.audioDisabled();
-    uint8_t maxNumSoundsToPlayPerFrame = ENGINE_CFG.maxNumSoundsToPlayPerFrame();
-    if (audioDisabled || _soundsToPlay.size() >= maxNumSoundsToPlayPerFrame)
+    if (ENGINE_CFG.audioDisabled())
     {
         return;
     }
@@ -93,8 +91,7 @@ void AudioEngine::playSound(std::string soundID, float volume, bool isLooping)
 
 void AudioEngine::stopSound(std::string soundID)
 {
-    bool audioDisabled = ENGINE_CFG.audioDisabled();
-    if (audioDisabled)
+    if (ENGINE_CFG.audioDisabled())
     {
         return;
     }
@@ -109,8 +106,7 @@ void AudioEngine::stopSound(std::string soundID)
 
 void AudioEngine::pauseSound(std::string soundID)
 {
-    bool audioDisabled = ENGINE_CFG.audioDisabled();
-    if (audioDisabled)
+    if (ENGINE_CFG.audioDisabled())
     {
         return;
     }
@@ -125,8 +121,7 @@ void AudioEngine::pauseSound(std::string soundID)
 
 void AudioEngine::resumeSound(std::string soundID)
 {
-    bool audioDisabled = ENGINE_CFG.audioDisabled();
-    if (audioDisabled)
+    if (ENGINE_CFG.audioDisabled())
     {
         return;
     }
@@ -141,8 +136,7 @@ void AudioEngine::resumeSound(std::string soundID)
 
 void AudioEngine::stopAllSounds()
 {
-    bool audioDisabled = ENGINE_CFG.audioDisabled();
-    if (audioDisabled)
+    if (ENGINE_CFG.audioDisabled())
     {
         return;
     }
@@ -160,8 +154,7 @@ void AudioEngine::stopAllSounds()
 
 void AudioEngine::pauseAllSounds()
 {
-    bool audioDisabled = ENGINE_CFG.audioDisabled();
-    if (audioDisabled)
+    if (ENGINE_CFG.audioDisabled())
     {
         return;
     }
@@ -179,8 +172,7 @@ void AudioEngine::pauseAllSounds()
 
 void AudioEngine::resumeAllSounds()
 {
-    bool audioDisabled = ENGINE_CFG.audioDisabled();
-    if (audioDisabled)
+    if (ENGINE_CFG.audioDisabled())
     {
         return;
     }

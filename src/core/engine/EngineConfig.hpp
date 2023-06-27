@@ -31,12 +31,10 @@ public:
     bool physicsLoggingEnabled();
     bool audioDisabled();
     uint8_t maxTextInputLength();
-    uint8_t maxNumSoundsToPlayPerFrame();
     uint16_t clientPortHost();
     uint16_t clientPortJoin();
     uint16_t serverPort();
     uint8_t maxNumMoves();
-    uint8_t maxNumPacketsToProcessPerFrame();
     uint8_t numFramesOfSimulatedLatency();
     
     /// Derived Values
@@ -59,12 +57,10 @@ private:
     bool _physicsLoggingEnabled;
     bool _audioDisabled;
     uint8_t _maxTextInputLength;
-    uint8_t _maxNumSoundsToPlayPerFrame;
     uint16_t _clientPortHost;
     uint16_t _clientPortJoin;
     uint16_t _serverPort;
     uint8_t _maxNumMoves;
-    uint8_t _maxNumPacketsToProcessPerFrame;
     uint8_t _numFramesOfSimulatedLatency;
     
     /// Derived Values

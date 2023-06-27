@@ -25,7 +25,7 @@ public:
     void loadSound(Sound& sound);
     void unloadSound(Sound& sound);
     
-    void play(uint32_t alHandle, bool isLooping = false);
+    void play(uint32_t alHandle);
     void resume(uint32_t alHandle);
     void pause(uint32_t alHandle);
     void stop(uint32_t alHandle);

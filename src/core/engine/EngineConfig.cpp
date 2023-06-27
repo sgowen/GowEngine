@@ -92,11 +92,6 @@ uint8_t EngineConfig::maxTextInputLength()
     return _maxTextInputLength;
 }
 
-uint8_t EngineConfig::maxNumSoundsToPlayPerFrame()
-{
-    return _maxNumSoundsToPlayPerFrame;
-}
-
 uint16_t EngineConfig::clientPortHost()
 {
     return _clientPortHost;
@@ -115,11 +110,6 @@ uint16_t EngineConfig::serverPort()
 uint8_t EngineConfig::maxNumMoves()
 {
     return _maxNumMoves;
-}
-
-uint8_t EngineConfig::maxNumPacketsToProcessPerFrame()
-{
-    return _maxNumPacketsToProcessPerFrame;
 }
 
 uint8_t EngineConfig::numFramesOfSimulatedLatency()
@@ -151,12 +141,10 @@ _networkLoggingEnabled(_config.getBool("networkLoggingEnabled", false)),
 _physicsLoggingEnabled(_config.getBool("physicsLoggingEnabled", false)),
 _audioDisabled(_config.getBool("audioDisabled", false)),
 _maxTextInputLength(_config.getUInt("maxTextInputLength", 16)),
-_maxNumSoundsToPlayPerFrame(_config.getUInt("maxNumSoundsToPlayPerFrame", 3)),
 _clientPortHost(_config.getUInt("clientPortHost", 1337)),
 _clientPortJoin(_config.getUInt("clientPortJoin", 1338)),
 _serverPort(_config.getUInt("serverPort", 9999)),
 _maxNumMoves(_config.getUInt("maxNumMoves", 7)),
-_maxNumPacketsToProcessPerFrame(_config.getUInt("maxNumPacketsToProcessPerFrame", 4)),
 _numFramesOfSimulatedLatency(_config.getUInt("numFramesOfSimulatedLatency", 0)),
 _frameRate(1.0 / _framesPerSecond),
 _timeScale(_framesPerSecond == 120 ? 4 : _framesPerSecond == 60 ? 2 : _framesPerSecond == 30 ? 1 : 0)
