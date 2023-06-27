@@ -8,6 +8,12 @@
 
 #pragma once
 
+#include "core/common/StateMachine.hpp"
+#include "core/input/ClipboardHandler.hpp"
+#include "EngineConfig.hpp"
+
+#include <stdint.h>
+
 enum EngineRequestedStateAction
 {
     ERSA_DEFAULT,
@@ -25,12 +31,6 @@ enum EngineRequestedHostAction
     ERHA_DEFAULT,
     ERHA_EXIT
 };
-
-#include "core/common/StateMachine.hpp"
-#include "core/input/ClipboardHandler.hpp"
-#include "EngineConfig.hpp"
-
-#include <stdint.h>
 
 class Config;
 class EngineState;
