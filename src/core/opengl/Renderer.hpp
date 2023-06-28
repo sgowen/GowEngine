@@ -18,8 +18,7 @@
 #include "TextView.hpp"
 #include "TriangleBatcher.hpp"
 #include "ScreenRenderer.hpp"
-
-#include "core/physics/NosPhysicsRenderer.hpp"
+#include "NosPhysicsRenderer.hpp"
 
 #include <map>
 
