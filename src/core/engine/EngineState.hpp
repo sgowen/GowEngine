@@ -42,7 +42,6 @@ private:
     std::string _filePathAssets;
     Assets _assets;
     Renderer _renderer;
-    bool _assetsLoaded;
     
     void createDeviceDependentResources(Engine* e);
     void onWindowSizeChanged(Engine* e);
