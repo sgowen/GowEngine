@@ -331,7 +331,7 @@ void NetworkClient::updateSendingInputPacket(MoveList& ml)
     ombs.write(ml.hasMoves());
     if (ml.hasMoves())
     {
-        uint8_t maxNumMoves = ENGINE_CFG.maxNumMoves();
+        static uint8_t maxNumMoves = ENGINE_CFG.maxNumMoves();
         int moveCount = ml.getNumMovesAfterTimestamp(_lastMoveProcessedByServerTimestamp);
         assert(moveCount <= maxNumMoves);
         ombs.writeBits(moveCount, NBITS(maxNumMoves));

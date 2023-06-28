@@ -12,7 +12,9 @@ IMPL_RTTI_NOPARENT(EntityNetworkController)
 IMPL_EntityNetworkController_create_NOPARENT
 
 EntityNetworkController::EntityNetworkController(Entity* e) :
-_entity(e)
+_entity(e),
+_poseCache(e->_pose),
+_stateCache(e->_state)
 {
     // Empty
 }
@@ -20,7 +22,7 @@ _entity(e)
 void EntityNetworkController::read(InputMemoryBitStream& imbs)
 {
     Entity& e = *_entity;
-    uint8_t fromState = e.stateCache()._state;
+    uint8_t fromState = _stateCache._state;
     
     bool stateBit;
     
@@ -33,7 +35,7 @@ void EntityNetworkController::read(InputMemoryBitStream& imbs)
         imbs.readBits(e._pose._numGroundContacts, 4);
         imbs.read(e._pose._isXFlipped);
         
-        e._poseCache = e._pose;
+        _poseCache = e._pose;
     }
     
     imbs.read(stateBit);
@@ -43,7 +45,7 @@ void EntityNetworkController::read(InputMemoryBitStream& imbs)
         imbs.read(e._state._stateFlags);
         imbs.read(e._state._stateTime);
         
-        e._stateCache = e._state;
+        _stateCache = e._state;
     }
     
     NetworkData& nd = e.data();
@@ -131,8 +133,8 @@ void EntityNetworkController::recallCache()
 {
     Entity& e = *_entity;
     
-    e._pose = e._poseCache;
-    e._state = e._stateCache;
+    e._pose = _poseCache;
+    e._state = _stateCache;
     
     NetworkData& nd = e.data();
     for (NetworkDataGroup& ndg : nd._data)
@@ -147,15 +149,15 @@ uint8_t EntityNetworkController::refreshDirtyState()
     
     Entity& e = *_entity;
     
-    if (e._poseCache != e._pose)
+    if (_poseCache != e._pose)
     {
-        e._poseCache = e._pose;
+        _poseCache = e._pose;
         ret |= RSTF_POSE;
     }
     
-    if (e._stateCache != e._state)
+    if (_stateCache != e._state)
     {
-        e._stateCache = e._state;
+        _stateCache = e._state;
         ret |= RSTF_STATE;
     }
     

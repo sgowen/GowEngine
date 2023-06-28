@@ -405,7 +405,7 @@ void NetworkServer::handleInputPacket(ClientProxy& cp, InputMemoryBitStream& imb
     }
     
     uint8_t moveCount = 0;
-    uint8_t maxNumMoves = ENGINE_CFG.maxNumMoves();
+    static uint8_t maxNumMoves = ENGINE_CFG.maxNumMoves();
     imbs.readBits(moveCount, NBITS(maxNumMoves));
     
     for (; moveCount > 0; --moveCount)

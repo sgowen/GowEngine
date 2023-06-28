@@ -23,7 +23,6 @@ public:
     
     virtual void onUpdate();
     virtual void onMessage(uint16_t message);
-    virtual void onCollision(Entity* e);
     
 protected:
     Entity* _entity;

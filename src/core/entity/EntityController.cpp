@@ -31,8 +31,3 @@ void EntityController::onMessage(uint16_t message)
 {
     // Empty
 }
-
-void EntityController::onCollision(Entity* e)
-{
-    // Empty
-}

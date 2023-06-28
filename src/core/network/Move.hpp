@@ -24,9 +24,7 @@ public:
     void read(InputMemoryBitStream& imbs);
     InputState* inputState() const;
     uint32_t getTimestamp() const;
-    void setTimestamp(uint32_t timeStamp);
     uint32_t getIndex() const;
-    void setIndex(uint32_t index);
     
 private:
     InputState* _inputState;

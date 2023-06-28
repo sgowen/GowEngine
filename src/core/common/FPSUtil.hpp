@@ -17,11 +17,11 @@ public:
         return ret;
     }
     
-    void update(float deltaTime);
+    void update(double deltaTime);
     int fps() const;
     
 private:
-    float _stateTime;
+    double _stateTime;
     int _fPS;
     int _numFrames;
     

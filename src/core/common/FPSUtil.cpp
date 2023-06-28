@@ -8,7 +8,7 @@
 
 #include <GowEngine/GowEngine.hpp>
 
-void FPSUtil::update(float deltaTime)
+void FPSUtil::update(double deltaTime)
 {
     _stateTime += deltaTime;
     ++_numFrames;

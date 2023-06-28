@@ -14,12 +14,9 @@
 
 struct TimeTracker
 {
-    float _frameRate;
     uint32_t _time;
     
-    TimeTracker() :
-    _frameRate(ENGINE_CFG.frameRate()),
-    _time(0)
+    TimeTracker() : _time(0)
     {
         // Empty
     }
@@ -34,13 +31,14 @@ struct TimeTracker
         _time = 0;
     }
     
-    float realTime()
+    double realTime()
     {
         return realTime(_time);
     }
     
-    float realTime(uint32_t time)
+    double realTime(uint32_t time)
     {
-        return time * _frameRate;
+        static double frameRate = ENGINE_CFG.frameRate();
+        return time * frameRate;
     }
 };

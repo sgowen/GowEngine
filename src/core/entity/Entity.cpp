@@ -16,9 +16,7 @@ _networkController(ENTITY_MGR.createEntityNetworkController(ed, this)),
 _physicsController(nullptr),
 _renderController(ENTITY_MGR.createEntityRenderController(ed, this)),
 _pose(eid._x + ed._width / 2.0f, eid._y + ed._height / 2.0f),
-_poseCache(_pose),
 _state(),
-_stateCache(_state),
 _width(ed._width),
 _height(ed._height),
 _angle(0),
@@ -179,19 +177,9 @@ Entity::Pose& Entity::pose()
     return _pose;
 }
 
-Entity::Pose& Entity::poseCache()
-{
-    return _poseCache;
-}
-
 Entity::State& Entity::state()
 {
     return _state;
-}
-
-Entity::State& Entity::stateCache()
-{
-    return _stateCache;
 }
 
 void Entity::requestDeletion()

@@ -9,10 +9,11 @@
 #pragma once
 
 #include "core/common/RTTI.hpp"
+#include "Entity.hpp"
 
 #include <stdint.h>
+#include <map>
 
-class Entity;
 class InputMemoryBitStream;
 class OutputMemoryBitStream;
 
@@ -32,4 +33,10 @@ public:
     
 protected:
     Entity* _entity;
+    
+private:
+    Entity::Pose _poseCache;
+    Entity::State _stateCache;
+//    std::map<uint32_t, Entity::Pose> _poseCache;
+//    std::map<uint32_t, Entity::State> _stateCache;
 };

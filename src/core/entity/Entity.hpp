@@ -516,7 +516,6 @@ public:
         }
     };
     Pose& pose();
-    Pose& poseCache();
     
     struct State
     {
@@ -545,7 +544,6 @@ public:
         }
     };
     State& state();
-    State& stateCache();
     
     void requestDeletion();
     bool isRequestingDeletion();
@@ -561,9 +559,7 @@ private:
     EntityPhysicsController* _physicsController;
     EntityRenderController* _renderController;
     Pose _pose;
-    Pose _poseCache;
     State _state;
-    State _stateCache;
     float _width;
     float _height;
     float _angle;

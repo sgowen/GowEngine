@@ -50,17 +50,7 @@ uint32_t Move::getTimestamp() const
     return _timestamp;
 }
 
-void Move::setTimestamp(uint32_t timeStamp)
-{
-    _timestamp = timeStamp;
-}
-
 uint32_t Move::getIndex() const
 {
     return _index;
-}
-
-void Move::setIndex(uint32_t index)
-{
-    _index = index;
 }
