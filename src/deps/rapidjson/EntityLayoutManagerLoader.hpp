@@ -8,8 +8,9 @@
 
 #pragma once
 
-#include "core/entity/EntityIDManager.hpp"
-#include "core/entity/EntityLayoutManager.hpp"
+class EntityIDManager;
+class EntityLayoutManager;
+struct EntityLayoutDef;
 
 class EntityLayoutManagerLoader
 {
