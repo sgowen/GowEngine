@@ -10,9 +10,6 @@
 
 IMPL_RTTI_NOPARENT(World)
 
-bool World::s_isClient = false;
-bool World::s_isLiveFrame = false;
-
 World::World() :
 _entityLayout()
 {
@@ -79,6 +76,19 @@ void World::recallCache()
     {
         e->networkController()->recallCache();
         e->physicsController()->updateBodyFromPose();
+    }
+}
+
+void World::beginFrame()
+{
+    for (Entity* e : _players)
+    {
+        e->beginFrame();
+    }
+    
+    for (Entity* e : _networkEntities)
+    {
+        e->beginFrame();
     }
 }
 

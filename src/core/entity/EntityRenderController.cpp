@@ -32,6 +32,12 @@ std::string EntityRenderController::getTextureMapping(uint8_t state)
     return q->second;
 }
 
+std::string EntityRenderController::getSoundMapping()
+{
+    Entity& e = *_entity;
+    return getSoundMapping(e._state._state);
+}
+
 std::string EntityRenderController::getSoundMapping(uint8_t state)
 {
     Entity& e = *_entity;

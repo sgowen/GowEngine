@@ -198,6 +198,7 @@ void NetworkClient::processPacket(InputMemoryBitStream& imbs, SocketAddress* fro
 void NetworkClient::onMoveProcessed()
 {
     ++_numMovesProcessed;
+    LOG("onMoveProcessed _numMovesProcessed: %d", _numMovesProcessed);
 }
 
 uint32_t NetworkClient::getNumMovesProcessed()
@@ -299,6 +300,7 @@ void NetworkClient::handleStatePacket(InputMemoryBitStream& imbs)
     }
     
     imbs.read(_numMovesProcessed);
+    LOG("handleStatePacket _numMovesProcessed: %d", _numMovesProcessed);
     
     if (!_deliveryNotificationManager.readAndProcessState(imbs))
     {
@@ -331,10 +333,16 @@ void NetworkClient::updateSendingInputPacket(MoveList& ml)
     ombs.write(ml.hasMoves());
     if (ml.hasMoves())
     {
-        static uint8_t maxNumMoves = ENGINE_CFG.maxNumMoves();
+        // TODO, consider making the input delay frames take from this value.
+        // If there are 7 moves allowed, but we have 5 frames of input delay,
+        // then setting maxNumFramesOfRollback from 7 to 0 should make the below value 5,
+        // meaning that the client should be able to provide inputs for 5 frames,
+        // before pausing itself to wait for the server update
+        // If maxNumFramesOfRollback is higher than 0, then that simply means the client is able to execute moves ahead of the server.
+        static uint8_t maxNumFramesOfRollback = ENGINE_CFG.maxNumFramesOfRollback();
         int moveCount = ml.getNumMovesAfterTimestamp(_lastMoveProcessedByServerTimestamp);
-        assert(moveCount <= maxNumMoves);
-        ombs.writeBits(moveCount, NBITS(maxNumMoves));
+        assert(moveCount <= maxNumFramesOfRollback);
+        ombs.writeBits(moveCount, NBITS(maxNumFramesOfRollback));
         
         std::deque<Move>::const_iterator moveItr = ml.begin();
         

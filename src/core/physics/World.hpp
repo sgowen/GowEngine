@@ -16,9 +16,6 @@ class World
     DECL_RTTI_NOPARENT;
     
 public:
-    static bool s_isClient;
-    static bool s_isLiveFrame;
-    
     static World* create();
     
     World();
@@ -30,6 +27,7 @@ public:
     void addNetworkEntity(Entity* e);
     void removeNetworkEntity(Entity* e);
     void recallCache();
+    void beginFrame();
     std::vector<Entity*> update();
     void reset();
     

@@ -107,9 +107,9 @@ uint16_t EngineConfig::serverPort()
     return _serverPort;
 }
 
-uint8_t EngineConfig::maxNumMoves()
+uint8_t EngineConfig::maxNumFramesOfRollback()
 {
-    return _maxNumMoves;
+    return _maxNumFramesOfRollback;
 }
 
 uint8_t EngineConfig::numFramesOfSimulatedLatency()
@@ -144,7 +144,7 @@ _maxTextInputLength(_config.getUInt("maxTextInputLength", 16)),
 _clientPortHost(_config.getUInt("clientPortHost", 1337)),
 _clientPortJoin(_config.getUInt("clientPortJoin", 1338)),
 _serverPort(_config.getUInt("serverPort", 9999)),
-_maxNumMoves(_config.getUInt("maxNumMoves", 7)),
+_maxNumFramesOfRollback(_config.getUInt("maxNumFramesOfRollback", 7)),
 _numFramesOfSimulatedLatency(_config.getUInt("numFramesOfSimulatedLatency", 0)),
 _frameRate(1.0 / _framesPerSecond),
 _timeScale(_framesPerSecond == 120 ? 4 : _framesPerSecond == 60 ? 2 : _framesPerSecond == 30 ? 1 : 0)

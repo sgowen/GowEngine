@@ -23,6 +23,7 @@ public:
     
     virtual std::string getTextureMapping();
     virtual std::string getTextureMapping(uint8_t state);
+    virtual std::string getSoundMapping();
     virtual std::string getSoundMapping(uint8_t state);
     
 protected:

@@ -37,21 +37,19 @@ Entity::~Entity()
     delete _renderController;
 }
 
-void Entity::update()
+void Entity::beginFrame()
 {
-    if (_isRequestingDeletion)
-    {
-        return;
-    }
-    
-    if (_physicsController != nullptr)
-    {
-        _physicsController->updatePoseFromBody();
-    }
-    
     if (isDynamic())
     {
         ++_state._stateTime;
+    }
+}
+
+void Entity::update()
+{    
+    if (_physicsController != nullptr)
+    {
+        _physicsController->updatePoseFromBody();
     }
     
     _controller->onUpdate();

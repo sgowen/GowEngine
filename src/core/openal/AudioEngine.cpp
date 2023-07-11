@@ -73,11 +73,11 @@ void AudioEngine::render()
     _soundsToResume.clear();
 }
 
-void AudioEngine::playSound(std::string soundID, float volume, bool isLooping)
+uint32_t AudioEngine::playSound(std::string soundID, float volume, bool isLooping)
 {
     if (ENGINE_CFG.audioDisabled())
     {
-        return;
+        return 0;
     }
     
     Sound& s = ASSETS_MGR.sound(soundID);
@@ -87,6 +87,18 @@ void AudioEngine::playSound(std::string soundID, float volume, bool isLooping)
     OAL.setLooping(alHandle, isLooping);
     
     _soundsToPlay.push_back(alHandle);
+    
+    return alHandle;
+}
+
+void AudioEngine::seekAhead(uint32_t alHandle, uint32_t numFrames)
+{
+    if (numFrames == 0)
+    {
+        return;
+    }
+    
+    OAL.seekAhead(alHandle, numFrames);
 }
 
 void AudioEngine::stopSound(std::string soundID)
@@ -171,6 +183,13 @@ void AudioEngine::stopAllSounds()
 
 void AudioEngine::pauseAllSounds()
 {
+    // TODO, should be able to pause all sounds and leave music running
+    
+    if (_isPaused)
+    {
+        return;
+    }
+    
     if (ENGINE_CFG.audioDisabled())
     {
         return;
@@ -194,10 +213,19 @@ void AudioEngine::pauseAllSounds()
             }
         }
     }
+    
+    _isPaused = true;
 }
 
 void AudioEngine::resumeAllSounds()
 {
+    // TODO, should be able to resume all sounds except music
+    
+    if (!_isPaused)
+    {
+        return;
+    }
+    
     if (ENGINE_CFG.audioDisabled())
     {
         return;
@@ -221,9 +249,16 @@ void AudioEngine::resumeAllSounds()
             }
         }
     }
+    
+    _isPaused = false;
 }
 
-AudioEngine::AudioEngine()
+bool AudioEngine::isPaused()
+{
+    return _isPaused;
+}
+
+AudioEngine::AudioEngine() : _isPaused(false)
 {
     OAL.openDeviceAndCreateContext();
 }

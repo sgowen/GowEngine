@@ -405,8 +405,8 @@ void NetworkServer::handleInputPacket(ClientProxy& cp, InputMemoryBitStream& imb
     }
     
     uint8_t moveCount = 0;
-    static uint8_t maxNumMoves = ENGINE_CFG.maxNumMoves();
-    imbs.readBits(moveCount, NBITS(maxNumMoves));
+    static uint8_t maxNumFramesOfRollback = ENGINE_CFG.maxNumFramesOfRollback();
+    imbs.readBits(moveCount, NBITS(maxNumFramesOfRollback));
     
     for (; moveCount > 0; --moveCount)
     {

@@ -22,6 +22,11 @@ EntityController::~EntityController()
     // Empty
 }
 
+void EntityController::processInput(uint16_t inputState)
+{
+    // Empty
+}
+
 void EntityController::onUpdate()
 {
     // Empty

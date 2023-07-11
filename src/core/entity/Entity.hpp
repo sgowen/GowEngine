@@ -431,6 +431,7 @@ public:
     Entity(EntityDef ed, EntityInstanceDef eid);
     ~Entity();
     
+    void beginFrame();
     void update();
     void message(uint16_t message);
     EntityDef& entityDef();

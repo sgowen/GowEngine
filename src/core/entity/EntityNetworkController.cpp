@@ -62,22 +62,6 @@ void EntityNetworkController::read(InputMemoryBitStream& imbs)
             ndg._dataCache = ndg._data;
         }
     }
-    
-    if (_entity->isPlayer())
-    {
-        uint8_t playerID = _entity->dataField("playerID").valueUInt8();
-        if (NW_CLNT->isPlayerIDLocal(playerID))
-        {
-            // Don't play any sounds for local player(s)
-            // since they already heard them
-            // * playing a sound after a nw read
-            // is only useful for server controlled
-            // or remote player controlled entities
-            return;
-        }
-    }
-    
-    SoundUtil::playSoundForStateIfChanged(e, fromState, e.state()._state);
 }
 
 uint8_t EntityNetworkController::write(OutputMemoryBitStream& ombs, uint8_t dirtyState)

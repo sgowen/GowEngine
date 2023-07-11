@@ -140,7 +140,6 @@
 #include "core/openal/OpenALUtil.hpp"
 #include "core/openal/Sound.hpp"
 #include "core/openal/SoundManager.hpp"
-#include "core/openal/SoundUtil.hpp"
 
 /// Core OpenGL
 #include "core/opengl/Animation.hpp"

@@ -222,8 +222,20 @@ void runEngine(Engine* engine, GLFWwindow* window)
             }
         }
 
-        auto updateStart = high_resolution_clock::now();
-        EngineRequestedHostAction requestedAction = engine->update(deltaTime);
+        EngineRequestedHostAction requestedAction = ERHA_DEFAULT;
+        if (ENGINE_CFG.glfwLoggingEnabled())
+        {
+            auto updateStart = high_resolution_clock::now();
+            requestedAction = engine->update(deltaTime);
+            auto updateStop = high_resolution_clock::now();
+            auto updateDur = duration_cast<microseconds>(updateStop - updateStart);
+            LOG("UPDATE took: %d microseconds", updateDur.count());
+        }
+        else
+        {
+            requestedAction = engine->update(deltaTime);
+        }
+        
         switch (requestedAction)
         {
             case ERHA_EXIT:
@@ -233,20 +245,18 @@ void runEngine(Engine* engine, GLFWwindow* window)
             default:
                 break;
         }
-        if (ENGINE_CFG.glfwLoggingEnabled())
-        {
-            auto updateStop = high_resolution_clock::now();
-            auto updateDur = duration_cast<microseconds>(updateStop - updateStart);
-            LOG("UPDATE took: %d microseconds", updateDur.count());
-        }
 
-        auto renderStart = high_resolution_clock::now();
-        engine->render();
         if (ENGINE_CFG.glfwLoggingEnabled())
         {
+            auto renderStart = high_resolution_clock::now();
+            engine->render();
             auto renderStop = high_resolution_clock::now();
             auto renderDur = duration_cast<microseconds>(renderStop - renderStart);
             LOG("RENDER took: %d microseconds", renderDur.count());
+        }
+        else
+        {
+            engine->render();
         }
 
         glfwSwapBuffers(window);
