@@ -26,7 +26,8 @@ public:
     void populateFromEntityLayout(EntityLayoutDef& eld);
     void addNetworkEntity(Entity* e);
     void removeNetworkEntity(Entity* e);
-    void recallCache();
+    void storeToCache(uint32_t numMovesProcessed);
+    void recallCache(uint32_t numMovesProcessed);
     void beginFrame();
     std::vector<Entity*> update();
     void reset();
@@ -38,6 +39,8 @@ public:
     std::vector<Entity*>& getNetworkEntities();
     std::vector<Entity*>& getPlayers();
     
+    uint32_t getNumMovesProcessed();
+    
 protected:
     EntityLayoutDef _entityLayout;
     std::vector<Entity*> _layers;
@@ -48,6 +51,8 @@ protected:
     virtual EntityPhysicsController* createPhysicsController(Entity* e) = 0;
     
 private:
+    uint32_t _numMovesProcessed;
+    
     void addEntity(Entity* e);
     void removeEntity(Entity* e);
     void removeEntity(Entity* e, std::vector<Entity*>& entities);

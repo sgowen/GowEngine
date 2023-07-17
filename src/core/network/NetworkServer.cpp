@@ -109,7 +109,7 @@ ClientProxy* NetworkServer::getClientProxy(uint8_t playerID) const
     return nullptr;
 }
 
-int NetworkServer::getMoveCount()
+int NetworkServer::getMoveCountAndDisconnectPlayersWithInvalidMoves()
 {
     int lowestMoveCount = 0;
 
@@ -137,15 +137,14 @@ int NetworkServer::getMoveCount()
             assert(cp != nullptr);
 
             MoveList& ml = cp->getUnprocessedMoveList();
-            Move* m = ml.getMoveAtIndex(i);
-            assert(m != nullptr);
-
-            uint32_t expectedMoveIndex = expectedMoveStartIndex + i;
-            if (expectedMoveIndex != m->getIndex())
+            Move* m = ml.getMoveWithMoveIndex(expectedMoveStartIndex + i);
+            if (m == nullptr)
             {
-                LOG("Disconnecting player with invalid move index: %d, expectedMoveIndex: %d", m->getIndex(), expectedMoveIndex);
-                handleClientDisconnected(*cp);
-                break;
+//                LOG("Disconnecting player with invalid moves");
+//                handleClientDisconnected(*cp);
+//                
+//                break;
+                return i;
             }
         }
     }
@@ -361,9 +360,9 @@ void NetworkServer::sendStatePacketToClient(ClientProxy& cp)
     OutputMemoryBitStream ombs(NW_MAX_PACKET_SIZE);
     ombs.writeBits(static_cast<uint8_t>(NWPT_STATE), 4);
     
-    ombs.write(_numMovesProcessed);
-    
     InFlightPacket* ifp = cp.getDeliveryNotificationManager().writeState(ombs);
+    
+    ombs.write(_numMovesProcessed);
     
     bool isTimestampDirty = cp.isLastMoveTimestampDirty();
     ombs.write(isTimestampDirty);
@@ -404,9 +403,12 @@ void NetworkServer::handleInputPacket(ClientProxy& cp, InputMemoryBitStream& imb
         return;
     }
     
-    uint8_t moveCount = 0;
     static uint8_t maxNumFramesOfRollback = ENGINE_CFG.maxNumFramesOfRollback();
-    imbs.readBits(moveCount, NBITS(maxNumFramesOfRollback));
+    static uint8_t numFramesOfInputDelay = ENGINE_CFG.numFramesOfInputDelay();
+    static uint8_t maxNumMoves = numFramesOfInputDelay + maxNumFramesOfRollback;
+    
+    uint8_t moveCount = 0;
+    imbs.readBits(moveCount, NBITS(maxNumMoves));
     
     for (; moveCount > 0; --moveCount)
     {

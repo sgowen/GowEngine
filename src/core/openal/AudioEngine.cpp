@@ -75,6 +75,8 @@ void AudioEngine::render()
 
 uint32_t AudioEngine::playSound(std::string soundID, float volume, bool isLooping)
 {
+    return 1;
+    
     if (ENGINE_CFG.audioDisabled())
     {
         return 0;

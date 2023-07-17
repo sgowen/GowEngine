@@ -83,7 +83,7 @@ NetworkData& Entity::data()
 NetworkDataField& Entity::dataField(std::string name)
 {
     NetworkDataField* ret = nullptr;
-    NetworkData& nd = _entityDef._networkData;
+    NetworkData& nd = data();
     for (NetworkDataGroup& ndg : nd._data)
     {
         for (NetworkDataField& ndf : ndg._data)

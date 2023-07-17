@@ -11,7 +11,8 @@
 IMPL_RTTI_NOPARENT(World)
 
 World::World() :
-_entityLayout()
+_entityLayout(),
+_numMovesProcessed(0)
 {
     // Empty
 }
@@ -64,17 +65,30 @@ void World::removeNetworkEntity(Entity* e)
     }
 }
 
-void World::recallCache()
+void World::storeToCache()
 {
     for (Entity* e : _players)
     {
-        e->networkController()->recallCache();
+        e->networkController()->storeToCache(_numMovesProcessed);
+    }
+    
+    for (Entity* e : _networkEntities)
+    {
+        e->networkController()->storeToCache(_numMovesProcessed);
+    }
+}
+
+void World::recallCache(uint32_t numMovesProcessed)
+{
+    for (Entity* e : _players)
+    {
+        e->networkController()->recallCache(numMovesProcessed);
         e->physicsController()->updateBodyFromPose();
     }
     
     for (Entity* e : _networkEntities)
     {
-        e->networkController()->recallCache();
+        e->networkController()->recallCache(numMovesProcessed);
         e->physicsController()->updateBodyFromPose();
     }
 }
@@ -112,6 +126,8 @@ std::vector<Entity*> World::update()
             toDelete.push_back(e);
         }
     }
+    
+    ++_numMovesProcessed;
     
     return toDelete;
 }
@@ -152,6 +168,11 @@ std::vector<Entity*>& World::getNetworkEntities()
 std::vector<Entity*>& World::getPlayers()
 {
     return _players;
+}
+
+uint32_t World::getNumMovesProcessed()
+{
+    return _numMovesProcessed;
 }
 
 void World::addEntity(Entity *e)

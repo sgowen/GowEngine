@@ -334,13 +334,11 @@ struct NetworkDataGroup
     uint8_t _readStateFlag;
     std::string _name;
     std::vector<NetworkDataField> _data;
-    std::vector<NetworkDataField> _dataCache;
     
     NetworkDataGroup(uint8_t readStateFlag, std::string name, std::vector<NetworkDataField> data) :
     _readStateFlag(readStateFlag),
     _name(name),
-    _data(data),
-    _dataCache(_data)
+    _data(data)
     {
         // Empty
     }

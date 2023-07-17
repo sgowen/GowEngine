@@ -15,13 +15,11 @@ _lastProcessedMoveTimestamp(0)
     // Empty
 }
 
-const Move& MoveList::addMove(InputState* inputState, uint32_t timestamp, uint32_t index)
+void MoveList::addMove(InputState* inputState, uint32_t timestamp, uint32_t index)
 {
     _moves.emplace_back(inputState, timestamp, index);
     
     _lastMoveTimestamp = timestamp;
-    
-    return _moves.back();
 }
 
 bool MoveList::addMoveIfNew(const Move& move)
@@ -53,10 +51,10 @@ bool MoveList::isMoveProcessed(Move* move)
 
 void MoveList::removeProcessedMoves(Pool<InputState>& inputStatePool)
 {
-    removeProcessedMovesAtTimestamp(_lastProcessedMoveTimestamp, inputStatePool);
+    removeProcessedMovesAtOrBeforeTimestamp(_lastProcessedMoveTimestamp, inputStatePool);
 }
 
-void MoveList::removeProcessedMovesAtTimestamp(uint32_t lastMoveProcessedOnServerTimestamp, Pool<InputState>& inputStatePool)
+void MoveList::removeProcessedMovesAtOrBeforeTimestamp(uint32_t lastMoveProcessedOnServerTimestamp, Pool<InputState>& inputStatePool)
 {
     while (!_moves.empty() && _moves.front().getTimestamp() <= lastMoveProcessedOnServerTimestamp)
     {
@@ -121,6 +119,19 @@ Move* MoveList::getMoveAtIndex(int index)
     if (index < getMoveCount())
     {
         return &_moves.at(index);
+    }
+    
+    return nullptr;
+}
+
+Move* MoveList::getMoveWithMoveIndex(uint32_t moveIndex)
+{
+    for (Move& move : _moves)
+    {
+        if (move.getIndex() == moveIndex)
+        {
+            return &move;
+        }
     }
     
     return nullptr;

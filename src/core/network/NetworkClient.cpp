@@ -195,12 +195,6 @@ void NetworkClient::processPacket(InputMemoryBitStream& imbs, SocketAddress* fro
     }
 }
 
-void NetworkClient::onMoveProcessed()
-{
-    ++_numMovesProcessed;
-    LOG("onMoveProcessed _numMovesProcessed: %d", _numMovesProcessed);
-}
-
 uint32_t NetworkClient::getNumMovesProcessed()
 {
     return _numMovesProcessed;
@@ -299,13 +293,12 @@ void NetworkClient::handleStatePacket(InputMemoryBitStream& imbs)
         return;
     }
     
-    imbs.read(_numMovesProcessed);
-    LOG("handleStatePacket _numMovesProcessed: %d", _numMovesProcessed);
-    
     if (!_deliveryNotificationManager.readAndProcessState(imbs))
     {
         return;
     }
+    
+    imbs.read(_numMovesProcessed);
     
     bool isTimestampDirty;
     imbs.read(isTimestampDirty);
@@ -333,22 +326,26 @@ void NetworkClient::updateSendingInputPacket(MoveList& ml)
     ombs.write(ml.hasMoves());
     if (ml.hasMoves())
     {
-        // TODO, consider making the input delay frames take from this value.
-        // If there are 7 moves allowed, but we have 5 frames of input delay,
-        // then setting maxNumFramesOfRollback from 7 to 0 should make the below value 5,
-        // meaning that the client should be able to provide inputs for 5 frames,
-        // before pausing itself to wait for the server update
-        // If maxNumFramesOfRollback is higher than 0, then that simply means the client is able to execute moves ahead of the server.
         static uint8_t maxNumFramesOfRollback = ENGINE_CFG.maxNumFramesOfRollback();
-        int moveCount = ml.getNumMovesAfterTimestamp(_lastMoveProcessedByServerTimestamp);
-        assert(moveCount <= maxNumFramesOfRollback);
-        ombs.writeBits(moveCount, NBITS(maxNumFramesOfRollback));
+        static uint8_t numFramesOfInputDelay = ENGINE_CFG.numFramesOfInputDelay();
+        static uint8_t maxNumMoves = numFramesOfInputDelay + maxNumFramesOfRollback;
         
+        int moveCount = ml.getNumMovesAfterTimestamp(_lastMoveProcessedByServerTimestamp);
+        assert(moveCount <= maxNumMoves);
+        ombs.writeBits(moveCount, NBITS(maxNumMoves));
+        
+        // TODO, check this.
+        // shouldn't the last X moves after _lastMoveProcessedByServerTimestamp
+        // be from the end?
         std::deque<Move>::const_iterator moveItr = ml.begin();
         
         for (int i = 0; i < moveCount; ++i, ++moveItr)
         {
-            moveItr->write(ombs);
+            // Maybe this solves my above complaint?
+            if (moveItr->getTimestamp() > _lastMoveProcessedByServerTimestamp)
+            {
+                moveItr->write(ombs);
+            }
         }
     }
     

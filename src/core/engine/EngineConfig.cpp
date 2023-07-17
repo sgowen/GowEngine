@@ -112,6 +112,11 @@ uint8_t EngineConfig::maxNumFramesOfRollback()
     return _maxNumFramesOfRollback;
 }
 
+uint8_t EngineConfig::numFramesOfInputDelay()
+{
+    return _numFramesOfInputDelay;
+}
+
 uint8_t EngineConfig::numFramesOfSimulatedLatency()
 {
     return _numFramesOfSimulatedLatency;
@@ -145,6 +150,7 @@ _clientPortHost(_config.getUInt("clientPortHost", 1337)),
 _clientPortJoin(_config.getUInt("clientPortJoin", 1338)),
 _serverPort(_config.getUInt("serverPort", 9999)),
 _maxNumFramesOfRollback(_config.getUInt("maxNumFramesOfRollback", 7)),
+_numFramesOfInputDelay(_config.getUInt("numFramesOfInputDelay", 5)),
 _numFramesOfSimulatedLatency(_config.getUInt("numFramesOfSimulatedLatency", 0)),
 _frameRate(1.0 / _framesPerSecond),
 _timeScale(_framesPerSecond == 120 ? 4 : _framesPerSecond == 60 ? 2 : _framesPerSecond == 30 ? 1 : 0)

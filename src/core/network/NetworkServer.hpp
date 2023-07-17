@@ -44,7 +44,7 @@ public:
     void deregisterAllEntities();
     void setStateDirty(uint32_t networkID, uint8_t dirtyState);
     ClientProxy* getClientProxy(uint8_t playerID) const;
-    int getMoveCount();
+    int getMoveCountAndDisconnectPlayersWithInvalidMoves();
     uint8_t getNumClientsConnected();
     uint8_t getNumPlayersConnected();
     SocketAddress& getServerAddress();
