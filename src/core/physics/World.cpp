@@ -80,6 +80,8 @@ void World::storeToCache()
 
 void World::recallCache(uint32_t numMovesProcessed)
 {
+    _numMovesProcessed = numMovesProcessed;
+    
     for (Entity* e : _players)
     {
         e->networkController()->recallCache(numMovesProcessed);

@@ -330,7 +330,7 @@ void NetworkClient::updateSendingInputPacket(MoveList& ml)
         static uint8_t numFramesOfInputDelay = ENGINE_CFG.numFramesOfInputDelay();
         static uint8_t maxNumMoves = numFramesOfInputDelay + maxNumFramesOfRollback;
         
-        int moveCount = ml.getNumMovesAfterTimestamp(_lastMoveProcessedByServerTimestamp);
+        uint8_t moveCount = ml.getNumMovesAfterTimestamp(_lastMoveProcessedByServerTimestamp);
         assert(moveCount <= maxNumMoves);
         ombs.writeBits(moveCount, NBITS(maxNumMoves));
         
@@ -339,14 +339,18 @@ void NetworkClient::updateSendingInputPacket(MoveList& ml)
         // be from the end?
         std::deque<Move>::const_iterator moveItr = ml.begin();
         
-        for (int i = 0; i < moveCount; ++i, ++moveItr)
+        uint8_t moveCountWritten = 0;
+        for (int i = 0; i < ml.getMoveCount(); ++i, ++moveItr)
         {
             // Maybe this solves my above complaint?
             if (moveItr->getTimestamp() > _lastMoveProcessedByServerTimestamp)
             {
                 moveItr->write(ombs);
+                ++moveCountWritten;
             }
         }
+        
+        assert(moveCountWritten == moveCount);
     }
     
     sendPacket(ombs);

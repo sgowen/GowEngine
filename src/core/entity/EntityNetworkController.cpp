@@ -14,9 +14,7 @@ IMPL_EntityNetworkController_create_NOPARENT
 EntityNetworkController::EntityNetworkController(Entity* e) :
 _entity(e)
 {
-    _poseCache[0] = e->_pose;
-    _stateCache[0] = e->_state;
-    _networkDataCache[0] = e->data();
+    storeToCache(0);
 }
 
 void EntityNetworkController::read(InputMemoryBitStream& imbs)
@@ -30,8 +28,8 @@ void EntityNetworkController::read(InputMemoryBitStream& imbs)
     imbs.read(stateBit);
     if (stateBit)
     {
-        _poseCache[numMovesProcessed] = Entity::Pose(0, 0);
-        Entity::Pose& pose = _poseCache[numMovesProcessed];
+        _poseCache.insert({numMovesProcessed, Entity::Pose(0, 0)});
+        Entity::Pose& pose = _poseCache.at(numMovesProcessed);
         
         MemoryBitStreamUtil::read(imbs, pose._position._x, pose._position._y);
         MemoryBitStreamUtil::read(imbs, pose._velocity._x, pose._velocity._y);
@@ -43,8 +41,8 @@ void EntityNetworkController::read(InputMemoryBitStream& imbs)
     imbs.read(stateBit);
     if (stateBit)
     {
-        _stateCache[numMovesProcessed] = Entity::State();
-        Entity::State& state = _stateCache[numMovesProcessed];
+        _stateCache.insert({numMovesProcessed, Entity::State()});
+        Entity::State& state = _stateCache.at(numMovesProcessed);
         
         imbs.read(state._state);
         imbs.read(state._stateFlags);
@@ -61,11 +59,17 @@ void EntityNetworkController::read(InputMemoryBitStream& imbs)
             auto it = _networkDataCache.find(numMovesProcessed);
             if (it == _networkDataCache.end())
             {
-                _networkDataCache[numMovesProcessed] = nd;
+                // TODO, may need to fix this up
+                // So we assign the latest client-side version of the networkData here
+                // And then read in the server update on top of it
+                // but unless all NetworkDataFields have an update to be read in,
+                // this frame of networkDataCache is going to contain parts that are potentially more up-to-date
+                // than it should be for the given numMovesProcessed
+                _networkDataCache.insert({numMovesProcessed, nd});
             }
             
-            _networkDataCache[numMovesProcessed]._data[i] = nd._data[i];
-            NetworkDataGroup& ndg = _networkDataCache[numMovesProcessed]._data[i];
+            _networkDataCache.at(numMovesProcessed)._data[i] = nd._data[i];
+            NetworkDataGroup& ndg = _networkDataCache.at(numMovesProcessed)._data[i];
             for (NetworkDataField& ndf : ndg._data)
             {
                 MemoryBitStreamUtil::read(imbs, ndf);
@@ -127,9 +131,20 @@ void EntityNetworkController::storeToCache(uint32_t numMovesProcessed)
 {
     Entity& e = *_entity;
     
-    _poseCache[numMovesProcessed] = e._pose;
-    _stateCache[numMovesProcessed] = e._state;
-    _networkDataCache[numMovesProcessed] = e._entityDef._networkData;
+    if (_poseCache.find(numMovesProcessed) == _poseCache.end())
+    {
+        _poseCache.insert({numMovesProcessed, e._pose});
+    }
+    
+    if (_stateCache.find(numMovesProcessed) == _stateCache.end())
+    {
+        _stateCache.insert({numMovesProcessed, e._state});
+    }
+    
+    if (_networkDataCache.find(numMovesProcessed) == _networkDataCache.end())
+    {
+        _networkDataCache.insert({numMovesProcessed, e._entityDef._networkData});
+    }
 }
 
 void EntityNetworkController::recallCache(uint32_t numMovesProcessed)
@@ -153,26 +168,55 @@ void EntityNetworkController::recallCache(uint32_t numMovesProcessed)
     // We could be on frame 7, getting an update for frame 0, with an input delay of 5.
     // So the cache really does have to be "maxNumMoves" in size
     // For the typical 7, 5 set up, this means we are caching the last 12 server updates
-//    auto it_poseCache = _poseCache.find(numMovesProcessed);
-//    if (it_poseCache != _poseCache.end())
-//    {
-//        e._pose = it_poseCache->second;
-//    }
-    e._pose = _poseCache[numMovesProcessed];
     
-//    auto it_stateCache = _stateCache.find(numMovesProcessed);
-//    if (it_stateCache != _stateCache.end())
-//    {
-//        e._state = it_stateCache->second;
-//    }
-    e._state = _stateCache[numMovesProcessed];
+    // TODO, below code should be optimized, it is potentially very slow
+    bool poseFound = false;
+    for (uint32_t i = numMovesProcessed; i != 0; --i)
+    {
+        auto it = _poseCache.find(i);
+        if (it != _poseCache.end())
+        {
+            e._pose = it->second;
+            poseFound = true;
+            break;
+        }
+    }
+    if (!poseFound)
+    {
+        e._pose = _poseCache.at(0);
+    }
     
-//    auto it_networkDataCache = _networkDataCache.find(numMovesProcessed);
-//    if (it_networkDataCache != _networkDataCache.end())
-//    {
-//        e._entityDef._networkData = it_networkDataCache->second;
-//    }
-    e._entityDef._networkData = _networkDataCache[numMovesProcessed];
+    bool stateFound = false;
+    for (uint32_t i = numMovesProcessed; i != 0; --i)
+    {
+        auto it = _stateCache.find(i);
+        if (it != _stateCache.end())
+        {
+            e._state = it->second;
+            stateFound = true;
+            break;
+        }
+    }
+    if (!stateFound)
+    {
+        e._state = _stateCache.at(0);
+    }
+    
+    bool dataFound = false;
+    for (uint32_t i = numMovesProcessed; i != 0; --i)
+    {
+        auto it = _networkDataCache.find(i);
+        if (it != _networkDataCache.end())
+        {
+            e._entityDef._networkData = it->second;
+            dataFound = true;
+            break;
+        }
+    }
+    if (!dataFound)
+    {
+        e._entityDef._networkData = _networkDataCache.at(0);
+    }
 }
 
 uint8_t EntityNetworkController::refreshDirtyState()
@@ -181,15 +225,15 @@ uint8_t EntityNetworkController::refreshDirtyState()
     
     Entity& e = *_entity;
     
-    if (_poseCache[0] != e._pose)
+    if (_poseCache.at(0) != e._pose)
     {
-        _poseCache[0] = e._pose;
+        _poseCache.insert({0, e._pose});
         ret |= RSTF_POSE;
     }
     
-    if (_stateCache[0] != e._state)
+    if (_stateCache.at(0) != e._state)
     {
-        _stateCache[0] = e._state;
+        _stateCache.insert({0, e._state});
         ret |= RSTF_STATE;
     }
     
@@ -198,7 +242,7 @@ uint8_t EntityNetworkController::refreshDirtyState()
     for (size_t i = 0; i < numDataGroups; ++i)
     {
         NetworkDataGroup& ndg = nd._data[i];
-        NetworkDataGroup& ndgCache = _networkDataCache[0]._data[i];
+        NetworkDataGroup& ndgCache = _networkDataCache.at(0)._data[i];
         if (ndgCache._data != ndg._data)
         {
             ndgCache._data = ndg._data;

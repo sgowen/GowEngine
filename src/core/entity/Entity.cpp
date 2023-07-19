@@ -39,10 +39,10 @@ Entity::~Entity()
 
 void Entity::beginFrame()
 {
-    if (isDynamic())
-    {
+//    if (isDynamic())
+//    {
         ++_state._stateTime;
-    }
+//    }
 }
 
 void Entity::update()

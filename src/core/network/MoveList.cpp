@@ -10,6 +10,7 @@
 
 MoveList::MoveList() :
 _lastMoveTimestamp(0),
+_lastMoveIndex(0),
 _lastProcessedMoveTimestamp(0)
 {
     // Empty
@@ -20,6 +21,7 @@ void MoveList::addMove(InputState* inputState, uint32_t timestamp, uint32_t inde
     _moves.emplace_back(inputState, timestamp, index);
     
     _lastMoveTimestamp = timestamp;
+    _lastMoveIndex = index;
 }
 
 bool MoveList::addMoveIfNew(const Move& move)
@@ -27,9 +29,11 @@ bool MoveList::addMoveIfNew(const Move& move)
     uint32_t timeStamp = move.getTimestamp();
     uint32_t index = move.getIndex();
     
-    if (timeStamp > _lastMoveTimestamp)
+    if (timeStamp > _lastMoveTimestamp &&
+        (index == 0 || index == (_lastMoveIndex + 1)))
     {
         _lastMoveTimestamp = timeStamp;
+        _lastMoveIndex = index;
         
         _moves.emplace_back(move.inputState(), timeStamp, index);
         
@@ -57,6 +61,16 @@ void MoveList::removeProcessedMoves(Pool<InputState>& inputStatePool)
 void MoveList::removeProcessedMovesAtOrBeforeTimestamp(uint32_t lastMoveProcessedOnServerTimestamp, Pool<InputState>& inputStatePool)
 {
     while (!_moves.empty() && _moves.front().getTimestamp() <= lastMoveProcessedOnServerTimestamp)
+    {
+        inputStatePool.free(_moves.front().inputState());
+
+        _moves.pop_front();
+    }
+}
+
+void MoveList::removeProcessedMovesWithIndexLessThan(uint32_t numMovesProcessed, Pool<InputState>& inputStatePool)
+{
+    while (!_moves.empty() && _moves.front().getIndex() < numMovesProcessed)
     {
         inputStatePool.free(_moves.front().inputState());
 

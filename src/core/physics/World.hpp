@@ -26,7 +26,7 @@ public:
     void populateFromEntityLayout(EntityLayoutDef& eld);
     void addNetworkEntity(Entity* e);
     void removeNetworkEntity(Entity* e);
-    void storeToCache(uint32_t numMovesProcessed);
+    void storeToCache();
     void recallCache(uint32_t numMovesProcessed);
     void beginFrame();
     std::vector<Entity*> update();

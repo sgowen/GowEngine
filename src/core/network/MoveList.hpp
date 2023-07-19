@@ -23,6 +23,7 @@ public:
     bool isMoveProcessed(Move* move);
     void removeProcessedMoves(Pool<InputState>& inputStatePool);
     void removeProcessedMovesAtOrBeforeTimestamp(uint32_t lastMoveProcessedOnServerTimestamp, Pool<InputState>& inputStatePool);
+    void removeProcessedMovesWithIndexLessThan(uint32_t numMovesProcessed, Pool<InputState>& inputStatePool);
     void removeAllMoves(Pool<InputState>& inputStatePool);
     uint32_t getLastMoveTimestamp() const;
     uint32_t getLastProcessedMoveTimestamp() const;
@@ -38,6 +39,7 @@ public:
     
 private:
     uint32_t _lastMoveTimestamp;
+    uint32_t _lastMoveIndex;
     uint32_t _lastProcessedMoveTimestamp;
     std::deque<Move> _moves;
 };

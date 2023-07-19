@@ -142,8 +142,9 @@ int NetworkServer::getMoveCountAndDisconnectPlayersWithInvalidMoves()
             {
 //                LOG("Disconnecting player with invalid moves");
 //                handleClientDisconnected(*cp);
-//                
+//
 //                break;
+                LOG("player doesn't have any valid moves");
                 return i;
             }
         }
