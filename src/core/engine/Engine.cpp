@@ -14,6 +14,7 @@ _stateMachine(this, &ENGINE_STATE_DEFAULT),
 _requestedStateAction(ERSA_DEFAULT),
 _requestedHostAction(ERHA_DEFAULT),
 _stateTime(0.0),
+_interpolation(0.0),
 _screenWidth(0),
 _screenHeight(0),
 _cursorWidth(0),
@@ -78,7 +79,6 @@ EngineRequestedHostAction Engine::update(double deltaTime)
     
     FPS_UTIL.update(deltaTime);
     
-    bool didUpdate = false;
     _stateTime += deltaTime;
     while (_stateTime >= frameRate)
     {
@@ -87,17 +87,13 @@ EngineRequestedHostAction Engine::update(double deltaTime)
         INPUT_MGR.process();
         
         execute(ERSA_UPDATE);
-        
-        didUpdate = true;
     }
+    
+    _interpolation = _stateTime;
+    LOG("_interpolation: %f", _interpolation);
     
     EngineRequestedHostAction ret = _requestedHostAction;
     _requestedHostAction = ERHA_DEFAULT;
-    
-    if (didUpdate && ret != ERHA_EXIT)
-    {
-        return ERHA_NEEDS_RENDER;
-    }
     
     return ret;
 }
@@ -200,6 +196,11 @@ uint16_t Engine::cursorWidth()
 uint16_t Engine::cursorHeight()
 {
     return _cursorHeight;
+}
+
+double Engine::interpolation()
+{
+    return _interpolation;
 }
 
 void Engine::execute(EngineRequestedStateAction ersa)

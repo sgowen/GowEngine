@@ -51,6 +51,36 @@ void NosPhysicsWorld::stepPhysics(float deltaTime)
     }
 }
 
+void NosPhysicsWorld::interpolatePhysics(float interpolation)
+{
+    for (Entity* e : _players)
+    {
+        NosPhysicsController* epc = e->physicsController<NosPhysicsController>();
+        epc->interpolate(interpolation);
+    }
+    
+    for (Entity* e : _networkEntities)
+    {
+        NosPhysicsController* epc = e->physicsController<NosPhysicsController>();
+        epc->interpolate(interpolation);
+    }
+}
+
+void NosPhysicsWorld::endInterpolatedPhysics()
+{
+    for (Entity* e : _players)
+    {
+        NosPhysicsController* epc = e->physicsController<NosPhysicsController>();
+        epc->endInterpolation();
+    }
+    
+    for (Entity* e : _networkEntities)
+    {
+        NosPhysicsController* epc = e->physicsController<NosPhysicsController>();
+        epc->endInterpolation();
+    }
+}
+
 EntityPhysicsController* NosPhysicsWorld::createPhysicsController(Entity* e)
 {
     return new NosPhysicsController(e, _gravity);

@@ -29,7 +29,6 @@ enum EngineRequestedStateAction
 enum EngineRequestedHostAction
 {
     ERHA_DEFAULT,
-    ERHA_NEEDS_RENDER,
     ERHA_EXIT
 };
 
@@ -71,6 +70,7 @@ public:
     uint16_t screenHeight();
     uint16_t cursorWidth();
     uint16_t cursorHeight();
+    double interpolation();
     
 private:
     State<Engine>& _initialState;
@@ -78,6 +78,7 @@ private:
     EngineRequestedStateAction _requestedStateAction;
     EngineRequestedHostAction _requestedHostAction;
     double _stateTime;
+    double _interpolation;
     uint16_t _screenWidth;
     uint16_t _screenHeight;
     uint16_t _cursorWidth;

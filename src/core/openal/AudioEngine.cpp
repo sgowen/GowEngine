@@ -93,7 +93,7 @@ uint32_t AudioEngine::playSound(std::string soundID, float volume, bool isLoopin
 
 void AudioEngine::seekAhead(uint32_t alHandle, uint32_t numFrames)
 {
-    if (numFrames == 0)
+    if (alHandle == 0 || numFrames == 0)
     {
         return;
     }

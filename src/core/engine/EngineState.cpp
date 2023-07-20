@@ -119,6 +119,6 @@ void EngineState::render(Engine* e)
         return;
     }
     
-    onRender(_renderer);
+    onRender(_renderer, e->interpolation());
     AUDIO_ENGINE.render();
 }

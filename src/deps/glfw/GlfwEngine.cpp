@@ -147,13 +147,9 @@ void runEngine(Engine* engine, GLFWwindow* window)
     double lastTime = glfwGetTime();
     int lastKnownWidth = 0, lastKnownHeight = 0;
     int width = 0, height = 0;
-
-    uint64_t timeToSleep = 0;
     
     while (!glfwWindowShouldClose(window))
     {
-//        static double frameRate = ENGINE_CFG.frameRate() * 1000000;
-//        std::this_thread::sleep_for(std::chrono::microseconds(16667 - timeToSleep));
         auto frameStart = high_resolution_clock::now();
         
         double deltaTime = glfwGetTime() - lastTime;
@@ -227,18 +223,18 @@ void runEngine(Engine* engine, GLFWwindow* window)
         }
 
         EngineRequestedHostAction requestedAction = ERHA_DEFAULT;
-//        if (ENGINE_CFG.glfwLoggingEnabled())
-//        {
-//            auto updateStart = high_resolution_clock::now();
-//            requestedAction = engine->update(deltaTime);
-//            auto updateStop = high_resolution_clock::now();
-//            auto updateDur = duration_cast<microseconds>(updateStop - updateStart);
-//            LOG("UPDATE took: %d microseconds", updateDur.count());
-//        }
-//        else
-//        {
+        if (ENGINE_CFG.glfwLoggingEnabled())
+        {
+            auto updateStart = high_resolution_clock::now();
             requestedAction = engine->update(deltaTime);
-//        }
+            auto updateStop = high_resolution_clock::now();
+            auto updateDur = duration_cast<microseconds>(updateStop - updateStart);
+            LOG("UPDATE took: %d microseconds", updateDur.count());
+        }
+        else
+        {
+            requestedAction = engine->update(deltaTime);
+        }
         
         switch (requestedAction)
         {
@@ -250,60 +246,26 @@ void runEngine(Engine* engine, GLFWwindow* window)
                 break;
         }
         
-//        engine->render();
-        
-//        auto frameStop = high_resolution_clock::now();
-//        auto frameDur = duration_cast<microseconds>(frameStop - frameStart);
-//
-//        timeToSleep = frameDur.count();
-//
-//        LOG("timeToSleep: %d microseconds", timeToSleep);
-        
-        if (requestedAction == ERHA_NEEDS_RENDER)
+        if (ENGINE_CFG.glfwLoggingEnabled())
         {
-//            if (ENGINE_CFG.glfwLoggingEnabled())
-//            {
-//                auto renderStart = high_resolution_clock::now();
-//                engine->render();
-//                auto renderStop = high_resolution_clock::now();
-//                auto renderDur = duration_cast<microseconds>(renderStop - renderStart);
-//                LOG("RENDER took: %d microseconds", renderDur.count());
-//            }
-//            else
-//            {
-                engine->render();
-//            }
-            
-//            auto frameStop = high_resolution_clock::now();
-//            auto frameDur = duration_cast<microseconds>(frameStop - frameStart);
-//
-//            timeToSleep = frameDur.count();
-
-            glfwSwapBuffers(window);
+            auto renderStart = high_resolution_clock::now();
+            engine->render();
+            auto renderStop = high_resolution_clock::now();
+            auto renderDur = duration_cast<microseconds>(renderStop - renderStart);
+            LOG("RENDER took: %d microseconds", renderDur.count());
         }
         else
         {
-//            auto frameStop = high_resolution_clock::now();
-//            auto frameDur = duration_cast<microseconds>(frameStop - frameStart);
-//
-//            timeToSleep = frameDur.count();
+            engine->render();
         }
-
         
-        
-//        auto frameStop = high_resolution_clock::now();
-//        auto frameDur = duration_cast<microseconds>(frameStop - frameStart);
-        
-//        timeToSleep = frameDur.count();
+        glfwSwapBuffers(window);
         
         if (ENGINE_CFG.glfwLoggingEnabled())
         {
             auto frameStop = high_resolution_clock::now();
             auto frameDur = duration_cast<microseconds>(frameStop - frameStart);
-            if (frameDur.count() > 16665)
-            {
-                LOG("FRAME took: %d microseconds", frameDur.count());
-            }
+            LOG("FRAME took: %d microseconds", frameDur.count());
         }
     }
 

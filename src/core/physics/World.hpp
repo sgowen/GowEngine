@@ -22,6 +22,8 @@ public:
     virtual ~World();
     
     virtual void stepPhysics(float deltaTime) = 0;
+    virtual void interpolatePhysics(float interpolation) = 0;
+    virtual void endInterpolatedPhysics() = 0;
     
     void populateFromEntityLayout(EntityLayoutDef& eld);
     void addNetworkEntity(Entity* e);

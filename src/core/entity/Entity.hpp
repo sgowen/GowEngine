@@ -430,6 +430,7 @@ public:
     ~Entity();
     
     void beginFrame();
+    void processInput(uint16_t inputState);
     void update();
     void message(uint16_t message);
     EntityDef& entityDef();
@@ -516,6 +517,11 @@ public:
     };
     Pose& pose();
     
+    enum StateFlags
+    {
+        STTF_EXILED = 255
+    };
+    
     struct State
     {
         uint8_t _state;
@@ -544,7 +550,8 @@ public:
     };
     State& state();
     
-    void requestDeletion();
+    void exile();
+    bool isExiled();
     bool isRequestingDeletion();
     
     void setWorld(World* w);
@@ -559,9 +566,9 @@ private:
     EntityRenderController* _renderController;
     Pose _pose;
     State _state;
+    uint16_t _exileStateTime;
     float _width;
     float _height;
     float _angle;
-    bool _isRequestingDeletion;
     World* _world;
 };

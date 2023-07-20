@@ -17,10 +17,10 @@ _physicsController(nullptr),
 _renderController(ENTITY_MGR.createEntityRenderController(ed, this)),
 _pose(eid._x + ed._width / 2.0f, eid._y + ed._height / 2.0f),
 _state(),
+_exileStateTime(0),
 _width(ed._width),
 _height(ed._height),
 _angle(0),
-_isRequestingDeletion(false),
 _world(nullptr)
 {
     // Empty
@@ -39,14 +39,37 @@ Entity::~Entity()
 
 void Entity::beginFrame()
 {
+    if (isExiled())
+    {
+        ++_exileStateTime;
+        return;
+    }
+    
 //    if (isDynamic())
 //    {
         ++_state._stateTime;
 //    }
 }
 
+void Entity::processInput(uint16_t inputState)
+{
+    if (isExiled())
+    {
+        return;
+    }
+    
+    EntityController* ec = controller();
+    assert(ec != nullptr);
+    ec->processInput(inputState);
+}
+
 void Entity::update()
-{    
+{
+    if (isExiled())
+    {
+        return;
+    }
+    
     if (_physicsController != nullptr)
     {
         _physicsController->updatePoseFromBody();
@@ -57,7 +80,7 @@ void Entity::update()
 
 void Entity::message(uint16_t message)
 {
-    if (_isRequestingDeletion)
+    if (isExiled())
     {
         return;
     }
@@ -180,19 +203,19 @@ Entity::State& Entity::state()
     return _state;
 }
 
-void Entity::requestDeletion()
+void Entity::exile()
 {
-    if (!isServer())
-    {
-        return;
-    }
-    
-    _isRequestingDeletion = true;
+    _state._stateFlags = STTF_EXILED;
+}
+
+bool Entity::isExiled()
+{
+    return _state._stateFlags == STTF_EXILED;
 }
 
 bool Entity::isRequestingDeletion()
 {
-    return _isRequestingDeletion;
+    return _exileStateTime >= 60;
 }
 
 void Entity::setWorld(World* w)
