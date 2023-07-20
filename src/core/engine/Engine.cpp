@@ -90,7 +90,6 @@ EngineRequestedHostAction Engine::update(double deltaTime)
     }
     
     _interpolation = _stateTime;
-    LOG("_interpolation: %f", _interpolation);
     
     EngineRequestedHostAction ret = _requestedHostAction;
     _requestedHostAction = ERHA_DEFAULT;
