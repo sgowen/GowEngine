@@ -38,6 +38,11 @@ void OpenGLUtil::enableBlending(bool srcAlpha)
     glBlendEquationSeparate(GL_FUNC_ADD, GL_FUNC_ADD);
 }
 
+void OpenGLUtil::flush()
+{
+    glFlush();
+}
+
 void OpenGLUtil::disableBlending()
 {
     glDisable(GL_BLEND);

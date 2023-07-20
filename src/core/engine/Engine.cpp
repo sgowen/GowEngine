@@ -78,6 +78,7 @@ EngineRequestedHostAction Engine::update(double deltaTime)
     
     FPS_UTIL.update(deltaTime);
     
+    bool didUpdate = false;
     _stateTime += deltaTime;
     while (_stateTime >= frameRate)
     {
@@ -86,10 +87,17 @@ EngineRequestedHostAction Engine::update(double deltaTime)
         INPUT_MGR.process();
         
         execute(ERSA_UPDATE);
+        
+        didUpdate = true;
     }
     
     EngineRequestedHostAction ret = _requestedHostAction;
     _requestedHostAction = ERHA_DEFAULT;
+    
+    if (didUpdate && ret != ERHA_EXIT)
+    {
+        return ERHA_NEEDS_RENDER;
+    }
     
     return ret;
 }

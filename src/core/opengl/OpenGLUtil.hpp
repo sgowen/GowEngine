@@ -65,6 +65,7 @@ public:
     void unloadTexture(Texture& t);
     void loadShader(Shader& s);
     void unloadShader(Shader& s);
+    void flush();
 
 private:
     static uint32_t TEXTURE_SLOTS[NUM_SUPPORTED_TEXTURE_SLOTS];

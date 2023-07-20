@@ -43,6 +43,8 @@ void ScreenRenderer::renderToScreen(Shader& s, Framebuffer& fb)
     OGL.enableBlending(false);
     
     renderFramebuffer(s, fb);
+    
+    OGL.flush();
 }
 
 void ScreenRenderer::renderFramebuffer(Shader& s, Framebuffer& fb)

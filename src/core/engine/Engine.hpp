@@ -29,6 +29,7 @@ enum EngineRequestedStateAction
 enum EngineRequestedHostAction
 {
     ERHA_DEFAULT,
+    ERHA_NEEDS_RENDER,
     ERHA_EXIT
 };
 
