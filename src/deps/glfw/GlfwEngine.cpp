@@ -152,8 +152,9 @@ void runEngine(Engine* engine, GLFWwindow* window)
     {
         auto frameStart = high_resolution_clock::now();
         
-        double deltaTime = glfwGetTime() - lastTime;
-        lastTime = glfwGetTime();
+        double timeNow = glfwGetTime();
+        double deltaTime = timeNow - lastTime;
+        lastTime = timeNow;
         
         glfwPollEvents();
         
