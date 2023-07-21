@@ -31,6 +31,7 @@ public:
     void removeAllNetworkEntities();
     void storeToCache();
     void recallCache(uint32_t numMovesProcessed);
+    void clearCache(uint32_t numMovesProcessed);
     void beginFrame();
     std::vector<Entity*> update();
     void reset();

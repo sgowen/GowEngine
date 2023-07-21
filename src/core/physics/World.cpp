@@ -101,6 +101,19 @@ void World::recallCache(uint32_t numMovesProcessed)
     }
 }
 
+void World::clearCache(uint32_t numMovesProcessed)
+{
+    for (Entity* e : _players)
+    {
+        e->networkController()->clearCache(numMovesProcessed);
+    }
+    
+    for (Entity* e : _networkEntities)
+    {
+        e->networkController()->clearCache(numMovesProcessed);
+    }
+}
+
 void World::beginFrame()
 {
     for (Entity* e : _players)

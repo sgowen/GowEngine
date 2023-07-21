@@ -30,6 +30,7 @@ public:
     virtual uint8_t write(OutputMemoryBitStream& ombs, uint8_t dirtyState);
     virtual void storeToCache(uint32_t numMovesProcessed);
     virtual void recallCache(uint32_t numMovesProcessed);
+    virtual void clearCache(uint32_t numMovesProcessed);
     virtual uint8_t refreshDirtyState();
     
 protected:

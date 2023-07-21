@@ -406,7 +406,7 @@ void NetworkServer::handleInputPacket(ClientProxy& cp, InputMemoryBitStream& imb
     
     static uint8_t maxNumFramesOfRollback = ENGINE_CFG.maxNumFramesOfRollback();
     static uint8_t numFramesOfInputDelay = ENGINE_CFG.numFramesOfInputDelay();
-    static uint8_t maxNumMoves = numFramesOfInputDelay + maxNumFramesOfRollback;
+    static uint8_t maxNumMoves = numFramesOfInputDelay + maxNumFramesOfRollback + 1;
     
     uint8_t moveCount = 0;
     imbs.readBits(moveCount, NBITS(maxNumMoves));

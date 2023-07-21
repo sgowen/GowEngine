@@ -151,71 +151,73 @@ void EntityNetworkController::recallCache(uint32_t numMovesProcessed)
 {
     Entity& e = *_entity;
     
-    // TODO, need to incorporate a cache system that
-    // can store up to maxNumMoves
-    // Could be a vector?
-    // Or just a raw ass array like what I'm using for my new sound frame system
-    // For reading back, simply apply the modulus operator with maxNumMoves
-    // Move
-//    static uint8_t maxNumFramesOfRollback = ENGINE_CFG.maxNumFramesOfRollback();
-//    static uint8_t numFramesOfInputDelay = ENGINE_CFG.numFramesOfInputDelay();
-//    static uint8_t maxNumMoves = numFramesOfInputDelay + maxNumFramesOfRollback;
-    
-    // Maybe the size should be numFramesOfInputDelay instead.
-    // Because if there is NO input delay, there's no need to cache anything but the latest update from the server
-    // Ahhhh, but the lag could be so great that it takes until we are well into our
-    // rollback allotted moves before we get an update.
-    // We could be on frame 7, getting an update for frame 0, with an input delay of 5.
-    // So the cache really does have to be "maxNumMoves" in size
-    // For the typical 7, 5 set up, this means we are caching the last 12 server updates
-    
-    // TODO, below code should be optimized, it is potentially very slow
-    bool poseFound = false;
-    for (uint32_t i = numMovesProcessed; i != 0; --i)
+    auto it_poseCache = _poseCache.find(numMovesProcessed);
+    if (it_poseCache != _poseCache.end())
     {
-        auto it = _poseCache.find(i);
-        if (it != _poseCache.end())
-        {
-            e._pose = it->second;
-            poseFound = true;
-            break;
-        }
+        e._pose = it_poseCache->second;
     }
-    if (!poseFound)
+    else
     {
         e._pose = _poseCache.at(0);
     }
     
-    bool stateFound = false;
-    for (uint32_t i = numMovesProcessed; i != 0; --i)
+    auto it_stateCache = _stateCache.find(numMovesProcessed);
+    if (it_stateCache != _stateCache.end())
     {
-        auto it = _stateCache.find(i);
-        if (it != _stateCache.end())
-        {
-            e._state = it->second;
-            stateFound = true;
-            break;
-        }
+        e._state = it_stateCache->second;
     }
-    if (!stateFound)
+    else
     {
         e._state = _stateCache.at(0);
     }
     
-    bool dataFound = false;
-    for (uint32_t i = numMovesProcessed; i != 0; --i)
+    auto it_networkDataCache = _networkDataCache.find(numMovesProcessed);
+    if (it_networkDataCache != _networkDataCache.end())
     {
-        auto it = _networkDataCache.find(i);
-        if (it != _networkDataCache.end())
-        {
-            e._entityDef._networkData = it->second;
-            dataFound = true;
-            break;
-        }
+        e._entityDef._networkData = it_networkDataCache->second;
     }
-    if (!dataFound)
+    else
     {
         e._entityDef._networkData = _networkDataCache.at(0);
+    }
+}
+
+void EntityNetworkController::clearCache(uint32_t numMovesProcessed)
+{
+    for (auto i = _poseCache.begin(); i != _poseCache.end(); )
+    {
+        if (i->first > 0 && i->first < numMovesProcessed)
+        {
+            i = _poseCache.erase(i);
+        }
+        else
+        {
+            ++i;
+        }
+    }
+    
+    for (auto i = _stateCache.begin(); i != _stateCache.end(); )
+    {
+        if (i->first > 0 && i->first < numMovesProcessed)
+        {
+            i = _stateCache.erase(i);
+        }
+        else
+        {
+            ++i;
+        }
+    }
+    
+    for (auto i = _networkDataCache.begin(); i != _networkDataCache.end(); )
+    {
+        if (i->first > 0 && i->first < numMovesProcessed)
+        {
+            i = _networkDataCache.erase(i);
+        }
+        else
+        {
+            ++i;
+        }
     }
 }
 
