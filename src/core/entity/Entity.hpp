@@ -362,6 +362,20 @@ enum ReadStateFlag
     RSTF_EXTRA_DATA_BEGIN =  1 << 2
 };
 
+struct SoundMapping
+{
+    uint16_t _stateTime;
+    std::string _soundID;
+    
+    SoundMapping(uint16_t stateTime,
+                 std::string soundID) :
+    _stateTime(stateTime),
+    _soundID(soundID)
+    {
+        // Empty
+    }
+};
+
 struct EntityDef
 {
     uint32_t _key;
@@ -371,7 +385,7 @@ struct EntityDef
     std::string _networkController;
     std::string _renderController;
     std::map<uint8_t, std::string> _textureMappings;
-    std::map<uint8_t, std::string> _soundMappings;
+    std::map<uint8_t, std::vector<SoundMapping> > _soundMappings;
     std::vector<FixtureDef> _fixtures;
     uint8_t _bodyFlags;
     uint8_t _width;
@@ -386,7 +400,7 @@ struct EntityDef
               std::string networkController,
               std::string renderController,
               std::map<uint8_t, std::string> textureMappings,
-              std::map<uint8_t, std::string> soundMappings,
+              std::map<uint8_t, std::vector<SoundMapping>> soundMappings,
               std::vector<FixtureDef> fixtures,
               uint8_t bodyFlags,
               uint8_t width,

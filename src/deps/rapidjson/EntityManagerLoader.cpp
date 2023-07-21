@@ -68,19 +68,39 @@ void EntityManagerLoader::initWithJSON(EntityManager& em, const char* json)
             textureMappings.emplace(state, stateMapping);
         }
         
-        std::map<uint8_t, std::string> soundMappings;
+        std::map<uint8_t, std::vector<SoundMapping> > soundMappings;
         if (iv.HasMember("soundMappings"))
         {
             const Value& v = iv["soundMappings"];
             assert(v.IsObject());
-            for (Value::ConstMemberIterator i = v.MemberBegin(); i != v.MemberEnd(); ++i)
+            for (Value::ConstMemberIterator member = v.MemberBegin(); member != v.MemberEnd(); ++member)
             {
-                std::string name = i->name.GetString();
+                std::string name = member->name.GetString();
                 uint16_t nameVal = StringUtil::stringToNumber<uint16_t>(name);
                 uint8_t state = (uint8_t)nameVal;
-                assert(i->value.IsString());
-                std::string soundID = i->value.GetString();
-                soundMappings.emplace(state, soundID);
+                assert(member->value.IsString() || member->value.IsArray());
+                
+                std::vector<SoundMapping> stateSoundMappings;
+                if (member->value.IsString())
+                {
+                    std::string soundID = member->value.GetString();
+                    stateSoundMappings.emplace_back(0, soundID);
+                }
+                else
+                {
+                    for (SizeType j = 0; j < member->value.Size(); ++j)
+                    {
+                        const Value& jv = member->value[j];
+                        assert(jv.IsObject());
+                        
+                        uint16_t stateTime = RapidJSONUtil::getUInt(jv, "stateTime") * ENGINE_CFG.timeScale();
+                        std::string soundID = RapidJSONUtil::getString(jv, "soundID");
+                        
+                        stateSoundMappings.emplace_back(stateTime, soundID);
+                    }
+                }
+                
+                soundMappings.emplace(state, stateSoundMappings);
             }
         }
         
