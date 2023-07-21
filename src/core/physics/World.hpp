@@ -28,6 +28,7 @@ public:
     void populateFromEntityLayout(EntityLayoutDef& eld);
     void addNetworkEntity(Entity* e);
     void removeNetworkEntity(Entity* e);
+    void removeAllNetworkEntities();
     void storeToCache();
     void recallCache(uint32_t numMovesProcessed);
     void beginFrame();
@@ -42,6 +43,7 @@ public:
     std::vector<Entity*>& getPlayers();
     
     uint32_t getNumMovesProcessed();
+    void resetNumMovesProcessed();
     
 protected:
     EntityLayoutDef _entityLayout;

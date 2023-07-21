@@ -253,18 +253,24 @@ void runEngine(Engine* engine, GLFWwindow* window)
             auto renderStop = high_resolution_clock::now();
             auto renderDur = duration_cast<microseconds>(renderStop - renderStart);
             LOG("RENDER took: %d microseconds", renderDur.count());
+            
+            auto glfwSwapBuffersStart = high_resolution_clock::now();
+            glfwSwapBuffers(window);
+            auto glfwSwapBuffersStop = high_resolution_clock::now();
+            auto glfwSwapBuffersDur = duration_cast<microseconds>(glfwSwapBuffersStop - glfwSwapBuffersStart);
+            LOG("glfwSwapBuffers took: %d microseconds", glfwSwapBuffersDur.count());
         }
         else
         {
             engine->render();
+            glfwSwapBuffers(window);
         }
         
-        glfwSwapBuffers(window);
+        auto frameStop = high_resolution_clock::now();
+        auto frameDur = duration_cast<microseconds>(frameStop - frameStart);
         
         if (ENGINE_CFG.glfwLoggingEnabled())
         {
-            auto frameStop = high_resolution_clock::now();
-            auto frameDur = duration_cast<microseconds>(frameStop - frameStart);
             LOG("FRAME took: %d microseconds", frameDur.count());
         }
     }

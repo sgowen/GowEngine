@@ -65,6 +65,12 @@ void World::removeNetworkEntity(Entity* e)
     }
 }
 
+void World::removeAllNetworkEntities()
+{
+    removeAllEntities(_players);
+    removeAllEntities(_networkEntities);
+}
+
 void World::storeToCache()
 {
     for (Entity* e : _players)
@@ -175,6 +181,11 @@ std::vector<Entity*>& World::getPlayers()
 uint32_t World::getNumMovesProcessed()
 {
     return _numMovesProcessed;
+}
+
+void World::resetNumMovesProcessed()
+{
+    _numMovesProcessed = 0;
 }
 
 void World::addEntity(Entity *e)
