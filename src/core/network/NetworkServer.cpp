@@ -511,9 +511,9 @@ void NetworkServer::handleClientDisconnected(ClientProxy& cp)
     MoveList& ml = cp.getUnprocessedMoveList();
     ml.removeAllMoves(_poolInputState);
     
-    _addressHashToClientMap.erase(cp.getSocketAddress()->getHash());
-    
     _handleLostClientFunc(cp, 0);
+    
+    _addressHashToClientMap.erase(cp.getSocketAddress()->getHash());
     
     resetNextPlayerID();
     
