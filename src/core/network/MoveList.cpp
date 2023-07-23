@@ -29,8 +29,7 @@ bool MoveList::addMoveIfNew(const Move& move)
     uint32_t timeStamp = move.getTimestamp();
     uint32_t index = move.getIndex();
     
-    if (timeStamp > _lastMoveTimestamp &&
-        (index == 0 || index == (_lastMoveIndex + 1)))
+    if (timeStamp > _lastMoveTimestamp)
     {
         _lastMoveTimestamp = timeStamp;
         _lastMoveIndex = index;
