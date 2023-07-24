@@ -47,6 +47,14 @@ void EntityNetworkController::read(InputMemoryBitStream& imbs)
         imbs.read(state._state);
         imbs.read(state._stateFlags);
         imbs.read(state._stateTime);
+        
+        state._inputState = 0;
+        imbs.read(stateBit);
+        if (stateBit)
+        {
+            imbs.read(state._inputState);
+        }
+        
     }
     
     NetworkData& nd = e.data();
@@ -104,6 +112,13 @@ uint8_t EntityNetworkController::write(OutputMemoryBitStream& ombs, uint8_t dirt
         ombs.write(e._state._state);
         ombs.write(e._state._stateFlags);
         ombs.write(e._state._stateTime);
+        uint16_t inputState = e._state._inputState;
+        state = inputState > 0;
+        ombs.write(state);
+        if (state)
+        {
+            ombs.write(inputState);
+        }
         
         ret |= RSTF_STATE;
     }

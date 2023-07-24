@@ -26,7 +26,6 @@ class SocketAddress;
 class Entity;
 class MoveList;
 
-typedef void (*RemoveProcessedMovesFunc)(uint32_t lastMoveProcessedByServerTimestamp);
 typedef void (*OnPlayerWelcomedFunc)(uint8_t playerID);
 
 enum NetworkClientState
@@ -39,7 +38,7 @@ enum NetworkClientState
 class NetworkClient
 {
 public:
-    static void create(std::string serverIPAddress, std::string username, uint16_t port, TimeTracker& tt, OnEntityRegisteredFunc oerf, OnEntityDeregisteredFunc oedf, RemoveProcessedMovesFunc rpmf, OnPlayerWelcomedFunc opwf);
+    static void create(std::string serverIPAddress, std::string username, uint16_t port, TimeTracker& tt, OnEntityRegisteredFunc oerf, OnEntityDeregisteredFunc oedf, OnPlayerWelcomedFunc opwf);
     static NetworkClient* getInstance();
     static void destroy();
     
@@ -66,7 +65,6 @@ private:
     PacketHandler _packetHandler;
     SocketAddress* _serverAddress;
     std::string _username;
-    RemoveProcessedMovesFunc _removeProcessedMovesFunc;
     OnPlayerWelcomedFunc _onPlayerWelcomedFunc;
     DeliveryNotificationManager _deliveryNotificationManager;
     EntityRegistry _entityRegistry;
@@ -95,7 +93,7 @@ private:
     void updateDropLocalPlayerRequest();
     void updateNextIndex();
     
-    NetworkClient(std::string serverIPAddress, std::string username, uint16_t port, TimeTracker& tt, OnEntityRegisteredFunc oerf, OnEntityDeregisteredFunc oedf, RemoveProcessedMovesFunc rpmf, OnPlayerWelcomedFunc opwf);
+    NetworkClient(std::string serverIPAddress, std::string username, uint16_t port, TimeTracker& tt, OnEntityRegisteredFunc oerf, OnEntityDeregisteredFunc oedf, OnPlayerWelcomedFunc opwf);
     ~NetworkClient();
     NetworkClient(const NetworkClient&);
     NetworkClient& operator=(const NetworkClient&);

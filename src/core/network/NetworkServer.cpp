@@ -32,7 +32,7 @@ void NetworkServer::destroy()
     s_instance = nullptr;
 }
 
-void NetworkServer::processIncomingPackets()
+int NetworkServer::processIncomingPackets()
 {
     _packetHandler.processIncomingPackets();
     
@@ -53,6 +53,8 @@ void NetworkServer::processIncomingPackets()
     {
         handleClientDisconnected(*cp);
     }
+    
+    return getNumMovesReadyToBeProcessed();
 }
 
 void NetworkServer::sendOutgoingPackets()
@@ -107,51 +109,6 @@ ClientProxy* NetworkServer::getClientProxy(uint8_t playerID) const
     }
     
     return nullptr;
-}
-
-int NetworkServer::getMoveCount()
-{
-    int lowestMoveCount = 0;
-
-    ClientProxy* cp = getClientProxy(1);
-    if (cp != nullptr)
-    {
-        lowestMoveCount = cp->getUnprocessedMoveList().getMoveCount();
-    }
-
-    for (auto& pair : _playerIDToClientMap)
-    {
-        int moveCount = pair.second->getUnprocessedMoveList().getMoveCount();
-        if (moveCount < lowestMoveCount)
-        {
-            lowestMoveCount = moveCount;
-        }
-    }
-
-    uint32_t expectedMoveStartIndex = getNumMovesProcessed();
-    for (int i = 0; i < lowestMoveCount; ++i)
-    {
-        uint32_t expectedMoveIndex = expectedMoveStartIndex + i;
-        
-        for (auto& pair : _playerIDToClientMap)
-        {
-            ClientProxy* cp = pair.second;
-            assert(cp != nullptr);
-
-            MoveList& ml = cp->getUnprocessedMoveList();
-            Move* m = ml.getMoveWithMoveIndex(expectedMoveIndex);
-            if (m == nullptr)
-            {
-                if (ENGINE_CFG.networkLoggingEnabled())
-                {
-                    LOG("Player %s is missing move at index: %d", cp->getUsername().c_str(), expectedMoveIndex);
-                }
-                return i;
-            }
-        }
-    }
-
-    return lowestMoveCount;
 }
 
 uint8_t NetworkServer::getNumClientsConnected()
@@ -239,28 +196,71 @@ void NetworkServer::processPacket(InputMemoryBitStream& imbs, SocketAddress* fro
     }
 }
 
-void NetworkServer::removeProcessedMovesForPlayer(uint8_t playerID)
+void NetworkServer::removeProcessedMoves()
 {
-    ClientProxy* cp = getClientProxy(playerID);
-    assert(cp != nullptr);
-
-    MoveList& ml = cp->getUnprocessedMoveList();
-    ml.removeProcessedMoves(_poolInputState);
+    for (auto& pair : _playerIDToClientMap)
+    {
+        ClientProxy* cp = pair.second;
+        assert(cp != nullptr);
+        
+        MoveList& ml = cp->getUnprocessedMoveList();
+        ml.removeProcessedMoves(_poolInputState);
+    }
 }
 
-void NetworkServer::onMovesProcessed(uint8_t moveCount)
+void NetworkServer::setNumMovesProcessed(uint32_t numMovesProcessed)
 {
-    _numMovesProcessed += moveCount;
-}
-
-uint32_t NetworkServer::getNumMovesProcessed()
-{
-    return _numMovesProcessed;
+    _numMovesProcessed = numMovesProcessed;
 }
 
 const std::map<int, ClientProxy*>& NetworkServer::playerIDToClientMap()
 {
     return _playerIDToClientMap;
+}
+
+int NetworkServer::getNumMovesReadyToBeProcessed()
+{
+    int lowestMoveCount = 0;
+
+    ClientProxy* cp = getClientProxy(1);
+    if (cp != nullptr)
+    {
+        lowestMoveCount = cp->getUnprocessedMoveList().getMoveCount();
+    }
+
+    for (auto& pair : _playerIDToClientMap)
+    {
+        int moveCount = pair.second->getUnprocessedMoveList().getMoveCount();
+        if (moveCount < lowestMoveCount)
+        {
+            lowestMoveCount = moveCount;
+        }
+    }
+
+    uint32_t expectedMoveStartIndex = _numMovesProcessed;
+    for (int i = 0; i < lowestMoveCount; ++i)
+    {
+        uint32_t expectedMoveIndex = expectedMoveStartIndex + i;
+        
+        for (auto& pair : _playerIDToClientMap)
+        {
+            ClientProxy* cp = pair.second;
+            assert(cp != nullptr);
+
+            MoveList& ml = cp->getUnprocessedMoveList();
+            Move* m = ml.getMoveWithMoveIndex(expectedMoveIndex);
+            if (m == nullptr)
+            {
+                if (ENGINE_CFG.networkLoggingEnabled())
+                {
+                    LOG("Player %s is missing move at index: %d", cp->getUsername().c_str(), expectedMoveIndex);
+                }
+                return i;
+            }
+        }
+    }
+
+    return lowestMoveCount;
 }
 
 void NetworkServer::sendPacket(const OutputMemoryBitStream& ombs, SocketAddress* fromAddress)

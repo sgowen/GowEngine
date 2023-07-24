@@ -36,7 +36,7 @@ public:
     static NetworkServer* getInstance();
     static void destroy();
     
-    void processIncomingPackets();
+    int processIncomingPackets();
     void sendOutgoingPackets();
     void registerEntity(Entity* e);
     void registerNewEntity(uint32_t key, uint32_t x, uint32_t y);
@@ -44,7 +44,6 @@ public:
     void deregisterAllEntities();
     void setStateDirty(uint32_t networkID, uint8_t dirtyState);
     ClientProxy* getClientProxy(uint8_t playerID) const;
-    int getMoveCount();
     uint8_t getNumClientsConnected();
     uint8_t getNumPlayersConnected();
     SocketAddress& getServerAddress();
@@ -52,9 +51,8 @@ public:
     void onEntityRegistered(Entity* e);
     void onEntityDeregistered(Entity* e);
     void processPacket(InputMemoryBitStream& imbs, SocketAddress* fromAddress);
-    void removeProcessedMovesForPlayer(uint8_t playerID);
-    void onMovesProcessed(uint8_t moveCount);
-    uint32_t getNumMovesProcessed();
+    void removeProcessedMoves();
+    void setNumMovesProcessed(uint32_t numMovesProcessed);
     const std::map<int, ClientProxy*>& playerIDToClientMap();
     
 private:
@@ -76,6 +74,7 @@ private:
     uint32_t _numMovesProcessed;
     uint16_t _port;
     
+    int getNumMovesReadyToBeProcessed();
     void sendPacket(const OutputMemoryBitStream& ombs, SocketAddress* fromAddress);
     void handlePacketFromNewClient(InputMemoryBitStream& imbs, SocketAddress* fromAddress);
     void processPacket(ClientProxy& cp, InputMemoryBitStream& imbs);

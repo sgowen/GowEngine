@@ -10,11 +10,11 @@
 
 NetworkClient* NetworkClient::s_instance = nullptr;
 
-void NetworkClient::create(std::string serverIPAddress, std::string username, uint16_t port, TimeTracker& tt, OnEntityRegisteredFunc oerf, OnEntityDeregisteredFunc oedf, RemoveProcessedMovesFunc rpmf, OnPlayerWelcomedFunc opwf)
+void NetworkClient::create(std::string serverIPAddress, std::string username, uint16_t port, TimeTracker& tt, OnEntityRegisteredFunc oerf, OnEntityDeregisteredFunc oedf, OnPlayerWelcomedFunc opwf)
 {
     assert(s_instance == nullptr);
     
-    s_instance = new NetworkClient(serverIPAddress, username, port, tt, oerf, oedf, rpmf, opwf);
+    s_instance = new NetworkClient(serverIPAddress, username, port, tt, oerf, oedf, opwf);
     
     assert(NW_CLNT != nullptr);
 }
@@ -308,8 +308,6 @@ void NetworkClient::handleStatePacket(InputMemoryBitStream& imbs)
         
         float rtt = _timeTracker.realTime() - _timeTracker.realTime(_lastMoveProcessedByServerTimestamp);
         _avgRoundTripTime.update(rtt);
-        
-        _removeProcessedMovesFunc(_lastMoveProcessedByServerTimestamp);
     }
     
     _replicationManagerClient.read(imbs, _entityRegistry);
@@ -410,12 +408,11 @@ void cb_client_processPacket(InputMemoryBitStream& imbs, SocketAddress* fromAddr
     NW_CLNT->processPacket(imbs, fromAddress);
 }
 
-NetworkClient::NetworkClient(std::string serverIPAddress, std::string username, uint16_t port, TimeTracker& tt, OnEntityRegisteredFunc oerf, OnEntityDeregisteredFunc oedf, RemoveProcessedMovesFunc rpmf, OnPlayerWelcomedFunc opwf) :
+NetworkClient::NetworkClient(std::string serverIPAddress, std::string username, uint16_t port, TimeTracker& tt, OnEntityRegisteredFunc oerf, OnEntityDeregisteredFunc oedf, OnPlayerWelcomedFunc opwf) :
 _timeTracker(tt),
 _packetHandler(_timeTracker, port, cb_client_processPacket),
 _serverAddress(SocketAddressFactory::createIPv4FromString(serverIPAddress)),
 _username(username),
-_removeProcessedMovesFunc(rpmf),
 _onPlayerWelcomedFunc(opwf),
 _deliveryNotificationManager(_timeTracker, true, false),
 _entityRegistry(oerf, oedf),

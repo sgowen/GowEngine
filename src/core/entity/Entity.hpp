@@ -541,20 +541,23 @@ public:
         uint8_t _state;
         uint8_t _stateFlags;
         uint16_t _stateTime;
+        uint16_t _inputState;
         
         State()
         {
             _state = 0;
             _stateFlags = 0;
             _stateTime = 0;
+            _inputState = 0;
         }
         
         friend bool operator==(State& a, State& b)
         {
             return
-            a._state             == b._state &&
-            a._stateFlags        == b._stateFlags &&
-            a._stateTime         == b._stateTime;
+            a._state              == b._state &&
+            a._stateFlags         == b._stateFlags &&
+            a._stateTime          == b._stateTime &&
+            a._inputState         == b._inputState;
         }
         
         friend bool operator!=(State& a, State& b)
@@ -567,6 +570,7 @@ public:
     void exile();
     bool isExiled();
     bool isRequestingDeletion();
+    uint16_t lastInputState();
     
     void setWorld(World* w);
     World* world();

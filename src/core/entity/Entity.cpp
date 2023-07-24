@@ -45,14 +45,13 @@ void Entity::beginFrame()
         return;
     }
     
-//    if (isDynamic())
-//    {
-        ++_state._stateTime;
-//    }
+    ++_state._stateTime;
 }
 
 void Entity::processInput(uint16_t inputState)
 {
+    _state._inputState = inputState;
+    
     if (isExiled())
     {
         return;
@@ -216,6 +215,11 @@ bool Entity::isExiled()
 bool Entity::isRequestingDeletion()
 {
     return _exileStateTime >= 60;
+}
+
+uint16_t Entity::lastInputState()
+{
+    return _state._inputState;
 }
 
 void Entity::setWorld(World* w)
