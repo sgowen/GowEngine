@@ -109,7 +109,7 @@ ClientProxy* NetworkServer::getClientProxy(uint8_t playerID) const
     return nullptr;
 }
 
-int NetworkServer::getMoveCountAndDisconnectPlayersWithInvalidMoves()
+int NetworkServer::getMoveCount()
 {
     int lowestMoveCount = 0;
 
@@ -131,20 +131,21 @@ int NetworkServer::getMoveCountAndDisconnectPlayersWithInvalidMoves()
     uint32_t expectedMoveStartIndex = getNumMovesProcessed();
     for (int i = 0; i < lowestMoveCount; ++i)
     {
+        uint32_t expectedMoveIndex = expectedMoveStartIndex + i;
+        
         for (auto& pair : _playerIDToClientMap)
         {
             ClientProxy* cp = pair.second;
             assert(cp != nullptr);
 
             MoveList& ml = cp->getUnprocessedMoveList();
-            Move* m = ml.getMoveWithMoveIndex(expectedMoveStartIndex + i);
+            Move* m = ml.getMoveWithMoveIndex(expectedMoveIndex);
             if (m == nullptr)
             {
-//                LOG("Disconnecting player with invalid moves");
-//                handleClientDisconnected(*cp);
-//
-//                break;
-                LOG("player doesn't have any valid moves");
+                if (ENGINE_CFG.networkLoggingEnabled())
+                {
+                    LOG("Player %s is missing move at index: %d", cp->getUsername().c_str(), expectedMoveIndex);
+                }
                 return i;
             }
         }
