@@ -28,15 +28,16 @@ public:
     
     virtual void read(InputMemoryBitStream& imbs);
     virtual uint8_t write(OutputMemoryBitStream& ombs, uint8_t dirtyState);
-    virtual void recallCache();
+    virtual void storeToCache(uint32_t numMovesProcessed);
+    virtual void recallCache(uint32_t numMovesProcessed);
+    virtual void clearCache(uint32_t numMovesProcessed);
     virtual uint8_t refreshDirtyState();
     
 protected:
     Entity* _entity;
     
 private:
-    Entity::Pose _poseCache;
-    Entity::State _stateCache;
-//    std::map<uint32_t, Entity::Pose> _poseCache;
-//    std::map<uint32_t, Entity::State> _stateCache;
+    std::map<uint32_t, Entity::Pose> _poseCache;
+    std::map<uint32_t, Entity::State> _stateCache;
+    std::map<uint32_t, NetworkData> _networkDataCache;
 };

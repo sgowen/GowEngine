@@ -131,21 +131,22 @@ int NetworkServer::getMoveCount()
     uint32_t expectedMoveStartIndex = getNumMovesProcessed();
     for (int i = 0; i < lowestMoveCount; ++i)
     {
+        uint32_t expectedMoveIndex = expectedMoveStartIndex + i;
+        
         for (auto& pair : _playerIDToClientMap)
         {
             ClientProxy* cp = pair.second;
             assert(cp != nullptr);
 
             MoveList& ml = cp->getUnprocessedMoveList();
-            Move* m = ml.getMoveAtIndex(i);
-            assert(m != nullptr);
-
-            uint32_t expectedMoveIndex = expectedMoveStartIndex + i;
-            if (expectedMoveIndex != m->getIndex())
+            Move* m = ml.getMoveWithMoveIndex(expectedMoveIndex);
+            if (m == nullptr)
             {
-                LOG("Disconnecting player with invalid move index: %d, expectedMoveIndex: %d", m->getIndex(), expectedMoveIndex);
-                handleClientDisconnected(*cp);
-                break;
+                if (ENGINE_CFG.networkLoggingEnabled())
+                {
+                    LOG("Player %s is missing move at index: %d", cp->getUsername().c_str(), expectedMoveIndex);
+                }
+                return i;
             }
         }
     }
@@ -361,9 +362,9 @@ void NetworkServer::sendStatePacketToClient(ClientProxy& cp)
     OutputMemoryBitStream ombs(NW_MAX_PACKET_SIZE);
     ombs.writeBits(static_cast<uint8_t>(NWPT_STATE), 4);
     
-    ombs.write(_numMovesProcessed);
-    
     InFlightPacket* ifp = cp.getDeliveryNotificationManager().writeState(ombs);
+    
+    ombs.write(_numMovesProcessed);
     
     bool isTimestampDirty = cp.isLastMoveTimestampDirty();
     ombs.write(isTimestampDirty);
@@ -404,8 +405,11 @@ void NetworkServer::handleInputPacket(ClientProxy& cp, InputMemoryBitStream& imb
         return;
     }
     
+    static uint8_t maxNumFramesOfRollback = ENGINE_CFG.maxNumFramesOfRollback();
+    static uint8_t numFramesOfInputDelay = ENGINE_CFG.numFramesOfInputDelay();
+    static uint8_t maxNumMoves = numFramesOfInputDelay + maxNumFramesOfRollback + 1;
+    
     uint8_t moveCount = 0;
-    static uint8_t maxNumMoves = ENGINE_CFG.maxNumMoves();
     imbs.readBits(moveCount, NBITS(maxNumMoves));
     
     for (; moveCount > 0; --moveCount)
@@ -508,9 +512,9 @@ void NetworkServer::handleClientDisconnected(ClientProxy& cp)
     MoveList& ml = cp.getUnprocessedMoveList();
     ml.removeAllMoves(_poolInputState);
     
-    _addressHashToClientMap.erase(cp.getSocketAddress()->getHash());
-    
     _handleLostClientFunc(cp, 0);
+    
+    _addressHashToClientMap.erase(cp.getSocketAddress()->getHash());
     
     resetNextPlayerID();
     

@@ -312,6 +312,13 @@ void OpenALUtil::setLooping(uint32_t alHandle, bool isLooping)
     crashIfError();
 }
 
+void OpenALUtil::seekAhead(uint32_t alHandle, uint32_t numFrames)
+{
+    static float frameRate = static_cast<float>(ENGINE_CFG.frameRate());
+    alSourcef(alHandle, AL_SEC_OFFSET, numFrames * frameRate);
+    crashIfError();
+}
+
 bool OpenALUtil::isPlaying(uint32_t alHandle)
 {
     ALint state;

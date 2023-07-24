@@ -14,6 +14,7 @@ _stateMachine(this, &ENGINE_STATE_DEFAULT),
 _requestedStateAction(ERSA_DEFAULT),
 _requestedHostAction(ERHA_DEFAULT),
 _stateTime(0.0),
+_interpolation(0.0),
 _screenWidth(0),
 _screenHeight(0),
 _cursorWidth(0),
@@ -87,6 +88,8 @@ EngineRequestedHostAction Engine::update(double deltaTime)
         
         execute(ERSA_UPDATE);
     }
+    
+    _interpolation = _stateTime;
     
     EngineRequestedHostAction ret = _requestedHostAction;
     _requestedHostAction = ERHA_DEFAULT;
@@ -192,6 +195,11 @@ uint16_t Engine::cursorWidth()
 uint16_t Engine::cursorHeight()
 {
     return _cursorHeight;
+}
+
+double Engine::interpolation()
+{
+    return _interpolation;
 }
 
 void Engine::execute(EngineRequestedStateAction ersa)

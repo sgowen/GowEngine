@@ -10,11 +10,9 @@
 
 IMPL_RTTI_NOPARENT(World)
 
-bool World::s_isClient = false;
-bool World::s_isLiveFrame = false;
-
 World::World() :
-_entityLayout()
+_entityLayout(),
+_numMovesProcessed(0)
 {
     // Empty
 }
@@ -67,18 +65,65 @@ void World::removeNetworkEntity(Entity* e)
     }
 }
 
-void World::recallCache()
+void World::removeAllNetworkEntities()
+{
+    removeAllEntities(_players);
+    removeAllEntities(_networkEntities);
+}
+
+void World::storeToCache()
 {
     for (Entity* e : _players)
     {
-        e->networkController()->recallCache();
+        e->networkController()->storeToCache(_numMovesProcessed);
+    }
+    
+    for (Entity* e : _networkEntities)
+    {
+        e->networkController()->storeToCache(_numMovesProcessed);
+    }
+}
+
+void World::recallCache(uint32_t numMovesProcessed)
+{
+    _numMovesProcessed = numMovesProcessed;
+    
+    for (Entity* e : _players)
+    {
+        e->networkController()->recallCache(numMovesProcessed);
         e->physicsController()->updateBodyFromPose();
     }
     
     for (Entity* e : _networkEntities)
     {
-        e->networkController()->recallCache();
+        e->networkController()->recallCache(numMovesProcessed);
         e->physicsController()->updateBodyFromPose();
+    }
+}
+
+void World::clearCache(uint32_t numMovesProcessed)
+{
+    for (Entity* e : _players)
+    {
+        e->networkController()->clearCache(numMovesProcessed);
+    }
+    
+    for (Entity* e : _networkEntities)
+    {
+        e->networkController()->clearCache(numMovesProcessed);
+    }
+}
+
+void World::beginFrame()
+{
+    for (Entity* e : _players)
+    {
+        e->beginFrame();
+    }
+    
+    for (Entity* e : _networkEntities)
+    {
+        e->beginFrame();
     }
 }
 
@@ -102,6 +147,8 @@ std::vector<Entity*> World::update()
             toDelete.push_back(e);
         }
     }
+    
+    ++_numMovesProcessed;
     
     return toDelete;
 }
@@ -142,6 +189,16 @@ std::vector<Entity*>& World::getNetworkEntities()
 std::vector<Entity*>& World::getPlayers()
 {
     return _players;
+}
+
+uint32_t World::getNumMovesProcessed()
+{
+    return _numMovesProcessed;
+}
+
+void World::resetNumMovesProcessed()
+{
+    _numMovesProcessed = 0;
 }
 
 void World::addEntity(Entity *e)

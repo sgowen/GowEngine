@@ -32,6 +32,7 @@ public:
     void setVolume(uint32_t alHandle, float volume);
     bool isLooping(uint32_t alHandle);
     void setLooping(uint32_t alHandle, bool isLooping);
+    void seekAhead(uint32_t alHandle, uint32_t numFrames);
     bool isPlaying(uint32_t alHandle);
     bool isPaused(uint32_t alHandle);
     

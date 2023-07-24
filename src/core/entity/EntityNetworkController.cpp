@@ -12,72 +12,70 @@ IMPL_RTTI_NOPARENT(EntityNetworkController)
 IMPL_EntityNetworkController_create_NOPARENT
 
 EntityNetworkController::EntityNetworkController(Entity* e) :
-_entity(e),
-_poseCache(e->_pose),
-_stateCache(e->_state)
+_entity(e)
 {
-    // Empty
+    storeToCache(0);
 }
 
 void EntityNetworkController::read(InputMemoryBitStream& imbs)
 {
+    const uint32_t numMovesProcessed = NW_CLNT->getNumMovesProcessed();
+    
     Entity& e = *_entity;
-    uint8_t fromState = _stateCache._state;
     
     bool stateBit;
     
     imbs.read(stateBit);
     if (stateBit)
     {
-        MemoryBitStreamUtil::read(imbs, e._pose._position._x, e._pose._position._y);
-        MemoryBitStreamUtil::read(imbs, e._pose._velocity._x, e._pose._velocity._y);
+        _poseCache.insert({numMovesProcessed, Entity::Pose(0, 0)});
+        Entity::Pose& pose = _poseCache.at(numMovesProcessed);
         
-        imbs.readBits(e._pose._numGroundContacts, 4);
-        imbs.read(e._pose._isXFlipped);
+        MemoryBitStreamUtil::read(imbs, pose._position._x, pose._position._y);
+        MemoryBitStreamUtil::read(imbs, pose._velocity._x, pose._velocity._y);
         
-        _poseCache = e._pose;
+        imbs.readBits(pose._numGroundContacts, 4);
+        imbs.read(pose._isXFlipped);
     }
     
     imbs.read(stateBit);
     if (stateBit)
     {
-        imbs.read(e._state._state);
-        imbs.read(e._state._stateFlags);
-        imbs.read(e._state._stateTime);
+        _stateCache.insert({numMovesProcessed, Entity::State()});
+        Entity::State& state = _stateCache.at(numMovesProcessed);
         
-        _stateCache = e._state;
+        imbs.read(state._state);
+        imbs.read(state._stateFlags);
+        imbs.read(state._stateTime);
     }
     
     NetworkData& nd = e.data();
-    for (NetworkDataGroup& ndg : nd._data)
+    size_t numDataGroups = nd._data.size();
+    for (size_t i = 0; i < numDataGroups; ++i)
     {
         imbs.read(stateBit);
         if (stateBit)
         {
+            auto it = _networkDataCache.find(numMovesProcessed);
+            if (it == _networkDataCache.end())
+            {
+                // TODO, may need to fix this up
+                // So we assign the latest client-side version of the networkData here
+                // And then read in the server update on top of it
+                // but unless all NetworkDataFields have an update to be read in,
+                // this frame of networkDataCache is going to contain parts that are potentially more up-to-date
+                // than it should be for the given numMovesProcessed
+                _networkDataCache.insert({numMovesProcessed, nd});
+            }
+            
+            _networkDataCache.at(numMovesProcessed)._data[i] = nd._data[i];
+            NetworkDataGroup& ndg = _networkDataCache.at(numMovesProcessed)._data[i];
             for (NetworkDataField& ndf : ndg._data)
             {
                 MemoryBitStreamUtil::read(imbs, ndf);
             }
-            
-            ndg._dataCache = ndg._data;
         }
     }
-    
-    if (_entity->isPlayer())
-    {
-        uint8_t playerID = _entity->dataField("playerID").valueUInt8();
-        if (NW_CLNT->isPlayerIDLocal(playerID))
-        {
-            // Don't play any sounds for local player(s)
-            // since they already heard them
-            // * playing a sound after a nw read
-            // is only useful for server controlled
-            // or remote player controlled entities
-            return;
-        }
-    }
-    
-    SoundUtil::playSoundForStateIfChanged(e, fromState, e.state()._state);
 }
 
 uint8_t EntityNetworkController::write(OutputMemoryBitStream& ombs, uint8_t dirtyState)
@@ -129,17 +127,97 @@ uint8_t EntityNetworkController::write(OutputMemoryBitStream& ombs, uint8_t dirt
     return ret;
 }
 
-void EntityNetworkController::recallCache()
+void EntityNetworkController::storeToCache(uint32_t numMovesProcessed)
 {
     Entity& e = *_entity;
     
-    e._pose = _poseCache;
-    e._state = _stateCache;
-    
-    NetworkData& nd = e.data();
-    for (NetworkDataGroup& ndg : nd._data)
+    if (_poseCache.find(numMovesProcessed) == _poseCache.end())
     {
-        ndg._data = ndg._dataCache;
+        _poseCache.insert({numMovesProcessed, e._pose});
+    }
+    
+    if (_stateCache.find(numMovesProcessed) == _stateCache.end())
+    {
+        _stateCache.insert({numMovesProcessed, e._state});
+    }
+    
+    if (_networkDataCache.find(numMovesProcessed) == _networkDataCache.end())
+    {
+        _networkDataCache.insert({numMovesProcessed, e._entityDef._networkData});
+    }
+}
+
+void EntityNetworkController::recallCache(uint32_t numMovesProcessed)
+{
+    Entity& e = *_entity;
+    
+    auto it_poseCache = _poseCache.find(numMovesProcessed);
+    if (it_poseCache != _poseCache.end())
+    {
+        e._pose = it_poseCache->second;
+    }
+    else
+    {
+        e._pose = _poseCache.at(0);
+    }
+    
+    auto it_stateCache = _stateCache.find(numMovesProcessed);
+    if (it_stateCache != _stateCache.end())
+    {
+        e._state = it_stateCache->second;
+    }
+    else
+    {
+        e._state = _stateCache.at(0);
+    }
+    
+    auto it_networkDataCache = _networkDataCache.find(numMovesProcessed);
+    if (it_networkDataCache != _networkDataCache.end())
+    {
+        e._entityDef._networkData = it_networkDataCache->second;
+    }
+    else
+    {
+        e._entityDef._networkData = _networkDataCache.at(0);
+    }
+}
+
+void EntityNetworkController::clearCache(uint32_t numMovesProcessed)
+{
+    for (auto i = _poseCache.begin(); i != _poseCache.end(); )
+    {
+        if (i->first > 0 && i->first < numMovesProcessed)
+        {
+            i = _poseCache.erase(i);
+        }
+        else
+        {
+            ++i;
+        }
+    }
+    
+    for (auto i = _stateCache.begin(); i != _stateCache.end(); )
+    {
+        if (i->first > 0 && i->first < numMovesProcessed)
+        {
+            i = _stateCache.erase(i);
+        }
+        else
+        {
+            ++i;
+        }
+    }
+    
+    for (auto i = _networkDataCache.begin(); i != _networkDataCache.end(); )
+    {
+        if (i->first > 0 && i->first < numMovesProcessed)
+        {
+            i = _networkDataCache.erase(i);
+        }
+        else
+        {
+            ++i;
+        }
     }
 }
 
@@ -149,24 +227,27 @@ uint8_t EntityNetworkController::refreshDirtyState()
     
     Entity& e = *_entity;
     
-    if (_poseCache != e._pose)
+    if (_poseCache.at(0) != e._pose)
     {
-        _poseCache = e._pose;
+        _poseCache.insert({0, e._pose});
         ret |= RSTF_POSE;
     }
     
-    if (_stateCache != e._state)
+    if (_stateCache.at(0) != e._state)
     {
-        _stateCache = e._state;
+        _stateCache.insert({0, e._state});
         ret |= RSTF_STATE;
     }
     
     NetworkData& nd = e.data();
-    for (NetworkDataGroup& ndg : nd._data)
+    size_t numDataGroups = nd._data.size();
+    for (size_t i = 0; i < numDataGroups; ++i)
     {
-        if (ndg._dataCache != ndg._data)
+        NetworkDataGroup& ndg = nd._data[i];
+        NetworkDataGroup& ndgCache = _networkDataCache.at(0)._data[i];
+        if (ndgCache._data != ndg._data)
         {
-            ndg._dataCache = ndg._data;
+            ndgCache._data = ndg._data;
             ret |= ndg._readStateFlag;
         }
     }

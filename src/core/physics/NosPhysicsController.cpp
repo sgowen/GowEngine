@@ -12,7 +12,9 @@ IMPL_RTTI(NosPhysicsController, EntityPhysicsController)
 
 NosPhysicsController::NosPhysicsController(Entity* e, float gravity) : EntityPhysicsController(e),
 _velocity(e->velocity()),
+_velocityCache(_velocity),
 _position(e->position()),
+_positionCache(_position),
 _gravity(gravity),
 _numGroundContacts(0),
 _isBodyFacingLeft(false)
@@ -62,6 +64,11 @@ void NosPhysicsController::updateBodyFromPose()
 
 void NosPhysicsController::step(float deltaTime)
 {
+    if (_entity->isExiled())
+    {
+        return;
+    }
+    
     _velocity.add(0, _gravity * deltaTime);
     _tolerance = fabsf(_velocity._y * deltaTime * 2);
     _position.add(_velocity._x * deltaTime, _velocity._y * deltaTime);
@@ -79,13 +86,39 @@ void NosPhysicsController::step(float deltaTime)
     }
 }
 
+void NosPhysicsController::interpolate(float interpolation)
+{
+    _velocityCache = _velocity;
+    _positionCache = _position;
+    
+    _velocity.add(0, _gravity * interpolation);
+    _position.add(_velocity._x * interpolation, _velocity._y * interpolation);
+}
+
+void NosPhysicsController::endInterpolation()
+{
+    _velocity = _velocityCache;
+    _position = _positionCache;
+}
+
 void NosPhysicsController::processCollisions(std::vector<Entity*>& entities)
 {
+    if (_entity->isExiled())
+    {
+        return;
+    }
+    
     for (Entity* e : entities)
     {
         if (_entity == e)
         {
             // Don't collide with myself
+            continue;
+        }
+        
+        if (e->isExiled())
+        {
+            // Can't interact with something in exile
             continue;
         }
         

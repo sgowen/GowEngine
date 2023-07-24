@@ -195,11 +195,6 @@ void NetworkClient::processPacket(InputMemoryBitStream& imbs, SocketAddress* fro
     }
 }
 
-void NetworkClient::onMoveProcessed()
-{
-    ++_numMovesProcessed;
-}
-
 uint32_t NetworkClient::getNumMovesProcessed()
 {
     return _numMovesProcessed;
@@ -298,12 +293,12 @@ void NetworkClient::handleStatePacket(InputMemoryBitStream& imbs)
         return;
     }
     
-    imbs.read(_numMovesProcessed);
-    
     if (!_deliveryNotificationManager.readAndProcessState(imbs))
     {
         return;
     }
+    
+    imbs.read(_numMovesProcessed);
     
     bool isTimestampDirty;
     imbs.read(isTimestampDirty);
@@ -331,17 +326,31 @@ void NetworkClient::updateSendingInputPacket(MoveList& ml)
     ombs.write(ml.hasMoves());
     if (ml.hasMoves())
     {
-        static uint8_t maxNumMoves = ENGINE_CFG.maxNumMoves();
-        int moveCount = ml.getNumMovesAfterTimestamp(_lastMoveProcessedByServerTimestamp);
+        static uint8_t maxNumFramesOfRollback = ENGINE_CFG.maxNumFramesOfRollback();
+        static uint8_t numFramesOfInputDelay = ENGINE_CFG.numFramesOfInputDelay();
+        static uint8_t maxNumMoves = numFramesOfInputDelay + maxNumFramesOfRollback + 1;
+        
+        uint8_t moveCount = ml.getNumMovesAfterTimestamp(_lastMoveProcessedByServerTimestamp);
         assert(moveCount <= maxNumMoves);
         ombs.writeBits(moveCount, NBITS(maxNumMoves));
         
+        // TODO, check this.
+        // shouldn't the last X moves after _lastMoveProcessedByServerTimestamp
+        // be from the end?
         std::deque<Move>::const_iterator moveItr = ml.begin();
         
-        for (int i = 0; i < moveCount; ++i, ++moveItr)
+        uint8_t moveCountWritten = 0;
+        for (int i = 0; i < ml.getMoveCount(); ++i, ++moveItr)
         {
-            moveItr->write(ombs);
+            // Maybe this solves my above complaint?
+            if (moveItr->getTimestamp() > _lastMoveProcessedByServerTimestamp)
+            {
+                moveItr->write(ombs);
+                ++moveCountWritten;
+            }
         }
+        
+        assert(moveCountWritten == moveCount);
     }
     
     sendPacket(ombs);

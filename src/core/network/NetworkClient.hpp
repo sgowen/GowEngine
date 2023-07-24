@@ -57,7 +57,6 @@ public:
     NetworkClientState state() const;
     bool connect();
     void processPacket(InputMemoryBitStream& imbs, SocketAddress* fromAddress);
-    void onMoveProcessed();
     uint32_t getNumMovesProcessed();
     
 private:

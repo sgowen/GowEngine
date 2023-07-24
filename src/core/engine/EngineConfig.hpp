@@ -34,7 +34,8 @@ public:
     uint16_t clientPortHost();
     uint16_t clientPortJoin();
     uint16_t serverPort();
-    uint8_t maxNumMoves();
+    uint8_t maxNumFramesOfRollback();
+    uint8_t numFramesOfInputDelay();
     uint8_t numFramesOfSimulatedLatency();
     
     /// Derived Values
@@ -60,7 +61,8 @@ private:
     uint16_t _clientPortHost;
     uint16_t _clientPortJoin;
     uint16_t _serverPort;
-    uint8_t _maxNumMoves;
+    uint8_t _maxNumFramesOfRollback;
+    uint8_t _numFramesOfInputDelay;
     uint8_t _numFramesOfSimulatedLatency;
     
     /// Derived Values

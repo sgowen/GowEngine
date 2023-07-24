@@ -58,13 +58,17 @@ public:
     virtual void updateBodyFromPose() override;
     
     void step(float deltaTime);
+    void interpolate(float interpolation);
+    void endInterpolation();
     void processCollisions(std::vector<Entity*>& entities);
     std::vector<Bounds>& bounds();
     
 private:
     std::vector<Bounds> _bounds;
     Vector2 _velocity;
+    Vector2 _velocityCache;
     Vector2 _position;
+    Vector2 _positionCache;
     float _gravity;
     float _tolerance;
     uint8_t _numGroundContacts;

@@ -24,7 +24,7 @@ public:
     virtual void onAssetsLoaded(Engine* e) = 0;
     virtual void onExit(Engine* e) = 0;
     virtual void onUpdate(Engine* e) = 0;
-    virtual void onRender(Renderer& r) = 0;
+    virtual void onRender(Renderer& r, double interpolation) = 0;
     
     virtual void enter(Engine* e);
     virtual void execute(Engine* e);

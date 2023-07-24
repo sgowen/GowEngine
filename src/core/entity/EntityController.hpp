@@ -21,6 +21,7 @@ public:
     EntityController(Entity* e);
     virtual ~EntityController();
     
+    virtual void processInput(uint16_t inputState);
     virtual void onUpdate();
     virtual void onMessage(uint16_t message);
     

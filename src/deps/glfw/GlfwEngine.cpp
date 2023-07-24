@@ -147,13 +147,14 @@ void runEngine(Engine* engine, GLFWwindow* window)
     double lastTime = glfwGetTime();
     int lastKnownWidth = 0, lastKnownHeight = 0;
     int width = 0, height = 0;
-
+    
     while (!glfwWindowShouldClose(window))
     {
         auto frameStart = high_resolution_clock::now();
         
-        double deltaTime = glfwGetTime() - lastTime;
-        lastTime = glfwGetTime();
+        double timeNow = glfwGetTime();
+        double deltaTime = timeNow - lastTime;
+        lastTime = timeNow;
         
         glfwPollEvents();
         
@@ -222,8 +223,20 @@ void runEngine(Engine* engine, GLFWwindow* window)
             }
         }
 
-        auto updateStart = high_resolution_clock::now();
-        EngineRequestedHostAction requestedAction = engine->update(deltaTime);
+        EngineRequestedHostAction requestedAction = ERHA_DEFAULT;
+        if (ENGINE_CFG.glfwLoggingEnabled())
+        {
+            auto updateStart = high_resolution_clock::now();
+            requestedAction = engine->update(deltaTime);
+            auto updateStop = high_resolution_clock::now();
+            auto updateDur = duration_cast<microseconds>(updateStop - updateStart);
+            LOG("UPDATE took: %d microseconds", updateDur.count());
+        }
+        else
+        {
+            requestedAction = engine->update(deltaTime);
+        }
+        
         switch (requestedAction)
         {
             case ERHA_EXIT:
@@ -233,28 +246,32 @@ void runEngine(Engine* engine, GLFWwindow* window)
             default:
                 break;
         }
-        if (ENGINE_CFG.glfwLoggingEnabled())
-        {
-            auto updateStop = high_resolution_clock::now();
-            auto updateDur = duration_cast<microseconds>(updateStop - updateStart);
-            LOG("UPDATE took: %d microseconds", updateDur.count());
-        }
-
-        auto renderStart = high_resolution_clock::now();
-        engine->render();
-        if (ENGINE_CFG.glfwLoggingEnabled())
-        {
-            auto renderStop = high_resolution_clock::now();
-            auto renderDur = duration_cast<microseconds>(renderStop - renderStart);
-            LOG("RENDER took: %d microseconds", renderDur.count());
-        }
-
-        glfwSwapBuffers(window);
         
         if (ENGINE_CFG.glfwLoggingEnabled())
         {
-            auto frameStop = high_resolution_clock::now();
-            auto frameDur = duration_cast<microseconds>(frameStop - frameStart);
+            auto renderStart = high_resolution_clock::now();
+            engine->render();
+            auto renderStop = high_resolution_clock::now();
+            auto renderDur = duration_cast<microseconds>(renderStop - renderStart);
+            LOG("RENDER took: %d microseconds", renderDur.count());
+            
+            auto glfwSwapBuffersStart = high_resolution_clock::now();
+            glfwSwapBuffers(window);
+            auto glfwSwapBuffersStop = high_resolution_clock::now();
+            auto glfwSwapBuffersDur = duration_cast<microseconds>(glfwSwapBuffersStop - glfwSwapBuffersStart);
+            LOG("glfwSwapBuffers took: %d microseconds", glfwSwapBuffersDur.count());
+        }
+        else
+        {
+            engine->render();
+            glfwSwapBuffers(window);
+        }
+        
+        auto frameStop = high_resolution_clock::now();
+        auto frameDur = duration_cast<microseconds>(frameStop - frameStart);
+        
+        if (ENGINE_CFG.glfwLoggingEnabled())
+        {
             LOG("FRAME took: %d microseconds", frameDur.count());
         }
     }
@@ -284,19 +301,19 @@ void GlfwEngine::exec(Engine* engine, const char* windowTitle)
     int height = 480;
 
 #if IS_RELEASE
-    monitor = glfwGetPrimaryMonitor();
-    if (monitor)
-    {
-        const GLFWvidmode* mode = glfwGetVideoMode(monitor);
-
-        glfwWindowHint(GLFW_RED_BITS, mode->redBits);
-        glfwWindowHint(GLFW_GREEN_BITS, mode->greenBits);
-        glfwWindowHint(GLFW_BLUE_BITS, mode->blueBits);
-        glfwWindowHint(GLFW_REFRESH_RATE, mode->refreshRate);
-
-        width = mode->width;
-        height = mode->height;
-    }
+//    monitor = glfwGetPrimaryMonitor();
+//    if (monitor)
+//    {
+//        const GLFWvidmode* mode = glfwGetVideoMode(monitor);
+//
+//        glfwWindowHint(GLFW_RED_BITS, mode->redBits);
+//        glfwWindowHint(GLFW_GREEN_BITS, mode->greenBits);
+//        glfwWindowHint(GLFW_BLUE_BITS, mode->blueBits);
+//        glfwWindowHint(GLFW_REFRESH_RATE, mode->refreshRate);
+//
+//        width = mode->width;
+//        height = mode->height;
+//    }
 #endif
 
     window = glfwCreateWindow(width, height, windowTitle, monitor, nullptr);
