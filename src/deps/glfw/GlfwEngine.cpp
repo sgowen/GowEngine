@@ -247,24 +247,27 @@ void runEngine(Engine* engine, GLFWwindow* window)
                 break;
         }
         
-        if (ENGINE_CFG.glfwLoggingEnabled())
+        if (engine->hasUpdatedSinceLastRender())
         {
-            auto renderStart = high_resolution_clock::now();
-            engine->render();
-            auto renderStop = high_resolution_clock::now();
-            auto renderDur = duration_cast<microseconds>(renderStop - renderStart);
-            LOG("RENDER took: %d microseconds", renderDur.count());
-            
-            auto glfwSwapBuffersStart = high_resolution_clock::now();
-            glfwSwapBuffers(window);
-            auto glfwSwapBuffersStop = high_resolution_clock::now();
-            auto glfwSwapBuffersDur = duration_cast<microseconds>(glfwSwapBuffersStop - glfwSwapBuffersStart);
-            LOG("glfwSwapBuffers took: %d microseconds", glfwSwapBuffersDur.count());
-        }
-        else
-        {
-            engine->render();
-            glfwSwapBuffers(window);
+            if (ENGINE_CFG.glfwLoggingEnabled())
+            {
+                auto renderStart = high_resolution_clock::now();
+                engine->render();
+                auto renderStop = high_resolution_clock::now();
+                auto renderDur = duration_cast<microseconds>(renderStop - renderStart);
+                LOG("RENDER took: %d microseconds", renderDur.count());
+                
+                auto glfwSwapBuffersStart = high_resolution_clock::now();
+                glfwSwapBuffers(window);
+                auto glfwSwapBuffersStop = high_resolution_clock::now();
+                auto glfwSwapBuffersDur = duration_cast<microseconds>(glfwSwapBuffersStop - glfwSwapBuffersStart);
+                LOG("glfwSwapBuffers took: %d microseconds", glfwSwapBuffersDur.count());
+            }
+            else
+            {
+                engine->render();
+                glfwSwapBuffers(window);
+            }
         }
         
         auto frameStop = high_resolution_clock::now();

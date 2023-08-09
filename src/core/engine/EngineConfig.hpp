@@ -30,7 +30,7 @@ public:
     bool networkLoggingEnabled();
     bool physicsLoggingEnabled();
     bool audioDisabled();
-    uint8_t maxTextInputLength();
+    bool extrapolatePhysics();
     uint16_t clientPortHost();
     uint16_t clientPortJoin();
     uint16_t serverPort();
@@ -57,7 +57,7 @@ private:
     bool _networkLoggingEnabled;
     bool _physicsLoggingEnabled;
     bool _audioDisabled;
-    uint8_t _maxTextInputLength;
+    bool _extrapolatePhysics;
     uint16_t _clientPortHost;
     uint16_t _clientPortJoin;
     uint16_t _serverPort;

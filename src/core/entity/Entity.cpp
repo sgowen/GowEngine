@@ -60,6 +60,11 @@ void Entity::processInput(uint16_t inputState)
     EntityController* ec = controller();
     assert(ec != nullptr);
     ec->processInput(inputState);
+    
+    if (_physicsController != nullptr)
+    {
+        _physicsController->updateBodyFromPose();
+    }
 }
 
 void Entity::update()

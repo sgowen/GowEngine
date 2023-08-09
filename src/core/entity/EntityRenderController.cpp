@@ -20,7 +20,7 @@ _entity(e)
 std::string EntityRenderController::getTextureMapping()
 {
     Entity& e = *_entity;
-    return getTextureMapping(e._state._state);
+    return getTextureMapping(e.state()._state);
 }
 
 std::string EntityRenderController::getTextureMapping(uint8_t state)
@@ -35,7 +35,7 @@ std::string EntityRenderController::getTextureMapping(uint8_t state)
 std::vector<SoundMapping>* EntityRenderController::getSoundMapping()
 {
     Entity& e = *_entity;
-    return getSoundMapping(e._state._state);
+    return getSoundMapping(e.state()._state);
 }
 
 std::vector<SoundMapping>* EntityRenderController::getSoundMapping(uint8_t state)

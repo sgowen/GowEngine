@@ -434,10 +434,7 @@ class World;
 
 class Entity
 {
-    friend class EntityController;
     friend class EntityNetworkController;
-    friend class EntityPhysicsController;
-    friend class EntityRenderController;
     
 public:
     Entity(EntityDef ed, EntityInstanceDef eid);

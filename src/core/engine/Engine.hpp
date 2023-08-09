@@ -70,7 +70,8 @@ public:
     uint16_t screenHeight();
     uint16_t cursorWidth();
     uint16_t cursorHeight();
-    double interpolation();
+    double extrapolation();
+    bool hasUpdatedSinceLastRender();
     
 private:
     State<Engine>& _initialState;
@@ -78,11 +79,12 @@ private:
     EngineRequestedStateAction _requestedStateAction;
     EngineRequestedHostAction _requestedHostAction;
     double _stateTime;
-    double _interpolation;
+    double _extrapolation;
     uint16_t _screenWidth;
     uint16_t _screenHeight;
     uint16_t _cursorWidth;
     uint16_t _cursorHeight;
+    bool _hasUpdatedSinceLastRender;
     
     void execute(EngineRequestedStateAction ersa);
 };

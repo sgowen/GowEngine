@@ -14,11 +14,11 @@ _stateMachine(this, &ENGINE_STATE_DEFAULT),
 _requestedStateAction(ERSA_DEFAULT),
 _requestedHostAction(ERHA_DEFAULT),
 _stateTime(0.0),
-_interpolation(0.0),
 _screenWidth(0),
 _screenHeight(0),
 _cursorWidth(0),
-_cursorHeight(0)
+_cursorHeight(0),
+_hasUpdatedSinceLastRender(false)
 {
     EngineConfig::create(configFilePath);
     AudioEngine::create();
@@ -87,9 +87,8 @@ EngineRequestedHostAction Engine::update(double deltaTime)
         INPUT_MGR.process();
         
         execute(ERSA_UPDATE);
+        _hasUpdatedSinceLastRender = true;
     }
-    
-    _interpolation = _stateTime;
     
     EngineRequestedHostAction ret = _requestedHostAction;
     _requestedHostAction = ERHA_DEFAULT;
@@ -100,6 +99,7 @@ EngineRequestedHostAction Engine::update(double deltaTime)
 void Engine::render()
 {
     execute(ERSA_RENDER);
+    _hasUpdatedSinceLastRender = false;
 }
 
 void Engine::onCursorDown(float x, float y, bool isAlt)
@@ -197,9 +197,14 @@ uint16_t Engine::cursorHeight()
     return _cursorHeight;
 }
 
-double Engine::interpolation()
+double Engine::extrapolation()
 {
-    return _interpolation;
+    return _stateTime;
+}
+
+bool Engine::hasUpdatedSinceLastRender()
+{
+    return _hasUpdatedSinceLastRender;
 }
 
 void Engine::execute(EngineRequestedStateAction ersa)

@@ -52,14 +52,12 @@ public:
     NosPhysicsController(Entity* e, float gravity);
     virtual ~NosPhysicsController();
     
-    virtual Vector2 velocity() override;
-    virtual void setVelocity(Vector2 v) override;
     virtual void updatePoseFromBody() override;
     virtual void updateBodyFromPose() override;
     
     void step(float deltaTime);
-    void interpolate(float interpolation);
-    void endInterpolation();
+    void extrapolate(float extrapolation);
+    void endExtrapolation();
     void processCollisions(std::vector<Entity*>& entities);
     std::vector<Bounds>& bounds();
     

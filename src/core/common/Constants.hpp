@@ -54,6 +54,7 @@
 #define NW_ALL_DIRTY_STATE 0xFFu
 
 /// Keyboard
+#define MAX_TEXT_INPUT_LENGTH 16
 #define GOW_KEY_0 0x0030
 #define GOW_KEY_1 0x0031
 #define GOW_KEY_2 0x0032

@@ -19,8 +19,8 @@ public:
     virtual ~NosPhysicsWorld();
     
     virtual void stepPhysics(float deltaTime) override;
-    virtual void interpolatePhysics(float interpolation) override;
-    virtual void endInterpolatedPhysics() override;
+    virtual void extrapolatePhysics(float extrapolation) override;
+    virtual void endExtrapolatedPhysics() override;
     
 protected:
     virtual EntityPhysicsController* createPhysicsController(Entity* e) override;

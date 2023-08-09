@@ -27,16 +27,6 @@ NosPhysicsController::~NosPhysicsController()
     destroyFixtures();
 }
 
-Vector2 NosPhysicsController::velocity()
-{
-    return _velocity;
-}
-
-void NosPhysicsController::setVelocity(Vector2 v)
-{
-    _velocity.set(v);
-}
-
 void NosPhysicsController::updatePoseFromBody()
 {
     _entity->velocity().set(_velocity._x, _velocity._y);
@@ -86,19 +76,23 @@ void NosPhysicsController::step(float deltaTime)
     }
 }
 
-void NosPhysicsController::interpolate(float interpolation)
+void NosPhysicsController::extrapolate(float extrapolation)
 {
     _velocityCache = _velocity;
     _positionCache = _position;
     
-    _velocity.add(0, _gravity * interpolation);
-    _position.add(_velocity._x * interpolation, _velocity._y * interpolation);
+    _velocity.add(0, _gravity * extrapolation);
+    _position.add(_velocity._x * extrapolation, _velocity._y * extrapolation);
+    
+    updatePoseFromBody();
 }
 
-void NosPhysicsController::endInterpolation()
+void NosPhysicsController::endExtrapolation()
 {
     _velocity = _velocityCache;
     _position = _positionCache;
+    
+    updatePoseFromBody();
 }
 
 void NosPhysicsController::processCollisions(std::vector<Entity*>& entities)

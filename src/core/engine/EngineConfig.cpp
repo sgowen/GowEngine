@@ -87,9 +87,9 @@ bool EngineConfig::audioDisabled()
     return _audioDisabled;
 }
 
-uint8_t EngineConfig::maxTextInputLength()
+bool EngineConfig::extrapolatePhysics()
 {
-    return _maxTextInputLength;
+    return _extrapolatePhysics;
 }
 
 uint16_t EngineConfig::clientPortHost()
@@ -145,7 +145,7 @@ _inputLoggingEnabled(_config.getBool("inputLoggingEnabled", false)),
 _networkLoggingEnabled(_config.getBool("networkLoggingEnabled", false)),
 _physicsLoggingEnabled(_config.getBool("physicsLoggingEnabled", false)),
 _audioDisabled(_config.getBool("audioDisabled", false)),
-_maxTextInputLength(_config.getUInt("maxTextInputLength", 16)),
+_extrapolatePhysics(_config.getBool("extrapolatePhysics", false)),
 _clientPortHost(_config.getUInt("clientPortHost", 1337)),
 _clientPortJoin(_config.getUInt("clientPortJoin", 1338)),
 _serverPort(_config.getUInt("serverPort", 9999)),

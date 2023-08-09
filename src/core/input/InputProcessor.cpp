@@ -58,8 +58,6 @@ uint8_t InputProcessor::update()
 
 uint8_t InputProcessor::updateReadText()
 {
-    uint8_t maxTextInputLength = ENGINE_CFG.maxTextInputLength();
-    
     for (KeyboardEvent* e : INPUT_MGR.getKeyboardEvents())
     {
         if (e->_key == GOW_KEY_CMD || e->_key == GOW_KEY_CTRL)
@@ -93,9 +91,9 @@ uint8_t InputProcessor::updateReadText()
                 {
                     const char* clipboard = INPUT_MGR.getClipboardString();
                     _textInput += clipboard;
-                    if (_textInput.length() >= maxTextInputLength)
+                    if (_textInput.length() >= MAX_TEXT_INPUT_LENGTH)
                     {
-                        int remove = (int)_textInput.length() - maxTextInputLength;
+                        int remove = (int)_textInput.length() - MAX_TEXT_INPUT_LENGTH;
                         _textInput.erase(_textInput.end() - remove, _textInput.end());
                     }
                     continue;
@@ -135,8 +133,7 @@ void InputProcessor::clearTextInput()
 
 void InputProcessor::acceptKeyInput(uint16_t key)
 {
-    uint8_t maxTextInputLength = ENGINE_CFG.maxTextInputLength();
-    if (_textInput.length() >= maxTextInputLength)
+    if (_textInput.length() >= MAX_TEXT_INPUT_LENGTH)
     {
         return;
     }
