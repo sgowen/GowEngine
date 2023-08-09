@@ -385,6 +385,11 @@ struct EntityDef
     std::string _networkController;
     std::string _renderController;
     std::map<uint8_t, std::string> _textureMappings;
+    // Need to also include totalTime for each state
+    // to correlate state animations to sounds
+    // running should play left, right, left, right sounds
+    // even after the stateTime > animationTime
+    // because we can just soundStateTime = stateTime % animationTime
     std::map<uint8_t, std::vector<SoundMapping> > _soundMappings;
     std::vector<FixtureDef> _fixtures;
     uint8_t _bodyFlags;
