@@ -23,7 +23,7 @@ void OpenALUtil::openDeviceAndCreateContext()
     device = alcOpenDevice(nullptr);
     if (!device)
     {
-        LOG("Could not open a device!");
+        LOG("[OpenAL] Could not open a device!");
         isSuccessful = false;
     }
 
@@ -37,7 +37,7 @@ void OpenALUtil::openDeviceAndCreateContext()
                 alcDestroyContext(ctx);
             }
             alcCloseDevice(device);
-            LOG("Could not set a context!");
+            LOG("[OpenAL] Could not set a context!");
             isSuccessful = false;
         }
     }
@@ -55,7 +55,7 @@ void OpenALUtil::openDeviceAndCreateContext()
             name = alcGetString(device, ALC_DEVICE_SPECIFIER);
         }
         
-        LOG("Opened \"%s\"", name);
+        LOG("[OpenAL] Opened \"%s\"", name);
     }
     
     assert(isSuccessful);
@@ -179,7 +179,7 @@ void crashIfError()
     err = alGetError();
     if (err != AL_NO_ERROR)
     {
-        LOG("OpenAL Error: %s", alGetString(err));
+        LOG("[OpenAL] Error: %s", alGetString(err));
     }
     assert(err == AL_NO_ERROR);
 }

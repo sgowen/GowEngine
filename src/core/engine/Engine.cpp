@@ -96,7 +96,10 @@ EngineRequestedHostAction Engine::update(double deltaTime)
         // than have a frame where there is no input at all
         if (_hasUpdatedSinceLastRender)
         {
-            LOG("Updating with input from last frame");
+            if (ENGINE_CFG.inputLoggingEnabled())
+            {
+                LOG("Reusing input from last frame");
+            }
         }
         else
         {
