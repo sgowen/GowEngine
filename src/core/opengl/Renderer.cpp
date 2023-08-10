@@ -219,7 +219,7 @@ void Renderer::renderSprite(std::string textureKey, std::string textureRegionKey
 
 void Renderer::renderParallaxLayers(std::vector<Entity*>& layers, std::string texture)
 {
-    std::map<std::string, std::vector<Entity*>> texturesToLayers;
+    std::vector<Entity*> layersUsingThisTexture;
     for (Entity* e : layers)
     {
         std::string textureRegionKey = e->renderController()->getTextureMapping();
@@ -227,25 +227,11 @@ void Renderer::renderParallaxLayers(std::vector<Entity*>& layers, std::string te
         
         if (textureForRegionKey == texture)
         {
-            std::vector<Entity*>* layersUsingThisTexture = nullptr;
-            const auto& q = texturesToLayers.find(texture);
-            if (q == texturesToLayers.end())
-            {
-                texturesToLayers.emplace(texture, std::vector<Entity*>());
-                layersUsingThisTexture = &texturesToLayers[texture];
-            }
-            else
-            {
-                layersUsingThisTexture = &q->second;
-            }
-            
-            layersUsingThisTexture->push_back(e);
+            layersUsingThisTexture.push_back(e);
         }
     }
     
     Matrix& m = matrix();
-    
-    std::vector<Entity*>& layersUsingThisTexture = texturesToLayers[texture];
     
     spriteBatcherBegin();
     for (Entity* e : layersUsingThisTexture)
