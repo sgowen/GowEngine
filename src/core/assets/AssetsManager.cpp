@@ -147,6 +147,22 @@ bool AssetsManager::isTextureLoaded(std::string name)
     return _textureMgr.isTextureLoaded(name);
 }
 
+std::string AssetsManager::textureForRegionKey(std::string key)
+{
+    std::string ret = "";
+
+    for (auto& pair : _assets)
+    {
+        ret = pair.second.textureForRegionKey(key);
+        if (!ret.empty())
+        {
+            break;
+        }
+    }
+    
+    return ret;
+}
+
 TextureRegion& AssetsManager::textureRegion(std::string key, uint16_t stateTime)
 {
     TextureRegion* ret = nullptr;

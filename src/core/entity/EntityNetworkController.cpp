@@ -57,7 +57,7 @@ void EntityNetworkController::read(InputMemoryBitStream& imbs)
         
     }
     
-    NetworkData& nd = e.data();
+    NetworkData& nd = e.networkData();
     size_t numDataGroups = nd._data.size();
     for (size_t i = 0; i < numDataGroups; ++i)
     {
@@ -123,7 +123,7 @@ uint8_t EntityNetworkController::write(OutputMemoryBitStream& ombs, uint8_t dirt
         ret |= RSTF_STATE;
     }
     
-    NetworkData& nd = e.data();
+    NetworkData& nd = e.networkData();
     for (NetworkDataGroup& ndg : nd._data)
     {
         bool readStateFlag = IS_BIT_SET(dirtyState, ndg._readStateFlag);
@@ -254,7 +254,7 @@ uint8_t EntityNetworkController::refreshDirtyState()
         ret |= RSTF_STATE;
     }
     
-    NetworkData& nd = e.data();
+    NetworkData& nd = e.networkData();
     size_t numDataGroups = nd._data.size();
     for (size_t i = 0; i < numDataGroups; ++i)
     {

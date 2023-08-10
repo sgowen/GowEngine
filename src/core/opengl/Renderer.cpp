@@ -217,6 +217,52 @@ void Renderer::renderSprite(std::string textureKey, std::string textureRegionKey
     sb.end(s, m._matrix, t);
 }
 
+void Renderer::renderParallaxLayers(std::vector<Entity*>& layers, std::string texture)
+{
+    std::map<std::string, std::vector<Entity*>> texturesToLayers;
+    for (Entity* e : layers)
+    {
+        std::string textureRegionKey = e->renderController()->getTextureMapping();
+        std::string textureForRegionKey = ASSETS_MGR.textureForRegionKey(textureRegionKey);
+        
+        if (textureForRegionKey == texture)
+        {
+            std::vector<Entity*>* layersUsingThisTexture = nullptr;
+            const auto& q = texturesToLayers.find(texture);
+            if (q == texturesToLayers.end())
+            {
+                texturesToLayers.emplace(texture, std::vector<Entity*>());
+                layersUsingThisTexture = &texturesToLayers[texture];
+            }
+            else
+            {
+                layersUsingThisTexture = &q->second;
+            }
+            
+            layersUsingThisTexture->push_back(e);
+        }
+    }
+    
+    Matrix& m = matrix();
+    
+    std::vector<Entity*>& layersUsingThisTexture = texturesToLayers[texture];
+    
+    spriteBatcherBegin();
+    for (Entity* e : layersUsingThisTexture)
+    {
+        float parallaxSpeedRatio = e->data().getFloat("parallaxSpeedRatio");
+        uint8_t gameToPixelRatio = e->data().getUInt("gameToPixelRatio");
+        
+        TextureRegion& trRaw = ASSETS_MGR.textureRegion(e->renderController()->getTextureMapping(),  e->stateTime());
+        
+        uint16_t x = (m._desc._left * parallaxSpeedRatio) * gameToPixelRatio;
+        TextureRegion tr = trRaw.copyWithX(x);
+        
+        spriteBatcher().addSprite(tr, e->position()._x + m._desc._left, e->position()._y, e->width(), e->height(), e->angle(), e->isXFlipped());
+    }
+    spriteBatcherEnd(texture);
+}
+
 void Renderer::spriteBatcherBegin(std::string spriteBatcherKey)
 {
     spriteBatcher(spriteBatcherKey).begin();
@@ -359,6 +405,6 @@ TriangleBatcher& Renderer::triangleBatcher(std::string key)
 
 void Renderer::spriteBatcherAddEntity(SpriteBatcher& sb, Entity& e)
 {
-    TextureRegion tr = ASSETS_MGR.textureRegion(e.renderController()->getTextureMapping(),  e.stateTime());
+    TextureRegion& tr = ASSETS_MGR.textureRegion(e.renderController()->getTextureMapping(),  e.stateTime());
     sb.addSprite(tr, e.position()._x, e.position()._y, e.width(), e.height(), e.angle(), e.isXFlipped());
 }

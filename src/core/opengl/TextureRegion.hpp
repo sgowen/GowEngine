@@ -29,4 +29,9 @@ struct TextureRegion
     {
         // Empty
     }
+    
+    TextureRegion copyWithX(uint16_t x)
+    {
+        return TextureRegion(x, _y, _width, _height, _textureWidth, _textureHeight);
+    }
 };

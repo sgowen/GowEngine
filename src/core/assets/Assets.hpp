@@ -37,6 +37,21 @@ struct Assets
         return ret;
     }
     
+    std::string textureForRegionKey(std::string key)
+    {
+        std::vector<TextureDescriptor>& tds = _textureDescriptors;
+        for (TextureDescriptor& td : tds)
+        {
+            TextureRegion* tr = td.textureRegion(key, 0);
+            if (tr != nullptr)
+            {
+                return td._name;
+            }
+        }
+        
+        return "";
+    }
+    
     TextureRegion* textureRegion(std::string key, uint16_t stateTime)
     {
         TextureRegion* ret = nullptr;

@@ -137,16 +137,16 @@ void EntityManagerLoader::initWithJSON(EntityManager& em, const char* json)
         uint8_t width = RapidJSONUtil::getUInt(iv, "width");
         uint8_t height = RapidJSONUtil::getUInt(iv, "height");
         
-        Config metadata;
-        if (iv.HasMember("metadata"))
+        Config data;
+        if (iv.HasMember("data"))
         {
-            const Value& v = iv["metadata"];
+            const Value& v = iv["data"];
             assert(v.IsObject());
             for (Value::ConstMemberIterator i = v.MemberBegin(); i != v.MemberEnd(); ++i)
             {
                 assert(i->value.IsString());
                 
-                metadata.putString(i->name.GetString(), i->value.GetString());
+                data.putString(i->name.GetString(), i->value.GetString());
             }
         }
         
@@ -185,6 +185,6 @@ void EntityManagerLoader::initWithJSON(EntityManager& em, const char* json)
         }
         NetworkData nd(networkDataGroups);
         
-        em._entityDefs.emplace(key, EntityDef{key, name, keyName, controller, networkController, renderController, textureMappings, soundMappings, fixtures, bodyFlags, width, height, metadata, nd});
+        em._entityDefs.emplace(key, EntityDef{key, name, keyName, controller, networkController, renderController, textureMappings, soundMappings, fixtures, bodyFlags, width, height, data, nd});
     }
 }

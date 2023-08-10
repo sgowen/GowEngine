@@ -97,12 +97,12 @@ EntityDef& Entity::entityDef()
     return _entityDef;
 }
 
-Config& Entity::metadata()
+Config& Entity::data()
 {
-    return _entityDef._metadata;
+    return _entityDef._data;
 }
 
-NetworkData& Entity::data()
+NetworkData& Entity::networkData()
 {
     return _entityDef._networkData;
 }
@@ -110,7 +110,7 @@ NetworkData& Entity::data()
 NetworkDataField& Entity::dataField(std::string name)
 {
     NetworkDataField* ret = nullptr;
-    NetworkData& nd = data();
+    NetworkData& nd = networkData();
     for (NetworkDataGroup& ndg : nd._data)
     {
         for (NetworkDataField& ndf : ndg._data)

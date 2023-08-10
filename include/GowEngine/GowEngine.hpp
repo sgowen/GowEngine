@@ -15,6 +15,7 @@
 #define _USE_MATH_DEFINES
 #include <math.h>
 #include <memory>
+#include <set>
 #include <sstream>
 #include <stdint.h>
 #include <stdio.h>
@@ -152,7 +153,6 @@
 #include "core/opengl/Matrix.hpp"
 #include "core/opengl/NosPhysicsRenderer.hpp"
 #include "core/opengl/OpenGLUtil.hpp"
-#include "core/opengl/ParallaxRenderer.hpp"
 #include "core/opengl/RektangleBatcher.hpp"
 #include "core/opengl/Renderer.hpp"
 #include "core/opengl/ScreenRenderer.hpp"

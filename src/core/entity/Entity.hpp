@@ -395,7 +395,7 @@ struct EntityDef
     uint8_t _bodyFlags;
     uint8_t _width;
     uint8_t _height;
-    Config _metadata;
+    Config _data;
     NetworkData _networkData;
     
     EntityDef(uint32_t key,
@@ -410,7 +410,7 @@ struct EntityDef
               uint8_t bodyFlags,
               uint8_t width,
               uint8_t height,
-              Config metadata,
+              Config data,
               NetworkData networkData) :
     _key(key),
     _name(name),
@@ -424,7 +424,7 @@ struct EntityDef
     _bodyFlags(bodyFlags),
     _width(width),
     _height(height),
-    _metadata(metadata),
+    _data(data),
     _networkData(networkData)
     {
         // Empty
@@ -450,8 +450,8 @@ public:
     void update();
     void message(uint16_t message);
     EntityDef& entityDef();
-    Config& metadata();
-    NetworkData& data();
+    Config& data();
+    NetworkData& networkData();
     NetworkDataField& dataField(std::string name);
     uint16_t stateTime();
     Vector2& position();
