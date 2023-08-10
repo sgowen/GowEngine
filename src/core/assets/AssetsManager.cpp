@@ -165,6 +165,22 @@ TextureRegion& AssetsManager::textureRegion(std::string key, uint16_t stateTime)
     return *ret;
 }
 
+Animation* AssetsManager::animation(std::string key)
+{
+    Animation* ret = nullptr;
+
+    for (auto& pair : _assets)
+    {
+        ret = pair.second.animation(key);
+        if (ret != nullptr)
+        {
+            break;
+        }
+    }
+
+    return ret;
+}
+
 uint32_t AssetsManager::getStateTime()
 {
     return _stateTime;

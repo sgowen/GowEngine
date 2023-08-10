@@ -56,4 +56,17 @@ struct TextureDescriptor
         
         return ret;
     }
+    
+    Animation* animation(std::string key)
+    {
+        Animation* ret = nullptr;
+        
+        const auto& qa = _animations.find(key);
+        if (qa != _animations.end())
+        {
+            ret = &qa->second;
+        }
+        
+        return ret;
+    }
 };

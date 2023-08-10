@@ -76,16 +76,34 @@ void Engine::onResume()
 EngineRequestedHostAction Engine::update(double deltaTime)
 {
     static double frameRate = ENGINE_CFG.frameRate();
+    static double maxStateTimeAllowed = frameRate * 3;
     
     FPS_UTIL.update(deltaTime);
     
     _stateTime += deltaTime;
+    if (_stateTime > maxStateTimeAllowed)
+    {
+        LOG("Okay! So this code really is here for a reason");
+        _stateTime = 0;
+        INPUT_MGR.process();
+    }
+    
     while (_stateTime >= frameRate)
     {
         _stateTime -= frameRate;
         
-        INPUT_MGR.process();
+        // Better to reuse input for the additional update
+        // than have a frame where there is no input at all
+        if (_hasUpdatedSinceLastRender)
+        {
+            LOG("Updating with input from last frame");
+        }
+        else
+        {
+            INPUT_MGR.process();
+        }
         
+        FPS_UTIL.onFrame();
         execute(ERSA_UPDATE);
         _hasUpdatedSinceLastRender = true;
     }

@@ -19,7 +19,7 @@ public:
     static EngineConfig& getInstance();
     static void destroy();
     
-    uint8_t glfwSwapInterval();
+    bool vsync();
     uint8_t framesPerSecond();
     std::string filePathEngineAssets();
     std::string filePathEntityLayoutManager();
@@ -30,6 +30,7 @@ public:
     bool networkLoggingEnabled();
     bool physicsLoggingEnabled();
     bool audioDisabled();
+    bool musicDisabled();
     bool extrapolatePhysics();
     uint16_t clientPortHost();
     uint16_t clientPortJoin();
@@ -40,13 +41,12 @@ public:
     
     /// Derived Values
     double frameRate();
-    uint8_t timeScale();
     
 private:
     static EngineConfig* s_instance;
     
     Config _config;
-    uint8_t _glfwSwapInterval;
+    bool _vsync;
     uint8_t _framesPerSecond;
     std::string _filePathEngineAssets;
     std::string _filePathEntityLayoutManager;
@@ -57,6 +57,7 @@ private:
     bool _networkLoggingEnabled;
     bool _physicsLoggingEnabled;
     bool _audioDisabled;
+    bool _musicDisabled;
     bool _extrapolatePhysics;
     uint16_t _clientPortHost;
     uint16_t _clientPortJoin;
@@ -67,7 +68,6 @@ private:
     
     /// Derived Values
     float _frameRate;
-    uint8_t _timeScale;
     
     EngineConfig(std::string configFilePath);
     ~EngineConfig();

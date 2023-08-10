@@ -11,6 +11,10 @@
 void FPSUtil::update(double deltaTime)
 {
     _stateTime += deltaTime;
+}
+
+void FPSUtil::onFrame()
+{
     ++_numFrames;
     
     if (_stateTime >= 1.0)

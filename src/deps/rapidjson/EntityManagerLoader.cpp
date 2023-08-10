@@ -93,7 +93,7 @@ void EntityManagerLoader::initWithJSON(EntityManager& em, const char* json)
                         const Value& jv = member->value[j];
                         assert(jv.IsObject());
                         
-                        uint16_t stateTime = RapidJSONUtil::getUInt(jv, "stateTime") * ENGINE_CFG.timeScale();
+                        uint16_t stateTime = RapidJSONUtil::getUInt(jv, "stateTime");
                         std::string soundID = RapidJSONUtil::getString(jv, "soundID");
                         
                         stateSoundMappings.emplace_back(stateTime, soundID);

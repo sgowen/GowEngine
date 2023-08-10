@@ -32,9 +32,9 @@ void EngineConfig::destroy()
     s_instance = nullptr;
 }
 
-uint8_t EngineConfig::glfwSwapInterval()
+bool EngineConfig::vsync()
 {
-    return _glfwSwapInterval;
+    return _vsync;
 }
 
 uint8_t EngineConfig::framesPerSecond()
@@ -87,6 +87,11 @@ bool EngineConfig::audioDisabled()
     return _audioDisabled;
 }
 
+bool EngineConfig::musicDisabled()
+{
+    return _musicDisabled;
+}
+
 bool EngineConfig::extrapolatePhysics()
 {
     return _extrapolatePhysics;
@@ -127,14 +132,9 @@ double EngineConfig::frameRate()
     return _frameRate;
 }
 
-uint8_t EngineConfig::timeScale()
-{
-    return _timeScale;
-}
-
 EngineConfig::EngineConfig(std::string configFilePath) :
 _config(ConfigLoader::initWithJSONFile(configFilePath)),
-_glfwSwapInterval(_config.getUInt("glfwSwapInterval", 1)),
+_vsync(_config.getBool("vsync", true)),
 _framesPerSecond(_config.getUInt("framesPerSecond", 60)),
 _filePathEngineAssets(_config.getString("filePathEngineAssets")),
 _filePathEntityLayoutManager(_config.getString("filePathEntityLayoutManager")),
@@ -145,6 +145,7 @@ _inputLoggingEnabled(_config.getBool("inputLoggingEnabled", false)),
 _networkLoggingEnabled(_config.getBool("networkLoggingEnabled", false)),
 _physicsLoggingEnabled(_config.getBool("physicsLoggingEnabled", false)),
 _audioDisabled(_config.getBool("audioDisabled", false)),
+_musicDisabled(_config.getBool("musicDisabled", false)),
 _extrapolatePhysics(_config.getBool("extrapolatePhysics", false)),
 _clientPortHost(_config.getUInt("clientPortHost", 1337)),
 _clientPortJoin(_config.getUInt("clientPortJoin", 1338)),
@@ -152,10 +153,9 @@ _serverPort(_config.getUInt("serverPort", 9999)),
 _maxNumFramesOfRollback(_config.getUInt("maxNumFramesOfRollback", 7)),
 _numFramesOfInputDelay(_config.getUInt("numFramesOfInputDelay", 5)),
 _numFramesOfSimulatedLatency(_config.getUInt("numFramesOfSimulatedLatency", 0)),
-_frameRate(1.0 / _framesPerSecond),
-_timeScale(_framesPerSecond == 120 ? 4 : _framesPerSecond == 60 ? 2 : _framesPerSecond == 30 ? 1 : 0)
+_frameRate(1.0 / _framesPerSecond)
 {
-    assert(_timeScale == 4 || _timeScale == 2 || _timeScale == 1);
+    // Empty
 }
 
 EngineConfig::~EngineConfig()

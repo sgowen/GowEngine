@@ -18,6 +18,7 @@ public:
     }
     
     void update(double deltaTime);
+    void onFrame();
     int fps() const;
     
 private:

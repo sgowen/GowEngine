@@ -141,7 +141,7 @@ void runEngine(Engine* engine, GLFWwindow* window)
     GlfwClipboardHandler clipboardHandler(window);
     engine->createDeviceDependentResources(&clipboardHandler);
     
-    glfwSwapInterval(ENGINE_CFG.glfwSwapInterval());
+    glfwSwapInterval(ENGINE_CFG.vsync() ? 1 : 0);
     glfwSetTime(0.0);
 
     double lastTime = glfwGetTime();

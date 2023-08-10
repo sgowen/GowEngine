@@ -53,4 +53,21 @@ struct Assets
         
         return ret;
     }
+    
+    Animation* animation(std::string key)
+    {
+        Animation* ret = nullptr;
+        
+        std::vector<TextureDescriptor>& tds = _textureDescriptors;
+        for (TextureDescriptor& td : tds)
+        {
+            ret = td.animation(key);
+            if (ret != nullptr)
+            {
+                break;
+            }
+        }
+        
+        return ret;
+    }
 };

@@ -180,8 +180,6 @@ Assets AssetsLoader::initWithJSON(const char* json)
                         auto q = animations.find(key);
                         assert(q == animations.end());
                         
-                        uint8_t timeScale = ENGINE_CFG.timeScale();
-
                         bool looping = RapidJSONUtil::getBool(iv, "looping", true);
                         int firstLoopingFrame = RapidJSONUtil::getInt(iv, "firstLoopingFrame");
                         int xPadding = RapidJSONUtil::getInt(iv, "xPadding");
@@ -197,7 +195,7 @@ Assets AssetsLoader::initWithJSON(const char* json)
                             for (SizeType i = 0; i < va.Size(); ++i)
                             {
                                 const Value& iva = va[i];
-                                frameTimes.push_back(iva.GetUint() * timeScale);
+                                frameTimes.push_back(iva.GetUint());
                             }
 
                             numFrames = frameTimes.size();
@@ -210,7 +208,7 @@ Assets AssetsLoader::initWithJSON(const char* json)
                             frameTimes.reserve(numFrames);
                             for (size_t i = 0; i < numFrames; ++i)
                             {
-                                frameTimes.push_back(frameTime * timeScale);
+                                frameTimes.push_back(frameTime);
                             }
                         }
 

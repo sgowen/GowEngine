@@ -93,3 +93,8 @@ uint16_t Animation::frameIndex(uint16_t stateTime)
 
     return 0;
 }
+
+uint16_t Animation::cycleTime()
+{
+    return _cycleTime;
+}

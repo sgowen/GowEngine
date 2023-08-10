@@ -42,6 +42,7 @@ public:
     Texture& texture(std::string name);
     bool isTextureLoaded(std::string name);
     TextureRegion& textureRegion(std::string key, uint16_t stateTime = 0);
+    Animation* animation(std::string key);
     uint32_t getStateTime();
     bool isLoaded();
 
