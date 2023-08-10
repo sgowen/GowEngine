@@ -255,7 +255,9 @@ void Renderer::renderParallaxLayers(std::vector<Entity*>& layers, std::string te
         
         TextureRegion& trRaw = ASSETS_MGR.textureRegion(e->renderController()->getTextureMapping(),  e->stateTime());
         
+        Texture& t = ASSETS_MGR.texture(texture);
         uint16_t x = (m._desc._left * parallaxSpeedRatio) * gameToPixelRatio;
+        x %= t._width;
         TextureRegion tr = trRaw.copyWithX(x);
         
         spriteBatcher().addSprite(tr, e->position()._x + m._desc._left, e->position()._y, e->width(), e->height(), e->angle(), e->isXFlipped());
