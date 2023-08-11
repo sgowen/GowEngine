@@ -98,3 +98,8 @@ uint16_t Animation::cycleTime()
 {
     return _cycleTime;
 }
+
+bool Animation::isLooping()
+{
+    return _isLooping;
+}

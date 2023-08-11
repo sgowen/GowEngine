@@ -22,6 +22,7 @@ public:
     TextureRegion& textureRegionAtKeyFrame(uint16_t frameIndex);
     uint16_t frameIndex(uint16_t stateTime);
     uint16_t cycleTime();
+    bool isLooping();
 
 private:
     bool _isLooping;
