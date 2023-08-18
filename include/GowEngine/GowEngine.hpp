@@ -67,6 +67,7 @@
 #include "core/common/FPSUtil.hpp"
 #include "core/common/FixedSizePool.hpp"
 #include "core/common/InstanceRegistry.hpp"
+#include "core/common/Logger.hpp"
 #include "core/common/Macros.hpp"
 #include "core/common/Pool.hpp"
 #include "core/common/RTTI.hpp"

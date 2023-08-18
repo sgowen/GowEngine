@@ -8,15 +8,11 @@
 
 #include <GowEngine/GowEngine.hpp>
 
-#include <cstdarg>
 #include <stdarg.h>
 
-#if IS_ANDROID
-    #include <android/log.h>
-#elif IS_WINDOWS
+#if IS_WINDOWS
     #define WIN32_LEAN_AND_MEAN
     #include <windows.h>
-    #include <debugapi.h>
 #endif
 
 // OUT_Z_ARRAY indicates an output array that will be null-terminated.
@@ -69,39 +65,6 @@ std::string StringUtil::format(const char* format, ...)
 #endif
     
     return std::string(temp);
-}
-
-#if IS_WINDOWS
-// OutputDebugStringA is included with the Windows API
-#else
-void OutputDebugStringA(const char* value)
-{
-#if IS_ANDROID
-    __android_log_print(ANDROID_LOG_DEBUG, "GowEngine", "%s", value);
-#else
-    printf("%s", value);
-#endif
-}
-#endif
-
-void StringUtil::log(const char* format, ...)
-{
-    static const int size = 4096;
-    char temp[size];
-    
-    va_list args;
-    va_start (args, format);
-    
-#if IS_WINDOWS
-    _vsnprintf_s(temp, size, size, format, args);
-#elif IS_ANDROID
-    __android_log_vprint(ANDROID_LOG_DEBUG, "GowEngine", format, args);
-#else
-    vsnprintf(temp, size, format, args);
-#endif
-    
-    OutputDebugStringA(temp);
-    OutputDebugStringA("\n");
 }
 
 std::string StringUtil::stringFromFourChar(uint32_t fourCC)

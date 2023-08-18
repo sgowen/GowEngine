@@ -84,7 +84,7 @@ std::string SocketAddress::toString() const
             break;
     }
 
-    return StringUtil::format("%s:%d", buffer, ntohs(port));
+    return STRING_FORMAT("%s:%d", buffer, ntohs(port));
 }
 
 bool SocketAddress::operator==(const SocketAddress& other) const

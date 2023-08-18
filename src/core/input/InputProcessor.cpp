@@ -139,5 +139,5 @@ void InputProcessor::acceptKeyInput(uint16_t key)
     }
     
     char c = static_cast<char>(key);
-    _textInput += StringUtil::format("%c", c);
+    _textInput += STRING_FORMAT("%c", c);
 }

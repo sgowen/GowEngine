@@ -8,6 +8,12 @@
 
 #include <GowEngine/GowEngine.hpp>
 
+uint64_t timeSinceEpochMillisec()
+{
+    using namespace std::chrono;
+    return duration_cast<milliseconds>(system_clock::now().time_since_epoch()).count();
+}
+
 Engine::Engine(std::string configFilePath, EngineState& initialEngineState) :
 _initialState(initialEngineState),
 _stateMachine(this, &ENGINE_STATE_DEFAULT),
@@ -21,6 +27,10 @@ _cursorHeight(0),
 _hasUpdatedSinceLastRender(false)
 {
     EngineConfig::create(configFilePath);
+    
+    std::string logFileName = STRING_FORMAT("%s/log_GowEngine_%d", ENGINE_CFG.fileDirLogger().c_str(), timeSinceEpochMillisec());
+    Logger::getInstance().initWithFile(logFileName.c_str());
+    
     AudioEngine::create();
     
     ASSETS_MGR.registerAssets(ENGINE_ASSETS, AssetsLoader::initWithJSONFile(ENGINE_CFG.filePathEngineAssets()));
@@ -36,6 +46,9 @@ Engine::~Engine()
     ASSETS_MGR.deregisterAssets(ENGINE_ASSETS);
     
     AudioEngine::destroy();
+    
+    Logger::getInstance().closeFileStream();
+    
     EngineConfig::destroy();
 }
 

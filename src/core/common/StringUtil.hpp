@@ -37,7 +37,6 @@ public:
     static std::string boolToString(bool value);
     static bool stringToBool(const std::string& str, bool defaultValue = false);
     static std::string format(const char* format, ...);
-    static void log(const char* format, ...);
     static std::string stringFromFourChar(uint32_t fourCC);
     static uint32_t fourCharFromString(std::string& fourCC);
 

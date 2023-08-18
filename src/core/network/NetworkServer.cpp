@@ -436,7 +436,7 @@ void NetworkServer::handleAddLocalPlayerPacket(ClientProxy& cp, InputMemoryBitSt
         uint8_t playerID = cp.getPlayerID(requestedIndex);
         if (playerID == 0)
         {
-            std::string localUsername = StringUtil::format("%s(%d)", cp.getUsername().c_str(), requestedIndex);
+            std::string localUsername = STRING_FORMAT("%s(%d)", cp.getUsername().c_str(), requestedIndex);
             uint8_t playerID = _nextPlayerID;
             
             cp.onLocalPlayerAdded(playerID);
@@ -468,7 +468,7 @@ void NetworkServer::sendLocalPlayerAddedPacket(ClientProxy& cp)
     ombs.writeBits(playerID, 3);
     sendPacket(ombs, cp.getSocketAddress());
     
-    std::string localPlayerName = StringUtil::format("%s(%d)", cp.getUsername().c_str(), index);
+    std::string localPlayerName = STRING_FORMAT("%s(%d)", cp.getUsername().c_str(), index);
     if (ENGINE_CFG.networkLoggingEnabled())
     {
         LOG("Server welcoming new client local player '%s' as player %d", localPlayerName.c_str(), playerID);

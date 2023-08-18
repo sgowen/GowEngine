@@ -42,6 +42,11 @@ uint8_t EngineConfig::framesPerSecond()
     return _framesPerSecond;
 }
 
+std::string EngineConfig::fileDirLogger()
+{
+    return _fileDirLogger;
+}
+
 std::string EngineConfig::filePathEngineAssets()
 {
     return _filePathEngineAssets;
@@ -136,6 +141,7 @@ EngineConfig::EngineConfig(std::string configFilePath) :
 _config(ConfigLoader::initWithJSONFile(configFilePath)),
 _vsync(_config.getBool("vsync", true)),
 _framesPerSecond(_config.getUInt("framesPerSecond", 60)),
+_fileDirLogger(_config.getString("fileDirLogger")),
 _filePathEngineAssets(_config.getString("filePathEngineAssets")),
 _filePathEntityLayoutManager(_config.getString("filePathEntityLayoutManager")),
 _filePathEntityManager(_config.getString("filePathEntityManager")),

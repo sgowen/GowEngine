@@ -47,7 +47,7 @@
 
 /// Handy static functions
 #define OPEN_FILE(filePath, mode) FileUtil::openFile(filePath, mode)
-#define LOG(...) StringUtil::log(__VA_ARGS__)
+#define LOG(...) Logger::getInstance().log(__VA_ARGS__)
 #define STRING_FORMAT(...) StringUtil::format(__VA_ARGS__)
 
 /// Miscellaneous

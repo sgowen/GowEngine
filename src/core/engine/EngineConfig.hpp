@@ -21,6 +21,7 @@ public:
     
     bool vsync();
     uint8_t framesPerSecond();
+    std::string fileDirLogger();
     std::string filePathEngineAssets();
     std::string filePathEntityLayoutManager();
     std::string filePathEntityManager();
@@ -48,6 +49,7 @@ private:
     Config _config;
     bool _vsync;
     uint8_t _framesPerSecond;
+    std::string _fileDirLogger;
     std::string _filePathEngineAssets;
     std::string _filePathEntityLayoutManager;
     std::string _filePathEntityManager;
