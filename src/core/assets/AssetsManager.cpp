@@ -77,12 +77,14 @@ void AssetsManager::createDeviceDependentResources()
     for (auto& pair : _assets)
     {
         Assets& a = pair.second;
-        a._isDataLoaded = false;
+        
         a._isLoadedIntoEngine = false;
+        a._isDataLoaded = false;
         
         _shaderMgr.loadData(a._shaderDescriptors);
         _soundMgr.loadData(a._soundDescriptors);
         _textureMgr.loadData(a._textureDescriptors);
+        
         a._isDataLoaded = true;
     }
 }
