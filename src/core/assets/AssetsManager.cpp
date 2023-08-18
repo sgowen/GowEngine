@@ -23,24 +23,36 @@ void AssetsManager::deregisterAssets(std::string key)
 
 void AssetsManager::update()
 {
-    if (_isLoadedIntoEngine)
+    if (isLoaded())
     {
         return;
     }
     
     ++_stateTime;
     
-    if (_isLoadingData)
+    for (auto& pair : _assets)
     {
-        return;
+        Assets& a = pair.second;
+        if (a._isLoadedIntoEngine)
+        {
+            continue;
+        }
+        
+        if (a._isDataLoaded)
+        {
+            _shaderMgr.loadIntoOpenGLAndFreeData(a._shaderDescriptors);
+            _soundMgr.loadIntoOpenALAndFreeData(a._soundDescriptors);
+            _textureMgr.loadIntoOpenGLAndFreeData(a._textureDescriptors);
+            
+            a._isLoadedIntoEngine = true;
+            a._isDataLoaded = false;
+        }
     }
     
-    _shaderMgr.loadIntoOpenGLAndFreeData();
-    _soundMgr.loadIntoOpenALAndFreeData();
-    _textureMgr.loadIntoOpenGLAndFreeData();
-    
-    THREAD_MGR.tearDownThreadIfRunning("AssetsManager");
-    _isLoadedIntoEngine = true;
+    if (isLoaded())
+    {
+        THREAD_MGR.tearDownThreadIfRunning("AssetsManager");
+    }
 }
 
 void thread_createDeviceDependentResources(void* arg)
@@ -54,29 +66,25 @@ void thread_createDeviceDependentResources(void* arg)
 void AssetsManager::createDeviceDependentResourcesAsync()
 {
     assert(THREAD_MGR.isThreadRunning("AssetsManager") == false);
-
-    beginLoad();
     
     THREAD_MGR.spawnThread("AssetsManager", thread_createDeviceDependentResources, this);
 }
 
 void AssetsManager::createDeviceDependentResources()
 {
-    beginLoad();
+    _stateTime = 0;
     
     for (auto& pair : _assets)
     {
         Assets& a = pair.second;
-        _shaderMgr.prepare(a._shaderDescriptors);
-        _soundMgr.prepare(a._soundDescriptors);
-        _textureMgr.prepare(a._textureDescriptors);
+        a._isDataLoaded = false;
+        a._isLoadedIntoEngine = false;
+        
+        _shaderMgr.loadData(a._shaderDescriptors);
+        _soundMgr.loadData(a._soundDescriptors);
+        _textureMgr.loadData(a._textureDescriptors);
+        a._isDataLoaded = true;
     }
-    
-    _shaderMgr.loadData();
-    _soundMgr.loadData();
-    _textureMgr.loadData();
-    
-    _isLoadingData = false;
 }
 
 void AssetsManager::destroyDeviceDependentResources()
@@ -204,23 +212,23 @@ uint32_t AssetsManager::getStateTime()
 
 bool AssetsManager::isLoaded()
 {
-    return _isLoadedIntoEngine;
-}
-
-void AssetsManager::beginLoad()
-{
-    _stateTime = 0;
-    _isLoadingData = true;
-    _isLoadedIntoEngine = false;
+    for (auto& pair : _assets)
+    {
+        Assets& a = pair.second;
+        if (!a._isLoadedIntoEngine)
+        {
+            return false;
+        }
+    }
+    
+    return true;
 }
 
 AssetsManager::AssetsManager() :
 _shaderMgr(),
 _soundMgr(),
 _textureMgr(),
-_stateTime(0),
-_isLoadingData(false),
-_isLoadedIntoEngine(false)
+_stateTime(0)
 {
     // Empty
 }

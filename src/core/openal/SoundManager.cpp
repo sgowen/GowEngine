@@ -8,28 +8,21 @@
 
 #include <GowEngine/GowEngine.hpp>
 
-void SoundManager::prepare(std::vector<SoundDescriptor>& sds)
+void SoundManager::loadData(std::vector<SoundDescriptor>& soundDescriptors)
 {
-    for (auto& sd : sds)
+    for (auto& sd : soundDescriptors)
     {
         _sounds.emplace(sd._soundID, Sound{sd});
-    }
-}
-
-void SoundManager::loadData()
-{
-    for (auto& pair : _sounds)
-    {
-        Sound& s = pair.second;
+        Sound& s = sound(sd._soundID);
         _loader.loadData(s);
     }
 }
 
-void SoundManager::loadIntoOpenALAndFreeData()
+void SoundManager::loadIntoOpenALAndFreeData(std::vector<SoundDescriptor>& soundDescriptors)
 {
-    for (auto& pair : _sounds)
+    for (auto& sd : soundDescriptors)
     {
-        Sound& s = pair.second;
+        Sound& s = sound(sd._soundID);
         OAL.loadSound(s);
         _loader.freeData(s);
     }

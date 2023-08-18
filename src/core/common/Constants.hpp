@@ -9,7 +9,7 @@
 #pragma once
 
 /// Engine
-#define ENGINE_ASSETS "engine"
+#define ENGINE_ASSETS "aaa_load_this_first"
 #define MAX_NUM_PLAYERS 4
 
 /// Entity ID

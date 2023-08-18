@@ -21,6 +21,13 @@ struct Assets
     std::vector<ShaderDescriptor> _shaderDescriptors;
     std::vector<SoundDescriptor> _soundDescriptors;
     std::vector<TextureDescriptor> _textureDescriptors;
+    bool _isDataLoaded;
+    bool _isLoadedIntoEngine;
+    
+    Assets() : _isDataLoaded(false), _isLoadedIntoEngine(false)
+    {
+        // Empty
+    }
     
     Font* font(std::string key)
     {

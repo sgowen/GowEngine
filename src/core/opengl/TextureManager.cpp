@@ -8,28 +8,21 @@
 
 #include <GowEngine/GowEngine.hpp>
 
-void TextureManager::prepare(std::vector<TextureDescriptor>& tds)
+void TextureManager::loadData(std::vector<TextureDescriptor>& textureDescriptors)
 {
-    for (auto& td : tds)
+    for (auto& td : textureDescriptors)
     {
         _textures.emplace(td._name, Texture{td});
-    }
-}
-
-void TextureManager::loadData()
-{
-    for (auto& pair : _textures)
-    {
-        Texture& t = pair.second;
+        Texture& t = texture(td._name);
         _loader.loadData(t);
     }
 }
 
-void TextureManager::loadIntoOpenGLAndFreeData()
+void TextureManager::loadIntoOpenGLAndFreeData(std::vector<TextureDescriptor>& textureDescriptors)
 {
-    for (auto& pair : _textures)
+    for (auto& td : textureDescriptors)
     {
-        Texture& t = pair.second;
+        Texture& t = texture(td._name);
         OGL.loadTexture(t);
         _loader.freeData(t);
     }
