@@ -17,6 +17,8 @@ struct Shader
     FileData* _vertexShaderFileData;
     FileData* _fragmentShaderFileData;
     uint32_t _glHandle;
+    std::vector<ShaderUniform> _uniforms;
+    std::vector<ShaderAttribute> _attributes;
     
     Shader(ShaderDescriptor desc) :
     _desc(desc),
@@ -25,5 +27,23 @@ struct Shader
     _glHandle(0)
     {
         // Empty
+    }
+    
+    ShaderUniform& uniform(std::string name)
+    {
+        ShaderUniform* ret = nullptr;
+        
+        for (auto& su : _uniforms)
+        {
+            if (su._name == name)
+            {
+                ret = &su;
+                break;
+            }
+        }
+        
+        assert(ret != nullptr);
+        
+        return *ret;
     }
 };

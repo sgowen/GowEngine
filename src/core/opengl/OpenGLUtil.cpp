@@ -49,20 +49,20 @@ void OpenGLUtil::bindShader(Shader& s)
     
     glUseProgram(s._glHandle);
     
-    std::vector<ShaderAttribute>& attributes = s._desc._attributes;
+    std::vector<ShaderAttribute>& attributes = s._attributes;
     for (const auto& sa : attributes)
     {
-        glEnableVertexAttribArray(sa._location);
-        glVertexAttribPointer(sa._location, sa._size, GL_FLOAT, GL_FALSE, sa._stride, BUFFER_OFFSET(sa._offset));
+        glEnableVertexAttribArray(sa._glHandle);
+        glVertexAttribPointer(sa._glHandle, sa._size, GL_FLOAT, GL_FALSE, sa._stride, BUFFER_OFFSET(sa._offset));
     }
 }
 
 void OpenGLUtil::unbindShader(Shader& s)
 {
-    std::vector<ShaderAttribute>& attributes = s._desc._attributes;
+    std::vector<ShaderAttribute>& attributes = s._attributes;
     for (const auto& sa : attributes)
     {
-        glDisableVertexAttribArray(sa._location);
+        glDisableVertexAttribArray(sa._glHandle);
     }
     
     glUseProgram(0);
@@ -70,42 +70,42 @@ void OpenGLUtil::unbindShader(Shader& s)
 
 void OpenGLUtil::bindMatrix(Shader& s, std::string uniform, mat4& matrix)
 {
-    ShaderUniform& su = s._desc.uniform(uniform);
-    assert(su._type == "mat4");
+    ShaderUniform& su = s.uniform(uniform);
+    assert(su._type == GL_FLOAT_MAT4);
     
-    glUniformMatrix4fv(su._location, 1, GL_FALSE, (GLfloat*)matrix);
+    glUniformMatrix4fv(su._glHandle, 1, GL_FALSE, (GLfloat*)matrix);
 }
 
 void OpenGLUtil::bindColor(Shader& s, std::string uniform, Color& c)
 {
-    ShaderUniform& su = s._desc.uniform(uniform);
-    assert(su._type == "vec4");
+    ShaderUniform& su = s.uniform(uniform);
+    assert(su._type == GL_FLOAT_VEC4);
     
-    glUniform4f(su._location, c._red, c._green, c._blue, c._alpha);
+    glUniform4f(su._glHandle, c._red, c._green, c._blue, c._alpha);
 }
 
 void OpenGLUtil::bindInt4(Shader& s, std::string uniform, ivec4& value)
 {
-    ShaderUniform& su = s._desc.uniform(uniform);
-    assert(su._type == "ivec4");
+    ShaderUniform& su = s.uniform(uniform);
+    assert(su._type == GL_INT_VEC4);
     
-    glUniform4i(su._location, value[0], value[1], value[2], value[3]);
+    glUniform4i(su._glHandle, value[0], value[1], value[2], value[3]);
 }
 
 void OpenGLUtil::bindFloat4(Shader& s, std::string uniform, vec4& value)
 {
-    ShaderUniform& su = s._desc.uniform(uniform);
-    assert(su._type == "vec4");
+    ShaderUniform& su = s.uniform(uniform);
+    assert(su._type == GL_FLOAT_VEC4);
     
-    glUniform4f(su._location, value[0], value[1], value[2], value[3]);
+    glUniform4f(su._glHandle, value[0], value[1], value[2], value[3]);
 }
 
 void OpenGLUtil::bindFloat4Array(Shader& s, std::string uniform, int count, vec4* value)
 {
-    ShaderUniform& su = s._desc.uniform(uniform);
-    assert(su._type == "vec4");
+    ShaderUniform& su = s.uniform(uniform);
+    assert(su._type == GL_FLOAT_VEC4);
     
-    glUniform4fv(su._location, count, (const GLfloat*)value);
+    glUniform4fv(su._glHandle, count, (const GLfloat*)value);
 }
 
 void OpenGLUtil::bindTexture(Shader& s, std::string uniform, uint32_t index, Texture& t)
@@ -118,13 +118,13 @@ void OpenGLUtil::bindTexture(Shader& s, std::string uniform, uint32_t index, uin
     assert(index < NUM_SUPPORTED_TEXTURE_SLOTS);
     assert(texture > 0);
     
-    ShaderUniform& su = s._desc.uniform(uniform);
-    assert(su._type == "sampler2D");
+    ShaderUniform& su = s.uniform(uniform);
+    assert(su._type == GL_SAMPLER_2D);
     
     glActiveTexture(TEXTURE_SLOTS[index]);
     glBindTexture(GL_TEXTURE_2D, texture);
     glEnable(GL_TEXTURE_2D);
-    glUniform1i(su._location, index);
+    glUniform1i(su._glHandle, index);
 }
 
 void OpenGLUtil::unbindTexture(uint32_t index)
@@ -353,27 +353,69 @@ void OpenGLUtil::loadShader(Shader& s)
     const long fragmentShaderSrcLength = s._fragmentShaderFileData->_length;
     s._glHandle = loadShader(vertexShaderSrc, vertexShaderSrcLength, fragmentShaderSrc, fragmentShaderSrcLength);
     
-    std::vector<ShaderUniform>& uniforms = s._desc._uniforms;
-    for (auto& su : uniforms)
+    GLint glslVarNumElements;
+    GLenum glslVarType;
+    static const GLsizei glslVarNameBufferSize = 32;
+    GLchar glslVarName[glslVarNameBufferSize];
+    GLsizei glslVarNameLength;
+
+    GLint numAttributes;
+    glGetProgramiv(s._glHandle, GL_ACTIVE_ATTRIBUTES, &numAttributes);
+    if (ENGINE_CFG.fileLoggingEnabled())
     {
-        su._location = glGetUniformLocation(s._glHandle, su._name.c_str());
+        LOG("Active Attributes: %d", numAttributes);
+    }
+
+    std::vector<ShaderAttribute>& attributes = s._attributes;
+    for (GLint i = 0; i < numAttributes; ++i)
+    {
+        glGetActiveAttrib(s._glHandle, (GLuint)i, glslVarNameBufferSize, &glslVarNameLength, &glslVarNumElements, &glslVarType, glslVarName);
+
+        if (ENGINE_CFG.fileLoggingEnabled())
+        {
+            LOG("Attribute #%d Type: %u Name: %s Length: %d Count: %d", i, glslVarType, glslVarName, glslVarNameLength, glslVarNumElements);
+        }
+        
+        uint32_t glHandle = glGetAttribLocation(s._glHandle, glslVarName);
+        
+        attributes.emplace_back(std::string(glslVarName), glslVarType, glHandle);
+    }
+
+    GLint numUniforms;
+    glGetProgramiv(s._glHandle, GL_ACTIVE_UNIFORMS, &numUniforms);
+    if (ENGINE_CFG.fileLoggingEnabled())
+    {
+        LOG("Active Uniforms: %d", numUniforms);
+    }
+
+    std::vector<ShaderUniform>& uniforms = s._uniforms;
+    for (GLint i = 0; i < numUniforms; ++i)
+    {
+        glGetActiveUniform(s._glHandle, (GLuint)i, glslVarNameBufferSize, &glslVarNameLength, &glslVarNumElements, &glslVarType, glslVarName);
+        
+        if (ENGINE_CFG.fileLoggingEnabled())
+        {
+            LOG("Uniform #%d Type: %u Name: %s Length: %d Count: %d", i, glslVarType, glslVarName, glslVarNameLength, glslVarNumElements);
+        }
+        
+        uint32_t glHandle = glGetUniformLocation(s._glHandle, glslVarName);
+        
+        uniforms.emplace_back(std::string(glslVarName), glslVarType, glHandle);
     }
     
     size_t offset = 0;
     uint32_t totalSize = 0;
     
-    std::vector<ShaderAttribute>& attributes = s._desc._attributes;
     for (auto& sa : attributes)
     {
         sa._offset = offset * sizeof(GL_FLOAT);
+        sa._size = sizeForGlslType(sa._type);
         offset += sa._size;
         totalSize += sa._size;
     }
     for (auto& sa : attributes)
     {
         sa._stride = totalSize * sizeof(GLfloat);
-        
-        sa._location = glGetAttribLocation(s._glHandle, sa._name.c_str());
     }
 }
 
@@ -389,7 +431,7 @@ void OpenGLUtil::unloadShader(Shader& s)
     
     uint32_t program = s._glHandle;
     assert(program > 0);
-        
+    
     glDeleteProgram(program);
     s._glHandle = 0;
 }
@@ -508,6 +550,31 @@ uint32_t OpenGLUtil::compileShader(const uint32_t type, const uint8_t* source, c
     }
     
     assert(compileStatus == GL_TRUE);
+
+    return ret;
+}
+
+uint32_t OpenGLUtil::sizeForGlslType(uint32_t type)
+{
+    uint32_t ret = 0;
+
+    if (type == GL_FLOAT_VEC4 ||
+        type == GL_INT_VEC4)
+    {
+        ret = 4;
+    }
+    else if (type == GL_FLOAT_VEC3 ||
+             type == GL_INT_VEC3)
+    {
+        ret = 3;
+    }
+    else if (type == GL_FLOAT_VEC2 ||
+             type == GL_INT_VEC2)
+    {
+        ret = 2;
+    }
+
+    assert(ret > 0);
 
     return ret;
 }

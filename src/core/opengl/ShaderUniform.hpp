@@ -13,13 +13,13 @@
 struct ShaderUniform
 {
     std::string _name;
-    std::string _type;
-    uint32_t _location;
+    uint32_t _type;
+    uint32_t _glHandle;
     
-    ShaderUniform(std::string name, std::string type) :
+    ShaderUniform(std::string name, uint32_t type, uint32_t glHandle) :
     _name(name),
     _type(type),
-    _location(0)
+    _glHandle(glHandle)
     {
         // Empty
     }

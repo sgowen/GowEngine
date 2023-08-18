@@ -75,41 +75,6 @@ Assets AssetsLoader::initWithJSON(const char* json)
             std::string fragmentShaderFilePath = RapidJSONUtil::getString(iv, "fragmentShaderFilePath");
 
             ret._shaderDescriptors.emplace_back(name, vertexShaderFilePath, fragmentShaderFilePath);
-
-            if (iv.HasMember("uniforms"))
-            {
-                ShaderDescriptor& sd = ret._shaderDescriptors.back();
-                std::vector<ShaderUniform>& uniforms = sd._uniforms;
-
-                const Value& v = iv["uniforms"];
-                assert(v.IsArray());
-                for (SizeType i = 0; i < v.Size(); ++i)
-                {
-                    const Value& iv = v[i];
-                    std::string name = RapidJSONUtil::getString(iv, "name");
-                    std::string type = RapidJSONUtil::getString(iv, "type");
-
-                    uniforms.emplace_back(name, type);
-                }
-            }
-
-            if (iv.HasMember("attributes"))
-            {
-                ShaderDescriptor& sd = ret._shaderDescriptors.back();
-                std::vector<ShaderAttribute>& attributes = sd._attributes;
-
-                const Value& v = iv["attributes"];
-                assert(v.IsArray());
-                for (SizeType i = 0; i < v.Size(); ++i)
-                {
-                    const Value& iv = v[i];
-                    std::string name = RapidJSONUtil::getString(iv, "name");
-                    std::string type = RapidJSONUtil::getString(iv, "type");
-                    int count = RapidJSONUtil::getInt(iv, "count", 1);
-
-                    attributes.emplace_back(name, type, count);
-                }
-            }
         }
     }
     

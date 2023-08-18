@@ -19,8 +19,6 @@ struct ShaderDescriptor
     const std::string _name;
     const std::string _vertexShaderFilePath;
     const std::string _fragmentShaderFilePath;
-    std::vector<ShaderUniform> _uniforms;
-    std::vector<ShaderAttribute> _attributes;
     
     ShaderDescriptor(std::string name, std::string vertexShaderFilePath, std::string fragmentShaderFilePath) :
     _name(name),
@@ -28,23 +26,5 @@ struct ShaderDescriptor
     _fragmentShaderFilePath(fragmentShaderFilePath)
     {
         // Empty
-    }
-    
-    ShaderUniform& uniform(std::string name)
-    {
-        ShaderUniform* ret = nullptr;
-        
-        for (auto& su : _uniforms)
-        {
-            if (su._name == name)
-            {
-                ret = &su;
-                break;
-            }
-        }
-        
-        assert(ret != nullptr);
-        
-        return *ret;
     }
 };
