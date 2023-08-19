@@ -50,7 +50,6 @@ void OutputDebugStringA(const char* value)
 void Logger::initWithFile(const char* fileName)
 {
     _fileStream.open(fileName, std::ios::app);
-    assert(_fileStream);
 }
 
 void Logger::closeFileStream()
@@ -74,9 +73,15 @@ void Logger::log(const char* format, ...)
     vsnprintf(temp, size, format, args);
 #endif
     
-    OutputDebugStringA(temp);
-    OutputDebugStringA("\n");
+    if (ENGINE_CFG.consoleLoggingEnabled())
+    {
+        OutputDebugStringA(temp);
+        OutputDebugStringA("\n");
+    }
     
-    _fileStream << temp;
-    _fileStream << "\n";
+    if (_fileStream)
+    {
+        _fileStream << temp;
+        _fileStream << "\n";
+    }
 }

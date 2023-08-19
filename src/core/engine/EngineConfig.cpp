@@ -37,6 +37,11 @@ bool EngineConfig::vsync()
     return _vsync;
 }
 
+bool EngineConfig::consoleLoggingEnabled()
+{
+    return _consoleLoggingEnabled;
+}
+
 uint8_t EngineConfig::framesPerSecond()
 {
     return _framesPerSecond;
@@ -140,6 +145,7 @@ double EngineConfig::frameRate()
 EngineConfig::EngineConfig(std::string configFilePath) :
 _config(ConfigLoader::initWithJSONFile(configFilePath)),
 _vsync(_config.getBool("vsync", true)),
+_consoleLoggingEnabled(_config.getBool("consoleLoggingEnabled", false)),
 _framesPerSecond(_config.getUInt("framesPerSecond", 60)),
 _fileDirLogger(_config.getString("fileDirLogger")),
 _filePathEngineAssets(_config.getString("filePathEngineAssets")),

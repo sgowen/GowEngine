@@ -20,6 +20,7 @@ public:
     static void destroy();
     
     bool vsync();
+    bool consoleLoggingEnabled();
     uint8_t framesPerSecond();
     std::string fileDirLogger();
     std::string filePathEngineAssets();
@@ -48,6 +49,7 @@ private:
     
     Config _config;
     bool _vsync;
+    bool _consoleLoggingEnabled;
     uint8_t _framesPerSecond;
     std::string _fileDirLogger;
     std::string _filePathEngineAssets;
