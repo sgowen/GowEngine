@@ -17,12 +17,13 @@ _cycleTimeBeforeFirstLoopingFrame(0)
 {
     for (int i = 0; i < _frameTimes.size(); ++i)
     {
-        auto frameTime = _frameTimes[i];
-        _cycleTime += frameTime;
         if (i == _firstLoopingFrame)
         {
             _cycleTimeBeforeFirstLoopingFrame = _cycleTime;
         }
+        
+        auto frameTime = _frameTimes[i];
+        _cycleTime += frameTime;
     }
     assert(_cycleTime > 0);
 
