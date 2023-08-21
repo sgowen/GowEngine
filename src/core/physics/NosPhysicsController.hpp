@@ -49,7 +49,7 @@ class NosPhysicsController : public EntityPhysicsController
     DECL_RTTI;
     
 public:
-    NosPhysicsController(Entity* e, float gravity);
+    NosPhysicsController(Entity* e);
     virtual ~NosPhysicsController();
     
     virtual void updatePoseFromBody() override;
@@ -67,7 +67,6 @@ private:
     Vector2 _velocityCache;
     Vector2 _position;
     Vector2 _positionCache;
-    float _gravity;
     float _tolerance;
     uint8_t _numGroundContacts;
     bool _isBodyFacingLeft;

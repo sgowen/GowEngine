@@ -12,11 +12,17 @@ Animation::Animation(uint16_t x, uint16_t y, std::vector<uint16_t> regionWidths,
 _isLooping(isLooping),
 _firstLoopingFrame(firstLoopingFrame),
 _frameTimes(frameTimes),
-_cycleTime(0)
+_cycleTime(0),
+_cycleTimeBeforeFirstLoopingFrame(0)
 {
-    for (auto frameTime : _frameTimes)
+    for (int i = 0; i < _frameTimes.size(); ++i)
     {
+        auto frameTime = _frameTimes[i];
         _cycleTime += frameTime;
+        if (i == _firstLoopingFrame)
+        {
+            _cycleTimeBeforeFirstLoopingFrame = _cycleTime;
+        }
     }
     assert(_cycleTime > 0);
 
@@ -97,6 +103,11 @@ uint16_t Animation::frameIndex(uint16_t stateTime)
 uint16_t Animation::cycleTime()
 {
     return _cycleTime;
+}
+
+uint16_t Animation::cycleTimeBeforeFirstLoopingFrame()
+{
+    return _cycleTimeBeforeFirstLoopingFrame;
 }
 
 bool Animation::isLooping()

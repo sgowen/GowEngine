@@ -10,8 +10,7 @@
 
 IMPL_RTTI(NosPhysicsWorld, World)
 
-NosPhysicsWorld::NosPhysicsWorld() : World(),
-_gravity(-120.0f)
+NosPhysicsWorld::NosPhysicsWorld() : World()
 {
     // Empty
 }
@@ -83,5 +82,5 @@ void NosPhysicsWorld::endExtrapolatedPhysics()
 
 EntityPhysicsController* NosPhysicsWorld::createPhysicsController(Entity* e)
 {
-    return new NosPhysicsController(e, _gravity);
+    return new NosPhysicsController(e);
 }

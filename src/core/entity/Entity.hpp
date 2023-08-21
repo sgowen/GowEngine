@@ -452,7 +452,7 @@ public:
     EntityDef& entityDef();
     Config& data();
     NetworkData& networkData();
-    NetworkDataField& dataField(std::string name);
+    NetworkDataField& networkDataField(std::string name);
     uint16_t stateTime();
     Vector2& position();
     Vector2& velocity();
@@ -507,12 +507,14 @@ public:
         Vector2 _velocity;
         uint8_t _numGroundContacts;
         bool _isXFlipped;
+        bool _isZeroGravity;
         
         Pose(float x, float y) :
         _position(x, y),
         _velocity(VECTOR2_ZERO),
         _numGroundContacts(0),
-        _isXFlipped(false)
+        _isXFlipped(false),
+        _isZeroGravity(false)
         {
             // Empty
         }
@@ -523,7 +525,8 @@ public:
             a._position          == b._position &&
             a._velocity          == b._velocity &&
             a._numGroundContacts == b._numGroundContacts &&
-            a._isXFlipped        == b._isXFlipped;
+            a._isXFlipped        == b._isXFlipped &&
+            a._isZeroGravity     == b._isZeroGravity;
         }
         
         friend bool operator!=(Pose& a, Pose& b)
@@ -535,7 +538,7 @@ public:
     
     enum StateFlags
     {
-        STTF_EXILED = 255
+        STTF_EXILED = 0x80
     };
     
     struct State
@@ -543,23 +546,23 @@ public:
         uint8_t _state;
         uint8_t _stateFlags;
         uint16_t _stateTime;
-        uint16_t _inputState;
+        uint16_t _lastProcessedInputState;
         
         State()
         {
             _state = 0;
             _stateFlags = 0;
             _stateTime = 0;
-            _inputState = 0;
+            _lastProcessedInputState = 0;
         }
         
         friend bool operator==(State& a, State& b)
         {
             return
-            a._state              == b._state &&
-            a._stateFlags         == b._stateFlags &&
-            a._stateTime          == b._stateTime &&
-            a._inputState         == b._inputState;
+            a._state                   == b._state &&
+            a._stateFlags              == b._stateFlags &&
+            a._stateTime               == b._stateTime &&
+            a._lastProcessedInputState == b._lastProcessedInputState;
         }
         
         friend bool operator!=(State& a, State& b)
@@ -572,7 +575,7 @@ public:
     void exile();
     bool isExiled();
     bool isRequestingDeletion();
-    uint16_t lastInputState();
+    uint16_t lastProcessedInputState();
     
     void setWorld(World* w);
     World* world();

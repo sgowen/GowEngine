@@ -50,8 +50,6 @@ void Entity::beginFrame()
 
 void Entity::processInput(uint16_t inputState)
 {
-    _state._inputState = inputState;
-    
     if (isExiled())
     {
         return;
@@ -60,6 +58,7 @@ void Entity::processInput(uint16_t inputState)
     EntityController* ec = controller();
     assert(ec != nullptr);
     ec->processInput(inputState);
+    _state._lastProcessedInputState = inputState;
     
     if (_physicsController != nullptr)
     {
@@ -77,6 +76,12 @@ void Entity::update()
     if (_physicsController != nullptr)
     {
         _physicsController->updatePoseFromBody();
+    }
+    
+    if (position()._y < 0)
+    {
+        exile();
+        return;
     }
     
     _controller->onUpdate();
@@ -107,7 +112,7 @@ NetworkData& Entity::networkData()
     return _entityDef._networkData;
 }
 
-NetworkDataField& Entity::dataField(std::string name)
+NetworkDataField& Entity::networkDataField(std::string name)
 {
     NetworkDataField* ret = nullptr;
     NetworkData& nd = networkData();
@@ -209,12 +214,12 @@ Entity::State& Entity::state()
 
 void Entity::exile()
 {
-    _state._stateFlags = STTF_EXILED;
+    SET_BIT(_state._stateFlags, STTF_EXILED, true);
 }
 
 bool Entity::isExiled()
 {
-    return _state._stateFlags == STTF_EXILED;
+    return IS_BIT_SET(_state._stateFlags, STTF_EXILED);
 }
 
 bool Entity::isRequestingDeletion()
@@ -222,9 +227,9 @@ bool Entity::isRequestingDeletion()
     return _exileStateTime >= 60;
 }
 
-uint16_t Entity::lastInputState()
+uint16_t Entity::lastProcessedInputState()
 {
-    return _state._inputState;
+    return _state._lastProcessedInputState;
 }
 
 void Entity::setWorld(World* w)

@@ -24,7 +24,4 @@ public:
     
 protected:
     virtual EntityPhysicsController* createPhysicsController(Entity* e) override;
-    
-private:
-    float _gravity;
 };

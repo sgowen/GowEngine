@@ -22,6 +22,7 @@ public:
     TextureRegion& textureRegionAtKeyFrame(uint16_t frameIndex);
     uint16_t frameIndex(uint16_t stateTime);
     uint16_t cycleTime();
+    uint16_t cycleTimeBeforeFirstLoopingFrame();
     bool isLooping();
 
 private:
@@ -29,5 +30,6 @@ private:
     uint16_t _firstLoopingFrame;
     std::vector<uint16_t> _frameTimes;
     uint16_t _cycleTime;
+    uint16_t _cycleTimeBeforeFirstLoopingFrame;
     std::vector<TextureRegion> _textureRegions;
 };

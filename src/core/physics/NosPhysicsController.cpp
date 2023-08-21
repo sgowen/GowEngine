@@ -10,12 +10,11 @@
 
 IMPL_RTTI(NosPhysicsController, EntityPhysicsController)
 
-NosPhysicsController::NosPhysicsController(Entity* e, float gravity) : EntityPhysicsController(e),
+NosPhysicsController::NosPhysicsController(Entity* e) : EntityPhysicsController(e),
 _velocity(e->velocity()),
 _velocityCache(_velocity),
 _position(e->position()),
 _positionCache(_position),
-_gravity(gravity),
 _numGroundContacts(0),
 _isBodyFacingLeft(false)
 {
@@ -59,7 +58,11 @@ void NosPhysicsController::step(float deltaTime)
         return;
     }
     
-    _velocity.add(0, _gravity * deltaTime);
+    if (!_entity->pose()._isZeroGravity)
+    {
+        float gravity = _entity->data().getFloat("gravity");
+        _velocity.add(0, gravity * deltaTime);
+    }
     _tolerance = fabsf(_velocity._y * deltaTime * 2);
     _position.add(_velocity._x * deltaTime, _velocity._y * deltaTime);
     for (Bounds& b : _bounds)
@@ -81,7 +84,8 @@ void NosPhysicsController::extrapolate(float extrapolation)
     _velocityCache = _velocity;
     _positionCache = _position;
     
-    _velocity.add(0, _gravity * extrapolation);
+    float gravity = _entity->data().getFloat("gravity");
+    _velocity.add(0, gravity * extrapolation);
     _position.add(_velocity._x * extrapolation, _velocity._y * extrapolation);
     
     updatePoseFromBody();
