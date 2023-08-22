@@ -239,6 +239,16 @@ void Renderer::renderParallaxLayers(std::vector<Entity*>& layers, std::string te
             TextureRegion tr = trRaw.copyWithX(x);
             
             spriteBatcher().addSprite(tr, e->position()._x + m._desc._left, e->position()._y, e->width(), e->height(), e->angle(), e->isXFlipped());
+            
+            float matrixWidthRemaining = m._desc.width() - e->width();
+            for (int i = 1; matrixWidthRemaining > 0; matrixWidthRemaining -= e->width(), ++i)
+            {
+                x += t._width;
+                x %= t._width;
+                TextureRegion trX = tr.copyWithX(x);
+                
+                spriteBatcher().addSprite(trX, e->position()._x + m._desc._left + e->width() * i, e->position()._y, e->width(), e->height(), e->angle(), e->isXFlipped());
+            }
         }
     }
     spriteBatcherEnd(texture);
