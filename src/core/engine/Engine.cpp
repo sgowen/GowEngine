@@ -97,8 +97,7 @@ EngineRequestedHostAction Engine::update(double deltaTime)
     if (_stateTime > maxStateTimeAllowed)
     {
         LOG("Okay! So this code really is here for a reason");
-        _stateTime = 0;
-        INPUT_MGR.process();
+        _stateTime = frameRate;
     }
     
     while (_stateTime >= frameRate)
