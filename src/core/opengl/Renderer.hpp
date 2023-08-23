@@ -45,7 +45,7 @@ public:
     
     void updateMatrix(float l, float r, float b, float t, float n = -1, float f = 1, std::string matrixKey = "main");
     void updateMatrix(MatrixDescriptor& desc, std::string matrixKey = "main");
-    void updateMatrixCenteredOnEntity(Entity* e, float maxRight, float maxTop, std::string matrixKey = "main");
+    void updateMatrixCenteredOnEntity(Entity* e, float maxRight, float maxTop, float scale = 1.0, std::string matrixKey = "main");
     
     void rektangleBatcherBegin(std::string rektangleBatcherKey = "main");
     void rektangleBatcherAddRektangle(Rektangle& r, std::string rektangleBatcherKey = "main");

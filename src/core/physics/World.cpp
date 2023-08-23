@@ -12,7 +12,9 @@ IMPL_RTTI_NOPARENT(World)
 
 World::World() :
 _entityLayout(),
-_numMovesProcessed(0)
+_numMovesProcessed(0),
+_rightEdge(0),
+_topEdge(0)
 {
     // Empty
 }
@@ -30,7 +32,22 @@ void World::populateFromEntityLayout(EntityLayoutDef& eld)
     
     for (auto& eid : _entityLayout._entities)
     {
-        addEntity(ENTITY_MGR.createEntity(eid));
+        Entity* e = ENTITY_MGR.createEntity(eid);
+        addEntity(e);
+        
+        EntityDef& ed = ENTITY_MGR.getEntityDef(eid._key);
+        
+        uint32_t rightEdge = eid._x + ed._width;
+        if (rightEdge > _rightEdge)
+        {
+            _rightEdge = rightEdge;
+        }
+        
+        uint32_t topEdge = eid._y + ed._height;
+        if (topEdge > _topEdge)
+        {
+            _topEdge = topEdge;
+        }
     }
 }
 
@@ -156,9 +173,21 @@ std::vector<Entity*> World::update()
 void World::reset()
 {
     _entityLayout = EntityLayoutDef();
+    _rightEdge = 0;
+    _topEdge = 0;
     
     removeAllEntities(_layers);
     removeAllEntities(_staticEntities);
+}
+
+uint32_t World::rightEdge()
+{
+    return _rightEdge;
+}
+
+uint32_t World::topEdge()
+{
+    return _topEdge;
 }
 
 bool World::isEntityLayoutLoaded()

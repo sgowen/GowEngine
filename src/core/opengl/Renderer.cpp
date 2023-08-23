@@ -153,7 +153,7 @@ void Renderer::updateMatrix(MatrixDescriptor& desc, std::string matrixKey)
     updateMatrix(desc._left, desc._right, desc._bottom, desc._top, desc._near, desc._far, matrixKey);
 }
 
-void Renderer::updateMatrixCenteredOnEntity(Entity* e, float maxRight, float maxTop, std::string matrixKey)
+void Renderer::updateMatrixCenteredOnEntity(Entity* e, float maxRight, float maxTop, float scale, std::string matrixKey)
 {
     if (e == nullptr)
     {
@@ -161,28 +161,31 @@ void Renderer::updateMatrixCenteredOnEntity(Entity* e, float maxRight, float max
     }
     
     Matrix& m = matrix(matrixKey);
-    float width = m._desc.width();
-    float height = m._desc.height();
-    m._desc._right = CLAMP(e->position()._x + width / 2, 0, maxRight);
-    m._desc._top = CLAMP(e->position()._y + height / 2, 0, maxTop);
+    MatrixDescriptor md = m._base;
+    float width = md.width() * scale;
+    float height = md.height() * scale;
+    md._right = CLAMP(e->position()._x + width / 2, 0, maxRight);
+    md._top = CLAMP(e->position()._y + height / 2, 0, maxTop);
     
-    m._desc._left = m._desc._right - width;
-    if (m._desc._left < 0)
+    md._left = md._right - width;
+    if (md._left < 0)
     {
-        float diff = -m._desc._left;
-        m._desc._left = 0;
-        m._desc._right += diff;
+        float diff = -md._left;
+        md._left = 0;
+        md._right += diff;
     }
     
-    m._desc._bottom = m._desc._top - height;
-    if (m._desc._bottom < 0)
+    md._bottom = md._top - height;
+    if (md._bottom < 0)
     {
-        float diff = -m._desc._bottom;
-        m._desc._bottom = 0;
-        m._desc._top += diff;
+        float diff = -md._bottom;
+        md._bottom = 0;
+        md._top += diff;
     }
     
-    updateMatrix(m._desc, matrixKey);
+    LOG("width: %f height: %f maxRight: %f maxTop: %f md.width: %f md.height: %f", width, height, maxRight, maxTop, md.width(), md.height());
+    
+    updateMatrix(md, matrixKey);
 }
 
 void Renderer::rektangleBatcherBegin(std::string rektangleBatcherKey)

@@ -35,6 +35,8 @@ public:
     void beginFrame();
     std::vector<Entity*> update();
     void reset();
+    uint32_t rightEdge();
+    uint32_t topEdge();
     
     bool isEntityLayoutLoaded();
     EntityLayoutDef& getEntityLayout();
@@ -57,6 +59,8 @@ protected:
     
 private:
     uint32_t _numMovesProcessed;
+    uint32_t _rightEdge;
+    uint32_t _topEdge;
     
     void addEntity(Entity* e);
     void removeEntity(Entity* e);

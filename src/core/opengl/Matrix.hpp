@@ -14,10 +14,12 @@
 
 struct Matrix
 {
+    MatrixDescriptor _base;
     MatrixDescriptor _desc;
     mat4 _matrix;
     
     Matrix(MatrixDescriptor desc) :
+    _base(desc),
     _desc(desc)
     {
         ortho(desc._left, desc._right, desc._bottom, desc._top, desc._near, desc._far);
