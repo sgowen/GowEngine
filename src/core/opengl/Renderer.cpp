@@ -183,8 +183,6 @@ void Renderer::updateMatrixCenteredOnEntity(Entity* e, float maxRight, float max
         md._top += diff;
     }
     
-    LOG("width: %f height: %f maxRight: %f maxTop: %f md.width: %f md.height: %f", width, height, maxRight, maxTop, md.width(), md.height());
-    
     updateMatrix(md, matrixKey);
 }
 
