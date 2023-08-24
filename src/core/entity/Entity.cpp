@@ -45,7 +45,10 @@ void Entity::beginFrame()
         return;
     }
     
-    ++_state._stateTime;
+    if (isDynamic())
+    {
+        ++_state._stateTime;
+    }
 }
 
 void Entity::processInput(uint16_t inputState)
