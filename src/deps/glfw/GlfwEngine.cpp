@@ -300,8 +300,8 @@ void GlfwEngine::exec(Engine* engine, const char* windowTitle)
 
     GLFWmonitor* monitor = nullptr;
 
-    int width = 800;
-    int height = 480;
+    int width = 1024;
+    int height = 576;
 
 #if IS_RELEASE
 //    monitor = glfwGetPrimaryMonitor();
