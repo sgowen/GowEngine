@@ -508,13 +508,15 @@ public:
         uint8_t _numGroundContacts;
         bool _isXFlipped;
         bool _isZeroGravity;
+        bool _isSlowed;
         
         Pose(float x, float y) :
         _position(x, y),
         _velocity(VECTOR2_ZERO),
         _numGroundContacts(0),
         _isXFlipped(false),
-        _isZeroGravity(false)
+        _isZeroGravity(false),
+        _isSlowed(false)
         {
             // Empty
         }
@@ -526,7 +528,8 @@ public:
             a._velocity          == b._velocity &&
             a._numGroundContacts == b._numGroundContacts &&
             a._isXFlipped        == b._isXFlipped &&
-            a._isZeroGravity     == b._isZeroGravity;
+            a._isZeroGravity     == b._isZeroGravity &&
+            a._isSlowed          == b._isSlowed;
         }
         
         friend bool operator!=(Pose& a, Pose& b)

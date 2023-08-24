@@ -37,6 +37,7 @@ void EntityNetworkController::read(InputMemoryBitStream& imbs)
         imbs.readBits(pose._numGroundContacts, 4);
         imbs.read(pose._isXFlipped);
         imbs.read(pose._isZeroGravity);
+        imbs.read(pose._isSlowed);
     }
     
     imbs.read(stateBit);
@@ -102,6 +103,7 @@ uint8_t EntityNetworkController::write(OutputMemoryBitStream& ombs, uint8_t dirt
         ombs.writeBits(e._pose._numGroundContacts, 4);
         ombs.write(e._pose._isXFlipped);
         ombs.write(e._pose._isZeroGravity);
+        ombs.write(e._pose._isSlowed);
         
         ret |= RSTF_POSE;
     }

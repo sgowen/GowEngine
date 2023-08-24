@@ -58,6 +58,12 @@ void NosPhysicsController::step(float deltaTime)
         return;
     }
     
+    if (_entity->pose()._isSlowed)
+    {
+        static float slowedDeltaTime = deltaTime / 8;
+        deltaTime = slowedDeltaTime;
+    }
+    
     if (!_entity->pose()._isZeroGravity)
     {
         float gravity = _entity->data().getFloat("gravity");
