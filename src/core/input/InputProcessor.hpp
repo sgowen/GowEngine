@@ -23,6 +23,7 @@ public:
     virtual ~InputProcessor();
     
     void registerActionForKey(uint16_t key, uint8_t action);
+    void registerActionForButton(uint16_t key, uint8_t action);
     
     uint8_t update();
     uint8_t updateReadText();
@@ -34,6 +35,7 @@ public:
     
 private:
     std::map<uint16_t, uint8_t> _keyMappings;
+    std::map<uint16_t, uint8_t> _buttonMappings;
     uint8_t _action;
     std::string _textInput;
     bool _isControlHeldDown;
