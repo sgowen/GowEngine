@@ -83,7 +83,9 @@ uint32_t AudioEngine::playSound(std::string soundID, float volume, bool isLoopin
     Sound& s = ASSETS_MGR.sound(soundID);
     uint32_t alHandle = s.nextSource();
     
-    OAL.setVolume(alHandle, CLAMP(volume, 0, 1));
+    float realVolume = ENGINE_CFG.volume() * volume;
+    
+    OAL.setVolume(alHandle, CLAMP(realVolume, 0, 1));
     OAL.setLooping(alHandle, isLooping);
     
     _soundsToPlay.push_back(alHandle);

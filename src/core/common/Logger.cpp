@@ -79,7 +79,8 @@ void Logger::log(const char* format, ...)
         OutputDebugStringA("\n");
     }
     
-    if (_fileStream)
+    if (ENGINE_CFG.fileLoggingEnabled() &&
+        _fileStream)
     {
         _fileStream << temp;
         _fileStream << "\n";

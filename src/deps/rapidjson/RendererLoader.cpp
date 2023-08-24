@@ -29,6 +29,14 @@ Renderer RendererLoader::initWithJSON(const char* json)
     d.Parse<kParseStopWhenDoneFlag>(json);
     assert(d.IsObject());
     
+    if (d.HasMember("pixelToUnitRatio"))
+    {
+        Value& v = d["pixelToUnitRatio"];
+        assert(v.IsInt());
+        
+        ret._pixelToUnitRatio = RapidJSONUtil::getUInt(d, "pixelToUnitRatio");
+    }
+    
     if (d.HasMember("circleBatchers"))
     {
         Value& v = d["circleBatchers"];

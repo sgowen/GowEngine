@@ -10,7 +10,8 @@
 
 Renderer::Renderer() :
 _nosPhysicsRenderer(2048),
-_screenRenderer()
+_screenRenderer(),
+_pixelToUnitRatio(1)
 {
     // Empty
 }
@@ -398,5 +399,9 @@ TriangleBatcher& Renderer::triangleBatcher(std::string key)
 void Renderer::spriteBatcherAddEntity(SpriteBatcher& sb, Entity& e)
 {
     TextureRegion& tr = ASSETS_MGR.textureRegion(e.renderController()->getTextureMapping(),  e.stateTime());
-    sb.addSprite(tr, e.position()._x, e.position()._y, e.width(), e.height(), e.angle(), e.isXFlipped());
+    assert(tr._width % _pixelToUnitRatio == 0);
+    assert(tr._height % _pixelToUnitRatio == 0);
+    float realWidth = tr._width / _pixelToUnitRatio;
+    float realHeight = tr._height / _pixelToUnitRatio;
+    sb.addSprite(tr, e.position()._x, e.position()._y, realWidth, realHeight, e.angle(), e.isXFlipped());
 }

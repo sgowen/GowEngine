@@ -28,8 +28,11 @@ _hasUpdatedSinceLastRender(false)
 {
     EngineConfig::create(configFilePath);
     
-    std::string logFileName = STRING_FORMAT("%s/log_GowEngine_%d", ENGINE_CFG.fileDirLogger().c_str(), timeSinceEpochMillisec());
-    Logger::getInstance().initWithFile(logFileName.c_str());
+    if (ENGINE_CFG.fileLoggingEnabled())
+    {
+        std::string logFileName = STRING_FORMAT("%s/log_GowEngine_%d", ENGINE_CFG.fileDirLogger().c_str(), timeSinceEpochMillisec());
+        Logger::getInstance().initWithFile(logFileName.c_str());
+    }
     
     AudioEngine::create();
     

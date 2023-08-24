@@ -102,6 +102,11 @@ bool EngineConfig::musicDisabled()
     return _musicDisabled;
 }
 
+float EngineConfig::volume()
+{
+    return _volume;
+}
+
 bool EngineConfig::extrapolatePhysics()
 {
     return _extrapolatePhysics;
@@ -158,6 +163,7 @@ _networkLoggingEnabled(_config.getBool("networkLoggingEnabled", false)),
 _physicsLoggingEnabled(_config.getBool("physicsLoggingEnabled", false)),
 _audioDisabled(_config.getBool("audioDisabled", false)),
 _musicDisabled(_config.getBool("musicDisabled", false)),
+_volume(_config.getFloat("volume", 1.0f)),
 _extrapolatePhysics(_config.getBool("extrapolatePhysics", false)),
 _clientPortHost(_config.getUInt("clientPortHost", 1337)),
 _clientPortJoin(_config.getUInt("clientPortJoin", 1338)),

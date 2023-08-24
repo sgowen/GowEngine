@@ -89,6 +89,7 @@ private:
     std::map<std::string, SpriteBatcher> _spriteBatchers;
     std::map<std::string, TextView> _textViews;
     std::map<std::string, TriangleBatcher> _triangleBatchers;
+    uint8_t _pixelToUnitRatio;
     
     void spriteBatcherAddEntity(SpriteBatcher& sb, Entity& e);
 };

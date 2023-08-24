@@ -33,6 +33,7 @@ public:
     bool physicsLoggingEnabled();
     bool audioDisabled();
     bool musicDisabled();
+    float volume();
     bool extrapolatePhysics();
     uint16_t clientPortHost();
     uint16_t clientPortJoin();
@@ -62,6 +63,7 @@ private:
     bool _physicsLoggingEnabled;
     bool _audioDisabled;
     bool _musicDisabled;
+    float _volume;
     bool _extrapolatePhysics;
     uint16_t _clientPortHost;
     uint16_t _clientPortJoin;
