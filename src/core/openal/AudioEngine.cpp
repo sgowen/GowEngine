@@ -48,32 +48,43 @@ void AudioEngine::resume()
 
 void AudioEngine::render()
 {
-    for (uint32_t s : _soundsToPlay)
+    for (auto i = _soundsToPlay.begin(); i != _soundsToPlay.end(); ++i)
     {
-        OAL.play(s);
+        uint32_t alHandle = i->first;
+        SoundCommand& sc = i->second;
+        
+        OAL.setVolume(alHandle, sc._volume);
+        OAL.setLooping(alHandle, sc._isLooping);
+        
+        if (sc._numFramesSeekedAhead > 0)
+        {
+            OAL.seekAhead(alHandle, sc._numFramesSeekedAhead);
+        }
+        
+        OAL.play(alHandle);
     }
     _soundsToPlay.clear();
     
-    for (uint32_t s : _soundsToStop)
+    for (uint32_t alHandle : _soundsToStop)
     {
-        OAL.stop(s);
+        OAL.stop(alHandle);
     }
     _soundsToStop.clear();
 
-    for (uint32_t s : _soundsToPause)
+    for (uint32_t alHandle : _soundsToPause)
     {
-        OAL.pause(s);
+        OAL.pause(alHandle);
     }
     _soundsToPause.clear();
 
-    for (uint32_t s : _soundsToResume)
+    for (uint32_t alHandle : _soundsToResume)
     {
-        OAL.resume(s);
+        OAL.resume(alHandle);
     }
     _soundsToResume.clear();
 }
 
-uint32_t AudioEngine::playSound(std::string soundID, float volume, bool isLooping)
+uint32_t AudioEngine::playSound(std::string soundID, uint32_t numFramesSeekedAhead, float volume, bool isLooping)
 {
     if (ENGINE_CFG.audioDisabled())
     {
@@ -85,22 +96,9 @@ uint32_t AudioEngine::playSound(std::string soundID, float volume, bool isLoopin
     
     float realVolume = ENGINE_CFG.volume() * volume;
     
-    OAL.setVolume(alHandle, CLAMP(realVolume, 0, 1));
-    OAL.setLooping(alHandle, isLooping);
-    
-    _soundsToPlay.push_back(alHandle);
+    _soundsToPlay.emplace(alHandle, SoundCommand(numFramesSeekedAhead, CLAMP(realVolume, 0, 1), isLooping));
     
     return alHandle;
-}
-
-void AudioEngine::seekAhead(uint32_t alHandle, uint32_t numFrames)
-{
-    if (alHandle == 0 || numFrames == 0)
-    {
-        return;
-    }
-    
-    OAL.seekAhead(alHandle, numFrames);
 }
 
 void AudioEngine::stopSound(std::string soundID)
@@ -114,7 +112,8 @@ void AudioEngine::stopSound(std::string soundID)
     
     for (uint8_t i = 0; i < s._desc._numInstances; ++i)
     {
-        _soundsToStop.push_back(s.nextSource());
+        uint32_t alHandle = s.nextSource();
+        _soundsToStop.push_back(alHandle);
     }
 }
 
@@ -130,10 +129,7 @@ void AudioEngine::pauseSound(std::string soundID)
     for (uint8_t i = 0; i < s._desc._numInstances; ++i)
     {
         uint32_t alHandle = s.nextSource();
-        if (OAL.isPlaying(alHandle))
-        {
-            _soundsToPause.push_back(alHandle);
-        }
+        _soundsToPause.push_back(alHandle);
     }
 }
 
@@ -149,10 +145,7 @@ void AudioEngine::resumeSound(std::string soundID)
     for (uint8_t i = 0; i < s._desc._numInstances; ++i)
     {
         uint32_t alHandle = s.nextSource();
-        if (OAL.isPaused(alHandle))
-        {
-            _soundsToResume.push_back(alHandle);
-        }
+        _soundsToResume.push_back(alHandle);
     }
 }
 
@@ -175,10 +168,7 @@ void AudioEngine::stopAllSounds()
         for (uint8_t i = 0; i < s._desc._numInstances; ++i)
         {
             uint32_t alHandle = s.nextSource();
-            if (OAL.isPlaying(alHandle))
-            {
-                _soundsToStop.push_back(alHandle);
-            }
+            _soundsToStop.push_back(alHandle);
         }
     }
 }
@@ -209,10 +199,7 @@ void AudioEngine::pauseAllSounds()
         for (uint8_t i = 0; i < s._desc._numInstances; ++i)
         {
             uint32_t alHandle = s.nextSource();
-            if (OAL.isPlaying(alHandle))
-            {
-                _soundsToPause.push_back(alHandle);
-            }
+            _soundsToPause.push_back(alHandle);
         }
     }
     
@@ -245,10 +232,7 @@ void AudioEngine::resumeAllSounds()
         for (uint8_t i = 0; i < s._desc._numInstances; ++i)
         {
             uint32_t alHandle = s.nextSource();
-            if (OAL.isPaused(alHandle))
-            {
-                _soundsToResume.push_back(alHandle);
-            }
+            _soundsToResume.push_back(alHandle);
         }
     }
     

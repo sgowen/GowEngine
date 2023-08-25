@@ -22,8 +22,7 @@ public:
     void pause();
     void resume();
     void render();
-    uint32_t playSound(std::string soundID, float volume = 1.0f, bool isLooping = false);
-    void seekAhead(uint32_t alHandle, uint32_t numFrames);
+    uint32_t playSound(std::string soundID, uint32_t numFramesSeekedAhead = 0, float volume = 1.0f, bool isLooping = false);
     void stopSound(std::string soundID);
     void pauseSound(std::string soundID);
     void resumeSound(std::string soundID);
@@ -35,7 +34,23 @@ public:
 private:
     static AudioEngine* s_instance;
     
-    std::vector<uint32_t> _soundsToPlay;
+    struct SoundCommand {
+        uint32_t _numFramesSeekedAhead;
+        float _volume;
+        bool _isLooping;
+        
+        SoundCommand(uint32_t numFramesSeekedAhead,
+                     float volume,
+                     bool isLooping) :
+        _numFramesSeekedAhead(numFramesSeekedAhead),
+        _volume(volume),
+        _isLooping(isLooping)
+        {
+            // Empty
+        }
+    };
+    
+    std::map<uint32_t, SoundCommand> _soundsToPlay;
     std::vector<uint32_t> _soundsToStop;
     std::vector<uint32_t> _soundsToPause;
     std::vector<uint32_t> _soundsToResume;
