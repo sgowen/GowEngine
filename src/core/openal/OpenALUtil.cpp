@@ -187,7 +187,7 @@ void crashIfError()
 void OpenALUtil::loadSound(Sound& s)
 {
     ALenum format = convertToOpenALFormat(s._format);
-    if (ENGINE_CFG.fileLoggingEnabled())
+    if (ENGINE_CFG.logOpenAL())
     {
         LOG("OpenALUtil::loadSound: %s (%s, %dhz)", s._desc._filePath.c_str(), formatName(format), s._sampleRate);
     }
@@ -235,7 +235,7 @@ void OpenALUtil::loadSound(Sound& s)
 
 void OpenALUtil::unloadSound(Sound& s)
 {
-    if (ENGINE_CFG.fileLoggingEnabled())
+    if (ENGINE_CFG.logOpenAL())
     {
         LOG("OpenALUtil::unloadSound %s", s._desc._filePath.c_str());
     }

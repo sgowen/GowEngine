@@ -52,7 +52,6 @@ public:
     NosPhysicsController(Entity* e);
     virtual ~NosPhysicsController();
     
-    virtual void updatePoseFromBody() override;
     virtual void updateBodyFromPose() override;
     
     void step(float deltaTime);
@@ -63,12 +62,9 @@ public:
     
 private:
     std::vector<Bounds> _bounds;
-    Vector2 _velocity;
     Vector2 _velocityCache;
-    Vector2 _position;
     Vector2 _positionCache;
     float _tolerance;
-    uint8_t _numGroundContacts;
     bool _isBodyFacingLeft;
     
     bool crossesBottomEdge(float yourBottom, float myTop, float tolerance = 1.0f);

@@ -13,7 +13,7 @@ void ShaderLoader::loadData(Shader& s)
     std::string vertexShaderFilePath = s._desc._vertexShaderFilePath;
     std::string fragmentShaderFilePath = s._desc._fragmentShaderFilePath;
     
-    if (ENGINE_CFG.fileLoggingEnabled())
+    if (ENGINE_CFG.logOpenGL())
     {
         LOG("ShaderLoader::loadData %s %s", vertexShaderFilePath.c_str(), fragmentShaderFilePath.c_str());
     }
@@ -30,7 +30,7 @@ void ShaderLoader::freeData(Shader& s)
     std::string vertexShaderFilePath = s._desc._vertexShaderFilePath;
     std::string fragmentShaderFilePath = s._desc._fragmentShaderFilePath;
     
-    if (ENGINE_CFG.fileLoggingEnabled())
+    if (ENGINE_CFG.logOpenGL())
     {
         LOG("ShaderLoader::freeData %s %s", vertexShaderFilePath.c_str(), fragmentShaderFilePath.c_str());
     }

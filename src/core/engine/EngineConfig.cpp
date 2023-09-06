@@ -72,6 +72,16 @@ bool EngineConfig::glfwLoggingEnabled()
     return _glfwLoggingEnabled;
 }
 
+bool EngineConfig::logOpenGL()
+{
+    return _logOpenGL;
+}
+
+bool EngineConfig::logOpenAL()
+{
+    return _logOpenAL;
+}
+
 bool EngineConfig::fileLoggingEnabled()
 {
     return _fileLoggingEnabled;
@@ -157,6 +167,8 @@ _filePathEngineAssets(_config.getString("filePathEngineAssets")),
 _filePathEntityLayoutManager(_config.getString("filePathEntityLayoutManager")),
 _filePathEntityManager(_config.getString("filePathEntityManager")),
 _glfwLoggingEnabled(_config.getBool("glfwLoggingEnabled", false)),
+_logOpenGL(_config.getBool("logOpenGL", false)),
+_logOpenAL(_config.getBool("logOpenAL", false)),
 _fileLoggingEnabled(_config.getBool("fileLoggingEnabled", false)),
 _inputLoggingEnabled(_config.getBool("inputLoggingEnabled", false)),
 _networkLoggingEnabled(_config.getBool("networkLoggingEnabled", false)),

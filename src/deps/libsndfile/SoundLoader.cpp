@@ -82,7 +82,7 @@ static sf_count_t gowengine_sf_vio_tell (void* user_data)
 void SoundLoader::loadData(Sound& s)
 {
     const char* filePath = s._desc._filePath.c_str();
-    if (ENGINE_CFG.fileLoggingEnabled())
+    if (ENGINE_CFG.logOpenAL())
     {
         LOG("SoundLoader::loadData %s", filePath);
     }
@@ -326,7 +326,7 @@ void SoundLoader::loadData(Sound& s)
 
 void SoundLoader::freeData(Sound& s)
 {
-    if (ENGINE_CFG.fileLoggingEnabled())
+    if (ENGINE_CFG.logOpenAL())
     {
         LOG("SoundLoader::freeData %s", s._desc._filePath.c_str());
     }

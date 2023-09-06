@@ -19,13 +19,20 @@
 #include <map>
 #include <vector>
 
+enum Messages
+{
+    MSG_NONE = 0,
+    MSG_DAMAGE = 1
+};
+
 enum FixtureFlags
 {
     FIXF_SENSOR =         1 << 0,
     FIXF_GROUND_SENSOR =  1 << 1,
     FIXF_IGNORE_LEFT =    1 << 2,
     FIXF_IGNORE_RIGHT =   1 << 3,
-    FIXF_IGNORE_BOTTOM =  1 << 4
+    FIXF_IGNORE_BOTTOM =  1 << 4,
+    FIXF_DAMAGE_TOP =     1 << 5
 };
 
 struct FixtureDef

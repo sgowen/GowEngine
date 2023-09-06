@@ -313,7 +313,7 @@ void OpenGLUtil::unloadFramebuffer(Framebuffer& fb)
 
 void OpenGLUtil::loadTexture(Texture& t)
 {
-    if (ENGINE_CFG.fileLoggingEnabled())
+    if (ENGINE_CFG.logOpenGL())
     {
         LOG("OpenGLUtil::loadTexture %s", t._desc._filePath.c_str());
     }
@@ -325,7 +325,7 @@ void OpenGLUtil::loadTexture(Texture& t)
 
 void OpenGLUtil::unloadTexture(Texture& t)
 {
-    if (ENGINE_CFG.fileLoggingEnabled())
+    if (ENGINE_CFG.logOpenGL())
     {
         LOG("OpenGLUtil::unloadTexture %s", t._desc._filePath.c_str());
     }
@@ -342,7 +342,7 @@ void OpenGLUtil::loadShader(Shader& s)
     std::string vertexShaderFilePath = s._desc._vertexShaderFilePath;
     std::string fragmentShaderFilePath = s._desc._fragmentShaderFilePath;
     
-    if (ENGINE_CFG.fileLoggingEnabled())
+    if (ENGINE_CFG.logOpenGL())
     {
         LOG("OpenGLUtil::loadShader %s %s", vertexShaderFilePath.c_str(), fragmentShaderFilePath.c_str());
     }
@@ -361,7 +361,7 @@ void OpenGLUtil::loadShader(Shader& s)
 
     GLint numAttributes;
     glGetProgramiv(s._glHandle, GL_ACTIVE_ATTRIBUTES, &numAttributes);
-    if (ENGINE_CFG.fileLoggingEnabled())
+    if (ENGINE_CFG.logOpenGL())
     {
         LOG("Active Attributes: %d", numAttributes);
     }
@@ -371,7 +371,7 @@ void OpenGLUtil::loadShader(Shader& s)
     {
         glGetActiveAttrib(s._glHandle, (GLuint)i, glslVarNameBufferSize, &glslVarNameLength, &glslVarNumElements, &glslVarType, glslVarName);
 
-        if (ENGINE_CFG.fileLoggingEnabled())
+        if (ENGINE_CFG.logOpenGL())
         {
             LOG("Attribute #%d Type: %u Name: %s Length: %d Count: %d", i, glslVarType, glslVarName, glslVarNameLength, glslVarNumElements);
         }
@@ -383,7 +383,7 @@ void OpenGLUtil::loadShader(Shader& s)
 
     GLint numUniforms;
     glGetProgramiv(s._glHandle, GL_ACTIVE_UNIFORMS, &numUniforms);
-    if (ENGINE_CFG.fileLoggingEnabled())
+    if (ENGINE_CFG.logOpenGL())
     {
         LOG("Active Uniforms: %d", numUniforms);
     }
@@ -393,7 +393,7 @@ void OpenGLUtil::loadShader(Shader& s)
     {
         glGetActiveUniform(s._glHandle, (GLuint)i, glslVarNameBufferSize, &glslVarNameLength, &glslVarNumElements, &glslVarType, glslVarName);
         
-        if (ENGINE_CFG.fileLoggingEnabled())
+        if (ENGINE_CFG.logOpenGL())
         {
             LOG("Uniform #%d Type: %u Name: %s Length: %d Count: %d", i, glslVarType, glslVarName, glslVarNameLength, glslVarNumElements);
         }
@@ -424,7 +424,7 @@ void OpenGLUtil::unloadShader(Shader& s)
     std::string vertexShaderFilePath = s._desc._vertexShaderFilePath;
     std::string fragmentShaderFilePath = s._desc._fragmentShaderFilePath;
     
-    if (ENGINE_CFG.fileLoggingEnabled())
+    if (ENGINE_CFG.logOpenGL())
     {
         LOG("OpenGLUtil::unloadShader %s %s", vertexShaderFilePath.c_str(), fragmentShaderFilePath.c_str());
     }

@@ -60,6 +60,7 @@ void Entity::processInput(uint16_t inputState)
     
     EntityController* ec = controller();
     assert(ec != nullptr);
+    
     ec->processInput(inputState);
     _state._lastProcessedInputState = inputState;
     
@@ -74,11 +75,6 @@ void Entity::update()
     if (isExiled())
     {
         return;
-    }
-    
-    if (_physicsController != nullptr)
-    {
-        _physicsController->updatePoseFromBody();
     }
     
     if (position()._y < 0)

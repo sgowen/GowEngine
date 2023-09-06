@@ -21,7 +21,6 @@ public:
     EntityPhysicsController(Entity* e);
     virtual ~EntityPhysicsController();
     
-    virtual void updatePoseFromBody() = 0;
     virtual void updateBodyFromPose() = 0;
     
 protected:

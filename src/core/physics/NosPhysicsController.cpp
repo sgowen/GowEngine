@@ -11,11 +11,8 @@
 IMPL_RTTI(NosPhysicsController, EntityPhysicsController)
 
 NosPhysicsController::NosPhysicsController(Entity* e) : EntityPhysicsController(e),
-_velocity(e->velocity()),
-_velocityCache(_velocity),
-_position(e->position()),
-_positionCache(_position),
-_numGroundContacts(0),
+_velocityCache(e->velocity()),
+_positionCache(e->position()),
 _isBodyFacingLeft(false)
 {
     createFixtures();
@@ -26,28 +23,19 @@ NosPhysicsController::~NosPhysicsController()
     destroyFixtures();
 }
 
-void NosPhysicsController::updatePoseFromBody()
-{
-    _entity->velocity().set(_velocity._x, _velocity._y);
-    _entity->position().set(_position._x, _position._y);
-    _entity->pose()._numGroundContacts = _numGroundContacts;
-}
-
 void NosPhysicsController::updateBodyFromPose()
 {
-    _velocity.set(_entity->velocity());
-    _position.set(_entity->position());
-    _numGroundContacts = _entity->pose()._numGroundContacts;
-    
     if (_isBodyFacingLeft != _entity->isXFlipped())
     {
         destroyFixtures();
         createFixtures();
     }
     
+    Entity::Pose& p =_entity->pose();
+    
     for (Bounds& b : _bounds)
     {
-        b.updateForPosition(_position);
+        b.updateForPosition(p._position);
     }
 }
 
@@ -58,51 +46,53 @@ void NosPhysicsController::step(float deltaTime)
         return;
     }
     
-    if (_entity->pose()._isSlowed)
+    Entity::Pose& p =_entity->pose();
+    
+    if (p._isSlowed)
     {
         static float slowedDeltaTime = deltaTime / 8;
         deltaTime = slowedDeltaTime;
     }
     
-    if (!_entity->pose()._isZeroGravity)
+    if (!p._isZeroGravity)
     {
         float gravity = _entity->data().getFloat("gravity");
-        _velocity.add(0, gravity * deltaTime);
+        p._velocity.add(0, gravity * deltaTime);
     }
-    _tolerance = fabsf(_velocity._y * deltaTime * 2);
-    _position.add(_velocity._x * deltaTime, _velocity._y * deltaTime);
+    _tolerance = fabsf(p._velocity._y * deltaTime * 2);
+    p._position.add(p._velocity._x * deltaTime, p._velocity._y * deltaTime);
     for (Bounds& b : _bounds)
     {
-        b.updateForPosition(_position);
+        b.updateForPosition(p._position);
     }
     
-    _numGroundContacts = 0;
+    p._numGroundContacts = 0;
     
     if (ENGINE_CFG.physicsLoggingEnabled())
     {
-        LOG("_velocity: %f, %f", _velocity._x, _velocity._y);
-        LOG("_position: %f, %f", _position._x, _position._y);
+        LOG("_velocity: %f, %f", p._velocity._x, p._velocity._y);
+        LOG("_position: %f, %f", p._position._x, p._position._y);
     }
 }
 
 void NosPhysicsController::extrapolate(float extrapolation)
 {
-    _velocityCache = _velocity;
-    _positionCache = _position;
+    Entity::Pose& p =_entity->pose();
+    
+    _velocityCache = p._velocity;
+    _positionCache = p._position;
     
     float gravity = _entity->data().getFloat("gravity");
-    _velocity.add(0, gravity * extrapolation);
-    _position.add(_velocity._x * extrapolation, _velocity._y * extrapolation);
-    
-    updatePoseFromBody();
+    p._velocity.add(0, gravity * extrapolation);
+    p._position.add(p._velocity._x * extrapolation, p._velocity._y * extrapolation);
 }
 
 void NosPhysicsController::endExtrapolation()
 {
-    _velocity = _velocityCache;
-    _position = _positionCache;
+    Entity::Pose& p =_entity->pose();
     
-    updatePoseFromBody();
+    p._velocity = _velocityCache;
+    p._position = _positionCache;
 }
 
 void NosPhysicsController::processCollisions(std::vector<Entity*>& entities)
@@ -111,6 +101,8 @@ void NosPhysicsController::processCollisions(std::vector<Entity*>& entities)
     {
         return;
     }
+    
+    Entity::Pose& p =_entity->pose();
     
     for (Entity* e : entities)
     {
@@ -164,15 +156,15 @@ void NosPhysicsController::processCollisions(std::vector<Entity*>& entities)
                         crossesBottomEdge(yb, mt, _tolerance) &&
                         mb < yb && (mr > yl || ml < yr);
                         
-                        b = _velocity._y < 0 &&
+                        b = p._velocity._y < 0 &&
                         crossesTopEdge(yt, mb, _tolerance) &&
                         mt > yt && (mr > yl || ml < yr);
                         
                         if (t)
                         {
-                            _position.sub(0, mt - yb);
-                            _velocity._y = 0;
-                            myBounds.updateForPosition(_position);
+                            p._position.sub(0, mt - yb);
+                            p._velocity._y = 0;
+                            myBounds.updateForPosition(p._position);
                             if (ENGINE_CFG.physicsLoggingEnabled())
                             {
                                 LOG("top");
@@ -180,9 +172,14 @@ void NosPhysicsController::processCollisions(std::vector<Entity*>& entities)
                         }
                         else if (b)
                         {
-                            _position.add(0, yt - mb);
-                            _velocity._y = 0;
-                            myBounds.updateForPosition(_position);
+                            p._position.add(0, yt - mb);
+                            p._velocity._y = 0;
+                            myBounds.updateForPosition(p._position);
+                            if (IS_BIT_SET(yourBounds._flags, FIXF_DAMAGE_TOP))
+                            {
+                                _entity->message(MSG_DAMAGE);
+                            }
+                            
                             if (ENGINE_CFG.physicsLoggingEnabled())
                             {
                                 LOG("bottom");
@@ -217,9 +214,9 @@ void NosPhysicsController::processCollisions(std::vector<Entity*>& entities)
                         
                         if (r)
                         {
-                            _position.sub(mr - yl, 0);
-                            _velocity._x = 0;
-                            myBounds.updateForPosition(_position);
+                            p._position.sub(mr - yl, 0);
+                            p._velocity._x = 0;
+                            myBounds.updateForPosition(p._position);
                             if (ENGINE_CFG.physicsLoggingEnabled())
                             {
                                 LOG("right");
@@ -227,9 +224,9 @@ void NosPhysicsController::processCollisions(std::vector<Entity*>& entities)
                         }
                         else if (l)
                         {
-                            _position.add(yr - ml, 0);
-                            _velocity._x = 0;
-                            myBounds.updateForPosition(_position);
+                            p._position.add(yr - ml, 0);
+                            p._velocity._x = 0;
+                            myBounds.updateForPosition(p._position);
                             if (ENGINE_CFG.physicsLoggingEnabled())
                             {
                                 LOG("left");
@@ -247,7 +244,7 @@ void NosPhysicsController::processCollisions(std::vector<Entity*>& entities)
                 continue;
             }
             
-            myBounds.updateForPosition(_position);
+            myBounds.updateForPosition(p._position);
             Rektangle& myBoundingBox = myBounds._boundingBox;
             for (Bounds& yourBounds : epc->_bounds)
             {
@@ -255,7 +252,7 @@ void NosPhysicsController::processCollisions(std::vector<Entity*>& entities)
                 if (b &&
                     OverlapTester::doRektanglesOverlap(myBoundingBox, yourBoundingBox))
                 {
-                    ++_numGroundContacts;
+                    ++p._numGroundContacts;
                 }
             }
         }

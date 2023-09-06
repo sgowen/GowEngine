@@ -14,7 +14,7 @@
 void TextureLoader::loadData(Texture& t)
 {
     std::string filePath = t._desc._filePath;
-    if (ENGINE_CFG.fileLoggingEnabled())
+    if (ENGINE_CFG.logOpenGL())
     {
         LOG("TextureLoader::loadData %s", filePath.c_str());
     }
@@ -38,7 +38,7 @@ void TextureLoader::freeData(Texture& t)
 {
     std::string filePath = t._desc._filePath;
     
-    if (ENGINE_CFG.fileLoggingEnabled())
+    if (ENGINE_CFG.logOpenGL())
     {
         LOG("TextureLoader::freeData %s", filePath.c_str());
     }
