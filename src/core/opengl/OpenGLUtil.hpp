@@ -38,7 +38,9 @@ public:
     void unbindShader(Shader& s);
     void bindMatrix(Shader& s, std::string uniform, mat4& matrix);
     void bindColor(Shader& s, std::string uniform, Color& c);
+    void bindInt(Shader& s, std::string uniform, int value);
     void bindInt4(Shader& s, std::string uniform, ivec4& value);
+    void bindFloat(Shader& s, std::string uniform, float value);
     void bindFloat4(Shader& s, std::string uniform, vec4& value);
     void bindFloat4Array(Shader& s, std::string uniform, int count, vec4* value);
     void bindTexture(Shader& s, std::string uniform, uint32_t index, Texture& t);

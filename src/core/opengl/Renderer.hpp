@@ -17,7 +17,9 @@
 #include "SpriteBatcher.hpp"
 #include "TextView.hpp"
 #include "TriangleBatcher.hpp"
+#include "ShockwaveRenderer.hpp"
 #include "ScreenRenderer.hpp"
+#include "FramebufferRenderer.hpp"
 #include "NosPhysicsRenderer.hpp"
 
 #include <map>
@@ -65,7 +67,11 @@ public:
     
     void renderNosPhysics(NosPhysicsWorld* world, std::string matrixKey = "main", std::string shaderKey = "geometry");
     
+    void renderFramebufferWithShockwave(std::string framebufferKey, float centerX, float centerY, float timeElapsed, bool isTransforming);
+    void renderFramebuffer(std::string framebufferKey, std::string shaderKey = "framebuffer");
+    
     void renderToScreen(std::string framebufferKey = "main", std::string shaderKey = "framebuffer");
+    void renderCurrentlyBoundFramebufferToScreen(std::string shaderKey = "framebuffer");
     
     CircleBatcher& circleBatcher(std::string key = "main");
     FontBatcher& fontBatcher(std::string key = "main");
@@ -79,6 +85,8 @@ public:
     
 private:
     NosPhysicsRenderer _nosPhysicsRenderer;
+    ShockwaveRenderer _shockwaveRenderer;
+    FramebufferRenderer _framebufferRenderer;
     ScreenRenderer _screenRenderer;
     std::map<std::string, CircleBatcher> _circleBatchers;
     std::map<std::string, FontBatcher> _fontBatchers;
@@ -90,6 +98,7 @@ private:
     std::map<std::string, TextView> _textViews;
     std::map<std::string, TriangleBatcher> _triangleBatchers;
     uint8_t _pixelToUnitRatio;
+    std::string _currentlyBoundFramebufferKey;
     
     void spriteBatcherAddEntity(SpriteBatcher& sb, Entity& e);
 };

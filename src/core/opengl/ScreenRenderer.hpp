@@ -22,11 +22,12 @@ public:
     void onWindowSizeChanged(uint16_t screenWidth, uint16_t screenHeight);
     void destroyDeviceDependentResources();
     void renderToScreen(Shader& s, Framebuffer& fb);
-    void renderFramebuffer(Shader& s, Framebuffer& fb);
     
 private:
     uint32_t _vertexBuffer;
     uint32_t _indexBuffer;
     int _screenWidth;
     int _screenHeight;
+    
+    void renderFramebuffer(Shader& s, Framebuffer& fb);
 };

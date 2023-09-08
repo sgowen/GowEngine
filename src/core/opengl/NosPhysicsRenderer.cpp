@@ -58,7 +58,7 @@ void NosPhysicsRenderer::render(NosPhysicsWorld* world, mat4* matrix, Shader* sh
                 _fillRektangleBatcher.addRektangle(b._boundingBox);
             }
         }
-        for (Entity* e : world->getNetworkEntities())
+        for (Entity* e : world->getDynamicEntities())
         {
             NosPhysicsController* epc = e->physicsController<NosPhysicsController>();
             
@@ -105,7 +105,7 @@ void NosPhysicsRenderer::render(NosPhysicsWorld* world, mat4* matrix, Shader* sh
                 _boundsRektangleBatcher.addRektangle(b._boundingBox);
             }
         }
-        for (Entity* e : world->getNetworkEntities())
+        for (Entity* e : world->getDynamicEntities())
         {
             NosPhysicsController* epc = e->physicsController<NosPhysicsController>();
             

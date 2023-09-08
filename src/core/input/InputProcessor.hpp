@@ -6,6 +6,8 @@
 //  Copyright © 2021 Stephen Gowen. All rights reserved.
 //
 
+#pragma once
+
 enum InputProcessorState
 {
     IPS_DEFAULT,

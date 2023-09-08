@@ -8,6 +8,16 @@
 
 #pragma once
 
+/// Config
+#define FILE_PATH_ENGINE_CONFIG            "data/json/Engine/Config.json"
+#define FILE_PATH_TITLE_ENGINE_STATE_CONFIG "data/json/TitleEngineState/Config.json"
+#define FILE_PATH_GAME_ENGINE_STATE_CONFIG "data/json/GameEngineState/Config.json"
+
+/// Game Engine State Args
+#define ARG_IP_ADDRESS "ARG_IP_ADDRESS"
+#define ARG_USERNAME "ARG_USERNAME"
+#define ARG_OFFLINE_MODE "ARG_OFFLINE_MODE"
+
 /// Engine
 #define ENGINE_ASSETS "aaa_load_this_first"
 #define MAX_NUM_PLAYERS 4

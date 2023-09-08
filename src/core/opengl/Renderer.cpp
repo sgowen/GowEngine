@@ -10,8 +10,11 @@
 
 Renderer::Renderer() :
 _nosPhysicsRenderer(2048),
+_shockwaveRenderer(),
+_framebufferRenderer(),
 _screenRenderer(),
-_pixelToUnitRatio(1)
+_pixelToUnitRatio(1),
+_currentlyBoundFramebufferKey("null")
 {
     // Empty
 }
@@ -19,6 +22,8 @@ _pixelToUnitRatio(1)
 void Renderer::createDeviceDependentResources()
 {
     _nosPhysicsRenderer.createDeviceDependentResources();
+    _shockwaveRenderer.createDeviceDependentResources();
+    _framebufferRenderer.createDeviceDependentResources();
     _screenRenderer.createDeviceDependentResources();
     
     for (auto& pair : _circleBatchers)
@@ -60,6 +65,8 @@ void Renderer::onWindowSizeChanged(uint16_t screenWidth, uint16_t screenHeight)
 void Renderer::destroyDeviceDependentResources()
 {
     _nosPhysicsRenderer.destroyDeviceDependentResources();
+    _shockwaveRenderer.destroyDeviceDependentResources();
+    _framebufferRenderer.destroyDeviceDependentResources();
     _screenRenderer.destroyDeviceDependentResources();
     
     for (auto& pair : _circleBatchers)
@@ -122,6 +129,8 @@ void Renderer::bindFramebuffer(std::string framebufferKey, bool enableBlending)
     Framebuffer& fb = framebuffer(framebufferKey);
     OGL.bindFramebuffer(fb);
     OGL.enableBlending(enableBlending);
+    
+    _currentlyBoundFramebufferKey = framebufferKey;
 }
 
 void Renderer::clearFramebuffer(Color& c)
@@ -327,10 +336,33 @@ void Renderer::renderNosPhysics(NosPhysicsWorld* world, std::string matrixKey, s
     _nosPhysicsRenderer.render(world, &m._matrix, &s);
 }
 
+void Renderer::renderFramebufferWithShockwave(std::string framebufferKey, float centerX, float centerY, float timeElapsed, bool isTransforming)
+{
+    Shader& s = ASSETS_MGR.shader("shockwave");
+    Framebuffer& fb = framebuffer(framebufferKey);
+    Matrix& m = matrix();
+    
+    _shockwaveRenderer.renderShockwave(s, fb, m, centerX, centerY, timeElapsed, isTransforming);
+}
+
+void Renderer::renderFramebuffer(std::string framebufferKey, std::string shaderKey)
+{
+    Shader& s = ASSETS_MGR.shader(shaderKey);
+    Framebuffer& fb = framebuffer(framebufferKey);
+    
+    _framebufferRenderer.renderFramebuffer(s, fb);
+}
+
 void Renderer::renderToScreen(std::string framebufferKey, std::string shaderKey)
 {
     Shader& s = ASSETS_MGR.shader(shaderKey);
-    _screenRenderer.renderToScreen(s, framebuffer(framebufferKey));
+    Framebuffer& fb = framebuffer(framebufferKey);
+    _screenRenderer.renderToScreen(s, fb);
+}
+
+void Renderer::renderCurrentlyBoundFramebufferToScreen(std::string shaderKey)
+{
+    renderToScreen(_currentlyBoundFramebufferKey, shaderKey);
 }
 
 CircleBatcher& Renderer::circleBatcher(std::string key)

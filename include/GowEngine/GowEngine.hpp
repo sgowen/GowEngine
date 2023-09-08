@@ -82,6 +82,10 @@
 #include "core/engine/Engine.hpp"
 #include "core/engine/EngineConfig.hpp"
 #include "core/engine/EngineState.hpp"
+#include "core/engine/GameClientEngineState.hpp"
+#include "core/engine/GameHostEngineState.hpp"
+#include "core/engine/GameServerEngineState.hpp"
+#include "core/engine/TitleEngineState.hpp"
 
 /// Core Entity
 #include "core/entity/Entity.hpp"
@@ -93,6 +97,7 @@
 #include "core/entity/EntityPhysicsController.hpp"
 #include "core/entity/EntityRegistry.hpp"
 #include "core/entity/EntityRenderController.hpp"
+#include "core/entity/JonController.hpp"
 
 /// Core Input
 #include "core/input/ClipboardHandler.hpp"
@@ -149,6 +154,7 @@
 #include "core/opengl/Color.hpp"
 #include "core/opengl/FontBatcher.hpp"
 #include "core/opengl/Framebuffer.hpp"
+#include "core/opengl/FramebufferRenderer.hpp"
 #include "core/opengl/LightRenderer.hpp"
 #include "core/opengl/LineBatcher.hpp"
 #include "core/opengl/Matrix.hpp"
@@ -163,6 +169,7 @@
 #include "core/opengl/ShaderLoader.hpp"
 #include "core/opengl/ShaderManager.hpp"
 #include "core/opengl/ShaderUniform.hpp"
+#include "core/opengl/ShockwaveRenderer.hpp"
 #include "core/opengl/SpriteBatcher.hpp"
 #include "core/opengl/TextView.hpp"
 #include "core/opengl/Texture.hpp"

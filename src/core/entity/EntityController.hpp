@@ -22,7 +22,7 @@ public:
     virtual ~EntityController();
     
     virtual void processInput(uint16_t inputState);
-    virtual void onUpdate();
+    virtual void onUpdate(uint32_t numMovesProcessed);
     virtual void onMessage(uint16_t message);
     
 protected:

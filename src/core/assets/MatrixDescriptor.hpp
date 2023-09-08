@@ -39,6 +39,16 @@ struct MatrixDescriptor
         // Empty
     }
     
+    float centerX()
+    {
+        return _left + width() / 2;
+    }
+    
+    float centerY()
+    {
+        return _bottom + height() / 2;
+    }
+    
     float width()
     {
         return _right - _left;

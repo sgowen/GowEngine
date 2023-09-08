@@ -64,7 +64,7 @@ void World::addNetworkEntity(Entity* e)
     }
     else if (e->isDynamic())
     {
-        _networkEntities.push_back(e);
+        _dynamicEntities.push_back(e);
     }
 }
 
@@ -78,14 +78,14 @@ void World::removeNetworkEntity(Entity* e)
     }
     else if (e->isDynamic())
     {
-        removeEntity(e, _networkEntities);
+        removeEntity(e, _dynamicEntities);
     }
 }
 
 void World::removeAllNetworkEntities()
 {
     removeAllEntities(_players);
-    removeAllEntities(_networkEntities);
+    removeAllEntities(_dynamicEntities);
 }
 
 void World::storeToCache()
@@ -95,7 +95,7 @@ void World::storeToCache()
         e->networkController()->storeToCache(_numMovesProcessed);
     }
     
-    for (Entity* e : _networkEntities)
+    for (Entity* e : _dynamicEntities)
     {
         e->networkController()->storeToCache(_numMovesProcessed);
     }
@@ -111,7 +111,7 @@ void World::recallCache(uint32_t numMovesProcessed)
         e->physicsController()->updateBodyFromPose();
     }
     
-    for (Entity* e : _networkEntities)
+    for (Entity* e : _dynamicEntities)
     {
         e->networkController()->recallCache(numMovesProcessed);
         e->physicsController()->updateBodyFromPose();
@@ -125,7 +125,7 @@ void World::clearCache(uint32_t numMovesProcessed)
         e->networkController()->clearCache(numMovesProcessed);
     }
     
-    for (Entity* e : _networkEntities)
+    for (Entity* e : _dynamicEntities)
     {
         e->networkController()->clearCache(numMovesProcessed);
     }
@@ -138,7 +138,7 @@ void World::beginFrame()
         e->beginFrame();
     }
     
-    for (Entity* e : _networkEntities)
+    for (Entity* e : _dynamicEntities)
     {
         e->beginFrame();
     }
@@ -149,16 +149,16 @@ std::vector<Entity*> World::update()
     std::vector<Entity*> toDelete;
     for (Entity* e : _players)
     {
-        e->update();
+        e->update(_numMovesProcessed);
         if (e->isRequestingDeletion())
         {
             toDelete.push_back(e);
         }
     }
     
-    for (Entity* e : _networkEntities)
+    for (Entity* e : _dynamicEntities)
     {
-        e->update();
+        e->update(_numMovesProcessed);
         if (e->isRequestingDeletion())
         {
             toDelete.push_back(e);
@@ -210,9 +210,9 @@ std::vector<Entity*>& World::getStaticEntities()
     return _staticEntities;
 }
 
-std::vector<Entity*>& World::getNetworkEntities()
+std::vector<Entity*>& World::getDynamicEntities()
 {
-    return _networkEntities;
+    return _dynamicEntities;
 }
 
 std::vector<Entity*>& World::getPlayers()

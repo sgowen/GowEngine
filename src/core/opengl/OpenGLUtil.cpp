@@ -84,12 +84,28 @@ void OpenGLUtil::bindColor(Shader& s, std::string uniform, Color& c)
     glUniform4f(su._glHandle, c._red, c._green, c._blue, c._alpha);
 }
 
+void OpenGLUtil::bindInt(Shader& s, std::string uniform, int value)
+{
+    ShaderUniform& su = s.uniform(uniform);
+    assert(su._type == GL_INT);
+    
+    glUniform1i(su._glHandle, value);
+}
+
 void OpenGLUtil::bindInt4(Shader& s, std::string uniform, ivec4& value)
 {
     ShaderUniform& su = s.uniform(uniform);
     assert(su._type == GL_INT_VEC4);
     
     glUniform4i(su._glHandle, value[0], value[1], value[2], value[3]);
+}
+
+void OpenGLUtil::bindFloat(Shader& s, std::string uniform, float value)
+{
+    ShaderUniform& su = s.uniform(uniform);
+    assert(su._type == GL_FLOAT);
+    
+    glUniform1f(su._glHandle, value);
 }
 
 void OpenGLUtil::bindFloat4(Shader& s, std::string uniform, vec4& value)

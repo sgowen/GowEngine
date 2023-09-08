@@ -70,7 +70,7 @@ void Entity::processInput(uint16_t inputState)
     }
 }
 
-void Entity::update()
+void Entity::update(uint32_t numMovesProcessed)
 {
     if (isExiled())
     {
@@ -83,7 +83,7 @@ void Entity::update()
         return;
     }
     
-    _controller->onUpdate();
+    _controller->onUpdate(numMovesProcessed);
 }
 
 void Entity::message(uint16_t message)

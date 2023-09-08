@@ -27,7 +27,7 @@ void EntityController::processInput(uint16_t inputState)
     // Empty
 }
 
-void EntityController::onUpdate()
+void EntityController::onUpdate(uint32_t numMovesProcessed)
 {
     // Empty
 }

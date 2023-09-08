@@ -454,7 +454,7 @@ public:
     
     void beginFrame();
     void processInput(uint16_t inputState);
-    void update();
+    void update(uint32_t numMovesProcessed);
     void message(uint16_t message);
     EntityDef& entityDef();
     Config& data();
