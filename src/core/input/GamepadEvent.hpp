@@ -3,7 +3,7 @@
 //  GowEngine
 //
 //  Created by Stephen Gowen on 1/21/17.
-//  Copyright © 2021 Stephen Gowen. All rights reserved.
+//  Copyright © 2023 Stephen Gowen. All rights reserved.
 //
 
 #pragma once
