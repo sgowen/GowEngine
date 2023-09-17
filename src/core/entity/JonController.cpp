@@ -26,11 +26,6 @@ void JonController::processInput(uint16_t inputState)
         processMovementInput(inputState);
     }
     
-    if (isJumpInputAllowed())
-    {
-        processJumpInput(inputState);
-    }
-    
     if (isAttackInputAllowed())
     {
         processAttackInput(inputState);
@@ -49,6 +44,11 @@ void JonController::processInput(uint16_t inputState)
     if (isSpecialInputAllowed())
     {
         processSpecialInput(inputState);
+    }
+    
+    if (isJumpInputAllowed())
+    {
+        processJumpInput(inputState);
     }
 }
 
