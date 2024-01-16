@@ -16,3 +16,6 @@
 [submodule "deps/stb"]
 	path = deps/stb
 	url = git@github.com:nothings/stb.git
+[submodule "deps/steamworks_sdk"]
+	path = deps/steamworks_sdk
+	url = git@github.com:sgowen/steamworks_sdk.git
