@@ -1,26 +1,14 @@
 //
 //  NGSteamPacketHandler.cpp
-//  noctisgames
+//  GowEngine
 //
 //  Created by Stephen Gowen on 6/15/17.
-//  Copyright (c) 2017 Noctis Games. All rights reserved.
+//  Copyright © 2023 Stephen Gowen. All rights reserved.
 //
 
-#include "pch.h"
+#include <GowEngine/GowEngine.hpp>
 
-#include <framework/network/steam/NGSteamPacketHandler.h>
-
-#include <framework/network/portable/OutputMemoryBitStream.h>
-#include <framework/network/portable/MachineAddress.h>
-
-#include <framework/network/portable/InputMemoryBitStream.h>
-#include <framework/util/Timing.h>
-#include <framework/network/steam/NGSteam.h>
-#include <framework/util/Constants.h>
-#include <framework/util/StringUtil.h>
-#include <framework/network/portable/Network.h>
-
-#include <assert.h>
+#if IS_DESKTOP
 
 NGSteamPacketHandler::NGSteamPacketHandler(Timing* timing, bool isServer, ProcessPacketFunc processPacketFunc, HandleNoResponseFunc handleNoResponseFunc, HandleConnectionResetFunc handleConnectionResetFunc) : PacketHandler(timing, isServer, processPacketFunc, handleNoResponseFunc, handleConnectionResetFunc)
 {
@@ -156,3 +144,5 @@ InputMemoryBitStream& NGSteamPacketHandler::ReceivedPacket::getPacketBuffer()
 {
     return _packetBuffer;
 }
+
+#endif /* IS_DESKTOP */

@@ -28,6 +28,7 @@ A basic no nonsense LGPL 2.1 licensed portable C++ 2D game engine
 * [openal-soft](https://github.com/kcat/openal-soft): renders audio
 * [rapidjson](https://github.com/Tencent/rapidjson): loads json
 * [stb](https://github.com/nothings/stb): loads textures
+* [steamworks_sdk](https://github.com/sgowen/steamworks_sdk): integrates with Steam
 
 ## Building
 * Template projects for various platforms reside in [GowEngineMount](https://github.com/sgowen/GowEngineMount), simply clone it into the same directory as GowEngine side by side

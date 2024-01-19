@@ -1,17 +1,14 @@
 //
 //  NGSteamGameServer.cpp
-//  noctisgames
+//  GowEngine
 //
 //  Created by Stephen Gowen on 6/13/17.
-//  Copyright (c) 2017 Noctis Games. All rights reserved.
+//  Copyright © 2023 Stephen Gowen. All rights reserved.
 //
 
-#include "pch.h"
+#include <GowEngine/GowEngine.hpp>
 
-#include <framework/network/steam/NGSteamGameServer.h>
-
-#include <framework/util/StringUtil.h>
-#include <framework/util/macros.h>
+#if IS_DESKTOP
 
 NGSteamGameServer::NGSteamGameServer(gameserveritem_t *pGameServerItem)
 {
@@ -60,3 +57,5 @@ CSteamID NGSteamGameServer::getSteamID()
 {
     return _steamID;
 }
+
+#endif /* IS_DESKTOP */

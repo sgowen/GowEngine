@@ -1,16 +1,18 @@
 //
-//  NGSteamGameServices.h
-//  noctisgames
+//  NGSteamGameServices.hpp
+//  GowEngine
 //
 //  Created by Stephen Gowen on 6/11/17.
-//  Copyright (c) 2017 Noctis Games. All rights reserved.
+//  Copyright © 2023 Stephen Gowen. All rights reserved.
 //
 
-#ifndef __noctisgames__NGSteamGameServices__
-#define __noctisgames__NGSteamGameServices__
+#pragma once
 
-#include <framework/network/steam/NGSteam.h>
-#include <framework/network/steam/NGSteamGameServer.h>
+#include <GowEngine/BuildConstants.hpp>
+#if IS_DESKTOP
+
+#include <framework/network/steam/NGSteam.hpp>
+#include <framework/network/steam/NGSteamGameServer.hpp>
 
 #include <string>
 #include <vector>
@@ -114,4 +116,4 @@ private:
     NGSteamGameServices& operator=(const NGSteamGameServices&);
 };
 
-#endif /* defined(__noctisgames__NGSteamGameServices__) */
+#endif /* IS_DESKTOP */

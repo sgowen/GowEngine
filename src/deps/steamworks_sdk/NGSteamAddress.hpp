@@ -1,17 +1,19 @@
 //
-//  NGSteamAddress.h
-//  noctisgames
+//  NGSteamAddress.hpp
+//  GowEngine
 //
 //  Created by Stephen Gowen on 5/15/17.
-//  Copyright (c) 2017 Noctis Games. All rights reserved.
+//  Copyright © 2023 Stephen Gowen. All rights reserved.
 //
 
-#ifndef __noctisgames__NGSteamAddress__
-#define __noctisgames__NGSteamAddress__
+#pragma once
 
-#include <framework/network/portable/MachineAddress.h>
+#include <GowEngine/BuildConstants.hpp>
+#if IS_DESKTOP
 
-#include <framework/network/steam/NGSteam.h>
+#include <framework/network/portable/MachineAddress.hpp>
+
+#include <framework/network/steam/NGSteam.hpp>
 
 class NGSteamAddress : public MachineAddress
 {
@@ -41,4 +43,4 @@ private:
     bool _isReliable;
 };
 
-#endif /* defined(__noctisgames__NGSteamAddress__) */
+#endif /* IS_DESKTOP */

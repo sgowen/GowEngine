@@ -1,27 +1,14 @@
 //
 //  NGSteamClientHelper.cpp
-//  noctisgames
+//  GowEngine
 //
 //  Created by Stephen Gowen on 6/17/17.
-//  Copyright (c) 2017 Noctis Games. All rights reserved.
+//  Copyright © 2023 Stephen Gowen. All rights reserved.
 //
 
-#include "pch.h"
+#include <GowEngine/GowEngine.hpp>
 
-#include <framework/network/steam/NGSteamClientHelper.h>
-
-#include <framework/network/steam/NGSteamP2PAuth.h>
-#include <framework/network/steam/NGSteamAddress.h>
-
-#include <framework/network/steam/NGSteamPacketHandler.h>
-#include <framework/util/macros.h>
-#include <framework/util/StringUtil.h>
-#include <framework/util/Timing.h>
-#include <framework/network/portable/OutputMemoryBitStream.h>
-#include <framework/network/steam/NGSteamGameServices.h>
-#include <framework/network/server/NetworkManagerServer.h>
-#include <framework/network/steam/NGSteamServerHelper.h>
-#include <framework/util/InstanceManager.h>
+#if IS_DESKTOP
 
 NGSteamClientHelper::NGSteamClientHelper(CSteamID inServerSteamID, GetPlayerAddressHashFunc inGetPlayerAddressHashFunc, ProcessPacketFunc inProcessPacketFunc, HandleNoResponseFunc inHandleNoResponseFunc, HandleConnectionResetFunc inHandleConnectionResetFunc) : ClientHelper(new NGSteamPacketHandler(static_cast<Timing*>(INSTANCE_MANAGER->get(INSTANCE_TIME_CLIENT)), false, inProcessPacketFunc, inHandleNoResponseFunc, inHandleConnectionResetFunc)),
 _steamP2PAuth(new NGSteamP2PAuth(this)),
@@ -302,3 +289,5 @@ void NGSteamClientHelper::updateState()
 {
     _state = _eConnectedStatus == k_EClientConnectedAndAuthenticated ? CLIENT_READY_TO_SAY_HELLO : (_eConnectedStatus == k_EClientConnectionFailure || _eConnectedStatus == k_EServerShuttingDown || _eConnectedStatus == k_EServerIsNotAuthorized) ? CLIENT_AUTH_FAILED : CLIENT_NOT_READY_TO_SAY_HELLO;
 }
+
+#endif /* IS_DESKTOP */

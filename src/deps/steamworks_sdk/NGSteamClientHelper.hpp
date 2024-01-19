@@ -1,19 +1,21 @@
 //
-//  NGSteamClientHelper.h
-//  noctisgames
+//  NGSteamClientHelper.hpp
+//  GowEngine
 //
 //  Created by Stephen Gowen on 6/17/17.
-//  Copyright (c) 2017 Noctis Games. All rights reserved.
+//  Copyright © 2023 Stephen Gowen. All rights reserved.
 //
 
-#ifndef __noctisgames__NGSteamClientHelper__
-#define __noctisgames__NGSteamClientHelper__
+#pragma once
 
-#include <framework/network/client/ClientHelper.h>
+#include <GowEngine/BuildConstants.hpp>
+#if IS_DESKTOP
 
-#include <framework/network/portable/PacketHandler.h>
-#include <framework/network/steam/NGSteam.h>
-#include <framework/util/Constants.h>
+#include <framework/network/client/ClientHelper.hpp>
+
+#include <framework/network/portable/PacketHandler.hpp>
+#include <framework/network/steam/NGSteam.hpp>
+#include <framework/util/Constants.hpp>
 
 class NGSteamP2PAuth;
 class NGSteamAddress;
@@ -63,4 +65,4 @@ private:
     void updateState();
 };
 
-#endif /* defined(__noctisgames__NGSteamClientHelper__) */
+#endif /* IS_DESKTOP */

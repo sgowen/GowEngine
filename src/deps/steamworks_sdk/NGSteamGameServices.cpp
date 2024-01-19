@@ -1,20 +1,14 @@
 //
 //  NGSteamGameServices.cpp
-//  noctisgames
+//  GowEngine
 //
 //  Created by Stephen Gowen on 6/11/17.
-//  Copyright (c) 2017 Noctis Games. All rights reserved.
+//  Copyright © 2023 Stephen Gowen. All rights reserved.
 //
 
-#include "pch.h"
+#include <GowEngine/GowEngine.hpp>
 
-#include <framework/network/steam/NGSteamGameServices.h>
-
-#include <framework/util/StringUtil.h>
-#include <framework/util/Constants.h>
-#include <framework/util/macros.h>
-
-#include <assert.h>
+#if IS_DESKTOP
 
 void alert(const char *lpCaption, const char *lpText)
 {
@@ -482,3 +476,5 @@ void NGSteamGameServices::GameServerPing::cancelPing()
 {
     _hGameServerQuery = HSERVERQUERY_INVALID;
 }
+
+#endif /* IS_DESKTOP */

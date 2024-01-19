@@ -1,17 +1,19 @@
 //
-//  NGSteamP2PAuth.h
-//  noctisgames
+//  NGSteamP2PAuth.hpp
+//  GowEngine
 //
 //  Created by Stephen Gowen on 6/20/17.
-//  Copyright (c) 2017 Noctis Games. All rights reserved.
+//  Copyright © 2023 Stephen Gowen. All rights reserved.
 //
 
-#ifndef __noctisgames__NGSteamP2PAuth__
-#define __noctisgames__NGSteamP2PAuth__
+#pragma once
 
-#include <framework/network/steam/NGSteam.h>
-#include <framework/util/Constants.h>
-#include <framework/util/MathUtil.h>
+#include <GowEngine/BuildConstants.hpp>
+#if IS_DESKTOP
+
+#include <framework/network/steam/NGSteam.hpp>
+#include <framework/util/Constants.hpp>
+#include <framework/util/MathUtil.hpp>
 
 class InputMemoryBitStream;
 class NetworkHelper;
@@ -112,4 +114,4 @@ private:
     uint64 _ulSteamID;
 };
 
-#endif /* defined(__noctisgames__NGSteamP2PAuth__) */
+#endif /* IS_DESKTOP */

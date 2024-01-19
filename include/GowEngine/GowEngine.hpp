@@ -26,13 +26,13 @@
 /// compiler variables
 #include "BuildConstants.hpp"
 
-/// glfw Implementation
+/// glfw implementation
 #include "deps/glfw/GlfwEngine.hpp"
 
-/// libsndfile Implementation
+/// libsndfile implementation
 #include "deps/libsndfile/SoundLoader.hpp"
 
-/// rapidjson Implementation
+/// rapidjson implementation
 #include "deps/rapidjson/AssetsLoader.hpp"
 #include "deps/rapidjson/ConfigLoader.hpp"
 #include "deps/rapidjson/EntityLayoutManagerLoader.hpp"
@@ -40,8 +40,19 @@
 #include "deps/rapidjson/RapidJSONUtil.hpp"
 #include "deps/rapidjson/RendererLoader.hpp"
 
-/// stb Implementation
+/// stb implementation
 #include "deps/stb/TextureLoader.hpp"
+
+/// steamworks_sdk implementation
+#include "deps/steamworks_sdk/NGSteam.hpp"
+#include "deps/steamworks_sdk/NGSteamAddress.hpp"
+#include "deps/steamworks_sdk/NGSteamClientHelper.hpp"
+#include "deps/steamworks_sdk/NGSteamClientHelper.hpp"
+#include "deps/steamworks_sdk/NGSteamGameServer.hpp"
+#include "deps/steamworks_sdk/NGSteamGameServices.hpp"
+#include "deps/steamworks_sdk/NGSteamP2PAuth.hpp"
+#include "deps/steamworks_sdk/NGSteamPacketHandler.hpp"
+#include "deps/steamworks_sdk/NGSteamServerHelper.hpp"
 
 /// Core Assets
 #include "core/assets/AndroidAssetHandler.hpp"

@@ -1,33 +1,14 @@
 //
 //  NGSteamServerHelper.cpp
-//  noctisgames
+//  GowEngine
 //
 //  Created by Stephen Gowen on 6/17/17.
-//  Copyright (c) 2017 Noctis Games. All rights reserved.
+//  Copyright © 2023 Stephen Gowen. All rights reserved.
 //
 
-#include "pch.h"
+#include <GowEngine/GowEngine.hpp>
 
-#include <framework/network/steam/NGSteamServerHelper.h>
-
-#include <framework/network/steam/NGSteamAddress.h>
-#include <framework/network/server/ClientProxy.h>
-
-#include <framework/network/steam/NGSteamPacketHandler.h>
-#include <framework/network/steam/NGSteamGameServices.h>
-#include <framework/util/StringUtil.h>
-#include <framework/util/Constants.h>
-#include <framework/network/portable/OutputMemoryBitStream.h>
-#include <framework/util/Timing.h>
-#include <framework/util/InstanceManager.h>
-
-#include <assert.h>
-
-// UDP port for the server to listen on
-#define STEAM_SERVER_PORT 27015
-
-// UDP port for the master server updater to listen on
-#define STEAM_MASTER_SERVER_UPDATER_PORT 27016
+#if IS_DESKTOP
 
 NGSteamServerHelper::NGSteamServerHelper(std::string inGameDir, std::string inVersionString, std::string inProductName, std::string inGameDescription, uint16 inPort, ProcessPacketFunc inProcessPacketFunc, HandleNoResponseFunc inHandleNoResponseFunc, HandleConnectionResetFunc inHandleConnectionResetFunc, GetClientProxyFunc inGetClientProxyFunc, HandleClientDisconnectedFunc inHandleClientDisconnectedFunc) : ServerHelper(new NGSteamPacketHandler(static_cast<Timing*>(INSTANCE_MANAGER->get(INSTANCE_TIME_SERVER)), true, inProcessPacketFunc, inHandleNoResponseFunc, inHandleConnectionResetFunc), inGetClientProxyFunc, inHandleClientDisconnectedFunc),
 _gameDir(inGameDir),
@@ -498,3 +479,5 @@ void NGSteamServerHelper::onP2PSessionConnectFail(P2PSessionConnectFail_t *pCall
         }
     }
 }
+
+#endif /* IS_DESKTOP */

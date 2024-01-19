@@ -1,16 +1,14 @@
 //
 //  NGSteamAddress.cpp
-//  noctisgames
+//  GowEngine
 //
 //  Created by Stephen Gowen on 5/15/17.
-//  Copyright (c) 2017 Noctis Games. All rights reserved.
+//  Copyright © 2023 Stephen Gowen. All rights reserved.
 //
 
-#include "pch.h"
+#include <GowEngine/GowEngine.hpp>
 
-#include <framework/network/steam/NGSteamAddress.h>
-
-#include <framework/util/StringUtil.h>
+#if IS_DESKTOP
 
 NGSteamAddress::NGSteamAddress(CSteamID steamID) : MachineAddress(), _steamID(steamID), _isReliable(false)
 {
@@ -61,3 +59,5 @@ bool NGSteamAddress::isReliable()
 {
     return _isReliable;
 }
+
+#endif /* IS_DESKTOP */

@@ -1,23 +1,14 @@
 //
 //  NGSteamP2PAuth.cpp
-//  noctisgames
+//  GowEngine
 //
 //  Created by Stephen Gowen on 6/20/17.
-//  Copyright (c) 2017 Noctis Games. All rights reserved.
+//  Copyright © 2023 Stephen Gowen. All rights reserved.
 //
 
-#include "pch.h"
+#include <GowEngine/GowEngine.hpp>
 
-#include <framework/network/steam/NGSteamP2PAuth.h>
-
-#include <framework/network/portable/InputMemoryBitStream.h>
-#include <framework/network/portable/NetworkHelper.h>
-#include <framework/network/steam/NGSteamAddress.h>
-#include <framework/util/Timing.h>
-
-#include <framework/util/StringUtil.h>
-#include <framework/network/portable/OutputMemoryBitStream.h>
-#include <framework/util/InstanceManager.h>
+#if IS_DESKTOP
 
 NGSteamP2PAuth::NGSteamP2PAuth(NetworkHelper* networkHelper) :
 _networkTransport(new NGSteamP2PNetworkTransport(networkHelper))
@@ -402,3 +393,5 @@ uint64 MsgP2PSendingTicket::getSteamID()
 {
     return _ulSteamID;
 }
+
+#endif /* IS_DESKTOP */
