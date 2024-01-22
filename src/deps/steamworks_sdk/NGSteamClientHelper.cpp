@@ -10,7 +10,7 @@
 
 #if IS_DESKTOP
 
-NGSteamClientHelper::NGSteamClientHelper(CSteamID inServerSteamID, GetPlayerAddressHashFunc inGetPlayerAddressHashFunc, ProcessPacketFunc inProcessPacketFunc, HandleNoResponseFunc inHandleNoResponseFunc, HandleConnectionResetFunc inHandleConnectionResetFunc) : ClientHelper(new NGSteamPacketHandler(static_cast<Timing*>(INSTANCE_MANAGER->get(INSTANCE_TIME_CLIENT)), false, inProcessPacketFunc, inHandleNoResponseFunc, inHandleConnectionResetFunc)),
+NGSteamClientHelper::NGSteamClientHelper(CSteamID inServerSteamID, GetPlayerAddressHashFunc inGetPlayerAddressHashFunc, ProcessPacketFunc inProcessPacketFunc, HandleNoResponseFunc inHandleNoResponseFunc, HandleConnectionResetFunc inHandleConnectionResetFunc) : ClientHelper(new NGSteamPacketHandler(static_cast<TimeTracker*>(INSTANCE_MANAGER->get(INSTANCE_TIME_CLIENT)), false, inProcessPacketFunc, inHandleNoResponseFunc, inHandleConnectionResetFunc)),
 _steamP2PAuth(new NGSteamP2PAuth(this)),
 _getPlayerAddressHashFunc(inGetPlayerAddressHashFunc),
 _eConnectedStatus(k_EClientNotConnected),
@@ -34,7 +34,7 @@ NGSteamClientHelper::~NGSteamClientHelper()
         SteamUser()->CancelAuthTicket(_hAuthTicket);
     }
 
-    OutputMemoryBitStream packet;
+    OutputMemoryBitStream packet(NW_MAX_PACKET_SIZE);
     packet.write(static_cast<uint8_t>(k_EMsgClientLeavingServer));
     sendPacket(packet);
 
@@ -65,7 +65,7 @@ void NGSteamClientHelper::processIncomingPackets()
     {
         // if i am the server owner i need to auth everyone who wants to play
         // assume i am in slot 0, so start at slot 1
-        for (uint32_t i = 1; i < MAX_NUM_PLAYERS_PER_SERVER; ++i)
+        for (uint32_t i = 1; i < MAX_NUM_PLAYERS; ++i)
         {
             CSteamID steamIDNew;
             steamIDNew.SetFromUint64(_getPlayerAddressHashFunc(i));
@@ -109,7 +109,7 @@ void NGSteamClientHelper::processIncomingPackets()
         }
     }
 
-    for (uint32_t i = 0; i < MAX_NUM_PLAYERS_PER_SERVER; ++i)
+    for (uint32_t i = 0; i < MAX_NUM_PLAYERS; ++i)
     {
         // Update steamid array with data from server
         // This is actually sort of hacky...
@@ -123,7 +123,7 @@ void NGSteamClientHelper::processIncomingPackets()
         // Now if we are the owner of the game, lets make sure all of our players are legit.
         // if they are not, we tell the server to kick them off
         // Start at 1 to skip myself
-        for (uint8_t i = 1; i < MAX_NUM_PLAYERS_PER_SERVER; ++i)
+        for (uint8_t i = 1; i < MAX_NUM_PLAYERS; ++i)
         {
             if (_steamP2PAuth->_rgpP2PAuthPlayer[i] && !_steamP2PAuth->_rgpP2PAuthPlayer[i]->isAuthOk())
             {
@@ -201,15 +201,15 @@ void NGSteamClientHelper::handleUninitialized()
     {
         case k_EClientNotConnected:
         {
-            OutputMemoryBitStream packet;
+            OutputMemoryBitStream packet(NW_MAX_PACKET_SIZE);
             packet.write(static_cast<uint8_t>(k_EMsgClientInitiateConnection));
             sendPacket(packet);
         }
             break;
         case k_EClientConnectedPendingAuthentication:
         {
-            Timing* timing = static_cast<Timing*>(INSTANCE_MANAGER->get(INSTANCE_TIME_CLIENT));
-            float time = timing->getTime();
+            TimeTracker* TimeTracker = static_cast<TimeTracker*>(INSTANCE_MANAGER->get(INSTANCE_TIME_CLIENT));
+            float time = TimeTracker->getTime();
 
             if (time > _timeOfLastMsgClientBeginAuthentication + 7.0f)
             {
@@ -226,7 +226,7 @@ void NGSteamClientHelper::handleUninitialized()
 
                 LOG("MsgClientBeginAuthentication_t, uTokenLen: %i", unTokenLen);
 
-                OutputMemoryBitStream packet;
+                OutputMemoryBitStream packet(NW_MAX_PACKET_SIZE);
                 packet.write(static_cast<uint8_t>(k_EMsgClientBeginAuthentication));
                 packet.write(unTokenLen);
                 packet.writeBytes(rgchToken, unTokenLen);
@@ -279,7 +279,7 @@ void NGSteamClientHelper::updateRichPresenceConnectionInfo()
     if (_eConnectedStatus == k_EClientConnectedAndAuthenticated && _unServerIP && _usServerPort)
     {
         // game server connection method
-        StringUtil::sprintf_safe(rgchConnectString, "+connect %d:%d", _unServerIP, _usServerPort);
+        STRING_FORMAT(rgchConnectString, "+connect %d:%d", _unServerIP, _usServerPort);
     }
 
     SteamFriends()->SetRichPresence("connect", rgchConnectString);

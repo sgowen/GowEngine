@@ -8,6 +8,24 @@
 
 #pragma once
 
+#define DECL_RTTI_NOPARENT                      \
+public:                                         \
+    static const RTTI rtti;                     \
+    virtual const RTTI& getRTTI()
+
+#define DECL_RTTI                               \
+public:                                         \
+    static const RTTI rtti;                     \
+    virtual const RTTI& getRTTI() override
+
+#define IMPL_RTTI_NOPARENT(name)                \
+    const RTTI name::rtti(#name);               \
+    const RTTI& name::getRTTI() { return rtti; }
+
+#define IMPL_RTTI(name,parent)                  \
+    const RTTI name::rtti(#name, parent::rtti); \
+    const RTTI& name::getRTTI() { return rtti; }
+
 #include <string>
 
 class RTTI

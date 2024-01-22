@@ -11,8 +11,8 @@
 #include <GowEngine/BuildConstants.hpp>
 #if IS_DESKTOP
 
-#include <framework/network/steam/NGSteam.hpp>
-#include <framework/network/steam/NGSteamGameServer.hpp>
+#include "deps/steamworks_sdk/NGSteam.hpp"
+#include "deps/steamworks_sdk/NGSteamGameServer.hpp"
 
 #include <string>
 #include <vector>

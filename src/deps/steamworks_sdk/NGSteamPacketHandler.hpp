@@ -11,10 +11,10 @@
 #include <GowEngine/BuildConstants.hpp>
 #if IS_DESKTOP
 
-#include <framework/network/portable/PacketHandler.hpp>
+#include "core/network/PacketHandler.hpp"
 
-#include <framework/network/portable/InputMemoryBitStream.hpp>
-#include <framework/network/steam/NGSteamAddress.hpp>
+#include "core/network/InputMemoryBitStream.hpp"
+#include "deps/steamworks_sdk/NGSteamAddress.hpp"
 
 #include <queue>
 #include <list>
@@ -25,7 +25,7 @@ class MachineAddress;
 class NGSteamPacketHandler : public PacketHandler
 {
 public:
-    NGSteamPacketHandler(Timing* timing, bool isServer, ProcessPacketFunc processPacketFunc, HandleNoResponseFunc handleNoResponseFunc, HandleConnectionResetFunc handleConnectionResetFunc);
+    NGSteamPacketHandler(TimeTracker* TimeTracker, bool isServer, ProcessPacketFunc processPacketFunc, HandleNoResponseFunc handleNoResponseFunc, HandleConnectionResetFunc handleConnectionResetFunc);
     virtual ~NGSteamPacketHandler();
     
     virtual void sendPacket(const OutputMemoryBitStream& inOutputStream, MachineAddress* inFromAddress);

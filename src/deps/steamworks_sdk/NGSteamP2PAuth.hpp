@@ -11,9 +11,9 @@
 #include <GowEngine/BuildConstants.hpp>
 #if IS_DESKTOP
 
-#include <framework/network/steam/NGSteam.hpp>
-#include <framework/util/Constants.hpp>
-#include <framework/util/MathUtil.hpp>
+#include "deps/steamworks_sdk/NGSteam.hpp"
+#include "core/common/Constants.hpp"
+#include "core/math/MathUtil.hpp"
 
 class InputMemoryBitStream;
 class NetworkHelper;
@@ -23,13 +23,13 @@ class NGSteamP2PAuthPlayer;
 class NGSteamP2PNetworkTransport;
 class MsgP2PSendingTicket;
 
-class Timing;
+class TimeTracker;
 
 class NGSteamP2PAuth
 {
 public:
-    NGSteamP2PAuthPlayer *_rgpP2PAuthPlayer[MAX_NUM_PLAYERS_PER_SERVER];
-    MsgP2PSendingTicket *_rgpQueuedMessage[MAX_NUM_PLAYERS_PER_SERVER];
+    NGSteamP2PAuthPlayer *_rgpP2PAuthPlayer[MAX_NUM_PLAYERS];
+    MsgP2PSendingTicket *_rgpQueuedMessage[MAX_NUM_PLAYERS];
     NGSteamP2PNetworkTransport *_networkTransport;
 
     NGSteamP2PAuth(NetworkHelper* networkHelper);
@@ -60,7 +60,7 @@ public:
 	STEAM_CALLBACK(NGSteamP2PAuthPlayer, OnBeginAuthResponse, ValidateAuthTicketResponse_t, _callbackBeginAuthResponse);
 
 private:
-    Timing* _timing;
+    TimeTracker* _timeTracker;
 	bool _bSentTicket;
 	bool _bSubmittedHisTicket;
 	bool _bHaveAnswer;

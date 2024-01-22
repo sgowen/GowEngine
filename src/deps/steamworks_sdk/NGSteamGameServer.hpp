@@ -11,7 +11,7 @@
 #include <GowEngine/BuildConstants.hpp>
 #if IS_DESKTOP
 
-#include <framework/network/steam/NGSteam.hpp>
+#include "deps/steamworks_sdk/NGSteam.hpp"
 
 class NGSteamGameServer
 {

@@ -10,6 +10,8 @@
 
 #if IS_DESKTOP
 
+IMPL_RTTI(NGSteamAddress, MachineAddress);
+
 NGSteamAddress::NGSteamAddress(CSteamID steamID) : MachineAddress(), _steamID(steamID), _isReliable(false)
 {
     // Empty

@@ -11,11 +11,11 @@
 #include <GowEngine/BuildConstants.hpp>
 #if IS_DESKTOP
 
-#include <framework/network/server/ServerHelper.hpp>
+#include "core/network/ServerHelper.hpp"
 
-#include <framework/network/steam/NGSteam.hpp>
-#include <framework/network/portable/PacketHandler.hpp>
-#include <framework/util/Constants.hpp>
+#include "deps/steamworks_sdk/NGSteam.hpp"
+#include "core/network/PacketHandler.hpp"
+#include "core/common/Constants.hpp"
 
 #include <string>
 
@@ -55,7 +55,7 @@ private:
     };
     
     // Vector to keep track of client connections which are pending auth
-    ClientConnectionData_t _rgPendingClientData[MAX_NUM_PLAYERS_PER_SERVER];
+    ClientConnectionData_t _rgPendingClientData[MAX_NUM_PLAYERS];
     
     void sendUpdatedServerDetailsToSteam();
     

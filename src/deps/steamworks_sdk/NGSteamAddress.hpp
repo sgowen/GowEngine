@@ -11,12 +11,14 @@
 #include <GowEngine/BuildConstants.hpp>
 #if IS_DESKTOP
 
-#include <framework/network/portable/MachineAddress.hpp>
+#include "core/network/MachineAddress.hpp"
 
-#include <framework/network/steam/NGSteam.hpp>
+#include "deps/steamworks_sdk/NGSteam.hpp"
 
 class NGSteamAddress : public MachineAddress
 {
+    DECL_RTTI;
+    
 public:
     NGSteamAddress(CSteamID steamID);
     

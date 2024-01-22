@@ -20,6 +20,8 @@ class OutputMemoryBitStream;
 class UDPSocket;
 
 typedef void (*ProcessPacketFunc)(InputMemoryBitStream& imbs, SocketAddress* fromAddress);
+typedef void (*HandleNoResponseFunc)();
+typedef void (*HandleConnectionResetFunc)(MachineAddress* inFromAddress);
 
 class PacketHandler
 {

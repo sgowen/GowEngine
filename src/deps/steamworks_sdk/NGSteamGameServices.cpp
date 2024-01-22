@@ -85,7 +85,7 @@ void NGSteamGameServices::connectToServerWithAddress(const char *pchServerAddres
         if (nConverted == 5)
         {
             char rgchIPAddress[128];
-            StringUtil::sprintf_safe(rgchIPAddress, "%d.%d.%d.%d", octet0, octet1, octet2, octet3);
+            STRING_FORMAT(rgchIPAddress, "%d.%d.%d.%d", octet0, octet1, octet2, octet3);
             uint32 unIPAddress = (octet3) + (octet2 << 8) + (octet1 << 16) + (octet0 << 24);
             
             initiateServerConnection(unIPAddress, uPort);

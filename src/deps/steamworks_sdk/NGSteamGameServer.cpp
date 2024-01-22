@@ -28,7 +28,7 @@ NGSteamGameServer::NGSteamGameServer(gameserveritem_t *pGameServerItem)
     
     strncpy(_szServerName, pGameServerItem->GetName(), ARRAYSIZE(_szServerName));
     
-    StringUtil::sprintf_safe(_szServerString, "%s (%i/%i) at %s ping(%d)", pGameServerItem->GetName(), pGameServerItem->m_nPlayers, pGameServerItem->m_nMaxPlayers, pGameServerItem->m_NetAdr.GetConnectionAddressString(), pGameServerItem->m_nPing);
+    STRING_FORMAT(_szServerString, "%s (%i/%i) at %s ping(%d)", pGameServerItem->GetName(), pGameServerItem->m_nPlayers, pGameServerItem->m_nMaxPlayers, pGameServerItem->m_NetAdr.GetConnectionAddressString(), pGameServerItem->m_nPing);
     
     _steamID = pGameServerItem->m_steamID;
 }

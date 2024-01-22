@@ -57,25 +57,9 @@
 /// Miscellaneous
 #define UNUSED(x) (void)(x)
 #define BUFFER_OFFSET(i) ((void*)(i))
-
-/// RTTI
-#define DECL_RTTI_NOPARENT                      \
-public:                                         \
-    static const RTTI rtti;                     \
-    virtual const RTTI& getRTTI()
-
-#define DECL_RTTI                               \
-public:                                         \
-    static const RTTI rtti;                     \
-    virtual const RTTI& getRTTI() override
-
-#define IMPL_RTTI_NOPARENT(name)                \
-    const RTTI name::rtti(#name);               \
-    const RTTI& name::getRTTI() { return rtti; }
-
-#define IMPL_RTTI(name,parent)                  \
-    const RTTI name::rtti(#name, parent::rtti); \
-    const RTTI& name::getRTTI() { return rtti; }
+#ifndef ARRAYSIZE
+#define ARRAYSIZE(x) (sizeof(x) / sizeof(x[0]))
+#endif
 
 /// EntityController
 #define DECL_EntityController_create          \

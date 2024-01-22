@@ -11,11 +11,11 @@
 #include <GowEngine/BuildConstants.hpp>
 #if IS_DESKTOP
 
-#include <framework/network/client/ClientHelper.hpp>
+#include "core/network/ClientHelper.hpp"
 
-#include <framework/network/portable/PacketHandler.hpp>
-#include <framework/network/steam/NGSteam.hpp>
-#include <framework/util/Constants.hpp>
+#include "core/network/PacketHandler.hpp"
+#include "deps/steamworks_sdk/NGSteam.hpp"
+#include "core/common/Constants.hpp"
 
 class NGSteamP2PAuth;
 class NGSteamAddress;
@@ -53,7 +53,7 @@ private:
     std::string _name;
     float _timeOfLastMsgClientBeginAuthentication;
     
-    CSteamID _rgSteamIDPlayers[MAX_NUM_PLAYERS_PER_SERVER];
+    CSteamID _rgSteamIDPlayers[MAX_NUM_PLAYERS];
     
     // Server address data
     uint32_t _unServerIP;
