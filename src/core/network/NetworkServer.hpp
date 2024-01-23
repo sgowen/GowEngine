@@ -11,8 +11,6 @@
 #include "core/common/Pool.hpp"
 #include "core/entity/EntityRegistry.hpp"
 
-#include "PacketHandler.hpp"
-
 #include <map>
 #include <string>
 
@@ -54,13 +52,14 @@ public:
     void removeProcessedMoves();
     void setNumMovesProcessed(uint32_t numMovesProcessed);
     const std::map<int, ClientProxy*>& playerIDToClientMap();
+    ServerHelper* getServerHelper();
     
 private:
     static NetworkServer* s_instance;
     
+    ServerHelper* _serverHelper;
     EntityIDManager& _entityIDManager;
     TimeTracker& _timeTracker;
-    PacketHandler _packetHandler;
     OnEntityRegisteredFunc _onEntityRegisteredFunc;
     OnEntityDeregisteredFunc _onEntityDeregisteredFunc;
     HandleNewClientFunc _handleNewClientFunc;

@@ -13,7 +13,6 @@
 
 #include "deps/steamworks_sdk/NGSteam.hpp"
 #include "core/common/Constants.hpp"
-#include "core/math/MathUtil.hpp"
 
 class InputMemoryBitStream;
 class NetworkHelper;

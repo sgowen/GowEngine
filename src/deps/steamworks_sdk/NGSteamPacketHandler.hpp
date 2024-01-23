@@ -25,7 +25,9 @@ class MachineAddress;
 class NGSteamPacketHandler : public PacketHandler
 {
 public:
-    NGSteamPacketHandler(TimeTracker* TimeTracker, bool isServer, ProcessPacketFunc processPacketFunc, HandleNoResponseFunc handleNoResponseFunc, HandleConnectionResetFunc handleConnectionResetFunc);
+    NGSteamPacketHandler(TimeTracker& timeTracker,
+                         ISteamNetworking* steamNetworking,
+                         ProcessPacketFunc processPacketFunc);
     virtual ~NGSteamPacketHandler();
     
     virtual void sendPacket(const OutputMemoryBitStream& inOutputStream, MachineAddress* inFromAddress);
@@ -35,6 +37,8 @@ protected:
     virtual void processQueuedPackets();
     
 private:
+    ISteamNetworking* _steamNetworking;
+    
     class ReceivedPacket;
     std::queue<ReceivedPacket, std::list<ReceivedPacket> > _packetQueue;
     
@@ -44,9 +48,7 @@ private:
         ReceivedPacket(float inReceivedTime, InputMemoryBitStream& inInputMemoryBitStream, NGSteamAddress inFromAddress);
         
         NGSteamAddress& getFromAddress();
-        
         float getReceivedTime()	const;
-        
         InputMemoryBitStream& getPacketBuffer();
         
     private:

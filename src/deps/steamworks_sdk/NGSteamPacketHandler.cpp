@@ -10,7 +10,10 @@
 
 #if IS_DESKTOP
 
-NGSteamPacketHandler::NGSteamPacketHandler(TimeTracker* TimeTracker, bool isServer, ProcessPacketFunc processPacketFunc, HandleNoResponseFunc handleNoResponseFunc, HandleConnectionResetFunc handleConnectionResetFunc) : PacketHandler(TimeTracker, isServer, processPacketFunc, handleNoResponseFunc, handleConnectionResetFunc)
+NGSteamPacketHandler::NGSteamPacketHandler(TimeTracker& tt,
+                                           ISteamNetworking* steamNetworking,
+                                           ProcessPacketFunc ppf) : PacketHandler(tt, ppf),
+_steamNetworking(steamNetworking)
 {
     // Empty
 }
@@ -28,9 +31,7 @@ void NGSteamPacketHandler::sendPacket(const OutputMemoryBitStream& inOutputStrea
     
     NGSteamAddress* inFromSteamAddress = static_cast<NGSteamAddress*>(inFromAddress);
     
-    ISteamNetworking* steamNetworking = _isServer ? SteamGameServerNetworking() : SteamNetworking();
-    
-    if (steamNetworking->SendP2PPacket(inFromSteamAddress->getSteamID(), inOutputStream.getBufferPtr(), inOutputStream.getByteLength(), inFromSteamAddress->isReliable() ? k_EP2PSendReliable : k_EP2PSendUnreliable))
+    if (_steamNetworking->SendP2PPacket(inFromSteamAddress->getSteamID(), inOutputStream.getBufferPtr(), inOutputStream.getByteLength(), inFromSteamAddress->isReliable() ? k_EP2PSendReliable : k_EP2PSendUnreliable))
     {
         int sentByteCount = inOutputStream.getByteLength();
         if (sentByteCount > 0)
@@ -55,31 +56,26 @@ void NGSteamPacketHandler::readIncomingPacketsIntoQueue()
     InputMemoryBitStream inputStream(packetMem, packetSize * 8);
     CSteamID fromId;
     
-    //keep reading until we don't have anything to read (or we hit a max number that we'll process per frame)
-    int receivedPackedCount = 0;
     int totalReadByteCount = 0;
     
-    ISteamNetworking* steamNetworking = _isServer ? SteamGameServerNetworking() : SteamNetworking();
-    
-    while (steamNetworking->IsP2PPacketAvailable(&incomingSize) && receivedPackedCount < NW_MAX_NUM_PACKETS_PER_FRAME)
+    while (_steamNetworking->IsP2PPacketAvailable(&incomingSize))
     {
         if (incomingSize <= packetSize)
         {
             uint32_t readByteCount;
-            if (steamNetworking->ReadP2PPacket(packetMem, packetSize, &readByteCount, &fromId))
+            if (_steamNetworking->ReadP2PPacket(packetMem, packetSize, &readByteCount, &fromId))
             {
                 assert(readByteCount <= packetSize);
                 
                 if (readByteCount > 0)
                 {
                     inputStream.resetToCapacity(readByteCount);
-                    ++receivedPackedCount;
                     totalReadByteCount += readByteCount;
                     
                     //shove the packet into the queue and we'll handle it as soon as we should...
                     //we'll pretend it wasn't received until simulated latency from now
                     //this doesn't sim jitter, for that we would need to.....
-                    float simulatedReceivedTime = _timeTracker->getTime();
+                    float simulatedReceivedTime = _timeTracker.realTime();
                     
                     _packetQueue.push(ReceivedPacket(simulatedReceivedTime, inputStream, fromId));
                 }
@@ -98,10 +94,6 @@ void NGSteamPacketHandler::readIncomingPacketsIntoQueue()
     {
         updateBytesReceivedLastFrame(totalReadByteCount);
     }
-    else
-    {
-        _handleNoResponseFunc();
-    }
 }
 
 void NGSteamPacketHandler::processQueuedPackets()
@@ -110,7 +102,7 @@ void NGSteamPacketHandler::processQueuedPackets()
     while (!_packetQueue.empty())
     {
         ReceivedPacket& nextPacket = _packetQueue.front();
-        if (_timeTracker->getTime() > nextPacket.getReceivedTime())
+        if (_timeTracker.realTime() > nextPacket.getReceivedTime())
         {
             _processPacketFunc(nextPacket.getPacketBuffer(), &nextPacket.getFromAddress());
             _packetQueue.pop();

@@ -25,7 +25,7 @@ void DefaultEngineState::execute(Engine* e)
     
     if (ERSA_CREATE_RESOURCES_called && ERSA_WINDOW_SIZE_CHANGED_called)
     {
-        e->overwriteState(&e->_initialState);
+        e->overwriteState(&ENGINE_STATE_TITLE);
     }
 }
 

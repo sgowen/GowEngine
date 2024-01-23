@@ -87,6 +87,7 @@
 #include "core/common/StringUtil.hpp"
 #include "core/common/ThreadManager.hpp"
 #include "core/common/TimeTracker.hpp"
+#include "core/common/TimeUtil.hpp"
 
 /// Core Engine
 #include "core/engine/DefaultEngineState.hpp"
@@ -153,6 +154,7 @@
 #include "core/network/ServerHelper.hpp"
 #include "core/network/SocketAddress.hpp"
 #include "core/network/SocketAddressFactory.hpp"
+#include "core/network/SocketPacketHandler.hpp"
 #include "core/network/SocketUtil.hpp"
 #include "core/network/TransmissionData.hpp"
 #include "core/network/UDPSocket.hpp"

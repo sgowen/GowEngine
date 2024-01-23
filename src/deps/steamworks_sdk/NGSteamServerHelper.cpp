@@ -10,7 +10,15 @@
 
 #if IS_DESKTOP
 
-NGSteamServerHelper::NGSteamServerHelper(std::string inGameDir, std::string inVersionString, std::string inProductName, std::string inGameDescription, uint16 inPort, ProcessPacketFunc inProcessPacketFunc, HandleNoResponseFunc inHandleNoResponseFunc, HandleConnectionResetFunc inHandleConnectionResetFunc, GetClientProxyFunc inGetClientProxyFunc, HandleClientDisconnectedFunc inHandleClientDisconnectedFunc) : ServerHelper(new NGSteamPacketHandler(static_cast<TimeTracker*>(INSTANCE_MANAGER->get(INSTANCE_TIME_SERVER)), true, inProcessPacketFunc, inHandleNoResponseFunc, inHandleConnectionResetFunc), inGetClientProxyFunc, inHandleClientDisconnectedFunc),
+NGSteamServerHelper::NGSteamServerHelper(std::string inGameDir,
+                                         std::string inVersionString,
+                                         std::string inProductName,
+                                         std::string inGameDescription,
+                                         uint16 inPort,
+                                         TimeTracker& tt,
+                                         ProcessPacketFunc inProcessPacketFunc,
+                                         GetClientProxyFunc inGetClientProxyFunc,
+                                         HandleClientDisconnectedFunc inHandleClientDisconnectedFunc) : ServerHelper(new NGSteamPacketHandler(tt, SteamGameServerNetworking(), inProcessPacketFunc), inGetClientProxyFunc, inHandleClientDisconnectedFunc),
 _gameDir(inGameDir),
 _serverSteamAddress(new NGSteamAddress()),
 _isConnectedToSteam(false),
@@ -242,7 +250,7 @@ void NGSteamServerHelper::sendUpdatedServerDetailsToSteam()
         if (clientProxy)
         {
             NGSteamAddress* userAddress = static_cast<NGSteamAddress*>(clientProxy->getMachineAddress());
-            SteamGameServer()->BUpdateUserData(userAddress->getSteamID(), clientProxy->getName().c_str(), 0);
+            SteamGameServer()->BUpdateUserData(userAddress->getSteamID(), clientProxy->getUsername().c_str(), 0);
         }
     }
 }

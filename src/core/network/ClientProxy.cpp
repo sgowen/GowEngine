@@ -27,6 +27,11 @@ ClientProxy::~ClientProxy()
     delete _socketAddress;
 }
 
+MachineAddress* ClientProxy::getMachineAddress() const
+{
+    return nullptr;
+}
+
 SocketAddress* ClientProxy::getSocketAddress() const
 {
     return _socketAddress;

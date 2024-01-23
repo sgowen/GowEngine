@@ -24,6 +24,7 @@ public:
     ClientProxy(EntityRegistry& er, TimeTracker& tt, SocketAddress* sa, std::string username, uint8_t playerID);
     ~ClientProxy();
     
+    MachineAddress* getMachineAddress() const;
     SocketAddress* getSocketAddress() const;
     uint8_t getPlayerID(uint8_t index = 0) const;
     const std::string& getUsername() const;

@@ -159,7 +159,7 @@ _timeTracker(static_cast<TimeTracker*>(INSTANCE_MANAGER->get(INSTANCE_TIME_CLIEN
     _bSentTicket = false;
     _bSubmittedHisTicket = false;
     _bHaveAnswer = false;
-    _connectTime = _timeTracker->getTime();
+    _connectTime = _timeTracker->realTime();
     _cubTicketIGaveThisUser = 0;
     _cubTicketHeGaveMe = 0;
 }
@@ -177,7 +177,7 @@ void NGSteamP2PAuthPlayer::OnBeginAuthResponse(ValidateAuthTicketResponse_t *pCa
     if (_steamID == pCallback->m_SteamID)
     {
         LOG("P2P:: Received steam response for account=%d\n", _steamID.GetAccountID());
-        _answerTime = _timeTracker->getTime();
+        _answerTime = _timeTracker->realTime();
         _bHaveAnswer = true;
         _eAuthSessionResponse = pCallback->m_eAuthSessionResponse;
     }
@@ -189,7 +189,7 @@ void NGSteamP2PAuthPlayer::initPlayer(CSteamID steamID)
     _bSentTicket = false;
     _bSubmittedHisTicket = false;
     _bHaveAnswer = false;
-    _connectTime = _timeTracker->getTime();
+    _connectTime = _timeTracker->realTime();
     _cubTicketIGaveThisUser = 0;
     _cubTicketHeGaveMe = 0;
 }
@@ -208,7 +208,7 @@ void NGSteamP2PAuthPlayer::startAuthPlayer()
     _bSentTicket = true;
 
     // start a timer on this, if we dont get a ticket back within reasonable time, mark him timed out
-    _ticketTime = _timeTracker->getTime();
+    _ticketTime = _timeTracker->realTime();
 }
 
 bool NGSteamP2PAuthPlayer::isAuthOk()
@@ -218,7 +218,7 @@ bool NGSteamP2PAuthPlayer::isAuthOk()
         // Timeout if we fail to establish communication with this player
         if (!_bSentTicket && !_bSubmittedHisTicket)
         {
-            if (_timeTracker->getTime() - _connectTime > 30)
+            if (_timeTracker->realTime() - _connectTime > 30)
             {
                 LOG("P2P:: Nothing received for account=%d\n", _steamID.GetAccountID());
                 return false;
@@ -242,7 +242,7 @@ bool NGSteamP2PAuthPlayer::isAuthOk()
         // last: if i sent him a ticket and he has not reciprocated, time out after 30 sec
         if (_bSentTicket && !_bSubmittedHisTicket)
         {
-            if (_timeTracker->getTime() - _ticketTime > 30)
+            if (_timeTracker->realTime() - _ticketTime > 30)
             {
                 LOG("P2P:: No ticket received for account=%d\n", _steamID.GetAccountID());
                 return false;
@@ -322,6 +322,7 @@ void NGSteamP2PNetworkTransport::sendTicket(CSteamID steamIDFrom, CSteamID steam
     _outgoingPacketAddress->setSteamID(steamIDTo);
     _outgoingPacketAddress->setReliable(true);
 
+    // TODO, don't like that this class has a reference to _networkHelper
     _networkHelper->sendPacket(packet, _outgoingPacketAddress);
 }
 
@@ -357,7 +358,7 @@ void MsgP2PSendingTicket::setToken(const char *pchToken, uint32 unLen)
 {
     _uTokenLen = unLen;
 
-    memcpy(_rgchToken, pchToken, MIN(unLen, sizeof(_rgchToken)));
+    memcpy(_rgchToken, pchToken, GOW_MIN(unLen, sizeof(_rgchToken)));
 }
 
 uint32 MsgP2PSendingTicket::getTokenLen()

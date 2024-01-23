@@ -40,7 +40,7 @@ class Engine
     friend class DefaultEngineState;
     
 public:
-    Engine(std::string configFilePath, EngineState& initialEngineState);
+    Engine(std::string configFilePath);
     ~Engine();
     
     void createDeviceDependentResources(ClipboardHandler* clipboardHandler = &NullClipboardHandler::getInstance());
@@ -74,7 +74,6 @@ public:
     bool hasUpdatedSinceLastRender();
     
 private:
-    State<Engine>& _initialState;
     StateMachine<Engine> _stateMachine;
     EngineRequestedStateAction _requestedStateAction;
     EngineRequestedHostAction _requestedHostAction;

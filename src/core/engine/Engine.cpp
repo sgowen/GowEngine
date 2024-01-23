@@ -8,14 +8,7 @@
 
 #include <GowEngine/GowEngine.hpp>
 
-uint64_t timeSinceEpochMillisec()
-{
-    using namespace std::chrono;
-    return duration_cast<milliseconds>(system_clock::now().time_since_epoch()).count();
-}
-
-Engine::Engine(std::string configFilePath, EngineState& initialEngineState) :
-_initialState(initialEngineState),
+Engine::Engine(std::string configFilePath) :
 _stateMachine(this, &ENGINE_STATE_DEFAULT),
 _requestedStateAction(ERSA_DEFAULT),
 _requestedHostAction(ERHA_DEFAULT),
@@ -30,7 +23,7 @@ _hasUpdatedSinceLastRender(false)
     
     if (ENGINE_CFG.fileLoggingEnabled())
     {
-        std::string logFileName = STRING_FORMAT("%s/log_GowEngine_%d", ENGINE_CFG.fileDirLogger().c_str(), timeSinceEpochMillisec());
+        std::string logFileName = STRING_FORMAT("%s/log_GowEngine_%d", ENGINE_CFG.fileDirLogger().c_str(), TimeUtil::timeSinceEpochMillisec());
         Logger::getInstance().initWithFile(logFileName.c_str());
     }
     

@@ -12,12 +12,16 @@
 
 IMPL_RTTI(NGSteamAddress, MachineAddress);
 
-NGSteamAddress::NGSteamAddress(CSteamID steamID) : MachineAddress(), _steamID(steamID), _isReliable(false)
+NGSteamAddress::NGSteamAddress(CSteamID steamID) : MachineAddress(),
+_steamID(steamID),
+_isReliable(false)
 {
     // Empty
 }
 
-NGSteamAddress::NGSteamAddress() : MachineAddress(), _steamID(CSteamID()), _isReliable(false)
+NGSteamAddress::NGSteamAddress() : MachineAddress(), 
+_steamID(CSteamID()),
+_isReliable(false)
 {
     // Empty
 }

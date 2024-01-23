@@ -25,11 +25,16 @@ typedef uint64_t (*GetPlayerAddressHashFunc)(uint8_t inPlayerIndex);
 class NGSteamClientHelper : public ClientHelper
 {
 public:
-    NGSteamClientHelper(CSteamID serverSteamID, GetPlayerAddressHashFunc getPlayerAddressHashFunc, ProcessPacketFunc processPacketFunc, HandleNoResponseFunc handleNoResponseFunc, HandleConnectionResetFunc handleConnectionResetFunc);
+    NGSteamClientHelper(CSteamID serverSteamID,
+                        TimeTracker& tt,
+                        GetPlayerAddressHashFunc getPlayerAddressHashFunc,
+                        ProcessPacketFunc processPacketFunc);
     virtual ~NGSteamClientHelper();
     
     virtual void processIncomingPackets();
-    virtual void processSpecialPacket(uint8_t packetType, InputMemoryBitStream& inInputStream, MachineAddress* inFromAddress);
+    virtual void processSpecialPacket(uint8_t packetType, 
+                                      InputMemoryBitStream& inInputStream,
+                                      MachineAddress* inFromAddress);
     virtual void handleUninitialized();
     virtual void sendPacket(const OutputMemoryBitStream& inOutputStream);
     virtual std::string& getName();
@@ -38,14 +43,18 @@ private:
     // Enum for various client connection states
     enum EClientConnectionState
     {
-        k_EClientNotConnected,							// Initial state, not connected to a server
-        k_EClientConnectedPendingAuthentication,		// We've established communication with the server, but it hasn't authed us yet
-        k_EClientConnectedAndAuthenticated,				// Final phase, server has authed us, we are actually able to play on it
+        // Initial state, not connected to a server
+        k_EClientNotConnected,
+        // We've established communication with the server, but it hasn't authed us yet
+        k_EClientConnectedPendingAuthentication,
+        // Final phase, server has authed us, we are actually able to play on it
+        k_EClientConnectedAndAuthenticated,
         k_EClientConnectionFailure,
         k_EServerIsNotAuthorized,
         k_EServerShuttingDown
     };
     
+    TimeTracker& _timeTracker;
     NGSteamP2PAuth* _steamP2PAuth;
     GetPlayerAddressHashFunc _getPlayerAddressHashFunc;
     EClientConnectionState _eConnectedStatus;

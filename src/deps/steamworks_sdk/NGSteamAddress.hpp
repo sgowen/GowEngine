@@ -21,23 +21,16 @@ class NGSteamAddress : public MachineAddress
     
 public:
     NGSteamAddress(CSteamID steamID);
-    
     NGSteamAddress();
-    
     virtual ~NGSteamAddress();
     
-    virtual MachineAddress* createNewCopy();
-    
-    virtual uint64_t getHash() const;
-    
-    virtual std::string toString() const;
+    virtual MachineAddress* createNewCopy() override;
+    virtual uint64_t getHash() const override;
+    virtual std::string toString() const override;
     
     void setSteamID(CSteamID steamID);
-    
     CSteamID& getSteamID();
-    
     void setReliable(bool isReliable);
-    
     bool isReliable();
     
 private:

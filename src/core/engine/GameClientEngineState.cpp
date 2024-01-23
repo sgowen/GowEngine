@@ -1005,7 +1005,7 @@ void GameClientEngineState::playSoundForEntityIfNecessary(Entity& e, uint32_t mo
     }
 }
 
-GameClientEngineState::GameClientEngineState() : EngineState(FILE_PATH_GAME_ENGINE_STATE_CONFIG),
+GameClientEngineState::GameClientEngineState() : EngineState("data/json/GameEngineState/Config.json"),
 _entityIDManager(),
 _timeTracker(),
 _world(new NosPhysicsWorld()),

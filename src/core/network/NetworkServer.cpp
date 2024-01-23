@@ -218,6 +218,11 @@ const std::map<int, ClientProxy*>& NetworkServer::playerIDToClientMap()
     return _playerIDToClientMap;
 }
 
+ServerHelper* NetworkServer::getServerHelper()
+{
+    return _serverHelper;
+}
+
 int NetworkServer::getNumMovesReadyToBeProcessed()
 {
     int lowestMoveCount = 0;
@@ -555,6 +560,7 @@ void cb_nw_srvr_onEntityDeregistered(Entity* e)
 }
 
 NetworkServer::NetworkServer(uint16_t port, EntityIDManager& eidm, TimeTracker& tt, OnEntityRegisteredFunc oerf, OnEntityDeregisteredFunc oedf, HandleNewClientFunc hncf, HandleLostClientFunc hlcf) :
+_serverHelper(nullptr),
 _entityIDManager(eidm),
 _timeTracker(tt),
 _packetHandler(_timeTracker, port, cb_nw_srvr_processPacket),

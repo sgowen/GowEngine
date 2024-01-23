@@ -143,7 +143,7 @@ void TitleEngineState::onRender(Renderer& r, double extrapolation)
     r.renderToScreen();
 }
 
-TitleEngineState::TitleEngineState() : EngineState(FILE_PATH_TITLE_ENGINE_STATE_CONFIG),
+TitleEngineState::TitleEngineState() : EngineState("data/json/TitleEngineState/Config.json"),
 _state(TESS_DEFAULT),
 _inputProcessor(),
 _userEnteredIPAddress("")

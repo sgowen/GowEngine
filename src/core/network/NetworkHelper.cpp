@@ -30,10 +30,10 @@ void NetworkHelper::sendPacket(const OutputMemoryBitStream& inOutputStream, Mach
 
 const MovingAverage& NetworkHelper::getBytesReceivedPerSecond() const
 {
-    return _packetHandler->getBytesReceivedPerSecond();
+    return _packetHandler->bytesReceivedPerSecond();
 }
 
 const MovingAverage& NetworkHelper::getBytesSentPerSecond() const
 {
-    return _packetHandler->getBytesSentPerSecond();
+    return _packetHandler->bytesSentPerSecond();
 }

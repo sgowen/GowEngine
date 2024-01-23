@@ -10,7 +10,11 @@
 
 #if IS_DESKTOP
 
-NGSteamClientHelper::NGSteamClientHelper(CSteamID inServerSteamID, GetPlayerAddressHashFunc inGetPlayerAddressHashFunc, ProcessPacketFunc inProcessPacketFunc, HandleNoResponseFunc inHandleNoResponseFunc, HandleConnectionResetFunc inHandleConnectionResetFunc) : ClientHelper(new NGSteamPacketHandler(static_cast<TimeTracker*>(INSTANCE_MANAGER->get(INSTANCE_TIME_CLIENT)), false, inProcessPacketFunc, inHandleNoResponseFunc, inHandleConnectionResetFunc)),
+NGSteamClientHelper::NGSteamClientHelper(CSteamID inServerSteamID,
+                                         TimeTracker& tt,
+                                         GetPlayerAddressHashFunc inGetPlayerAddressHashFunc,
+                                         ProcessPacketFunc inProcessPacketFunc) : ClientHelper(new NGSteamPacketHandler(tt, SteamNetworking(), inProcessPacketFunc)),
+_timeTracker(tt),
 _steamP2PAuth(new NGSteamP2PAuth(this)),
 _getPlayerAddressHashFunc(inGetPlayerAddressHashFunc),
 _eConnectedStatus(k_EClientNotConnected),
@@ -61,7 +65,7 @@ void NGSteamClientHelper::processIncomingPackets()
     NetworkHelper::processIncomingPackets();
 
     // has the player list changed?
-    if (NG_SERVER)
+    if (NW_SRVR)
     {
         // if i am the server owner i need to auth everyone who wants to play
         // assume i am in slot 0, so start at slot 1
@@ -118,7 +122,7 @@ void NGSteamClientHelper::processIncomingPackets()
         _rgSteamIDPlayers[i].SetFromUint64(_getPlayerAddressHashFunc(i));
     }
 
-    if (NG_SERVER)
+    if (NW_SRVR)
     {
         // Now if we are the owner of the game, lets make sure all of our players are legit.
         // if they are not, we tell the server to kick them off
@@ -127,7 +131,7 @@ void NGSteamClientHelper::processIncomingPackets()
         {
             if (_steamP2PAuth->_rgpP2PAuthPlayer[i] && !_steamP2PAuth->_rgpP2PAuthPlayer[i]->isAuthOk())
             {
-                NGSteamServerHelper* helper = static_cast<NGSteamServerHelper*>(NG_SERVER->getServerHelper());
+                NGSteamServerHelper* helper = static_cast<NGSteamServerHelper*>(NW_SRVR->getServerHelper());
                 helper->kickPlayerOffServer(_steamP2PAuth->_rgpP2PAuthPlayer[i]->_steamID);
             }
         }
@@ -208,8 +212,7 @@ void NGSteamClientHelper::handleUninitialized()
             break;
         case k_EClientConnectedPendingAuthentication:
         {
-            TimeTracker* TimeTracker = static_cast<TimeTracker*>(INSTANCE_MANAGER->get(INSTANCE_TIME_CLIENT));
-            float time = TimeTracker->getTime();
+            float time = _timeTracker.realTime();
 
             if (time > _timeOfLastMsgClientBeginAuthentication + 7.0f)
             {

@@ -32,7 +32,7 @@ SocketAddress::SocketAddress()
     getAsSockAddrIn()->sin_port = 0;
 }
 
-SocketAddress* SocketAddress::createNewCopy()
+MachineAddress* SocketAddress::createNewCopy()
 {
     return new SocketAddress(_socketAddress);
 }

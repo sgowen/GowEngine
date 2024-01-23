@@ -25,18 +25,21 @@ class ClientProxy;
 class NGSteamServerHelper : public ServerHelper
 {
 public:
-    NGSteamServerHelper(std::string inGameDir, std::string inVersionString, std::string inProductName, std::string inGameDescription, uint16 inPort, ProcessPacketFunc inProcessPacketFunc, HandleNoResponseFunc inHandleNoResponseFunc, HandleConnectionResetFunc inHandleConnectionResetFunc, GetClientProxyFunc inGetClientProxyFunc, HandleClientDisconnectedFunc inHandleClientDisconnectedFunc);
-    
+    NGSteamServerHelper(std::string inGameDir,
+                        std::string inVersionString,
+                        std::string inProductName,
+                        std::string inGameDescription,
+                        uint16 inPort,
+                        TimeTracker& tt,
+                        ProcessPacketFunc inProcessPacketFunc,
+                        GetClientProxyFunc inGetClientProxyFunc,
+                        HandleClientDisconnectedFunc inHandleClientDisconnectedFunc);
     virtual ~NGSteamServerHelper();
     
     virtual void processIncomingPackets();
-    
     virtual void processSpecialPacket(uint8_t packetType, InputMemoryBitStream& inInputStream, MachineAddress* inFromAddress);
-    
     virtual void onClientDisconnected(ClientProxy* clientProxy);
-    
     virtual MachineAddress* getServerAddress();
-    
     virtual bool isConnected();
     
     void kickPlayerOffServer(CSteamID steamID);
@@ -50,19 +53,16 @@ private:
     
     struct ClientConnectionData_t
     {
-        bool _isActive;					// Is this slot in use? Or is it available for new connections?
-        CSteamID _steamIDUser;			// What is the steamid of the player?
+        bool _isActive; // Is this slot in use? Or is it available for new connections?
+        CSteamID _steamIDUser; // What is the steamid of the player?
     };
     
     // Vector to keep track of client connections which are pending auth
     ClientConnectionData_t _rgPendingClientData[MAX_NUM_PLAYERS];
     
     void sendUpdatedServerDetailsToSteam();
-    
     void onClientBeginAuthentication(CSteamID steamIDClient, void* token, uint32 uTokenLen);
-    
     void onAuthCompleted(bool bAuthSuccessful, uint32 iPendingAuthIndex);
-    
     void sendDataToClient(CSteamID steamIDUser, const OutputMemoryBitStream& inOutputStream);
     
     STEAM_GAMESERVER_CALLBACK(NGSteamServerHelper, onSteamServersConnected, SteamServersConnected_t);

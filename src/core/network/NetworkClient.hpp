@@ -10,7 +10,6 @@
 
 #include "core/entity/EntityRegistry.hpp"
 
-#include "PacketHandler.hpp"
 #include "DeliveryNotificationManager.hpp"
 #include "ReplicationManagerClient.hpp"
 #include "MovingAverage.hpp"
@@ -62,7 +61,6 @@ private:
     static NetworkClient* s_instance;
     
     TimeTracker& _timeTracker;
-    PacketHandler _packetHandler;
     SocketAddress* _serverAddress;
     std::string _username;
     OnPlayerWelcomedFunc _onPlayerWelcomedFunc;
