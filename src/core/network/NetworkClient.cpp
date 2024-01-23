@@ -10,11 +10,18 @@
 
 NetworkClient* NetworkClient::s_instance = nullptr;
 
-void NetworkClient::create(std::string serverIPAddress, std::string username, uint16_t port, TimeTracker& tt, OnEntityRegisteredFunc oerf, OnEntityDeregisteredFunc oedf, OnPlayerWelcomedFunc opwf)
+void NetworkClient::create(ClientHelper* clientHelper,
+                           std::string serverIPAddress,
+                           std::string username,
+                           uint16_t port,
+                           TimeTracker& tt,
+                           OnEntityRegisteredFunc oerf,
+                           OnEntityDeregisteredFunc oedf,
+                           OnPlayerWelcomedFunc opwf)
 {
     assert(s_instance == nullptr);
     
-    s_instance = new NetworkClient(serverIPAddress, username, port, tt, oerf, oedf, opwf);
+    s_instance = new NetworkClient(clientHelper, serverIPAddress, username, port, tt, oerf, oedf, opwf);
     
     assert(NW_CLNT != nullptr);
 }
@@ -36,7 +43,7 @@ NetworkClientState NetworkClient::processIncomingPackets()
 {
     _hasReceivedNewState = false;
     
-    _packetHandler.processIncomingPackets();
+    _clientHelper->processIncomingPackets();
     
     uint32_t time = _timeTracker._time;
     uint32_t timeout = ENGINE_CFG.framesPerSecond() * 2;
@@ -85,12 +92,12 @@ void NetworkClient::requestToDropLocalPlayer(uint8_t index)
 
 float NetworkClient::bytesReceivedPerSecond() const
 {
-    return _packetHandler.bytesReceivedPerSecond().value();
+    return _clientHelper->bytesReceivedPerSecond().value();
 }
 
 float NetworkClient::bytesSentPerSecond() const
 {
-    return _packetHandler.bytesSentPerSecond().value();
+    return _clientHelper->bytesSentPerSecond().value();
 }
 
 float NetworkClient::avgRoundTripTime() const
@@ -408,10 +415,15 @@ void cb_client_processPacket(InputMemoryBitStream& imbs, SocketAddress* fromAddr
     NW_CLNT->processPacket(imbs, fromAddress);
 }
 
-NetworkClient::NetworkClient(std::string serverIPAddress, std::string username, uint16_t port, TimeTracker& tt, OnEntityRegisteredFunc oerf, OnEntityDeregisteredFunc oedf, OnPlayerWelcomedFunc opwf) :
+NetworkClient::NetworkClient(ClientHelper* clientHelper,
+                             std::string serverIPAddress,
+                             std::string username,
+                             uint16_t port,
+                             TimeTracker& tt,
+                             OnEntityRegisteredFunc oerf,
+                             OnEntityDeregisteredFunc oedf,
+                             OnPlayerWelcomedFunc opwf) :
 _timeTracker(tt),
-_packetHandler(_timeTracker, port, cb_client_processPacket),
-_serverAddress(SocketAddressFactory::createIPv4FromString(serverIPAddress)),
 _username(username),
 _onPlayerWelcomedFunc(opwf),
 _deliveryNotificationManager(_timeTracker, true, false),

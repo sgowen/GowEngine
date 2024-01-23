@@ -28,12 +28,12 @@ void NetworkHelper::sendPacket(const OutputMemoryBitStream& inOutputStream, Mach
     _packetHandler->sendPacket(inOutputStream, inFromAddress);
 }
 
-const MovingAverage& NetworkHelper::getBytesReceivedPerSecond() const
+const MovingAverage& NetworkHelper::bytesReceivedPerSecond() const
 {
     return _packetHandler->bytesReceivedPerSecond();
 }
 
-const MovingAverage& NetworkHelper::getBytesSentPerSecond() const
+const MovingAverage& NetworkHelper::bytesSentPerSecond() const
 {
     return _packetHandler->bytesSentPerSecond();
 }

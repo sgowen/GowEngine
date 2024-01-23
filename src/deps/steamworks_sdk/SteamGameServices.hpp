@@ -1,5 +1,5 @@
 //
-//  NGSteamGameServices.hpp
+//  SteamGameServices.hpp
 //  GowEngine
 //
 //  Created by Stephen Gowen on 6/11/17.
@@ -11,13 +11,13 @@
 #include <GowEngine/BuildConstants.hpp>
 #if IS_DESKTOP
 
-#include "deps/steamworks_sdk/NGSteam.hpp"
-#include "deps/steamworks_sdk/NGSteamGameServer.hpp"
+#include "deps/steamworks_sdk/Steam.hpp"
+#include "deps/steamworks_sdk/SteamGameServer.hpp"
 
 #include <string>
 #include <vector>
 
-#define NG_STEAM_GAME_SERVICES (NGSteamGameServices::getInstance())
+#define NG_STEAM_GAME_SERVICES (SteamGameServices::getInstance())
 
 #define STEAM_INIT_SUCCESS 1
 #define STEAM_UNINITIALIZED 0
@@ -29,12 +29,12 @@
 #define STEAM_IPC_FAILURE -6
 #define STEAM_SHUTDOWN -7
 
-class NGSteamGameServices : public ISteamMatchmakingServerListResponse
+class SteamGameServices : public ISteamMatchmakingServerListResponse
 {
 public:
     static void create(const char* inGameDir);
     static void destroy();
-    static NGSteamGameServices* getInstance();
+    static SteamGameServices* getInstance();
     
     void update();
     void refreshInternetServers();
@@ -53,7 +53,7 @@ public:
     virtual void ServerFailedToRespond(HServerListRequest hReq, int iServer);
     virtual void RefreshComplete(HServerListRequest hReq, EMatchMakingServerResponse response);
     
-    std::vector<NGSteamGameServer>& getGameServers();
+    std::vector<SteamGameServer>& getGameServers();
     bool isRequestingServers();
     
 #pragma mark Steam Cloud
@@ -62,13 +62,13 @@ public:
     void refreshSteamCloudFileStats();
     
 private:
-    static NGSteamGameServices* s_instance;
+    static SteamGameServices* s_instance;
     
     const char* _gameDir;
     int _numServers; // Track the number of servers we know about
     bool _isRequestingServers; // Track whether we are in the middle of a refresh or not
     HServerListRequest _hServerListRequest; // Track what server list request is currently running
-    std::vector<NGSteamGameServer> _gameServers;
+    std::vector<SteamGameServer> _gameServers;
     
     uint32 _unServerIP;
     uint16 _usServerPort;
@@ -84,13 +84,13 @@ private:
         // Server failed to respond to the ping request
         virtual void ServerFailedToRespond();
         
-        void retrieveSteamIDFromGameServer(NGSteamGameServices *client, uint32 unIP, uint16 unPort);
+        void retrieveSteamIDFromGameServer(SteamGameServices *client, uint32 unIP, uint16 unPort);
         
         void cancelPing();
         
     private:
         HServerQuery _hGameServerQuery; // we're ping a game server, so we can convert IP:Port to a steamID
-        NGSteamGameServices *_client;
+        SteamGameServices *_client;
     };
     
     GameServerPing _gameServerPing;
@@ -104,16 +104,16 @@ private:
     int _status;
     bool _isRequestingToJoinServer;
     
-    STEAM_CALLBACK(NGSteamGameServices, onGameOverlayActivated, GameOverlayActivated_t);
-    STEAM_CALLBACK(NGSteamGameServices, onGameJoinRequested, GameRichPresenceJoinRequested_t);
-    STEAM_CALLBACK(NGSteamGameServices, onIPCFailure, IPCFailure_t);
-    STEAM_CALLBACK(NGSteamGameServices, onSteamShutdown, SteamShutdown_t);
+    STEAM_CALLBACK(SteamGameServices, onGameOverlayActivated, GameOverlayActivated_t);
+    STEAM_CALLBACK(SteamGameServices, onGameJoinRequested, GameRichPresenceJoinRequested_t);
+    STEAM_CALLBACK(SteamGameServices, onIPCFailure, IPCFailure_t);
+    STEAM_CALLBACK(SteamGameServices, onSteamShutdown, SteamShutdown_t);
     
     // ctor, copy ctor, and assignment should be private in a Singleton
-    NGSteamGameServices(const char* inGameDir);
-    ~NGSteamGameServices();
-    NGSteamGameServices(const NGSteamGameServices&);
-    NGSteamGameServices& operator=(const NGSteamGameServices&);
+    SteamGameServices(const char* inGameDir);
+    ~SteamGameServices();
+    SteamGameServices(const SteamGameServices&);
+    SteamGameServices& operator=(const SteamGameServices&);
 };
 
 #endif /* IS_DESKTOP */

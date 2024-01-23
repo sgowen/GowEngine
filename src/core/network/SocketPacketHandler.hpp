@@ -20,9 +20,9 @@ public:
     SocketPacketHandler(TimeTracker& tt, uint16_t port, ProcessPacketFunc ppf);
     virtual ~SocketPacketHandler();
     
+    virtual int connect() override;
     virtual void sendPacket(const OutputMemoryBitStream& ombs, MachineAddress* toAddress) override;
     
-    int connect();
     void processIncomingPackets();
     SocketAddress& getSocketAddress();
     const MovingAverage& bytesReceivedPerSecond() const;

@@ -1,5 +1,5 @@
 //
-//  NGSteamP2PAuth.hpp
+//  SteamP2PAuth.hpp
 //  GowEngine
 //
 //  Created by Stephen Gowen on 6/20/17.
@@ -11,28 +11,28 @@
 #include <GowEngine/BuildConstants.hpp>
 #if IS_DESKTOP
 
-#include "deps/steamworks_sdk/NGSteam.hpp"
+#include "deps/steamworks_sdk/Steam.hpp"
 #include "core/common/Constants.hpp"
 
 class InputMemoryBitStream;
 class NetworkHelper;
-class NGSteamAddress;
+class SteamAddress;
 
-class NGSteamP2PAuthPlayer;
-class NGSteamP2PNetworkTransport;
+class SteamP2PAuthPlayer;
+class SteamP2PNetworkTransport;
 class MsgP2PSendingTicket;
 
 class TimeTracker;
 
-class NGSteamP2PAuth
+class SteamP2PAuth
 {
 public:
-    NGSteamP2PAuthPlayer *_rgpP2PAuthPlayer[MAX_NUM_PLAYERS];
+    SteamP2PAuthPlayer *_rgpP2PAuthPlayer[MAX_NUM_PLAYERS];
     MsgP2PSendingTicket *_rgpQueuedMessage[MAX_NUM_PLAYERS];
-    NGSteamP2PNetworkTransport *_networkTransport;
+    SteamP2PNetworkTransport *_networkTransport;
 
-    NGSteamP2PAuth(NetworkHelper* networkHelper);
-    ~NGSteamP2PAuth();
+    SteamP2PAuth(NetworkHelper* networkHelper);
+    ~SteamP2PAuth();
 
     void playerDisconnect(uint8 iSlot);
     void endGame();
@@ -42,13 +42,13 @@ public:
     void internalinitPlayer(uint8 iSlot, CSteamID steamID, bool bStartAuthProcess);
 };
 
-class NGSteamP2PAuthPlayer
+class SteamP2PAuthPlayer
 {
 public:
     CSteamID _steamID;
 
-	NGSteamP2PAuthPlayer(NGSteamP2PNetworkTransport *pNetworkTransport);
-	~NGSteamP2PAuthPlayer();
+	SteamP2PAuthPlayer(SteamP2PNetworkTransport *pNetworkTransport);
+	~SteamP2PAuthPlayer();
 
     void endGame();
 	void initPlayer(CSteamID steamID);
@@ -56,7 +56,7 @@ public:
 	bool isAuthOk();
 	bool handleMessage(MsgP2PSendingTicket* msg);
 
-	STEAM_CALLBACK(NGSteamP2PAuthPlayer, OnBeginAuthResponse, ValidateAuthTicketResponse_t, _callbackBeginAuthResponse);
+	STEAM_CALLBACK(SteamP2PAuthPlayer, OnBeginAuthResponse, ValidateAuthTicketResponse_t, _callbackBeginAuthResponse);
 
 private:
     TimeTracker* _timeTracker;
@@ -74,24 +74,24 @@ private:
 	EBeginAuthSessionResult _eBeginAuthSessionResult;
 	EAuthSessionResponse _eAuthSessionResponse;
 
-	NGSteamP2PNetworkTransport *_networkTransport;
+	SteamP2PNetworkTransport *_networkTransport;
 };
 
-class NGSteamP2PNetworkTransport
+class SteamP2PNetworkTransport
 {
 public:
-	NGSteamP2PNetworkTransport(NetworkHelper* networkHelper);
-    ~NGSteamP2PNetworkTransport();
+	SteamP2PNetworkTransport(NetworkHelper* networkHelper);
+    ~SteamP2PNetworkTransport();
 
 	void sendTicket(CSteamID steamIDFrom, CSteamID steamIDTo, uint32 cubTicket, uint8 *pubTicket);
 	void closeConnection(CSteamID steamID);
 
-	STEAM_CALLBACK(NGSteamP2PNetworkTransport, onP2PSessionRequest, P2PSessionRequest_t, _CallbackP2PSessionRequest);
-	STEAM_CALLBACK(NGSteamP2PNetworkTransport, onP2PSessionConnectFail, P2PSessionConnectFail_t, _CallbackP2PSessionConnectFail);
+	STEAM_CALLBACK(SteamP2PNetworkTransport, onP2PSessionRequest, P2PSessionRequest_t, _CallbackP2PSessionRequest);
+	STEAM_CALLBACK(SteamP2PNetworkTransport, onP2PSessionConnectFail, P2PSessionConnectFail_t, _CallbackP2PSessionConnectFail);
 
 private:
     NetworkHelper* _networkHelper;
-    NGSteamAddress* _outgoingPacketAddress;
+    SteamAddress* _outgoingPacketAddress;
 };
 
 class MsgP2PSendingTicket

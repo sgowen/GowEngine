@@ -37,7 +37,7 @@ enum NetworkClientState
 class NetworkClient
 {
 public:
-    static void create(std::string serverIPAddress, std::string username, uint16_t port, TimeTracker& tt, OnEntityRegisteredFunc oerf, OnEntityDeregisteredFunc oedf, OnPlayerWelcomedFunc opwf);
+    static void create(ClientHelper* clientHelper, std::string serverIPAddress, std::string username, uint16_t port, TimeTracker& tt, OnEntityRegisteredFunc oerf, OnEntityDeregisteredFunc oedf, OnPlayerWelcomedFunc opwf);
     static NetworkClient* getInstance();
     static void destroy();
     
@@ -61,7 +61,7 @@ private:
     static NetworkClient* s_instance;
     
     TimeTracker& _timeTracker;
-    SocketAddress* _serverAddress;
+    ClientHelper* _clientHelper;
     std::string _username;
     OnPlayerWelcomedFunc _onPlayerWelcomedFunc;
     DeliveryNotificationManager _deliveryNotificationManager;
@@ -91,7 +91,14 @@ private:
     void updateDropLocalPlayerRequest();
     void updateNextIndex();
     
-    NetworkClient(std::string serverIPAddress, std::string username, uint16_t port, TimeTracker& tt, OnEntityRegisteredFunc oerf, OnEntityDeregisteredFunc oedf, OnPlayerWelcomedFunc opwf);
+    NetworkClient(ClientHelper* clientHelper, 
+                  std::string serverIPAddress,
+                  std::string username,
+                  uint16_t port,
+                  TimeTracker& tt,
+                  OnEntityRegisteredFunc oerf,
+                  OnEntityDeregisteredFunc oedf,
+                  OnPlayerWelcomedFunc opwf);
     ~NetworkClient();
     NetworkClient(const NetworkClient&);
     NetworkClient& operator=(const NetworkClient&);

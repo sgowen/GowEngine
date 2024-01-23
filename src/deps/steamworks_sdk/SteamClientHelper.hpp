@@ -1,5 +1,5 @@
 //
-//  NGSteamClientHelper.hpp
+//  SteamClientHelper.hpp
 //  GowEngine
 //
 //  Created by Stephen Gowen on 6/17/17.
@@ -14,22 +14,22 @@
 #include "core/network/ClientHelper.hpp"
 
 #include "core/network/PacketHandler.hpp"
-#include "deps/steamworks_sdk/NGSteam.hpp"
+#include "deps/steamworks_sdk/Steam.hpp"
 #include "core/common/Constants.hpp"
 
-class NGSteamP2PAuth;
-class NGSteamAddress;
+class SteamP2PAuth;
+class SteamAddress;
 
 typedef uint64_t (*GetPlayerAddressHashFunc)(uint8_t inPlayerIndex);
 
-class NGSteamClientHelper : public ClientHelper
+class SteamClientHelper : public ClientHelper
 {
 public:
-    NGSteamClientHelper(CSteamID serverSteamID,
+    SteamClientHelper(CSteamID serverSteamID,
                         TimeTracker& tt,
                         GetPlayerAddressHashFunc getPlayerAddressHashFunc,
                         ProcessPacketFunc processPacketFunc);
-    virtual ~NGSteamClientHelper();
+    virtual ~SteamClientHelper();
     
     virtual void processIncomingPackets();
     virtual void processSpecialPacket(uint8_t packetType, 
@@ -55,10 +55,10 @@ private:
     };
     
     TimeTracker& _timeTracker;
-    NGSteamP2PAuth* _steamP2PAuth;
+    SteamP2PAuth* _steamP2PAuth;
     GetPlayerAddressHashFunc _getPlayerAddressHashFunc;
     EClientConnectionState _eConnectedStatus;
-    NGSteamAddress* _serverSteamAddress;
+    SteamAddress* _serverSteamAddress;
     std::string _name;
     float _timeOfLastMsgClientBeginAuthentication;
     

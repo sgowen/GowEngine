@@ -1,5 +1,5 @@
 //
-//  NGSteamPacketHandler.hpp
+//  SteamPacketHandler.hpp
 //  GowEngine
 //
 //  Created by Stephen Gowen on 6/15/17.
@@ -14,7 +14,7 @@
 #include "core/network/PacketHandler.hpp"
 
 #include "core/network/InputMemoryBitStream.hpp"
-#include "deps/steamworks_sdk/NGSteamAddress.hpp"
+#include "deps/steamworks_sdk/SteamAddress.hpp"
 
 #include <queue>
 #include <list>
@@ -22,19 +22,20 @@
 class OutputMemoryBitStream;
 class MachineAddress;
 
-class NGSteamPacketHandler : public PacketHandler
+class SteamPacketHandler : public PacketHandler
 {
 public:
-    NGSteamPacketHandler(TimeTracker& timeTracker,
+    SteamPacketHandler(TimeTracker& timeTracker,
                          ISteamNetworking* steamNetworking,
                          ProcessPacketFunc processPacketFunc);
-    virtual ~NGSteamPacketHandler();
+    virtual ~SteamPacketHandler();
     
-    virtual void sendPacket(const OutputMemoryBitStream& inOutputStream, MachineAddress* inFromAddress);
+    virtual int connect() override;
+    virtual void sendPacket(const OutputMemoryBitStream& inOutputStream, MachineAddress* inFromAddress) override;
 
 protected:
-    virtual void readIncomingPacketsIntoQueue();
-    virtual void processQueuedPackets();
+    virtual void readIncomingPacketsIntoQueue() override;
+    virtual void processQueuedPackets() override;
     
 private:
     ISteamNetworking* _steamNetworking;
@@ -45,16 +46,16 @@ private:
     class ReceivedPacket
     {
     public:
-        ReceivedPacket(float inReceivedTime, InputMemoryBitStream& inInputMemoryBitStream, NGSteamAddress inFromAddress);
+        ReceivedPacket(uint32_t inReceivedTime, InputMemoryBitStream& inInputMemoryBitStream, SteamAddress inFromAddress);
         
-        NGSteamAddress& getFromAddress();
-        float getReceivedTime()	const;
+        SteamAddress& getFromAddress();
+        uint32_t getReceivedTime()	const;
         InputMemoryBitStream& getPacketBuffer();
         
     private:
-        float _receivedTime;
+        uint32_t _receivedTime;
         InputMemoryBitStream _packetBuffer;
-        NGSteamAddress _fromAddress;
+        SteamAddress _fromAddress;
     };
 };
 

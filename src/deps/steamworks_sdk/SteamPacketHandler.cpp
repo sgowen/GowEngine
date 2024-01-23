@@ -1,5 +1,5 @@
 //
-//  NGSteamPacketHandler.cpp
+//  SteamPacketHandler.cpp
 //  GowEngine
 //
 //  Created by Stephen Gowen on 6/15/17.
@@ -10,7 +10,7 @@
 
 #if IS_DESKTOP
 
-NGSteamPacketHandler::NGSteamPacketHandler(TimeTracker& tt,
+SteamPacketHandler::SteamPacketHandler(TimeTracker& tt,
                                            ISteamNetworking* steamNetworking,
                                            ProcessPacketFunc ppf) : PacketHandler(tt, ppf),
 _steamNetworking(steamNetworking)
@@ -18,18 +18,24 @@ _steamNetworking(steamNetworking)
     // Empty
 }
 
-NGSteamPacketHandler::~NGSteamPacketHandler()
+SteamPacketHandler::~SteamPacketHandler()
 {
     // Empty
 }
 
-void NGSteamPacketHandler::sendPacket(const OutputMemoryBitStream& inOutputStream, MachineAddress* inFromAddress)
+int SteamPacketHandler::connect()
+{
+    // No need to manually create the UDP socket with Steam I guess?
+    return NO_ERROR;
+}
+
+void SteamPacketHandler::sendPacket(const OutputMemoryBitStream& inOutputStream, MachineAddress* inFromAddress)
 {
 #ifdef NG_LOG
     LOG("%s Outgoing packet Bit Length: %d \n", _isServer ? "Server" : "Client", inOutputStream.getBitLength());
 #endif
     
-    NGSteamAddress* inFromSteamAddress = static_cast<NGSteamAddress*>(inFromAddress);
+    SteamAddress* inFromSteamAddress = static_cast<SteamAddress*>(inFromAddress);
     
     if (_steamNetworking->SendP2PPacket(inFromSteamAddress->getSteamID(), inOutputStream.getBufferPtr(), inOutputStream.getByteLength(), inFromSteamAddress->isReliable() ? k_EP2PSendReliable : k_EP2PSendUnreliable))
     {
@@ -45,7 +51,7 @@ void NGSteamPacketHandler::sendPacket(const OutputMemoryBitStream& inOutputStrea
     }
 }
 
-void NGSteamPacketHandler::readIncomingPacketsIntoQueue()
+void SteamPacketHandler::readIncomingPacketsIntoQueue()
 {
     static char packetMem[NW_MAX_PACKET_SIZE];
     static uint32 packetSize = sizeof(packetMem);
@@ -57,6 +63,8 @@ void NGSteamPacketHandler::readIncomingPacketsIntoQueue()
     CSteamID fromId;
     
     int totalReadByteCount = 0;
+    
+    uint8_t numFramesOfSimulatedLatency = ENGINE_CFG.numFramesOfSimulatedLatency();
     
     while (_steamNetworking->IsP2PPacketAvailable(&incomingSize))
     {
@@ -72,20 +80,8 @@ void NGSteamPacketHandler::readIncomingPacketsIntoQueue()
                     inputStream.resetToCapacity(readByteCount);
                     totalReadByteCount += readByteCount;
                     
-                    //shove the packet into the queue and we'll handle it as soon as we should...
-                    //we'll pretend it wasn't received until simulated latency from now
-                    //this doesn't sim jitter, for that we would need to.....
-                    float simulatedReceivedTime = _timeTracker.realTime();
-                    
-                    _packetQueue.push(ReceivedPacket(simulatedReceivedTime, inputStream, fromId));
+                    _packetQueue.emplace(_timeTracker._time + numFramesOfSimulatedLatency, inputStream, fromId);
                 }
-                
-#ifdef NG_LOG
-                if (!_isServer)
-                {
-                    LOG("readByteCount: %d", readByteCount);
-                }
-#endif
             }
         }
     }
@@ -96,13 +92,13 @@ void NGSteamPacketHandler::readIncomingPacketsIntoQueue()
     }
 }
 
-void NGSteamPacketHandler::processQueuedPackets()
+void SteamPacketHandler::processQueuedPackets()
 {
     //look at the front packet...
     while (!_packetQueue.empty())
     {
         ReceivedPacket& nextPacket = _packetQueue.front();
-        if (_timeTracker.realTime() > nextPacket.getReceivedTime())
+        if (_timeTracker._time > nextPacket.getReceivedTime())
         {
             _processPacketFunc(nextPacket.getPacketBuffer(), &nextPacket.getFromAddress());
             _packetQueue.pop();
@@ -114,7 +110,7 @@ void NGSteamPacketHandler::processQueuedPackets()
     }
 }
 
-NGSteamPacketHandler::ReceivedPacket::ReceivedPacket(float inReceivedTime, InputMemoryBitStream& ioInputMemoryBitStream, NGSteamAddress inFromAddress) :
+SteamPacketHandler::ReceivedPacket::ReceivedPacket(uint32_t inReceivedTime, InputMemoryBitStream& ioInputMemoryBitStream, SteamAddress inFromAddress) :
 _receivedTime(inReceivedTime),
 _fromAddress(inFromAddress),
 _packetBuffer(ioInputMemoryBitStream)
@@ -122,17 +118,17 @@ _packetBuffer(ioInputMemoryBitStream)
     // Empty
 }
 
-NGSteamAddress& NGSteamPacketHandler::ReceivedPacket::getFromAddress()
+SteamAddress& SteamPacketHandler::ReceivedPacket::getFromAddress()
 {
     return _fromAddress;
 }
 
-float NGSteamPacketHandler::ReceivedPacket::getReceivedTime() const
+uint32_t SteamPacketHandler::ReceivedPacket::getReceivedTime() const
 {
     return _receivedTime;
 }
 
-InputMemoryBitStream& NGSteamPacketHandler::ReceivedPacket::getPacketBuffer()
+InputMemoryBitStream& SteamPacketHandler::ReceivedPacket::getPacketBuffer()
 {
     return _packetBuffer;
 }

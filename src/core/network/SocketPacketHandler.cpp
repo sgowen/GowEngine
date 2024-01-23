@@ -40,13 +40,6 @@ int SocketPacketHandler::connect()
     return _socket->setNonBlockingMode(true);
 }
 
-void SocketPacketHandler::processIncomingPackets()
-{
-    readIncomingPacketsIntoQueue();
-    processQueuedPackets();
-    updateBytesSentLastFrame();
-}
-
 void SocketPacketHandler::sendPacket(const OutputMemoryBitStream& ombs, MachineAddress* toAddress)
 {
     SocketAddress* toSocketAddress = static_cast<SocketAddress*>(toAddress);
@@ -55,6 +48,13 @@ void SocketPacketHandler::sendPacket(const OutputMemoryBitStream& ombs, MachineA
     {
         _bytesSentThisFrame += sentByteCount;
     }
+}
+
+void SocketPacketHandler::processIncomingPackets()
+{
+    readIncomingPacketsIntoQueue();
+    processQueuedPackets();
+    updateBytesSentLastFrame();
 }
 
 SocketAddress& SocketPacketHandler::getSocketAddress()
@@ -70,7 +70,6 @@ void SocketPacketHandler::readIncomingPacketsIntoQueue()
     InputMemoryBitStream imbs(packetMem, NW_MAX_PACKET_SIZE);
     SocketAddress fromAddress;
 
-    int receivedPacketCount = 0;
     int totalReadByteCount = 0;
 
     uint8_t numFramesOfSimulatedLatency = ENGINE_CFG.numFramesOfSimulatedLatency();
@@ -86,7 +85,6 @@ void SocketPacketHandler::readIncomingPacketsIntoQueue()
         else if (readByteCount > 0)
         {
             imbs.resetToCapacity(readByteCount);
-            ++receivedPacketCount;
             totalReadByteCount += readByteCount;
             
             _packetQueue.emplace(_timeTracker._time + numFramesOfSimulatedLatency, imbs, fromAddress);

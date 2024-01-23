@@ -44,15 +44,15 @@
 #include "deps/stb/TextureLoader.hpp"
 
 /// steamworks_sdk implementation
-#include "deps/steamworks_sdk/NGSteam.hpp"
-#include "deps/steamworks_sdk/NGSteamAddress.hpp"
-#include "deps/steamworks_sdk/NGSteamClientHelper.hpp"
-#include "deps/steamworks_sdk/NGSteamClientHelper.hpp"
-#include "deps/steamworks_sdk/NGSteamGameServer.hpp"
-#include "deps/steamworks_sdk/NGSteamGameServices.hpp"
-#include "deps/steamworks_sdk/NGSteamP2PAuth.hpp"
-#include "deps/steamworks_sdk/NGSteamPacketHandler.hpp"
-#include "deps/steamworks_sdk/NGSteamServerHelper.hpp"
+#include "deps/steamworks_sdk/Steam.hpp"
+#include "deps/steamworks_sdk/SteamAddress.hpp"
+#include "deps/steamworks_sdk/SteamClientHelper.hpp"
+#include "deps/steamworks_sdk/SteamClientHelper.hpp"
+#include "deps/steamworks_sdk/SteamGameServer.hpp"
+#include "deps/steamworks_sdk/SteamGameServices.hpp"
+#include "deps/steamworks_sdk/SteamP2PAuth.hpp"
+#include "deps/steamworks_sdk/SteamPacketHandler.hpp"
+#include "deps/steamworks_sdk/SteamServerHelper.hpp"
 
 /// Core Assets
 #include "core/assets/AndroidAssetHandler.hpp"

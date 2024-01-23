@@ -1,5 +1,5 @@
 //
-//  NGSteamGameServices.cpp
+//  SteamGameServices.cpp
 //  GowEngine
 //
 //  Created by Stephen Gowen on 6/11/17.
@@ -32,16 +32,16 @@ extern "C" void __cdecl steamAPIDebugTextHook(int nSeverity, const char *pchDebu
     }
 }
 
-NGSteamGameServices* NGSteamGameServices::s_instance = NULL;
+SteamGameServices* SteamGameServices::s_instance = NULL;
 
-void NGSteamGameServices::create(const char* inGameDir)
+void SteamGameServices::create(const char* inGameDir)
 {
     assert(!s_instance);
     
-    s_instance = new NGSteamGameServices(inGameDir);
+    s_instance = new SteamGameServices(inGameDir);
 }
 
-void NGSteamGameServices::destroy()
+void SteamGameServices::destroy()
 {
     assert(s_instance);
     
@@ -49,18 +49,18 @@ void NGSteamGameServices::destroy()
     s_instance = NULL;
 }
 
-NGSteamGameServices * NGSteamGameServices::getInstance()
+SteamGameServices * SteamGameServices::getInstance()
 {
     return s_instance;
 }
 
-void NGSteamGameServices::update()
+void SteamGameServices::update()
 {
     SteamGameServer_RunCallbacks();
     SteamAPI_RunCallbacks();
 }
 
-void NGSteamGameServices::parseCommandLine(const char *pchCmdLine, const char **ppchServerAddress)
+void SteamGameServices::parseCommandLine(const char *pchCmdLine, const char **ppchServerAddress)
 {
     // Look for the +connect ipaddress:port parameter in the command line,
     // Steam will pass this when a user has used the Steam Server browser to find
@@ -75,7 +75,7 @@ void NGSteamGameServices::parseCommandLine(const char *pchCmdLine, const char **
     }
 }
 
-void NGSteamGameServices::connectToServerWithAddress(const char *pchServerAddress)
+void SteamGameServices::connectToServerWithAddress(const char *pchServerAddress)
 {
     if (pchServerAddress)
     {
@@ -93,7 +93,7 @@ void NGSteamGameServices::connectToServerWithAddress(const char *pchServerAddres
     }
 }
 
-void NGSteamGameServices::initiateServerConnection(uint32 unServerAddress, const int32 nPort)
+void SteamGameServices::initiateServerConnection(uint32 unServerAddress, const int32 nPort)
 {
     // ping the server to find out what it's steamID is
     _unServerIP = unServerAddress;
@@ -102,7 +102,7 @@ void NGSteamGameServices::initiateServerConnection(uint32 unServerAddress, const
     _gameServerPing.retrieveSteamIDFromGameServer(this, _unServerIP, _usServerPort);
 }
 
-void NGSteamGameServices::initiateServerConnection(CSteamID steamIDGameServer)
+void SteamGameServices::initiateServerConnection(CSteamID steamIDGameServer)
 {
     _steamIDGameServerToJoin = steamIDGameServer;
     
@@ -111,22 +111,22 @@ void NGSteamGameServices::initiateServerConnection(CSteamID steamIDGameServer)
     _isRequestingToJoinServer = true;
 }
 
-CSteamID NGSteamGameServices::getServerToJoinSteamID()
+CSteamID SteamGameServices::getServerToJoinSteamID()
 {
     return _steamIDGameServerToJoin;
 }
 
-int NGSteamGameServices::getStatus()
+int SteamGameServices::getStatus()
 {
     return _status;
 }
 
-bool NGSteamGameServices::isRequestingToJoinServer()
+bool SteamGameServices::isRequestingToJoinServer()
 {
     return _isRequestingToJoinServer;
 }
 
-void NGSteamGameServices::onServerJoined()
+void SteamGameServices::onServerJoined()
 {
     SteamFriends()->SetRichPresence("status", "In game");
     
@@ -135,7 +135,7 @@ void NGSteamGameServices::onServerJoined()
 
 #pragma mark ISteamMatchmakingServerListResponse
 
-void NGSteamGameServices::ServerResponded(HServerListRequest hReq, int iServer)
+void SteamGameServices::ServerResponded(HServerListRequest hReq, int iServer)
 {
     LOG("ServerResponded");
     
@@ -145,13 +145,13 @@ void NGSteamGameServices::ServerResponded(HServerListRequest hReq, int iServer)
         // Filter out servers that don't match our appid here (might get these in LAN calls since we can't put more filters on it)
         if (pServer->m_nAppID == SteamUtils()->GetAppID())
         {
-            _gameServers.push_back(NGSteamGameServer(pServer));
+            _gameServers.push_back(SteamGameServer(pServer));
             _numServers++;
         }
     }
 }
 
-void NGSteamGameServices::ServerFailedToRespond(HServerListRequest hReq, int iServer)
+void SteamGameServices::ServerFailedToRespond(HServerListRequest hReq, int iServer)
 {
     LOG("ServerFailedToRespond");
     
@@ -159,24 +159,24 @@ void NGSteamGameServices::ServerFailedToRespond(HServerListRequest hReq, int iSe
     UNUSED(iServer);
 }
 
-void NGSteamGameServices::RefreshComplete(HServerListRequest hReq, EMatchMakingServerResponse response)
+void SteamGameServices::RefreshComplete(HServerListRequest hReq, EMatchMakingServerResponse response)
 {
     LOG("RefreshComplete");
     
     _isRequestingServers = false;
 }
 
-std::vector<NGSteamGameServer>& NGSteamGameServices::getGameServers()
+std::vector<SteamGameServer>& SteamGameServices::getGameServers()
 {
     return _gameServers;
 }
 
-bool NGSteamGameServices::isRequestingServers()
+bool SteamGameServices::isRequestingServers()
 {
     return _isRequestingServers;
 }
 
-void NGSteamGameServices::refreshInternetServers()
+void SteamGameServices::refreshInternetServers()
 {
     // If we are still finishing the previous refresh, then ignore this new request
     if (_isRequestingServers)
@@ -222,7 +222,7 @@ void NGSteamGameServices::refreshInternetServers()
     SteamFriends()->SetRichPresence("status", "Finding an internet game");
 }
 
-void NGSteamGameServices::refreshLANServers()
+void SteamGameServices::refreshLANServers()
 {
     // If we are still finishing the previous refresh, then ignore this new request
     if (_isRequestingServers)
@@ -252,7 +252,7 @@ void NGSteamGameServices::refreshLANServers()
 
 #pragma mark Steam Cloud
 
-bool NGSteamGameServices::writeFileToSteamCloud(const char *inFileName, const char *inData)
+bool SteamGameServices::writeFileToSteamCloud(const char *inFileName, const char *inData)
 {
     refreshSteamCloudFileStats();
     
@@ -265,17 +265,17 @@ bool NGSteamGameServices::writeFileToSteamCloud(const char *inFileName, const ch
     
     if (ret)
     {
-        LOG("NGSteamGameServices: File written successfully to Steam Remote Storage");
+        LOG("SteamGameServices: File written successfully to Steam Remote Storage");
     }
     else
     {
-        LOG("NGSteamGameServices: Failed to write file!");
+        LOG("SteamGameServices: Failed to write file!");
     }
     
     return ret;
 }
 
-std::string NGSteamGameServices::readFileFromSteamCloud(const char *inFileName)
+std::string SteamGameServices::readFileFromSteamCloud(const char *inFileName)
 {
 	char temp[4096];
     
@@ -286,7 +286,7 @@ std::string NGSteamGameServices::readFileFromSteamCloud(const char *inFileName)
         int32 fileByteSize = SteamRemoteStorage()->GetFileSize(inFileName);
         if (fileByteSize >= sizeof(temp))
         {
-            LOG("NGSteamGameServices: File was larger than expected, removing it...");
+            LOG("SteamGameServices: File was larger than expected, removing it...");
             
             char c = 0;
             SteamRemoteStorage()->FileWrite(inFileName, &c, 1);
@@ -302,7 +302,7 @@ std::string NGSteamGameServices::readFileFromSteamCloud(const char *inFileName)
     return std::string(temp);
 }
 
-void NGSteamGameServices::refreshSteamCloudFileStats()
+void SteamGameServices::refreshSteamCloudFileStats()
 {
     _ulBytesQuota = 0;
     _ulAvailableBytes = 0;
@@ -314,7 +314,7 @@ void NGSteamGameServices::refreshSteamCloudFileStats()
 
 #pragma mark - STEAM_CALLBACK
 
-void NGSteamGameServices::onGameOverlayActivated(GameOverlayActivated_t *callback)
+void SteamGameServices::onGameOverlayActivated(GameOverlayActivated_t *callback)
 {
     if (callback->m_bActive)
     {
@@ -326,7 +326,7 @@ void NGSteamGameServices::onGameOverlayActivated(GameOverlayActivated_t *callbac
     }
 }
 
-void NGSteamGameServices::onGameJoinRequested(GameRichPresenceJoinRequested_t *pCallback)
+void SteamGameServices::onGameJoinRequested(GameRichPresenceJoinRequested_t *pCallback)
 {
     LOG("onGameJoinRequested");
     
@@ -337,21 +337,21 @@ void NGSteamGameServices::onGameJoinRequested(GameRichPresenceJoinRequested_t *p
     connectToServerWithAddress(pchServerAddress);
 }
 
-void NGSteamGameServices::onIPCFailure(IPCFailure_t *failure)
+void SteamGameServices::onIPCFailure(IPCFailure_t *failure)
 {
     LOG("Steam IPC Failure, shutting down");
     
     _status = STEAM_IPC_FAILURE;
 }
 
-void NGSteamGameServices::onSteamShutdown(SteamShutdown_t *callback)
+void SteamGameServices::onSteamShutdown(SteamShutdown_t *callback)
 {
     LOG("Steam shutdown request, shutting down");
     
     _status = STEAM_SHUTDOWN;
 }
 
-NGSteamGameServices::NGSteamGameServices(const char* inGameDir) :
+SteamGameServices::SteamGameServices(const char* inGameDir) :
 _gameDir(inGameDir),
 _numServers(0),
 _isRequestingServers(false),
@@ -430,7 +430,7 @@ _isRequestingToJoinServer(false)
     _status = STEAM_INIT_SUCCESS;
 }
 
-NGSteamGameServices::~NGSteamGameServices()
+SteamGameServices::~SteamGameServices()
 {
     if (_hServerListRequest)
     {
@@ -445,13 +445,13 @@ NGSteamGameServices::~NGSteamGameServices()
     Steamworks_TermCEGLibrary();
 }
 
-NGSteamGameServices::GameServerPing::GameServerPing()
+SteamGameServices::GameServerPing::GameServerPing()
 {
     _hGameServerQuery = HSERVERQUERY_INVALID;
     _client = NULL;
 }
 
-void NGSteamGameServices::GameServerPing::ServerResponded(gameserveritem_t &server)
+void SteamGameServices::GameServerPing::ServerResponded(gameserveritem_t &server)
 {
     if (_hGameServerQuery != HSERVERQUERY_INVALID && server.m_steamID.IsValid())
     {
@@ -461,18 +461,18 @@ void NGSteamGameServices::GameServerPing::ServerResponded(gameserveritem_t &serv
     _hGameServerQuery = HSERVERQUERY_INVALID;
 }
 
-void NGSteamGameServices::GameServerPing::ServerFailedToRespond()
+void SteamGameServices::GameServerPing::ServerFailedToRespond()
 {
     _hGameServerQuery = HSERVERQUERY_INVALID;
 }
 
-void NGSteamGameServices::GameServerPing::retrieveSteamIDFromGameServer(NGSteamGameServices *client, uint32 unIP, uint16 unPort)
+void SteamGameServices::GameServerPing::retrieveSteamIDFromGameServer(SteamGameServices *client, uint32 unIP, uint16 unPort)
 {
     _client = client;
     _hGameServerQuery = SteamMatchmakingServers()->PingServer(unIP, unPort, this);
 }
 
-void NGSteamGameServices::GameServerPing::cancelPing()
+void SteamGameServices::GameServerPing::cancelPing()
 {
     _hGameServerQuery = HSERVERQUERY_INVALID;
 }

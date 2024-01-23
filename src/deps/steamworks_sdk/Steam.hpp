@@ -1,5 +1,5 @@
 //
-//  NGSteam.hpp
+//  Steam.hpp
 //  GowEngine
 //
 //  Created by Stephen Gowen on 6/13/17.

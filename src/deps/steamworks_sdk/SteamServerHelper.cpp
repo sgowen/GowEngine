@@ -1,5 +1,5 @@
 //
-//  NGSteamServerHelper.cpp
+//  SteamServerHelper.cpp
 //  GowEngine
 //
 //  Created by Stephen Gowen on 6/17/17.
@@ -10,7 +10,7 @@
 
 #if IS_DESKTOP
 
-NGSteamServerHelper::NGSteamServerHelper(std::string inGameDir,
+SteamServerHelper::SteamServerHelper(std::string inGameDir,
                                          std::string inVersionString,
                                          std::string inProductName,
                                          std::string inGameDescription,
@@ -18,11 +18,11 @@ NGSteamServerHelper::NGSteamServerHelper(std::string inGameDir,
                                          TimeTracker& tt,
                                          ProcessPacketFunc inProcessPacketFunc,
                                          GetClientProxyFunc inGetClientProxyFunc,
-                                         HandleClientDisconnectedFunc inHandleClientDisconnectedFunc) : ServerHelper(new NGSteamPacketHandler(tt, SteamGameServerNetworking(), inProcessPacketFunc), inGetClientProxyFunc, inHandleClientDisconnectedFunc),
+                                         HandleClientDisconnectedFunc inHandleClientDisconnectedFunc) : ServerHelper(new SteamPacketHandler(tt, SteamGameServerNetworking(), inProcessPacketFunc), inGetClientProxyFunc, inHandleClientDisconnectedFunc),
 _gameDir(inGameDir),
-_serverSteamAddress(new NGSteamAddress()),
+_serverSteamAddress(new SteamAddress()),
 _isConnectedToSteam(false),
-_outgoingPacketAddress(new NGSteamAddress())
+_outgoingPacketAddress(new SteamAddress())
 {
     // Initialize the SteamGameServer interface, we tell it some info about us, and we request support
     // for both Authentication (making sure users own games) and secure mode, VAC running in our game
@@ -70,7 +70,7 @@ _outgoingPacketAddress(new NGSteamAddress())
     memset(&_rgPendingClientData, 0, sizeof(_rgPendingClientData));
 }
 
-NGSteamServerHelper::~NGSteamServerHelper()
+SteamServerHelper::~SteamServerHelper()
 {
     // Notify Steam master server we are going offline
     SteamGameServer()->EnableHeartbeats(false);
@@ -80,7 +80,7 @@ NGSteamServerHelper::~NGSteamServerHelper()
         ClientProxy* clientProxy = _getClientProxyFunc(i);
         if (clientProxy)
         {
-            NGSteamAddress* userAddress = static_cast<NGSteamAddress*>(clientProxy->getMachineAddress());
+            SteamAddress* userAddress = static_cast<SteamAddress*>(clientProxy->getMachineAddress());
             
             OutputMemoryBitStream packet(NW_MAX_PACKET_SIZE);
             packet.write(static_cast<uint8_t>(k_EMsgServerExiting));
@@ -99,14 +99,14 @@ NGSteamServerHelper::~NGSteamServerHelper()
     SteamGameServer_Shutdown();
 }
 
-void NGSteamServerHelper::processIncomingPackets()
+void SteamServerHelper::processIncomingPackets()
 {
     NetworkHelper::processIncomingPackets();
     
     sendUpdatedServerDetailsToSteam();
 }
 
-void NGSteamServerHelper::processSpecialPacket(uint8_t packetType, InputMemoryBitStream& inInputStream, MachineAddress* inFromAddress)
+void SteamServerHelper::processSpecialPacket(uint8_t packetType, InputMemoryBitStream& inInputStream, MachineAddress* inFromAddress)
 {
     switch (packetType)
     {
@@ -127,7 +127,7 @@ void NGSteamServerHelper::processSpecialPacket(uint8_t packetType, InputMemoryBi
             break;
         case k_EMsgClientBeginAuthentication:
         {
-            CSteamID steamIDRemote = (static_cast<NGSteamAddress*>(inFromAddress))->getSteamID();
+            CSteamID steamIDRemote = (static_cast<SteamAddress*>(inFromAddress))->getSteamID();
             
             uint32_t uTokenLen;
             inInputStream.read(uTokenLen);
@@ -142,7 +142,7 @@ void NGSteamServerHelper::processSpecialPacket(uint8_t packetType, InputMemoryBi
         {
             LOG("Client is leaving the server");
             
-            CSteamID steamIDRemote = (static_cast<NGSteamAddress*>(inFromAddress))->getSteamID();
+            CSteamID steamIDRemote = (static_cast<SteamAddress*>(inFromAddress))->getSteamID();
             
             // Find the connection that should exist for this users address
             bool isFound = false;
@@ -151,7 +151,7 @@ void NGSteamServerHelper::processSpecialPacket(uint8_t packetType, InputMemoryBi
                 ClientProxy* clientProxy = _getClientProxyFunc(i);
                 if (clientProxy)
                 {
-                    NGSteamAddress* userAddress = static_cast<NGSteamAddress*>(clientProxy->getMachineAddress());
+                    SteamAddress* userAddress = static_cast<SteamAddress*>(clientProxy->getMachineAddress());
                     if (userAddress->getSteamID() == steamIDRemote)
                     {
                         isFound = true;
@@ -181,27 +181,27 @@ void NGSteamServerHelper::processSpecialPacket(uint8_t packetType, InputMemoryBi
     }
 }
 
-void NGSteamServerHelper::onClientDisconnected(ClientProxy* clientProxy)
+void SteamServerHelper::onClientDisconnected(ClientProxy* clientProxy)
 {
-    NGSteamAddress* userAddress = static_cast<NGSteamAddress*>(clientProxy->getMachineAddress());
+    SteamAddress* userAddress = static_cast<SteamAddress*>(clientProxy->getMachineAddress());
     
     // Tell the GS the user is leaving the server
     SteamGameServer()->EndAuthSession(userAddress->getSteamID());
 }
 
-MachineAddress* NGSteamServerHelper::getServerAddress()
+MachineAddress* SteamServerHelper::getServerAddress()
 {
     _serverSteamAddress->setSteamID(SteamGameServer()->GetSteamID());
     
     return _serverSteamAddress;
 }
 
-bool NGSteamServerHelper::isConnected()
+bool SteamServerHelper::isConnected()
 {
     return _isConnectedToSteam;
 }
 
-void NGSteamServerHelper::kickPlayerOffServer(CSteamID steamID)
+void SteamServerHelper::kickPlayerOffServer(CSteamID steamID)
 {
     for (uint8_t i = 0; i < MAX_NUM_PLAYERS; ++i)
     {
@@ -212,7 +212,7 @@ void NGSteamServerHelper::kickPlayerOffServer(CSteamID steamID)
             continue;
         }
         
-        NGSteamAddress* userAddress = static_cast<NGSteamAddress*>(clientProxy->getMachineAddress());
+        SteamAddress* userAddress = static_cast<SteamAddress*>(clientProxy->getMachineAddress());
         
         if (userAddress->getSteamID() == steamID)
         {
@@ -227,7 +227,7 @@ void NGSteamServerHelper::kickPlayerOffServer(CSteamID steamID)
     }
 }
 
-void NGSteamServerHelper::sendUpdatedServerDetailsToSteam()
+void SteamServerHelper::sendUpdatedServerDetailsToSteam()
 {
     // Tell the Steam authentication servers about our game
     // If a client is running (should always be since we don't support a dedicated server)
@@ -249,7 +249,7 @@ void NGSteamServerHelper::sendUpdatedServerDetailsToSteam()
         ClientProxy* clientProxy = _getClientProxyFunc(i);
         if (clientProxy)
         {
-            NGSteamAddress* userAddress = static_cast<NGSteamAddress*>(clientProxy->getMachineAddress());
+            SteamAddress* userAddress = static_cast<SteamAddress*>(clientProxy->getMachineAddress());
             SteamGameServer()->BUpdateUserData(userAddress->getSteamID(), clientProxy->getUsername().c_str(), 0);
         }
     }
@@ -258,7 +258,7 @@ void NGSteamServerHelper::sendUpdatedServerDetailsToSteam()
 //-----------------------------------------------------------------------------
 // Purpose: Handle a new client connecting
 //-----------------------------------------------------------------------------
-void NGSteamServerHelper::onClientBeginAuthentication(CSteamID steamIDClient, void* token, uint32_t uTokenLen)
+void SteamServerHelper::onClientBeginAuthentication(CSteamID steamIDClient, void* token, uint32_t uTokenLen)
 {
     LOG("onClientBeginAuthentication, uTokenLen: %i", uTokenLen);
     
@@ -268,7 +268,7 @@ void NGSteamServerHelper::onClientBeginAuthentication(CSteamID steamIDClient, vo
         ClientProxy* clientProxy = _getClientProxyFunc(i);
         if (clientProxy)
         {
-            NGSteamAddress* userAddress = static_cast<NGSteamAddress*>(clientProxy->getMachineAddress());
+            SteamAddress* userAddress = static_cast<SteamAddress*>(clientProxy->getMachineAddress());
             if (userAddress->getSteamID() == steamIDClient)
             {
                 // We already logged them on... (should maybe tell them again incase they don't know?)
@@ -322,9 +322,9 @@ void NGSteamServerHelper::onClientBeginAuthentication(CSteamID steamIDClient, vo
 }
 
 /// Purpose: A new client that connected has had their authentication processed
-void NGSteamServerHelper::onAuthCompleted(bool bAuthSuccessful, uint32_t iPendingAuthIndex)
+void SteamServerHelper::onAuthCompleted(bool bAuthSuccessful, uint32_t iPendingAuthIndex)
 {
-    LOG("NGSteamServerHelper onAuthCompleted");
+    LOG("SteamServerHelper onAuthCompleted");
     
     if (!_rgPendingClientData[iPendingAuthIndex]._isActive)
     {
@@ -364,7 +364,7 @@ void NGSteamServerHelper::onAuthCompleted(bool bAuthSuccessful, uint32_t iPendin
     }
 }
 
-void NGSteamServerHelper::sendDataToClient(CSteamID steamIDUser, const OutputMemoryBitStream& inOutputStream)
+void SteamServerHelper::sendDataToClient(CSteamID steamIDUser, const OutputMemoryBitStream& inOutputStream)
 {
     _outgoingPacketAddress->setSteamID(steamIDUser);
     
@@ -373,7 +373,7 @@ void NGSteamServerHelper::sendDataToClient(CSteamID steamIDUser, const OutputMem
 
 #pragma mark - STEAM_GAMESERVER_CALLBACK
 
-void NGSteamServerHelper::onSteamServersConnected(SteamServersConnected_t *pLogonSuccess)
+void SteamServerHelper::onSteamServersConnected(SteamServersConnected_t *pLogonSuccess)
 {
     LOG("%s connected to Steam successfully", _gameDir.c_str());
     
@@ -384,21 +384,21 @@ void NGSteamServerHelper::onSteamServersConnected(SteamServersConnected_t *pLogo
     sendUpdatedServerDetailsToSteam();
 }
 
-void NGSteamServerHelper::onSteamServersConnectFailure(SteamServerConnectFailure_t *pConnectFailure)
+void SteamServerHelper::onSteamServersConnectFailure(SteamServerConnectFailure_t *pConnectFailure)
 {
     LOG("%s failed to connect to Steam", _gameDir.c_str());
     
     _isConnectedToSteam = false;
 }
 
-void NGSteamServerHelper::onSteamServersDisconnected(SteamServersDisconnected_t *pLoggedOff)
+void SteamServerHelper::onSteamServersDisconnected(SteamServersDisconnected_t *pLoggedOff)
 {
     LOG("%s got logged out of Steam", _gameDir.c_str());
     
     _isConnectedToSteam = false;
 }
 
-void NGSteamServerHelper::onPolicyResponse(GSPolicyResponse_t *pPolicyResponse)
+void SteamServerHelper::onPolicyResponse(GSPolicyResponse_t *pPolicyResponse)
 {
     if (SteamGameServer()->BSecure())
     {
@@ -413,7 +413,7 @@ void NGSteamServerHelper::onPolicyResponse(GSPolicyResponse_t *pPolicyResponse)
 }
 
 /// Purpose: Tells us Steam3 (VAC and newer license checking) has accepted the user connection
-void NGSteamServerHelper::onValidateAuthTicketResponse(ValidateAuthTicketResponse_t *pResponse)
+void SteamServerHelper::onValidateAuthTicketResponse(ValidateAuthTicketResponse_t *pResponse)
 {
     LOG("onValidateAuthTicketResponse");
     
@@ -454,7 +454,7 @@ void NGSteamServerHelper::onValidateAuthTicketResponse(ValidateAuthTicketRespons
 }
 
 /// Purpose: Handle clients connecting
-void NGSteamServerHelper::onP2PSessionRequest(P2PSessionRequest_t *pCallback)
+void SteamServerHelper::onP2PSessionRequest(P2PSessionRequest_t *pCallback)
 {
     LOG("onP2PSessionRequest");
     
@@ -463,7 +463,7 @@ void NGSteamServerHelper::onP2PSessionRequest(P2PSessionRequest_t *pCallback)
 }
 
 /// Handle clients disconnecting
-void NGSteamServerHelper::onP2PSessionConnectFail(P2PSessionConnectFail_t *pCallback)
+void SteamServerHelper::onP2PSessionConnectFail(P2PSessionConnectFail_t *pCallback)
 {
     LOG("onP2PSessionConnectFail");
     
@@ -477,7 +477,7 @@ void NGSteamServerHelper::onP2PSessionConnectFail(P2PSessionConnectFail_t *pCall
             continue;
         }
         
-        NGSteamAddress* userAddress = static_cast<NGSteamAddress*>(clientProxy->getMachineAddress());
+        SteamAddress* userAddress = static_cast<SteamAddress*>(clientProxy->getMachineAddress());
         
         if (userAddress->getSteamID() == pCallback->m_steamIDRemote)
         {

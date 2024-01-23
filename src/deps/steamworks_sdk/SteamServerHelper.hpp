@@ -1,5 +1,5 @@
 //
-//  NGSteamServerHelper.hpp
+//  SteamServerHelper.hpp
 //  GowEngine
 //
 //  Created by Stephen Gowen on 6/17/17.
@@ -13,19 +13,19 @@
 
 #include "core/network/ServerHelper.hpp"
 
-#include "deps/steamworks_sdk/NGSteam.hpp"
+#include "deps/steamworks_sdk/Steam.hpp"
 #include "core/network/PacketHandler.hpp"
 #include "core/common/Constants.hpp"
 
 #include <string>
 
-class NGSteamAddress;
+class SteamAddress;
 class ClientProxy;
 
-class NGSteamServerHelper : public ServerHelper
+class SteamServerHelper : public ServerHelper
 {
 public:
-    NGSteamServerHelper(std::string inGameDir,
+    SteamServerHelper(std::string inGameDir,
                         std::string inVersionString,
                         std::string inProductName,
                         std::string inGameDescription,
@@ -34,7 +34,7 @@ public:
                         ProcessPacketFunc inProcessPacketFunc,
                         GetClientProxyFunc inGetClientProxyFunc,
                         HandleClientDisconnectedFunc inHandleClientDisconnectedFunc);
-    virtual ~NGSteamServerHelper();
+    virtual ~SteamServerHelper();
     
     virtual void processIncomingPackets();
     virtual void processSpecialPacket(uint8_t packetType, InputMemoryBitStream& inInputStream, MachineAddress* inFromAddress);
@@ -46,10 +46,10 @@ public:
     
 private:
     std::string _gameDir;
-    NGSteamAddress* _serverSteamAddress;
+    SteamAddress* _serverSteamAddress;
     std::string _serverName;
     bool _isConnectedToSteam;
-    NGSteamAddress* _outgoingPacketAddress;
+    SteamAddress* _outgoingPacketAddress;
     
     struct ClientConnectionData_t
     {
@@ -65,13 +65,13 @@ private:
     void onAuthCompleted(bool bAuthSuccessful, uint32 iPendingAuthIndex);
     void sendDataToClient(CSteamID steamIDUser, const OutputMemoryBitStream& inOutputStream);
     
-    STEAM_GAMESERVER_CALLBACK(NGSteamServerHelper, onSteamServersConnected, SteamServersConnected_t);
-    STEAM_GAMESERVER_CALLBACK(NGSteamServerHelper, onSteamServersConnectFailure, SteamServerConnectFailure_t);
-    STEAM_GAMESERVER_CALLBACK(NGSteamServerHelper, onSteamServersDisconnected, SteamServersDisconnected_t);
-    STEAM_GAMESERVER_CALLBACK(NGSteamServerHelper, onPolicyResponse, GSPolicyResponse_t);
-    STEAM_GAMESERVER_CALLBACK(NGSteamServerHelper, onValidateAuthTicketResponse, ValidateAuthTicketResponse_t);
-    STEAM_GAMESERVER_CALLBACK(NGSteamServerHelper, onP2PSessionRequest, P2PSessionRequest_t);
-    STEAM_GAMESERVER_CALLBACK(NGSteamServerHelper, onP2PSessionConnectFail, P2PSessionConnectFail_t);
+    STEAM_GAMESERVER_CALLBACK(SteamServerHelper, onSteamServersConnected, SteamServersConnected_t);
+    STEAM_GAMESERVER_CALLBACK(SteamServerHelper, onSteamServersConnectFailure, SteamServerConnectFailure_t);
+    STEAM_GAMESERVER_CALLBACK(SteamServerHelper, onSteamServersDisconnected, SteamServersDisconnected_t);
+    STEAM_GAMESERVER_CALLBACK(SteamServerHelper, onPolicyResponse, GSPolicyResponse_t);
+    STEAM_GAMESERVER_CALLBACK(SteamServerHelper, onValidateAuthTicketResponse, ValidateAuthTicketResponse_t);
+    STEAM_GAMESERVER_CALLBACK(SteamServerHelper, onP2PSessionRequest, P2PSessionRequest_t);
+    STEAM_GAMESERVER_CALLBACK(SteamServerHelper, onP2PSessionConnectFail, P2PSessionConnectFail_t);
 };
 
 #endif /* IS_DESKTOP */

@@ -1,5 +1,5 @@
 //
-//  NGSteamClientHelper.cpp
+//  SteamClientHelper.cpp
 //  GowEngine
 //
 //  Created by Stephen Gowen on 6/17/17.
@@ -10,15 +10,15 @@
 
 #if IS_DESKTOP
 
-NGSteamClientHelper::NGSteamClientHelper(CSteamID inServerSteamID,
+SteamClientHelper::SteamClientHelper(CSteamID inServerSteamID,
                                          TimeTracker& tt,
                                          GetPlayerAddressHashFunc inGetPlayerAddressHashFunc,
-                                         ProcessPacketFunc inProcessPacketFunc) : ClientHelper(new NGSteamPacketHandler(tt, SteamNetworking(), inProcessPacketFunc)),
+                                         ProcessPacketFunc inProcessPacketFunc) : ClientHelper(new SteamPacketHandler(tt, SteamNetworking(), inProcessPacketFunc)),
 _timeTracker(tt),
-_steamP2PAuth(new NGSteamP2PAuth(this)),
+_steamP2PAuth(new SteamP2PAuth(this)),
 _getPlayerAddressHashFunc(inGetPlayerAddressHashFunc),
 _eConnectedStatus(k_EClientNotConnected),
-_serverSteamAddress(new NGSteamAddress(inServerSteamID)),
+_serverSteamAddress(new SteamAddress(inServerSteamID)),
 _timeOfLastMsgClientBeginAuthentication(0.0f),
 _unServerIP(0),
 _usServerPort(0),
@@ -31,7 +31,7 @@ _hAuthTicket(k_HAuthTicketInvalid)
     NG_STEAM_GAME_SERVICES->onServerJoined();
 }
 
-NGSteamClientHelper::~NGSteamClientHelper()
+SteamClientHelper::~SteamClientHelper()
 {
     if (_hAuthTicket != k_HAuthTicketInvalid)
     {
@@ -60,7 +60,7 @@ NGSteamClientHelper::~NGSteamClientHelper()
     delete _serverSteamAddress;
 }
 
-void NGSteamClientHelper::processIncomingPackets()
+void SteamClientHelper::processIncomingPackets()
 {
     NetworkHelper::processIncomingPackets();
 
@@ -117,7 +117,7 @@ void NGSteamClientHelper::processIncomingPackets()
     {
         // Update steamid array with data from server
         // This is actually sort of hacky...
-        // It only works because we know that the hash of a NGSteamAddress
+        // It only works because we know that the hash of a SteamAddress
         // object is actually the CSteamID in uint64 form
         _rgSteamIDPlayers[i].SetFromUint64(_getPlayerAddressHashFunc(i));
     }
@@ -131,7 +131,7 @@ void NGSteamClientHelper::processIncomingPackets()
         {
             if (_steamP2PAuth->_rgpP2PAuthPlayer[i] && !_steamP2PAuth->_rgpP2PAuthPlayer[i]->isAuthOk())
             {
-                NGSteamServerHelper* helper = static_cast<NGSteamServerHelper*>(NW_SRVR->getServerHelper());
+                SteamServerHelper* helper = static_cast<SteamServerHelper*>(NW_SRVR->getServerHelper());
                 helper->kickPlayerOffServer(_steamP2PAuth->_rgpP2PAuthPlayer[i]->_steamID);
             }
         }
@@ -152,7 +152,7 @@ void NGSteamClientHelper::processIncomingPackets()
     }
 }
 
-void NGSteamClientHelper::processSpecialPacket(uint8_t packetType, InputMemoryBitStream& inInputStream, MachineAddress* inFromAddress)
+void SteamClientHelper::processSpecialPacket(uint8_t packetType, InputMemoryBitStream& inInputStream, MachineAddress* inFromAddress)
 {
     if (inFromAddress->getHash() == _serverSteamAddress->getHash())
     {
@@ -199,7 +199,7 @@ void NGSteamClientHelper::processSpecialPacket(uint8_t packetType, InputMemoryBi
     updateState();
 }
 
-void NGSteamClientHelper::handleUninitialized()
+void SteamClientHelper::handleUninitialized()
 {
     switch (_eConnectedStatus)
     {
@@ -246,17 +246,17 @@ void NGSteamClientHelper::handleUninitialized()
     updateState();
 }
 
-void NGSteamClientHelper::sendPacket(const OutputMemoryBitStream& inOutputStream)
+void SteamClientHelper::sendPacket(const OutputMemoryBitStream& inOutputStream)
 {
     NetworkHelper::sendPacket(inOutputStream, _serverSteamAddress);
 }
 
-std::string& NGSteamClientHelper::getName()
+std::string& SteamClientHelper::getName()
 {
     return _name;
 }
 
-void NGSteamClientHelper::onReceiveServerInfo(CSteamID steamIDGameServer, bool bVACSecure, const char *pchServerName)
+void SteamClientHelper::onReceiveServerInfo(CSteamID steamIDGameServer, bool bVACSecure, const char *pchServerName)
 {
     _eConnectedStatus = k_EClientConnectedPendingAuthentication;
 
@@ -273,7 +273,7 @@ void NGSteamClientHelper::onReceiveServerInfo(CSteamID steamIDGameServer, bool b
     updateRichPresenceConnectionInfo();
 }
 
-void NGSteamClientHelper::updateRichPresenceConnectionInfo()
+void SteamClientHelper::updateRichPresenceConnectionInfo()
 {
     // connect string that will come back to us on the command line	when a friend tries to join our game
     char rgchConnectString[128];
@@ -288,7 +288,7 @@ void NGSteamClientHelper::updateRichPresenceConnectionInfo()
     SteamFriends()->SetRichPresence("connect", rgchConnectString);
 }
 
-void NGSteamClientHelper::updateState()
+void SteamClientHelper::updateState()
 {
     _state = _eConnectedStatus == k_EClientConnectedAndAuthenticated ? CLIENT_READY_TO_SAY_HELLO : (_eConnectedStatus == k_EClientConnectionFailure || _eConnectedStatus == k_EServerShuttingDown || _eConnectedStatus == k_EServerIsNotAuthorized) ? CLIENT_AUTH_FAILED : CLIENT_NOT_READY_TO_SAY_HELLO;
 }

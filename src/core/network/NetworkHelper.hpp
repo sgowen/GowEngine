@@ -27,8 +27,8 @@ public:
     virtual void processIncomingPackets();
     virtual void sendPacket(const OutputMemoryBitStream& inOutputStream, MachineAddress* inFromAddress);
     
-    const MovingAverage& getBytesReceivedPerSecond() const;
-    const MovingAverage& getBytesSentPerSecond() const;
+    const MovingAverage& bytesReceivedPerSecond() const;
+    const MovingAverage& bytesSentPerSecond() const;
     
 protected:
     PacketHandler* _packetHandler;

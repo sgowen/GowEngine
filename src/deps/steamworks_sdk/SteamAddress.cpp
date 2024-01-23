@@ -1,5 +1,5 @@
 //
-//  NGSteamAddress.cpp
+//  SteamAddress.cpp
 //  GowEngine
 //
 //  Created by Stephen Gowen on 5/15/17.
@@ -10,58 +10,58 @@
 
 #if IS_DESKTOP
 
-IMPL_RTTI(NGSteamAddress, MachineAddress);
+IMPL_RTTI(SteamAddress, MachineAddress);
 
-NGSteamAddress::NGSteamAddress(CSteamID steamID) : MachineAddress(),
+SteamAddress::SteamAddress(CSteamID steamID) : MachineAddress(),
 _steamID(steamID),
 _isReliable(false)
 {
     // Empty
 }
 
-NGSteamAddress::NGSteamAddress() : MachineAddress(), 
+SteamAddress::SteamAddress() : MachineAddress(), 
 _steamID(CSteamID()),
 _isReliable(false)
 {
     // Empty
 }
 
-NGSteamAddress::~NGSteamAddress()
+SteamAddress::~SteamAddress()
 {
     // Empty
 }
 
-MachineAddress* NGSteamAddress::createNewCopy()
+MachineAddress* SteamAddress::createNewCopy()
 {
-    return new NGSteamAddress(_steamID);
+    return new SteamAddress(_steamID);
 }
 
-uint64_t NGSteamAddress::getHash() const
+uint64_t SteamAddress::getHash() const
 {
     return _steamID.ConvertToUint64();
 }
 
-std::string NGSteamAddress::toString() const
+std::string SteamAddress::toString() const
 {
     return StringUtil::format("Steam ID %llu", _steamID.ConvertToUint64());
 }
 
-void NGSteamAddress::setSteamID(CSteamID steamID)
+void SteamAddress::setSteamID(CSteamID steamID)
 {
     _steamID = steamID;
 }
 
-CSteamID& NGSteamAddress::getSteamID()
+CSteamID& SteamAddress::getSteamID()
 {
     return _steamID;
 }
 
-void NGSteamAddress::setReliable(bool isReliable)
+void SteamAddress::setReliable(bool isReliable)
 {
     _isReliable = isReliable;
 }
 
-bool NGSteamAddress::isReliable()
+bool SteamAddress::isReliable()
 {
     return _isReliable;
 }

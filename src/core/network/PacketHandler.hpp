@@ -26,9 +26,9 @@ public:
     PacketHandler(TimeTracker& tt, ProcessPacketFunc ppf);
     virtual ~PacketHandler();
     
+    virtual int connect() = 0;
     virtual void sendPacket(const OutputMemoryBitStream& ombs, MachineAddress* toAddress) = 0;
     
-    int connect();
     void processIncomingPackets();
     const MovingAverage& bytesReceivedPerSecond() const;
     const MovingAverage& bytesSentPerSecond() const;

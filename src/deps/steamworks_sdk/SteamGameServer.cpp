@@ -1,5 +1,5 @@
 //
-//  NGSteamGameServer.cpp
+//  SteamGameServer.cpp
 //  GowEngine
 //
 //  Created by Stephen Gowen on 6/13/17.
@@ -10,7 +10,7 @@
 
 #if IS_DESKTOP
 
-NGSteamGameServer::NGSteamGameServer(gameserveritem_t *pGameServerItem)
+SteamGameServer::SteamGameServer(gameserveritem_t *pGameServerItem)
 {
     _unIPAddress = pGameServerItem->m_NetAdr.GetIP();
     _nConnectionPort = pGameServerItem->m_NetAdr.GetConnectionPort();
@@ -33,27 +33,27 @@ NGSteamGameServer::NGSteamGameServer(gameserveritem_t *pGameServerItem)
     _steamID = pGameServerItem->m_steamID;
 }
 
-const char* NGSteamGameServer::getName()
+const char* SteamGameServer::getName()
 {
     return _szServerName;
 }
 
-const char* NGSteamGameServer::getDisplayString()
+const char* SteamGameServer::getDisplayString()
 {
     return _szServerString;
 }
 
-uint32 NGSteamGameServer::getIP()
+uint32 SteamGameServer::getIP()
 {
     return _unIPAddress;
 }
 
-int32 NGSteamGameServer::getPort()
+int32 SteamGameServer::getPort()
 {
     return _nConnectionPort;
 }
 
-CSteamID NGSteamGameServer::getSteamID()
+CSteamID SteamGameServer::getSteamID()
 {
     return _steamID;
 }

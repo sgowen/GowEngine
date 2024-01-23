@@ -1,5 +1,5 @@
 //
-//  NGSteamAddress.hpp
+//  SteamAddress.hpp
 //  GowEngine
 //
 //  Created by Stephen Gowen on 5/15/17.
@@ -13,16 +13,16 @@
 
 #include "core/network/MachineAddress.hpp"
 
-#include "deps/steamworks_sdk/NGSteam.hpp"
+#include "deps/steamworks_sdk/Steam.hpp"
 
-class NGSteamAddress : public MachineAddress
+class SteamAddress : public MachineAddress
 {
     DECL_RTTI;
     
 public:
-    NGSteamAddress(CSteamID steamID);
-    NGSteamAddress();
-    virtual ~NGSteamAddress();
+    SteamAddress(CSteamID steamID);
+    SteamAddress();
+    virtual ~SteamAddress();
     
     virtual MachineAddress* createNewCopy() override;
     virtual uint64_t getHash() const override;
