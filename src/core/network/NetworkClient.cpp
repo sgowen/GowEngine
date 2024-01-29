@@ -11,9 +11,6 @@
 NetworkClient* NetworkClient::s_instance = nullptr;
 
 void NetworkClient::create(ClientHelper* clientHelper,
-                           std::string serverIPAddress,
-                           std::string username,
-                           uint16_t port,
                            TimeTracker& tt,
                            OnEntityRegisteredFunc oerf,
                            OnEntityDeregisteredFunc oedf,
@@ -21,7 +18,7 @@ void NetworkClient::create(ClientHelper* clientHelper,
 {
     assert(s_instance == nullptr);
     
-    s_instance = new NetworkClient(clientHelper, serverIPAddress, username, port, tt, oerf, oedf, opwf);
+    s_instance = new NetworkClient(clientHelper, tt, oerf, oedf, opwf);
     
     assert(NW_CLNT != nullptr);
 }
@@ -37,6 +34,11 @@ void NetworkClient::destroy()
     
     delete s_instance;
     s_instance = nullptr;
+}
+
+void NetworkClient::sProcessPacket(InputMemoryBitStream& inInputStream, MachineAddress* inFromAddress)
+{
+    NW_CLNT->processPacket(inInputStream, static_cast<SocketAddress*>(inFromAddress));
 }
 
 NetworkClientState NetworkClient::processIncomingPackets()
@@ -130,7 +132,7 @@ std::map<uint8_t, uint8_t>& NetworkClient::getPlayerIDs()
 
 std::string& NetworkClient::getPlayerName()
 {
-    return _username;
+    return _clientHelper->getName();
 }
 
 NetworkClientState NetworkClient::state() const
@@ -140,24 +142,26 @@ NetworkClientState NetworkClient::state() const
 
 bool NetworkClient::connect()
 {
-    if (_serverAddress == nullptr)
-    {
-        return false;
-    }
-    
-    if (ENGINE_CFG.networkLoggingEnabled())
-    {
-        LOG("Client Initializing PacketHandler at port %hu", _port);
-    }
-    
-    int error = _packetHandler.connect();
-    if (error != NO_ERROR &&
-        ENGINE_CFG.networkLoggingEnabled())
-    {
-        LOG("Client connect failed. Error code %d", error);
-    }
-    
-    return error == NO_ERROR;
+    // TODO
+    return _clientHelper->connect() == NO_ERROR;
+//    if (_serverAddress == nullptr)
+//    {
+//        return false;
+//    }
+//    
+//    if (ENGINE_CFG.networkLoggingEnabled())
+//    {
+//        LOG("Client Initializing PacketHandler at port %hu", _port);
+//    }
+//    
+//    int error = _packetHandler.connect();
+//    if (error != NO_ERROR &&
+//        ENGINE_CFG.networkLoggingEnabled())
+//    {
+//        LOG("Client connect failed. Error code %d", error);
+//    }
+//    
+//    return error == NO_ERROR;
 }
 
 void NetworkClient::processPacket(InputMemoryBitStream& imbs, SocketAddress* fromAddress)
@@ -214,7 +218,7 @@ void NetworkClient::sendPacket(const OutputMemoryBitStream& ombs)
         LOG("Client    sendPacket bit length: %d", ombs.getBitLength());
     }
     
-    _packetHandler.sendPacket(ombs, _serverAddress);
+    _clientHelper->sendPacket(ombs);
 }
 
 void NetworkClient::updateSayingHello()
@@ -416,15 +420,12 @@ void cb_client_processPacket(InputMemoryBitStream& imbs, SocketAddress* fromAddr
 }
 
 NetworkClient::NetworkClient(ClientHelper* clientHelper,
-                             std::string serverIPAddress,
-                             std::string username,
-                             uint16_t port,
                              TimeTracker& tt,
                              OnEntityRegisteredFunc oerf,
                              OnEntityDeregisteredFunc oedf,
                              OnPlayerWelcomedFunc opwf) :
+_clientHelper(clientHelper),
 _timeTracker(tt),
-_username(username),
 _onPlayerWelcomedFunc(opwf),
 _deliveryNotificationManager(_timeTracker, true, false),
 _entityRegistry(oerf, oedf),
@@ -438,14 +439,9 @@ _avgRoundTripTime(_timeTracker, 1.0f),
 _isRequestingToAddLocalPlayer(false),
 _isRequestingToDropLocalPlayer(0),
 _hasReceivedNewState(false),
-_numMovesProcessed(0),
-_port(port)
+_numMovesProcessed(0)
 {
-    if (_serverAddress == nullptr &&
-        ENGINE_CFG.networkLoggingEnabled())
-    {
-        LOG("Server Address invalid: %s", serverIPAddress.c_str());
-    }
+    // Empty
 }
 
 NetworkClient::~NetworkClient()
@@ -457,6 +453,4 @@ NetworkClient::~NetworkClient()
     sendPacket(ombs);
     
     _deliveryNotificationManager.logStats();
-    
-    delete _serverAddress;
 }

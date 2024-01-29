@@ -40,6 +40,11 @@ const MovingAverage& PacketHandler::bytesSentPerSecond() const
     return _bytesSentPerSecond;
 }
 
+TimeTracker& PacketHandler::timeTracker()
+{
+    return _timeTracker;
+}
+
 void PacketHandler::updateBytesSentLastFrame()
 {
     if (_bytesSentThisFrame > 0)

@@ -50,7 +50,9 @@ void cb_server_handleLostClient(ClientProxy& cp, uint8_t localPlayerIndex)
 
 void GameServerEngineState::enter(Engine* e)
 {
-    NetworkServer::create(ENGINE_CFG.serverPort(),
+    SocketServerHelper* serverHelper = new SocketServerHelper(_timeTracker, ENGINE_CFG.serverPort(), NW_SRVR_CALLBACKS);
+    
+    NetworkServer::create(serverHelper,
                           _entityIDManager,
                           _timeTracker,
                           cb_server_onEntityRegistered,
@@ -246,7 +248,7 @@ void GameServerEngineState::addPlayer(std::string username, uint8_t playerID)
     EntityInstanceDef eid(networkID, key, spawnX, spawnY, true);
     Entity* e = ENTITY_MGR.createEntity(eid);
     e->networkDataField("username").setValueString(username);
-    e->networkDataField("userAddress").setValueString(cp->getSocketAddress()->toString());
+    e->networkDataField("userAddress").setValueString(cp->getMachineAddress()->toString());
     e->networkDataField("playerID").setValueUInt8(playerID);
     if (playerID == 1)
     {

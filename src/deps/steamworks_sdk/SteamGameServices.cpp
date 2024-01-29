@@ -145,7 +145,7 @@ void SteamGameServices::ServerResponded(HServerListRequest hReq, int iServer)
         // Filter out servers that don't match our appid here (might get these in LAN calls since we can't put more filters on it)
         if (pServer->m_nAppID == SteamUtils()->GetAppID())
         {
-            _gameServers.push_back(SteamGameServer(pServer));
+            _gameServers.push_back(SteamServerInfo(pServer));
             _numServers++;
         }
     }
@@ -166,7 +166,7 @@ void SteamGameServices::RefreshComplete(HServerListRequest hReq, EMatchMakingSer
     _isRequestingServers = false;
 }
 
-std::vector<SteamGameServer>& SteamGameServices::getGameServers()
+std::vector<SteamServerInfo>& SteamGameServices::getGameServers()
 {
     return _gameServers;
 }

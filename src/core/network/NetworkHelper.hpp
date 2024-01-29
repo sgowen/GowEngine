@@ -14,6 +14,7 @@ class InputMemoryBitStream;
 class OutputMemoryBitStream;
 class MachineAddress;
 class MovingAverage;
+struct TimeTracker;
 class PacketHandler;
 
 class NetworkHelper
@@ -29,6 +30,8 @@ public:
     
     const MovingAverage& bytesReceivedPerSecond() const;
     const MovingAverage& bytesSentPerSecond() const;
+    
+    TimeTracker& timeTracker();
     
 protected:
     PacketHandler* _packetHandler;

@@ -21,11 +21,10 @@ class SocketAddress;
 class ClientProxy
 {
 public:
-    ClientProxy(EntityRegistry& er, TimeTracker& tt, SocketAddress* sa, std::string username, uint8_t playerID);
+    ClientProxy(EntityRegistry& er, TimeTracker& tt, MachineAddress* ma, std::string username, uint8_t playerID);
     ~ClientProxy();
     
     MachineAddress* getMachineAddress() const;
-    SocketAddress* getSocketAddress() const;
     uint8_t getPlayerID(uint8_t index = 0) const;
     const std::string& getUsername() const;
     void updateLastPacketTime();
@@ -44,7 +43,7 @@ private:
     TimeTracker& _timeTracker;
     DeliveryNotificationManager	_deliveryNotificationManager;
     ReplicationManagerServer _replicationManagerServer;
-    SocketAddress* _socketAddress;
+    MachineAddress* _machineAddress;
     std::string _username;
     std::vector<uint8_t> _playerIDs;
     uint32_t _lastPacketFromClientTime;

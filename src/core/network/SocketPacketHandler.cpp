@@ -37,7 +37,9 @@ int SocketPacketHandler::connect()
         return bindSocketRet;
     }
     
-    return _socket->setNonBlockingMode(true);
+    int result = _socket->setNonBlockingMode(true);
+    
+    return result;
 }
 
 void SocketPacketHandler::sendPacket(const OutputMemoryBitStream& ombs, MachineAddress* toAddress)

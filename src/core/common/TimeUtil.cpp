@@ -1,12 +1,10 @@
 //
-//  TimeUtil.hpp
+//  TimeUtil.cpp
 //  GowEngine
 //
 //  Created by Stephen Gowen on 1/23/24.
 //  Copyright © 2023 Stephen Gowen. All rights reserved.
 //
-
-#pragma once
 
 #include <GowEngine/GowEngine.hpp>
 

@@ -11,14 +11,14 @@
 #if IS_DESKTOP
 
 SteamServerHelper::SteamServerHelper(std::string inGameDir,
-                                         std::string inVersionString,
-                                         std::string inProductName,
-                                         std::string inGameDescription,
-                                         uint16 inPort,
-                                         TimeTracker& tt,
-                                         ProcessPacketFunc inProcessPacketFunc,
-                                         GetClientProxyFunc inGetClientProxyFunc,
-                                         HandleClientDisconnectedFunc inHandleClientDisconnectedFunc) : ServerHelper(new SteamPacketHandler(tt, SteamGameServerNetworking(), inProcessPacketFunc), inGetClientProxyFunc, inHandleClientDisconnectedFunc),
+                                     std::string inVersionString,
+                                     std::string inProductName,
+                                     std::string inGameDescription,
+                                     uint16 inPort,
+                                     TimeTracker& tt,
+                                     ProcessPacketFunc inProcessPacketFunc,
+                                     GetClientProxyFunc inGetClientProxyFunc,
+                                     HandleClientDisconnectedFunc inHandleClientDisconnectedFunc) : ServerHelper(new SteamPacketHandler(tt, SteamGameServerNetworking(), inProcessPacketFunc), inGetClientProxyFunc, inHandleClientDisconnectedFunc),
 _gameDir(inGameDir),
 _serverSteamAddress(new SteamAddress()),
 _isConnectedToSteam(false),
@@ -97,6 +97,12 @@ SteamServerHelper::~SteamServerHelper()
     
     // release our reference to the steam client library
     SteamGameServer_Shutdown();
+}
+
+int SteamServerHelper::connect()
+{
+    // TODO?
+    return NO_ERROR;
 }
 
 void SteamServerHelper::processIncomingPackets()

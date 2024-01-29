@@ -26,8 +26,8 @@ class SteamPacketHandler : public PacketHandler
 {
 public:
     SteamPacketHandler(TimeTracker& timeTracker,
-                         ISteamNetworking* steamNetworking,
-                         ProcessPacketFunc processPacketFunc);
+                       ISteamNetworking* steamNetworking,
+                       ProcessPacketFunc processPacketFunc);
     virtual ~SteamPacketHandler();
     
     virtual int connect() override;

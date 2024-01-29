@@ -37,9 +37,11 @@ enum NetworkClientState
 class NetworkClient
 {
 public:
-    static void create(ClientHelper* clientHelper, std::string serverIPAddress, std::string username, uint16_t port, TimeTracker& tt, OnEntityRegisteredFunc oerf, OnEntityDeregisteredFunc oedf, OnPlayerWelcomedFunc opwf);
+    static void create(ClientHelper* clientHelper, TimeTracker& tt, OnEntityRegisteredFunc oerf, OnEntityDeregisteredFunc oedf, OnPlayerWelcomedFunc opwf);
     static NetworkClient* getInstance();
     static void destroy();
+    
+    static void sProcessPacket(InputMemoryBitStream& inInputStream, MachineAddress* inFromAddress);
     
     NetworkClientState processIncomingPackets();
     void sendOutgoingPackets(MoveList& ml);
@@ -62,7 +64,6 @@ private:
     
     TimeTracker& _timeTracker;
     ClientHelper* _clientHelper;
-    std::string _username;
     OnPlayerWelcomedFunc _onPlayerWelcomedFunc;
     DeliveryNotificationManager _deliveryNotificationManager;
     EntityRegistry _entityRegistry;
@@ -78,7 +79,6 @@ private:
     uint8_t _isRequestingToDropLocalPlayer;
     bool _hasReceivedNewState;
     uint32_t _numMovesProcessed;
-    uint16_t _port;
     
     void sendPacket(const OutputMemoryBitStream& ombs);
     void updateSayingHello();
@@ -92,9 +92,6 @@ private:
     void updateNextIndex();
     
     NetworkClient(ClientHelper* clientHelper, 
-                  std::string serverIPAddress,
-                  std::string username,
-                  uint16_t port,
                   TimeTracker& tt,
                   OnEntityRegisteredFunc oerf,
                   OnEntityDeregisteredFunc oedf,

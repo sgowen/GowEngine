@@ -28,7 +28,7 @@ _hAuthTicket(k_HAuthTicketInvalid)
 
     LOG("Client %s is connecting to Game Server with Steam ID: %s", _name.c_str(), _serverSteamAddress->toString().c_str());
 
-    NG_STEAM_GAME_SERVICES->onServerJoined();
+    STEAM_GAME_SERVICES->onServerJoined();
 }
 
 SteamClientHelper::~SteamClientHelper()

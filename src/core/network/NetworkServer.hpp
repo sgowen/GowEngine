@@ -19,10 +19,12 @@ class ReplicationTransmissionData;
 class InputMemoryBitStream;
 class OutputMemoryBitStream;
 class DeliveryNotificationManager;
-class SocketAddress;
+class MachineAddress;
 class ClientProxy;
 class InputState;
 class Entity;
+
+#define NW_SRVR_CALLBACKS NetworkServer::sProcessPacket, NetworkServer::sGetClientProxy, NetworkServer::sHandleClientDisconnected
 
 typedef void (*HandleNewClientFunc)(std::string username, uint8_t playerID);
 typedef void (*HandleLostClientFunc)(ClientProxy& cp, uint8_t localPlayerIndex);
@@ -30,9 +32,13 @@ typedef void (*HandleLostClientFunc)(ClientProxy& cp, uint8_t localPlayerIndex);
 class NetworkServer
 {
 public:
-    static void create(uint16_t port, EntityIDManager& eidm, TimeTracker& tt, OnEntityRegisteredFunc oerf, OnEntityDeregisteredFunc oedf, HandleNewClientFunc hncf, HandleLostClientFunc hlcf);
+    static void create(ServerHelper* serverHelper, EntityIDManager& eidm, TimeTracker& tt, OnEntityRegisteredFunc oerf, OnEntityDeregisteredFunc oedf, HandleNewClientFunc hncf, HandleLostClientFunc hlcf);
     static NetworkServer* getInstance();
     static void destroy();
+    
+    static void sProcessPacket(InputMemoryBitStream& inInputStream, MachineAddress* inFromAddress);
+    static ClientProxy* sGetClientProxy(uint8_t inPlayerId);
+    static void sHandleClientDisconnected(ClientProxy* inClientProxy);
     
     int processIncomingPackets();
     void sendOutgoingPackets();
@@ -44,11 +50,11 @@ public:
     ClientProxy* getClientProxy(uint8_t playerID) const;
     uint8_t getNumClientsConnected();
     uint8_t getNumPlayersConnected();
-    SocketAddress& getServerAddress();
+    MachineAddress* getServerAddress();
     bool connect();
     void onEntityRegistered(Entity* e);
     void onEntityDeregistered(Entity* e);
-    void processPacket(InputMemoryBitStream& imbs, SocketAddress* fromAddress);
+    void processPacket(InputMemoryBitStream& imbs, MachineAddress* fromAddress);
     void removeProcessedMoves();
     void setNumMovesProcessed(uint32_t numMovesProcessed);
     const std::map<int, ClientProxy*>& playerIDToClientMap();
@@ -71,11 +77,10 @@ private:
     std::map<int, ClientProxy*> _playerIDToClientMap;
     uint8_t _nextPlayerID;
     uint32_t _numMovesProcessed;
-    uint16_t _port;
     
     int getNumMovesReadyToBeProcessed();
-    void sendPacket(const OutputMemoryBitStream& ombs, SocketAddress* fromAddress);
-    void handlePacketFromNewClient(InputMemoryBitStream& imbs, SocketAddress* fromAddress);
+    void sendPacket(const OutputMemoryBitStream& ombs, MachineAddress* fromAddress);
+    void handlePacketFromNewClient(InputMemoryBitStream& imbs, MachineAddress* fromAddress);
     void processPacket(ClientProxy& cp, InputMemoryBitStream& imbs);
     void sendWelcomePacket(ClientProxy& cp);
     void sendLocalPlayerAddedPacket(ClientProxy& cp);
@@ -86,7 +91,7 @@ private:
     void handleClientDisconnected(ClientProxy& cp);
     void resetNextPlayerID();
     
-    NetworkServer(uint16_t port, EntityIDManager& eidm, TimeTracker& tt, OnEntityRegisteredFunc oerf, OnEntityDeregisteredFunc oedf, HandleNewClientFunc hncf, HandleLostClientFunc hlcf);
+    NetworkServer(ServerHelper* serverHelper, EntityIDManager& eidm, TimeTracker& tt, OnEntityRegisteredFunc oerf, OnEntityDeregisteredFunc oedf, HandleNewClientFunc hncf, HandleLostClientFunc hlcf);
     ~NetworkServer();
     NetworkServer(const NetworkServer&);
     NetworkServer& operator=(const NetworkServer&);

@@ -1,5 +1,5 @@
 //
-//  SteamGameServer.hpp
+//  SteamServerInfo.hpp
 //  GowEngine
 //
 //  Created by Stephen Gowen on 6/13/17.
@@ -13,10 +13,10 @@
 
 #include "deps/steamworks_sdk/Steam.hpp"
 
-class SteamGameServer
+class SteamServerInfo
 {
 public:
-    SteamGameServer(gameserveritem_t *pGameServerItem);
+    SteamServerInfo(gameserveritem_t *pGameServerItem);
     
     const char* getName();
     const char* getDisplayString();

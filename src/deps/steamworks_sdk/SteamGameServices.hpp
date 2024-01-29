@@ -12,12 +12,12 @@
 #if IS_DESKTOP
 
 #include "deps/steamworks_sdk/Steam.hpp"
-#include "deps/steamworks_sdk/SteamGameServer.hpp"
+#include "deps/steamworks_sdk/SteamServerInfo.hpp"
 
 #include <string>
 #include <vector>
 
-#define NG_STEAM_GAME_SERVICES (SteamGameServices::getInstance())
+#define STEAM_GAME_SERVICES (SteamGameServices::getInstance())
 
 #define STEAM_INIT_SUCCESS 1
 #define STEAM_UNINITIALIZED 0
@@ -53,7 +53,7 @@ public:
     virtual void ServerFailedToRespond(HServerListRequest hReq, int iServer);
     virtual void RefreshComplete(HServerListRequest hReq, EMatchMakingServerResponse response);
     
-    std::vector<SteamGameServer>& getGameServers();
+    std::vector<SteamServerInfo>& getGameServers();
     bool isRequestingServers();
     
 #pragma mark Steam Cloud
@@ -68,7 +68,7 @@ private:
     int _numServers; // Track the number of servers we know about
     bool _isRequestingServers; // Track whether we are in the middle of a refresh or not
     HServerListRequest _hServerListRequest; // Track what server list request is currently running
-    std::vector<SteamGameServer> _gameServers;
+    std::vector<SteamServerInfo> _gameServers;
     
     uint32 _unServerIP;
     uint16 _usServerPort;

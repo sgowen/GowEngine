@@ -277,9 +277,12 @@ void GameClientEngineState::onAssetsLoaded(Engine* e)
             port = ENGINE_CFG.clientPortHost();
         }
         
-        NetworkClient::create(STRING_FORMAT("%s:%d", serverIPAddress.c_str(), ENGINE_CFG.serverPort()),
-                              _args.getString(ARG_USERNAME),
-                              port,
+        // TODO, add Steam implementation
+        std::string serverAddress = STRING_FORMAT("%s:%d", serverIPAddress.c_str(), ENGINE_CFG.serverPort());
+        std::string username = _args.getString(ARG_USERNAME);
+        SocketClientHelper* clientHelper = new SocketClientHelper(_timeTracker, serverAddress, username, port, NetworkClient::sProcessPacket);
+        
+        NetworkClient::create(clientHelper,
                               _timeTracker,
                               cb_client_onEntityRegistered,
                               cb_client_onEntityDeregistered,
@@ -287,6 +290,7 @@ void GameClientEngineState::onAssetsLoaded(Engine* e)
         
         if (NW_CLNT->connect() == false)
         {
+            LOG("Unable to connect, exiting...");
             e->popState();
             return;
         }

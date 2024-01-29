@@ -11,8 +11,8 @@
 #if IS_DESKTOP
 
 SteamPacketHandler::SteamPacketHandler(TimeTracker& tt,
-                                           ISteamNetworking* steamNetworking,
-                                           ProcessPacketFunc ppf) : PacketHandler(tt, ppf),
+                                       ISteamNetworking* steamNetworking,
+                                       ProcessPacketFunc ppf) : PacketHandler(tt, ppf),
 _steamNetworking(steamNetworking)
 {
     // Empty

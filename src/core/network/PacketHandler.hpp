@@ -32,6 +32,7 @@ public:
     void processIncomingPackets();
     const MovingAverage& bytesReceivedPerSecond() const;
     const MovingAverage& bytesSentPerSecond() const;
+    TimeTracker& timeTracker();
     
 protected:
     TimeTracker& _timeTracker;

@@ -11,7 +11,8 @@
 #if IS_DESKTOP
 
 SteamP2PAuth::SteamP2PAuth(NetworkHelper* networkHelper) :
-_networkTransport(new SteamP2PNetworkTransport(networkHelper))
+_networkHelper(networkHelper),
+_networkTransport(new SteamP2PNetworkTransport())
 {
     // no players yet
 	for (uint8 i = 0; i < MAX_NUM_PLAYERS; ++i)
@@ -58,7 +59,7 @@ void SteamP2PAuth::endGame()
 void SteamP2PAuth::internalinitPlayer(uint8 iSlot, CSteamID steamID, bool bStartAuthProcess)
 {
 	LOG("P2P:: startAuthPlayer slot=%d account=%d \n", iSlot, steamID.GetAccountID());
-	_rgpP2PAuthPlayer[iSlot] = new SteamP2PAuthPlayer(_networkTransport);
+	_rgpP2PAuthPlayer[iSlot] = new SteamP2PAuthPlayer(_networkHelper, _networkTransport);
 	_rgpP2PAuthPlayer[iSlot]->initPlayer(steamID);
 	if (bStartAuthProcess)
     {
@@ -151,15 +152,16 @@ bool SteamP2PAuth::handleMessage(uint8 packetType, InputMemoryBitStream& inInput
 	return false;
 }
 
-SteamP2PAuthPlayer::SteamP2PAuthPlayer(SteamP2PNetworkTransport *pNetworkTransport) :
-_callbackBeginAuthResponse(this, &SteamP2PAuthPlayer::OnBeginAuthResponse),
-_timeTracker(static_cast<TimeTracker*>(INSTANCE_MANAGER->get(INSTANCE_TIME_CLIENT)))
+SteamP2PAuthPlayer::SteamP2PAuthPlayer(NetworkHelper *networkHelper,
+                                       SteamP2PNetworkTransport *pNetworkTransport) :
+_networkHelper(networkHelper),
+_callbackBeginAuthResponse(this, &SteamP2PAuthPlayer::OnBeginAuthResponse)
 {
     _networkTransport = pNetworkTransport;
     _bSentTicket = false;
     _bSubmittedHisTicket = false;
     _bHaveAnswer = false;
-    _connectTime = _timeTracker->realTime();
+    _connectTime = _networkHelper->timeTracker().realTime();
     _cubTicketIGaveThisUser = 0;
     _cubTicketHeGaveMe = 0;
 }
@@ -177,7 +179,7 @@ void SteamP2PAuthPlayer::OnBeginAuthResponse(ValidateAuthTicketResponse_t *pCall
     if (_steamID == pCallback->m_SteamID)
     {
         LOG("P2P:: Received steam response for account=%d\n", _steamID.GetAccountID());
-        _answerTime = _timeTracker->realTime();
+        _answerTime = _networkHelper->timeTracker().realTime();
         _bHaveAnswer = true;
         _eAuthSessionResponse = pCallback->m_eAuthSessionResponse;
     }
@@ -189,7 +191,7 @@ void SteamP2PAuthPlayer::initPlayer(CSteamID steamID)
     _bSentTicket = false;
     _bSubmittedHisTicket = false;
     _bHaveAnswer = false;
-    _connectTime = _timeTracker->realTime();
+    _connectTime = _networkHelper->timeTracker().realTime();
     _cubTicketIGaveThisUser = 0;
     _cubTicketHeGaveMe = 0;
 }
@@ -203,12 +205,12 @@ void SteamP2PAuthPlayer::startAuthPlayer()
     }
 
     // sample has no retry here
-    _networkTransport->sendTicket(SteamUser()->GetSteamID(), _steamID, _cubTicketIGaveThisUser, _rgubTicketIGaveThisUser);
+    _networkTransport->sendTicket(_networkHelper, SteamUser()->GetSteamID(), _steamID, _cubTicketIGaveThisUser, _rgubTicketIGaveThisUser);
 
     _bSentTicket = true;
 
     // start a timer on this, if we dont get a ticket back within reasonable time, mark him timed out
-    _ticketTime = _timeTracker->realTime();
+    _ticketTime = _networkHelper->timeTracker().realTime();
 }
 
 bool SteamP2PAuthPlayer::isAuthOk()
@@ -218,7 +220,7 @@ bool SteamP2PAuthPlayer::isAuthOk()
         // Timeout if we fail to establish communication with this player
         if (!_bSentTicket && !_bSubmittedHisTicket)
         {
-            if (_timeTracker->realTime() - _connectTime > 30)
+            if (_networkHelper->timeTracker().realTime() - _connectTime > 30)
             {
                 LOG("P2P:: Nothing received for account=%d\n", _steamID.GetAccountID());
                 return false;
@@ -242,7 +244,7 @@ bool SteamP2PAuthPlayer::isAuthOk()
         // last: if i sent him a ticket and he has not reciprocated, time out after 30 sec
         if (_bSentTicket && !_bSubmittedHisTicket)
         {
-            if (_timeTracker->realTime() - _ticketTime > 30)
+            if (_networkHelper->timeTracker().realTime() - _ticketTime > 30)
             {
                 LOG("P2P:: No ticket received for account=%d\n", _steamID.GetAccountID());
                 return false;
@@ -293,8 +295,7 @@ bool SteamP2PAuthPlayer::handleMessage(MsgP2PSendingTicket* msg)
     return true;
 }
 
-SteamP2PNetworkTransport::SteamP2PNetworkTransport(NetworkHelper* networkHelper) :
-_networkHelper(networkHelper),
+SteamP2PNetworkTransport::SteamP2PNetworkTransport() :
 _outgoingPacketAddress(new SteamAddress()),
 _CallbackP2PSessionRequest(this, &SteamP2PNetworkTransport::onP2PSessionRequest),
 _CallbackP2PSessionConnectFail(this, &SteamP2PNetworkTransport::onP2PSessionConnectFail)
@@ -307,7 +308,7 @@ SteamP2PNetworkTransport::~SteamP2PNetworkTransport()
     delete _outgoingPacketAddress;
 }
 
-void SteamP2PNetworkTransport::sendTicket(CSteamID steamIDFrom, CSteamID steamIDTo, uint32 cubTicket, uint8 *pubTicket)
+void SteamP2PNetworkTransport::sendTicket(NetworkHelper* networkHelper, CSteamID steamIDFrom, CSteamID steamIDTo, uint32 cubTicket, uint8 *pubTicket)
 {
     MsgP2PSendingTicket msg;
     msg.setToken((char *)pubTicket, cubTicket);
@@ -322,8 +323,7 @@ void SteamP2PNetworkTransport::sendTicket(CSteamID steamIDFrom, CSteamID steamID
     _outgoingPacketAddress->setSteamID(steamIDTo);
     _outgoingPacketAddress->setReliable(true);
 
-    // TODO, don't like that this class has a reference to _networkHelper
-    _networkHelper->sendPacket(packet, _outgoingPacketAddress);
+    networkHelper->sendPacket(packet, _outgoingPacketAddress);
 }
 
 void SteamP2PNetworkTransport::closeConnection(CSteamID steamID)

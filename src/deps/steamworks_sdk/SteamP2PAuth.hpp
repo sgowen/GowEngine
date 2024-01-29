@@ -40,6 +40,9 @@ public:
     void registerPlayer(uint8 iSlot, CSteamID steamID);
     bool handleMessage(uint8 packetType, InputMemoryBitStream& inInputStream);
     void internalinitPlayer(uint8 iSlot, CSteamID steamID, bool bStartAuthProcess);
+    
+private:
+    NetworkHelper* _networkHelper;
 };
 
 class SteamP2PAuthPlayer
@@ -47,7 +50,7 @@ class SteamP2PAuthPlayer
 public:
     CSteamID _steamID;
 
-	SteamP2PAuthPlayer(SteamP2PNetworkTransport *pNetworkTransport);
+	SteamP2PAuthPlayer(NetworkHelper *networkHelper, SteamP2PNetworkTransport *pNetworkTransport);
 	~SteamP2PAuthPlayer();
 
     void endGame();
@@ -59,7 +62,7 @@ public:
 	STEAM_CALLBACK(SteamP2PAuthPlayer, OnBeginAuthResponse, ValidateAuthTicketResponse_t, _callbackBeginAuthResponse);
 
 private:
-    TimeTracker* _timeTracker;
+    NetworkHelper* _networkHelper;
 	bool _bSentTicket;
 	bool _bSubmittedHisTicket;
 	bool _bHaveAnswer;
@@ -80,17 +83,16 @@ private:
 class SteamP2PNetworkTransport
 {
 public:
-	SteamP2PNetworkTransport(NetworkHelper* networkHelper);
+	SteamP2PNetworkTransport();
     ~SteamP2PNetworkTransport();
 
-	void sendTicket(CSteamID steamIDFrom, CSteamID steamIDTo, uint32 cubTicket, uint8 *pubTicket);
+	void sendTicket(NetworkHelper* networkHelper, CSteamID steamIDFrom, CSteamID steamIDTo, uint32 cubTicket, uint8 *pubTicket);
 	void closeConnection(CSteamID steamID);
 
 	STEAM_CALLBACK(SteamP2PNetworkTransport, onP2PSessionRequest, P2PSessionRequest_t, _CallbackP2PSessionRequest);
 	STEAM_CALLBACK(SteamP2PNetworkTransport, onP2PSessionConnectFail, P2PSessionConnectFail_t, _CallbackP2PSessionConnectFail);
 
 private:
-    NetworkHelper* _networkHelper;
     SteamAddress* _outgoingPacketAddress;
 };
 

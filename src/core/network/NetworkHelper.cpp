@@ -37,3 +37,8 @@ const MovingAverage& NetworkHelper::bytesSentPerSecond() const
 {
     return _packetHandler->bytesSentPerSecond();
 }
+
+TimeTracker& NetworkHelper::timeTracker()
+{
+    return _packetHandler->timeTracker();
+}

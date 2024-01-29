@@ -10,11 +10,11 @@
 
 NetworkServer* NetworkServer::s_instance = nullptr;
 
-void NetworkServer::create(uint16_t port, EntityIDManager& eidm, TimeTracker& tt, OnEntityRegisteredFunc oerf, OnEntityDeregisteredFunc oedf, HandleNewClientFunc hncf, HandleLostClientFunc hlcf)
+void NetworkServer::create(ServerHelper* serverHelper, EntityIDManager& eidm, TimeTracker& tt, OnEntityRegisteredFunc oerf, OnEntityDeregisteredFunc oedf, HandleNewClientFunc hncf, HandleLostClientFunc hlcf)
 {
     assert(s_instance == nullptr);
     
-    s_instance = new NetworkServer(port, eidm, tt, oerf, oedf, hncf, hlcf);
+    s_instance = new NetworkServer(serverHelper, eidm, tt, oerf, oedf, hncf, hlcf);
     
     assert(NW_SRVR != nullptr);
 }
@@ -32,9 +32,26 @@ void NetworkServer::destroy()
     s_instance = nullptr;
 }
 
+void NetworkServer::sProcessPacket(InputMemoryBitStream& inputStream, MachineAddress* inFromAddress)
+{
+    NW_SRVR->processPacket(inputStream, inFromAddress);
+}
+
+ClientProxy* NetworkServer::sGetClientProxy(uint8_t inPlayerIndex)
+{
+    return NW_SRVR->getClientProxy(inPlayerIndex + 1);
+}
+
+void NetworkServer::sHandleClientDisconnected(ClientProxy* inClientProxy)
+{
+    ClientProxy cp = *inClientProxy;
+    
+    NW_SRVR->handleClientDisconnected(cp);
+}
+
 int NetworkServer::processIncomingPackets()
 {
-    _packetHandler.processIncomingPackets();
+    _serverHelper->processIncomingPackets();
     
     std::vector<ClientProxy*> clientsToDC;
     
@@ -121,26 +138,14 @@ uint8_t NetworkServer::getNumPlayersConnected()
     return static_cast<uint8_t>(_playerIDToClientMap.size());
 }
 
-SocketAddress& NetworkServer::getServerAddress()
+MachineAddress* NetworkServer::getServerAddress()
 {
-    return _packetHandler.getSocketAddress();
+    return _serverHelper->getServerAddress();
 }
 
 bool NetworkServer::connect()
 {
-    if (ENGINE_CFG.networkLoggingEnabled())
-    {
-        LOG("Server Initializing PacketHandler at port %hu", _port);
-    }
-    
-    int error = _packetHandler.connect();
-    if (error != NO_ERROR &&
-        ENGINE_CFG.networkLoggingEnabled())
-    {
-        LOG("Server connect failed. Error code %d", error);
-    }
-    
-    return error == NO_ERROR;
+    return _serverHelper->connect() == NO_ERROR;
 }
 
 void NetworkServer::onEntityRegistered(Entity* e)
@@ -163,7 +168,7 @@ void NetworkServer::onEntityDeregistered(Entity* e)
     _onEntityDeregisteredFunc(e);
 }
 
-void NetworkServer::processPacket(InputMemoryBitStream& imbs, SocketAddress* fromAddress)
+void NetworkServer::processPacket(InputMemoryBitStream& imbs, MachineAddress* fromAddress)
 {
     if (ENGINE_CFG.networkLoggingEnabled())
     {
@@ -268,17 +273,17 @@ int NetworkServer::getNumMovesReadyToBeProcessed()
     return lowestMoveCount;
 }
 
-void NetworkServer::sendPacket(const OutputMemoryBitStream& ombs, SocketAddress* fromAddress)
+void NetworkServer::sendPacket(const OutputMemoryBitStream& ombs, MachineAddress* fromAddress)
 {
     if (ENGINE_CFG.networkLoggingEnabled())
     {
         LOG("Server    sendPacket bit length: %d", ombs.getBitLength());
     }
     
-    _packetHandler.sendPacket(ombs, fromAddress);
+    _serverHelper->sendPacket(ombs, fromAddress);
 }
 
-void NetworkServer::handlePacketFromNewClient(InputMemoryBitStream& imbs, SocketAddress* fromAddress)
+void NetworkServer::handlePacketFromNewClient(InputMemoryBitStream& imbs, MachineAddress* fromAddress)
 {
     uint8_t packetType;
     imbs.readBits(packetType, 4);
@@ -343,7 +348,7 @@ void NetworkServer::processPacket(ClientProxy& cp, InputMemoryBitStream& imbs)
         default:
             if (ENGINE_CFG.networkLoggingEnabled())
             {
-                LOG("Unknown packet type received from %s", cp.getSocketAddress()->toString().c_str());
+                LOG("Unknown packet type received from %s", cp.getMachineAddress()->toString().c_str());
             }
             break;
     }
@@ -354,7 +359,7 @@ void NetworkServer::sendWelcomePacket(ClientProxy& cp)
     OutputMemoryBitStream ombs(1);
     ombs.writeBits(static_cast<uint8_t>(NWPT_WELCOME), 4);
     ombs.writeBits(cp.getPlayerID(), 3);
-    sendPacket(ombs, cp.getSocketAddress());
+    sendPacket(ombs, cp.getMachineAddress());
     
     if (ENGINE_CFG.networkLoggingEnabled())
     {
@@ -393,7 +398,7 @@ void NetworkServer::sendStatePacketToClient(ClientProxy& cp)
     
     ifp->setTransmissionData('RPLM', rtd);
     
-    sendPacket(ombs, cp.getSocketAddress());
+    sendPacket(ombs, cp.getMachineAddress());
 }
 
 void NetworkServer::handleInputPacket(ClientProxy& cp, InputMemoryBitStream& imbs)
@@ -459,7 +464,7 @@ void NetworkServer::handleAddLocalPlayerPacket(ClientProxy& cp, InputMemoryBitSt
     {
         OutputMemoryBitStream ombs(1);
         ombs.writeBits(static_cast<uint8_t>(NWPT_LOCAL_PLAYER_DENIED), 4);
-        sendPacket(ombs, cp.getSocketAddress());
+        sendPacket(ombs, cp.getMachineAddress());
     }
 }
 
@@ -471,7 +476,7 @@ void NetworkServer::sendLocalPlayerAddedPacket(ClientProxy& cp)
     OutputMemoryBitStream ombs(1);
     ombs.writeBits(static_cast<uint8_t>(NWPT_LOCAL_PLAYER_ADDED), 4);
     ombs.writeBits(playerID, 3);
-    sendPacket(ombs, cp.getSocketAddress());
+    sendPacket(ombs, cp.getMachineAddress());
     
     std::string localPlayerName = STRING_FORMAT("%s(%d)", cp.getUsername().c_str(), index);
     if (ENGINE_CFG.networkLoggingEnabled())
@@ -519,7 +524,7 @@ void NetworkServer::handleClientDisconnected(ClientProxy& cp)
     
     _handleLostClientFunc(cp, 0);
     
-    _addressHashToClientMap.erase(cp.getSocketAddress()->getHash());
+    _addressHashToClientMap.erase(cp.getMachineAddress()->getHash());
     
     resetNextPlayerID();
     
@@ -544,7 +549,7 @@ void NetworkServer::resetNextPlayerID()
     }
 }
 
-void cb_nw_srvr_processPacket(InputMemoryBitStream& imbs, SocketAddress* fromAddress)
+void cb_nw_srvr_processPacket(InputMemoryBitStream& imbs, MachineAddress* fromAddress)
 {
     NW_SRVR->processPacket(imbs, fromAddress);
 }
@@ -559,19 +564,17 @@ void cb_nw_srvr_onEntityDeregistered(Entity* e)
     NW_SRVR->onEntityDeregistered(e);
 }
 
-NetworkServer::NetworkServer(uint16_t port, EntityIDManager& eidm, TimeTracker& tt, OnEntityRegisteredFunc oerf, OnEntityDeregisteredFunc oedf, HandleNewClientFunc hncf, HandleLostClientFunc hlcf) :
-_serverHelper(nullptr),
+NetworkServer::NetworkServer(ServerHelper* serverHelper, EntityIDManager& eidm, TimeTracker& tt, OnEntityRegisteredFunc oerf, OnEntityDeregisteredFunc oedf, HandleNewClientFunc hncf, HandleLostClientFunc hlcf) :
+_serverHelper(serverHelper),
 _entityIDManager(eidm),
 _timeTracker(tt),
-_packetHandler(_timeTracker, port, cb_nw_srvr_processPacket),
 _onEntityRegisteredFunc(oerf),
 _onEntityDeregisteredFunc(oedf),
 _handleNewClientFunc(hncf),
 _handleLostClientFunc(hlcf),
 _entityRegistry(cb_nw_srvr_onEntityRegistered, cb_nw_srvr_onEntityDeregistered),
 _nextPlayerID(1),
-_numMovesProcessed(0),
-_port(port)
+_numMovesProcessed(0)
 {
     // Empty 
 }
@@ -587,7 +590,7 @@ NetworkServer::~NetworkServer()
         
         OutputMemoryBitStream ombs(1);
         ombs.writeBits(static_cast<uint8_t>(NWPT_SRVR_EXIT), 4);
-        sendPacket(ombs, cp.getSocketAddress());
+        sendPacket(ombs, cp.getMachineAddress());
     }
 
     _addressHashToClientMap.clear();

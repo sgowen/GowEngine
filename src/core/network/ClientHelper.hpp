@@ -22,6 +22,7 @@ public:
     ClientHelper(PacketHandler* packetHandler);
     virtual ~ClientHelper();
     
+    virtual int connect() = 0;
     virtual void handleUninitialized() = 0;
     virtual void sendPacket(const OutputMemoryBitStream& inOutputStream) = 0;
     virtual std::string& getName() = 0;

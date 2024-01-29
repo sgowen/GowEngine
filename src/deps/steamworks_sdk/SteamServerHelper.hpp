@@ -26,16 +26,17 @@ class SteamServerHelper : public ServerHelper
 {
 public:
     SteamServerHelper(std::string inGameDir,
-                        std::string inVersionString,
-                        std::string inProductName,
-                        std::string inGameDescription,
-                        uint16 inPort,
-                        TimeTracker& tt,
-                        ProcessPacketFunc inProcessPacketFunc,
-                        GetClientProxyFunc inGetClientProxyFunc,
-                        HandleClientDisconnectedFunc inHandleClientDisconnectedFunc);
+                      std::string inVersionString,
+                      std::string inProductName,
+                      std::string inGameDescription,
+                      uint16 inPort,
+                      TimeTracker& tt,
+                      ProcessPacketFunc inProcessPacketFunc,
+                      GetClientProxyFunc inGetClientProxyFunc,
+                      HandleClientDisconnectedFunc inHandleClientDisconnectedFunc);
     virtual ~SteamServerHelper();
     
+    virtual int connect();
     virtual void processIncomingPackets();
     virtual void processSpecialPacket(uint8_t packetType, InputMemoryBitStream& inInputStream, MachineAddress* inFromAddress);
     virtual void onClientDisconnected(ClientProxy* clientProxy);

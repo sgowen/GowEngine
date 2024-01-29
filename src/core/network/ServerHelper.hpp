@@ -20,13 +20,11 @@ class ServerHelper : public NetworkHelper
 {
 public:
     ServerHelper(PacketHandler* packetHandler, GetClientProxyFunc inGetClientProxyFunc, HandleClientDisconnectedFunc inHandleClientDisconnectedFunc);
-    
     virtual ~ServerHelper();
     
+    virtual int connect() = 0;
     virtual void onClientDisconnected(ClientProxy* clientProxy) = 0;
-    
     virtual MachineAddress* getServerAddress() = 0;
-    
     virtual bool isConnected() = 0;
     
 protected:
