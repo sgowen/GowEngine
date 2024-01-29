@@ -22,7 +22,7 @@ class SteamP2PAuthPlayer;
 class SteamP2PNetworkTransport;
 class MsgP2PSendingTicket;
 
-class TimeTracker;
+struct TimeTracker;
 
 class SteamP2PAuth
 {
