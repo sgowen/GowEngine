@@ -37,6 +37,31 @@ bool EngineConfig::vsync()
     return _vsync;
 }
 
+bool EngineConfig::useSteamNetworking()
+{
+    return _useSteamNetworking;
+}
+
+std::string EngineConfig::versionName()
+{
+    return _versionName;
+}
+
+std::string EngineConfig::steamGameDir()
+{
+    return _steamGameDir;
+}
+
+std::string EngineConfig::steamProductName()
+{
+    return _steamProductName;
+}
+
+std::string EngineConfig::steamProductDescription()
+{
+    return _steamProductDescription;
+}
+
 bool EngineConfig::consoleLoggingEnabled()
 {
     return _consoleLoggingEnabled;
@@ -160,6 +185,11 @@ double EngineConfig::frameRate()
 EngineConfig::EngineConfig(std::string configFilePath) :
 _config(ConfigLoader::initWithJSONFile(configFilePath)),
 _vsync(_config.getBool("vsync", true)),
+_useSteamNetworking(_config.getBool("useSteamNetworking", false)),
+_versionName(_config.getString("versionName")),
+_steamGameDir(_config.getString("steamGameDir")),
+_steamProductName(_config.getString("steamProductName")),
+_steamProductDescription(_config.getString("steamProductDescription")),
 _consoleLoggingEnabled(_config.getBool("consoleLoggingEnabled", false)),
 _framesPerSecond(_config.getUInt("framesPerSecond", 60)),
 _fileDirLogger(_config.getString("fileDirLogger")),

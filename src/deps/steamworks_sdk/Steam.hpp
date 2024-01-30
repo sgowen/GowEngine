@@ -53,6 +53,10 @@ typedef unsigned char uint8;
 #define Steamworks_SelfCheck()
 #endif
 
+// These numbers have no meaning, I made them up, because I need them!
+const int STEAM_GAME_SERVER_INIT_FAILED = 95;
+const int STEAM_GAME_SERVER_INTERFACE_INVALID = 96;
+
 // Steam Auth Network message types
 enum EMessage
 {

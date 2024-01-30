@@ -31,10 +31,6 @@ int SteamPacketHandler::connect()
 
 void SteamPacketHandler::sendPacket(const OutputMemoryBitStream& inOutputStream, MachineAddress* inFromAddress)
 {
-#ifdef NG_LOG
-    LOG("%s Outgoing packet Bit Length: %d \n", _isServer ? "Server" : "Client", inOutputStream.getBitLength());
-#endif
-    
     SteamAddress* inFromSteamAddress = static_cast<SteamAddress*>(inFromAddress);
     
     if (_steamNetworking->SendP2PPacket(inFromSteamAddress->getSteamID(), inOutputStream.getBufferPtr(), inOutputStream.getByteLength(), inFromSteamAddress->isReliable() ? k_EP2PSendReliable : k_EP2PSendUnreliable))

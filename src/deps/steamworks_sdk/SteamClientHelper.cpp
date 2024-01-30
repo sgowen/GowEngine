@@ -22,13 +22,10 @@ _serverSteamAddress(new SteamAddress(inServerSteamID)),
 _timeOfLastMsgClientBeginAuthentication(0.0f),
 _unServerIP(0),
 _usServerPort(0),
-_hAuthTicket(k_HAuthTicketInvalid)
+_hAuthTicket(k_HAuthTicketInvalid),
+_name(std::string(SteamFriends()->GetFriendPersonaName(SteamUser()->GetSteamID())))
 {
-    _name = std::string(SteamFriends()->GetFriendPersonaName(SteamUser()->GetSteamID()));
-
-    LOG("Client %s is connecting to Game Server with Steam ID: %s", _name.c_str(), _serverSteamAddress->toString().c_str());
-
-    STEAM_GAME_SERVICES->onServerJoined();
+    // Empty
 }
 
 SteamClientHelper::~SteamClientHelper()
@@ -45,7 +42,7 @@ SteamClientHelper::~SteamClientHelper()
     _steamP2PAuth->endGame();
 
     delete _steamP2PAuth;
-    _steamP2PAuth = NULL;
+    _steamP2PAuth = nullptr;
 
     if (_eConnectedStatus == k_EClientConnectedAndAuthenticated)
     {
@@ -58,6 +55,15 @@ SteamClientHelper::~SteamClientHelper()
     }
 
     delete _serverSteamAddress;
+}
+
+int SteamClientHelper::connect()
+{
+    LOG("Client %s is connecting to Game Server with Steam ID: %s", _name.c_str(), _serverSteamAddress->toString().c_str());
+
+    STEAM_GAME_SERVICES->onServerJoined();
+    
+    return NO_ERROR;
 }
 
 void SteamClientHelper::processIncomingPackets()

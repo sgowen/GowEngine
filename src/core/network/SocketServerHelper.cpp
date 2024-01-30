@@ -8,7 +8,7 @@
 
 #include <GowEngine/GowEngine.hpp>
 
-SocketServerHelper::SocketServerHelper(TimeTracker& tt, uint16_t inPort, ProcessPacketFunc inProcessPacketFunc, GetClientProxyFunc inGetClientProxyFunc, HandleClientDisconnectedFunc inHandleClientDisconnectedFunc) : ServerHelper(new SocketPacketHandler(tt, inPort, inProcessPacketFunc), inGetClientProxyFunc, inHandleClientDisconnectedFunc)
+SocketServerHelper::SocketServerHelper(TimeTracker& tt, uint16_t inPort, ProcessPacketFunc inProcessPacketFunc, GetClientProxyFunc inGetClientProxyFunc, HandleClientDisconnectedFunc inHandleClientDisconnectedFunc) : ServerHelper(new SocketPacketHandler(tt, inPort, inProcessPacketFunc), inGetClientProxyFunc, inHandleClientDisconnectedFunc), _port(inPort)
 {
     // Empty
 }
@@ -32,6 +32,11 @@ SocketServerHelper::~SocketServerHelper()
 
 int SocketServerHelper::connect()
 {
+    if (ENGINE_CFG.networkLoggingEnabled())
+    {
+        LOG("Server connecting to socket at port %hu", _port);
+    }
+    
     return _packetHandler->connect();
 }
 

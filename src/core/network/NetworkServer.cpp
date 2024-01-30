@@ -145,7 +145,15 @@ MachineAddress* NetworkServer::getServerAddress()
 
 bool NetworkServer::connect()
 {
-    return _serverHelper->connect() == NO_ERROR;
+    int error = _serverHelper->connect();
+    
+    if (error != NO_ERROR &&
+        ENGINE_CFG.networkLoggingEnabled())
+    {
+        LOG("Server connect failed. Error code %d", error);
+    }
+    
+    return error == NO_ERROR;
 }
 
 void NetworkServer::onEntityRegistered(Entity* e)

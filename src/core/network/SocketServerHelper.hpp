@@ -21,4 +21,7 @@ public:
     virtual void onClientDisconnected(ClientProxy* clientProxy);
     virtual MachineAddress* getServerAddress();
     virtual bool isConnected();
+    
+private:
+    uint16_t _port;
 };

@@ -47,6 +47,10 @@ public:
     
 private:
     std::string _gameDir;
+    std::string _versionString;
+    std::string _productName;
+    std::string _gameDescription;
+    uint16 _port;
     SteamAddress* _serverSteamAddress;
     std::string _serverName;
     bool _isConnectedToSteam;

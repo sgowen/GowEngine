@@ -17,13 +17,13 @@ _networkTransport(new SteamP2PNetworkTransport())
     // no players yet
 	for (uint8 i = 0; i < MAX_NUM_PLAYERS; ++i)
 	{
-		_rgpP2PAuthPlayer[i] = NULL;
+		_rgpP2PAuthPlayer[i] = nullptr;
 	}
 
 	// no queued messages
 	for (uint8 i = 0; i < MAX_NUM_PLAYERS; ++i)
 	{
-		_rgpQueuedMessage[i] = NULL;
+		_rgpQueuedMessage[i] = nullptr;
 	}
 }
 
@@ -38,7 +38,7 @@ void SteamP2PAuth::playerDisconnect(uint8 iSlot)
 	{
 		_rgpP2PAuthPlayer[iSlot]->endGame();
 		delete _rgpP2PAuthPlayer[iSlot];
-		_rgpP2PAuthPlayer[iSlot] = NULL;
+		_rgpP2PAuthPlayer[iSlot] = nullptr;
 	}
 }
 
@@ -51,7 +51,7 @@ void SteamP2PAuth::endGame()
 			_rgpP2PAuthPlayer[i]->endGame();
 
 			delete _rgpP2PAuthPlayer[i];
-			_rgpP2PAuthPlayer[i] = NULL;
+			_rgpP2PAuthPlayer[i] = nullptr;
 		}
 	}
 }
@@ -69,13 +69,13 @@ void SteamP2PAuth::internalinitPlayer(uint8 iSlot, CSteamID steamID, bool bStart
 	// check our queued messages list to see if this guys ticket message arrived before we noticed him
 	for (uint8 i = 0; i < MAX_NUM_PLAYERS; ++i)
 	{
-		if (_rgpQueuedMessage[i] != NULL)
+		if (_rgpQueuedMessage[i] != nullptr)
 		{
 			if (_rgpP2PAuthPlayer[i]->handleMessage(_rgpQueuedMessage[i]))
 			{
 				LOG("P2P:: Consumed queued message");
                 delete _rgpQueuedMessage[i];
-				_rgpQueuedMessage[i] = NULL;
+				_rgpQueuedMessage[i] = nullptr;
 			}
 		}
 	}
@@ -132,7 +132,7 @@ bool SteamP2PAuth::handleMessage(uint8 packetType, InputMemoryBitStream& inInput
             LOG("P2P:: handleMessage queueing message");
             for (uint8 i = 0; i < MAX_NUM_PLAYERS; ++i)
             {
-                if (_rgpQueuedMessage[i] == NULL)
+                if (_rgpQueuedMessage[i] == nullptr)
                 {
                     _rgpQueuedMessage[i] = msg;
                     return true; // message handled
@@ -171,7 +171,7 @@ SteamP2PAuthPlayer::~SteamP2PAuthPlayer()
     endGame();
 
     _networkTransport->closeConnection(SteamUser()->GetSteamID());
-    _networkTransport = NULL;
+    _networkTransport = nullptr;
 }
 
 void SteamP2PAuthPlayer::OnBeginAuthResponse(ValidateAuthTicketResponse_t *pCallback)

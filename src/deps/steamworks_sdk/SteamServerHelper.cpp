@@ -20,54 +20,15 @@ SteamServerHelper::SteamServerHelper(std::string inGameDir,
                                      GetClientProxyFunc inGetClientProxyFunc,
                                      HandleClientDisconnectedFunc inHandleClientDisconnectedFunc) : ServerHelper(new SteamPacketHandler(tt, SteamGameServerNetworking(), inProcessPacketFunc), inGetClientProxyFunc, inHandleClientDisconnectedFunc),
 _gameDir(inGameDir),
+_versionString(inVersionString),
+_productName(inProductName),
+_gameDescription(inGameDescription),
+_port(inPort),
 _serverSteamAddress(new SteamAddress()),
 _isConnectedToSteam(false),
 _outgoingPacketAddress(new SteamAddress())
 {
-    // Initialize the SteamGameServer interface, we tell it some info about us, and we request support
-    // for both Authentication (making sure users own games) and secure mode, VAC running in our game
-    // and kicking users who are VAC banned
-    
-    if (!SteamGameServer_Init(INADDR_ANY, STEAM_SERVER_PORT, inPort, STEAM_MASTER_SERVER_UPDATER_PORT, eServerModeAuthenticationAndSecure, inVersionString.c_str()))
-    {
-        LOG("SteamGameServer_Init call failed");
-    }
-    
-    if (SteamGameServer())
-    {
-        // Set the "game dir".
-        // This is currently required for all games.  However, soon we will be
-        // using the AppID for most purposes, and this string will only be needed
-        // for mods.  it may not be changed after the server has logged on
-        SteamGameServer()->SetModDir(_gameDir.c_str());
-        
-        // These fields are currently required, but will go away soon.
-        // See their documentation for more info
-        SteamGameServer()->SetProduct(inProductName.c_str());
-        SteamGameServer()->SetGameDescription(inGameDescription.c_str());
-        
-        // We don't support specators in our game.
-        // .... but if we did:
-        //SteamGameServer()->SetSpectatorPort(...);
-        //SteamGameServer()->SetSpectatorServerName(...);
-        
-        // Initiate Anonymous logon.
-        // Coming soon: Logging into authenticated, persistent game server account
-        SteamGameServer()->LogOnAnonymous();
-        
-        // We want to actively update the master server with our presence so players can
-        // find us via the steam matchmaking/server browser interfaces
-        SteamGameServer()->EnableHeartbeats(true);
-        
-        LOG("SteamGameServer() interface is valid");
-    }
-    else
-    {
-        LOG("SteamGameServer() interface is invalid");
-    }
-    
-    // zero the client connection data
-    memset(&_rgPendingClientData, 0, sizeof(_rgPendingClientData));
+    // Empty
 }
 
 SteamServerHelper::~SteamServerHelper()
@@ -101,8 +62,61 @@ SteamServerHelper::~SteamServerHelper()
 
 int SteamServerHelper::connect()
 {
-    // TODO?
-    return NO_ERROR;
+    if (ENGINE_CFG.networkLoggingEnabled())
+    {
+        LOG("Server connecting to socket at port %hu", _port);
+    }
+    
+    // Initialize the SteamGameServer interface, we tell it some info about us, and we request support
+    // for both Authentication (making sure users own games) and secure mode, VAC running in our game
+    // and kicking users who are VAC banned
+    
+    int error = NO_ERROR;
+    
+    if (!SteamGameServer_Init(INADDR_ANY, STEAM_SERVER_PORT, _port, STEAM_MASTER_SERVER_UPDATER_PORT, eServerModeAuthenticationAndSecure, _versionString.c_str()))
+    {
+        LOG("SteamGameServer_Init call failed");
+        error = STEAM_GAME_SERVER_INIT_FAILED;
+    }
+    
+    if (SteamGameServer())
+    {
+        // Set the "game dir".
+        // This is currently required for all games.  However, soon we will be
+        // using the AppID for most purposes, and this string will only be needed
+        // for mods.  it may not be changed after the server has logged on
+        SteamGameServer()->SetModDir(_gameDir.c_str());
+        
+        // These fields are currently required, but will go away soon.
+        // See their documentation for more info
+        SteamGameServer()->SetProduct(_productName.c_str());
+        SteamGameServer()->SetGameDescription(_gameDescription.c_str());
+        
+        // We don't support specators in our game.
+        // .... but if we did:
+        //SteamGameServer()->SetSpectatorPort(...);
+        //SteamGameServer()->SetSpectatorServerName(...);
+        
+        // Initiate Anonymous logon.
+        // Coming soon: Logging into authenticated, persistent game server account
+        SteamGameServer()->LogOnAnonymous();
+        
+        // We want to actively update the master server with our presence so players can
+        // find us via the steam matchmaking/server browser interfaces
+        SteamGameServer()->EnableHeartbeats(true);
+        
+        LOG("SteamGameServer() interface is valid");
+    }
+    else
+    {
+        LOG("SteamGameServer() interface is invalid");
+        error = STEAM_GAME_SERVER_INTERFACE_INVALID;
+    }
+    
+    // zero the client connection data
+    memset(&_rgPendingClientData, 0, sizeof(_rgPendingClientData));
+    
+    return error;
 }
 
 void SteamServerHelper::processIncomingPackets()
@@ -197,8 +211,6 @@ void SteamServerHelper::onClientDisconnected(ClientProxy* clientProxy)
 
 MachineAddress* SteamServerHelper::getServerAddress()
 {
-    _serverSteamAddress->setSteamID(SteamGameServer()->GetSteamID());
-    
     return _serverSteamAddress;
 }
 
@@ -416,6 +428,8 @@ void SteamServerHelper::onPolicyResponse(GSPolicyResponse_t *pPolicyResponse)
     }
     
     LOG("Game Server Steam ID: %llu", SteamGameServer()->GetSteamID().ConvertToUint64());
+    
+    _serverSteamAddress->setSteamID(SteamGameServer()->GetSteamID());
 }
 
 /// Purpose: Tells us Steam3 (VAC and newer license checking) has accepted the user connection

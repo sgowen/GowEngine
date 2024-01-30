@@ -27,6 +27,7 @@ public:
 private:
     SocketAddress* _serverAddress;
     std::string _name;
+    uint16_t _port;
     
     void updateState();
 };

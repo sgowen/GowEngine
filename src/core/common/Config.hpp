@@ -24,6 +24,7 @@ public:
     int32_t getInt(std::string key, int32_t defaultValue);
     uint32_t getUInt(std::string key);
     uint32_t getUInt(std::string key, uint32_t defaultValue);
+    uint64_t getUInt64(std::string key);
     float getFloat(std::string key);
     float getFloat(std::string key, float defaultValue);
     double getDouble(std::string key);
@@ -32,6 +33,7 @@ public:
     std::string getString(std::string key, std::string defaultValue);
     void putString(std::string key, std::string value);
     void putBool(std::string key, bool value);
+    void putUInt64(std::string key, uint64_t value);
     
 private:
     std::map<std::string, std::string> _keyValues;

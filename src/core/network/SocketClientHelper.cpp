@@ -11,7 +11,8 @@
 SocketClientHelper::SocketClientHelper(TimeTracker& tt, std::string serverIPAddress, std::string inName, uint16_t inPort, ProcessPacketFunc processPacketFunc) :
 ClientHelper(new SocketPacketHandler(tt, inPort, processPacketFunc)),
 _serverAddress(SocketAddressFactory::createIPv4FromString(serverIPAddress)),
-_name(inName)
+_name(inName),
+_port(inPort)
 {
     if (_serverAddress == nullptr &&
         ENGINE_CFG.networkLoggingEnabled())
@@ -34,6 +35,11 @@ SocketClientHelper::~SocketClientHelper()
 
 int SocketClientHelper::connect()
 {
+    if (ENGINE_CFG.networkLoggingEnabled())
+    {
+        LOG("Client connecting to socket at port %hu", _port);
+    }
+    
     return _packetHandler->connect();
 }
 
@@ -47,7 +53,7 @@ void SocketClientHelper::processSpecialPacket(uint8_t packetType, InputMemoryBit
             if (_serverAddress)
             {
                 delete _serverAddress;
-                _serverAddress = NULL;
+                _serverAddress = nullptr;
             }
             
             updateState();

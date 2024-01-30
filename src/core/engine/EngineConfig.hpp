@@ -20,6 +20,11 @@ public:
     static void destroy();
     
     bool vsync();
+    bool useSteamNetworking();
+    std::string versionName();
+    std::string steamGameDir();
+    std::string steamProductName();
+    std::string steamProductDescription();
     bool consoleLoggingEnabled();
     uint8_t framesPerSecond();
     std::string fileDirLogger();
@@ -52,6 +57,11 @@ private:
     
     Config _config;
     bool _vsync;
+    bool _useSteamNetworking;
+    std::string _versionName;
+    std::string _steamGameDir;
+    std::string _steamProductName;
+    std::string _steamProductDescription;
     bool _consoleLoggingEnabled;
     uint8_t _framesPerSecond;
     std::string _fileDirLogger;

@@ -32,7 +32,7 @@ extern "C" void __cdecl steamAPIDebugTextHook(int nSeverity, const char *pchDebu
     }
 }
 
-SteamGameServices* SteamGameServices::s_instance = NULL;
+SteamGameServices* SteamGameServices::s_instance = nullptr;
 
 void SteamGameServices::create(const char* inGameDir)
 {
@@ -46,7 +46,7 @@ void SteamGameServices::destroy()
     assert(s_instance);
     
     delete s_instance;
-    s_instance = NULL;
+    s_instance = nullptr;
 }
 
 SteamGameServices * SteamGameServices::getInstance()
@@ -67,7 +67,7 @@ void SteamGameServices::parseCommandLine(const char *pchCmdLine, const char **pp
     // a server for our game and is trying to join it.
     const char *pchConnectParam = "+connect";
     const char *pchConnect = strstr(pchCmdLine, pchConnectParam);
-    *ppchServerAddress = NULL;
+    *ppchServerAddress = nullptr;
     if (pchConnect && strlen(pchCmdLine) > (pchConnect - pchCmdLine) + strlen(pchConnectParam) + 1)
     {
         // Address should be right after the +connect, +1 on the end to skip the space
@@ -188,7 +188,7 @@ void SteamGameServices::refreshInternetServers()
     if (_hServerListRequest)
     {
         SteamMatchmakingServers()->ReleaseRequest(_hServerListRequest);
-        _hServerListRequest = NULL;
+        _hServerListRequest = nullptr;
     }
     
     LOG("Refreshing internet servers");
@@ -234,7 +234,7 @@ void SteamGameServices::refreshLANServers()
     if (_hServerListRequest)
     {
         SteamMatchmakingServers()->ReleaseRequest(_hServerListRequest);
-        _hServerListRequest = NULL;
+        _hServerListRequest = nullptr;
     }
     
     LOG("Refreshing LAN servers");
@@ -355,7 +355,7 @@ SteamGameServices::SteamGameServices(const char* inGameDir) :
 _gameDir(inGameDir),
 _numServers(0),
 _isRequestingServers(false),
-_hServerListRequest(NULL),
+_hServerListRequest(nullptr),
 _unServerIP(0),
 _usServerPort(0),
 _steamIDGameServerToJoin(CSteamID()),
@@ -387,7 +387,7 @@ _isRequestingToJoinServer(false)
     
     // Initialize SteamAPI, if this fails we bail out since we depend on Steam for lots of stuff.
     // You don't necessarily have to though if you write your code to check whether all the Steam
-    // interfaces are NULL before using them and provide alternate paths when they are unavailable.
+    // interfaces are nullptr before using them and provide alternate paths when they are unavailable.
     //
     // This will also load the in-game steam overlay dll into your process.  That dll is normally
     // injected by steam when it launches games, but by calling this you cause it to always load,
@@ -435,7 +435,7 @@ SteamGameServices::~SteamGameServices()
     if (_hServerListRequest)
     {
         SteamMatchmakingServers()->ReleaseRequest(_hServerListRequest);
-        _hServerListRequest = NULL;
+        _hServerListRequest = nullptr;
     }
     
     // Shutdown the SteamAPI
@@ -448,7 +448,7 @@ SteamGameServices::~SteamGameServices()
 SteamGameServices::GameServerPing::GameServerPing()
 {
     _hGameServerQuery = HSERVERQUERY_INVALID;
-    _client = NULL;
+    _client = nullptr;
 }
 
 void SteamGameServices::GameServerPing::ServerResponded(gameserveritem_t &server)

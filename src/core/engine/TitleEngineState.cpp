@@ -19,6 +19,13 @@ void TitleEngineState::onAssetsLoaded(Engine *e)
 //    {
 //        AUDIO_ENGINE.playSound("music_title", 0, 1.0f, true);
 //    }
+  
+#if IS_DESKTOP
+    if (ENGINE_CFG.useSteamNetworking())
+    {
+        SteamGameServices::create(ENGINE_CFG.steamGameDir().c_str());
+    }
+#endif
 }
 
 void TitleEngineState::onExit(Engine* e)
@@ -30,6 +37,33 @@ void TitleEngineState::onExit(Engine* e)
 
 void TitleEngineState::onUpdate(Engine* e)
 {
+#if IS_DESKTOP
+    if (STEAM_GAME_SERVICES)
+    {
+        STEAM_GAME_SERVICES->update();
+        
+        if (STEAM_GAME_SERVICES->getStatus() == STEAM_INIT_SUCCESS)
+        {
+            if (STEAM_GAME_SERVICES->isRequestingToJoinServer())
+            {
+                CSteamID serverToJoinSteamID = STEAM_GAME_SERVICES->getServerToJoinSteamID();
+                
+                Config args;
+                args.putUInt64(ARG_STEAM_ADDRESS, serverToJoinSteamID.ConvertToUint64());
+                e->pushState(&ENGINE_STATE_GAME_CLNT, args);
+            }
+        }
+        else
+        {
+            if (STEAM_GAME_SERVICES)
+            {
+                SteamGameServices::destroy();
+            }
+            e->setRequestedHostAction(ERHA_EXIT);
+        }
+    }
+#endif
+    
     switch (_state)
     {
         case TESS_DEFAULT:

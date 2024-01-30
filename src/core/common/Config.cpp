@@ -72,6 +72,13 @@ uint32_t Config::getUInt(std::string key, uint32_t defaultValue)
     return defaultValue;
 }
 
+uint64_t Config::getUInt64(std::string key)
+{
+    std::string* val = value(key);
+    assert(val != nullptr);
+    return StringUtil::stringToNumber<uint64_t>(*val);
+}
+
 float Config::getFloat(std::string key)
 {
     std::string* val = value(key);
@@ -133,6 +140,11 @@ void Config::putString(std::string key, std::string value)
 void Config::putBool(std::string key, bool value)
 {
     putString(key, StringUtil::boolToString(value));
+}
+
+void Config::putUInt64(std::string key, uint64_t value)
+{
+    putString(key, StringUtil::toString(value));
 }
 
 std::string* Config::value(std::string key)

@@ -142,26 +142,15 @@ NetworkClientState NetworkClient::state() const
 
 bool NetworkClient::connect()
 {
-    // TODO
-    return _clientHelper->connect() == NO_ERROR;
-//    if (_serverAddress == nullptr)
-//    {
-//        return false;
-//    }
-//    
-//    if (ENGINE_CFG.networkLoggingEnabled())
-//    {
-//        LOG("Client Initializing PacketHandler at port %hu", _port);
-//    }
-//    
-//    int error = _packetHandler.connect();
-//    if (error != NO_ERROR &&
-//        ENGINE_CFG.networkLoggingEnabled())
-//    {
-//        LOG("Client connect failed. Error code %d", error);
-//    }
-//    
-//    return error == NO_ERROR;
+    int error = _clientHelper->connect();
+    
+    if (error != NO_ERROR &&
+        ENGINE_CFG.networkLoggingEnabled())
+    {
+        LOG("Client connect failed. Error code %d", error);
+    }
+    
+    return error == NO_ERROR;
 }
 
 void NetworkClient::processPacket(InputMemoryBitStream& imbs, SocketAddress* fromAddress)

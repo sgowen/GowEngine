@@ -12,6 +12,7 @@
 #define ARG_IP_ADDRESS "ARG_IP_ADDRESS"
 #define ARG_USERNAME "ARG_USERNAME"
 #define ARG_OFFLINE_MODE "ARG_OFFLINE_MODE"
+#define ARG_STEAM_ADDRESS "ARG_STEAM_ADDRESS"
 
 /// Engine
 #define ENGINE_ASSETS "aaa_load_this_first"

@@ -31,6 +31,7 @@ public:
                         ProcessPacketFunc processPacketFunc);
     virtual ~SteamClientHelper();
     
+    virtual int connect();
     virtual void processIncomingPackets();
     virtual void processSpecialPacket(uint8_t packetType, 
                                       InputMemoryBitStream& inInputStream,
