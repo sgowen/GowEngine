@@ -19,9 +19,9 @@ void TitleEngineState::onAssetsLoaded(Engine *e)
 //    {
 //        AUDIO_ENGINE.playSound("music_title", 0, 1.0f, true);
 //    }
-  
+    
 #if IS_DESKTOP
-    if (ENGINE_CFG.useSteamNetworking())
+    if (ENGINE_CFG.useSteamNetworking() && !STEAM_GAME_SERVICES)
     {
         SteamGameServices::create(ENGINE_CFG.steamGameDir().c_str());
     }
@@ -30,7 +30,7 @@ void TitleEngineState::onAssetsLoaded(Engine *e)
 
 void TitleEngineState::onExit(Engine* e)
 {
-    _state = TESS_DEFAULT;
+    setState(TESS_DEFAULT);
     _inputProcessor.clearTextInput();
     _userEnteredIPAddress.clear();
 }
@@ -55,10 +55,6 @@ void TitleEngineState::onUpdate(Engine* e)
         }
         else
         {
-            if (STEAM_GAME_SERVICES)
-            {
-                SteamGameServices::destroy();
-            }
             e->setRequestedHostAction(ERHA_EXIT);
         }
     }
@@ -75,7 +71,7 @@ void TitleEngineState::onUpdate(Engine* e)
                     e->setRequestedHostAction(ERHA_EXIT);
                     break;
                 case IPS_ACTION:
-                    _state = _inputProcessor.getAction();
+                    setState(_inputProcessor.getAction());
                     break;
                 default:
 #if IS_MOBILE
@@ -96,11 +92,12 @@ void TitleEngineState::onUpdate(Engine* e)
             break;
         case TESS_INPUT_HOST_NAME:
         {
+            // TODO, for Steam, skip entering a name
             uint8_t inputState = _inputProcessor.updateReadText();
             switch (inputState)
             {
                 case IPS_EXIT:
-                    _state = TESS_DEFAULT;
+                    setState(TESS_DEFAULT);
                     break;
                 case IPS_TEXT_INPUT_READY:
                 {
@@ -118,12 +115,12 @@ void TitleEngineState::onUpdate(Engine* e)
             switch (inputState)
             {
                 case IPS_EXIT:
-                    _state = TESS_DEFAULT;
+                    setState(TESS_DEFAULT);
                     break;
                 case IPS_TEXT_INPUT_READY:
                     _userEnteredIPAddress = _inputProcessor.getTextInput();
                     _inputProcessor.clearTextInput();
-                    _state = TESS_INPUT_JOIN_NAME;
+                    setState(TESS_INPUT_JOIN_NAME);
                     break;
             }
         }
@@ -134,7 +131,7 @@ void TitleEngineState::onUpdate(Engine* e)
             switch (inputState)
             {
                 case IPS_EXIT:
-                    _state = TESS_INPUT_IP;
+                    setState(TESS_INPUT_IP);
                     _inputProcessor.setTextInput(_userEnteredIPAddress);
                     break;
                 case IPS_TEXT_INPUT_READY:
@@ -146,6 +143,34 @@ void TitleEngineState::onUpdate(Engine* e)
                     break;
                 }
             }
+        }
+            break;
+        case TESS_INPUT_LAN_SERVER:
+        case TESS_INPUT_INTERNET_SERVER:
+        {
+#if IS_DESKTOP
+            uint8_t inputState = _inputProcessor.updateReadText(1);
+            switch (inputState)
+            {
+                case IPS_EXIT:
+                    setState(TESS_DEFAULT);
+                    break;
+                case IPS_TEXT_INPUT_READY:
+                {
+                    std::string textInput = _inputProcessor.getTextInput();
+                    int8_t serverIndex = 0;//StringUtil::stringToNumber<int8_t>(textInput);
+                    if (serverIndex >= 0 && serverIndex <= 3)
+                    {
+                        std::vector<SteamServerInfo> gameServers = STEAM_GAME_SERVICES->getGameServers();
+                        if (gameServers.size() > serverIndex)
+                        {
+                            STEAM_GAME_SERVICES->initiateServerConnection(gameServers[serverIndex].getSteamID());
+                        }
+                    }
+                }
+                    break;
+            }
+#endif
         }
             break;
         case TESS_START_OFFLINE:
@@ -162,19 +187,66 @@ void TitleEngineState::onUpdate(Engine* e)
 
 void TitleEngineState::onRender(Renderer& r, double extrapolation)
 {
+    bool steam = false;
+#if IS_DESKTOP
+    if (ENGINE_CFG.useSteamNetworking())
+    {
+        steam = true;
+    }
+#endif
+    
     r.bindFramebuffer();
     
     r.setTextVisible("hostServer", _state == TESS_DEFAULT);
-    r.setTextVisible("joinServer", _state == TESS_DEFAULT);
+    r.setTextVisible("joinServer", _state == TESS_DEFAULT && !steam);
+    r.setTextVisible("joinLANServer", _state == TESS_DEFAULT && steam);
+    r.setTextVisible("joinInternetServer", _state == TESS_DEFAULT && steam);
     r.setTextVisible("enterIP", _state == TESS_INPUT_IP);
     r.setTextVisible("enterName", _state == TESS_INPUT_HOST_NAME || _state == TESS_INPUT_JOIN_NAME);
-    r.setTextVisible("input", _state == TESS_INPUT_HOST_NAME || _state == TESS_INPUT_IP || _state == TESS_INPUT_JOIN_NAME);
+    r.setTextVisible("input", _state == TESS_INPUT_HOST_NAME || _state == TESS_INPUT_IP || _state == TESS_INPUT_JOIN_NAME || _state == TESS_INPUT_LAN_SERVER || _state == TESS_INPUT_INTERNET_SERVER);
+    r.setTextVisible("server0", _state == TESS_INPUT_LAN_SERVER || _state == TESS_INPUT_INTERNET_SERVER);
+    r.setTextVisible("server1", _state == TESS_INPUT_LAN_SERVER || _state == TESS_INPUT_INTERNET_SERVER);
+    r.setTextVisible("server2", _state == TESS_INPUT_LAN_SERVER || _state == TESS_INPUT_INTERNET_SERVER);
+    r.setTextVisible("server3", _state == TESS_INPUT_LAN_SERVER || _state == TESS_INPUT_INTERNET_SERVER);
     r.setText("input", _inputProcessor.getTextInput());
+    
+    if (STEAM_GAME_SERVICES)
+    {
+        std::vector<SteamServerInfo> gameServers = STEAM_GAME_SERVICES->getGameServers();
+        if (gameServers.size() >= 1)
+        {
+            r.setText("server0", STRING_FORMAT("[%i] %s", 0, gameServers[0].getDisplayString()).c_str());
+        }
+        
+        if (gameServers.size() >= 2)
+        {
+            r.setText("server1", STRING_FORMAT("[%i] %s", 1, gameServers[1].getDisplayString()).c_str());
+        }
+    }
     
     r.renderImageViews();
     r.renderTextViews();
 
     r.renderToScreen();
+}
+
+void TitleEngineState::setState(uint8_t state)
+{
+    _state = state;
+    
+#if IS_DESKTOP
+    if (ENGINE_CFG.useSteamNetworking())
+    {
+        if (_state == TESS_INPUT_LAN_SERVER && STEAM_GAME_SERVICES)
+        {
+            STEAM_GAME_SERVICES->refreshLANServers();
+        }
+        else if (_state == TESS_INPUT_INTERNET_SERVER && STEAM_GAME_SERVICES)
+        {
+            STEAM_GAME_SERVICES->refreshInternetServers();
+        }
+    }
+#endif
 }
 
 TitleEngineState::TitleEngineState() : EngineState("data/json/TitleEngineState/Config.json"),
@@ -184,6 +256,8 @@ _userEnteredIPAddress("")
 {
     _inputProcessor.registerActionForKey(GOW_KEY_H, TESS_INPUT_HOST_NAME);
     _inputProcessor.registerActionForKey(GOW_KEY_J, TESS_INPUT_IP);
+    _inputProcessor.registerActionForKey(GOW_KEY_L, TESS_INPUT_LAN_SERVER);
+    _inputProcessor.registerActionForKey(GOW_KEY_I, TESS_INPUT_INTERNET_SERVER);
     _inputProcessor.registerActionForKey(GOW_KEY_O, TESS_START_OFFLINE);
     
     _inputProcessor.registerActionForButton(GPEB_BUTTON_A, TESS_INPUT_HOST_NAME);

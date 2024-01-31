@@ -78,7 +78,7 @@ const std::map<std::string, EntityRenderControllerCreationFunc>& EntityManager::
 EntityManager::EntityManager()
 {
     registerController("Default", EntityController::create);
-    registerController("JonController", JonController::create);
+    registerController("PlayerController", PlayerController::create);
     registerNetworkController("Default", EntityNetworkController::create);
     registerRenderController("Default", EntityRenderController::create);
 }

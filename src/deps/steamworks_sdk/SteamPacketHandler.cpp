@@ -11,9 +11,9 @@
 #if IS_DESKTOP
 
 SteamPacketHandler::SteamPacketHandler(TimeTracker& tt,
-                                       ISteamNetworking* steamNetworking,
+                                       bool isServer,
                                        ProcessPacketFunc ppf) : PacketHandler(tt, ppf),
-_steamNetworking(steamNetworking)
+_isServer(isServer)
 {
     // Empty
 }
@@ -33,7 +33,9 @@ void SteamPacketHandler::sendPacket(const OutputMemoryBitStream& inOutputStream,
 {
     SteamAddress* inFromSteamAddress = static_cast<SteamAddress*>(inFromAddress);
     
-    if (_steamNetworking->SendP2PPacket(inFromSteamAddress->getSteamID(), inOutputStream.getBufferPtr(), inOutputStream.getByteLength(), inFromSteamAddress->isReliable() ? k_EP2PSendReliable : k_EP2PSendUnreliable))
+    ISteamNetworking* steamNetworking = _isServer ? SteamGameServerNetworking() : SteamNetworking();
+    
+    if (steamNetworking->SendP2PPacket(inFromSteamAddress->getSteamID(), inOutputStream.getBufferPtr(), inOutputStream.getByteLength(), inFromSteamAddress->isReliable() ? k_EP2PSendReliable : k_EP2PSendUnreliable))
     {
         int sentByteCount = inOutputStream.getByteLength();
         if (sentByteCount > 0)
@@ -62,12 +64,14 @@ void SteamPacketHandler::readIncomingPacketsIntoQueue()
     
     uint8_t numFramesOfSimulatedLatency = ENGINE_CFG.numFramesOfSimulatedLatency();
     
-    while (_steamNetworking->IsP2PPacketAvailable(&incomingSize))
+    ISteamNetworking* steamNetworking = _isServer ? SteamGameServerNetworking() : SteamNetworking();
+    
+    while (steamNetworking->IsP2PPacketAvailable(&incomingSize))
     {
         if (incomingSize <= packetSize)
         {
             uint32_t readByteCount;
-            if (_steamNetworking->ReadP2PPacket(packetMem, packetSize, &readByteCount, &fromId))
+            if (steamNetworking->ReadP2PPacket(packetMem, packetSize, &readByteCount, &fromId))
             {
                 assert(readByteCount <= packetSize);
                 

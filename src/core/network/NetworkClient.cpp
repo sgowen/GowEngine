@@ -48,7 +48,7 @@ NetworkClientState NetworkClient::processIncomingPackets()
     _clientHelper->processIncomingPackets();
     
     uint32_t time = _timeTracker._time;
-    uint32_t timeout = ENGINE_CFG.framesPerSecond() * 2;
+    uint32_t timeout = ENGINE_CFG.framesPerSecond() * 10;
     uint32_t dcTime = _lastServerCommunicationTimestamp + timeout;
     if (time > dcTime)
     {

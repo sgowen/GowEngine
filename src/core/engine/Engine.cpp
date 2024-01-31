@@ -39,6 +39,13 @@ _hasUpdatedSinceLastRender(false)
 
 Engine::~Engine()
 {
+#if IS_DESKTOP
+    if (STEAM_GAME_SERVICES)
+    {
+        SteamGameServices::destroy();
+    }
+#endif
+    
     ASSETS_MGR.deregisterAssets(ENGINE_ASSETS);
     
     AudioEngine::destroy();

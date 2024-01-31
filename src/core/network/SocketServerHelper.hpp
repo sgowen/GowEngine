@@ -13,7 +13,7 @@
 class SocketServerHelper : public ServerHelper
 {
 public:
-    SocketServerHelper(TimeTracker& tt, uint16_t inPort, ProcessPacketFunc inProcessPacketFunc, GetClientProxyFunc inGetClientProxyFunc, HandleClientDisconnectedFunc inHandleClientDisconnectedFunc);
+    SocketServerHelper(uint16_t inPort, TimeTracker& tt, ProcessPacketFunc inProcessPacketFunc, GetClientProxyFunc inGetClientProxyFunc, HandleClientDisconnectedFunc inHandleClientDisconnectedFunc);
     virtual ~SocketServerHelper();
     
     virtual int connect();

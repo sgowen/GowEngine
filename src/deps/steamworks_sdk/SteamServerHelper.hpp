@@ -54,6 +54,7 @@ private:
     SteamAddress* _serverSteamAddress;
     std::string _serverName;
     bool _isConnectedToSteam;
+    bool _isServerReady;
     SteamAddress* _outgoingPacketAddress;
     
     struct ClientConnectionData_t

@@ -113,8 +113,10 @@ void FontBatcher::addText(Renderer& r, TextView& tv)
                 continue;
             }
 
-            assert(c >= 0 && c <= 175);
-            _spriteBatcher.addSprite(_glyphs[c], x, y, glyphWidth, glyphHeight);
+            if (c >= 0 && c <= 175)
+            {
+                _spriteBatcher.addSprite(_glyphs[c], x, y, glyphWidth, glyphHeight);
+            }
 
             x += glyphWidth;
         }

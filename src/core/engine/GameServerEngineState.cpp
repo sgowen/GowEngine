@@ -12,7 +12,7 @@ void cb_server_onEntityRegistered(Entity* e)
 {
     ENGINE_STATE_GAME_SRVR.world().addNetworkEntity(e);
     
-    if (e->isPlayer() && e->networkDataField("playerID").valueUInt8() == 1)
+    if (e->isPlayer() && e->playerInfo()._playerID == 1)
     {
         uint32_t entityLayoutKey = e->networkDataField("entityLayoutKey").valueUInt32();
         EntityLayoutDef& eld = ENTITY_LAYOUT_MGR.entityLayoutDef(entityLayoutKey);
@@ -26,7 +26,7 @@ void cb_server_onEntityDeregistered(Entity* e)
     
     if (e->isPlayer())
     {
-        uint8_t playerID = e->networkDataField("playerID").valueUInt8();
+        uint8_t playerID = e->playerInfo()._playerID;
         needsRestart = NW_SRVR->getClientProxy(playerID) != nullptr;
     }
     
@@ -38,9 +38,9 @@ void cb_server_onEntityDeregistered(Entity* e)
     }
 }
 
-void cb_server_handleNewClient(std::string username, uint8_t playerID)
+void cb_server_handleNewClient(std::string playerName, uint8_t playerID)
 {
-    ENGINE_STATE_GAME_SRVR.handleNewClient(username, playerID);
+    ENGINE_STATE_GAME_SRVR.handleNewClient(playerName, playerID);
 }
 
 void cb_server_handleLostClient(ClientProxy& cp, uint8_t localPlayerIndex)
@@ -50,7 +50,27 @@ void cb_server_handleLostClient(ClientProxy& cp, uint8_t localPlayerIndex)
 
 void GameServerEngineState::enter(Engine* e)
 {
-    SocketServerHelper* serverHelper = new SocketServerHelper(_timeTracker, ENGINE_CFG.serverPort(), NW_SRVR_CALLBACKS);
+    ServerHelper* serverHelper = nullptr;
+#if IS_DESKTOP
+    if (ENGINE_CFG.useSteamNetworking())
+    {
+        serverHelper = new SteamServerHelper(ENGINE_CFG.steamGameDir(),
+                                             ENGINE_CFG.versionName(),
+                                             ENGINE_CFG.steamProductName(),
+                                             ENGINE_CFG.steamProductDescription(),
+                                             ENGINE_CFG.serverPort(),
+                                             _timeTracker,
+                                             NW_SRVR_CALLBACKS);
+    }
+    else
+    {
+#endif
+        serverHelper = new SocketServerHelper(ENGINE_CFG.serverPort(), 
+                                              _timeTracker,
+                                              NW_SRVR_CALLBACKS);
+#if IS_DESKTOP
+    }
+#endif
     
     NetworkServer::create(serverHelper,
                           _entityIDManager,
@@ -83,9 +103,9 @@ void GameServerEngineState::exit(Engine* e)
     _isRestarting = false;
 }
 
-void GameServerEngineState::handleNewClient(std::string username, uint8_t playerID)
+void GameServerEngineState::handleNewClient(std::string playerName, uint8_t playerID)
 {
-    addPlayer(username, playerID);
+    addPlayer(playerName, playerID);
 }
 
 void GameServerEngineState::handleLostClient(ClientProxy& cp, uint8_t localPlayerIndex)
@@ -154,7 +174,7 @@ World& GameServerEngineState::world()
 
 void GameServerEngineState::update(Engine* e)
 {
-    if (!_isConnected)
+    if (!_isConnected || !NW_SRVR->isConnected())
     {
         return;
     }
@@ -176,7 +196,7 @@ void GameServerEngineState::updateWorld()
     world().beginFrame();
     for (Entity* e : world().getPlayers())
     {
-        uint8_t playerID = e->networkDataField("playerID").valueUInt8();
+        uint8_t playerID = e->playerInfo()._playerID;
         ClientProxy* cp = NW_SRVR->getClientProxy(playerID);
         assert(cp != nullptr);
         
@@ -235,7 +255,7 @@ void GameServerEngineState::handleDirtyStates(std::vector<Entity*>& entities)
     }
 }
 
-void GameServerEngineState::addPlayer(std::string username, uint8_t playerID)
+void GameServerEngineState::addPlayer(std::string playerName, uint8_t playerID)
 {
     ClientProxy* cp = NW_SRVR->getClientProxy(playerID);
     assert(cp != nullptr);
@@ -247,9 +267,10 @@ void GameServerEngineState::addPlayer(std::string username, uint8_t playerID)
     uint32_t networkID = _entityIDManager.getNextPlayerEntityID();
     EntityInstanceDef eid(networkID, key, spawnX, spawnY, true);
     Entity* e = ENTITY_MGR.createEntity(eid);
-    e->networkDataField("username").setValueString(username);
-    e->networkDataField("userAddress").setValueString(cp->getMachineAddress()->toString());
-    e->networkDataField("playerID").setValueUInt8(playerID);
+    e->playerInfo()._playerAddressHash = cp->getMachineAddress()->getHash();
+    e->playerInfo()._playerName = playerName;
+    e->playerInfo()._playerAddress = cp->getMachineAddress()->toString();
+    e->playerInfo()._playerID = playerID;
     if (playerID == 1)
     {
         e->networkDataField("entityLayoutKey").setValueUInt32('L001');
@@ -262,7 +283,7 @@ void GameServerEngineState::removePlayer(uint8_t playerID)
 {
     for (Entity* e : world().getPlayers())
     {
-        if (e->networkDataField("playerID").valueUInt8() == playerID)
+        if (e->playerInfo()._playerID == playerID)
         {
             NW_SRVR->deregisterEntity(e);
             return;

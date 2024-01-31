@@ -143,6 +143,11 @@ MachineAddress* NetworkServer::getServerAddress()
     return _serverHelper->getServerAddress();
 }
 
+bool NetworkServer::isConnected()
+{
+    return _serverHelper->isConnected();
+}
+
 bool NetworkServer::connect()
 {
     int error = _serverHelper->connect();
@@ -305,11 +310,11 @@ void NetworkServer::handlePacketFromNewClient(InputMemoryBitStream& imbs, Machin
                   std::forward_as_tuple(fromAddress->getHash()),
                   std::forward_as_tuple(_entityRegistry, _timeTracker, fromAddress, name, _nextPlayerID));
         ClientProxy& cp = _addressHashToClientMap.at(fromAddress->getHash());
-        std::string username = cp.getUsername();
+        std::string playerName = cp.getUsername();
         uint8_t playerID = cp.getPlayerID();
         _playerIDToClientMap[playerID] = &cp;
         
-        _handleNewClientFunc(username, playerID);
+        _handleNewClientFunc(playerName, playerID);
         
         sendWelcomePacket(cp);
         

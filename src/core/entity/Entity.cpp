@@ -17,6 +17,7 @@ _physicsController(nullptr),
 _renderController(ENTITY_MGR.createEntityRenderController(ed, this)),
 _pose(eid._x + ed._width / 2.0f, eid._y + ed._height / 2.0f),
 _state(),
+_playerInfo(),
 _exileStateTime(0),
 _width(ed._width),
 _height(ed._height),
@@ -209,6 +210,11 @@ Entity::Pose& Entity::pose()
 Entity::State& Entity::state()
 {
     return _state;
+}
+
+Entity::PlayerInfo& Entity::playerInfo()
+{
+    return _playerInfo;
 }
 
 void Entity::exile()

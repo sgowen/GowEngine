@@ -26,7 +26,7 @@ class SteamPacketHandler : public PacketHandler
 {
 public:
     SteamPacketHandler(TimeTracker& timeTracker,
-                       ISteamNetworking* steamNetworking,
+                       bool isServer,
                        ProcessPacketFunc processPacketFunc);
     virtual ~SteamPacketHandler();
     
@@ -38,7 +38,7 @@ protected:
     virtual void processQueuedPackets() override;
     
 private:
-    ISteamNetworking* _steamNetworking;
+    bool _isServer;
     
     class ReceivedPacket;
     std::queue<ReceivedPacket, std::list<ReceivedPacket> > _packetQueue;

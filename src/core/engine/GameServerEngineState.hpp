@@ -25,7 +25,7 @@ public:
     virtual void execute(Engine* e);
     virtual void exit(Engine* e);
     
-    void handleNewClient(std::string username, uint8_t playerID);
+    void handleNewClient(std::string playerName, uint8_t playerID);
     void handleLostClient(ClientProxy& cp, uint8_t localPlayerIndex);
     void resetWorld();
     void populateFromEntityLayout(EntityLayoutDef& eld);
@@ -42,7 +42,7 @@ private:
     void update(Engine* e);
     void updateWorld();
     void handleDirtyStates(std::vector<Entity*>& entities);
-    void addPlayer(std::string username, uint8_t playerID);
+    void addPlayer(std::string playerName, uint8_t playerID);
     void removePlayer(uint8_t playerID);
     
     GameServerEngineState();

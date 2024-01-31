@@ -11,9 +11,9 @@
 #if IS_DESKTOP
 
 SteamClientHelper::SteamClientHelper(CSteamID inServerSteamID,
-                                         TimeTracker& tt,
-                                         GetPlayerAddressHashFunc inGetPlayerAddressHashFunc,
-                                         ProcessPacketFunc inProcessPacketFunc) : ClientHelper(new SteamPacketHandler(tt, SteamNetworking(), inProcessPacketFunc)),
+                                     TimeTracker& tt,
+                                     GetPlayerAddressHashFunc inGetPlayerAddressHashFunc,
+                                     ProcessPacketFunc inProcessPacketFunc) : ClientHelper(new SteamPacketHandler(tt, false, inProcessPacketFunc)),
 _timeTracker(tt),
 _steamP2PAuth(new SteamP2PAuth(this)),
 _getPlayerAddressHashFunc(inGetPlayerAddressHashFunc),

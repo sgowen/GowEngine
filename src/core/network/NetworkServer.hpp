@@ -26,7 +26,7 @@ class Entity;
 
 #define NW_SRVR_CALLBACKS NetworkServer::sProcessPacket, NetworkServer::sGetClientProxy, NetworkServer::sHandleClientDisconnected
 
-typedef void (*HandleNewClientFunc)(std::string username, uint8_t playerID);
+typedef void (*HandleNewClientFunc)(std::string playerName, uint8_t playerID);
 typedef void (*HandleLostClientFunc)(ClientProxy& cp, uint8_t localPlayerIndex);
 
 class NetworkServer
@@ -51,6 +51,7 @@ public:
     uint8_t getNumClientsConnected();
     uint8_t getNumPlayersConnected();
     MachineAddress* getServerAddress();
+    bool isConnected();
     bool connect();
     void onEntityRegistered(Entity* e);
     void onEntityDeregistered(Entity* e);

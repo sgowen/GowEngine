@@ -18,7 +18,7 @@ SteamServerHelper::SteamServerHelper(std::string inGameDir,
                                      TimeTracker& tt,
                                      ProcessPacketFunc inProcessPacketFunc,
                                      GetClientProxyFunc inGetClientProxyFunc,
-                                     HandleClientDisconnectedFunc inHandleClientDisconnectedFunc) : ServerHelper(new SteamPacketHandler(tt, SteamGameServerNetworking(), inProcessPacketFunc), inGetClientProxyFunc, inHandleClientDisconnectedFunc),
+                                     HandleClientDisconnectedFunc inHandleClientDisconnectedFunc) : ServerHelper(new SteamPacketHandler(tt, true, inProcessPacketFunc), inGetClientProxyFunc, inHandleClientDisconnectedFunc),
 _gameDir(inGameDir),
 _versionString(inVersionString),
 _productName(inProductName),
@@ -26,6 +26,7 @@ _gameDescription(inGameDescription),
 _port(inPort),
 _serverSteamAddress(new SteamAddress()),
 _isConnectedToSteam(false),
+_isServerReady(false),
 _outgoingPacketAddress(new SteamAddress())
 {
     // Empty
@@ -216,7 +217,7 @@ MachineAddress* SteamServerHelper::getServerAddress()
 
 bool SteamServerHelper::isConnected()
 {
-    return _isConnectedToSteam;
+    return _isConnectedToSteam && _isServerReady;
 }
 
 void SteamServerHelper::kickPlayerOffServer(CSteamID steamID)
@@ -430,6 +431,8 @@ void SteamServerHelper::onPolicyResponse(GSPolicyResponse_t *pPolicyResponse)
     LOG("Game Server Steam ID: %llu", SteamGameServer()->GetSteamID().ConvertToUint64());
     
     _serverSteamAddress->setSteamID(SteamGameServer()->GetSteamID());
+    
+    _isServerReady = true;
 }
 
 /// Purpose: Tells us Steam3 (VAC and newer license checking) has accepted the user connection

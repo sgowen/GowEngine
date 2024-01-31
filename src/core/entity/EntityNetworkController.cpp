@@ -58,6 +58,21 @@ void EntityNetworkController::read(InputMemoryBitStream& imbs)
         }
     }
     
+    if (e.isPlayer())
+    {
+        imbs.read(stateBit);
+        if (stateBit)
+        {
+            _playerInfoCache.insert({numMovesProcessed, Entity::PlayerInfo()});
+            Entity::PlayerInfo& playerInfo = _playerInfoCache.at(numMovesProcessed);
+            
+            imbs.read(playerInfo._playerAddressHash);
+            imbs.readSmall(playerInfo._playerAddress);
+            imbs.readSmall(playerInfo._playerName);
+            imbs.read(playerInfo._playerID);
+        }
+    }
+    
     NetworkData& nd = e.networkData();
     size_t numDataGroups = nd._data.size();
     for (size_t i = 0; i < numDataGroups; ++i)
@@ -116,14 +131,29 @@ uint8_t EntityNetworkController::write(OutputMemoryBitStream& ombs, uint8_t dirt
         ombs.write(e._state._stateFlags);
         ombs.write(e._state._stateTime);
         uint16_t inputState = e._state._lastProcessedInputState;
-        state = inputState > 0;
-        ombs.write(state);
-        if (state)
+        bool write = inputState > 0;
+        ombs.write(write);
+        if (write)
         {
             ombs.write(inputState);
         }
         
         ret |= RSTF_STATE;
+    }
+    
+    if (e.isPlayer())
+    {
+        bool playerInfo = IS_BIT_SET(dirtyState, RSTF_PLAYER_INFO);
+        ombs.write(playerInfo);
+        if (playerInfo)
+        {
+            ombs.write(e._playerInfo._playerAddressHash);
+            ombs.writeSmall(e._playerInfo._playerAddress);
+            ombs.writeSmall(e._playerInfo._playerName);
+            ombs.write(e._playerInfo._playerID);
+            
+            ret |= RSTF_PLAYER_INFO;
+        }
     }
     
     NetworkData& nd = e.networkData();
@@ -159,6 +189,11 @@ void EntityNetworkController::storeToCache(uint32_t numMovesProcessed)
         _stateCache.insert({numMovesProcessed, e._state});
     }
     
+    if (_playerInfoCache.find(numMovesProcessed) == _playerInfoCache.end())
+    {
+        _playerInfoCache.insert({numMovesProcessed, e._playerInfo});
+    }
+    
     if (_networkDataCache.find(numMovesProcessed) == _networkDataCache.end())
     {
         _networkDataCache.insert({numMovesProcessed, e._entityDef._networkData});
@@ -187,6 +222,16 @@ void EntityNetworkController::recallCache(uint32_t numMovesProcessed)
     else
     {
         e._state = _stateCache.at(0);
+    }
+    
+    auto it_playerInfoCache = _playerInfoCache.find(numMovesProcessed);
+    if (it_playerInfoCache != _playerInfoCache.end())
+    {
+        e._playerInfo = it_playerInfoCache->second;
+    }
+    else
+    {
+        e._playerInfo = _playerInfoCache.at(0);
     }
     
     auto it_networkDataCache = _networkDataCache.find(numMovesProcessed);
@@ -226,6 +271,18 @@ void EntityNetworkController::clearCache(uint32_t numMovesProcessed)
         }
     }
     
+    for (auto i = _playerInfoCache.begin(); i != _playerInfoCache.end(); )
+    {
+        if (i->first > 0 && i->first < numMovesProcessed)
+        {
+            i = _playerInfoCache.erase(i);
+        }
+        else
+        {
+            ++i;
+        }
+    }
+    
     for (auto i = _networkDataCache.begin(); i != _networkDataCache.end(); )
     {
         if (i->first > 0 && i->first < numMovesProcessed)
@@ -255,6 +312,12 @@ uint8_t EntityNetworkController::refreshDirtyState()
     {
         _stateCache.insert({0, e._state});
         ret |= RSTF_STATE;
+    }
+    
+    if (_playerInfoCache.at(0) != e._playerInfo)
+    {
+        _playerInfoCache.insert({0, e._playerInfo});
+        ret |= RSTF_PLAYER_INFO;
     }
     
     NetworkData& nd = e.networkData();

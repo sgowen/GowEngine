@@ -87,7 +87,7 @@ uint8_t InputProcessor::update()
     return IPS_DEFAULT;
 }
 
-uint8_t InputProcessor::updateReadText()
+uint8_t InputProcessor::updateReadText(uint16_t maxInputLength)
 {
     for (KeyboardEvent* e : INPUT_MGR.getKeyboardEvents())
     {
@@ -122,9 +122,9 @@ uint8_t InputProcessor::updateReadText()
                 {
                     const char* clipboard = INPUT_MGR.getClipboardString();
                     _textInput += clipboard;
-                    if (_textInput.length() >= MAX_TEXT_INPUT_LENGTH)
+                    if (_textInput.length() >= maxInputLength)
                     {
-                        int remove = (int)_textInput.length() - MAX_TEXT_INPUT_LENGTH;
+                        int remove = (int)_textInput.length() - maxInputLength;
                         _textInput.erase(_textInput.end() - remove, _textInput.end());
                     }
                     continue;
@@ -200,9 +200,9 @@ void InputProcessor::clearTextInput()
     _isControlHeldDown = false;
 }
 
-void InputProcessor::acceptKeyInput(uint16_t key)
+void InputProcessor::acceptKeyInput(uint16_t key, uint16_t maxInputLength)
 {
-    if (_textInput.length() >= MAX_TEXT_INPUT_LENGTH)
+    if (_textInput.length() >= maxInputLength)
     {
         return;
     }

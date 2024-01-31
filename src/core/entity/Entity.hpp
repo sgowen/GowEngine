@@ -366,7 +366,8 @@ enum ReadStateFlag
 {
     RSTF_POSE =              1 << 0,
     RSTF_STATE =             1 << 1,
-    RSTF_EXTRA_DATA_BEGIN =  1 << 2
+    RSTF_PLAYER_INFO =       1 << 2,
+    RSTF_EXTRA_DATA_BEGIN =  1 << 3
 };
 
 struct SoundMapping
@@ -582,6 +583,37 @@ public:
     };
     State& state();
     
+    struct PlayerInfo
+    {
+        uint64_t _playerAddressHash;
+        std::string _playerName;
+        std::string _playerAddress;
+        uint8_t _playerID;
+        
+        PlayerInfo()
+        {
+            _playerAddressHash = 0;
+            _playerName = "Robot";
+            _playerAddress = "";
+            _playerID = 0;
+        }
+        
+        friend bool operator==(PlayerInfo& lhs, PlayerInfo& rhs)
+        {
+            return
+            lhs._playerAddressHash == rhs._playerAddressHash &&
+            lhs._playerName        == rhs._playerName &&
+            lhs._playerAddress     == rhs._playerAddress &&
+            lhs._playerID          == rhs._playerID;
+        }
+        
+        friend bool operator!=(PlayerInfo& lhs, PlayerInfo& rhs)
+        {
+            return !(lhs == rhs);
+        }
+    };
+    PlayerInfo& playerInfo();
+    
     void exile();
     bool isExiled();
     bool isRequestingDeletion();
@@ -599,6 +631,7 @@ private:
     EntityRenderController* _renderController;
     Pose _pose;
     State _state;
+    PlayerInfo _playerInfo;
     uint16_t _exileStateTime;
     float _width;
     float _height;

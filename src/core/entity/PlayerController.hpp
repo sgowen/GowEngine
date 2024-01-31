@@ -1,5 +1,5 @@
 //
-//  JonController.hpp
+//  PlayerController.hpp
 //  GowEngine
 //
 //  Created by Stephen Gowen on 1/29/21.
@@ -21,14 +21,14 @@ enum InputStateFlags
     ISF_TRIGGERING_SPECIAL = 1 << 6
 };
 
-class JonController : public EntityController
+class PlayerController : public EntityController
 {    
     DECL_RTTI;
     DECL_EntityController_create;
     
 public:
-    JonController(Entity* e);
-    virtual ~JonController() {}
+    PlayerController(Entity* e);
+    virtual ~PlayerController() {}
     
     virtual void processInput(uint16_t inputState) override;
     virtual void onUpdate(uint32_t numMovesProcessed) override;

@@ -240,6 +240,27 @@ void GameInputProcessor::drop2ndPlayer()
     NW_CLNT->requestToDropLocalPlayer(1);
 }
 
+uint64_t cb_steam_getPlayerAddressHash(uint8_t inPlayerIndex)
+{
+    uint64_t ret = 0;
+    
+    World& world = ENGINE_STATE_GAME_CLNT.world();
+    
+    uint8_t playerID = inPlayerIndex + 1;
+    
+    Entity* player = NULL;
+    for (Entity* e : world.getPlayers())
+    {
+        if (e->playerInfo()._playerID == playerID)
+        {
+            ret = e->playerInfo()._playerAddressHash;
+            break;
+        }
+    }
+    
+    return ret;
+}
+
 void cb_client_onEntityRegistered(Entity* e)
 {
     ENGINE_STATE_GAME_CLNT.world().addNetworkEntity(e);
@@ -264,36 +285,7 @@ void GameClientEngineState::onAssetsLoaded(Engine* e)
 {
     if (_args.getBool(ARG_OFFLINE_MODE, false) == false)
     {
-        std::string serverIPAddress;
-        uint16_t port;
-        if (_args.hasValue(ARG_IP_ADDRESS))
-        {
-            serverIPAddress = _args.getString(ARG_IP_ADDRESS);
-            port = ENGINE_CFG.clientPortJoin();
-        }
-        else
-        {
-            serverIPAddress = "localhost";
-            port = ENGINE_CFG.clientPortHost();
-        }
         
-        // TODO, add Steam implementation
-        std::string serverAddress = STRING_FORMAT("%s:%d", serverIPAddress.c_str(), ENGINE_CFG.serverPort());
-        std::string username = _args.getString(ARG_USERNAME);
-        SocketClientHelper* clientHelper = new SocketClientHelper(_timeTracker, serverAddress, username, port, NetworkClient::sProcessPacket);
-        
-        NetworkClient::create(clientHelper,
-                              _timeTracker,
-                              cb_client_onEntityRegistered,
-                              cb_client_onEntityDeregistered,
-                              cb_client_onPlayerWelcomed);
-        
-        if (NW_CLNT->connect() == false)
-        {
-            LOG("Unable to connect, exiting...");
-            e->popState();
-            return;
-        }
     }
     
     if (!ENGINE_CFG.musicDisabled())
@@ -431,7 +423,7 @@ Entity* GameClientEngineState::getPlayer(uint8_t playerID)
     
     for (Entity* e : world().getPlayers())
     {
-        if (playerID == e->networkDataField("playerID").valueUInt8())
+        if (playerID == e->playerInfo()._playerID)
         {
             ret = e;
             break;
@@ -456,8 +448,94 @@ World& GameClientEngineState::world()
     return *_world;
 }
 
+void GameClientEngineState::joinServer(Engine* e)
+{
+    ClientHelper* clientHelper = nullptr;
+#if IS_DESKTOP
+    if (ENGINE_CFG.useSteamNetworking())
+    {
+        CSteamID serverSteamID;
+        if (_args.hasValue(ARG_STEAM_ADDRESS))
+        {
+            uint64 ulSteamID = _args.getUInt64(ARG_STEAM_ADDRESS);
+            serverSteamID.SetFromUint64(ulSteamID);
+        }
+        else
+        {
+            serverSteamID = static_cast<SteamAddress*>(NW_SRVR->getServerAddress())->getSteamID();
+        }
+        clientHelper = new SteamClientHelper(serverSteamID,
+                                             _timeTracker,
+                                             cb_steam_getPlayerAddressHash,
+                                             NetworkClient::sProcessPacket);
+    }
+    else
+    {
+#endif
+        std::string serverIPAddress;
+        uint16_t port;
+        if (_args.hasValue(ARG_IP_ADDRESS))
+        {
+            serverIPAddress = _args.getString(ARG_IP_ADDRESS);
+            port = ENGINE_CFG.clientPortJoin();
+        }
+        else
+        {
+            serverIPAddress = "localhost";
+            port = ENGINE_CFG.clientPortHost();
+        }
+        
+        std::string serverAddress = STRING_FORMAT("%s:%d", serverIPAddress.c_str(), ENGINE_CFG.serverPort());
+        std::string playerName = _args.getString(ARG_USERNAME);
+        clientHelper = new SocketClientHelper(_timeTracker,
+                                              serverAddress,
+                                              playerName,
+                                              port,
+                                              NetworkClient::sProcessPacket);
+#if IS_DESKTOP
+    }
+#endif
+    
+    NetworkClient::create(clientHelper,
+                          _timeTracker,
+                          cb_client_onEntityRegistered,
+                          cb_client_onEntityDeregistered,
+                          cb_client_onPlayerWelcomed);
+    
+    if (NW_CLNT->connect() == false)
+    {
+        LOG("Unable to connect, exiting...");
+        e->popState();
+        return;
+    }
+}
+
 void GameClientEngineState::updateWithNetwork(Engine* e)
 {
+#if IS_DESKTOP
+    if (STEAM_GAME_SERVICES)
+    {
+        STEAM_GAME_SERVICES->update();
+    }
+#endif
+    
+    if (NW_SRVR && 
+        NW_SRVR->isConnected() &&
+        NW_CLNT == nullptr)
+    {
+        joinServer(e);
+    }
+    else if (!NW_SRVR &&
+             NW_CLNT == nullptr)
+    {
+        joinServer(e);
+    }
+    
+    if (NW_CLNT == nullptr)
+    {
+        return;
+    }
+    
     if (NW_CLNT->processIncomingPackets() == NWCS_DISCONNECTED)
     {
         e->popState();
@@ -601,7 +679,7 @@ void GameClientEngineState::updateOffline(Engine* e)
         uint32_t networkID = _entityIDManager.getNextPlayerEntityID();
         EntityInstanceDef eid(networkID, key, spawnX, spawnY, true);
         Entity* e = ENTITY_MGR.createEntity(eid);
-        e->networkDataField("playerID").setValueUInt8(1);
+        e->playerInfo()._playerID = 1;
         world().addNetworkEntity(e);
         
         world().resetNumMovesProcessed();
@@ -629,7 +707,7 @@ void GameClientEngineState::updateWorld(const Move& move)
     for (Entity* e : world().getPlayers())
     {
         uint16_t inputState = e->lastProcessedInputState();
-        uint8_t playerID = e->networkDataField("playerID").valueUInt8();
+        uint8_t playerID = e->playerInfo()._playerID;
         
         InputState* is = move.inputState();
         InputState::PlayerInputState* pis = is->playerInputStateForID(playerID);
@@ -671,10 +749,13 @@ void GameClientEngineState::renderWithNetwork(Renderer& r)
     r.setTextVisible("player2Info", true);
     r.setTextVisible("player1Info", true);
     
-    r.setText("rtt", STRING_FORMAT("RTT %d ms", static_cast<int>(NW_CLNT->avgRoundTripTime())));
-    r.setText("rollbackFrames", STRING_FORMAT("Rollback frames %d", _numMovesToReprocess));
-    r.setText("inBps", STRING_FORMAT(" In %d Bps", static_cast<int>(NW_CLNT->bytesReceivedPerSecond())));
-    r.setText("outBps", STRING_FORMAT("Out %d Bps", static_cast<int>(NW_CLNT->bytesSentPerSecond())));
+    if (NW_CLNT)
+    {
+        r.setText("rtt", STRING_FORMAT("RTT %d ms", static_cast<int>(NW_CLNT->avgRoundTripTime())));
+        r.setText("rollbackFrames", STRING_FORMAT("Rollback frames %d", _numMovesToReprocess));
+        r.setText("inBps", STRING_FORMAT(" In %d Bps", static_cast<int>(NW_CLNT->bytesReceivedPerSecond())));
+        r.setText("outBps", STRING_FORMAT("Out %d Bps", static_cast<int>(NW_CLNT->bytesSentPerSecond())));
+    }
     
     bool isReleasingShockwavePlayer4 = false;
     bool isVampirePlayer4 = false;
@@ -685,11 +766,11 @@ void GameClientEngineState::renderWithNetwork(Renderer& r)
         if (NW_CLNT->isPlayerIDLocal(4) &&
             NW_CLNT->isPlayerIDLocal(1))
         {
-            r.setText("player4Info", STRING_FORMAT("4|%s [.] to drop", player4->networkDataField("username").valueString().c_str()));
+            r.setText("player4Info", STRING_FORMAT("4|%s [.] to drop", player4->playerInfo()._playerName.c_str()));
         }
         else
         {
-            r.setText("player4Info", STRING_FORMAT("4|%s", player4->networkDataField("username").valueString().c_str()));
+            r.setText("player4Info", STRING_FORMAT("4|%s", player4->playerInfo()._playerName.c_str()));
         }
         
         if (!player4->isExiled())
@@ -700,10 +781,10 @@ void GameClientEngineState::renderWithNetwork(Renderer& r)
             std::string textureForRegionKey = ASSETS_MGR.textureForRegionKey(textureRegionKey);
             r.spriteBatcherEnd(textureForRegionKey, "main", "texture", "main", Color::BLUE);
             
-            JonController* jon = player4->controller<JonController>();
-            isReleasingShockwavePlayer4 = jon->isReleasingShockwave();
-            isVampirePlayer4 = jon->isVampire();
-            shockwaveStateTimePlayer4 = jon->shockwaveStateTime();
+            PlayerController* player = player4->controller<PlayerController>();
+            isReleasingShockwavePlayer4 = player->isReleasingShockwave();
+            isVampirePlayer4 = player->isVampire();
+            shockwaveStateTimePlayer4 = player->shockwaveStateTime();
         }
     }
     else
@@ -730,11 +811,11 @@ void GameClientEngineState::renderWithNetwork(Renderer& r)
         if (NW_CLNT->isPlayerIDLocal(3) &&
             NW_CLNT->isPlayerIDLocal(1))
         {
-            r.setText("player3Info", STRING_FORMAT("3|%s [.] to drop", player3->networkDataField("username").valueString().c_str()));
+            r.setText("player3Info", STRING_FORMAT("3|%s [.] to drop", player3->playerInfo()._playerName.c_str()));
         }
         else
         {
-            r.setText("player3Info", STRING_FORMAT("3|%s", player3->networkDataField("username").valueString().c_str()));
+            r.setText("player3Info", STRING_FORMAT("3|%s", player3->playerInfo()._playerName.c_str()));
         }
         
         if (!player3->isExiled())
@@ -745,10 +826,10 @@ void GameClientEngineState::renderWithNetwork(Renderer& r)
             std::string textureForRegionKey = ASSETS_MGR.textureForRegionKey(textureRegionKey);
             r.spriteBatcherEnd(textureForRegionKey, "main", "texture", "main", Color::GREEN);
             
-            JonController* jon = player3->controller<JonController>();
-            isReleasingShockwavePlayer3 = jon->isReleasingShockwave();
-            isVampirePlayer3 = jon->isVampire();
-            shockwaveStateTimePlayer3 = jon->shockwaveStateTime();
+            PlayerController* player = player3->controller<PlayerController>();
+            isReleasingShockwavePlayer3 = player->isReleasingShockwave();
+            isVampirePlayer3 = player->isVampire();
+            shockwaveStateTimePlayer3 = player->shockwaveStateTime();
         }
     }
     else
@@ -775,11 +856,11 @@ void GameClientEngineState::renderWithNetwork(Renderer& r)
         if (NW_CLNT->isPlayerIDLocal(2) &&
             NW_CLNT->isPlayerIDLocal(1))
         {
-            r.setText("player2Info", STRING_FORMAT("2|%s [.] to drop", player2->networkDataField("username").valueString().c_str()));
+            r.setText("player2Info", STRING_FORMAT("2|%s [.] to drop", player2->playerInfo()._playerName.c_str()));
         }
         else
         {
-            r.setText("player2Info", STRING_FORMAT("2|%s", player2->networkDataField("username").valueString().c_str()));
+            r.setText("player2Info", STRING_FORMAT("2|%s", player2->playerInfo()._playerName.c_str()));
         }
         
         if (!player2->isExiled())
@@ -790,10 +871,10 @@ void GameClientEngineState::renderWithNetwork(Renderer& r)
             std::string textureForRegionKey = ASSETS_MGR.textureForRegionKey(textureRegionKey);
             r.spriteBatcherEnd(textureForRegionKey, "main", "texture", "main", Color::RED);
             
-            JonController* jon = player2->controller<JonController>();
-            isReleasingShockwavePlayer2 = jon->isReleasingShockwave();
-            isVampirePlayer2 = jon->isVampire();
-            shockwaveStateTimePlayer2 = jon->shockwaveStateTime();
+            PlayerController* player = player2->controller<PlayerController>();
+            isReleasingShockwavePlayer2 = player->isReleasingShockwave();
+            isVampirePlayer2 = player->isVampire();
+            shockwaveStateTimePlayer2 = player->shockwaveStateTime();
         }
     }
     else
@@ -817,7 +898,7 @@ void GameClientEngineState::renderWithNetwork(Renderer& r)
     Entity* player1 = getPlayer(1);
     if (player1 != nullptr)
     {
-        r.setText("player1Info", STRING_FORMAT("1|%s", player1->networkDataField("username").valueString().c_str()));
+        r.setText("player1Info", STRING_FORMAT("1|%s", player1->playerInfo()._playerName.c_str()));
         
         if (!player1->isExiled())
         {
@@ -827,10 +908,10 @@ void GameClientEngineState::renderWithNetwork(Renderer& r)
             std::string textureForRegionKey = ASSETS_MGR.textureForRegionKey(textureRegionKey);
             r.spriteBatcherEnd(textureForRegionKey);
             
-            JonController* jon = player1->controller<JonController>();
-            isReleasingShockwavePlayer1 = jon->isReleasingShockwave();
-            isVampirePlayer1 = jon->isVampire();
-            shockwaveStateTimePlayer1 = jon->shockwaveStateTime();
+            PlayerController* player = player1->controller<PlayerController>();
+            isReleasingShockwavePlayer1 = player->isReleasingShockwave();
+            isVampirePlayer1 = player->isVampire();
+            shockwaveStateTimePlayer1 = player->shockwaveStateTime();
         }
     }
     else
@@ -874,10 +955,10 @@ void GameClientEngineState::renderOffline(Renderer& r)
         std::string textureForRegionKey = ASSETS_MGR.textureForRegionKey(textureRegionKey);
         r.spriteBatcherEnd(textureForRegionKey);
         
-        JonController* jon = player1->controller<JonController>();
-        isReleasingShockwavePlayer1 = jon->isReleasingShockwave();
-        isVampirePlayer1 = jon->isVampire();
-        shockwaveStateTimePlayer1 = jon->shockwaveStateTime();
+        PlayerController* player = player1->controller<PlayerController>();
+        isReleasingShockwavePlayer1 = player->isReleasingShockwave();
+        isVampirePlayer1 = player->isVampire();
+        shockwaveStateTimePlayer1 = player->shockwaveStateTime();
     }
     
     r.bindFramebuffer("player1");

@@ -8,6 +8,8 @@
 
 #pragma once
 
+#include "core/common/Constants.hpp"
+
 enum InputProcessorState
 {
     IPS_DEFAULT,
@@ -28,7 +30,7 @@ public:
     void registerActionForButton(uint16_t key, uint8_t action);
     
     uint8_t update();
-    uint8_t updateReadText();
+    uint8_t updateReadText(uint16_t maxInputLength = MAX_TEXT_INPUT_LENGTH);
     
     uint8_t getAction();
     std::string getTextInput();
@@ -42,5 +44,5 @@ private:
     std::string _textInput;
     bool _isControlHeldDown;
     
-    void acceptKeyInput(uint16_t key);
+    void acceptKeyInput(uint16_t key, uint16_t maxInputLength = MAX_TEXT_INPUT_LENGTH);
 };

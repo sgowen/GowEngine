@@ -93,6 +93,8 @@ private:
     };
     SoundFrameState _soundFrameStates[360];
     
+    void joinServer(Engine* e);
+    
     void updateWithNetwork(Engine* e);
     void updateOffline(Engine* e);
     void updateWorld(const Move& move);

@@ -153,7 +153,7 @@ void OutputMemoryBitStream::write(bool data)
 void OutputMemoryBitStream::writeLarge(const std::string& value)
 {
     uint16_t elementCount = static_cast<uint16_t>(value.size());
-    assert(elementCount <= 1198);
+    assert(elementCount <= 500);
     write(elementCount);
     for (const char& element : value)
     {

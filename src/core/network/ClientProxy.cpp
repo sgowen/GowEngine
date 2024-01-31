@@ -8,12 +8,12 @@
 
 #include <GowEngine/GowEngine.hpp>
 
-ClientProxy::ClientProxy(EntityRegistry& er, TimeTracker& tt, MachineAddress* ma, std::string username, uint8_t playerID) :
+ClientProxy::ClientProxy(EntityRegistry& er, TimeTracker& tt, MachineAddress* ma, std::string playerName, uint8_t playerID) :
 _timeTracker(tt),
 _deliveryNotificationManager(_timeTracker, false, true),
 _replicationManagerServer(er),
 _machineAddress(ma->createNewCopy()),
-_username(username),
+_playerName(playerName),
 _lastPacketFromClientTime(0),
 _isLastMoveTimestampDirty(false)
 {
@@ -39,7 +39,7 @@ uint8_t ClientProxy::getPlayerID(uint8_t index) const
 
 const std::string& ClientProxy::getUsername() const
 {
-    return _username;
+    return _playerName;
 }
 
 void ClientProxy::updateLastPacketTime()

@@ -39,5 +39,6 @@ protected:
 private:
     std::map<uint32_t, Entity::Pose> _poseCache;
     std::map<uint32_t, Entity::State> _stateCache;
+    std::map<uint32_t, Entity::PlayerInfo> _playerInfoCache;
     std::map<uint32_t, NetworkData> _networkDataCache;
 };
