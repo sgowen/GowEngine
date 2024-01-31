@@ -19,13 +19,6 @@ void TitleEngineState::onAssetsLoaded(Engine *e)
 //    {
 //        AUDIO_ENGINE.playSound("music_title", 0, 1.0f, true);
 //    }
-    
-#if IS_DESKTOP
-    if (ENGINE_CFG.useSteamNetworking() && !STEAM_GAME_SERVICES)
-    {
-        SteamGameServices::create(ENGINE_CFG.steamGameDir().c_str());
-    }
-#endif
 }
 
 void TitleEngineState::onExit(Engine* e)
@@ -55,12 +48,6 @@ void TitleEngineState::onUpdate(Engine* e)
         }
         else
         {
-#if IS_DESKTOP
-    if (STEAM_GAME_SERVICES)
-    {
-        SteamGameServices::destroy();
-    }
-#endif
             e->setRequestedHostAction(ERHA_EXIT);
         }
     }
@@ -74,12 +61,6 @@ void TitleEngineState::onUpdate(Engine* e)
             switch (inputState)
             {
                 case IPS_EXIT:
-#if IS_DESKTOP
-    if (STEAM_GAME_SERVICES)
-    {
-        SteamGameServices::destroy();
-    }
-#endif
                     e->setRequestedHostAction(ERHA_EXIT);
                     break;
                 case IPS_ACTION:
@@ -104,7 +85,15 @@ void TitleEngineState::onUpdate(Engine* e)
             break;
         case TESS_INPUT_HOST_NAME:
         {
-            // TODO, for Steam, skip entering a name
+#if IS_DESKTOP
+            if (ENGINE_CFG.useSteamNetworking())
+            {
+                // We don't need to input a host name on Steam
+                e->pushState(&ENGINE_STATE_GAME_HOST);
+                return;
+            }
+#endif
+            
             uint8_t inputState = _inputProcessor.updateReadText();
             switch (inputState)
             {
@@ -217,7 +206,7 @@ void TitleEngineState::onRender(Renderer& r, double extrapolation)
     r.setTextVisible("joinLANServer", _state == TESS_DEFAULT && steam);
     r.setTextVisible("joinInternetServer", _state == TESS_DEFAULT && steam);
     r.setTextVisible("enterIP", _state == TESS_INPUT_IP);
-    r.setTextVisible("enterName", _state == TESS_INPUT_HOST_NAME || _state == TESS_INPUT_JOIN_NAME);
+    r.setTextVisible("enterName", !steam && (_state == TESS_INPUT_HOST_NAME || _state == TESS_INPUT_JOIN_NAME));
     r.setTextVisible("input", _state == TESS_INPUT_HOST_NAME || _state == TESS_INPUT_IP || _state == TESS_INPUT_JOIN_NAME || _state == TESS_INPUT_LAN_SERVER || _state == TESS_INPUT_INTERNET_SERVER);
     r.setTextVisible("server0", _state == TESS_INPUT_LAN_SERVER || _state == TESS_INPUT_INTERNET_SERVER);
     r.setTextVisible("server1", _state == TESS_INPUT_LAN_SERVER || _state == TESS_INPUT_INTERNET_SERVER);

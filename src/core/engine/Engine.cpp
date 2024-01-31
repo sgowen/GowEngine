@@ -45,6 +45,13 @@ Engine::~Engine()
     
     Logger::getInstance().closeFileStream();
     
+#if IS_DESKTOP
+    if (ENGINE_CFG.useSteamNetworking())
+    {
+        SteamGameServices::destroy();
+    }
+#endif
+    
     EngineConfig::destroy();
 }
 

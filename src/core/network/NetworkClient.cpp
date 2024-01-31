@@ -442,4 +442,6 @@ NetworkClient::~NetworkClient()
     sendPacket(ombs);
     
     _deliveryNotificationManager.logStats();
+    
+    delete _clientHelper;
 }

@@ -25,6 +25,12 @@ void DefaultEngineState::execute(Engine* e)
     
     if (ERSA_CREATE_RESOURCES_called && ERSA_WINDOW_SIZE_CHANGED_called)
     {
+#if IS_DESKTOP
+    if (ENGINE_CFG.useSteamNetworking())
+    {
+        SteamGameServices::create(ENGINE_CFG.steamGameDir().c_str());
+    }
+#endif
         e->overwriteState(&ENGINE_STATE_TITLE);
     }
 }

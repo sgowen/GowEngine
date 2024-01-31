@@ -610,4 +610,6 @@ NetworkServer::~NetworkServer()
     _playerIDToClientMap.clear();
     
     deregisterAllEntities();
+    
+    delete _serverHelper;
 }
