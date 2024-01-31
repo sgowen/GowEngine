@@ -22,13 +22,14 @@ A basic no nonsense LGPL 2.1 licensed portable C++ 2D game engine
 * Soon... Nintendo DS!
 
 ## Dependencies
+* [box2d](https://github.com/erincatto/box2d): optional library for handling physics
 * [glfw](https://github.com/glfw/glfw): creates window and OpenGL context and handles input on macOS, Linux, and Windows
 * [ios-cmake](https://github.com/leetal/ios-cmake): handles cmake stuff for iOS and macOS
 * [libsndfile](https://github.com/libsndfile/libsndfile): loads sounds
 * [openal-soft](https://github.com/kcat/openal-soft): renders audio
 * [rapidjson](https://github.com/Tencent/rapidjson): loads json
 * [stb](https://github.com/nothings/stb): loads textures
-* [steamworks_sdk](https://github.com/sgowen/steamworks_sdk): integrates with Steam
+* [steamworks_sdk](https://github.com/sgowen/steamworks_sdk): optional library for integrating with Steam
 
 ## Building
 * Template projects for various platforms reside in [GowEngineMount](https://github.com/sgowen/GowEngineMount), simply clone it into the same directory as GowEngine side by side
