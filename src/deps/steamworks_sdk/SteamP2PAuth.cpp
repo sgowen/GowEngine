@@ -222,23 +222,23 @@ bool SteamP2PAuthPlayer::isAuthOk()
         {
             if (_networkHelper->timeTracker().realTime() - _connectTime > 30)
             {
-                LOG("P2P:: Nothing received for account=%d\n", _steamID.GetAccountID());
-                return false;
+//                LOG("P2P:: Nothing received for account=%d\n", _steamID.GetAccountID());
+//                return false;
             }
         }
 
         // first ticket check: if i submitted his ticket - was it good?
         if (_bSubmittedHisTicket && _eBeginAuthSessionResult != k_EBeginAuthSessionResultOK)
         {
-            LOG("P2P:: Ticket from account=%d was bad\n", _steamID.GetAccountID());
-            return false;
+//            LOG("P2P:: Ticket from account=%d was bad\n", _steamID.GetAccountID());
+//            return false;
         }
 
         // second ticket check: if the steam backend replied, was that good?
         if (_bHaveAnswer && _eAuthSessionResponse != k_EAuthSessionResponseOK)
         {
-            LOG("P2P:: Steam response for account=%d was bad\n", _steamID.GetAccountID());
-            return false;
+//            LOG("P2P:: Steam response for account=%d was bad\n", _steamID.GetAccountID());
+//            return false;
         }
 
         // last: if i sent him a ticket and he has not reciprocated, time out after 30 sec
@@ -246,8 +246,8 @@ bool SteamP2PAuthPlayer::isAuthOk()
         {
             if (_networkHelper->timeTracker().realTime() - _ticketTime > 30)
             {
-                LOG("P2P:: No ticket received for account=%d\n", _steamID.GetAccountID());
-                return false;
+//                LOG("P2P:: No ticket received for account=%d\n", _steamID.GetAccountID());
+//                return false;
             }
         }
     }
