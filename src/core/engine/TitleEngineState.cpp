@@ -55,6 +55,12 @@ void TitleEngineState::onUpdate(Engine* e)
         }
         else
         {
+#if IS_DESKTOP
+    if (STEAM_GAME_SERVICES)
+    {
+        SteamGameServices::destroy();
+    }
+#endif
             e->setRequestedHostAction(ERHA_EXIT);
         }
     }
@@ -68,6 +74,12 @@ void TitleEngineState::onUpdate(Engine* e)
             switch (inputState)
             {
                 case IPS_EXIT:
+#if IS_DESKTOP
+    if (STEAM_GAME_SERVICES)
+    {
+        SteamGameServices::destroy();
+    }
+#endif
                     e->setRequestedHostAction(ERHA_EXIT);
                     break;
                 case IPS_ACTION:
@@ -158,13 +170,16 @@ void TitleEngineState::onUpdate(Engine* e)
                 case IPS_TEXT_INPUT_READY:
                 {
                     std::string textInput = _inputProcessor.getTextInput();
-                    int8_t serverIndex = 0;//StringUtil::stringToNumber<int8_t>(textInput);
+                    int32_t serverIndex = StringUtil::stringToNumber<int32_t>(textInput);
                     if (serverIndex >= 0 && serverIndex <= 3)
                     {
-                        std::vector<SteamServerInfo> gameServers = STEAM_GAME_SERVICES->getGameServers();
-                        if (gameServers.size() > serverIndex)
+                        if (STEAM_GAME_SERVICES && !STEAM_GAME_SERVICES->isRequestingServers())
                         {
-                            STEAM_GAME_SERVICES->initiateServerConnection(gameServers[serverIndex].getSteamID());
+                            std::vector<SteamServerInfo> gameServers = STEAM_GAME_SERVICES->getGameServers();
+                            if (gameServers.size() > serverIndex)
+                            {
+                                STEAM_GAME_SERVICES->initiateServerConnection(gameServers[serverIndex].getSteamID());
+                            }
                         }
                     }
                 }
@@ -210,18 +225,28 @@ void TitleEngineState::onRender(Renderer& r, double extrapolation)
     r.setTextVisible("server3", _state == TESS_INPUT_LAN_SERVER || _state == TESS_INPUT_INTERNET_SERVER);
     r.setText("input", _inputProcessor.getTextInput());
     
-    if (STEAM_GAME_SERVICES)
+    std::vector<SteamServerInfo> gameServers;
+    if (STEAM_GAME_SERVICES && !STEAM_GAME_SERVICES->isRequestingServers())
     {
-        std::vector<SteamServerInfo> gameServers = STEAM_GAME_SERVICES->getGameServers();
+        gameServers = STEAM_GAME_SERVICES->getGameServers();
+        
         if (gameServers.size() >= 1)
         {
-            r.setText("server0", STRING_FORMAT("[%i] %s", 0, gameServers[0].getDisplayString()).c_str());
+            r.setText("server0", STRING_FORMAT("[%i] %s", 0, gameServers[0].getName()).c_str());
         }
         
         if (gameServers.size() >= 2)
         {
-            r.setText("server1", STRING_FORMAT("[%i] %s", 1, gameServers[1].getDisplayString()).c_str());
+            r.setText("server1", STRING_FORMAT("[%i] %s", 1, gameServers[1].getName()).c_str());
         }
+    }
+    
+    if (gameServers.empty())
+    {
+        r.setText("server0", "");
+        r.setText("server1", "");
+        r.setText("server2", "");
+        r.setText("server3", "");
     }
     
     r.renderImageViews();

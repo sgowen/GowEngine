@@ -586,7 +586,10 @@ void GameClientEngineState::updateWithNetwork(Engine* e)
             world().recallCache(numMovesProcessedByServer);
             world().clearCache(world().getNumMovesProcessed());
             input().removeProcessedMovesWithIndexLessThan(world().getNumMovesProcessed());
-            assert (getPlayer(1) != nullptr);
+            if (getPlayer(1) == nullptr)
+            {
+                return;
+            }
             
             _numMovesToReprocess = numMovesProcessedLocally - world().getNumMovesProcessed();
             

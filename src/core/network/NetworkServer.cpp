@@ -44,7 +44,7 @@ ClientProxy* NetworkServer::sGetClientProxy(uint8_t inPlayerIndex)
 
 void NetworkServer::sHandleClientDisconnected(ClientProxy* inClientProxy)
 {
-    ClientProxy cp = *inClientProxy;
+    ClientProxy& cp = *inClientProxy;
     
     NW_SRVR->handleClientDisconnected(cp);
 }
