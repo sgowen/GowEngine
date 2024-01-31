@@ -173,9 +173,8 @@ void DeliveryNotificationManager::processAcks(InputMemoryBitStream& imbs)
             uint16_t nextInFlightuint16_t = nextInFlightPacket.getSequenceNumber();
             if (nextInFlightuint16_t < nextAckdSequenceNumber)
             {
-                auto copyOfInFlightPacket = nextInFlightPacket;
+                handlePacketDeliveryFailure(nextInFlightPacket);
                 _inFlightPackets.pop_front();
-                handlePacketDeliveryFailure(copyOfInFlightPacket);
             }
             else if (nextInFlightuint16_t == nextAckdSequenceNumber)
             {
