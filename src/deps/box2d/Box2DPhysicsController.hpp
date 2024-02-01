@@ -39,6 +39,7 @@ private:
     b2Body* _body;
     std::vector<b2Fixture*> _fixtures;
     b2Fixture* _groundSensorFixture;
+    b2Fixture* _damageSensorFixture;
     uint8_t _numGroundContacts;
     bool _isBodyFacingLeft;
     

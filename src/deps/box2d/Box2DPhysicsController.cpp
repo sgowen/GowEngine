@@ -15,6 +15,7 @@ IMPL_RTTI(Box2DPhysicsController, EntityPhysicsController)
 Box2DPhysicsController::Box2DPhysicsController(Entity* e, b2World& world) : EntityPhysicsController(e),
 _body(nullptr),
 _groundSensorFixture(nullptr),
+_damageSensorFixture(nullptr),
 _numGroundContacts(0),
 _isBodyFacingLeft(false)
 {
@@ -107,6 +108,12 @@ void Box2DPhysicsController::handleBeginContact(Entity* e, b2Fixture* fixtureA, 
             LOG("_numGroundContacts: %d", _numGroundContacts);
         }
     }
+    
+    if (fixtureA == _damageSensorFixture &&
+        !fixtureB->IsSensor())
+    {
+        e->message(MSG_DAMAGE);
+    }
 }
 
 void Box2DPhysicsController::handleEndContact(Entity* e, b2Fixture* fixtureA, b2Fixture* fixtureB)
@@ -156,7 +163,7 @@ void Box2DPhysicsController::createFixtures()
         b2fd.shape = &shape;
         b2fd.isSensor = IS_BIT_SET(fd._flags, FIXF_SENSOR);
         b2fd.density = 1.0f;
-        b2fd.friction = 1.0f;
+        b2fd.friction = 0.0f;
         b2fd.userData.pointer = (uintptr_t)_entity;
         
         b2Fixture* fixture = _body->CreateFixture(&b2fd);
@@ -164,6 +171,11 @@ void Box2DPhysicsController::createFixtures()
         if (IS_BIT_SET(fd._flags, FIXF_GROUND_SENSOR))
         {
             _groundSensorFixture = fixture;
+        }
+        
+        if (IS_BIT_SET(fd._flags, FIXF_DAMAGE_TOP))
+        {
+            _damageSensorFixture = fixture;
         }
         
         _fixtures.push_back(fixture);
@@ -180,4 +192,5 @@ void Box2DPhysicsController::destroyFixtures()
     }
     
     _groundSensorFixture = nullptr;
+    _damageSensorFixture = nullptr;
 }

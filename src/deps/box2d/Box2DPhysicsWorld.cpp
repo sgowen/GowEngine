@@ -38,6 +38,18 @@ void Box2DPhysicsWorld::stepPhysics(float deltaTime)
     // Instruct the world to perform a single step of simulation.
     // It is generally best to keep the time step and iterations fixed.
     _world->Step(deltaTime, velocityIterations, positionIterations);
+    
+    for (Entity* e : _players)
+    {
+        Box2DPhysicsController* epc = e->physicsController<Box2DPhysicsController>();
+        epc->updatePoseFromBody();
+    }
+    
+    for (Entity* e : _dynamicEntities)
+    {
+        Box2DPhysicsController* epc = e->physicsController<Box2DPhysicsController>();
+        epc->updatePoseFromBody();
+    }
 }
 
 void Box2DPhysicsWorld::extrapolatePhysics(float extrapolation)
