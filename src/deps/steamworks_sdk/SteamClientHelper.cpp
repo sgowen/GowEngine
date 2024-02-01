@@ -110,6 +110,7 @@ void SteamClientHelper::processIncomingPackets()
             if (_rgSteamIDPlayers[0].IsValid())
             {
                 LOG("Server player slot 0 has disconnected - but thats the server owner.");
+                LOG("steamIDNew: %lld", steamIDNew.ConvertToUint64());
                 _steamP2PAuth->playerDisconnect(0);
             }
             if (steamIDNew.IsValid())
