@@ -25,6 +25,7 @@
 #include <map>
 
 class Entity;
+class Box2DPhysicsWorld;
 class NosPhysicsWorld;
 
 class Renderer
@@ -65,6 +66,7 @@ public:
     void hideAllText();
     void renderTextViews(std::string fontBatcherKey = "main", std::string shaderKey = "texture", Color& colorFactor = Color::ONE);
     
+    void renderBox2DPhysics(Box2DPhysicsWorld* world, std::string matrixKey = "main", std::string shaderKey = "geometry");
     void renderNosPhysics(NosPhysicsWorld* world, std::string matrixKey = "main", std::string shaderKey = "geometry");
     
     void renderFramebufferWithShockwave(std::string framebufferKey, float centerX, float centerY, float timeElapsed, bool isTransforming);
@@ -84,6 +86,7 @@ public:
     TriangleBatcher& triangleBatcher(std::string key = "main");
     
 private:
+    Box2DPhysicsRenderer _box2DPhysicsRenderer;
     NosPhysicsRenderer _nosPhysicsRenderer;
     ShockwaveRenderer _shockwaveRenderer;
     FramebufferRenderer _framebufferRenderer;

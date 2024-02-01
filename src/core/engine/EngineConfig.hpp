@@ -21,6 +21,7 @@ public:
     
     bool vsync();
     bool useSteamNetworking();
+    bool useBox2DPhysics();
     std::string versionName();
     std::string steamGameDir();
     std::string steamProductName();
@@ -58,6 +59,7 @@ private:
     Config _config;
     bool _vsync;
     bool _useSteamNetworking;
+    bool _useBox2DPhysics;
     std::string _versionName;
     std::string _steamGameDir;
     std::string _steamProductName;

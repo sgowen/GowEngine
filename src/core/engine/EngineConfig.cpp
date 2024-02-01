@@ -42,6 +42,11 @@ bool EngineConfig::useSteamNetworking()
     return _useSteamNetworking;
 }
 
+bool EngineConfig::useBox2DPhysics()
+{
+    return _useBox2DPhysics;
+}
+
 std::string EngineConfig::versionName()
 {
     return _versionName;
@@ -186,6 +191,7 @@ EngineConfig::EngineConfig(std::string configFilePath) :
 _config(ConfigLoader::initWithJSONFile(configFilePath)),
 _vsync(_config.getBool("vsync", true)),
 _useSteamNetworking(_config.getBool("useSteamNetworking", false)),
+_useBox2DPhysics(_config.getBool("useBox2DPhysics", false)),
 _versionName(_config.getString("versionName")),
 _steamGameDir(_config.getString("steamGameDir")),
 _steamProductName(_config.getString("steamProductName")),

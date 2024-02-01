@@ -9,6 +9,7 @@
 #include <GowEngine/GowEngine.hpp>
 
 Renderer::Renderer() :
+_box2DPhysicsRenderer(2048),
 _nosPhysicsRenderer(2048),
 _shockwaveRenderer(),
 _framebufferRenderer(),
@@ -21,6 +22,7 @@ _currentlyBoundFramebufferKey("null")
 
 void Renderer::createDeviceDependentResources()
 {
+    _box2DPhysicsRenderer.createDeviceDependentResources();
     _nosPhysicsRenderer.createDeviceDependentResources();
     _shockwaveRenderer.createDeviceDependentResources();
     _framebufferRenderer.createDeviceDependentResources();
@@ -64,6 +66,7 @@ void Renderer::onWindowSizeChanged(uint16_t screenWidth, uint16_t screenHeight)
 
 void Renderer::destroyDeviceDependentResources()
 {
+    _box2DPhysicsRenderer.destroyDeviceDependentResources();
     _nosPhysicsRenderer.destroyDeviceDependentResources();
     _shockwaveRenderer.destroyDeviceDependentResources();
     _framebufferRenderer.destroyDeviceDependentResources();
@@ -327,6 +330,13 @@ void Renderer::renderTextViews(std::string fontBatcherKey, std::string shaderKey
         fb.addText(*this, pair.second);
     }
     fb.end(*this, s, colorFactor);
+}
+
+void Renderer::renderBox2DPhysics(Box2DPhysicsWorld* world, std::string matrixKey, std::string shaderKey)
+{
+    Matrix& m = matrix(matrixKey);
+    Shader& s = ASSETS_MGR.shader(shaderKey);
+    _box2DPhysicsRenderer.render(world, &m._matrix, &s);
 }
 
 void Renderer::renderNosPhysics(NosPhysicsWorld* world, std::string matrixKey, std::string shaderKey)

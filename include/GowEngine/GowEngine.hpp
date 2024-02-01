@@ -26,6 +26,11 @@
 /// compiler variables
 #include "BuildConstants.hpp"
 
+/// box2d Implementation
+#include "deps/box2d/Box2DPhysicsController.hpp"
+#include "deps/box2d/Box2DPhysicsRenderer.hpp"
+#include "deps/box2d/Box2DPhysicsWorld.hpp"
+
 /// glfw implementation
 #include "deps/glfw/GlfwEngine.hpp"
 

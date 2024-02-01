@@ -294,9 +294,16 @@ void GameServerEngineState::removePlayer(uint8_t playerID)
 GameServerEngineState::GameServerEngineState() : State<Engine>(),
 _entityIDManager(),
 _timeTracker(),
-_world(new NosPhysicsWorld()),
+_world(nullptr),
 _isRestarting(false),
 _isConnected(false)
 {
-    // Empty
+    if (ENGINE_CFG.useBox2DPhysics())
+    {
+        _world = new Box2DPhysicsWorld();
+    }
+    else
+    {
+        _world = new NosPhysicsWorld();
+    }
 }

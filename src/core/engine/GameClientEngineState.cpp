@@ -248,7 +248,6 @@ uint64_t cb_steam_getPlayerAddressHash(uint8_t inPlayerIndex)
     
     uint8_t playerID = inPlayerIndex + 1;
     
-    Entity* player = NULL;
     for (Entity* e : world.getPlayers())
     {
         if (e->playerInfo()._playerID == playerID)
@@ -394,7 +393,14 @@ void GameClientEngineState::onRender(Renderer& r, double extrapolation)
     
     if (_inputProcessor.state() == GIMS_DISPLAY_PHYSICS)
     {
-        r.renderNosPhysics(static_cast<NosPhysicsWorld*>(_world));
+        if (ENGINE_CFG.useBox2DPhysics())
+        {
+            r.renderBox2DPhysics(static_cast<Box2DPhysicsWorld*>(_world));
+        }
+        else
+        {
+            r.renderNosPhysics(static_cast<NosPhysicsWorld*>(_world));
+        }
     }
     
     r.setText("fps", STRING_FORMAT("FPS %d", FPS_UTIL.fps()));
@@ -1096,10 +1102,17 @@ void GameClientEngineState::playSoundForEntityIfNecessary(Entity& e, uint32_t mo
 GameClientEngineState::GameClientEngineState() : EngineState("data/json/GameEngineState/Config.json"),
 _entityIDManager(),
 _timeTracker(),
-_world(new NosPhysicsWorld()),
+_world(nullptr),
 _inputProcessor(),
 _numMovesToReprocess(0),
 _scale(1.0)
 {
-    // Empty
+    if (ENGINE_CFG.useBox2DPhysics())
+    {
+        _world = new Box2DPhysicsWorld();
+    }
+    else
+    {
+        _world = new NosPhysicsWorld();
+    }
 }
