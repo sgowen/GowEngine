@@ -334,13 +334,13 @@ void NetworkClient::updateSendingInputPacket(MoveList& ml)
         
         // TODO, check this.
         // shouldn't the last X moves after _lastMoveProcessedByServerTimestamp
-        // be from the end?
+        // be from the end? #tyingCommentsTogetherForTheFirstTime
         std::deque<Move>::const_iterator moveItr = ml.begin();
         
         uint8_t moveCountWritten = 0;
         for (int i = 0; i < ml.getMoveCount(); ++i, ++moveItr)
         {
-            // Maybe this solves my above complaint?
+            // Maybe this solves my above complaint? #tyingCommentsTogetherForTheFirstTime
             if (moveItr->getTimestamp() > _lastMoveProcessedByServerTimestamp)
             {
                 moveItr->write(ombs);
