@@ -182,7 +182,6 @@
 #include "core/opengl/LightRenderer.hpp"
 #include "core/opengl/LineBatcher.hpp"
 #include "core/opengl/Matrix.hpp"
-#include "core/opengl/NosPhysicsRenderer.hpp"
 #include "core/opengl/OpenGLUtil.hpp"
 #include "core/opengl/RektangleBatcher.hpp"
 #include "core/opengl/Renderer.hpp"
@@ -203,5 +202,6 @@
 
 /// Core Physics
 #include "core/physics/NosPhysicsController.hpp"
+#include "core/physics/NosPhysicsRenderer.hpp"
 #include "core/physics/NosPhysicsWorld.hpp"
 #include "core/physics/World.hpp"
