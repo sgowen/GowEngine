@@ -23,6 +23,7 @@ class MachineAddress;
 class ClientProxy;
 class InputState;
 class Entity;
+class ServerHelper;
 
 #define NW_SRVR_CALLBACKS NetworkServer::sProcessPacket, NetworkServer::sGetClientProxy, NetworkServer::sHandleClientDisconnected
 

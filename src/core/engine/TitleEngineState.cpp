@@ -208,35 +208,42 @@ void TitleEngineState::onRender(Renderer& r, double extrapolation)
     r.setTextVisible("enterIP", _state == TESS_INPUT_IP);
     r.setTextVisible("enterName", !steam && (_state == TESS_INPUT_HOST_NAME || _state == TESS_INPUT_JOIN_NAME));
     r.setTextVisible("input", _state == TESS_INPUT_HOST_NAME || _state == TESS_INPUT_IP || _state == TESS_INPUT_JOIN_NAME || _state == TESS_INPUT_LAN_SERVER || _state == TESS_INPUT_INTERNET_SERVER);
-    r.setTextVisible("server0", _state == TESS_INPUT_LAN_SERVER || _state == TESS_INPUT_INTERNET_SERVER);
-    r.setTextVisible("server1", _state == TESS_INPUT_LAN_SERVER || _state == TESS_INPUT_INTERNET_SERVER);
-    r.setTextVisible("server2", _state == TESS_INPUT_LAN_SERVER || _state == TESS_INPUT_INTERNET_SERVER);
-    r.setTextVisible("server3", _state == TESS_INPUT_LAN_SERVER || _state == TESS_INPUT_INTERNET_SERVER);
+    
     r.setText("input", _inputProcessor.getTextInput());
-    
-    std::vector<SteamServerInfo> gameServers;
-    if (STEAM_GAME_SERVICES && !STEAM_GAME_SERVICES->isRequestingServers())
+  
+#if IS_DESKTOP
+    if (steam)
     {
-        gameServers = STEAM_GAME_SERVICES->getGameServers();
+        r.setTextVisible("server0", _state == TESS_INPUT_LAN_SERVER || _state == TESS_INPUT_INTERNET_SERVER);
+        r.setTextVisible("server1", _state == TESS_INPUT_LAN_SERVER || _state == TESS_INPUT_INTERNET_SERVER);
+        r.setTextVisible("server2", _state == TESS_INPUT_LAN_SERVER || _state == TESS_INPUT_INTERNET_SERVER);
+        r.setTextVisible("server3", _state == TESS_INPUT_LAN_SERVER || _state == TESS_INPUT_INTERNET_SERVER);
         
-        if (gameServers.size() >= 1)
+        std::vector<SteamServerInfo> gameServers;
+        if (STEAM_GAME_SERVICES && !STEAM_GAME_SERVICES->isRequestingServers())
         {
-            r.setText("server0", STRING_FORMAT("[%i] %s", 0, gameServers[0].getName()).c_str());
+            gameServers = STEAM_GAME_SERVICES->getGameServers();
+            
+            if (gameServers.size() >= 1)
+            {
+                r.setText("server0", STRING_FORMAT("[%i] %s", 0, gameServers[0].getName()).c_str());
+            }
+            
+            if (gameServers.size() >= 2)
+            {
+                r.setText("server1", STRING_FORMAT("[%i] %s", 1, gameServers[1].getName()).c_str());
+            }
         }
         
-        if (gameServers.size() >= 2)
+        if (gameServers.empty())
         {
-            r.setText("server1", STRING_FORMAT("[%i] %s", 1, gameServers[1].getName()).c_str());
+            r.setText("server0", "");
+            r.setText("server1", "");
+            r.setText("server2", "");
+            r.setText("server3", "");
         }
     }
-    
-    if (gameServers.empty())
-    {
-        r.setText("server0", "");
-        r.setText("server1", "");
-        r.setText("server2", "");
-        r.setText("server3", "");
-    }
+#endif
     
     r.renderImageViews();
     r.renderTextViews();
