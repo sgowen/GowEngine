@@ -153,6 +153,7 @@ void SteamClientHelper::processIncomingPackets()
             {
                 // leave the game
                 _eConnectedStatus = k_EServerIsNotAuthorized;
+                LOG("k_EServerIsNotAuthorized");
                 updateState();
             }
         }
@@ -182,6 +183,7 @@ void SteamClientHelper::processSpecialPacket(uint8_t packetType, InputMemoryBitS
                 break;
             case k_EMsgServerPassAuthentication:
                 _eConnectedStatus = k_EClientConnectedAndAuthenticated;
+                LOG("k_EClientConnectedAndAuthenticated");
                 // set information so our friends can join the lobby
                 updateRichPresenceConnectionInfo();
                 break;
@@ -266,6 +268,7 @@ std::string& SteamClientHelper::getName()
 void SteamClientHelper::onReceiveServerInfo(CSteamID steamIDGameServer, bool bVACSecure, const char *pchServerName)
 {
     _eConnectedStatus = k_EClientConnectedPendingAuthentication;
+    LOG("k_EClientConnectedPendingAuthentication");
 
     _serverSteamAddress->setSteamID(steamIDGameServer);
 

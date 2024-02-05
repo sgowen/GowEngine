@@ -20,7 +20,7 @@
 #include "ShockwaveRenderer.hpp"
 #include "ScreenRenderer.hpp"
 #include "FramebufferRenderer.hpp"
-#include "NosPhysicsRenderer.hpp"
+#include "core/physics/NosPhysicsRenderer.hpp"
 
 #include <map>
 

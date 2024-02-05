@@ -10,10 +10,10 @@
 
 PacketHandler::PacketHandler(TimeTracker& tt, ProcessPacketFunc ppf) :
 _timeTracker(tt),
-_bytesReceivedPerSecond(tt, 1.0f),
-_bytesSentPerSecond(tt, 1.0f),
 _processPacketFunc(ppf),
-_bytesSentThisFrame(0)
+_bytesSentThisFrame(0),
+_bytesReceivedPerSecond(tt, 1.0f),
+_bytesSentPerSecond(tt, 1.0f)
 {
     // Empty
 }

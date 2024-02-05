@@ -74,6 +74,22 @@ void NetworkClient::sendOutgoingPackets(MoveList& ml)
         default:
             break;
     }
+    
+    if (_state != NWCS_DISCONNECTED)
+    {
+        int clientHelperState = _clientHelper->getState();
+        if (clientHelperState == CLIENT_READY_TO_SAY_HELLO
+            && _state != NWCS_WELCOMED)
+        {
+            _state = NWCS_SAYING_HELLO;
+        }
+        else if (clientHelperState == CLIENT_AUTH_FAILED)
+        {
+            // TODO, get Steam P2P auth working
+//            _state = NWCS_DISCONNECTED;
+            _state = NWCS_WELCOMED;
+        }
+    }
 }
 
 void NetworkClient::requestToAddLocalPlayer()
@@ -403,18 +419,13 @@ void NetworkClient::updateNextIndex()
     }
 }
 
-void cb_client_processPacket(InputMemoryBitStream& imbs, SocketAddress* fromAddress)
-{
-    NW_CLNT->processPacket(imbs, fromAddress);
-}
-
 NetworkClient::NetworkClient(ClientHelper* clientHelper,
                              TimeTracker& tt,
                              OnEntityRegisteredFunc oerf,
                              OnEntityDeregisteredFunc oedf,
                              OnPlayerWelcomedFunc opwf) :
-_clientHelper(clientHelper),
 _timeTracker(tt),
+_clientHelper(clientHelper),
 _onPlayerWelcomedFunc(opwf),
 _deliveryNotificationManager(_timeTracker, true, false),
 _entityRegistry(oerf, oedf),

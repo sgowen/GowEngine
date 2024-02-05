@@ -90,7 +90,8 @@ uint8_t ReplicationManagerServer::writeCreateAction(OutputMemoryBitStream& ombs,
     Entity* e = _entityRegistry.getEntityByID(networkID);
     assert(e != nullptr);
     
-    ombs.write(e->entityDef()._key);
+    EntityDef& ed = ENTITY_MGR.getEntityDef(e->entityDef()._key);
+    ombs.write(ed._key);
     
     return e->networkController()->write(ombs, dirtyState);
 }
