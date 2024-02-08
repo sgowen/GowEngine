@@ -139,7 +139,6 @@ void OpenGLUtil::bindTexture(Shader& s, std::string uniform, uint32_t index, uin
     
     glActiveTexture(TEXTURE_SLOTS[index]);
     glBindTexture(GL_TEXTURE_2D, texture);
-    glEnable(GL_TEXTURE_2D);
     glUniform1i(su._glHandle, index);
 }
 
@@ -149,7 +148,6 @@ void OpenGLUtil::unbindTexture(uint32_t index)
     
     glActiveTexture(TEXTURE_SLOTS[index]);
     glBindTexture(GL_TEXTURE_2D, 0);
-    glDisable(GL_TEXTURE_2D);
 }
 
 void OpenGLUtil::bindVertexBuffer(uint32_t buffer)
