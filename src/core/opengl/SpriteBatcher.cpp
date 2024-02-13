@@ -44,19 +44,19 @@ void SpriteBatcher::addSprite(TextureRegion& tr, float x, float y, float width, 
     
     if (angle == 0)
     {
-        float x1 = x - halfWidth;
-        float y1 = y - halfHeight;
-        float x2 = x + halfWidth;
-        float y2 = y + halfHeight;
+        float left = x - halfWidth;
+        float bottom = y - halfHeight;
+        float right = x + halfWidth;
+        float top = y + halfHeight;
         
-        xFinal[0] = x1;
-        yFinal[0] = y1;
-        xFinal[1] = x1;
-        yFinal[1] = y2;
-        xFinal[2] = x2;
-        yFinal[2] = y2;
-        xFinal[3] = x2;
-        yFinal[3] = y1;
+        xFinal[0] = left;
+        yFinal[0] = bottom;
+        xFinal[1] = left;
+        yFinal[1] = top;
+        xFinal[2] = right;
+        yFinal[2] = top;
+        xFinal[3] = right;
+        yFinal[3] = bottom;
     }
     else
     {
@@ -125,12 +125,12 @@ void SpriteBatcher::end(Shader& s, mat4& matrix, Texture& t, Color& colorFactor)
         return;
     }
     
-    int numSprites = (int)_vertices.size() / NUM_VERTICES_PER_RECTANGLE;
+    uint32_t numSprites = (uint32_t)_vertices.size() / NUM_VERTICES_PER_RECTANGLE;
     
     OGL.bindVertexBuffer(_vertexBuffer, sizeof(VERTEX_2D_TEXTURE) * _vertices.size(), &_vertices[0]);
     OGL.bindShader(s);
     OGL.bindMatrix(s, "u_Matrix", matrix);
-    OGL.bindColor(s, "u_ColorFactor", colorFactor);
+    OGL.bindColor(s, "u_Color", colorFactor);
     OGL.bindTexture(s, "u_Texture", 0, t);
     
     OGL.drawTrianglesIndexed(_indexBuffer, numSprites);
