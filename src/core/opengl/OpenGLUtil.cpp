@@ -467,7 +467,7 @@ void OpenGLUtil::drawIndexed(uint32_t mode, uint32_t indexBuffer, uint32_t count
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 }
 
-uint32_t OpenGLUtil::loadTexture(int width, int height, uint8_t* data, std::string filterMin, std::string filterMag, uint32_t type, bool repeat_s, bool mipmap)
+uint32_t OpenGLUtil::loadTexture(int width, int height, const uint8_t* data, std::string filterMin, std::string filterMag, uint32_t type, bool repeat_s, bool mipmap)
 {
     assert(width > 0);
     assert(height > 0);

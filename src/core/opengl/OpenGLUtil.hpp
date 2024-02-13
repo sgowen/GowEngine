@@ -74,7 +74,7 @@ private:
     void draw(uint32_t mode, uint32_t first, uint32_t count);
     void drawIndexed(uint32_t mode, uint32_t indexBuffer, uint32_t count, size_t first = 0);
     
-    uint32_t loadTexture(int width, int height, uint8_t* data, std::string filterMin, std::string filterMag, uint32_t type, bool repeat_s, bool mipmap);
+    uint32_t loadTexture(int width, int height, const uint8_t* data, std::string filterMin, std::string filterMag, uint32_t type, bool repeat_s, bool mipmap);
     uint32_t loadShader(const uint8_t* vertexShaderSrc, const long vertexShaderSrcLength, const uint8_t* fragmentShaderSrc, const long fragmentShaderSrcLength);
     uint32_t compileShader(const uint32_t type, const uint8_t* source, const int32_t length);
     uint32_t sizeForGlslType(uint32_t type);

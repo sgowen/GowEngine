@@ -16,7 +16,7 @@ struct Texture
     int _width;
     int _height;
     int _numChannels;
-    uint8_t* _data;
+    const uint8_t* _data;
     uint32_t _glHandle;
     
     Texture(TextureDescriptor td) :
