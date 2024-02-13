@@ -9,7 +9,7 @@
 #pragma once
 
 #include <GowEngine/BuildConstants.hpp>
-#if IS_LINUX || IS_APPLE
+#if IS_ANDROID || IS_LINUX || IS_APPLE
 
 #include "AssetHandler.hpp"
 

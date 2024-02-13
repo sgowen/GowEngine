@@ -8,7 +8,11 @@
 
 #include <GowEngine/GowEngine.hpp>
 
-#if IS_LINUX || IS_APPLE
+#if IS_ANDROID || IS_LINUX || IS_APPLE
+
+#if defined(__ANDROID__)
+#include "file_compat.h"
+#endif
 
 #include <fstream>
 

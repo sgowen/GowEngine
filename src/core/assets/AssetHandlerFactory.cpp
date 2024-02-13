@@ -13,7 +13,7 @@ AssetHandler& AssetHandlerFactory::getInstance()
 #if IS_APPLE
     return AppleAssetHandler::getInstance();
 #elif IS_ANDROID
-    return AndroidAssetHandler::getInstance();
+    return LinuxAssetHandler::getInstance();
 #elif IS_LINUX
     return LinuxAssetHandler::getInstance();
 #elif IS_WINDOWS

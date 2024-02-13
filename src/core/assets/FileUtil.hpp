@@ -10,8 +10,19 @@
 
 #include <string>
 
+#if defined(__ANDROID__)
+#include <android/asset_manager.h>
+#include <android/log.h>
+#include <android/native_activity.h>
+#include <jni.h>
+#endif
+
 class FileUtil
 {
 public:
+#if defined(__ANDROID__)
+static ANativeActivity* androidActivity;
+#endif
+    
     static FILE* openFile(std::string filePath, std::string mode);
 };
