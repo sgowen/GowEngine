@@ -246,36 +246,38 @@ int main(int argc, char *argv[])
     {
         exit(EXIT_FAILURE);
     }
-
-    GLFWmonitor* monitor = nullptr;
-
-    int width = 1024;
-    int height = 576;
-
-#if IS_RELEASE
-//    monitor = glfwGetPrimaryMonitor();
-//    if (monitor)
-//    {
-//        const GLFWvidmode* mode = glfwGetVideoMode(monitor);
-//
-//        glfwWindowHint(GLFW_RED_BITS, mode->redBits);
-//        glfwWindowHint(GLFW_GREEN_BITS, mode->greenBits);
-//        glfwWindowHint(GLFW_BLUE_BITS, mode->blueBits);
-//        glfwWindowHint(GLFW_REFRESH_RATE, mode->refreshRate);
-//
-//        width = mode->width;
-//        height = mode->height;
-//    }
-#endif
-    
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 2);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
     
     // TODO, kind of weird to instantiate Engine here.
     // But we have to because otherwise ENGINE_CFG will be null
     // Consider loading config here
     // And instanting Engine only inside runEngine function
     Engine engine;
+
+    GLFWmonitor* monitor = nullptr;
+
+    int width = 1024;
+    int height = 576;
+
+    if (ENGINE_CFG.fullScreen())
+    {
+        // TODO, this isn't working on macOS
+        monitor = glfwGetPrimaryMonitor();
+        if (monitor)
+        {
+            const GLFWvidmode* mode = glfwGetVideoMode(monitor);
+
+            glfwWindowHint(GLFW_RED_BITS, mode->redBits);
+            glfwWindowHint(GLFW_GREEN_BITS, mode->greenBits);
+            glfwWindowHint(GLFW_BLUE_BITS, mode->blueBits);
+            glfwWindowHint(GLFW_REFRESH_RATE, mode->refreshRate);
+
+            width = mode->width;
+            height = mode->height;
+        }
+    }
+    
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 2);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
     
     window = glfwCreateWindow(width, height, ENGINE_CFG.title().c_str(), monitor, nullptr);
     if (window == nullptr)

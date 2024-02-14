@@ -32,6 +32,11 @@ void EngineConfig::destroy()
     s_instance = nullptr;
 }
 
+bool EngineConfig::fullScreen()
+{
+    return _fullScreen;
+}
+
 std::string EngineConfig::title()
 {
     return _title;
@@ -194,6 +199,7 @@ double EngineConfig::frameRate()
 
 EngineConfig::EngineConfig(std::string configFilePath) :
 _config(ConfigLoader::initWithJSONFile(configFilePath)),
+_fullScreen(_config.getBool("fullScreen")),
 _title(_config.getString("title")),
 _vsync(_config.getBool("vsync")),
 _useSteamNetworking(_config.getBool("useSteamNetworking")),

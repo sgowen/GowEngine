@@ -19,6 +19,7 @@ public:
     static EngineConfig& getInstance();
     static void destroy();
     
+    bool fullScreen();
     std::string title();
     bool vsync();
     bool useSteamNetworking();
@@ -58,6 +59,8 @@ private:
     static EngineConfig* s_instance;
     
     Config _config;
+    
+    bool _fullScreen;
     std::string _title;
     bool _vsync;
     bool _useSteamNetworking;
