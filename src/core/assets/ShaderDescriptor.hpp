@@ -8,11 +8,7 @@
 
 #pragma once
 
-#include "core/opengl/ShaderUniform.hpp"
-#include "core/opengl/ShaderAttribute.hpp"
-
 #include <string>
-#include <vector>
 
 struct ShaderDescriptor
 {

@@ -8,7 +8,7 @@
 
 #pragma once
 
-/// System
+/// system
 #include <algorithm>
 #include <cassert>
 #include <ctime>
@@ -26,18 +26,15 @@
 /// compiler variables
 #include "BuildConstants.hpp"
 
-/// box2d Implementation
+/// deps/box2d Implementation
 #include "deps/box2d/Box2DPhysicsController.hpp"
 #include "deps/box2d/Box2DPhysicsRenderer.hpp"
 #include "deps/box2d/Box2DPhysicsWorld.hpp"
 
-/// glfw implementation
-#include "deps/glfw/GlfwEngine.hpp"
-
-/// libsndfile implementation
+/// deps/libsndfile implementation
 #include "deps/libsndfile/SoundLoader.hpp"
 
-/// rapidjson implementation
+/// deps/rapidjson implementation
 #include "deps/rapidjson/AssetsLoader.hpp"
 #include "deps/rapidjson/ConfigLoader.hpp"
 #include "deps/rapidjson/EntityLayoutManagerLoader.hpp"
@@ -45,10 +42,10 @@
 #include "deps/rapidjson/RapidJSONUtil.hpp"
 #include "deps/rapidjson/RendererLoader.hpp"
 
-/// stb implementation
+/// deps/stb implementation
 #include "deps/stb/TextureLoader.hpp"
 
-/// steamworks_sdk implementation
+/// deps/steamworks_sdk implementation
 #include "deps/steamworks_sdk/Steam.hpp"
 #include "deps/steamworks_sdk/SteamAddress.hpp"
 #include "deps/steamworks_sdk/SteamClientHelper.hpp"
@@ -59,7 +56,7 @@
 #include "deps/steamworks_sdk/SteamPacketHandler.hpp"
 #include "deps/steamworks_sdk/SteamServerHelper.hpp"
 
-/// Core Assets
+/// core/assets
 #include "core/assets/AndroidAssetHandler.hpp"
 #include "core/assets/AppleAssetHandler.hpp"
 #include "core/assets/AppleBundleUtil.hpp"
@@ -73,11 +70,12 @@
 #include "core/assets/LinuxAssetHandler.hpp"
 #include "core/assets/MatrixDescriptor.hpp"
 #include "core/assets/ShaderDescriptor.hpp"
+#include "core/assets/ShaderLoader.hpp"
 #include "core/assets/SoundDescriptor.hpp"
 #include "core/assets/TextureDescriptor.hpp"
 #include "core/assets/WindowsAssetHandler.hpp"
 
-/// Core Common
+/// core/common
 #include "core/common/Config.hpp"
 #include "core/common/Constants.hpp"
 #include "core/common/FPSUtil.hpp"
@@ -94,7 +92,7 @@
 #include "core/common/TimeTracker.hpp"
 #include "core/common/TimeUtil.hpp"
 
-/// Core Engine
+/// core/engine
 #include "core/engine/DefaultEngineState.hpp"
 #include "core/engine/Engine.hpp"
 #include "core/engine/EngineConfig.hpp"
@@ -104,7 +102,7 @@
 #include "core/engine/GameServerEngineState.hpp"
 #include "core/engine/TitleEngineState.hpp"
 
-/// Core Entity
+/// core/entity
 #include "core/entity/Entity.hpp"
 #include "core/entity/EntityController.hpp"
 #include "core/entity/EntityIDManager.hpp"
@@ -116,7 +114,7 @@
 #include "core/entity/EntityRenderController.hpp"
 #include "core/entity/PlayerController.hpp"
 
-/// Core Input
+/// core/input
 #include "core/input/ClipboardHandler.hpp"
 #include "core/input/CursorEvent.hpp"
 #include "core/input/GamepadEvent.hpp"
@@ -125,7 +123,7 @@
 #include "core/input/InputState.hpp"
 #include "core/input/KeyboardEvent.hpp"
 
-/// Core Math
+/// core/math
 #include "core/math/Circle.hpp"
 #include "core/math/Line.hpp"
 #include "core/math/MathUtil.hpp"
@@ -134,7 +132,7 @@
 #include "core/math/Triangle.hpp"
 #include "core/math/Vector2.hpp"
 
-/// Core Network
+/// core/network
 #include "core/network/AckRange.hpp"
 #include "core/network/ClientHelper.hpp"
 #include "core/network/ClientProxy.hpp"
@@ -166,13 +164,13 @@
 #include "core/network/TransmissionData.hpp"
 #include "core/network/UDPSocket.hpp"
 
-/// Core OpenAL
+/// core/openal
 #include "core/openal/AudioEngine.hpp"
 #include "core/openal/OpenALUtil.hpp"
 #include "core/openal/Sound.hpp"
 #include "core/openal/SoundManager.hpp"
 
-/// Core OpenGL
+/// core/opengl
 #include "core/opengl/Animation.hpp"
 #include "core/opengl/CircleBatcher.hpp"
 #include "core/opengl/Color.hpp"
@@ -189,7 +187,6 @@
 #include "core/opengl/Shader.hpp"
 #include "core/opengl/ShaderAttribute.hpp"
 #include "core/opengl/ShaderInput.hpp"
-#include "core/opengl/ShaderLoader.hpp"
 #include "core/opengl/ShaderManager.hpp"
 #include "core/opengl/ShaderUniform.hpp"
 #include "core/opengl/ShockwaveRenderer.hpp"
@@ -200,7 +197,7 @@
 #include "core/opengl/TextureRegion.hpp"
 #include "core/opengl/TriangleBatcher.hpp"
 
-/// Core Physics
+/// core/physics
 #include "core/physics/NosPhysicsController.hpp"
 #include "core/physics/NosPhysicsRenderer.hpp"
 #include "core/physics/NosPhysicsWorld.hpp"

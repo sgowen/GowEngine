@@ -8,7 +8,7 @@
 
 #pragma once
 
-#include "ShaderLoader.hpp"
+#include "core/assets/ShaderLoader.hpp"
 #include "Shader.hpp"
 
 #include <map>

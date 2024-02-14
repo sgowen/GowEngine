@@ -10,6 +10,8 @@
 
 #include "core/assets/ShaderDescriptor.hpp"
 #include "core/assets/FileData.hpp"
+#include "core/opengl/ShaderAttribute.hpp"
+#include "core/opengl/ShaderUniform.hpp"
 
 struct Shader
 {

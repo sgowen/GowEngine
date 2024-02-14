@@ -19,6 +19,7 @@ public:
     static EngineConfig& getInstance();
     static void destroy();
     
+    std::string title();
     bool vsync();
     bool useSteamNetworking();
     bool useBox2DPhysics();
@@ -57,6 +58,7 @@ private:
     static EngineConfig* s_instance;
     
     Config _config;
+    std::string _title;
     bool _vsync;
     bool _useSteamNetworking;
     bool _useBox2DPhysics;

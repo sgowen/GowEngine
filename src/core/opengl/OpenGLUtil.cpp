@@ -353,18 +353,16 @@ void OpenGLUtil::unloadTexture(Texture& t)
 
 void OpenGLUtil::loadShader(Shader& s)
 {
-    std::string vertexShaderFilePath = s._desc._vertexShaderFilePath;
-    std::string fragmentShaderFilePath = s._desc._fragmentShaderFilePath;
-    
     if (ENGINE_CFG.logOpenGL())
     {
-        LOG("OpenGLUtil::loadShader %s %s", vertexShaderFilePath.c_str(), fragmentShaderFilePath.c_str());
+        LOG("OpenGLUtil::loadShader %s", s._desc._name.c_str());
     }
     
     const uint8_t* vertexShaderSrc = s._vertexShaderFileData->_data;
     const long vertexShaderSrcLength = s._vertexShaderFileData->_length;
     const uint8_t* fragmentShaderSrc = s._fragmentShaderFileData->_data;
     const long fragmentShaderSrcLength = s._fragmentShaderFileData->_length;
+    
     s._glHandle = loadShader(vertexShaderSrc, vertexShaderSrcLength, fragmentShaderSrc, fragmentShaderSrcLength);
     
     GLint glslVarNumElements;
@@ -435,12 +433,9 @@ void OpenGLUtil::loadShader(Shader& s)
 
 void OpenGLUtil::unloadShader(Shader& s)
 {
-    std::string vertexShaderFilePath = s._desc._vertexShaderFilePath;
-    std::string fragmentShaderFilePath = s._desc._fragmentShaderFilePath;
-    
     if (ENGINE_CFG.logOpenGL())
     {
-        LOG("OpenGLUtil::unloadShader %s %s", vertexShaderFilePath.c_str(), fragmentShaderFilePath.c_str());
+        LOG("OpenGLUtil::unloadShader %s", s._desc._name.c_str());
     }
     
     uint32_t program = s._glHandle;

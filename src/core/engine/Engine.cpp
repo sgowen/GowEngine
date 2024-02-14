@@ -8,7 +8,7 @@
 
 #include <GowEngine/GowEngine.hpp>
 
-Engine::Engine(std::string configFilePath) :
+Engine::Engine() :
 _stateMachine(this, &ENGINE_STATE_DEFAULT),
 _requestedStateAction(ERSA_DEFAULT),
 _requestedHostAction(ERHA_DEFAULT),
@@ -19,7 +19,9 @@ _cursorWidth(0),
 _cursorHeight(0),
 _hasUpdatedSinceLastRender(false)
 {
-    EngineConfig::create(configFilePath);
+    // TODO, check to see if config File actually exists
+    // if it doesn't, use the embedded version
+    EngineConfig::create("data/json/Engine/Config.json");
     
     if (ENGINE_CFG.fileLoggingEnabled())
     {
@@ -27,8 +29,7 @@ _hasUpdatedSinceLastRender(false)
         Logger::getInstance().initWithFile(logFileName.c_str());
     }
     
-    AudioEngine::create();
-    
+    // TODO, check to see if we need to use embedded Assets.json
     ASSETS_MGR.registerAssets(ENGINE_ASSETS, AssetsLoader::initWithJSONFile(ENGINE_CFG.filePathEngineAssets()));
     
     // Okay, this stuff is only relevant to the game, not the entire engine.
@@ -40,8 +41,6 @@ _hasUpdatedSinceLastRender(false)
 Engine::~Engine()
 {    
     ASSETS_MGR.deregisterAssets(ENGINE_ASSETS);
-    
-    AudioEngine::destroy();
     
     Logger::getInstance().closeFileStream();
     
@@ -58,6 +57,8 @@ Engine::~Engine()
 void Engine::createDeviceDependentResources(ClipboardHandler* clipboardHandler)
 {
     INPUT_MGR.setClipboardHandler(clipboardHandler);
+    
+    AudioEngine::create();
     
     execute(ERSA_CREATE_RESOURCES);
 }
@@ -76,6 +77,8 @@ void Engine::onWindowSizeChanged(uint16_t screenWidth, uint16_t screenHeight, ui
 
 void Engine::destroyDeviceDependentResources()
 {
+    AudioEngine::destroy();
+    
     execute(ERSA_DESTROY_RESOURCES);
 }
 

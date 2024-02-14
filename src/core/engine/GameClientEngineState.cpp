@@ -405,7 +405,7 @@ void GameClientEngineState::onRender(Renderer& r, double extrapolation)
     
     r.setText("fps", STRING_FORMAT("FPS %d", FPS_UTIL.fps()));
     
-    r.renderTextViews("main", "texture", Color::RED);
+    r.renderTextViews("main", "sprite", Color::RED);
 
     r.renderCurrentlyBoundFramebufferToScreen();
     
@@ -788,7 +788,7 @@ void GameClientEngineState::renderWithNetwork(Renderer& r)
             r.spriteBatcherAddEntity(player4);
             std::string textureRegionKey = player4->renderController()->getTextureMapping();
             std::string textureForRegionKey = ASSETS_MGR.textureForRegionKey(textureRegionKey);
-            r.spriteBatcherEnd(textureForRegionKey, "main", "texture", "main", Color::BLUE);
+            r.spriteBatcherEnd(textureForRegionKey, "main", "sprite", "main", Color::BLUE);
             
             PlayerController* player = player4->controller<PlayerController>();
             isReleasingShockwavePlayer4 = player->isReleasingShockwave();
@@ -833,7 +833,7 @@ void GameClientEngineState::renderWithNetwork(Renderer& r)
             r.spriteBatcherAddEntity(player3);
             std::string textureRegionKey = player3->renderController()->getTextureMapping();
             std::string textureForRegionKey = ASSETS_MGR.textureForRegionKey(textureRegionKey);
-            r.spriteBatcherEnd(textureForRegionKey, "main", "texture", "main", Color::GREEN);
+            r.spriteBatcherEnd(textureForRegionKey, "main", "sprite", "main", Color::GREEN);
             
             PlayerController* player = player3->controller<PlayerController>();
             isReleasingShockwavePlayer3 = player->isReleasingShockwave();
@@ -878,7 +878,7 @@ void GameClientEngineState::renderWithNetwork(Renderer& r)
             r.spriteBatcherAddEntity(player2);
             std::string textureRegionKey = player2->renderController()->getTextureMapping();
             std::string textureForRegionKey = ASSETS_MGR.textureForRegionKey(textureRegionKey);
-            r.spriteBatcherEnd(textureForRegionKey, "main", "texture", "main", Color::RED);
+            r.spriteBatcherEnd(textureForRegionKey, "main", "sprite", "main", Color::RED);
             
             PlayerController* player = player2->controller<PlayerController>();
             isReleasingShockwavePlayer2 = player->isReleasingShockwave();

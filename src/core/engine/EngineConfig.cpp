@@ -32,6 +32,11 @@ void EngineConfig::destroy()
     s_instance = nullptr;
 }
 
+std::string EngineConfig::title()
+{
+    return _title;
+}
+
 bool EngineConfig::vsync()
 {
     return _vsync;
@@ -189,36 +194,37 @@ double EngineConfig::frameRate()
 
 EngineConfig::EngineConfig(std::string configFilePath) :
 _config(ConfigLoader::initWithJSONFile(configFilePath)),
-_vsync(_config.getBool("vsync", true)),
-_useSteamNetworking(_config.getBool("useSteamNetworking", false)),
-_useBox2DPhysics(_config.getBool("useBox2DPhysics", false)),
+_title(_config.getString("title")),
+_vsync(_config.getBool("vsync")),
+_useSteamNetworking(_config.getBool("useSteamNetworking")),
+_useBox2DPhysics(_config.getBool("useBox2DPhysics")),
 _versionName(_config.getString("versionName")),
 _steamGameDir(_config.getString("steamGameDir")),
 _steamProductName(_config.getString("steamProductName")),
 _steamProductDescription(_config.getString("steamProductDescription")),
-_consoleLoggingEnabled(_config.getBool("consoleLoggingEnabled", false)),
-_framesPerSecond(_config.getUInt("framesPerSecond", 60)),
+_consoleLoggingEnabled(_config.getBool("consoleLoggingEnabled")),
+_framesPerSecond(_config.getUInt("framesPerSecond")),
 _fileDirLogger(_config.getString("fileDirLogger")),
 _filePathEngineAssets(_config.getString("filePathEngineAssets")),
 _filePathEntityLayoutManager(_config.getString("filePathEntityLayoutManager")),
 _filePathEntityManager(_config.getString("filePathEntityManager")),
-_glfwLoggingEnabled(_config.getBool("glfwLoggingEnabled", false)),
-_logOpenGL(_config.getBool("logOpenGL", false)),
-_logOpenAL(_config.getBool("logOpenAL", false)),
-_fileLoggingEnabled(_config.getBool("fileLoggingEnabled", false)),
-_inputLoggingEnabled(_config.getBool("inputLoggingEnabled", false)),
-_networkLoggingEnabled(_config.getBool("networkLoggingEnabled", false)),
-_physicsLoggingEnabled(_config.getBool("physicsLoggingEnabled", false)),
-_audioDisabled(_config.getBool("audioDisabled", false)),
-_musicDisabled(_config.getBool("musicDisabled", false)),
-_volume(_config.getFloat("volume", 1.0f)),
-_extrapolatePhysics(_config.getBool("extrapolatePhysics", false)),
-_clientPortHost(_config.getUInt("clientPortHost", 1337)),
-_clientPortJoin(_config.getUInt("clientPortJoin", 1338)),
-_serverPort(_config.getUInt("serverPort", 9999)),
-_maxNumFramesOfRollback(_config.getUInt("maxNumFramesOfRollback", 7)),
-_numFramesOfInputDelay(_config.getUInt("numFramesOfInputDelay", 5)),
-_numFramesOfSimulatedLatency(_config.getUInt("numFramesOfSimulatedLatency", 0)),
+_glfwLoggingEnabled(_config.getBool("glfwLoggingEnabled")),
+_logOpenGL(_config.getBool("logOpenGL")),
+_logOpenAL(_config.getBool("logOpenAL")),
+_fileLoggingEnabled(_config.getBool("fileLoggingEnabled")),
+_inputLoggingEnabled(_config.getBool("inputLoggingEnabled")),
+_networkLoggingEnabled(_config.getBool("networkLoggingEnabled")),
+_physicsLoggingEnabled(_config.getBool("physicsLoggingEnabled")),
+_audioDisabled(_config.getBool("audioDisabled")),
+_musicDisabled(_config.getBool("musicDisabled")),
+_volume(_config.getFloat("volume")),
+_extrapolatePhysics(_config.getBool("extrapolatePhysics")),
+_clientPortHost(_config.getUInt("clientPortHost")),
+_clientPortJoin(_config.getUInt("clientPortJoin")),
+_serverPort(_config.getUInt("serverPort")),
+_maxNumFramesOfRollback(_config.getUInt("maxNumFramesOfRollback")),
+_numFramesOfInputDelay(_config.getUInt("numFramesOfInputDelay")),
+_numFramesOfSimulatedLatency(_config.getUInt("numFramesOfSimulatedLatency")),
 _frameRate(1.0 / _framesPerSecond)
 {
     // Empty

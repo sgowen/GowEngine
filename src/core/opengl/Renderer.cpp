@@ -107,7 +107,7 @@ void Renderer::renderLoadingView(uint32_t stateTime)
 {
     clearFramebuffer();
     
-    if (!ASSETS_MGR.isShaderLoaded("texture") ||
+    if (!ASSETS_MGR.isShaderLoaded("sprite") ||
         !ASSETS_MGR.isFontLoaded("main"))
     {
         return;
@@ -121,7 +121,7 @@ void Renderer::renderLoadingView(uint32_t stateTime)
     }
     
     FontBatcher& fb = fontBatcher("main");
-    Shader& s = ASSETS_MGR.shader("texture");
+    Shader& s = ASSETS_MGR.shader("sprite");
     fb.begin();
     fb.addText(*this, loadingText, TEXA_LEFT, 0.80f, 0.04f, 0.02f);
     fb.end(*this, s);
