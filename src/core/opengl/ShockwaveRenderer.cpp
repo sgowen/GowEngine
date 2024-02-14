@@ -44,12 +44,12 @@ void ShockwaveRenderer::renderShockwave(Shader& s, Framebuffer& fb, Matrix& m, f
     
     OGL.bindVertexBuffer(_vertexBuffer, sizeof(VERTEX_2D) * _vertices.size(), &_vertices[0]);
     OGL.bindShader(s);
-    OGL.bindMatrix(s, "u_Matrix", m._matrix);
-    OGL.bindTexture(s, "u_Texture", 0, fb._texture);
-    OGL.bindFloat(s, "u_CenterX", x);
-    OGL.bindFloat(s, "u_CenterY", y);
-    OGL.bindFloat(s, "u_TimeElapsed", timeElapsed * 1.2f + 0.1f);
-    OGL.bindInt(s, "u_IsTransforming", isTransforming ? 1 : 0);
+    OGL.bindMatrix(s, "u_matrix", m._matrix);
+    OGL.bindTexture(s, "u_texture", 0, fb._texture);
+    OGL.bindFloat(s, "u_centerX", x);
+    OGL.bindFloat(s, "u_centerY", y);
+    OGL.bindFloat(s, "u_timeElapsed", timeElapsed * 1.2f + 0.1f);
+    OGL.bindInt(s, "u_isTransforming", isTransforming ? 1 : 0);
     
     OGL.drawTrianglesIndexed(_indexBuffer, 1);
     

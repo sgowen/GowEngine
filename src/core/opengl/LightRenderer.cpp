@@ -94,14 +94,14 @@ void LightRenderer::render(Shader& s, mat4& matrix, Framebuffer& texture, Frameb
 {
     OGL.bindVertexBuffer(_vertexBuffer);
     OGL.bindShader(s);
-    OGL.bindMatrix(s, "u_Matrix", matrix);
-    OGL.bindFloat4Array(s, "u_LightPositions", _numLights[0], _lightPositions);
-    OGL.bindFloat4Array(s, "u_LightColors", _numLights[0], _lightColors);
-    OGL.bindFloat4(s, "u_AmbientColor", _ambientColor);
-    OGL.bindFloat4(s, "u_Falloff", _fallOff);
-    OGL.bindInt4(s, "u_NumLights", _numLights);
-    OGL.bindTexture(s, "u_Texture", 0, texture._texture);
-    OGL.bindTexture(s, "u_NormalMap", 1, normalMap._texture);
+    OGL.bindMatrix(s, "u_matrix", matrix);
+    OGL.bindFloat4Array(s, "u_lightPositions", _numLights[0], _lightPositions);
+    OGL.bindFloat4Array(s, "u_lightColors", _numLights[0], _lightColors);
+    OGL.bindFloat4(s, "u_ambientColor", _ambientColor);
+    OGL.bindFloat4(s, "u_falloff", _fallOff);
+    OGL.bindInt4(s, "u_numLights", _numLights);
+    OGL.bindTexture(s, "u_texture", 0, texture._texture);
+    OGL.bindTexture(s, "u_normalMap", 1, normalMap._texture);
 
     OGL.drawTrianglesIndexed(_indexBuffer, 1);
 

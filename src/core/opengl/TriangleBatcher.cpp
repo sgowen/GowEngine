@@ -72,8 +72,8 @@ void TriangleBatcher::end(Shader& s, mat4& matrix, Color& c)
     
     OGL.bindVertexBuffer(_vertexBuffer, sizeof(VERTEX_2D) * _vertices.size(), &_vertices[0]);
     OGL.bindShader(s);
-    OGL.bindMatrix(s, "u_Matrix", matrix);
-    OGL.bindColor(s, "u_Color", c);
+    OGL.bindMatrix(s, "u_matrix", matrix);
+    OGL.bindColor(s, "u_color", c);
     
     if (_isFill)
     {

@@ -129,9 +129,9 @@ void SpriteBatcher::end(Shader& s, mat4& matrix, Texture& t, Color& colorFactor)
     
     OGL.bindVertexBuffer(_vertexBuffer, sizeof(VERTEX_2D_TEXTURE) * _vertices.size(), &_vertices[0]);
     OGL.bindShader(s);
-    OGL.bindMatrix(s, "u_Matrix", matrix);
-    OGL.bindColor(s, "u_Color", colorFactor);
-    OGL.bindTexture(s, "u_Texture", 0, t);
+    OGL.bindMatrix(s, "u_matrix", matrix);
+    OGL.bindColor(s, "u_color", colorFactor);
+    OGL.bindTexture(s, "u_texture", 0, t);
     
     OGL.drawTrianglesIndexed(_indexBuffer, numSprites);
     

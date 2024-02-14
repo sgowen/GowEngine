@@ -35,7 +35,7 @@ void FramebufferRenderer::renderFramebuffer(Shader& s, Framebuffer& fb)
     
     OGL.bindVertexBuffer(_vertexBuffer);
     OGL.bindShader(s);
-    OGL.bindTexture(s, "u_Texture", 0, fb._texture);
+    OGL.bindTexture(s, "u_texture", 0, fb._texture);
     
     OGL.drawTrianglesIndexed(_indexBuffer, 1);
     
