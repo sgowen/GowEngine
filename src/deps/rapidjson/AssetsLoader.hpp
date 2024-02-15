@@ -8,13 +8,13 @@
 
 #pragma once
 
-#include "core/assets/Assets.hpp"
+struct Assets;
 
 class AssetsLoader
 {
 public:
-	static Assets initWithJSONFile(std::string filePath);
-    static Assets initWithJSON(const char* json);
+	static void initWithJSONFile(Assets& assets, std::string filePath);
+    static void initWithJSON(Assets& assets, const char* json);
 
 private:
     AssetsLoader();

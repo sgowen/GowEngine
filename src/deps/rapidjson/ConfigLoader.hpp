@@ -8,13 +8,13 @@
 
 #pragma once
 
-#include "core/common/Config.hpp"
+class Config;
 
 class ConfigLoader
 {
 public:
-    static Config initWithJSONFile(std::string filePath);
-    static Config initWithJSON(const char* json);
+    static void initWithJSONFile(Config& config, std::string filePath);
+    static void initWithJSON(Config& config, const char* json);
     
 private:
     ConfigLoader();

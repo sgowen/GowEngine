@@ -29,8 +29,16 @@ _hasUpdatedSinceLastRender(false)
         Logger::getInstance().initWithFile(logFileName.c_str());
     }
     
-    // TODO, check to see if we need to use embedded Assets.json
-    ASSETS_MGR.registerAssets(ENGINE_ASSETS, AssetsLoader::initWithJSONFile(ENGINE_CFG.filePathEngineAssets()));
+    Assets assets;
+    // TODO, check if the engine assets file even exists.
+    AssetsLoader::initWithJSONFile(assets, ENGINE_CFG.filePathEngineAssets());
+    
+    // TODO
+    // check assets
+    // Do we have our font texture?
+    // And our framebuffer, geometry, and sprite shaders?
+    // If not, let's add them to the Assets struct
+    ASSETS_MGR.registerAssets(ENGINE_ASSETS, assets);
     
     // Okay, this stuff is only relevant to the game, not the entire engine.
     // This needs to be loaded on an as-needed basis

@@ -10,19 +10,15 @@
 
 #include <rapidjson/document.h>
 
-Renderer RendererLoader::initWithJSONFile(std::string filePath)
+void RendererLoader::initWithJSONFile(Renderer& renderer, std::string filePath)
 {
     FileData jsonData = ASSET_HANDLER.loadAsset(filePath);
-    Renderer ret = initWithJSON((const char*)jsonData._data);
+    initWithJSON(renderer, (const char*)jsonData._data);
     ASSET_HANDLER.unloadAsset(jsonData);
-    
-    return ret;
 }
 
-Renderer RendererLoader::initWithJSON(const char* json)
+void RendererLoader::initWithJSON(Renderer& renderer, const char* json)
 {
-    Renderer ret;
-    
     using namespace rapidjson;
     
     Document d;
@@ -34,7 +30,7 @@ Renderer RendererLoader::initWithJSON(const char* json)
         Value& v = d["pixelToUnitRatio"];
         assert(v.IsInt());
         
-        ret._pixelToUnitRatio = RapidJSONUtil::getUInt(d, "pixelToUnitRatio");
+        renderer._pixelToUnitRatio = RapidJSONUtil::getUInt(d, "pixelToUnitRatio");
     }
     
     if (d.HasMember("circleBatchers"))
@@ -50,7 +46,7 @@ Renderer RendererLoader::initWithJSON(const char* json)
             std::string key = i->name.GetString();
             uint32_t maxBatchSize = RapidJSONUtil::getUInt(iv, "maxBatchSize");
             
-            ret._circleBatchers.emplace(key, CircleBatcher{maxBatchSize});
+            renderer._circleBatchers.emplace(key, CircleBatcher{maxBatchSize});
         }
     }
     
@@ -70,7 +66,7 @@ Renderer RendererLoader::initWithJSON(const char* json)
             std::string matrix = RapidJSONUtil::getString(iv, "matrix");
             uint32_t maxBatchSize = RapidJSONUtil::getUInt(iv, "maxBatchSize");
             
-            ret._fontBatchers.emplace(key, FontBatcher{font, matrix, maxBatchSize});
+            renderer._fontBatchers.emplace(key, FontBatcher{font, matrix, maxBatchSize});
         }
     }
     
@@ -93,7 +89,7 @@ Renderer RendererLoader::initWithJSON(const char* json)
             std::string filterMag = RapidJSONUtil::getString(iv, "filterMag", "SHARP");
             assert(filterMag == "SHARP" || filterMag == "SMOOTH");
             
-            ret._framebuffers.emplace(key, Framebuffer{width, height, filterMin, filterMag});
+            renderer._framebuffers.emplace(key, Framebuffer{width, height, filterMin, filterMag});
         }
     }
     
@@ -116,7 +112,7 @@ Renderer RendererLoader::initWithJSON(const char* json)
             float widthWeight = RapidJSONUtil::getFloat(iv, "widthWeight");
             float heightWeight = RapidJSONUtil::getFloat(iv, "heightWeight");
             
-            ret._imageViews.emplace(key, ImageView{texture, textureRegion, xWeight, yWeight, widthWeight, heightWeight});
+            renderer._imageViews.emplace(key, ImageView{texture, textureRegion, xWeight, yWeight, widthWeight, heightWeight});
         }
     }
     
@@ -137,7 +133,7 @@ Renderer RendererLoader::initWithJSON(const char* json)
                 uint32_t w = RapidJSONUtil::getUInt(iv, "width");
                 uint32_t h = RapidJSONUtil::getUInt(iv, "height");
                 
-                ret._matrices.emplace(key, Matrix{MatrixDescriptor(w, h)});
+                renderer._matrices.emplace(key, Matrix{MatrixDescriptor(w, h)});
             }
             else
             {
@@ -148,7 +144,7 @@ Renderer RendererLoader::initWithJSON(const char* json)
                 float n = RapidJSONUtil::getFloat(iv, "near", -1);
                 float f = RapidJSONUtil::getFloat(iv, "far", 1);
                 
-                ret._matrices.emplace(key, Matrix{MatrixDescriptor(l, r, b, t, n, f)});
+                renderer._matrices.emplace(key, Matrix{MatrixDescriptor(l, r, b, t, n, f)});
             }
         }
     }
@@ -168,7 +164,7 @@ Renderer RendererLoader::initWithJSON(const char* json)
             uint32_t maxBatchSize = RapidJSONUtil::getUInt(iv, "maxBatchSize");
             bool isFill = RapidJSONUtil::getBool(iv, "isFill");
             
-            ret._rektangleBatchers.emplace(key, RektangleBatcher{maxBatchSize, isFill});
+            renderer._rektangleBatchers.emplace(key, RektangleBatcher{maxBatchSize, isFill});
         }
     }
     
@@ -186,7 +182,7 @@ Renderer RendererLoader::initWithJSON(const char* json)
             
             uint32_t maxBatchSize = RapidJSONUtil::getUInt(iv, "maxBatchSize");
             
-            ret._spriteBatchers.emplace(key, SpriteBatcher{maxBatchSize});
+            renderer._spriteBatchers.emplace(key, SpriteBatcher{maxBatchSize});
         }
     }
     
@@ -208,7 +204,7 @@ Renderer RendererLoader::initWithJSON(const char* json)
             float yWeight = RapidJSONUtil::getFloat(iv, "yWeight");
             float glyphWidthWeight = RapidJSONUtil::getFloat(iv, "glyphWidthWeight");
             
-            ret._textViews.emplace(key, TextView{text, alignment, xWeight, yWeight, glyphWidthWeight});
+            renderer._textViews.emplace(key, TextView{text, alignment, xWeight, yWeight, glyphWidthWeight});
         }
     }
     
@@ -227,9 +223,7 @@ Renderer RendererLoader::initWithJSON(const char* json)
             uint32_t maxBatchSize = RapidJSONUtil::getUInt(iv, "maxBatchSize");
             bool isFill = RapidJSONUtil::getBool(iv, "isFill");
             
-            ret._triangleBatchers.emplace(key, TriangleBatcher{maxBatchSize, isFill});
+            renderer._triangleBatchers.emplace(key, TriangleBatcher{maxBatchSize, isFill});
         }
     }
-    
-    return ret;
 }

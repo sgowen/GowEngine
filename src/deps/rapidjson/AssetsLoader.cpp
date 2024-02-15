@@ -10,19 +10,15 @@
 
 #include <rapidjson/document.h>
 
-Assets AssetsLoader::initWithJSONFile(std::string filePath)
+void AssetsLoader::initWithJSONFile(Assets& assets, std::string filePath)
 {
     FileData jsonData = ASSET_HANDLER.loadAsset(filePath);
-    Assets ret = initWithJSON((const char*)jsonData._data);
+    initWithJSON(assets, (const char*)jsonData._data);
     ASSET_HANDLER.unloadAsset(jsonData);
-
-    return ret;
 }
 
-Assets AssetsLoader::initWithJSON(const char* json)
+void AssetsLoader::initWithJSON(Assets& assets, const char* json)
 {
-    Assets ret;
-
     using namespace rapidjson;
 
     Document d;
@@ -37,7 +33,7 @@ Assets AssetsLoader::initWithJSON(const char* json)
 
         std::string filePath = RapidJSONUtil::getString(v, "filePath");
         std::string soundID = "music";
-        ret._soundDescriptors.emplace_back(soundID, filePath, 1);
+        assets._soundDescriptors.emplace_back(soundID, filePath, 1);
         soundIDsAdded.emplace_back(soundID);
     }
 
@@ -56,7 +52,7 @@ Assets AssetsLoader::initWithJSON(const char* json)
 
             assert(std::find(soundIDsAdded.begin(), soundIDsAdded.end(), soundID) == soundIDsAdded.end());
 
-            ret._soundDescriptors.emplace_back(soundID, filePath, numInstances);
+            assets._soundDescriptors.emplace_back(soundID, filePath, numInstances);
             soundIDsAdded.emplace_back(soundID);
         }
     }
@@ -74,7 +70,7 @@ Assets AssetsLoader::initWithJSON(const char* json)
             std::string vertexShaderFilePath = RapidJSONUtil::getString(iv, "vertexShaderFilePath");
             std::string fragmentShaderFilePath = RapidJSONUtil::getString(iv, "fragmentShaderFilePath");
 
-            ret._shaderDescriptors.emplace_back(name, vertexShaderFilePath, fragmentShaderFilePath);
+            assets._shaderDescriptors.emplace_back(name, vertexShaderFilePath, fragmentShaderFilePath);
         }
     }
     
@@ -93,7 +89,7 @@ Assets AssetsLoader::initWithJSON(const char* json)
             uint8_t glyphWidth = RapidJSONUtil::getUInt(iv, "glyphWidth");
             uint8_t glyphHeight = RapidJSONUtil::getUInt(iv, "glyphHeight");
 
-            ret._fonts.emplace_back(name, texture, glyphsPerRow, glyphWidth, glyphHeight);
+            assets._fonts.emplace_back(name, texture, glyphsPerRow, glyphWidth, glyphHeight);
         }
     }
 
@@ -116,14 +112,14 @@ Assets AssetsLoader::initWithJSON(const char* json)
             bool repeatS = RapidJSONUtil::getBool(iv, "repeatS", false);
             bool mipMap = RapidJSONUtil::getBool(iv, "mipMap", false);
 
-            ret._textureDescriptors.emplace_back(name, normalMap, filePath, filterMin, filterMag, repeatS, mipMap);
+            assets._textureDescriptors.emplace_back(name, normalMap, filePath, filterMin, filterMag, repeatS, mipMap);
 
             if (iv.HasMember("mappings"))
             {
                 int textureWidth = RapidJSONUtil::getInt(iv, "textureWidth", 2048);
                 int textureHeight = RapidJSONUtil::getInt(iv, "textureHeight", 2048);
 
-                TextureDescriptor& td = ret._textureDescriptors.back();
+                TextureDescriptor& td = assets._textureDescriptors.back();
                 std::map<std::string, Animation>& animations = td._animations;
                 std::map<std::string, TextureRegion>& textureRegions = td._textureRegions;
 
@@ -245,6 +241,4 @@ Assets AssetsLoader::initWithJSON(const char* json)
             }
         }
     }
-
-    return ret;
 }

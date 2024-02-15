@@ -8,13 +8,13 @@
 
 #pragma once
 
-#include "core/opengl/Renderer.hpp"
+class Renderer;
 
 class RendererLoader
 {
 public:
-    static Renderer initWithJSONFile(std::string filePath);
-    static Renderer initWithJSON(const char* json);
+    static void initWithJSONFile(Renderer& renderer, std::string filePath);
+    static void initWithJSON(Renderer& renderer, const char* json);
 
 private:
     RendererLoader();

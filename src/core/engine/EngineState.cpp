@@ -55,13 +55,15 @@ void EngineState::exit(Engine* e)
     onExit(e);
 }
 
-EngineState::EngineState(std::string configFilePath) : State<Engine>(),
-// Yeah, this config should be loaded async.
-_config(ConfigLoader::initWithJSONFile(configFilePath)),
-_filePathAssets(_config.getString("filePathAssets")),
-_assets(AssetsLoader::initWithJSONFile(_filePathAssets)),
-_renderer(RendererLoader::initWithJSONFile(_config.getString("filePathRenderer")))
+EngineState::EngineState(std::string configFilePath) : State<Engine>()
 {
+    // Yeah, this should all should be loaded async.
+    
+    ConfigLoader::initWithJSONFile(_config, configFilePath);
+    _filePathAssets = _config.getString("filePathAssets");
+    AssetsLoader::initWithJSONFile(_assets, _filePathAssets);
+    RendererLoader::initWithJSONFile(_renderer, _config.getString("filePathRenderer"));
+    
     INPUT_MGR.setMatrix(&_renderer.matrix());
 }
 

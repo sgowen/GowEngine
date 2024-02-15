@@ -10,19 +10,15 @@
 
 #include <rapidjson/document.h>
 
-Config ConfigLoader::initWithJSONFile(std::string filePath)
+void ConfigLoader::initWithJSONFile(Config& config, std::string filePath)
 {
     FileData jsonData = ASSET_HANDLER.loadAsset(filePath);
-    Config ret = initWithJSON((const char*)jsonData._data);
+    initWithJSON(config, (const char*)jsonData._data);
     ASSET_HANDLER.unloadAsset(jsonData);
-    
-    return ret;
 }
 
-Config ConfigLoader::initWithJSON(const char* json)
+void ConfigLoader::initWithJSON(Config& config, const char* json)
 {
-    Config ret;
-    
     using namespace rapidjson;
     
     Document d;
@@ -32,8 +28,6 @@ Config ConfigLoader::initWithJSON(const char* json)
     {
         assert(i->value.IsString());
         
-        ret.putString(i->name.GetString(), i->value.GetString());
+        config.putString(i->name.GetString(), i->value.GetString());
     }
-    
-    return ret;
 }
