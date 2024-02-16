@@ -15,7 +15,15 @@
 FileData LinuxAssetHandler::loadAsset(std::string filePath)
 {
     FILE* stream = OPEN_FILE(filePath, "r");
-    assert(stream != nullptr);
+    if (stream == nullptr)
+    {
+        EmbeddedAssetHandler& eah = EmbeddedAssetHandler::getInstance();
+        
+        // File not found, so crash unless the asset is embedded
+        assert(eah.isAssetEmbedded(filePath));
+        
+        return eah.loadAsset(filePath);
+    }
 
     fseek(stream, 0, SEEK_END);
 
@@ -36,6 +44,14 @@ FileData LinuxAssetHandler::loadAsset(std::string filePath)
 
 void LinuxAssetHandler::unloadAsset(const FileData& fileData)
 {
+    if (fileData._fileHandle != nullptr)
+    {
+        // _fileHandle is only set for embedded assets
+        EmbeddedAssetHandler& eah = EmbeddedAssetHandler::getInstance();
+        eah.unloadAsset(fileData);
+        return;
+    }
+    
     assert(fileData._data != nullptr);
 
     free((void*)fileData._data);

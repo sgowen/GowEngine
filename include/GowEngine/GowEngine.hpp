@@ -64,6 +64,7 @@
 #include "core/assets/AssetHandlerFactory.hpp"
 #include "core/assets/Assets.hpp"
 #include "core/assets/AssetsManager.hpp"
+#include "core/assets/EmbeddedAssetHandler.hpp"
 #include "core/assets/FileData.hpp"
 #include "core/assets/FileUtil.hpp"
 #include "core/assets/Font.hpp"

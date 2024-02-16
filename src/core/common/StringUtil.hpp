@@ -40,6 +40,7 @@ public:
     static std::string format(const char* format, ...);
     static std::string stringFromFourChar(uint32_t fourCC);
     static uint32_t fourCharFromString(std::string& fourCC);
+    static bool doesStringEndWithString(const std::string& fullString, const std::string& ending);
 
 private:
     StringUtil();

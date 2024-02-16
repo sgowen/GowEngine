@@ -22,3 +22,6 @@
 [submodule "deps/box2d"]
 	path = deps/box2d
 	url = git@github.com:erincatto/box2d.git
+[submodule "deps/bin_to_c"]
+	path = deps/bin_to_c
+	url = git@github.com:sgowen/bin_to_c.git

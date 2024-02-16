@@ -87,24 +87,9 @@ uint8_t EngineConfig::framesPerSecond()
     return _framesPerSecond;
 }
 
-std::string EngineConfig::fileDirLogger()
+std::string EngineConfig::fileLoggingDir()
 {
-    return _fileDirLogger;
-}
-
-std::string EngineConfig::filePathEngineAssets()
-{
-    return _filePathEngineAssets;
-}
-
-std::string EngineConfig::filePathEntityLayoutManager()
-{
-    return _filePathEntityLayoutManager;
-}
-
-std::string EngineConfig::filePathEntityManager()
-{
-    return _filePathEntityManager;
+    return _fileLoggingDir;
 }
 
 bool EngineConfig::glfwLoggingEnabled()
@@ -212,10 +197,7 @@ EngineConfig::EngineConfig(std::string configFilePath)
     _steamProductDescription = _config.getString("steamProductDescription");
     _consoleLoggingEnabled = _config.getBool("consoleLoggingEnabled");
     _framesPerSecond = _config.getUInt("framesPerSecond");
-    _fileDirLogger = _config.getString("fileDirLogger");
-    _filePathEngineAssets = _config.getString("filePathEngineAssets");
-    _filePathEntityLayoutManager = _config.getString("filePathEntityLayoutManager");
-    _filePathEntityManager = _config.getString("filePathEntityManager");
+    _fileLoggingDir = _config.getString("fileLoggingDir");
     _glfwLoggingEnabled = _config.getBool("glfwLoggingEnabled");
     _logOpenGL = _config.getBool("logOpenGL");
     _logOpenAL = _config.getBool("logOpenAL");

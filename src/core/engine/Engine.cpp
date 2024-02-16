@@ -19,31 +19,17 @@ _cursorWidth(0),
 _cursorHeight(0),
 _hasUpdatedSinceLastRender(false)
 {
-    // TODO, check to see if config File actually exists
-    // if it doesn't, use the embedded version
     EngineConfig::create("data/json/Engine/Config.json");
     
     if (ENGINE_CFG.fileLoggingEnabled())
     {
-        std::string logFileName = STRING_FORMAT("%s/log_GowEngine_%d", ENGINE_CFG.fileDirLogger().c_str(), TimeUtil::timeSinceEpochMillisec());
+        std::string logFileName = STRING_FORMAT("%s/log_GowEngine_%d", ENGINE_CFG.fileLoggingDir().c_str(), TimeUtil::timeSinceEpochMillisec());
         Logger::getInstance().initWithFile(logFileName.c_str());
     }
     
     Assets assets;
-    // TODO, check if the engine assets file even exists.
-    AssetsLoader::initWithJSONFile(assets, ENGINE_CFG.filePathEngineAssets());
-    
-    // TODO
-    // check assets
-    // Do we have our font texture?
-    // And our framebuffer, geometry, and sprite shaders?
-    // If not, let's add them to the Assets struct
+    AssetsLoader::initWithJSONFile(assets, "data/json/Engine/Assets.json");
     ASSETS_MGR.registerAssets(ENGINE_ASSETS, assets);
-    
-    // Okay, this stuff is only relevant to the game, not the entire engine.
-    // This needs to be loaded on an as-needed basis
-    EntityLayoutManagerLoader::initWithJSONFile(ENTITY_LAYOUT_MGR, ENGINE_CFG.filePathEntityLayoutManager());
-    EntityManagerLoader::initWithJSONFile(ENTITY_MGR, ENGINE_CFG.filePathEntityManager());
 }
 
 Engine::~Engine()

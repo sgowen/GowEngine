@@ -97,3 +97,13 @@ uint32_t StringUtil::fourCharFromString(std::string& fourCC)
     (uint32_t)chars[2] << 8  |
     (uint32_t)chars[3];
 }
+
+bool StringUtil::doesStringEndWithString(const std::string& fullString, const std::string& ending)
+{
+    if (ending.size() > fullString.size())
+    {
+        return false;
+    }
+    
+    return fullString.compare(fullString.size() - ending.size(), ending.size(), ending) == 0;
+}

@@ -282,10 +282,11 @@ void GameClientEngineState::onEnter(Engine* e)
 
 void GameClientEngineState::onAssetsLoaded(Engine* e)
 {
-    if (_args.getBool(ARG_OFFLINE_MODE, false) == false)
-    {
-        
-    }
+    std::string filePathEntityManager = _config.getString("filePathEntityManager");
+    EntityManagerLoader::initWithJSONFile(ENTITY_MGR, filePathEntityManager);
+    
+    std::string filePathEntityLayoutManager = _config.getString("filePathEntityLayoutManager");
+    EntityLayoutManagerLoader::initWithJSONFile(ENTITY_LAYOUT_MGR, filePathEntityLayoutManager);
     
     if (!ENGINE_CFG.musicDisabled())
     {
