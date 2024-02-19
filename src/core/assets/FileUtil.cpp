@@ -8,9 +8,9 @@
 
 #include <GowEngine/GowEngine.hpp>
 
-#if defined(__ANDROID__)
 #include "file_compat.h"
 
+#if defined(__ANDROID__)
 #define FILE_COMPAT_ANDROID_ACTIVITY FileUtil::androidActivity
 
 ANativeActivity* FileUtil::androidActivity = nullptr;

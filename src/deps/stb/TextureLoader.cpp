@@ -21,15 +21,6 @@ void TextureLoader::loadData(Texture& t)
     
     assert(t._data == nullptr);
     
-    // TODO, check filePath, if it matches a specific pattern
-    // say...
-    // "filePath": "embedded:sf_font.png"
-    // instead of:
-    // "filePath": "data/textures/sf_font.png"
-    //
-    // if embedded, then we read in the embedded version of sf_font.png
-    // from the embedded_textures.h file
-    
     const FileData fd = ASSET_HANDLER.loadAsset(filePath);
     
     if (IS_IOS)

@@ -21,15 +21,6 @@ void ShaderLoader::loadData(Shader& s)
     assert(s._vertexShaderFileData == nullptr);
     assert(s._fragmentShaderFileData == nullptr);
     
-    // TODO, check filePath, if it matches a specific pattern
-    // say...
-    // "vertexShaderFilePath": "embedded:framebuffer.vsh"
-    // instead of:
-    // "vertexShaderFilePath": "data/shaders/framebuffer.vsh"
-    //
-    // if embedded, then we read in the embedded version of framebuffer.vsh
-    // from the embedded_shaders.h file
-    
     s._vertexShaderFileData = new FileData(ASSET_HANDLER.loadAsset(vertexShaderFilePath));
     s._fragmentShaderFileData = new FileData(ASSET_HANDLER.loadAsset(fragmentShaderFilePath));
 }
