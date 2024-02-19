@@ -16,8 +16,6 @@ AssetHandler& AssetHandlerFactory::getInstance()
     return LinuxAssetHandler::getInstance();
 #elif IS_LINUX
     return LinuxAssetHandler::getInstance();
-#elif IS_WINDOWS
-    return WindowsAssetHandler::getInstance();
 #else
     #error Need to add AssetHandler implementation
 #endif

@@ -57,7 +57,6 @@
 #include "deps/steamworks_sdk/SteamServerHelper.hpp"
 
 /// core/assets
-#include "core/assets/AndroidAssetHandler.hpp"
 #include "core/assets/AppleAssetHandler.hpp"
 #include "core/assets/AppleBundleUtil.hpp"
 #include "core/assets/AssetHandler.hpp"
@@ -74,7 +73,6 @@
 #include "core/assets/ShaderLoader.hpp"
 #include "core/assets/SoundDescriptor.hpp"
 #include "core/assets/TextureDescriptor.hpp"
-#include "core/assets/WindowsAssetHandler.hpp"
 
 /// core/common
 #include "core/common/Config.hpp"

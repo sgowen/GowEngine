@@ -28,15 +28,23 @@ static void onSurfaceCreated(GLFMDisplay *display, int width, int height)
         delete _engine;
         _engine = nullptr;
     }
+    
+#if IS_ANDROID
+    // TODO, is there a better way to set this?
+    FileUtil::androidActivity = static_cast<ANativeActivity *>(glfmGetAndroidActivity(display));
+#endif
 }
 
 static void onSurfaceDestroyed(GLFMDisplay *display)
 {
     UNUSED(display);
 
-    _engine->destroyDeviceDependentResources();
-    delete _engine;
-    _engine = nullptr;
+    if (_engine != nullptr)
+    {
+        _engine->destroyDeviceDependentResources();
+        delete _engine;
+        _engine = nullptr;
+    }
 }
 
 static void onDraw(GLFMDisplay *display)
@@ -44,8 +52,7 @@ static void onDraw(GLFMDisplay *display)
     if (_engine == nullptr)
     {
         lastTime = glfmGetTime();
-        FileUtil::androidActivity = static_cast<ANativeActivity *>(glfmGetAndroidActivity(display));
-        _engine = GowEngineMount::createEngine();
+        _engine = new Engine();
         _engine->createDeviceDependentResources();
     }
 
@@ -66,6 +73,30 @@ static void onDraw(GLFMDisplay *display)
     glfmSwapBuffers(display);
 }
 
+static bool onTouch(GLFMDisplay *display, int touch, GLFMTouchPhase phase, double x, double y)
+{
+    if (phase == GLFMTouchPhaseBegan)
+    {
+        _engine->onCursorDown(x, y);
+        return true;
+    }
+    else if (phase == GLFMTouchPhaseMoved)
+    {
+        _engine->onCursorDragged(x, y);
+        return true;
+    }
+    else if (phase == GLFMTouchPhaseEnded ||
+             phase == GLFMTouchPhaseCancelled)
+    {
+        _engine->onCursorUp(x, y);
+        return true;
+    }
+    else
+    {
+        return false;
+    }
+}
+
 void glfmMain(GLFMDisplay *display)
 {
     glfmSetDisplayConfig(
@@ -76,8 +107,10 @@ void glfmMain(GLFMDisplay *display)
             GLFMStencilFormatNone,
             GLFMMultisampleNone);
     glfmSetSurfaceCreatedFunc(display, onSurfaceCreated);
-    glfmSetRenderFunc(display, onDraw);
     glfmSetSurfaceDestroyedFunc(display, onSurfaceDestroyed);
+    glfmSetRenderFunc(display, onDraw);
+    glfmSetMultitouchEnabled(display, true);
+    glfmSetTouchFunc(display, onTouch);
 }
 
 #endif /* IS_MOBILE */
