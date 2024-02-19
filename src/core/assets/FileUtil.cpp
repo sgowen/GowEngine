@@ -9,7 +9,6 @@
 #include <GowEngine/GowEngine.hpp>
 
 #if defined(__ANDROID__)
-#include "glfm.h"
 #include "file_compat.h"
 
 #define FILE_COMPAT_ANDROID_ACTIVITY FileUtil::androidActivity

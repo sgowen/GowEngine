@@ -25,3 +25,9 @@
 [submodule "deps/bin_to_c"]
 	path = deps/bin_to_c
 	url = git@github.com:sgowen/bin_to_c.git
+[submodule "deps/glfm"]
+	path = deps/glfm
+	url = git@github.com:brackeen/glfm.git
+[submodule "deps/file-compat"]
+	path = deps/file-compat
+	url = git@github.com:brackeen/file-compat.git
