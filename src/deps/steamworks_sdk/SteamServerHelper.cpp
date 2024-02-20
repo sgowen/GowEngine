@@ -390,8 +390,6 @@ void SteamServerHelper::sendDataToClient(CSteamID steamIDUser, const OutputMemor
     sendPacket(inOutputStream, _outgoingPacketAddress);
 }
 
-#pragma mark - STEAM_GAMESERVER_CALLBACK
-
 void SteamServerHelper::onSteamServersConnected(SteamServersConnected_t *pLogonSuccess)
 {
     LOG("%s connected to Steam successfully", _gameDir.c_str());

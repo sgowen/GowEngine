@@ -48,7 +48,6 @@ public:
     bool isRequestingToJoinServer();
     void onServerJoined();
     
-#pragma mark ISteamMatchmakingServerListResponse
     virtual void ServerResponded(HServerListRequest hReq, int iServer);
     virtual void ServerFailedToRespond(HServerListRequest hReq, int iServer);
     virtual void RefreshComplete(HServerListRequest hReq, EMatchMakingServerResponse response);
@@ -56,7 +55,6 @@ public:
     std::vector<SteamServerInfo>& getGameServers();
     bool isRequestingServers();
     
-#pragma mark Steam Cloud
     bool writeFileToSteamCloud(const char *inFileName, const char *inData);
     std::string readFileFromSteamCloud(const char *inFileName);
     void refreshSteamCloudFileStats();

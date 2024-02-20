@@ -133,8 +133,6 @@ void SteamGameServices::onServerJoined()
     _isRequestingToJoinServer = false;
 }
 
-#pragma mark ISteamMatchmakingServerListResponse
-
 void SteamGameServices::ServerResponded(HServerListRequest hReq, int iServer)
 {
     LOG("ServerResponded");
@@ -250,8 +248,6 @@ void SteamGameServices::refreshLANServers()
     SteamFriends()->SetRichPresence("status", "Finding a LAN game");
 }
 
-#pragma mark Steam Cloud
-
 bool SteamGameServices::writeFileToSteamCloud(const char *inFileName, const char *inData)
 {
     refreshSteamCloudFileStats();
@@ -311,8 +307,6 @@ void SteamGameServices::refreshSteamCloudFileStats()
     
     LOG("Quota: %llu bytes, %llu bytes remaining", _ulBytesQuota, _ulAvailableBytes);
 }
-
-#pragma mark - STEAM_CALLBACK
 
 void SteamGameServices::onGameOverlayActivated(GameOverlayActivated_t *callback)
 {

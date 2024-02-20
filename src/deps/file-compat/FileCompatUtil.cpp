@@ -18,10 +18,14 @@ ANativeActivity* FileCompatUtil::androidActivity = nullptr;
 
 std::string FileCompatUtil::resourceFilePath(std::string filePath)
 {
+#if IS_APPLE
     char resourceDir[PATH_MAX];
     fc_resdir(resourceDir, PATH_MAX);
     
     return std::string(resourceDir) + filePath;
+#else
+    return filePath;
+#endif
 }
 
 FILE* FileCompatUtil::openFile(std::string filePath, std::string mode)

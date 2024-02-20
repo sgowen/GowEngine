@@ -14,7 +14,7 @@ FileData FileAssetHandler::loadAsset(std::string filePath)
 {
     std::string resFilePath = RES_FILE_PATH(filePath);
     
-    FILE* stream = OPEN_FILE(resFilePath, "r");
+    FILE* stream = OPEN_FILE(resFilePath, "r+b");
     if (stream == nullptr)
     {
         EmbeddedAssetHandler& eah = EmbeddedAssetHandler::getInstance();
