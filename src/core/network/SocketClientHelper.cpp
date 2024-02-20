@@ -25,7 +25,7 @@ SocketClientHelper::~SocketClientHelper()
 {
     OutputMemoryBitStream packet(NW_MAX_PACKET_SIZE);
     packet.write(static_cast<uint8_t>(NWPT_CLNT_EXIT));
-    sendPacket(packet);
+    sendPacketToServer(packet);
     
     if (_serverAddress)
     {
@@ -68,7 +68,7 @@ void SocketClientHelper::handleUninitialized()
     updateState();
 }
 
-void SocketClientHelper::sendPacket(const OutputMemoryBitStream& inOutputStream)
+void SocketClientHelper::sendPacketToServer(const OutputMemoryBitStream& inOutputStream)
 {
     if (_serverAddress)
     {

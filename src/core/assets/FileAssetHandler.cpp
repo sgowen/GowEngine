@@ -1,22 +1,20 @@
 //
-//  LinuxAssetHandler.cpp
+//  FileAssetHandler.cpp
 //  GowEngine
 //
-//  Created by Stephen Gowen on 4/23/20.
+//  Created by Stephen Gowen on 2/20/24.
 //  Copyright © 2023 Stephen Gowen. All rights reserved.
 //
 
 #include <GowEngine/GowEngine.hpp>
 
-#if IS_ANDROID || IS_LINUX || IS_APPLE
-
-#include "file_compat.h"
-
 #include <fstream>
 
-FileData LinuxAssetHandler::loadAsset(std::string filePath)
+FileData FileAssetHandler::loadAsset(std::string filePath)
 {
-    FILE* stream = OPEN_FILE(filePath, "r");
+    std::string resFilePath = RES_FILE_PATH(filePath);
+    
+    FILE* stream = OPEN_FILE(resFilePath, "r");
     if (stream == nullptr)
     {
         EmbeddedAssetHandler& eah = EmbeddedAssetHandler::getInstance();
@@ -44,7 +42,7 @@ FileData LinuxAssetHandler::loadAsset(std::string filePath)
     return FileData(size, buffer, nullptr);
 }
 
-void LinuxAssetHandler::unloadAsset(const FileData& fileData)
+void FileAssetHandler::unloadAsset(const FileData& fileData)
 {
     if (fileData._fileHandle != nullptr)
     {
@@ -58,5 +56,3 @@ void LinuxAssetHandler::unloadAsset(const FileData& fileData)
 
     free((void*)fileData._data);
 }
-
-#endif /* IS_LINUX || IS_APPLE */

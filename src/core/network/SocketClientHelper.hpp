@@ -21,7 +21,7 @@ public:
     virtual int connect();
     virtual void processSpecialPacket(uint8_t packetType, InputMemoryBitStream& inInputStream, MachineAddress* inFromAddress);
     virtual void handleUninitialized();
-    virtual void sendPacket(const OutputMemoryBitStream& inOutputStream);
+    virtual void sendPacketToServer(const OutputMemoryBitStream& inOutputStream);
     virtual std::string& getName();
     
 private:

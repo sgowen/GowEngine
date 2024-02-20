@@ -31,7 +31,7 @@ static void onSurfaceCreated(GLFMDisplay *display, int width, int height)
     
 #if IS_ANDROID
     // TODO, is there a better way to set this?
-    FileUtil::androidActivity = static_cast<ANativeActivity *>(glfmGetAndroidActivity(display));
+    FileCompatUtil::androidActivity = static_cast<ANativeActivity *>(glfmGetAndroidActivity(display));
 #endif
 }
 

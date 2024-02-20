@@ -26,7 +26,7 @@ public:
     virtual void processSpecialPacket(uint8_t packetType, InputMemoryBitStream& inInputStream, MachineAddress* inFromAddress) = 0;
     
     virtual void processIncomingPackets();
-    virtual void sendPacket(const OutputMemoryBitStream& inOutputStream, MachineAddress* inFromAddress);
+    virtual void sendPacket(const OutputMemoryBitStream& inOutputStream, MachineAddress* toAddress);
     
     const MovingAverage& bytesReceivedPerSecond() const;
     const MovingAverage& bytesSentPerSecond() const;

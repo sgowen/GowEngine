@@ -31,6 +31,9 @@
 #include "deps/box2d/Box2DPhysicsRenderer.hpp"
 #include "deps/box2d/Box2DPhysicsWorld.hpp"
 
+/// deps/file-compat Implementation
+#include "deps/file-compat/FileCompatUtil.hpp"
+
 /// deps/libsndfile implementation
 #include "deps/libsndfile/SoundLoader.hpp"
 
@@ -57,22 +60,22 @@
 #include "deps/steamworks_sdk/SteamServerHelper.hpp"
 
 /// core/assets
-#include "core/assets/AppleAssetHandler.hpp"
-#include "core/assets/AppleBundleUtil.hpp"
+#include "core/assets/Animation.hpp"
 #include "core/assets/AssetHandler.hpp"
-#include "core/assets/AssetHandlerFactory.hpp"
 #include "core/assets/Assets.hpp"
 #include "core/assets/AssetsManager.hpp"
 #include "core/assets/EmbeddedAssetHandler.hpp"
+#include "core/assets/FileAssetHandler.hpp"
 #include "core/assets/FileData.hpp"
-#include "core/assets/FileUtil.hpp"
 #include "core/assets/Font.hpp"
-#include "core/assets/LinuxAssetHandler.hpp"
+#include "core/assets/ImageView.hpp"
 #include "core/assets/MatrixDescriptor.hpp"
 #include "core/assets/ShaderDescriptor.hpp"
 #include "core/assets/ShaderLoader.hpp"
 #include "core/assets/SoundDescriptor.hpp"
 #include "core/assets/TextureDescriptor.hpp"
+#include "core/assets/TextureRegion.hpp"
+#include "core/assets/TextView.hpp"
 
 /// core/common
 #include "core/common/Config.hpp"
@@ -170,7 +173,6 @@
 #include "core/openal/SoundManager.hpp"
 
 /// core/opengl
-#include "core/opengl/Animation.hpp"
 #include "core/opengl/CircleBatcher.hpp"
 #include "core/opengl/Color.hpp"
 #include "core/opengl/FontBatcher.hpp"
@@ -190,10 +192,8 @@
 #include "core/opengl/ShaderUniform.hpp"
 #include "core/opengl/ShockwaveRenderer.hpp"
 #include "core/opengl/SpriteBatcher.hpp"
-#include "core/opengl/TextView.hpp"
 #include "core/opengl/Texture.hpp"
 #include "core/opengl/TextureManager.hpp"
-#include "core/opengl/TextureRegion.hpp"
 #include "core/opengl/TriangleBatcher.hpp"
 
 /// core/physics

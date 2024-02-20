@@ -99,7 +99,9 @@ void EntityLayoutManagerLoader::loadEntityLayout(EntityLayoutDef& eld, EntityIDM
 
 void EntityLayoutManagerLoader::saveEntityLayout(EntityLayoutDef& eld)
 {
-    FILE* file = OPEN_FILE(eld._filePath.c_str(), "w+");
+    std::string resFilePath = RES_FILE_PATH(eld._filePath);
+    
+    FILE* file = OPEN_FILE(resFilePath, "w+");
     if (file == nullptr)
     {
         return;

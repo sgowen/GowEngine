@@ -23,9 +23,9 @@ void NetworkHelper::processIncomingPackets()
     _packetHandler->processIncomingPackets();
 }
 
-void NetworkHelper::sendPacket(const OutputMemoryBitStream& inOutputStream, MachineAddress* inFromAddress)
+void NetworkHelper::sendPacket(const OutputMemoryBitStream& inOutputStream, MachineAddress* toAddress)
 {
-    _packetHandler->sendPacket(inOutputStream, inFromAddress);
+    _packetHandler->sendPacket(inOutputStream, toAddress);
 }
 
 const MovingAverage& NetworkHelper::bytesReceivedPerSecond() const

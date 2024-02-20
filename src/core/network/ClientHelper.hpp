@@ -24,7 +24,7 @@ public:
     
     virtual int connect() = 0;
     virtual void handleUninitialized() = 0;
-    virtual void sendPacket(const OutputMemoryBitStream& inOutputStream) = 0;
+    virtual void sendPacketToServer(const OutputMemoryBitStream& inOutputStream) = 0;
     virtual std::string& getName() = 0;
     
     int getState();
