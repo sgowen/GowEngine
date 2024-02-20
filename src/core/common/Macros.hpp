@@ -58,9 +58,6 @@
 /// Miscellaneous
 #define UNUSED(x) (void)(x)
 #define BUFFER_OFFSET(i) ((void*)(i))
-#ifndef ARRAYSIZE
-#define ARRAYSIZE(x) (sizeof(x) / sizeof(x[0]))
-#endif
 
 /// EntityController
 #define DECL_EntityController_create          \
