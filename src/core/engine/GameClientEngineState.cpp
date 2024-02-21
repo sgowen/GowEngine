@@ -245,17 +245,15 @@ uint64_t cb_steam_getPlayerAddressHash(uint8_t inPlayerIndex)
 {
     uint64_t ret = 0;
     
-    World& world = ENGINE_STATE_GAME_CLNT.world();
+    std::map<uint8_t, Entity::PlayerInfo>& players = ENGINE_STATE_GAME_CLNT.players();
     
     uint8_t playerID = inPlayerIndex + 1;
     
-    for (Entity* e : world.getPlayers())
+    auto q = players.find(playerID);
+    if (q != players.end())
     {
-        if (e->playerInfo()._playerID == playerID)
-        {
-            ret = e->playerInfo()._playerAddressHash;
-            break;
-        }
+        Entity::PlayerInfo& playerInfo = q->second;
+        ret = playerInfo._playerAddressHash;
     }
     
     return ret;
@@ -265,8 +263,10 @@ void cb_client_onEntityRegistered(Entity* e)
 {
     ENGINE_STATE_GAME_CLNT.world().addNetworkEntity(e);
     
-    // TODO, check if the entity is a player, if so, grab its _playerAddressHash and
-    // store it here, so that the steam auth check doesn't fail during host player respawn
+    if (e->isPlayer())
+    {
+        ENGINE_STATE_GAME_CLNT.players().insert({e->playerInfo()._playerID, e->playerInfo()});
+    }
 }
 
 void cb_client_onEntityDeregistered(Entity* e)
@@ -466,6 +466,11 @@ Entity* GameClientEngineState::getControlledPlayer()
 GameInputProcessor& GameClientEngineState::input()
 {
     return _inputProcessor;
+}
+
+std::map<uint8_t, Entity::PlayerInfo>& GameClientEngineState::players()
+{
+    return _players;
 }
 
 World& GameClientEngineState::world()

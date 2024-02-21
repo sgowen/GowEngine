@@ -13,6 +13,7 @@
 #include "core/input/InputState.hpp"
 #include "core/network/MoveList.hpp"
 #include "core/entity/EntityIDManager.hpp"
+#include "core/entity/Entity.hpp"
 
 enum GameInputProcessorState
 {
@@ -70,11 +71,13 @@ public:
     Entity* getPlayer(uint8_t playerID);
     Entity* getControlledPlayer();
     GameInputProcessor& input();
+    std::map<uint8_t, Entity::PlayerInfo>& players();
     World& world();
     
 private:
     EntityIDManager _entityIDManager;
     TimeTracker _timeTracker;
+    std::map<uint8_t, Entity::PlayerInfo> _players;
     World* _world;
     GameInputProcessor _inputProcessor;
     int _numMovesToReprocess;
