@@ -13,8 +13,13 @@
 FileData FileAssetHandler::loadAsset(std::string filePath)
 {
     std::string resFilePath = RES_FILE_PATH(filePath);
+    std::string fileMode = "r";
     
-    FILE* stream = OPEN_FILE(resFilePath, "r+b");
+#if IS_WINDOWS
+    fileMode += "+b";
+#endif
+    
+    FILE* stream = OPEN_FILE(resFilePath, fileMode);
     if (stream == nullptr)
     {
         EmbeddedAssetHandler& eah = EmbeddedAssetHandler::getInstance();
