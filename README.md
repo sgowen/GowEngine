@@ -24,7 +24,9 @@ A basic no nonsense LGPL 2.1 licensed portable C++ 2D game engine
 ## Dependencies
 * [bin_to_c](https://github.com/sgowen/bin_to_c): converts files to binary for embedding inside GowEngine
 * [box2d](https://github.com/erincatto/box2d): handles physics (optional)
-* [glfw](https://github.com/glfw/glfw): creates window and OpenGL context and handles input on macOS, Linux, and Windows
+* [file-compat](https://github.com/brackeen/file-compat): implements fopen for Android and Windows  
+* [glfm](https://github.com/brackeen/glfm): creates window and OpenGL context and handles input on Android and iOS
+* [glfw](https://github.com/glfw/glfw): creates window and OpenGL context and handles input on Linux, macOS, and Windows
 * [ios-cmake](https://github.com/leetal/ios-cmake): handles cmake stuff for iOS and macOS
 * [libsndfile](https://github.com/libsndfile/libsndfile): loads sounds
 * [openal-soft](https://github.com/kcat/openal-soft): renders audio

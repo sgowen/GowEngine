@@ -117,7 +117,8 @@ GameInputProcessorState GameInputProcessor::update()
         switch (e->_key)
         {
             case GOW_KEY_ESCAPE:
-                _state = e->isDown() ? GIMS_EXIT : GIMS_DEFAULT;
+            case GOW_KEY_ANDROID_BACK_BUTTON:
+                _state = e->isUp() ? GIMS_EXIT : GIMS_DEFAULT;
                 break;
             case GOW_KEY_P:
                 if (e->isDown())
@@ -263,6 +264,9 @@ uint64_t cb_steam_getPlayerAddressHash(uint8_t inPlayerIndex)
 void cb_client_onEntityRegistered(Entity* e)
 {
     ENGINE_STATE_GAME_CLNT.world().addNetworkEntity(e);
+    
+    // TODO, check if the entity is a player, if so, grab its _playerAddressHash and
+    // store it here, so that the steam auth check doesn't fail during host player respawn
 }
 
 void cb_client_onEntityDeregistered(Entity* e)

@@ -34,12 +34,12 @@ public:
     SteamP2PAuth(NetworkHelper* networkHelper);
     ~SteamP2PAuth();
 
-    void playerDisconnect(uint8 iSlot);
+    void playerDisconnect(uint8_t iSlot);
     void endGame();
-    void startAuthPlayer(uint8 iSlot, CSteamID steamID);
-    void registerPlayer(uint8 iSlot, CSteamID steamID);
-    bool handleMessage(uint8 packetType, InputMemoryBitStream& inInputStream);
-    void internalinitPlayer(uint8 iSlot, CSteamID steamID, bool bStartAuthProcess);
+    void startAuthPlayer(uint8_t iSlot, CSteamID steamID);
+    void registerPlayer(uint8_t iSlot, CSteamID steamID);
+    bool handleMessage(uint8_t packetType, InputMemoryBitStream& inInputStream);
+    void internalinitPlayer(uint8_t iSlot, CSteamID steamID, bool bStartAuthProcess);
     
 private:
     NetworkHelper* _networkHelper;
@@ -69,10 +69,10 @@ private:
 	float _connectTime;
 	float _ticketTime;
 	float _answerTime;
-	uint32 _cubTicketIGaveThisUser;
-	uint8 _rgubTicketIGaveThisUser[1024];
-	uint32 _cubTicketHeGaveMe;
-	uint8 _rgubTicketHeGaveMe[1024];
+	uint32_t _cubTicketIGaveThisUser;
+	uint8_t _rgubTicketIGaveThisUser[1024];
+	uint32_t _cubTicketHeGaveMe;
+	uint8_t _rgubTicketHeGaveMe[1024];
 	HAuthTicket _hAuthTicketIGaveThisUser;
 	EBeginAuthSessionResult _eBeginAuthSessionResult;
 	EAuthSessionResponse _eAuthSessionResponse;
@@ -86,7 +86,7 @@ public:
 	SteamP2PNetworkTransport();
     ~SteamP2PNetworkTransport();
 
-	void sendTicket(NetworkHelper* networkHelper, CSteamID steamIDFrom, CSteamID steamIDTo, uint32 cubTicket, uint8 *pubTicket);
+	void sendTicket(NetworkHelper* networkHelper, CSteamID steamIDFrom, CSteamID steamIDTo, uint32_t cubTicket, uint8_t *pubTicket);
 	void closeConnection(CSteamID steamID);
 
 	STEAM_CALLBACK(SteamP2PNetworkTransport, onP2PSessionRequest, P2PSessionRequest_t, _CallbackP2PSessionRequest);
@@ -101,18 +101,18 @@ class MsgP2PSendingTicket
 public:
     MsgP2PSendingTicket();
 
-    uint8 getMessageType();
-    void setToken(const char *pchToken, uint32 unLen);
-    uint32 getTokenLen();
+    uint8_t getMessageType();
+    void setToken(const char *pchToken, uint32_t unLen);
+    uint32_t getTokenLen();
     const char* getTokenPtr();
-    void setSteamID(uint64 ulSteamID);
-    uint64 getSteamID();
+    void setSteamID(uint64_t ulSteamID);
+    uint64_t getSteamID();
 
 private:
-    const uint8 _messageType;
-    uint32 _uTokenLen;
+    const uint8_t _messageType;
+    uint32_t _uTokenLen;
     char _rgchToken[1024];
-    uint64 _ulSteamID;
+    uint64_t _ulSteamID;
 };
 
 #endif /* IS_DESKTOP */

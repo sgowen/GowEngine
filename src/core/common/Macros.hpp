@@ -28,7 +28,7 @@
 #define NBITS(n)   (n==0?0:NBITS32(n)+1)
 
 /// Handy singleton accessors
-#define ASSET_HANDLER AssetHandlerFactory::getInstance()
+#define ASSET_HANDLER FileAssetHandler::getInstance()
 #define ASSETS_MGR AssetsManager::getInstance()
 #define AUDIO_ENGINE AudioEngine::getInstance()
 #define FPS_UTIL FPSUtil::getInstance()
@@ -50,16 +50,14 @@
 #define SOCKET_UTIL SocketUtil::getInstance()
 
 /// Handy static functions
-#define OPEN_FILE(filePath, mode) FileUtil::openFile(filePath, mode)
+#define RES_FILE_PATH(filePath) FileCompatUtil::resourceFilePath(filePath)
+#define OPEN_FILE(filePath, mode) FileCompatUtil::openFile(filePath, mode)
 #define LOG(...) Logger::getInstance().log(__VA_ARGS__)
 #define STRING_FORMAT(...) StringUtil::format(__VA_ARGS__)
 
 /// Miscellaneous
 #define UNUSED(x) (void)(x)
 #define BUFFER_OFFSET(i) ((void*)(i))
-#ifndef ARRAYSIZE
-#define ARRAYSIZE(x) (sizeof(x) / sizeof(x[0]))
-#endif
 
 /// EntityController
 #define DECL_EntityController_create          \

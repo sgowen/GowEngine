@@ -37,7 +37,7 @@ SteamClientHelper::~SteamClientHelper()
 
     OutputMemoryBitStream packet(NW_MAX_PACKET_SIZE);
     packet.write(static_cast<uint8_t>(k_EMsgClientLeavingServer));
-    sendPacket(packet);
+    sendPacketToServer(packet);
 
     _steamP2PAuth->endGame();
 
@@ -170,14 +170,14 @@ void SteamClientHelper::processSpecialPacket(uint8_t packetType, InputMemoryBitS
             {
                 if (_eConnectedStatus == k_EClientNotConnected)
                 {
-                    uint64 steamIDGameServer;
+                    uint64_t steamIDGameServer;
                     bool bVACSecure;
                     std::string serverName;
                     inInputStream.read(steamIDGameServer);
                     inInputStream.read(bVACSecure);
                     inInputStream.readLarge(serverName);
 
-                    onReceiveServerInfo(CSteamID(steamIDGameServer), bVACSecure, serverName.c_str());
+                    onReceiveServerInfo(CSteamID((uint64)steamIDGameServer), bVACSecure, serverName.c_str());
                 }
             }
                 break;
@@ -216,7 +216,7 @@ void SteamClientHelper::handleUninitialized()
         {
             OutputMemoryBitStream packet(NW_MAX_PACKET_SIZE);
             packet.write(static_cast<uint8_t>(k_EMsgClientInitiateConnection));
-            sendPacket(packet);
+            sendPacketToServer(packet);
         }
             break;
         case k_EClientConnectedPendingAuthentication:
@@ -242,7 +242,7 @@ void SteamClientHelper::handleUninitialized()
                 packet.write(static_cast<uint8_t>(k_EMsgClientBeginAuthentication));
                 packet.write(unTokenLen);
                 packet.writeBytes(rgchToken, unTokenLen);
-                sendPacket(packet);
+                sendPacketToServer(packet);
 
                 _timeOfLastMsgClientBeginAuthentication = time;
             }
@@ -255,7 +255,7 @@ void SteamClientHelper::handleUninitialized()
     updateState();
 }
 
-void SteamClientHelper::sendPacket(const OutputMemoryBitStream& inOutputStream)
+void SteamClientHelper::sendPacketToServer(const OutputMemoryBitStream& inOutputStream)
 {
     NetworkHelper::sendPacket(inOutputStream, _serverSteamAddress);
 }

@@ -216,14 +216,14 @@ uint32_t NetworkClient::getNumMovesProcessed()
     return _numMovesProcessed;
 }
 
-void NetworkClient::sendPacket(const OutputMemoryBitStream& ombs)
+void NetworkClient::sendPacketToServer(const OutputMemoryBitStream& ombs)
 {
     if (ENGINE_CFG.networkLoggingEnabled())
     {
         LOG("Client    sendPacket bit length: %d", ombs.getBitLength());
     }
     
-    _clientHelper->sendPacket(ombs);
+    _clientHelper->sendPacketToServer(ombs);
 }
 
 void NetworkClient::updateSayingHello()
@@ -237,7 +237,7 @@ void NetworkClient::updateSayingHello()
         OutputMemoryBitStream ombs(64);
         ombs.writeBits(static_cast<uint8_t>(NWPT_HELLO), 4);
         ombs.writeSmall(getPlayerName());
-        sendPacket(ombs);
+        sendPacketToServer(ombs);
         
         _timeOfLastHello = time;
     }
@@ -367,7 +367,7 @@ void NetworkClient::updateSendingInputPacket(MoveList& ml)
         assert(moveCountWritten == moveCount);
     }
     
-    sendPacket(ombs);
+    sendPacketToServer(ombs);
 }
 
 void NetworkClient::updateAddLocalPlayerRequest()
@@ -384,7 +384,7 @@ void NetworkClient::updateAddLocalPlayerRequest()
         OutputMemoryBitStream ombs(2);
         ombs.writeBits(static_cast<uint8_t>(NWPT_ADD_LOCAL_PLAYER), 4);
         ombs.write(_nextIndex);
-        sendPacket(ombs);
+        sendPacketToServer(ombs);
         
         _timeOfLastHello = time;
     }
@@ -402,7 +402,7 @@ void NetworkClient::updateDropLocalPlayerRequest()
     OutputMemoryBitStream ombs(1);
     ombs.writeBits(static_cast<uint8_t>(NWPT_DROP_LOCAL_PLAYER), 4);
     ombs.write(_isRequestingToDropLocalPlayer);
-    sendPacket(ombs);
+    sendPacketToServer(ombs);
     
     _isRequestingToDropLocalPlayer = 0;
 }
@@ -450,7 +450,7 @@ NetworkClient::~NetworkClient()
     
     OutputMemoryBitStream ombs(1);
     ombs.writeBits(static_cast<uint8_t>(NWPT_CLNT_EXIT), 4);
-    sendPacket(ombs);
+    sendPacketToServer(ombs);
     
     _deliveryNotificationManager.logStats();
     

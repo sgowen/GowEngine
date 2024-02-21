@@ -13,7 +13,7 @@
 
 #include "SpriteBatcher.hpp"
 #include "ShaderInput.hpp"
-#include "TextView.hpp"
+#include "core/assets/TextView.hpp"
 #include "ShaderInput.hpp"
 #include "Color.hpp"
 

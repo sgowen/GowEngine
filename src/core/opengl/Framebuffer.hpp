@@ -20,7 +20,11 @@ public:
     uint32_t _texture;
     uint32_t _fbo;
 
-    Framebuffer(uint16_t width, uint16_t height, std::string filterMin = "SMOOTH", std::string filterMag = "SMOOTH");
+    Framebuffer(uint16_t width, 
+                uint16_t height,
+                std::string filterMin = "SMOOTH",
+                std::string filterMag = "SMOOTH");
+    
     void createDeviceDependentResources();
     void destroyDeviceDependentResources();
 };

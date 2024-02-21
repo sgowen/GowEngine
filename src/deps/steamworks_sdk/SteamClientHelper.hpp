@@ -37,7 +37,7 @@ public:
                                       InputMemoryBitStream& inInputStream,
                                       MachineAddress* inFromAddress);
     virtual void handleUninitialized();
-    virtual void sendPacket(const OutputMemoryBitStream& inOutputStream);
+    virtual void sendPacketToServer(const OutputMemoryBitStream& inOutputStream);
     virtual std::string& getName();
     
 private:

@@ -80,7 +80,7 @@ private:
     bool _hasReceivedNewState;
     uint32_t _numMovesProcessed;
     
-    void sendPacket(const OutputMemoryBitStream& ombs);
+    void sendPacketToServer(const OutputMemoryBitStream& ombs);
     void updateSayingHello();
     void handleWelcomePacket(InputMemoryBitStream& imbs);
     void handleLocalPlayerAddedPacket(InputMemoryBitStream& imbs);

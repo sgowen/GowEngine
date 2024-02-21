@@ -282,6 +282,7 @@ int main(int argc, char *argv[])
     window = glfwCreateWindow(width, height, ENGINE_CFG.title().c_str(), monitor, nullptr);
     if (window == nullptr)
     {
+        LOG("window is null, terminating...");
         glfwTerminate();
         exit(EXIT_FAILURE);
     }
@@ -314,8 +315,8 @@ int main(int argc, char *argv[])
     glfwSetTime(0.0);
 
     double lastTime = glfwGetTime();
-    int lastKnownWidth = width;
-    int lastKnownHeight = height;
+    int lastKnownWidth = 0;
+    int lastKnownHeight = 0;
     
     while (!glfwWindowShouldClose(window))
     {

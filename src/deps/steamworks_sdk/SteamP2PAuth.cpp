@@ -15,13 +15,13 @@ _networkHelper(networkHelper),
 _networkTransport(new SteamP2PNetworkTransport())
 {
     // no players yet
-	for (uint8 i = 0; i < MAX_NUM_PLAYERS; ++i)
+	for (uint8_t i = 0; i < MAX_NUM_PLAYERS; ++i)
 	{
 		_rgpP2PAuthPlayer[i] = nullptr;
 	}
 
 	// no queued messages
-	for (uint8 i = 0; i < MAX_NUM_PLAYERS; ++i)
+	for (uint8_t i = 0; i < MAX_NUM_PLAYERS; ++i)
 	{
 		_rgpQueuedMessage[i] = nullptr;
 	}
@@ -32,7 +32,7 @@ SteamP2PAuth::~SteamP2PAuth()
     delete _networkTransport;
 }
 
-void SteamP2PAuth::playerDisconnect(uint8 iSlot)
+void SteamP2PAuth::playerDisconnect(uint8_t iSlot)
 {
 	if (_rgpP2PAuthPlayer[iSlot])
 	{
@@ -56,7 +56,7 @@ void SteamP2PAuth::endGame()
 	}
 }
 
-void SteamP2PAuth::internalinitPlayer(uint8 iSlot, CSteamID steamID, bool bStartAuthProcess)
+void SteamP2PAuth::internalinitPlayer(uint8_t iSlot, CSteamID steamID, bool bStartAuthProcess)
 {
 	LOG("P2P:: startAuthPlayer slot=%d account=%d \n", iSlot, steamID.GetAccountID());
 	_rgpP2PAuthPlayer[iSlot] = new SteamP2PAuthPlayer(_networkHelper, _networkTransport);
@@ -67,7 +67,7 @@ void SteamP2PAuth::internalinitPlayer(uint8 iSlot, CSteamID steamID, bool bStart
     }
 
 	// check our queued messages list to see if this guys ticket message arrived before we noticed him
-	for (uint8 i = 0; i < MAX_NUM_PLAYERS; ++i)
+	for (uint8_t i = 0; i < MAX_NUM_PLAYERS; ++i)
 	{
 		if (_rgpQueuedMessage[i] != nullptr)
 		{
@@ -81,7 +81,7 @@ void SteamP2PAuth::internalinitPlayer(uint8 iSlot, CSteamID steamID, bool bStart
 	}
 }
 
-void SteamP2PAuth::registerPlayer(uint8 iSlot, CSteamID steamID)
+void SteamP2PAuth::registerPlayer(uint8_t iSlot, CSteamID steamID)
 {
 	if (iSlot < MAX_NUM_PLAYERS)
     {
@@ -89,7 +89,7 @@ void SteamP2PAuth::registerPlayer(uint8 iSlot, CSteamID steamID)
     }
 }
 
-void SteamP2PAuth::startAuthPlayer(uint8 iSlot, CSteamID steamID)
+void SteamP2PAuth::startAuthPlayer(uint8_t iSlot, CSteamID steamID)
 {
 	if (iSlot < MAX_NUM_PLAYERS)
     {
@@ -97,17 +97,17 @@ void SteamP2PAuth::startAuthPlayer(uint8 iSlot, CSteamID steamID)
     }
 }
 
-bool SteamP2PAuth::handleMessage(uint8 packetType, InputMemoryBitStream& inInputStream)
+bool SteamP2PAuth::handleMessage(uint8_t packetType, InputMemoryBitStream& inInputStream)
 {
 	switch (packetType)
 	{
 		// message from another player providing his ticket
         case k_EMsgP2PSendingTicket:
         {
-            uint64 steamID;
+            uint64_t steamID;
             inInputStream.read(steamID);
 
-            uint32 uTokenLen;
+            uint32_t uTokenLen;
             inInputStream.read(uTokenLen);
 
             char token[1024];
@@ -314,7 +314,7 @@ SteamP2PNetworkTransport::~SteamP2PNetworkTransport()
     delete _outgoingPacketAddress;
 }
 
-void SteamP2PNetworkTransport::sendTicket(NetworkHelper* networkHelper, CSteamID steamIDFrom, CSteamID steamIDTo, uint32 cubTicket, uint8 *pubTicket)
+void SteamP2PNetworkTransport::sendTicket(NetworkHelper* networkHelper, CSteamID steamIDFrom, CSteamID steamIDTo, uint32_t cubTicket, uint8_t *pubTicket)
 {
     MsgP2PSendingTicket msg;
     msg.setToken((char *)pubTicket, cubTicket);
@@ -355,19 +355,19 @@ MsgP2PSendingTicket::MsgP2PSendingTicket() : _messageType(k_EMsgP2PSendingTicket
     // Empty
 }
 
-uint8 MsgP2PSendingTicket::getMessageType()
+uint8_t MsgP2PSendingTicket::getMessageType()
 {
     return _messageType;
 }
 
-void MsgP2PSendingTicket::setToken(const char *pchToken, uint32 unLen)
+void MsgP2PSendingTicket::setToken(const char *pchToken, uint32_t unLen)
 {
     _uTokenLen = unLen;
 
     memcpy(_rgchToken, pchToken, GOW_MIN(unLen, sizeof(_rgchToken)));
 }
 
-uint32 MsgP2PSendingTicket::getTokenLen()
+uint32_t MsgP2PSendingTicket::getTokenLen()
 {
     return _uTokenLen;
 }
@@ -377,12 +377,12 @@ const char* MsgP2PSendingTicket::getTokenPtr()
     return _rgchToken;
 }
 
-void MsgP2PSendingTicket::setSteamID(uint64 ulSteamID)
+void MsgP2PSendingTicket::setSteamID(uint64_t ulSteamID)
 {
     _ulSteamID = ulSteamID;
 }
 
-uint64 MsgP2PSendingTicket::getSteamID()
+uint64_t MsgP2PSendingTicket::getSteamID()
 {
     return _ulSteamID;
 }

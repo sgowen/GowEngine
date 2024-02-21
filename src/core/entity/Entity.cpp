@@ -11,10 +11,10 @@
 Entity::Entity(EntityDef ed, EntityInstanceDef eid) :
 _entityDef(ed),
 _entityInstanceDef(eid),
-_controller(ENTITY_MGR.createEntityController(ed, this)),
-_networkController(ENTITY_MGR.createEntityNetworkController(ed, this)),
+_controller(nullptr),
+_networkController(nullptr),
 _physicsController(nullptr),
-_renderController(ENTITY_MGR.createEntityRenderController(ed, this)),
+_renderController(nullptr),
 _pose(eid._x + ed._width / 2.0f, eid._y + ed._height / 2.0f),
 _state(),
 _playerInfo(),
@@ -24,7 +24,9 @@ _height(ed._height),
 _angle(0),
 _world(nullptr)
 {
-    // Empty
+    _controller = ENTITY_MGR.createEntityController(ed, this);
+    _networkController = ENTITY_MGR.createEntityNetworkController(ed, this);
+    _renderController = ENTITY_MGR.createEntityRenderController(ed, this);
 }
 
 Entity::~Entity()

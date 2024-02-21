@@ -8,8 +8,8 @@
 
 #pragma once
 
-#include "core/opengl/TextureRegion.hpp"
-#include "core/opengl/Animation.hpp"
+#include "core/assets/TextureRegion.hpp"
+#include "core/assets/Animation.hpp"
 
 #include <map>
 #include <string>
