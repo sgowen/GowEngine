@@ -68,9 +68,12 @@ static void onDraw(GLFMDisplay *display)
     double deltaTime = timeNow - lastTime;
     lastTime = timeNow;
     _engine->update(deltaTime);
-    _engine->render();
-
-    glfmSwapBuffers(display);
+    
+    if (_engine->hasUpdatedSinceLastRender())
+    {
+        _engine->render();
+        glfmSwapBuffers(display);
+    }
 }
 
 static bool onTouch(GLFMDisplay *display, int touch, GLFMTouchPhase phase, double x, double y)
