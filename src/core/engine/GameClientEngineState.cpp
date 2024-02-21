@@ -376,16 +376,30 @@ void GameClientEngineState::onRender(Renderer& r, double extrapolation)
     r.renderParallaxLayers(world().getLayers(), "background_mid");
     r.renderParallaxLayers(world().getLayers(), "background_lower");
     
-    // TODO FIXME
-    // Obviously, this is prone to error
+    std::vector<Entity*> platformingEntities;
+    r.spriteBatcherBegin();
     for (Entity* e : world().getStaticEntities())
     {
-        r.spriteBatcherBegin();
-        r.spriteBatcherAddEntity(e);
+        // TODO, this isn't the best code you know
         std::string name = e->entityDef()._keyName;
-        std::string texture = name == "P001" || name == "P002" || name == "P003"|| name == "P004" ? "platforming_1" : "ground";
-        r.spriteBatcherEnd(texture);
+        bool isPlatformingEntity = name == "P001" || name == "P002" || name == "P003"|| name == "P004";
+        if (isPlatformingEntity)
+        {
+            platformingEntities.push_back(e);
+        }
+        else
+        {
+            r.spriteBatcherAddEntity(e);
+        }
     }
+    r.spriteBatcherEnd("ground");
+    
+    r.spriteBatcherBegin();
+    for (Entity* e : platformingEntities)
+    {
+        r.spriteBatcherAddEntity(e);
+    }
+    r.spriteBatcherEnd("platforming_1");
     
     if (_args.getBool(ARG_OFFLINE_MODE, false))
     {
