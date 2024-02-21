@@ -100,8 +100,15 @@ static bool onTouch(GLFMDisplay *display, int touch, GLFMTouchPhase phase, doubl
     }
 }
 
+static bool onKey(GLFMDisplay *display, GLFMKeyCode keyCode, GLFMKeyAction action, int modifiers)
+{
+    _engine->onKeyboardInput(keyCode, action == GLFMKeyActionReleased);
+    return true;
+}
+
 void glfmMain(GLFMDisplay *display)
 {
+    glfmSetDisplayChrome(display, GLFMUserInterfaceChromeNone);
     glfmSetDisplayConfig(
             display,
             GLFMRenderingAPIOpenGLES2,
@@ -114,6 +121,7 @@ void glfmMain(GLFMDisplay *display)
     glfmSetRenderFunc(display, onDraw);
     glfmSetMultitouchEnabled(display, true);
     glfmSetTouchFunc(display, onTouch);
+    glfmSetKeyFunc(display, onKey);
 }
 
 #endif /* IS_MOBILE */

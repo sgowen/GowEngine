@@ -245,6 +245,7 @@ _matrix(nullptr)
     _supportedKeys.push_back(GOW_KEY_BACK_SPACE);
     _supportedKeys.push_back(GOW_KEY_CARRIAGE_RETURN);
     _supportedKeys.push_back(GOW_KEY_ESCAPE);
+    _supportedKeys.push_back(GOW_KEY_ANDROID_BACK_BUTTON);
     _supportedKeys.push_back(GOW_KEY_CTRL);
     _supportedKeys.push_back(GOW_KEY_CMD);
     _supportedKeys.push_back(GOW_KEY_DELETE);

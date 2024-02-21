@@ -51,6 +51,7 @@ uint8_t InputProcessor::update()
             switch (e->_key)
             {
                 case GOW_KEY_ESCAPE:
+                case GOW_KEY_ANDROID_BACK_BUTTON:
                     return IPS_EXIT;
                 default:
                     continue;

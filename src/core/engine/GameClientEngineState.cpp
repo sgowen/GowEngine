@@ -117,7 +117,8 @@ GameInputProcessorState GameInputProcessor::update()
         switch (e->_key)
         {
             case GOW_KEY_ESCAPE:
-                _state = e->isDown() ? GIMS_EXIT : GIMS_DEFAULT;
+            case GOW_KEY_ANDROID_BACK_BUTTON:
+                _state = e->isUp() ? GIMS_EXIT : GIMS_DEFAULT;
                 break;
             case GOW_KEY_P:
                 if (e->isDown())
