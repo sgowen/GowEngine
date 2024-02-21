@@ -138,7 +138,8 @@ void SteamServerHelper::processSpecialPacket(uint8_t packetType, InputMemoryBitS
             // TODO
             OutputMemoryBitStream packet(NW_MAX_PACKET_SIZE);
             packet.write(static_cast<uint8_t>(k_EMsgServerSendInfo));
-            packet.write(SteamGameServer()->GetSteamID().ConvertToUint64());
+            uint64_t steamIDGameServer = (uint64_t) SteamGameServer()->GetSteamID().ConvertToUint64();
+            packet.write(steamIDGameServer);
             // You can only make use of VAC when using the Steam authentication system
             packet.write(SteamGameServer()->BSecure());
             packet.writeLarge(_serverName);

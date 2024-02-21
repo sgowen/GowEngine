@@ -170,14 +170,14 @@ void SteamClientHelper::processSpecialPacket(uint8_t packetType, InputMemoryBitS
             {
                 if (_eConnectedStatus == k_EClientNotConnected)
                 {
-                    uint64 steamIDGameServer;
+                    uint64_t steamIDGameServer;
                     bool bVACSecure;
                     std::string serverName;
                     inInputStream.read(steamIDGameServer);
                     inInputStream.read(bVACSecure);
                     inInputStream.readLarge(serverName);
 
-                    onReceiveServerInfo(CSteamID(steamIDGameServer), bVACSecure, serverName.c_str());
+                    onReceiveServerInfo(CSteamID((uint64)steamIDGameServer), bVACSecure, serverName.c_str());
                 }
             }
                 break;
