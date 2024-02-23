@@ -19,7 +19,7 @@ _cursorWidth(0),
 _cursorHeight(0),
 _hasUpdatedSinceLastRender(false)
 {
-    EngineConfig::create("data/json/Engine/Config.json");
+    EngineConfig::create("engine/json/Config.json");
     
     if (ENGINE_CFG.fileLoggingEnabled())
     {
@@ -28,7 +28,7 @@ _hasUpdatedSinceLastRender(false)
     }
     
     Assets assets;
-    AssetsLoader::initWithJSONFile(assets, "data/json/Engine/Assets.json");
+    AssetsLoader::initWithJSONFile(assets, "engine/json/Assets.json");
     ASSETS_MGR.registerAssets(ENGINE_ASSETS, assets);
 }
 

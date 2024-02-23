@@ -814,7 +814,7 @@ void GameClientEngineState::renderWithNetwork(Renderer& r)
             std::string textureForRegionKey = ASSETS_MGR.textureForRegionKey(textureRegionKey);
             r.spriteBatcherEnd(textureForRegionKey, "main", "sprite", "main", Color::BLUE);
             
-            PlayerController* player = player4->controller<PlayerController>();
+            JonController* player = player4->controller<JonController>();
             isReleasingShockwavePlayer4 = player->isReleasingShockwave();
             isVampirePlayer4 = player->isVampire();
             shockwaveStateTimePlayer4 = player->shockwaveStateTime();
@@ -859,7 +859,7 @@ void GameClientEngineState::renderWithNetwork(Renderer& r)
             std::string textureForRegionKey = ASSETS_MGR.textureForRegionKey(textureRegionKey);
             r.spriteBatcherEnd(textureForRegionKey, "main", "sprite", "main", Color::GREEN);
             
-            PlayerController* player = player3->controller<PlayerController>();
+            JonController* player = player3->controller<JonController>();
             isReleasingShockwavePlayer3 = player->isReleasingShockwave();
             isVampirePlayer3 = player->isVampire();
             shockwaveStateTimePlayer3 = player->shockwaveStateTime();
@@ -904,7 +904,7 @@ void GameClientEngineState::renderWithNetwork(Renderer& r)
             std::string textureForRegionKey = ASSETS_MGR.textureForRegionKey(textureRegionKey);
             r.spriteBatcherEnd(textureForRegionKey, "main", "sprite", "main", Color::RED);
             
-            PlayerController* player = player2->controller<PlayerController>();
+            JonController* player = player2->controller<JonController>();
             isReleasingShockwavePlayer2 = player->isReleasingShockwave();
             isVampirePlayer2 = player->isVampire();
             shockwaveStateTimePlayer2 = player->shockwaveStateTime();
@@ -941,7 +941,7 @@ void GameClientEngineState::renderWithNetwork(Renderer& r)
             std::string textureForRegionKey = ASSETS_MGR.textureForRegionKey(textureRegionKey);
             r.spriteBatcherEnd(textureForRegionKey);
             
-            PlayerController* player = player1->controller<PlayerController>();
+            JonController* player = player1->controller<JonController>();
             isReleasingShockwavePlayer1 = player->isReleasingShockwave();
             isVampirePlayer1 = player->isVampire();
             shockwaveStateTimePlayer1 = player->shockwaveStateTime();
@@ -988,7 +988,7 @@ void GameClientEngineState::renderOffline(Renderer& r)
         std::string textureForRegionKey = ASSETS_MGR.textureForRegionKey(textureRegionKey);
         r.spriteBatcherEnd(textureForRegionKey);
         
-        PlayerController* player = player1->controller<PlayerController>();
+        JonController* player = player1->controller<JonController>();
         isReleasingShockwavePlayer1 = player->isReleasingShockwave();
         isVampirePlayer1 = player->isVampire();
         shockwaveStateTimePlayer1 = player->shockwaveStateTime();
@@ -1123,7 +1123,7 @@ void GameClientEngineState::playSoundForEntityIfNecessary(Entity& e, uint32_t mo
     }
 }
 
-GameClientEngineState::GameClientEngineState() : EngineState("data/json/GameEngineState/Config.json"),
+GameClientEngineState::GameClientEngineState() : EngineState("json/game/Config.json"),
 _entityIDManager(),
 _timeTracker(),
 _world(nullptr),

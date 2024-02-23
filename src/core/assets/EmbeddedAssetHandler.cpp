@@ -22,19 +22,19 @@
 #include <GowEngine/embeddedData/sprite_vsh.h>
 #include <GowEngine/embeddedData/sf_font_png.h>
 
-#define FILE_PATH_ENGINE_ASSETS "data/json/Engine/Assets.json"
-#define FILE_PATH_ENGINE_CONFIG "data/json/Engine/Config.json"
-#define FILE_PATH_SHADER_FRAGMENT_FRAMEBUFFER "data/shaders/framebuffer.fsh"
-#define FILE_PATH_SHADER_VERTEX_FRAMEBUFFER "data/shaders/framebuffer.vsh"
-#define FILE_PATH_SHADER_FRAGMENT_GEOMETRY "data/shaders/geometry.fsh"
-#define FILE_PATH_SHADER_VERTEX_GEOMETRY "data/shaders/geometry.vsh"
-#define FILE_PATH_SHADER_FRAGMENT_LIGHTS "data/shaders/lights.fsh"
-#define FILE_PATH_SHADER_VERTEX_LIGHTS "data/shaders/lights.vsh"
-#define FILE_PATH_SHADER_FRAGMENT_SHOCKWAVE "data/shaders/shockwave.fsh"
-#define FILE_PATH_SHADER_VERTEX_SHOCKWAVE "data/shaders/shockwave.vsh"
-#define FILE_PATH_SHADER_FRAGMENT_SPRITE "data/shaders/sprite.fsh"
-#define FILE_PATH_SHADER_VERTEX_SPRITE "data/shaders/sprite.vsh"
-#define FILE_PATH_TEXTURE_FONT "data/textures/sf_font.png"
+#define FILE_PATH_ENGINE_ASSETS "engine/json/Assets.json"
+#define FILE_PATH_ENGINE_CONFIG "engine/json/Config.json"
+#define FILE_PATH_SHADER_FRAGMENT_FRAMEBUFFER "engine/shaders/framebuffer.fsh"
+#define FILE_PATH_SHADER_VERTEX_FRAMEBUFFER "engine/shaders/framebuffer.vsh"
+#define FILE_PATH_SHADER_FRAGMENT_GEOMETRY "engine/shaders/geometry.fsh"
+#define FILE_PATH_SHADER_VERTEX_GEOMETRY "engine/shaders/geometry.vsh"
+#define FILE_PATH_SHADER_FRAGMENT_LIGHTS "engine/shaders/lights.fsh"
+#define FILE_PATH_SHADER_VERTEX_LIGHTS "engine/shaders/lights.vsh"
+#define FILE_PATH_SHADER_FRAGMENT_SHOCKWAVE "engine/shaders/shockwave.fsh"
+#define FILE_PATH_SHADER_VERTEX_SHOCKWAVE "engine/shaders/shockwave.vsh"
+#define FILE_PATH_SHADER_FRAGMENT_SPRITE "engine/shaders/sprite.fsh"
+#define FILE_PATH_SHADER_VERTEX_SPRITE "engine/shaders/sprite.vsh"
+#define FILE_PATH_TEXTURE_FONT "engine/textures/sf_font.png"
 
 FileData EmbeddedAssetHandler::loadAsset(std::string filePath)
 {

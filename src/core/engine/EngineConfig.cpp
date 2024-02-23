@@ -42,6 +42,11 @@ std::string EngineConfig::title()
     return _title;
 }
 
+std::string EngineConfig::mode()
+{
+    return _mode;
+}
+
 bool EngineConfig::vsync()
 {
     return _vsync;
@@ -188,6 +193,7 @@ EngineConfig::EngineConfig(std::string configFilePath)
     
     _fullScreen = _config.getBool("fullScreen");
     _title = _config.getString("title");
+    _mode = _config.getString("mode");
     _vsync = _config.getBool("vsync");
     _useSteamNetworking = _config.getBool("useSteamNetworking");
     _useBox2DPhysics = _config.getBool("useBox2DPhysics");

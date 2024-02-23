@@ -12,7 +12,17 @@
 
 FileData FileAssetHandler::loadAsset(std::string filePath)
 {
-    std::string resFilePath = RES_FILE_PATH(filePath);
+    bool isEngine = StringUtil::doesStringStartWithString(filePath, "engine");
+    
+    std::string prefix = "data/";
+    if (!isEngine)
+    {
+        std::string mode = ENGINE_CFG.mode();
+        prefix += mode;
+        prefix += "/";
+    }
+    
+    std::string resFilePath = RES_FILE_PATH(prefix + filePath);
     std::string fileMode = "r";
     
 #if IS_WINDOWS

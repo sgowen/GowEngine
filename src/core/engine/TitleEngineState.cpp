@@ -270,7 +270,7 @@ void TitleEngineState::setState(uint8_t state)
 #endif
 }
 
-TitleEngineState::TitleEngineState() : EngineState("data/json/TitleEngineState/Config.json"),
+TitleEngineState::TitleEngineState() : EngineState("json/title/Config.json"),
 _state(TESS_DEFAULT),
 _inputProcessor(),
 _userEnteredIPAddress("")

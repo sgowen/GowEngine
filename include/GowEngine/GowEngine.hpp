@@ -114,7 +114,7 @@
 #include "core/entity/EntityPhysicsController.hpp"
 #include "core/entity/EntityRegistry.hpp"
 #include "core/entity/EntityRenderController.hpp"
-#include "core/entity/PlayerController.hpp"
+#include "core/entity/JonController.hpp"
 
 /// core/input
 #include "core/input/ClipboardHandler.hpp"

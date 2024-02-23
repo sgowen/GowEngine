@@ -21,6 +21,7 @@ public:
     
     bool fullScreen();
     std::string title();
+    std::string mode();
     bool vsync();
     bool useSteamNetworking();
     bool useBox2DPhysics();
@@ -59,6 +60,7 @@ private:
     
     bool _fullScreen;
     std::string _title;
+    std::string _mode;
     bool _vsync;
     bool _useSteamNetworking;
     bool _useBox2DPhysics;

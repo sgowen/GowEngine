@@ -98,6 +98,16 @@ uint32_t StringUtil::fourCharFromString(std::string& fourCC)
     (uint32_t)chars[3];
 }
 
+bool StringUtil::doesStringStartWithString(const std::string& fullString, const std::string& start)
+{
+    if (start.size() > fullString.size())
+    {
+        return false;
+    }
+    
+    return equal(start.begin(), start.end(), fullString.begin());
+}
+
 bool StringUtil::doesStringEndWithString(const std::string& fullString, const std::string& ending)
 {
     if (ending.size() > fullString.size())

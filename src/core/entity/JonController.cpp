@@ -1,5 +1,5 @@
 //
-//  PlayerController.cpp
+//  JonController.cpp
 //  GowEngine
 //
 //  Created by Stephen Gowen on 1/29/21.
@@ -8,10 +8,10 @@
 
 #include <GowEngine/GowEngine.hpp>
 
-IMPL_RTTI(PlayerController, EntityController)
-IMPL_EntityController_create(PlayerController)
+IMPL_RTTI(JonController, EntityController)
+IMPL_EntityController_create(JonController)
 
-PlayerController::PlayerController(Entity* e) : EntityController(e),
+JonController::JonController(Entity* e) : EntityController(e),
 _shockwaveStartTime(0),
 _shockwaveStateTime(0),
 _isReleasingShockwave(false)
@@ -19,7 +19,7 @@ _isReleasingShockwave(false)
     // Empty
 }
 
-void PlayerController::processInput(uint16_t inputState)
+void JonController::processInput(uint16_t inputState)
 {
     if (isMovementInputAllowed())
     {
@@ -52,7 +52,7 @@ void PlayerController::processInput(uint16_t inputState)
     }
 }
 
-void PlayerController::onUpdate(uint32_t numMovesProcessed)
+void JonController::onUpdate(uint32_t numMovesProcessed)
 {
     Entity& e = *_entity;
     Vector2& vel = e.velocity();
@@ -168,7 +168,7 @@ void PlayerController::onUpdate(uint32_t numMovesProcessed)
     }
 }
 
-void PlayerController::onMessage(uint16_t message)
+void JonController::onMessage(uint16_t message)
 {
     Entity& e = *_entity;
     uint8_t& state = e.state()._state;
@@ -186,7 +186,7 @@ void PlayerController::onMessage(uint16_t message)
     }
 }
 
-void PlayerController::processMovementInput(uint16_t inputState)
+void JonController::processMovementInput(uint16_t inputState)
 {
     Entity& e = *_entity;
     
@@ -238,7 +238,7 @@ void PlayerController::processMovementInput(uint16_t inputState)
     }
 }
 
-void PlayerController::processJumpInput(uint16_t inputState)
+void JonController::processJumpInput(uint16_t inputState)
 {
     Entity& e = *_entity;
     
@@ -332,7 +332,7 @@ void PlayerController::processJumpInput(uint16_t inputState)
     }
 }
 
-void PlayerController::processAttackInput(uint16_t inputState)
+void JonController::processAttackInput(uint16_t inputState)
 {
     Entity& e = *_entity;
     
@@ -352,7 +352,7 @@ void PlayerController::processAttackInput(uint16_t inputState)
     }
 }
 
-void PlayerController::processAbilityInput(uint16_t inputState)
+void JonController::processAbilityInput(uint16_t inputState)
 {
     Entity& e = *_entity;
     
@@ -408,7 +408,7 @@ void PlayerController::processAbilityInput(uint16_t inputState)
     }
 }
 
-void PlayerController::processWarmingUpInput(uint16_t inputState)
+void JonController::processWarmingUpInput(uint16_t inputState)
 {
     Entity& e = *_entity;
     
@@ -428,7 +428,7 @@ void PlayerController::processWarmingUpInput(uint16_t inputState)
     }
 }
 
-void PlayerController::processSpecialInput(uint16_t inputState)
+void JonController::processSpecialInput(uint16_t inputState)
 {
     Entity& e = *_entity;
     
@@ -467,7 +467,7 @@ void PlayerController::processSpecialInput(uint16_t inputState)
     }
 }
 
-bool PlayerController::isRabbit()
+bool JonController::isRabbit()
 {
     Entity& e = *_entity;
     uint8_t& state = e.state()._state;
@@ -489,17 +489,17 @@ bool PlayerController::isRabbit()
     state == STATE_RABBIT_DEATH;
 }
 
-bool PlayerController::isReleasingShockwave()
+bool JonController::isReleasingShockwave()
 {
     return _isReleasingShockwave;
 }
 
-uint16_t PlayerController::shockwaveStateTime()
+uint16_t JonController::shockwaveStateTime()
 {
     return _shockwaveStateTime;
 }
 
-bool PlayerController::isVampire()
+bool JonController::isVampire()
 {
     Entity& e = *_entity;
     uint8_t& state = e.state()._state;
@@ -519,7 +519,7 @@ bool PlayerController::isVampire()
     state == STATE_VAMPIRE_DEATH;
 }
 
-bool PlayerController::isMovementInputAllowed()
+bool JonController::isMovementInputAllowed()
 {
     Entity& e = *_entity;
     uint8_t& state = e.state()._state;
@@ -539,7 +539,7 @@ bool PlayerController::isMovementInputAllowed()
     state == STATE_VAMPIRE_LANDING;
 }
 
-bool PlayerController::isJumpInputAllowed()
+bool JonController::isJumpInputAllowed()
 {
     Entity& e = *_entity;
     uint8_t& state = e.state()._state;
@@ -562,7 +562,7 @@ bool PlayerController::isJumpInputAllowed()
     state == STATE_VAMPIRE_LANDING;
 }
 
-bool PlayerController::isAttackInputAllowed()
+bool JonController::isAttackInputAllowed()
 {
     Entity& e = *_entity;
     uint8_t& state = e.state()._state;
@@ -575,7 +575,7 @@ bool PlayerController::isAttackInputAllowed()
     state == STATE_WARMING_UP;
 }
 
-bool PlayerController::isAbilityInputAllowed()
+bool JonController::isAbilityInputAllowed()
 {
     Entity& e = *_entity;
     uint8_t& state = e.state()._state;
@@ -596,7 +596,7 @@ bool PlayerController::isAbilityInputAllowed()
     state == STATE_VAMPIRE_LANDING;
 }
 
-bool PlayerController::isWarmingUpInputAllowed()
+bool JonController::isWarmingUpInputAllowed()
 {
     Entity& e = *_entity;
     uint8_t& state = e.state()._state;
@@ -604,7 +604,7 @@ bool PlayerController::isWarmingUpInputAllowed()
     return state == STATE_IDLE;
 }
 
-bool PlayerController::isSpecialInputAllowed()
+bool JonController::isSpecialInputAllowed()
 {
     Entity& e = *_entity;
     uint8_t& state = e.state()._state;
@@ -613,7 +613,7 @@ bool PlayerController::isSpecialInputAllowed()
     state != STATE_REVERTING;
 }
 
-bool PlayerController::needsStateChangeForMovement()
+bool JonController::needsStateChangeForMovement()
 {
     Entity& e = *_entity;
     uint8_t& state = e.state()._state;
@@ -623,7 +623,7 @@ bool PlayerController::needsStateChangeForMovement()
     state == STATE_VAMPIRE_IDLE;
 }
 
-bool PlayerController::canCurrentStateBeInterruptedByFalling()
+bool JonController::canCurrentStateBeInterruptedByFalling()
 {
     Entity& e = *_entity;
     uint8_t& state = e.state()._state;
@@ -644,7 +644,7 @@ bool PlayerController::canCurrentStateBeInterruptedByFalling()
     state == STATE_VAMPIRE_DASH_COMPLETED;
 }
 
-bool PlayerController::canCurrentStateBeInterruptedByLanding()
+bool JonController::canCurrentStateBeInterruptedByLanding()
 {
     Entity& e = *_entity;
     uint8_t& state = e.state()._state;
@@ -654,7 +654,7 @@ bool PlayerController::canCurrentStateBeInterruptedByLanding()
     state == STATE_VAMPIRE_FALLING;
 }
 
-bool PlayerController::needsToResolveNewStateOnceAnimationEnds()
+bool JonController::needsToResolveNewStateOnceAnimationEnds()
 {
     Entity& e = *_entity;
     uint8_t& state = e.state()._state;
@@ -677,7 +677,7 @@ bool PlayerController::needsToResolveNewStateOnceAnimationEnds()
     state == STATE_VAMPIRE_DEATH;
 }
 
-void PlayerController::resolveNewState()
+void JonController::resolveNewState()
 {
     Entity& e = *_entity;
     uint8_t& state = e.state()._state;
