@@ -1,8 +1,8 @@
 //
-//  NosGameEngineState.cpp
+//  DanteGameEngineState.cpp
 //  GowEngine
 //
-//  Created by Stephen Gowen on 1/27/21.
+//  Created by Stephen Gowen on 2/24/24.
 //  Copyright © 2023 Stephen Gowen. All rights reserved.
 //
 
@@ -23,165 +23,6 @@ GameInputProcessor::~GameInputProcessor()
 
 GameInputProcessorState GameInputProcessor::update()
 {
-    uint16_t& inputStateP1 = _inputState.playerInputState(0)._inputState;
-    uint16_t& inputStateP2 = _inputState.playerInputState(1)._inputState;
-    
-#if IS_MOBILE
-    for (CursorEvent* e : INPUT_MGR.getCursorEvents())
-    {
-        uint16_t& inputState = inputStateP1;
-        
-        Vector2& pos = INPUT_MGR.convert(e);
-        
-        SET_BIT(inputState, ISF_MOVING_LEFT, e->isPressed() && pos._x < 38);
-        SET_BIT(inputState, ISF_MOVING_RIGHT, e->isPressed() && pos._x > 76);
-        
-        SET_BIT(inputState, ISF_JUMPING, e->isDown() && pos._y > 32);
-        
-        if (e->isUp() && pos._x > 90 && pos._y < 8)
-        {
-            _state = GIMS_EXIT;
-        }
-    }
-#endif
-    
-    for (GamepadEvent* e : INPUT_MGR.getGamepadEvents())
-    {
-        if (_state == GIMS_EXIT)
-        {
-            break;
-        }
-        
-        uint16_t& inputState = e->_index == 0 ? inputStateP1 : inputStateP2;
-        
-        switch (e->_button)
-        {
-            case GPEB_BUTTON_SELECT:
-            case GPEB_BUTTON_SNES_SELECT:
-                _state = e->isDown() ? GIMS_EXIT : GIMS_DEFAULT;
-                break;
-            case GPEB_BUTTON_A:
-                SET_BIT(inputState, ISF_EXECUTING_ATTACK, e->isPressed());
-                break;
-            case GPEB_BUTTON_B:
-                SET_BIT(inputState, ISF_JUMPING, e->isPressed());
-                break;
-            case GPEB_BUTTON_Y:
-            case GPEB_BUMPER_LEFT:
-                // Weird that Y button on my SNES controller is coming through as GPEB_BUMPER_LEFT
-                SET_BIT(inputState, ISF_EXECUTING_ABILITY, e->isPressed());
-                break;
-            case GPEB_BUTTON_X:
-                SET_BIT(inputState, ISF_TRIGGERING_SPECIAL, e->isPressed());
-                break;
-            case GPEB_D_PAD_LEFT:
-            {
-                SET_BIT(inputState, ISF_MOVING_LEFT, e->isPressed());
-                break;
-            }
-            case GPEB_D_PAD_RIGHT:
-            {
-                SET_BIT(inputState, ISF_MOVING_RIGHT, e->isPressed());
-                break;
-            }
-            case GPEB_STICK_LEFT:
-            {
-                SET_BIT(inputState, ISF_MOVING_LEFT, e->_x < 0);
-                SET_BIT(inputState, ISF_MOVING_RIGHT, e->_x > 0);
-                break;
-            }
-            case GPEB_UNKNOWN_6:
-            {
-                _state = e->isPressed() ? GIMS_ZOOM_IN : GIMS_DEFAULT;
-                SET_BIT(inputState, ISF_WARMING_UP, e->isPressed());
-                break;
-            }
-            case GPEB_BUMPER_RIGHT:
-            case GPEB_UNKNOWN_7:
-                if (_state == GIMS_ZOOM_IN)
-                {
-                    _state = GIMS_ZOOM_RESET;
-                }
-                else
-                {
-                    _state = e->isPressed() ? GIMS_ZOOM_OUT : GIMS_DEFAULT;
-                }
-                break;
-            default:
-                break;
-        }
-    }
-    
-    for (KeyboardEvent* e : INPUT_MGR.getKeyboardEvents())
-    {
-        switch (e->_key)
-        {
-            case GOW_KEY_ESCAPE:
-            case GOW_KEY_ANDROID_BACK_BUTTON:
-                _state = e->isUp() ? GIMS_EXIT : GIMS_DEFAULT;
-                break;
-            case GOW_KEY_P:
-                if (e->isDown())
-                {
-                    _state = _state == GIMS_DISPLAY_PHYSICS ? GIMS_DEFAULT : GIMS_DISPLAY_PHYSICS;
-                }
-                break;
-            case GOW_KEY_J:
-                SET_BIT(inputStateP1, ISF_JUMPING, e->isPressed());
-                break;
-            case GOW_KEY_K:
-                SET_BIT(inputStateP1, ISF_EXECUTING_ATTACK, e->isPressed());
-                break;
-            case GOW_KEY_H:
-                SET_BIT(inputStateP1, ISF_EXECUTING_ABILITY, e->isPressed());
-                break;
-            case GOW_KEY_U:
-                SET_BIT(inputStateP1, ISF_TRIGGERING_SPECIAL, e->isPressed());
-                break;
-            case GOW_KEY_T:
-                SET_BIT(inputStateP1, ISF_WARMING_UP, e->isPressed());
-                break;
-            case GOW_KEY_I:
-                _state = e->isPressed() ? GIMS_ZOOM_IN : GIMS_DEFAULT;
-                break;
-            case GOW_KEY_O:
-                if (_state == GIMS_ZOOM_IN)
-                {
-                    _state = GIMS_ZOOM_RESET;
-                }
-                else
-                {
-                    _state = e->isPressed() ? GIMS_ZOOM_OUT : GIMS_DEFAULT;
-                }
-                break;
-            case GOW_KEY_A:
-                SET_BIT(inputStateP1, ISF_MOVING_LEFT, e->isPressed());
-                break;
-            case GOW_KEY_D:
-                SET_BIT(inputStateP1, ISF_MOVING_RIGHT, e->isPressed());
-                break;
-            case GOW_KEY_ARROW_UP:
-                SET_BIT(inputStateP2, ISF_JUMPING, e->isPressed());
-                break;
-            case GOW_KEY_ARROW_LEFT:
-                SET_BIT(inputStateP2, ISF_MOVING_LEFT, e->isPressed());
-                break;
-            case GOW_KEY_ARROW_RIGHT:
-                SET_BIT(inputStateP2, ISF_MOVING_RIGHT, e->isPressed());
-                break;
-            case GOW_KEY_PERIOD:
-            {
-                if (e->isDown())
-                {
-                    drop2ndPlayer();
-                }
-                break;
-            }
-            default:
-                break;
-        }
-    }
-    
     if (_inputState.isRequestingToAddLocalPlayer() &&
         NW_CLNT != nullptr)
     {
@@ -245,7 +86,7 @@ uint64_t cb_steam_getPlayerAddressHash(uint8_t inPlayerIndex)
 {
     uint64_t ret = 0;
     
-    std::map<uint8_t, Entity::PlayerInfo>& players = ENGINE_STATE_GAME_NOS.players();
+    std::map<uint8_t, Entity::PlayerInfo>& players = ENGINE_STATE_GAME_DANTE.players();
     
     uint8_t playerID = inPlayerIndex + 1;
     
@@ -261,36 +102,36 @@ uint64_t cb_steam_getPlayerAddressHash(uint8_t inPlayerIndex)
 
 void cb_client_onEntityRegistered(Entity* e)
 {
-    ENGINE_STATE_GAME_NOS.world().addNetworkEntity(e);
+    ENGINE_STATE_GAME_DANTE.world().addNetworkEntity(e);
     
     if (e->isPlayer())
     {
-        ENGINE_STATE_GAME_NOS.players().insert({e->playerInfo()._playerID, e->playerInfo()});
+        ENGINE_STATE_GAME_DANTE.players().insert({e->playerInfo()._playerID, e->playerInfo()});
     }
 }
 
 void cb_client_onEntityDeregistered(Entity* e)
 {
-    ENGINE_STATE_GAME_NOS.world().removeNetworkEntity(e);
+    ENGINE_STATE_GAME_DANTE.world().removeNetworkEntity(e);
 }
 
 void cb_client_onPlayerWelcomed(uint8_t playerID)
 {
-    ENGINE_STATE_GAME_NOS.input().inputState().activateNextPlayer(playerID);
+    ENGINE_STATE_GAME_DANTE.input().inputState().activateNextPlayer(playerID);
 }
 
-void NosGameEngineState::onEnter(Engine* e)
+void DanteGameEngineState::onEnter(Engine* e)
 {
-    _world = new NosPhysicsWorld();
+    _world = new Box2DPhysicsWorld();
     
     if (_args.getBool(ARG_IS_HOST, false) == true)
     {
-        NosServer::create();
-        assert(NOS_SERVER != nullptr);
+        DanteServer::create();
+        assert(DANTE_SERVER != nullptr);
     }
 }
 
-void NosGameEngineState::onAssetsLoaded(Engine* e)
+void DanteGameEngineState::onAssetsLoaded(Engine* e)
 {
     std::string filePathEntityManager = _config.getString("filePathEntityManager");
     EntityManagerLoader::initWithJSONFile(ENTITY_MGR, filePathEntityManager);
@@ -304,11 +145,11 @@ void NosGameEngineState::onAssetsLoaded(Engine* e)
     }
 }
 
-void NosGameEngineState::onExit(Engine* e)
+void DanteGameEngineState::onExit(Engine* e)
 {
     if (_args.getBool(ARG_IS_HOST, false) == true)
     {
-        NosServer::destroy();
+        DanteServer::destroy();
     }
     
     NetworkClient::destroy();
@@ -320,11 +161,11 @@ void NosGameEngineState::onExit(Engine* e)
     _scale = 1.0f;
 }
 
-void NosGameEngineState::onUpdate(Engine* e)
+void DanteGameEngineState::onUpdate(Engine* e)
 {
-    if (NOS_SERVER)
+    if (DANTE_SERVER)
     {
-        NOS_SERVER->update();
+        DANTE_SERVER->update();
     }
     
     _timeTracker.onFrame();
@@ -353,7 +194,7 @@ void NosGameEngineState::onUpdate(Engine* e)
     updateWithNetwork(e);
 }
 
-void NosGameEngineState::onRender(Renderer& r, double extrapolation)
+void DanteGameEngineState::onRender(Renderer& r, double extrapolation)
 {
     const float baseRight = r.matrix()._base._right;
     const float baseTop = r.matrix()._base._top;
@@ -410,7 +251,7 @@ void NosGameEngineState::onRender(Renderer& r, double extrapolation)
     
     if (_inputProcessor.state() == GIMS_DISPLAY_PHYSICS)
     {
-        r.renderNosPhysics(static_cast<NosPhysicsWorld*>(_world));
+        r.renderBox2DPhysics(static_cast<Box2DPhysicsWorld*>(_world));
     }
     
     r.setText("fps", STRING_FORMAT("FPS %d", FPS_UTIL.fps()));
@@ -427,13 +268,13 @@ void NosGameEngineState::onRender(Renderer& r, double extrapolation)
     renderAudio();
 }
 
-void NosGameEngineState::populateFromEntityLayout(EntityLayoutDef& eld)
+void DanteGameEngineState::populateFromEntityLayout(EntityLayoutDef& eld)
 {
     EntityLayoutManagerLoader::loadEntityLayout(eld, _entityIDManager, false);
     world().populateFromEntityLayout(eld);
 }
 
-Entity* NosGameEngineState::getPlayer(uint8_t playerID)
+Entity* DanteGameEngineState::getPlayer(uint8_t playerID)
 {
     Entity* ret = nullptr;
     
@@ -449,27 +290,27 @@ Entity* NosGameEngineState::getPlayer(uint8_t playerID)
     return ret;
 }
 
-Entity* NosGameEngineState::getControlledPlayer()
+Entity* DanteGameEngineState::getControlledPlayer()
 {
     return getPlayer(_inputProcessor.inputState().playerInputState(0)._playerID);
 }
 
-GameInputProcessor& NosGameEngineState::input()
+GameInputProcessor& DanteGameEngineState::input()
 {
     return _inputProcessor;
 }
 
-std::map<uint8_t, Entity::PlayerInfo>& NosGameEngineState::players()
+std::map<uint8_t, Entity::PlayerInfo>& DanteGameEngineState::players()
 {
     return _players;
 }
 
-World& NosGameEngineState::world()
+World& DanteGameEngineState::world()
 {
     return *_world;
 }
 
-void NosGameEngineState::joinServer(Engine* e)
+void DanteGameEngineState::joinServer(Engine* e)
 {
     ClientHelper* clientHelper = nullptr;
 #if IS_DESKTOP
@@ -531,7 +372,7 @@ void NosGameEngineState::joinServer(Engine* e)
     }
 }
 
-void NosGameEngineState::updateWithNetwork(Engine* e)
+void DanteGameEngineState::updateWithNetwork(Engine* e)
 {
 #if IS_DESKTOP
     if (STEAM_GAME_SERVICES)
@@ -575,7 +416,7 @@ void NosGameEngineState::updateWithNetwork(Engine* e)
         {
             uint32_t entityLayoutKey = e->networkDataField("entityLayoutKey").valueUInt32();
             EntityLayoutDef& eld = ENTITY_LAYOUT_MGR.entityLayoutDef(entityLayoutKey);
-            ENGINE_STATE_GAME_NOS.populateFromEntityLayout(eld);
+            ENGINE_STATE_GAME_DANTE.populateFromEntityLayout(eld);
         }
     }
     
@@ -692,7 +533,7 @@ void NosGameEngineState::updateWithNetwork(Engine* e)
     }
 }
 
-void NosGameEngineState::updateWorld(const Move& move)
+void DanteGameEngineState::updateWorld(const Move& move)
 {
     world().beginFrame();
     for (Entity* e : world().getPlayers())
@@ -716,7 +557,7 @@ void NosGameEngineState::updateWorld(const Move& move)
     world().storeToCache();
 }
 
-void NosGameEngineState::renderWithNetwork(Renderer& r)
+void DanteGameEngineState::renderWithNetwork(Renderer& r)
 {
     static float frameRate = static_cast<float>(ENGINE_CFG.frameRate());
     
@@ -910,7 +751,7 @@ void NosGameEngineState::renderWithNetwork(Renderer& r)
     }
 }
 
-void NosGameEngineState::renderAudio()
+void DanteGameEngineState::renderAudio()
 {
     if (AUDIO_ENGINE.isPaused() ||
         world().getNumMovesProcessed() == 0)
@@ -932,14 +773,14 @@ void NosGameEngineState::renderAudio()
     }
 }
 
-NosGameEngineState::SoundFrameState& NosGameEngineState::soundFrameStateAtMoveIndex(uint32_t moveIndex)
+DanteGameEngineState::SoundFrameState& DanteGameEngineState::soundFrameStateAtMoveIndex(uint32_t moveIndex)
 {
     uint32_t index = moveIndex % 360;
     
     return _soundFrameStates[index];
 }
 
-void NosGameEngineState::playSoundForEntityIfNecessary(Entity& e, uint32_t moveIndex)
+void DanteGameEngineState::playSoundForEntityIfNecessary(Entity& e, uint32_t moveIndex)
 {
     // TODO, support more than 1 sound per entity per frame
     
@@ -1028,7 +869,7 @@ void NosGameEngineState::playSoundForEntityIfNecessary(Entity& e, uint32_t moveI
     }
 }
 
-NosGameEngineState::NosGameEngineState() : EngineState("json/game/Config.json"),
+DanteGameEngineState::DanteGameEngineState() : EngineState("json/game/Config.json"),
 _entityIDManager(),
 _timeTracker(),
 _world(nullptr),

@@ -95,6 +95,8 @@
 #include "core/common/TimeUtil.hpp"
 
 /// core/engine
+#include "core/engine/DanteGameEngineState.hpp"
+#include "core/engine/DanteServer.hpp"
 #include "core/engine/DefaultEngineState.hpp"
 #include "core/engine/Engine.hpp"
 #include "core/engine/EngineConfig.hpp"
@@ -114,6 +116,7 @@
 #include "core/entity/EntityRegistry.hpp"
 #include "core/entity/EntityRenderController.hpp"
 #include "core/entity/JonController.hpp"
+#include "core/entity/RobotController.hpp"
 
 /// core/input
 #include "core/input/ClipboardHandler.hpp"

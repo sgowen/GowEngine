@@ -22,8 +22,7 @@ public:
         TESS_INPUT_IP,
         TESS_INPUT_JOIN_NAME,
         TESS_INPUT_LAN_SERVER,
-        TESS_INPUT_INTERNET_SERVER,
-        TESS_START_OFFLINE
+        TESS_INPUT_INTERNET_SERVER
     };
     
     static TitleEngineState& getInstance()
@@ -44,6 +43,7 @@ private:
     std::string _userEnteredIPAddress;
     
     void setState(uint8_t state);
+    void startGame(Engine* e, const Config& args);
     
     TitleEngineState();
     virtual ~TitleEngineState() {}

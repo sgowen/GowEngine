@@ -1,8 +1,8 @@
 //
-//  NosGameEngineState.hpp
+//  DanteGameEngineState.hpp
 //  GowEngine
 //
-//  Created by Stephen Gowen on 1/27/21.
+//  Created by Stephen Gowen on 2/24/24.
 //  Copyright © 2023 Stephen Gowen. All rights reserved.
 //
 
@@ -52,12 +52,12 @@ private:
 
 class World;
 
-class NosGameEngineState : public EngineState
+class DanteGameEngineState : public EngineState
 {    
 public:    
-    static NosGameEngineState& getInstance()
+    static DanteGameEngineState& getInstance()
     {
-        static NosGameEngineState ret = NosGameEngineState();
+        static DanteGameEngineState ret = DanteGameEngineState();
         return ret;
     }
     
@@ -109,8 +109,8 @@ private:
     
     void spawnPlayerAndResetWorld();
     
-    NosGameEngineState();
-    virtual ~NosGameEngineState() {}
-    NosGameEngineState(const NosGameEngineState&);
-    NosGameEngineState& operator=(const NosGameEngineState&);
+    DanteGameEngineState();
+    virtual ~DanteGameEngineState() {}
+    DanteGameEngineState(const DanteGameEngineState&);
+    DanteGameEngineState& operator=(const DanteGameEngineState&);
 };

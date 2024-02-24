@@ -43,7 +43,7 @@ void TitleEngineState::onUpdate(Engine* e)
                 
                 Config args;
                 args.putUInt64(ARG_STEAM_ADDRESS, serverToJoinSteamID.ConvertToUint64());
-                e->pushState(&ENGINE_STATE_GAME_NOS, args);
+                startGame(e, args);
             }
         }
         else
@@ -75,7 +75,7 @@ void TitleEngineState::onUpdate(Engine* e)
                             Config args;
                             args.putBool(ARG_IS_HOST, true);
                             args.putString(ARG_USERNAME, "Mobile User");
-                            e->pushState(&ENGINE_STATE_GAME_NOS, args);
+                            startGame(e, args);
                             break;
                         }
                     }
@@ -92,7 +92,7 @@ void TitleEngineState::onUpdate(Engine* e)
                 // We don't need to input a host name on Steam
                 Config args;
                 args.putBool(ARG_IS_HOST, true);
-                e->pushState(&ENGINE_STATE_GAME_NOS);
+                startGame(e, args);
                 return;
             }
 #endif
@@ -108,7 +108,7 @@ void TitleEngineState::onUpdate(Engine* e)
                     Config args;
                     args.putBool(ARG_IS_HOST, true);
                     args.putString(ARG_USERNAME, _inputProcessor.getTextInput());
-                    e->pushState(&ENGINE_STATE_GAME_NOS, args);
+                    startGame(e, args);
                     break;
                 }
             }
@@ -144,7 +144,7 @@ void TitleEngineState::onUpdate(Engine* e)
                     Config args;
                     args.putString(ARG_IP_ADDRESS, _userEnteredIPAddress);
                     args.putString(ARG_USERNAME, _inputProcessor.getTextInput());
-                    e->pushState(&ENGINE_STATE_GAME_NOS, args);
+                    startGame(e, args);
                     break;
                 }
             }
@@ -179,13 +179,6 @@ void TitleEngineState::onUpdate(Engine* e)
                     break;
             }
 #endif
-        }
-            break;
-        case TESS_START_OFFLINE:
-        {
-            Config args;
-            args.putBool(ARG_OFFLINE_MODE, true);
-            e->pushState(&ENGINE_STATE_GAME_NOS, args);
         }
             break;
         default:
@@ -274,6 +267,22 @@ void TitleEngineState::setState(uint8_t state)
 #endif
 }
 
+void TitleEngineState::startGame(Engine* e, const Config& args)
+{
+    bool isDante = strcmp(ENGINE_CFG.mode().c_str(), "dante") == 0;
+    bool isNos = strcmp(ENGINE_CFG.mode().c_str(), "nosfuratu") == 0;
+    assert(isDante || isNos);
+    
+    if (isDante)
+    {
+        e->pushState(&ENGINE_STATE_GAME_DANTE, args);
+    }
+    else if (isNos)
+    {
+        e->pushState(&ENGINE_STATE_GAME_NOS, args);
+    }
+}
+
 TitleEngineState::TitleEngineState() : EngineState("json/title/Config.json"),
 _state(TESS_DEFAULT),
 _inputProcessor(),
@@ -283,8 +292,6 @@ _userEnteredIPAddress("")
     _inputProcessor.registerActionForKey(GOW_KEY_J, TESS_INPUT_IP);
     _inputProcessor.registerActionForKey(GOW_KEY_L, TESS_INPUT_LAN_SERVER);
     _inputProcessor.registerActionForKey(GOW_KEY_I, TESS_INPUT_INTERNET_SERVER);
-    _inputProcessor.registerActionForKey(GOW_KEY_O, TESS_START_OFFLINE);
     
     _inputProcessor.registerActionForButton(GPEB_BUTTON_A, TESS_INPUT_HOST_NAME);
-    _inputProcessor.registerActionForButton(GPEB_BUTTON_X, TESS_START_OFFLINE);
 }
