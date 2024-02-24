@@ -1,5 +1,5 @@
 //
-//  GameClientEngineState.cpp
+//  NosGameEngineState.cpp
 //  GowEngine
 //
 //  Created by Stephen Gowen on 1/27/21.
@@ -245,7 +245,7 @@ uint64_t cb_steam_getPlayerAddressHash(uint8_t inPlayerIndex)
 {
     uint64_t ret = 0;
     
-    std::map<uint8_t, Entity::PlayerInfo>& players = ENGINE_STATE_GAME_CLNT.players();
+    std::map<uint8_t, Entity::PlayerInfo>& players = ENGINE_STATE_GAME_NOS.players();
     
     uint8_t playerID = inPlayerIndex + 1;
     
@@ -261,30 +261,36 @@ uint64_t cb_steam_getPlayerAddressHash(uint8_t inPlayerIndex)
 
 void cb_client_onEntityRegistered(Entity* e)
 {
-    ENGINE_STATE_GAME_CLNT.world().addNetworkEntity(e);
+    ENGINE_STATE_GAME_NOS.world().addNetworkEntity(e);
     
     if (e->isPlayer())
     {
-        ENGINE_STATE_GAME_CLNT.players().insert({e->playerInfo()._playerID, e->playerInfo()});
+        ENGINE_STATE_GAME_NOS.players().insert({e->playerInfo()._playerID, e->playerInfo()});
     }
 }
 
 void cb_client_onEntityDeregistered(Entity* e)
 {
-    ENGINE_STATE_GAME_CLNT.world().removeNetworkEntity(e);
+    ENGINE_STATE_GAME_NOS.world().removeNetworkEntity(e);
 }
 
 void cb_client_onPlayerWelcomed(uint8_t playerID)
 {
-    ENGINE_STATE_GAME_CLNT.input().inputState().activateNextPlayer(playerID);
+    ENGINE_STATE_GAME_NOS.input().inputState().activateNextPlayer(playerID);
 }
 
-void GameClientEngineState::onEnter(Engine* e)
+void NosGameEngineState::onEnter(Engine* e)
 {
-    // Empty
+    _world = new NosPhysicsWorld();
+    
+    if (_args.getBool(ARG_IS_HOST, false) == true)
+    {
+        NosServer::create();
+        assert(NOS_SERVER != nullptr);
+    }
 }
 
-void GameClientEngineState::onAssetsLoaded(Engine* e)
+void NosGameEngineState::onAssetsLoaded(Engine* e)
 {
     std::string filePathEntityManager = _config.getString("filePathEntityManager");
     EntityManagerLoader::initWithJSONFile(ENTITY_MGR, filePathEntityManager);
@@ -298,23 +304,32 @@ void GameClientEngineState::onAssetsLoaded(Engine* e)
     }
 }
 
-void GameClientEngineState::onExit(Engine* e)
+void NosGameEngineState::onExit(Engine* e)
 {
+    if (_args.getBool(ARG_IS_HOST, false) == true)
+    {
+        NosServer::destroy();
+    }
+    
     if (_args.getBool(ARG_OFFLINE_MODE, false) == false)
     {
         NetworkClient::destroy();
     }
     
     _timeTracker.reset();
-    world().reset();
-    world().removeAllNetworkEntities();
+    delete _world;
     
     _inputProcessor.reset();
     _scale = 1.0f;
 }
 
-void GameClientEngineState::onUpdate(Engine* e)
+void NosGameEngineState::onUpdate(Engine* e)
 {
+    if (NOS_SERVER)
+    {
+        NOS_SERVER->update();
+    }
+    
     _timeTracker.onFrame();
     
     GameInputProcessorState gims = _inputProcessor.update();
@@ -348,7 +363,7 @@ void GameClientEngineState::onUpdate(Engine* e)
     }
 }
 
-void GameClientEngineState::onRender(Renderer& r, double extrapolation)
+void NosGameEngineState::onRender(Renderer& r, double extrapolation)
 {
     const float baseRight = r.matrix()._base._right;
     const float baseTop = r.matrix()._base._top;
@@ -412,14 +427,7 @@ void GameClientEngineState::onRender(Renderer& r, double extrapolation)
     
     if (_inputProcessor.state() == GIMS_DISPLAY_PHYSICS)
     {
-        if (ENGINE_CFG.useBox2DPhysics())
-        {
-            r.renderBox2DPhysics(static_cast<Box2DPhysicsWorld*>(_world));
-        }
-        else
-        {
-            r.renderNosPhysics(static_cast<NosPhysicsWorld*>(_world));
-        }
+        r.renderNosPhysics(static_cast<NosPhysicsWorld*>(_world));
     }
     
     r.setText("fps", STRING_FORMAT("FPS %d", FPS_UTIL.fps()));
@@ -436,13 +444,13 @@ void GameClientEngineState::onRender(Renderer& r, double extrapolation)
     renderAudio();
 }
 
-void GameClientEngineState::populateFromEntityLayout(EntityLayoutDef& eld)
+void NosGameEngineState::populateFromEntityLayout(EntityLayoutDef& eld)
 {
     EntityLayoutManagerLoader::loadEntityLayout(eld, _entityIDManager, false);
     world().populateFromEntityLayout(eld);
 }
 
-Entity* GameClientEngineState::getPlayer(uint8_t playerID)
+Entity* NosGameEngineState::getPlayer(uint8_t playerID)
 {
     Entity* ret = nullptr;
     
@@ -458,27 +466,27 @@ Entity* GameClientEngineState::getPlayer(uint8_t playerID)
     return ret;
 }
 
-Entity* GameClientEngineState::getControlledPlayer()
+Entity* NosGameEngineState::getControlledPlayer()
 {
     return getPlayer(_inputProcessor.inputState().playerInputState(0)._playerID);
 }
 
-GameInputProcessor& GameClientEngineState::input()
+GameInputProcessor& NosGameEngineState::input()
 {
     return _inputProcessor;
 }
 
-std::map<uint8_t, Entity::PlayerInfo>& GameClientEngineState::players()
+std::map<uint8_t, Entity::PlayerInfo>& NosGameEngineState::players()
 {
     return _players;
 }
 
-World& GameClientEngineState::world()
+World& NosGameEngineState::world()
 {
     return *_world;
 }
 
-void GameClientEngineState::joinServer(Engine* e)
+void NosGameEngineState::joinServer(Engine* e)
 {
     ClientHelper* clientHelper = nullptr;
 #if IS_DESKTOP
@@ -540,7 +548,7 @@ void GameClientEngineState::joinServer(Engine* e)
     }
 }
 
-void GameClientEngineState::updateWithNetwork(Engine* e)
+void NosGameEngineState::updateWithNetwork(Engine* e)
 {
 #if IS_DESKTOP
     if (STEAM_GAME_SERVICES)
@@ -584,7 +592,7 @@ void GameClientEngineState::updateWithNetwork(Engine* e)
         {
             uint32_t entityLayoutKey = e->networkDataField("entityLayoutKey").valueUInt32();
             EntityLayoutDef& eld = ENTITY_LAYOUT_MGR.entityLayoutDef(entityLayoutKey);
-            ENGINE_STATE_GAME_CLNT.populateFromEntityLayout(eld);
+            ENGINE_STATE_GAME_NOS.populateFromEntityLayout(eld);
         }
     }
     
@@ -701,7 +709,7 @@ void GameClientEngineState::updateWithNetwork(Engine* e)
     }
 }
 
-void GameClientEngineState::updateOffline(Engine* e)
+void NosGameEngineState::updateOffline(Engine* e)
 {
     if (getPlayer(1) == nullptr)
     {
@@ -721,7 +729,7 @@ void GameClientEngineState::updateOffline(Engine* e)
         input().inputState().activateNextPlayer(1);
         
         EntityLayoutDef& eld = ENTITY_LAYOUT_MGR.entityLayoutDef('L001');
-        ENGINE_STATE_GAME_CLNT.populateFromEntityLayout(eld);
+        ENGINE_STATE_GAME_NOS.populateFromEntityLayout(eld);
     }
     
     MoveList& ml = _inputProcessor.moveList();
@@ -734,7 +742,7 @@ void GameClientEngineState::updateOffline(Engine* e)
     input().removeProcessedMovesWithIndexLessThan(world().getNumMovesProcessed());
 }
 
-void GameClientEngineState::updateWorld(const Move& move)
+void NosGameEngineState::updateWorld(const Move& move)
 {
     world().beginFrame();
     for (Entity* e : world().getPlayers())
@@ -769,7 +777,7 @@ void GameClientEngineState::updateWorld(const Move& move)
     world().storeToCache();
 }
 
-void GameClientEngineState::renderWithNetwork(Renderer& r)
+void NosGameEngineState::renderWithNetwork(Renderer& r)
 {
     static float frameRate = static_cast<float>(ENGINE_CFG.frameRate());
     
@@ -963,7 +971,7 @@ void GameClientEngineState::renderWithNetwork(Renderer& r)
     }
 }
 
-void GameClientEngineState::renderOffline(Renderer& r)
+void NosGameEngineState::renderOffline(Renderer& r)
 {
     static float frameRate = static_cast<float>(ENGINE_CFG.frameRate());
     
@@ -1005,7 +1013,7 @@ void GameClientEngineState::renderOffline(Renderer& r)
     }
 }
 
-void GameClientEngineState::renderAudio()
+void NosGameEngineState::renderAudio()
 {
     if (AUDIO_ENGINE.isPaused() ||
         world().getNumMovesProcessed() == 0)
@@ -1027,14 +1035,14 @@ void GameClientEngineState::renderAudio()
     }
 }
 
-GameClientEngineState::SoundFrameState& GameClientEngineState::soundFrameStateAtMoveIndex(uint32_t moveIndex)
+NosGameEngineState::SoundFrameState& NosGameEngineState::soundFrameStateAtMoveIndex(uint32_t moveIndex)
 {
     uint32_t index = moveIndex % 360;
     
     return _soundFrameStates[index];
 }
 
-void GameClientEngineState::playSoundForEntityIfNecessary(Entity& e, uint32_t moveIndex)
+void NosGameEngineState::playSoundForEntityIfNecessary(Entity& e, uint32_t moveIndex)
 {
     // TODO, support more than 1 sound per entity per frame
     
@@ -1123,7 +1131,7 @@ void GameClientEngineState::playSoundForEntityIfNecessary(Entity& e, uint32_t mo
     }
 }
 
-GameClientEngineState::GameClientEngineState() : EngineState("json/game/Config.json"),
+NosGameEngineState::NosGameEngineState() : EngineState("json/game/Config.json"),
 _entityIDManager(),
 _timeTracker(),
 _world(nullptr),
@@ -1131,12 +1139,5 @@ _inputProcessor(),
 _numMovesToReprocess(0),
 _scale(1.0)
 {
-    if (ENGINE_CFG.useBox2DPhysics())
-    {
-        _world = new Box2DPhysicsWorld();
-    }
-    else
-    {
-        _world = new NosPhysicsWorld();
-    }
+    // Empty
 }

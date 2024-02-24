@@ -1,5 +1,5 @@
 //
-//  GameClientEngineState.hpp
+//  NosGameEngineState.hpp
 //  GowEngine
 //
 //  Created by Stephen Gowen on 1/27/21.
@@ -52,12 +52,12 @@ private:
 
 class World;
 
-class GameClientEngineState : public EngineState
+class NosGameEngineState : public EngineState
 {    
 public:    
-    static GameClientEngineState& getInstance()
+    static NosGameEngineState& getInstance()
     {
-        static GameClientEngineState ret = GameClientEngineState();
+        static NosGameEngineState ret = NosGameEngineState();
         return ret;
     }
     
@@ -111,8 +111,8 @@ private:
     
     void spawnPlayerAndResetWorld();
     
-    GameClientEngineState();
-    virtual ~GameClientEngineState() {}
-    GameClientEngineState(const GameClientEngineState&);
-    GameClientEngineState& operator=(const GameClientEngineState&);
+    NosGameEngineState();
+    virtual ~NosGameEngineState() {}
+    NosGameEngineState(const NosGameEngineState&);
+    NosGameEngineState& operator=(const NosGameEngineState&);
 };

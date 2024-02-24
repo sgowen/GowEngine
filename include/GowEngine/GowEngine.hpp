@@ -99,9 +99,8 @@
 #include "core/engine/Engine.hpp"
 #include "core/engine/EngineConfig.hpp"
 #include "core/engine/EngineState.hpp"
-#include "core/engine/GameClientEngineState.hpp"
-#include "core/engine/GameHostEngineState.hpp"
-#include "core/engine/GameServerEngineState.hpp"
+#include "core/engine/NosGameEngineState.hpp"
+#include "core/engine/NosServer.hpp"
 #include "core/engine/TitleEngineState.hpp"
 
 /// core/entity

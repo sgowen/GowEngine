@@ -43,7 +43,7 @@ void TitleEngineState::onUpdate(Engine* e)
                 
                 Config args;
                 args.putUInt64(ARG_STEAM_ADDRESS, serverToJoinSteamID.ConvertToUint64());
-                e->pushState(&ENGINE_STATE_GAME_CLNT, args);
+                e->pushState(&ENGINE_STATE_GAME_NOS, args);
             }
         }
         else
@@ -73,8 +73,9 @@ void TitleEngineState::onUpdate(Engine* e)
                         if (ce->isUp())
                         {
                             Config args;
+                            args.putBool(ARG_IS_HOST, true);
                             args.putString(ARG_USERNAME, "Mobile User");
-                            e->pushState(&ENGINE_STATE_GAME_HOST, args);
+                            e->pushState(&ENGINE_STATE_GAME_NOS, args);
                             break;
                         }
                     }
@@ -89,7 +90,9 @@ void TitleEngineState::onUpdate(Engine* e)
             if (ENGINE_CFG.useSteamNetworking())
             {
                 // We don't need to input a host name on Steam
-                e->pushState(&ENGINE_STATE_GAME_HOST);
+                Config args;
+                args.putBool(ARG_IS_HOST, true);
+                e->pushState(&ENGINE_STATE_GAME_NOS);
                 return;
             }
 #endif
@@ -103,8 +106,9 @@ void TitleEngineState::onUpdate(Engine* e)
                 case IPS_TEXT_INPUT_READY:
                 {
                     Config args;
+                    args.putBool(ARG_IS_HOST, true);
                     args.putString(ARG_USERNAME, _inputProcessor.getTextInput());
-                    e->pushState(&ENGINE_STATE_GAME_HOST, args);
+                    e->pushState(&ENGINE_STATE_GAME_NOS, args);
                     break;
                 }
             }
@@ -140,7 +144,7 @@ void TitleEngineState::onUpdate(Engine* e)
                     Config args;
                     args.putString(ARG_IP_ADDRESS, _userEnteredIPAddress);
                     args.putString(ARG_USERNAME, _inputProcessor.getTextInput());
-                    e->pushState(&ENGINE_STATE_GAME_CLNT, args);
+                    e->pushState(&ENGINE_STATE_GAME_NOS, args);
                     break;
                 }
             }
@@ -181,7 +185,7 @@ void TitleEngineState::onUpdate(Engine* e)
         {
             Config args;
             args.putBool(ARG_OFFLINE_MODE, true);
-            e->pushState(&ENGINE_STATE_GAME_CLNT, args);
+            e->pushState(&ENGINE_STATE_GAME_NOS, args);
         }
             break;
         default:

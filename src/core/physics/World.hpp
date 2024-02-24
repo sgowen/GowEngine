@@ -16,8 +16,6 @@ class World
     DECL_RTTI_NOPARENT;
     
 public:
-    static World* create();
-    
     World();
     virtual ~World();
     

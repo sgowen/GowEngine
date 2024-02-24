@@ -22,9 +22,7 @@ _entityContactFilter(new EntityContactFilter())
 }
 
 Box2DPhysicsWorld::~Box2DPhysicsWorld()
-{
-    reset();
-    
+{    
     delete _entityContactListener;
     delete _entityContactFilter;
     delete _world;

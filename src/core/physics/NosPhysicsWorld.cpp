@@ -17,7 +17,7 @@ NosPhysicsWorld::NosPhysicsWorld() : World()
 
 NosPhysicsWorld::~NosPhysicsWorld()
 {
-    reset();
+    // Empty
 }
 
 void NosPhysicsWorld::stepPhysics(float deltaTime)

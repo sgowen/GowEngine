@@ -21,7 +21,8 @@ _topEdge(0)
 
 World::~World()
 {
-    _entityLayout = EntityLayoutDef();
+    reset();
+    removeAllNetworkEntities();
 }
 
 void World::populateFromEntityLayout(EntityLayoutDef& eld)

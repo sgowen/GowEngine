@@ -1,5 +1,5 @@
 //
-//  GameServerEngineState.hpp
+//  NosServer.hpp
 //  GowEngine
 //
 //  Created by Stephen Gowen on 1/27/21.
@@ -8,23 +8,17 @@
 
 #pragma once
 
-#include "EngineState.hpp"
-
+class Engine;
 class ClientProxy;
 
-class GameServerEngineState : public State<Engine>
+class NosServer
 {
 public:
-    static GameServerEngineState& getInstance()
-    {
-        static GameServerEngineState ret = GameServerEngineState();
-        return ret;
-    }
+    static void create();
+    static NosServer* getInstance();
+    static void destroy();
     
-    virtual void enter(Engine* e);
-    virtual void execute(Engine* e);
-    virtual void exit(Engine* e);
-    
+    void update();
     void handleNewClient(std::string playerName, uint8_t playerID);
     void handleLostClient(ClientProxy& cp, uint8_t localPlayerIndex);
     void resetWorld();
@@ -33,20 +27,21 @@ public:
     World& world();
     
 private:
+    static NosServer* s_instance;
+    
     EntityIDManager _entityIDManager;
     TimeTracker _timeTracker;
     World* _world;
     bool _isRestarting;
     bool _isConnected;
     
-    void update(Engine* e);
     void updateWorld();
     void handleDirtyStates(std::vector<Entity*>& entities);
     void addPlayer(std::string playerName, uint8_t playerID);
     void removePlayer(uint8_t playerID);
     
-    GameServerEngineState();
-    virtual ~GameServerEngineState() {}
-    GameServerEngineState(const GameServerEngineState&);
-    GameServerEngineState& operator=(const GameServerEngineState&);
+    NosServer();
+    virtual ~NosServer();
+    NosServer(const NosServer&);
+    NosServer& operator=(const NosServer&);
 };

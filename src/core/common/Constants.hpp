@@ -9,6 +9,7 @@
 #pragma once
 
 /// Game Engine State Args
+#define ARG_IS_HOST "ARG_IS_HOST"
 #define ARG_IP_ADDRESS "ARG_IP_ADDRESS"
 #define ARG_USERNAME "ARG_USERNAME"
 #define ARG_OFFLINE_MODE "ARG_OFFLINE_MODE"

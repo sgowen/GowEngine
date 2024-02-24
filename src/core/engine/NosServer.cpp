@@ -1,5 +1,5 @@
 //
-//  GameServerEngineState.cpp
+//  NosServer.cpp
 //  GowEngine
 //
 //  Created by Stephen Gowen on 1/27/21.
@@ -10,13 +10,13 @@
 
 void cb_server_onEntityRegistered(Entity* e)
 {
-    ENGINE_STATE_GAME_SRVR.world().addNetworkEntity(e);
+    NOS_SERVER->world().addNetworkEntity(e);
     
     if (e->isPlayer() && e->playerInfo()._playerID == 1)
     {
         uint32_t entityLayoutKey = e->networkDataField("entityLayoutKey").valueUInt32();
         EntityLayoutDef& eld = ENTITY_LAYOUT_MGR.entityLayoutDef(entityLayoutKey);
-        ENGINE_STATE_GAME_SRVR.populateFromEntityLayout(eld);
+        NOS_SERVER->populateFromEntityLayout(eld);
     }
 }
 
@@ -30,85 +30,71 @@ void cb_server_onEntityDeregistered(Entity* e)
         needsRestart = NW_SRVR->getClientProxy(playerID) != nullptr;
     }
     
-    ENGINE_STATE_GAME_SRVR.world().removeNetworkEntity(e);
+    NOS_SERVER->world().removeNetworkEntity(e);
     
     if (needsRestart)
     {
-        ENGINE_STATE_GAME_SRVR.restart();
+        NOS_SERVER->restart();
     }
 }
 
 void cb_server_handleNewClient(std::string playerName, uint8_t playerID)
 {
-    ENGINE_STATE_GAME_SRVR.handleNewClient(playerName, playerID);
+    NOS_SERVER->handleNewClient(playerName, playerID);
 }
 
 void cb_server_handleLostClient(ClientProxy& cp, uint8_t localPlayerIndex)
 {
-    ENGINE_STATE_GAME_SRVR.handleLostClient(cp, localPlayerIndex);
+    NOS_SERVER->handleLostClient(cp, localPlayerIndex);
 }
 
-void GameServerEngineState::enter(Engine* e)
+NosServer* NosServer::s_instance = nullptr;
+
+void NosServer::create()
 {
-    ServerHelper* serverHelper = nullptr;
-#if IS_DESKTOP
-    if (ENGINE_CFG.useSteamNetworking())
-    {
-        serverHelper = new SteamServerHelper(ENGINE_CFG.steamGameDir(),
-                                             ENGINE_CFG.versionName(),
-                                             ENGINE_CFG.steamProductName(),
-                                             ENGINE_CFG.steamProductDescription(),
-                                             ENGINE_CFG.serverPort(),
-                                             _timeTracker,
-                                             NW_SRVR_CALLBACKS);
-    }
-    else
-    {
-#endif
-        serverHelper = new SocketServerHelper(ENGINE_CFG.serverPort(), 
-                                              _timeTracker,
-                                              NW_SRVR_CALLBACKS);
-#if IS_DESKTOP
-    }
-#endif
+    assert(s_instance == nullptr);
     
-    NetworkServer::create(serverHelper,
-                          _entityIDManager,
-                          _timeTracker,
-                          cb_server_onEntityRegistered,
-                          cb_server_onEntityDeregistered,
-                          cb_server_handleNewClient,
-                          cb_server_handleLostClient);
+    s_instance = new NosServer();
+}
+
+NosServer* NosServer::getInstance()
+{
+    return s_instance;
+}
+
+void NosServer::destroy()
+{
+    assert(s_instance != nullptr);
     
-    _isConnected = NW_SRVR->connect();
+    delete s_instance;
+    s_instance = nullptr;
 }
 
-void GameServerEngineState::execute(Engine* e)
+void NosServer::update()
 {
-    switch (e->requestedStateAction())
+    if (!_isConnected || !NW_SRVR->isConnected())
     {
-        case ERSA_UPDATE:
-            update(e);
-            break;
-        default:
-            break;
+        return;
     }
+    
+    _timeTracker.onFrame();
+    
+    int moveCount = NW_SRVR->processIncomingPackets();
+    for (int i = 0; i < moveCount; ++i)
+    {
+        updateWorld();
+    }
+    NW_SRVR->removeProcessedMoves();
+    NW_SRVR->setNumMovesProcessed(world().getNumMovesProcessed());
+    NW_SRVR->sendOutgoingPackets();
 }
 
-void GameServerEngineState::exit(Engine* e)
-{
-    NetworkServer::destroy();
-    _timeTracker.reset();
-    world().reset();
-    _isRestarting = false;
-}
-
-void GameServerEngineState::handleNewClient(std::string playerName, uint8_t playerID)
+void NosServer::handleNewClient(std::string playerName, uint8_t playerID)
 {
     addPlayer(playerName, playerID);
 }
 
-void GameServerEngineState::handleLostClient(ClientProxy& cp, uint8_t localPlayerIndex)
+void NosServer::handleLostClient(ClientProxy& cp, uint8_t localPlayerIndex)
 {
     if (localPlayerIndex >= 1)
     {
@@ -125,7 +111,7 @@ void GameServerEngineState::handleLostClient(ClientProxy& cp, uint8_t localPlaye
     }
 }
 
-void GameServerEngineState::populateFromEntityLayout(EntityLayoutDef& eld)
+void NosServer::populateFromEntityLayout(EntityLayoutDef& eld)
 {
     EntityLayoutManagerLoader::loadEntityLayout(eld, _entityIDManager, true);
     
@@ -142,7 +128,7 @@ void GameServerEngineState::populateFromEntityLayout(EntityLayoutDef& eld)
     }
 }
 
-void GameServerEngineState::restart()
+void NosServer::restart()
 {
     if (_isRestarting)
     {
@@ -167,31 +153,12 @@ void GameServerEngineState::restart()
     }
 }
 
-World& GameServerEngineState::world()
+World& NosServer::world()
 {
     return *_world;
 }
 
-void GameServerEngineState::update(Engine* e)
-{
-    if (!_isConnected || !NW_SRVR->isConnected())
-    {
-        return;
-    }
-    
-    _timeTracker.onFrame();
-    
-    int moveCount = NW_SRVR->processIncomingPackets();
-    for (int i = 0; i < moveCount; ++i)
-    {
-        updateWorld();
-    }
-    NW_SRVR->removeProcessedMoves();
-    NW_SRVR->setNumMovesProcessed(world().getNumMovesProcessed());
-    NW_SRVR->sendOutgoingPackets();
-}
-
-void GameServerEngineState::updateWorld()
+void NosServer::updateWorld()
 {
     world().beginFrame();
     for (Entity* e : world().getPlayers())
@@ -243,7 +210,7 @@ void GameServerEngineState::updateWorld()
     handleDirtyStates(world().getDynamicEntities());
 }
 
-void GameServerEngineState::handleDirtyStates(std::vector<Entity*>& entities)
+void NosServer::handleDirtyStates(std::vector<Entity*>& entities)
 {
     for (Entity* e : entities)
     {
@@ -255,7 +222,7 @@ void GameServerEngineState::handleDirtyStates(std::vector<Entity*>& entities)
     }
 }
 
-void GameServerEngineState::addPlayer(std::string playerName, uint8_t playerID)
+void NosServer::addPlayer(std::string playerName, uint8_t playerID)
 {
     ClientProxy* cp = NW_SRVR->getClientProxy(playerID);
     assert(cp != nullptr);
@@ -279,7 +246,7 @@ void GameServerEngineState::addPlayer(std::string playerName, uint8_t playerID)
     NW_SRVR->registerEntity(e);
 }
 
-void GameServerEngineState::removePlayer(uint8_t playerID)
+void NosServer::removePlayer(uint8_t playerID)
 {
     for (Entity* e : world().getPlayers())
     {
@@ -291,19 +258,49 @@ void GameServerEngineState::removePlayer(uint8_t playerID)
     }
 }
 
-GameServerEngineState::GameServerEngineState() : State<Engine>(),
+NosServer::NosServer() :
 _entityIDManager(),
 _timeTracker(),
-_world(nullptr),
+_world(new NosPhysicsWorld()),
 _isRestarting(false),
 _isConnected(false)
 {
-    if (ENGINE_CFG.useBox2DPhysics())
+    ServerHelper* serverHelper = nullptr;
+#if IS_DESKTOP
+    if (ENGINE_CFG.useSteamNetworking())
     {
-        _world = new Box2DPhysicsWorld();
+        serverHelper = new SteamServerHelper(ENGINE_CFG.steamGameDir(),
+                                             ENGINE_CFG.versionName(),
+                                             ENGINE_CFG.steamProductName(),
+                                             ENGINE_CFG.steamProductDescription(),
+                                             ENGINE_CFG.serverPort(),
+                                             _timeTracker,
+                                             NW_SRVR_CALLBACKS);
     }
     else
     {
-        _world = new NosPhysicsWorld();
+#endif
+        serverHelper = new SocketServerHelper(ENGINE_CFG.serverPort(),
+                                              _timeTracker,
+                                              NW_SRVR_CALLBACKS);
+#if IS_DESKTOP
     }
+#endif
+    
+    NetworkServer::create(serverHelper,
+                          _entityIDManager,
+                          _timeTracker,
+                          cb_server_onEntityRegistered,
+                          cb_server_onEntityDeregistered,
+                          cb_server_handleNewClient,
+                          cb_server_handleLostClient);
+    assert(NW_SRVR != nullptr);
+    
+    _isConnected = NW_SRVR->connect();
+}
+
+NosServer::~NosServer()
+{
+    NetworkServer::destroy();
+    delete _world;
 }
