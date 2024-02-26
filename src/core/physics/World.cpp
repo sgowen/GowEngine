@@ -251,7 +251,7 @@ void World::addEntity(Entity *e)
 
 void World::removeEntity(Entity* e)
 {
-    assert(!e->isDynamic());
+    assert(!e->isPlayer() && !e->isDynamic());
     
     if (e->isLayer())
     {

@@ -25,28 +25,41 @@ enum Messages
     MSG_DAMAGE = 1
 };
 
-enum FixtureFlags
+enum Box2DFixtureFlags
 {
-    FIXF_SENSOR =         1 << 0,
-    FIXF_GROUND_SENSOR =  1 << 1,
-    FIXF_IGNORE_LEFT =    1 << 2,
-    FIXF_IGNORE_RIGHT =   1 << 3,
-    FIXF_IGNORE_BOTTOM =  1 << 4,
-    FIXF_DAMAGE_TOP =     1 << 5
+    BFIXF_BOX =           1 << 0,
+    BFIXF_SENSOR =        1 << 1,
+    BFIXF_GROUND_SENSOR = 1 << 2,
+    BFIXF_CIRCLE =        1 << 3
+};
+
+enum NosFixtureFlags
+{
+    NFIXF_SENSOR =        1 << 0,
+    NFIXF_GROUND_SENSOR = 1 << 1,
+    NFIXF_IGNORE_LEFT =   1 << 2,
+    NFIXF_IGNORE_RIGHT =  1 << 3,
+    NFIXF_IGNORE_BOTTOM = 1 << 4,
+    NFIXF_DAMAGE_TOP =    1 << 5
 };
 
 struct FixtureDef
 {
+    std::vector<Vector2> _vertices;
     Vector2 _center;
     float _halfWidthFactor;
     float _halfHeightFactor;
+    float _restitution;
+    float _density;
+    float _friction;
     uint32_t _flags;
 };
 
 enum BodyFlags
 {
-    BODF_DYNAMIC = 1 << 0,
-    BODF_PLAYER =  1 << 1
+    BODF_DYNAMIC =         1 << 0,
+    BODF_PLAYER =          1 << 1,
+    BODF_FIXED_ROTATION =  1 << 2
 };
 
 enum NetworkDataFieldType

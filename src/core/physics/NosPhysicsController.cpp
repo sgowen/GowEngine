@@ -127,7 +127,7 @@ void NosPhysicsController::processCollisions(std::vector<Entity*>& entities)
         
         for (Bounds& myBounds : _bounds)
         {
-            if (IS_BIT_SET(myBounds._flags, FIXF_GROUND_SENSOR))
+            if (IS_BIT_SET(myBounds._flags, NFIXF_GROUND_SENSOR))
             {
                 continue;
             }
@@ -152,7 +152,7 @@ void NosPhysicsController::processCollisions(std::vector<Entity*>& entities)
                         float yr = yourBoundingBox.right();
                         float yl = yourBoundingBox.left();
                         
-                        t = !IS_BIT_SET(yourFlags, FIXF_IGNORE_BOTTOM) &&
+                        t = !IS_BIT_SET(yourFlags, NFIXF_IGNORE_BOTTOM) &&
                         crossesBottomEdge(yb, mt, _tolerance) &&
                         mb < yb && (mr > yl || ml < yr);
                         
@@ -175,7 +175,7 @@ void NosPhysicsController::processCollisions(std::vector<Entity*>& entities)
                             p._position.add(0, yt - mb);
                             p._velocity._y = 0;
                             myBounds.updateForPosition(p._position);
-                            if (IS_BIT_SET(yourBounds._flags, FIXF_DAMAGE_TOP))
+                            if (IS_BIT_SET(yourBounds._flags, NFIXF_DAMAGE_TOP))
                             {
                                 _entity->message(MSG_DAMAGE);
                             }
@@ -206,10 +206,10 @@ void NosPhysicsController::processCollisions(std::vector<Entity*>& entities)
                             LOG("isInside: %d", i);
                         }
                         
-                        r = !IS_BIT_SET(yourFlags, FIXF_IGNORE_LEFT) &&
+                        r = !IS_BIT_SET(yourFlags, NFIXF_IGNORE_LEFT) &&
                         mr > yl && ml < yl && i;
                         
-                        l = !IS_BIT_SET(yourFlags, FIXF_IGNORE_RIGHT) &&
+                        l = !IS_BIT_SET(yourFlags, NFIXF_IGNORE_RIGHT) &&
                         ml < yr && mr > yr && i;
                         
                         if (r)
@@ -239,7 +239,7 @@ void NosPhysicsController::processCollisions(std::vector<Entity*>& entities)
         
         for (Bounds& myBounds : _bounds)
         {
-            if (!IS_BIT_SET(myBounds._flags, FIXF_GROUND_SENSOR))
+            if (!IS_BIT_SET(myBounds._flags, NFIXF_GROUND_SENSOR))
             {
                 continue;
             }

@@ -231,7 +231,7 @@ void Renderer::renderSprite(std::string textureKey, std::string textureRegionKey
     sb.end(s, m._matrix, t);
 }
 
-void Renderer::renderParallaxLayers(std::vector<Entity*>& layers, std::string texture)
+void Renderer::renderNosParallaxLayers(std::vector<Entity*>& layers, std::string texture)
 {
     Matrix& m = matrix();
     
@@ -443,7 +443,14 @@ void Renderer::spriteBatcherAddEntity(SpriteBatcher& sb, Entity& e)
     TextureRegion& tr = ASSETS_MGR.textureRegion(e.renderController()->getTextureMapping(),  e.stateTime());
     assert(tr._width % _pixelToUnitRatio == 0);
     assert(tr._height % _pixelToUnitRatio == 0);
-    float realWidth = tr._width / _pixelToUnitRatio;
-    float realHeight = tr._height / _pixelToUnitRatio;
+//    float realWidth = tr._width / _pixelToUnitRatio;
+//    float realHeight = tr._height / _pixelToUnitRatio;
+    float realWidth = e.width();
+    float realHeight = e.height();
+    // TODO, need ability to override the above commented out calculation
+    // Sometimes the entity does NEED to be rendered larger than what it actually is,
+    // due to a sprite sheet implementation
+    // e.g. jon jumping up as the vampire
+    // we have to render larger because the animation frames themselves are larger than regular frames
     sb.addSprite(tr, e.position()._x, e.position()._y, realWidth, realHeight, e.angle(), e.isXFlipped());
 }

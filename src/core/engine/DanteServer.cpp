@@ -8,7 +8,7 @@
 
 #include <GowEngine/GowEngine.hpp>
 
-void cb_server_onEntityRegistered(Entity* e)
+void cb_dante_server_onEntityRegistered(Entity* e)
 {
     DANTE_SERVER->world().addNetworkEntity(e);
     
@@ -20,30 +20,17 @@ void cb_server_onEntityRegistered(Entity* e)
     }
 }
 
-void cb_server_onEntityDeregistered(Entity* e)
+void cb_dante_server_onEntityDeregistered(Entity* e)
 {
-    bool needsRestart = false;
-    
-    if (e->isPlayer())
-    {
-        uint8_t playerID = e->playerInfo()._playerID;
-        needsRestart = NW_SRVR->getClientProxy(playerID) != nullptr;
-    }
-    
     DANTE_SERVER->world().removeNetworkEntity(e);
-    
-    if (needsRestart)
-    {
-        DANTE_SERVER->restart();
-    }
 }
 
-void cb_server_handleNewClient(std::string playerName, uint8_t playerID)
+void cb_dante_server_handleNewClient(std::string playerName, uint8_t playerID)
 {
     DANTE_SERVER->handleNewClient(playerName, playerID);
 }
 
-void cb_server_handleLostClient(ClientProxy& cp, uint8_t localPlayerIndex)
+void cb_dante_server_handleLostClient(ClientProxy& cp, uint8_t localPlayerIndex)
 {
     DANTE_SERVER->handleLostClient(cp, localPlayerIndex);
 }
@@ -198,12 +185,7 @@ void DanteServer::updateWorld()
     std::vector<Entity*> toDelete = world().update();
     for (Entity* e : toDelete)
     {
-        bool exitImmediately = e->isPlayer();
         NW_SRVR->deregisterEntity(e);
-        if (exitImmediately)
-        {
-            return;
-        }
     }
     
     handleDirtyStates(world().getPlayers());
@@ -229,16 +211,6 @@ void DanteServer::addPlayer(std::string playerName, uint8_t playerID)
 
     uint32_t spawnX = 32;
     uint32_t spawnY = 16;
-    
-    for (Entity* e : _world->getLayers())
-    {
-        if (e->entityDef()._key == 'Z1S1')
-        {
-            spawnX = e->position()._x;
-            spawnY = e->position()._y - e->height() / 2 + 9;
-            break;
-        }
-    }
 
     uint32_t key = 'ROBT';
     uint32_t networkID = _entityIDManager.getNextPlayerEntityID();
@@ -250,7 +222,7 @@ void DanteServer::addPlayer(std::string playerName, uint8_t playerID)
     e->playerInfo()._playerID = playerID;
     if (playerID == 1)
     {
-        e->networkDataField("entityLayoutKey").setValueUInt32('L001');
+        e->networkDataField("entityLayoutKey").setValueUInt32('Z002');
     }
 
     NW_SRVR->registerEntity(e);
@@ -271,7 +243,7 @@ void DanteServer::removePlayer(uint8_t playerID)
 DanteServer::DanteServer() :
 _entityIDManager(),
 _timeTracker(),
-_world(new NosPhysicsWorld()),
+_world(new Box2DPhysicsWorld()),
 _isRestarting(false),
 _isConnected(false)
 {
@@ -300,10 +272,10 @@ _isConnected(false)
     NetworkServer::create(serverHelper,
                           _entityIDManager,
                           _timeTracker,
-                          cb_server_onEntityRegistered,
-                          cb_server_onEntityDeregistered,
-                          cb_server_handleNewClient,
-                          cb_server_handleLostClient);
+                          cb_dante_server_onEntityRegistered,
+                          cb_dante_server_onEntityDeregistered,
+                          cb_dante_server_handleNewClient,
+                          cb_dante_server_handleLostClient);
     assert(NW_SRVR != nullptr);
     
     _isConnected = NW_SRVR->connect();

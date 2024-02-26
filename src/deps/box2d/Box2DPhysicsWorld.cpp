@@ -22,7 +22,13 @@ _entityContactFilter(new EntityContactFilter())
 }
 
 Box2DPhysicsWorld::~Box2DPhysicsWorld()
-{    
+{
+    // TODO, fix this, I don't like this one bit.
+    // reset is called in the super destructor, World
+    // Buuuut, because we delete _world here, the entities that are released
+    // in the World destructor AFTER this crash because Box2D has already been shut down
+    reset();
+    
     delete _entityContactListener;
     delete _entityContactFilter;
     delete _world;

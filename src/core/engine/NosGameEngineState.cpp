@@ -8,20 +8,20 @@
 
 #include <GowEngine/GowEngine.hpp>
 
-GameInputProcessor::GameInputProcessor() :
+NosGameInputProcessor::NosGameInputProcessor() :
 _inputState(),
-_state(GIMS_DEFAULT),
+_state(NGIMS_DEFAULT),
 _numMovesProcessed(0)
 {
     reset();
 }
 
-GameInputProcessor::~GameInputProcessor()
+NosGameInputProcessor::~NosGameInputProcessor()
 {
     // Empty
 }
 
-GameInputProcessorState GameInputProcessor::update()
+NosGameInputProcessorState NosGameInputProcessor::update()
 {
     uint16_t& inputStateP1 = _inputState.playerInputState(0)._inputState;
     uint16_t& inputStateP2 = _inputState.playerInputState(1)._inputState;
@@ -40,14 +40,14 @@ GameInputProcessorState GameInputProcessor::update()
         
         if (e->isUp() && pos._x > 90 && pos._y < 8)
         {
-            _state = GIMS_EXIT;
+            _state = NGIMS_EXIT;
         }
     }
 #endif
     
     for (GamepadEvent* e : INPUT_MGR.getGamepadEvents())
     {
-        if (_state == GIMS_EXIT)
+        if (_state == NGIMS_EXIT)
         {
             break;
         }
@@ -58,7 +58,7 @@ GameInputProcessorState GameInputProcessor::update()
         {
             case GPEB_BUTTON_SELECT:
             case GPEB_BUTTON_SNES_SELECT:
-                _state = e->isDown() ? GIMS_EXIT : GIMS_DEFAULT;
+                _state = e->isDown() ? NGIMS_EXIT : NGIMS_DEFAULT;
                 break;
             case GPEB_BUTTON_A:
                 SET_BIT(inputState, ISF_EXECUTING_ATTACK, e->isPressed());
@@ -92,19 +92,19 @@ GameInputProcessorState GameInputProcessor::update()
             }
             case GPEB_UNKNOWN_6:
             {
-                _state = e->isPressed() ? GIMS_ZOOM_IN : GIMS_DEFAULT;
+                _state = e->isPressed() ? NGIMS_ZOOM_IN : NGIMS_DEFAULT;
                 SET_BIT(inputState, ISF_WARMING_UP, e->isPressed());
                 break;
             }
             case GPEB_BUMPER_RIGHT:
             case GPEB_UNKNOWN_7:
-                if (_state == GIMS_ZOOM_IN)
+                if (_state == NGIMS_ZOOM_IN)
                 {
-                    _state = GIMS_ZOOM_RESET;
+                    _state = NGIMS_ZOOM_RESET;
                 }
                 else
                 {
-                    _state = e->isPressed() ? GIMS_ZOOM_OUT : GIMS_DEFAULT;
+                    _state = e->isPressed() ? NGIMS_ZOOM_OUT : NGIMS_DEFAULT;
                 }
                 break;
             default:
@@ -118,12 +118,12 @@ GameInputProcessorState GameInputProcessor::update()
         {
             case GOW_KEY_ESCAPE:
             case GOW_KEY_ANDROID_BACK_BUTTON:
-                _state = e->isUp() ? GIMS_EXIT : GIMS_DEFAULT;
+                _state = e->isUp() ? NGIMS_EXIT : NGIMS_DEFAULT;
                 break;
             case GOW_KEY_P:
                 if (e->isDown())
                 {
-                    _state = _state == GIMS_DISPLAY_PHYSICS ? GIMS_DEFAULT : GIMS_DISPLAY_PHYSICS;
+                    _state = _state == NGIMS_DISPLAY_PHYSICS ? NGIMS_DEFAULT : NGIMS_DISPLAY_PHYSICS;
                 }
                 break;
             case GOW_KEY_J:
@@ -142,16 +142,16 @@ GameInputProcessorState GameInputProcessor::update()
                 SET_BIT(inputStateP1, ISF_WARMING_UP, e->isPressed());
                 break;
             case GOW_KEY_I:
-                _state = e->isPressed() ? GIMS_ZOOM_IN : GIMS_DEFAULT;
+                _state = e->isPressed() ? NGIMS_ZOOM_IN : NGIMS_DEFAULT;
                 break;
             case GOW_KEY_O:
-                if (_state == GIMS_ZOOM_IN)
+                if (_state == NGIMS_ZOOM_IN)
                 {
-                    _state = GIMS_ZOOM_RESET;
+                    _state = NGIMS_ZOOM_RESET;
                 }
                 else
                 {
-                    _state = e->isPressed() ? GIMS_ZOOM_OUT : GIMS_DEFAULT;
+                    _state = e->isPressed() ? NGIMS_ZOOM_OUT : NGIMS_DEFAULT;
                 }
                 break;
             case GOW_KEY_A:
@@ -191,12 +191,12 @@ GameInputProcessorState GameInputProcessor::update()
     return _state;
 }
 
-GameInputProcessorState GameInputProcessor::state()
+NosGameInputProcessorState NosGameInputProcessor::state()
 {
     return _state;
 }
 
-void GameInputProcessor::sampleInputAsNewMove(TimeTracker& tt)
+void NosGameInputProcessor::sampleInputAsNewMove(TimeTracker& tt)
 {
     InputState* inputState = _poolInputState.obtain();
     _inputState.copyTo(inputState);
@@ -205,43 +205,43 @@ void GameInputProcessor::sampleInputAsNewMove(TimeTracker& tt)
     ++_numMovesProcessed;
 }
 
-void GameInputProcessor::removeProcessedMovesWithIndexLessThan(uint32_t numMovesProcessed)
+void NosGameInputProcessor::removeProcessedMovesWithIndexLessThan(uint32_t numMovesProcessed)
 {
     _moveList.removeProcessedMovesWithIndexLessThan(numMovesProcessed, _poolInputState);
 }
 
-InputState& GameInputProcessor::inputState()
+InputState& NosGameInputProcessor::inputState()
 {
     return _inputState;
 }
 
-MoveList& GameInputProcessor::moveList()
+MoveList& NosGameInputProcessor::moveList()
 {
     return _moveList;
 }
 
-void GameInputProcessor::reset()
+void NosGameInputProcessor::reset()
 {
     _moveList.removeAllMoves(_poolInputState);
     _inputState.reset();
     _numMovesProcessed = 0;
     
-    _state = GIMS_DEFAULT;
+    _state = NGIMS_DEFAULT;
 }
 
-void GameInputProcessor::setNumMovesProcessed(uint32_t numMovesProcessed)
+void NosGameInputProcessor::setNumMovesProcessed(uint32_t numMovesProcessed)
 {
     _numMovesProcessed = numMovesProcessed;
 }
 
-void GameInputProcessor::drop2ndPlayer()
+void NosGameInputProcessor::drop2ndPlayer()
 {
     InputState::PlayerInputState& pis = _inputState.playerInputState(1);
     pis._playerID = 0;
     NW_CLNT->requestToDropLocalPlayer(1);
 }
 
-uint64_t cb_steam_getPlayerAddressHash(uint8_t inPlayerIndex)
+uint64_t cb_nos_steam_getPlayerAddressHash(uint8_t inPlayerIndex)
 {
     uint64_t ret = 0;
     
@@ -259,7 +259,7 @@ uint64_t cb_steam_getPlayerAddressHash(uint8_t inPlayerIndex)
     return ret;
 }
 
-void cb_client_onEntityRegistered(Entity* e)
+void cb_nos_client_onEntityRegistered(Entity* e)
 {
     ENGINE_STATE_GAME_NOS.world().addNetworkEntity(e);
     
@@ -269,12 +269,12 @@ void cb_client_onEntityRegistered(Entity* e)
     }
 }
 
-void cb_client_onEntityDeregistered(Entity* e)
+void cb_nos_client_onEntityDeregistered(Entity* e)
 {
     ENGINE_STATE_GAME_NOS.world().removeNetworkEntity(e);
 }
 
-void cb_client_onPlayerWelcomed(uint8_t playerID)
+void cb_nos_client_onPlayerWelcomed(uint8_t playerID)
 {
     ENGINE_STATE_GAME_NOS.input().inputState().activateNextPlayer(playerID);
 }
@@ -329,23 +329,23 @@ void NosGameEngineState::onUpdate(Engine* e)
     
     _timeTracker.onFrame();
     
-    GameInputProcessorState gims = _inputProcessor.update();
-    if (gims == GIMS_EXIT)
+    NosGameInputProcessorState gims = _inputProcessor.update();
+    if (gims == NGIMS_EXIT)
     {
         e->popState();
         return;
     }
     
     static float zoomStep = 0.035398230088496f;
-    if (gims == GIMS_ZOOM_IN)
+    if (gims == NGIMS_ZOOM_IN)
     {
         _scale -= zoomStep;
     }
-    if (gims == GIMS_ZOOM_OUT)
+    if (gims == NGIMS_ZOOM_OUT)
     {
         _scale += zoomStep;
     }
-    if (gims == GIMS_ZOOM_RESET)
+    if (gims == NGIMS_ZOOM_RESET)
     {
         _scale = 1.0f;
     }
@@ -377,9 +377,9 @@ void NosGameEngineState::onRender(Renderer& r, double extrapolation)
         r.updateMatrixCenteredOnEntity(controlledPlayer, static_cast<float>(_world->rightEdge()), static_cast<float>(_world->topEdge()), _scale);
     }
     
-    r.renderParallaxLayers(world().getLayers(), "background_upper");
-    r.renderParallaxLayers(world().getLayers(), "background_mid");
-    r.renderParallaxLayers(world().getLayers(), "background_lower");
+    r.renderNosParallaxLayers(world().getLayers(), "background_upper");
+    r.renderNosParallaxLayers(world().getLayers(), "background_mid");
+    r.renderNosParallaxLayers(world().getLayers(), "background_lower");
     
     std::vector<Entity*> platformingEntities;
     r.spriteBatcherBegin();
@@ -408,7 +408,7 @@ void NosGameEngineState::onRender(Renderer& r, double extrapolation)
     
     renderWithNetwork(r);
     
-    if (_inputProcessor.state() == GIMS_DISPLAY_PHYSICS)
+    if (_inputProcessor.state() == NGIMS_DISPLAY_PHYSICS)
     {
         r.renderNosPhysics(static_cast<NosPhysicsWorld*>(_world));
     }
@@ -454,7 +454,7 @@ Entity* NosGameEngineState::getControlledPlayer()
     return getPlayer(_inputProcessor.inputState().playerInputState(0)._playerID);
 }
 
-GameInputProcessor& NosGameEngineState::input()
+NosGameInputProcessor& NosGameEngineState::input()
 {
     return _inputProcessor;
 }
@@ -487,7 +487,7 @@ void NosGameEngineState::joinServer(Engine* e)
         }
         clientHelper = new SteamClientHelper(serverSteamID,
                                              _timeTracker,
-                                             cb_steam_getPlayerAddressHash,
+                                             cb_nos_steam_getPlayerAddressHash,
                                              NetworkClient::sProcessPacket);
     }
     else
@@ -519,9 +519,9 @@ void NosGameEngineState::joinServer(Engine* e)
     
     NetworkClient::create(clientHelper,
                           _timeTracker,
-                          cb_client_onEntityRegistered,
-                          cb_client_onEntityDeregistered,
-                          cb_client_onPlayerWelcomed);
+                          cb_nos_client_onEntityRegistered,
+                          cb_nos_client_onEntityDeregistered,
+                          cb_nos_client_onPlayerWelcomed);
     
     if (NW_CLNT->connect() == false)
     {

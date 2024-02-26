@@ -8,7 +8,7 @@
 
 #include <GowEngine/GowEngine.hpp>
 
-void cb_server_onEntityRegistered(Entity* e)
+void cb_nos_server_onEntityRegistered(Entity* e)
 {
     NOS_SERVER->world().addNetworkEntity(e);
     
@@ -20,7 +20,7 @@ void cb_server_onEntityRegistered(Entity* e)
     }
 }
 
-void cb_server_onEntityDeregistered(Entity* e)
+void cb_nos_server_onEntityDeregistered(Entity* e)
 {
     bool needsRestart = false;
     
@@ -38,12 +38,12 @@ void cb_server_onEntityDeregistered(Entity* e)
     }
 }
 
-void cb_server_handleNewClient(std::string playerName, uint8_t playerID)
+void cb_nos_server_handleNewClient(std::string playerName, uint8_t playerID)
 {
     NOS_SERVER->handleNewClient(playerName, playerID);
 }
 
-void cb_server_handleLostClient(ClientProxy& cp, uint8_t localPlayerIndex)
+void cb_nos_server_handleLostClient(ClientProxy& cp, uint8_t localPlayerIndex)
 {
     NOS_SERVER->handleLostClient(cp, localPlayerIndex);
 }
@@ -290,10 +290,10 @@ _isConnected(false)
     NetworkServer::create(serverHelper,
                           _entityIDManager,
                           _timeTracker,
-                          cb_server_onEntityRegistered,
-                          cb_server_onEntityDeregistered,
-                          cb_server_handleNewClient,
-                          cb_server_handleLostClient);
+                          cb_nos_server_onEntityRegistered,
+                          cb_nos_server_onEntityDeregistered,
+                          cb_nos_server_handleNewClient,
+                          cb_nos_server_handleLostClient);
     assert(NW_SRVR != nullptr);
     
     _isConnected = NW_SRVR->connect();

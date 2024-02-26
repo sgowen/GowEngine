@@ -22,7 +22,7 @@ _isBodyFacingLeft(false)
     b2BodyDef bd;
     bd.position.Set(_entity->position()._x, _entity->position()._y);
     bd.type = _entity->isStatic() ? b2_staticBody : b2_dynamicBody;
-    bd.fixedRotation = true;
+    bd.fixedRotation = _entity->entityDef()._bodyFlags & BODF_FIXED_ROTATION;
     bd.userData.pointer = (uintptr_t)_entity;
     _body = world.CreateBody(&bd);
     
@@ -161,22 +161,22 @@ void Box2DPhysicsController::createFixtures()
         
         b2FixtureDef b2fd;
         b2fd.shape = &shape;
-        b2fd.isSensor = IS_BIT_SET(fd._flags, FIXF_SENSOR);
+        b2fd.isSensor = IS_BIT_SET(fd._flags, BFIXF_SENSOR);
         b2fd.density = 1.0f;
         b2fd.friction = 0.0f;
         b2fd.userData.pointer = (uintptr_t)_entity;
         
         b2Fixture* fixture = _body->CreateFixture(&b2fd);
         
-        if (IS_BIT_SET(fd._flags, FIXF_GROUND_SENSOR))
+        if (IS_BIT_SET(fd._flags, BFIXF_GROUND_SENSOR))
         {
             _groundSensorFixture = fixture;
         }
         
-        if (IS_BIT_SET(fd._flags, FIXF_DAMAGE_TOP))
-        {
-            _damageSensorFixture = fixture;
-        }
+//        if (IS_BIT_SET(fd._flags, FIXF_DAMAGE_TOP))
+//        {
+//            _damageSensorFixture = fixture;
+//        }
         
         _fixtures.push_back(fixture);
     }

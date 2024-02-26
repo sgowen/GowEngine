@@ -55,7 +55,7 @@ public:
     void rektangleBatcherEnd(Color& c, std::string matrixKey = "main", std::string shaderKey = "geometry", std::string rektangleBatcherKey = "main");
     
     void renderSprite(std::string textureKey, std::string textureRegionKey, float x, float y, float width, float height, uint16_t stateTime = 0, float angle = 0, bool flipX = false, std::string matrixKey = "main", std::string shaderKey = "sprite", std::string spriteBatcherKey = "main");
-    void renderParallaxLayers(std::vector<Entity*>& layers, std::string texture);
+    void renderNosParallaxLayers(std::vector<Entity*>& layers, std::string texture);
     void spriteBatcherBegin(std::string spriteBatcherKey = "main");
     void spriteBatcherAddEntities(std::vector<Entity*>& entities, std::string spriteBatcherKey = "main");
     void spriteBatcherAddEntity(Entity* e, std::string spriteBatcherKey = "main");

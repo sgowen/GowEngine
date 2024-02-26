@@ -15,24 +15,24 @@
 #include "core/entity/EntityIDManager.hpp"
 #include "core/entity/Entity.hpp"
 
-enum GameInputProcessorState
+enum DanteGameInputProcessorState
 {
-    GIMS_DEFAULT,
-    GIMS_DISPLAY_PHYSICS,
-    GIMS_EXIT,
-    GIMS_ZOOM_IN,
-    GIMS_ZOOM_OUT,
-    GIMS_ZOOM_RESET
+    DGIMS_DEFAULT,
+    DGIMS_DISPLAY_PHYSICS,
+    DGIMS_EXIT,
+    DGIMS_ZOOM_IN,
+    DGIMS_ZOOM_OUT,
+    DGIMS_ZOOM_RESET
 };
 
-class GameInputProcessor
+class DanteGameInputProcessor
 {
 public:
-    GameInputProcessor();
-    ~GameInputProcessor();
+    DanteGameInputProcessor();
+    ~DanteGameInputProcessor();
     
-    GameInputProcessorState update();
-    GameInputProcessorState state();
+    DanteGameInputProcessorState update();
+    DanteGameInputProcessorState state();
     void sampleInputAsNewMove(TimeTracker& tt);
     void removeProcessedMovesWithIndexLessThan(uint32_t numMovesProcessed);
     InputState& inputState();
@@ -44,7 +44,7 @@ private:
     MoveList _moveList;
     Pool<InputState> _poolInputState;
     InputState _inputState;
-    GameInputProcessorState _state;
+    DanteGameInputProcessorState _state;
     uint32_t _numMovesProcessed;
     
     void drop2ndPlayer();
@@ -70,7 +70,7 @@ public:
     void populateFromEntityLayout(EntityLayoutDef& eld);
     Entity* getPlayer(uint8_t playerID);
     Entity* getControlledPlayer();
-    GameInputProcessor& input();
+    DanteGameInputProcessor& input();
     std::map<uint8_t, Entity::PlayerInfo>& players();
     World& world();
     
@@ -79,7 +79,7 @@ private:
     TimeTracker _timeTracker;
     std::map<uint8_t, Entity::PlayerInfo> _players;
     World* _world;
-    GameInputProcessor _inputProcessor;
+    DanteGameInputProcessor _inputProcessor;
     int _numMovesToReprocess;
     float _scale;
     

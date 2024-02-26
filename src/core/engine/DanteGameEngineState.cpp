@@ -8,21 +8,161 @@
 
 #include <GowEngine/GowEngine.hpp>
 
-GameInputProcessor::GameInputProcessor() :
+DanteGameInputProcessor::DanteGameInputProcessor() :
 _inputState(),
-_state(GIMS_DEFAULT),
+_state(DGIMS_DEFAULT),
 _numMovesProcessed(0)
 {
     reset();
 }
 
-GameInputProcessor::~GameInputProcessor()
+DanteGameInputProcessor::~DanteGameInputProcessor()
 {
     // Empty
 }
 
-GameInputProcessorState GameInputProcessor::update()
+DanteGameInputProcessorState DanteGameInputProcessor::update()
 {
+    uint16_t& inputStateP1 = _inputState.playerInputState(0)._inputState;
+    uint16_t& inputStateP2 = _inputState.playerInputState(1)._inputState;
+    
+    for (GamepadEvent* e : INPUT_MGR.getGamepadEvents())
+    {
+        if (_state == DGIMS_EXIT)
+        {
+            break;
+        }
+        
+        uint16_t& inputState = e->_index == 0 ? inputStateP1 : inputStateP2;
+        
+        switch (e->_button)
+        {
+            case GPEB_BUTTON_SELECT:
+            case GPEB_BUTTON_SNES_SELECT:
+                _state = e->isDown() ? DGIMS_EXIT : DGIMS_DEFAULT;
+                break;
+            case GPEB_BUTTON_A:
+                SET_BIT(inputState, ISF_EXECUTING_ATTACK, e->isPressed());
+                break;
+            case GPEB_BUTTON_B:
+                SET_BIT(inputState, ISF_JUMPING, e->isPressed());
+                break;
+            case GPEB_BUTTON_Y:
+            case GPEB_BUMPER_LEFT:
+                // Weird that Y button on my SNES controller is coming through as GPEB_BUMPER_LEFT
+                SET_BIT(inputState, ISF_EXECUTING_ABILITY, e->isPressed());
+                break;
+            case GPEB_BUTTON_X:
+                SET_BIT(inputState, ISF_TRIGGERING_SPECIAL, e->isPressed());
+                break;
+            case GPEB_D_PAD_LEFT:
+            {
+                SET_BIT(inputState, ISF_MOVING_LEFT, e->isPressed());
+                break;
+            }
+            case GPEB_D_PAD_RIGHT:
+            {
+                SET_BIT(inputState, ISF_MOVING_RIGHT, e->isPressed());
+                break;
+            }
+            case GPEB_STICK_LEFT:
+            {
+                SET_BIT(inputState, ISF_MOVING_LEFT, e->_x < 0);
+                SET_BIT(inputState, ISF_MOVING_RIGHT, e->_x > 0);
+                break;
+            }
+            case GPEB_UNKNOWN_6:
+            {
+                _state = e->isPressed() ? DGIMS_ZOOM_IN : DGIMS_DEFAULT;
+                SET_BIT(inputState, ISF_WARMING_UP, e->isPressed());
+                break;
+            }
+            case GPEB_BUMPER_RIGHT:
+            case GPEB_UNKNOWN_7:
+                if (_state == DGIMS_ZOOM_IN)
+                {
+                    _state = DGIMS_ZOOM_RESET;
+                }
+                else
+                {
+                    _state = e->isPressed() ? DGIMS_ZOOM_OUT : DGIMS_DEFAULT;
+                }
+                break;
+            default:
+                break;
+        }
+    }
+    
+    for (KeyboardEvent* e : INPUT_MGR.getKeyboardEvents())
+    {
+        switch (e->_key)
+        {
+            case GOW_KEY_ESCAPE:
+            case GOW_KEY_ANDROID_BACK_BUTTON:
+                _state = e->isUp() ? DGIMS_EXIT : DGIMS_DEFAULT;
+                break;
+            case GOW_KEY_P:
+                if (e->isDown())
+                {
+                    _state = _state == DGIMS_DISPLAY_PHYSICS ? DGIMS_DEFAULT : DGIMS_DISPLAY_PHYSICS;
+                }
+                break;
+            case GOW_KEY_J:
+                SET_BIT(inputStateP1, ISF_JUMPING, e->isPressed());
+                break;
+            case GOW_KEY_K:
+                SET_BIT(inputStateP1, ISF_EXECUTING_ATTACK, e->isPressed());
+                break;
+            case GOW_KEY_H:
+                SET_BIT(inputStateP1, ISF_EXECUTING_ABILITY, e->isPressed());
+                break;
+            case GOW_KEY_U:
+                SET_BIT(inputStateP1, ISF_TRIGGERING_SPECIAL, e->isPressed());
+                break;
+            case GOW_KEY_T:
+                SET_BIT(inputStateP1, ISF_WARMING_UP, e->isPressed());
+                break;
+            case GOW_KEY_I:
+                _state = e->isPressed() ? DGIMS_ZOOM_IN : DGIMS_DEFAULT;
+                break;
+            case GOW_KEY_O:
+                if (_state == DGIMS_ZOOM_IN)
+                {
+                    _state = DGIMS_ZOOM_RESET;
+                }
+                else
+                {
+                    _state = e->isPressed() ? DGIMS_ZOOM_OUT : DGIMS_DEFAULT;
+                }
+                break;
+            case GOW_KEY_A:
+                SET_BIT(inputStateP1, ISF_MOVING_LEFT, e->isPressed());
+                break;
+            case GOW_KEY_D:
+                SET_BIT(inputStateP1, ISF_MOVING_RIGHT, e->isPressed());
+                break;
+            case GOW_KEY_ARROW_UP:
+                SET_BIT(inputStateP2, ISF_JUMPING, e->isPressed());
+                break;
+            case GOW_KEY_ARROW_LEFT:
+                SET_BIT(inputStateP2, ISF_MOVING_LEFT, e->isPressed());
+                break;
+            case GOW_KEY_ARROW_RIGHT:
+                SET_BIT(inputStateP2, ISF_MOVING_RIGHT, e->isPressed());
+                break;
+            case GOW_KEY_PERIOD:
+            {
+                if (e->isDown())
+                {
+                    drop2ndPlayer();
+                }
+                break;
+            }
+            default:
+                break;
+        }
+    }
+    
     if (_inputState.isRequestingToAddLocalPlayer() &&
         NW_CLNT != nullptr)
     {
@@ -32,12 +172,12 @@ GameInputProcessorState GameInputProcessor::update()
     return _state;
 }
 
-GameInputProcessorState GameInputProcessor::state()
+DanteGameInputProcessorState DanteGameInputProcessor::state()
 {
     return _state;
 }
 
-void GameInputProcessor::sampleInputAsNewMove(TimeTracker& tt)
+void DanteGameInputProcessor::sampleInputAsNewMove(TimeTracker& tt)
 {
     InputState* inputState = _poolInputState.obtain();
     _inputState.copyTo(inputState);
@@ -46,43 +186,43 @@ void GameInputProcessor::sampleInputAsNewMove(TimeTracker& tt)
     ++_numMovesProcessed;
 }
 
-void GameInputProcessor::removeProcessedMovesWithIndexLessThan(uint32_t numMovesProcessed)
+void DanteGameInputProcessor::removeProcessedMovesWithIndexLessThan(uint32_t numMovesProcessed)
 {
     _moveList.removeProcessedMovesWithIndexLessThan(numMovesProcessed, _poolInputState);
 }
 
-InputState& GameInputProcessor::inputState()
+InputState& DanteGameInputProcessor::inputState()
 {
     return _inputState;
 }
 
-MoveList& GameInputProcessor::moveList()
+MoveList& DanteGameInputProcessor::moveList()
 {
     return _moveList;
 }
 
-void GameInputProcessor::reset()
+void DanteGameInputProcessor::reset()
 {
     _moveList.removeAllMoves(_poolInputState);
     _inputState.reset();
     _numMovesProcessed = 0;
     
-    _state = GIMS_DEFAULT;
+    _state = DGIMS_DEFAULT;
 }
 
-void GameInputProcessor::setNumMovesProcessed(uint32_t numMovesProcessed)
+void DanteGameInputProcessor::setNumMovesProcessed(uint32_t numMovesProcessed)
 {
     _numMovesProcessed = numMovesProcessed;
 }
 
-void GameInputProcessor::drop2ndPlayer()
+void DanteGameInputProcessor::drop2ndPlayer()
 {
     InputState::PlayerInputState& pis = _inputState.playerInputState(1);
     pis._playerID = 0;
     NW_CLNT->requestToDropLocalPlayer(1);
 }
 
-uint64_t cb_steam_getPlayerAddressHash(uint8_t inPlayerIndex)
+uint64_t cb_dante_steam_getPlayerAddressHash(uint8_t inPlayerIndex)
 {
     uint64_t ret = 0;
     
@@ -100,9 +240,16 @@ uint64_t cb_steam_getPlayerAddressHash(uint8_t inPlayerIndex)
     return ret;
 }
 
-void cb_client_onEntityRegistered(Entity* e)
+void cb_dante_client_onEntityRegistered(Entity* e)
 {
     ENGINE_STATE_GAME_DANTE.world().addNetworkEntity(e);
+    
+//    if (e->isPlayer() && e->playerInfo()._playerID == 1)
+//    {
+//        uint32_t entityLayoutKey = e->networkDataField("entityLayoutKey").valueUInt32();
+//        EntityLayoutDef& eld = ENTITY_LAYOUT_MGR.entityLayoutDef(entityLayoutKey);
+//        ENGINE_STATE_GAME_DANTE.populateFromEntityLayout(eld);
+//    }
     
     if (e->isPlayer())
     {
@@ -110,12 +257,12 @@ void cb_client_onEntityRegistered(Entity* e)
     }
 }
 
-void cb_client_onEntityDeregistered(Entity* e)
+void cb_dante_client_onEntityDeregistered(Entity* e)
 {
     ENGINE_STATE_GAME_DANTE.world().removeNetworkEntity(e);
 }
 
-void cb_client_onPlayerWelcomed(uint8_t playerID)
+void cb_dante_client_onPlayerWelcomed(uint8_t playerID)
 {
     ENGINE_STATE_GAME_DANTE.input().inputState().activateNextPlayer(playerID);
 }
@@ -170,23 +317,23 @@ void DanteGameEngineState::onUpdate(Engine* e)
     
     _timeTracker.onFrame();
     
-    GameInputProcessorState gims = _inputProcessor.update();
-    if (gims == GIMS_EXIT)
+    DanteGameInputProcessorState gims = _inputProcessor.update();
+    if (gims == DGIMS_EXIT)
     {
         e->popState();
         return;
     }
     
     static float zoomStep = 0.035398230088496f;
-    if (gims == GIMS_ZOOM_IN)
+    if (gims == DGIMS_ZOOM_IN)
     {
         _scale -= zoomStep;
     }
-    if (gims == GIMS_ZOOM_OUT)
+    if (gims == DGIMS_ZOOM_OUT)
     {
         _scale += zoomStep;
     }
-    if (gims == GIMS_ZOOM_RESET)
+    if (gims == DGIMS_ZOOM_RESET)
     {
         _scale = 1.0f;
     }
@@ -202,7 +349,7 @@ void DanteGameEngineState::onRender(Renderer& r, double extrapolation)
     float topEdge = _world->topEdge();
     float maxWidthScale = rightEdge / baseRight;
     float maxHeightScale = topEdge / baseTop;
-    float maxScale = CLAMP(GOW_MIN(maxWidthScale, maxHeightScale), 1.0f, 32.0f);
+    float maxScale = CLAMP(GOW_MIN(maxWidthScale, maxHeightScale), 1.0f, 200.0f);
     _scale = CLAMP(_scale, 0.25f, maxScale);
     
     if (ENGINE_CFG.extrapolatePhysics())
@@ -218,38 +365,142 @@ void DanteGameEngineState::onRender(Renderer& r, double extrapolation)
         r.updateMatrixCenteredOnEntity(controlledPlayer, static_cast<float>(_world->rightEdge()), static_cast<float>(_world->topEdge()), _scale);
     }
     
-    r.renderParallaxLayers(world().getLayers(), "background_upper");
-    r.renderParallaxLayers(world().getLayers(), "background_mid");
-    r.renderParallaxLayers(world().getLayers(), "background_lower");
-    
-    std::vector<Entity*> platformingEntities;
     r.spriteBatcherBegin();
-    for (Entity* e : world().getStaticEntities())
+    for (Entity* e : world().getLayers())
     {
-        // TODO, this isn't the best code you know
-        std::string name = e->entityDef()._keyName;
-        bool isPlatformingEntity = name == "P001" || name == "P002" || name == "P003"|| name == "P004";
-        if (isPlatformingEntity)
-        {
-            platformingEntities.push_back(e);
-        }
-        else
+        std::string textureRegionKey = e->renderController()->getTextureMapping();
+        std::string textureForRegionKey = ASSETS_MGR.textureForRegionKey(textureRegionKey);
+        
+        if (textureForRegionKey == "texture_001")
         {
             r.spriteBatcherAddEntity(e);
         }
     }
-    r.spriteBatcherEnd("ground");
+    r.spriteBatcherEnd("texture_001");
     
     r.spriteBatcherBegin();
-    for (Entity* e : platformingEntities)
+    for (Entity* e : world().getLayers())
     {
-        r.spriteBatcherAddEntity(e);
+        std::string textureRegionKey = e->renderController()->getTextureMapping();
+        std::string textureForRegionKey = ASSETS_MGR.textureForRegionKey(textureRegionKey);
+        
+        if (textureForRegionKey == "texture_002")
+        {
+            r.spriteBatcherAddEntity(e);
+        }
     }
-    r.spriteBatcherEnd("platforming_1");
+    r.spriteBatcherEnd("texture_002");
+    
+    r.spriteBatcherBegin();
+    for (Entity* e : world().getLayers())
+    {
+        std::string textureRegionKey = e->renderController()->getTextureMapping();
+        std::string textureForRegionKey = ASSETS_MGR.textureForRegionKey(textureRegionKey);
+        
+        if (textureForRegionKey == "texture_003")
+        {
+            r.spriteBatcherAddEntity(e);
+        }
+    }
+    r.spriteBatcherEnd("texture_003");
+    
+    r.spriteBatcherBegin();
+    for (Entity* e : world().getStaticEntities())
+    {
+        std::string textureRegionKey = e->renderController()->getTextureMapping();
+        std::string textureForRegionKey = ASSETS_MGR.textureForRegionKey(textureRegionKey);
+        
+        if (textureForRegionKey == "texture_004")
+        {
+            r.spriteBatcherAddEntity(e);
+        }
+    }
+    r.spriteBatcherEnd("texture_004");
+    
+    r.spriteBatcherBegin();
+    for (Entity* e : world().getDynamicEntities())
+    {
+        std::string textureRegionKey = e->renderController()->getTextureMapping();
+        std::string textureForRegionKey = ASSETS_MGR.textureForRegionKey(textureRegionKey);
+        
+        if (textureForRegionKey == "texture_005")
+        {
+            r.spriteBatcherAddEntity(e);
+        }
+    }
+    r.spriteBatcherEnd("texture_005");
+    
+    r.spriteBatcherBegin();
+    for (Entity* e : world().getDynamicEntities())
+    {
+        std::string textureRegionKey = e->renderController()->getTextureMapping();
+        std::string textureForRegionKey = ASSETS_MGR.textureForRegionKey(textureRegionKey);
+        
+        if (textureForRegionKey == "texture_007")
+        {
+            r.spriteBatcherAddEntity(e);
+        }
+    }
+    r.spriteBatcherEnd("texture_007");
+    
+    r.spriteBatcherBegin();
+    for (Entity* e : world().getDynamicEntities())
+    {
+        std::string textureRegionKey = e->renderController()->getTextureMapping();
+        std::string textureForRegionKey = ASSETS_MGR.textureForRegionKey(textureRegionKey);
+        
+        if (textureForRegionKey == "texture_008")
+        {
+            r.spriteBatcherAddEntity(e);
+        }
+    }
+    r.spriteBatcherEnd("texture_008");
+    
+    r.spriteBatcherBegin();
+    for (Entity* e : world().getStaticEntities())
+    {
+        std::string textureRegionKey = e->renderController()->getTextureMapping();
+        std::string textureForRegionKey = ASSETS_MGR.textureForRegionKey(textureRegionKey);
+        
+        if (textureForRegionKey == "texture_009")
+        {
+            r.spriteBatcherAddEntity(e);
+        }
+    }
+    r.spriteBatcherEnd("texture_009");
+    
+//    r.renderNosParallaxLayers(world().getLayers(), "texture_001");
+//    r.renderNosParallaxLayers(world().getLayers(), "texture_002");
+//    r.renderNosParallaxLayers(world().getLayers(), "texture_003");
+    
+//    std::vector<Entity*> platformingEntities;
+//    r.spriteBatcherBegin();
+//    for (Entity* e : world().getStaticEntities())
+//    {
+//        // TODO, this isn't the best code you know
+//        std::string name = e->entityDef()._keyName;
+//        bool isPlatformingEntity = name == "P001" || name == "P002" || name == "P003"|| name == "P004";
+//        if (isPlatformingEntity)
+//        {
+//            platformingEntities.push_back(e);
+//        }
+//        else
+//        {
+//            r.spriteBatcherAddEntity(e);
+//        }
+//    }
+//    r.spriteBatcherEnd("ground");
+//    
+//    r.spriteBatcherBegin();
+//    for (Entity* e : platformingEntities)
+//    {
+//        r.spriteBatcherAddEntity(e);
+//    }
+//    r.spriteBatcherEnd("platforming_1");
     
     renderWithNetwork(r);
     
-    if (_inputProcessor.state() == GIMS_DISPLAY_PHYSICS)
+    if (_inputProcessor.state() == DGIMS_DISPLAY_PHYSICS)
     {
         r.renderBox2DPhysics(static_cast<Box2DPhysicsWorld*>(_world));
     }
@@ -295,7 +546,7 @@ Entity* DanteGameEngineState::getControlledPlayer()
     return getPlayer(_inputProcessor.inputState().playerInputState(0)._playerID);
 }
 
-GameInputProcessor& DanteGameEngineState::input()
+DanteGameInputProcessor& DanteGameEngineState::input()
 {
     return _inputProcessor;
 }
@@ -328,7 +579,7 @@ void DanteGameEngineState::joinServer(Engine* e)
         }
         clientHelper = new SteamClientHelper(serverSteamID,
                                              _timeTracker,
-                                             cb_steam_getPlayerAddressHash,
+                                             cb_dante_steam_getPlayerAddressHash,
                                              NetworkClient::sProcessPacket);
     }
     else
@@ -360,9 +611,9 @@ void DanteGameEngineState::joinServer(Engine* e)
     
     NetworkClient::create(clientHelper,
                           _timeTracker,
-                          cb_client_onEntityRegistered,
-                          cb_client_onEntityDeregistered,
-                          cb_client_onPlayerWelcomed);
+                          cb_dante_client_onEntityRegistered,
+                          cb_dante_client_onEntityDeregistered,
+                          cb_dante_client_onPlayerWelcomed);
     
     if (NW_CLNT->connect() == false)
     {
@@ -414,6 +665,7 @@ void DanteGameEngineState::updateWithNetwork(Engine* e)
         Entity* e = getPlayer(1);
         if (e != nullptr)
         {
+            LOG("Okay, let's investigate how the fuck we got in here");
             uint32_t entityLayoutKey = e->networkDataField("entityLayoutKey").valueUInt32();
             EntityLayoutDef& eld = ENTITY_LAYOUT_MGR.entityLayoutDef(entityLayoutKey);
             ENGINE_STATE_GAME_DANTE.populateFromEntityLayout(eld);
@@ -529,7 +781,7 @@ void DanteGameEngineState::updateWithNetwork(Engine* e)
         world().recallCache(world().getNumMovesProcessed());
         world().clearCache(world().getNumMovesProcessed());
         input().removeProcessedMovesWithIndexLessThan(world().getNumMovesProcessed());
-        assert (getPlayer(1) != nullptr);
+//        assert (getPlayer(1) != nullptr);
     }
 }
 
@@ -578,9 +830,6 @@ void DanteGameEngineState::renderWithNetwork(Renderer& r)
         r.setText("outBps", STRING_FORMAT("Out %d Bps", static_cast<int>(NW_CLNT->bytesSentPerSecond())));
     }
     
-    bool isReleasingShockwavePlayer4 = false;
-    bool isVampirePlayer4 = false;
-    uint16_t shockwaveStateTimePlayer4 = 0;
     Entity* player4 = getPlayer(4);
     if (player4 != nullptr)
     {
@@ -601,11 +850,6 @@ void DanteGameEngineState::renderWithNetwork(Renderer& r)
             std::string textureRegionKey = player4->renderController()->getTextureMapping();
             std::string textureForRegionKey = ASSETS_MGR.textureForRegionKey(textureRegionKey);
             r.spriteBatcherEnd(textureForRegionKey, "main", "sprite", "main", Color::BLUE);
-            
-            JonController* player = player4->controller<JonController>();
-            isReleasingShockwavePlayer4 = player->isReleasingShockwave();
-            isVampirePlayer4 = player->isVampire();
-            shockwaveStateTimePlayer4 = player->shockwaveStateTime();
         }
     }
     else
@@ -613,19 +857,6 @@ void DanteGameEngineState::renderWithNetwork(Renderer& r)
         r.setText("player4Info", "4|Maybe someone will join...?");
     }
     
-    r.bindFramebuffer("player4");
-    if (isReleasingShockwavePlayer4)
-    {
-        r.renderFramebufferWithShockwave("main", player4->position()._x, player4->position()._y, shockwaveStateTimePlayer4 * frameRate, isVampirePlayer4);
-    }
-    else
-    {
-        r.renderFramebuffer("main", isVampirePlayer4 ? "framebufferWithTint" : "framebuffer");
-    }
-    
-    bool isReleasingShockwavePlayer3 = false;
-    bool isVampirePlayer3 = false;
-    uint16_t shockwaveStateTimePlayer3 = 0;
     Entity* player3 = getPlayer(3);
     if (player3 != nullptr)
     {
@@ -646,11 +877,6 @@ void DanteGameEngineState::renderWithNetwork(Renderer& r)
             std::string textureRegionKey = player3->renderController()->getTextureMapping();
             std::string textureForRegionKey = ASSETS_MGR.textureForRegionKey(textureRegionKey);
             r.spriteBatcherEnd(textureForRegionKey, "main", "sprite", "main", Color::GREEN);
-            
-            JonController* player = player3->controller<JonController>();
-            isReleasingShockwavePlayer3 = player->isReleasingShockwave();
-            isVampirePlayer3 = player->isVampire();
-            shockwaveStateTimePlayer3 = player->shockwaveStateTime();
         }
     }
     else
@@ -658,19 +884,6 @@ void DanteGameEngineState::renderWithNetwork(Renderer& r)
         r.setText("player3Info", "3|Maybe someone will join...?");
     }
     
-    r.bindFramebuffer("player3");
-    if (isReleasingShockwavePlayer3)
-    {
-        r.renderFramebufferWithShockwave("player4", player3->position()._x, player3->position()._y, shockwaveStateTimePlayer3 * frameRate, isVampirePlayer3);
-    }
-    else
-    {
-        r.renderFramebuffer("player4", isVampirePlayer3 ? "framebufferWithTint" : "framebuffer");
-    }
-    
-    bool isReleasingShockwavePlayer2 = false;
-    bool isVampirePlayer2 = false;
-    uint16_t shockwaveStateTimePlayer2 = 0;
     Entity* player2 = getPlayer(2);
     if (player2 != nullptr)
     {
@@ -691,11 +904,6 @@ void DanteGameEngineState::renderWithNetwork(Renderer& r)
             std::string textureRegionKey = player2->renderController()->getTextureMapping();
             std::string textureForRegionKey = ASSETS_MGR.textureForRegionKey(textureRegionKey);
             r.spriteBatcherEnd(textureForRegionKey, "main", "sprite", "main", Color::RED);
-            
-            JonController* player = player2->controller<JonController>();
-            isReleasingShockwavePlayer2 = player->isReleasingShockwave();
-            isVampirePlayer2 = player->isVampire();
-            shockwaveStateTimePlayer2 = player->shockwaveStateTime();
         }
     }
     else
@@ -703,19 +911,6 @@ void DanteGameEngineState::renderWithNetwork(Renderer& r)
         r.setText("player2Info", "2|Connect gamepad or use arrow keys...");
     }
     
-    r.bindFramebuffer("player2");
-    if (isReleasingShockwavePlayer2)
-    {
-        r.renderFramebufferWithShockwave("player3", player2->position()._x, player2->position()._y, shockwaveStateTimePlayer2 * frameRate, isVampirePlayer2);
-    }
-    else
-    {
-        r.renderFramebuffer("player3", isVampirePlayer2 ? "framebufferWithTint" : "framebuffer");
-    }
-    
-    bool isReleasingShockwavePlayer1 = false;
-    bool isVampirePlayer1 = false;
-    uint16_t shockwaveStateTimePlayer1 = 0;
     Entity* player1 = getPlayer(1);
     if (player1 != nullptr)
     {
@@ -728,26 +923,11 @@ void DanteGameEngineState::renderWithNetwork(Renderer& r)
             std::string textureRegionKey = player1->renderController()->getTextureMapping();
             std::string textureForRegionKey = ASSETS_MGR.textureForRegionKey(textureRegionKey);
             r.spriteBatcherEnd(textureForRegionKey);
-            
-            JonController* player = player1->controller<JonController>();
-            isReleasingShockwavePlayer1 = player->isReleasingShockwave();
-            isVampirePlayer1 = player->isVampire();
-            shockwaveStateTimePlayer1 = player->shockwaveStateTime();
         }
     }
     else
     {
         r.setText("player1Info", "1|Joining...");
-    }
-    
-    r.bindFramebuffer("player1");
-    if (isReleasingShockwavePlayer1)
-    {
-        r.renderFramebufferWithShockwave("player2", player1->position()._x, player1->position()._y, shockwaveStateTimePlayer1 * frameRate, isVampirePlayer1);
-    }
-    else
-    {
-        r.renderFramebuffer("player2", isVampirePlayer1 ? "framebufferWithTint" : "framebuffer");
     }
 }
 
