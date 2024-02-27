@@ -356,7 +356,8 @@ void NetworkClient::updateSendingInputPacket(MoveList& ml)
         uint8_t moveCountWritten = 0;
         for (int i = 0; i < ml.getMoveCount(); ++i, ++moveItr)
         {
-            // Maybe this solves my above complaint? #tyingCommentsTogetherForTheFirstTime
+            // Maybe this solves my above complaint?
+            // #tyingCommentsTogetherForTheFirstTime
             if (moveItr->getTimestamp() > _lastMoveProcessedByServerTimestamp)
             {
                 moveItr->write(ombs);

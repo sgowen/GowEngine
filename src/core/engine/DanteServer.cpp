@@ -205,7 +205,7 @@ void DanteServer::addPlayer(std::string playerName, uint8_t playerID)
     // TODO, assert that we don't already have a player for this ID
     uint32_t spawnX = 20;
     uint32_t spawnY = 15;
-    uint32_t entityLayoutKey = 'Z001';
+    uint32_t entityLayoutKey = 'Z002';
     
     if (playerID == 1)
     {

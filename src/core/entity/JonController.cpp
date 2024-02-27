@@ -190,10 +190,10 @@ void JonController::processMovementInput(uint16_t inputState)
 {
     Entity& e = *_entity;
     
-    bool isInputLeft = IS_BIT_SET(inputState, ISF_MOVING_LEFT);
-    bool wasInputLeft = IS_BIT_SET(e.lastProcessedInputState(), ISF_MOVING_LEFT);
-    bool isInputRight = IS_BIT_SET(inputState, ISF_MOVING_RIGHT);
-    bool wasInputRight = IS_BIT_SET(e.lastProcessedInputState(), ISF_MOVING_RIGHT);
+    bool isInputLeft = IS_BIT_SET(inputState, JISF_MOVING_LEFT);
+    bool wasInputLeft = IS_BIT_SET(e.lastProcessedInputState(), JISF_MOVING_LEFT);
+    bool isInputRight = IS_BIT_SET(inputState, JISF_MOVING_RIGHT);
+    bool wasInputRight = IS_BIT_SET(e.lastProcessedInputState(), JISF_MOVING_RIGHT);
     
     static float speedRabbitX = e.data().getFloat("speedX");
     static float speedVampireX = e.data().getFloat("speedVampireX");
@@ -242,8 +242,8 @@ void JonController::processJumpInput(uint16_t inputState)
 {
     Entity& e = *_entity;
     
-    bool isInputJump = IS_BIT_SET(inputState, ISF_JUMPING);
-    bool wasInputJump = IS_BIT_SET(e.lastProcessedInputState(), ISF_JUMPING);
+    bool isInputJump = IS_BIT_SET(inputState, JISF_JUMPING);
+    bool wasInputJump = IS_BIT_SET(e.lastProcessedInputState(), JISF_JUMPING);
     
     static uint32_t numJumpFrames = e.data().getUInt("numJumpFrames");
     static uint32_t numDoubleJumpFrames = e.data().getUInt("numDoubleJumpFrames");
@@ -336,8 +336,8 @@ void JonController::processAttackInput(uint16_t inputState)
 {
     Entity& e = *_entity;
     
-    bool isInputAttack = IS_BIT_SET(inputState, ISF_EXECUTING_ATTACK);
-    bool wasInputAttack = IS_BIT_SET(e.lastProcessedInputState(), ISF_EXECUTING_ATTACK);
+    bool isInputAttack = IS_BIT_SET(inputState, JISF_EXECUTING_ATTACK);
+    bool wasInputAttack = IS_BIT_SET(e.lastProcessedInputState(), JISF_EXECUTING_ATTACK);
     
     uint8_t& state = e.state()._state;
     uint16_t& stateTime = e.state()._stateTime;
@@ -356,8 +356,8 @@ void JonController::processAbilityInput(uint16_t inputState)
 {
     Entity& e = *_entity;
     
-    bool isInputAbility = IS_BIT_SET(inputState, ISF_EXECUTING_ABILITY);
-    bool wasInputAbility = IS_BIT_SET(e.lastProcessedInputState(), ISF_EXECUTING_ABILITY);
+    bool isInputAbility = IS_BIT_SET(inputState, JISF_EXECUTING_ABILITY);
+    bool wasInputAbility = IS_BIT_SET(e.lastProcessedInputState(), JISF_EXECUTING_ABILITY);
     
     uint8_t& state = e.state()._state;
     uint16_t& stateTime = e.state()._stateTime;
@@ -412,8 +412,8 @@ void JonController::processWarmingUpInput(uint16_t inputState)
 {
     Entity& e = *_entity;
     
-    bool isInputWarmingUp = IS_BIT_SET(inputState, ISF_WARMING_UP);
-    bool wasInputWarmingUp = IS_BIT_SET(e.lastProcessedInputState(), ISF_WARMING_UP);
+    bool isInputWarmingUp = IS_BIT_SET(inputState, JISF_WARMING_UP);
+    bool wasInputWarmingUp = IS_BIT_SET(e.lastProcessedInputState(), JISF_WARMING_UP);
     
     uint8_t& state = e.state()._state;
     uint16_t& stateTime = e.state()._stateTime;
@@ -432,8 +432,8 @@ void JonController::processSpecialInput(uint16_t inputState)
 {
     Entity& e = *_entity;
     
-    bool isInputSpecial = IS_BIT_SET(inputState, ISF_TRIGGERING_SPECIAL);
-    bool wasInputSpecial = IS_BIT_SET(e.lastProcessedInputState(), ISF_TRIGGERING_SPECIAL);
+    bool isInputSpecial = IS_BIT_SET(inputState, JISF_TRIGGERING_SPECIAL);
+    bool wasInputSpecial = IS_BIT_SET(e.lastProcessedInputState(), JISF_TRIGGERING_SPECIAL);
     
     uint8_t& state = e.state()._state;
     uint16_t& stateTime = e.state()._stateTime;

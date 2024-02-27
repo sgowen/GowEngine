@@ -199,6 +199,34 @@ void Renderer::updateMatrixCenteredOnEntity(Entity* e, float maxRight, float max
     updateMatrix(md, matrixKey);
 }
 
+void Renderer::updateMatrixCenteredOnEntityForParallaxLayer(Entity* e, Entity* parallaxLayer, float maxRight, float maxTop, float scale, std::string matrixKey)
+{
+    if (e == nullptr || parallaxLayer == nullptr)
+    {
+        return;
+    }
+    
+    updateMatrixCenteredOnEntity(e, maxRight, maxTop, scale, matrixKey);
+    
+    if (parallaxLayer->data().hasValue("parallaxSpeedRatio"))
+    {
+        float parallaxSpeedRatio = parallaxLayer->data().getFloat("parallaxSpeedRatio");
+        
+        Matrix& m = matrix(matrixKey);
+        MatrixDescriptor md = m._desc;
+        
+        float left = md._left * parallaxSpeedRatio;
+        float bottom = md._bottom * parallaxSpeedRatio;
+        
+        md._right += (left - md._left);
+        md._left = left;
+        md._top += (bottom - md._bottom);
+        md._bottom = bottom;
+        
+        updateMatrix(md, matrixKey);
+    }
+}
+
 void Renderer::rektangleBatcherBegin(std::string rektangleBatcherKey)
 {
     rektangleBatcher(rektangleBatcherKey).begin();

@@ -10,15 +10,15 @@
 
 #include "EntityController.hpp"
 
-enum InputStateFlags
+enum JonInputStateFlags
 {
-    ISF_MOVING_RIGHT       = 1 << 0,
-    ISF_MOVING_LEFT        = 1 << 1,
-    ISF_JUMPING            = 1 << 2,
-    ISF_EXECUTING_ABILITY  = 1 << 3,
-    ISF_WARMING_UP         = 1 << 4,
-    ISF_EXECUTING_ATTACK   = 1 << 5,
-    ISF_TRIGGERING_SPECIAL = 1 << 6
+    JISF_MOVING_RIGHT       = 1 << 0,
+    JISF_MOVING_LEFT        = 1 << 1,
+    JISF_JUMPING            = 1 << 2,
+    JISF_EXECUTING_ABILITY  = 1 << 3,
+    JISF_WARMING_UP         = 1 << 4,
+    JISF_EXECUTING_ATTACK   = 1 << 5,
+    JISF_TRIGGERING_SPECIAL = 1 << 6
 };
 
 class JonController : public EntityController

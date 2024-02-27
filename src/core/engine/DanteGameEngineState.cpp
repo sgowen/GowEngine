@@ -26,6 +26,25 @@ DanteGameInputProcessorState DanteGameInputProcessor::update()
     uint16_t& inputStateP1 = _inputState.playerInputState(0)._inputState;
     uint16_t& inputStateP2 = _inputState.playerInputState(1)._inputState;
     
+#if IS_MOBILE
+    for (CursorEvent* e : INPUT_MGR.getCursorEvents())
+    {
+        uint16_t& inputState = inputStateP1;
+        
+        Vector2& pos = INPUT_MGR.convert(e);
+        
+        SET_BIT(inputState, RISF_MOVING_LEFT, e->isPressed() && pos._x < 38);
+        SET_BIT(inputState, RISF_MOVING_RIGHT, e->isPressed() && pos._x > 76);
+        
+        SET_BIT(inputState, RISF_JUMPING, e->isDown() && pos._y > 32);
+        
+        if (e->isUp() && pos._x > 90 && pos._y < 8)
+        {
+            _state = DGIMS_EXIT;
+        }
+    }
+#endif
+    
     for (GamepadEvent* e : INPUT_MGR.getGamepadEvents())
     {
         if (_state == DGIMS_EXIT)
@@ -42,39 +61,30 @@ DanteGameInputProcessorState DanteGameInputProcessor::update()
                 _state = e->isDown() ? DGIMS_EXIT : DGIMS_DEFAULT;
                 break;
             case GPEB_BUTTON_A:
-                SET_BIT(inputState, ISF_EXECUTING_ATTACK, e->isPressed());
+                SET_BIT(inputState, RISF_EXECUTING_ATTACK, e->isPressed());
                 break;
             case GPEB_BUTTON_B:
-                SET_BIT(inputState, ISF_JUMPING, e->isPressed());
-                break;
-            case GPEB_BUTTON_Y:
-            case GPEB_BUMPER_LEFT:
-                // Weird that Y button on my SNES controller is coming through as GPEB_BUMPER_LEFT
-                SET_BIT(inputState, ISF_EXECUTING_ABILITY, e->isPressed());
-                break;
-            case GPEB_BUTTON_X:
-                SET_BIT(inputState, ISF_TRIGGERING_SPECIAL, e->isPressed());
+                SET_BIT(inputState, RISF_JUMPING, e->isPressed());
                 break;
             case GPEB_D_PAD_LEFT:
             {
-                SET_BIT(inputState, ISF_MOVING_LEFT, e->isPressed());
+                SET_BIT(inputState, RISF_MOVING_LEFT, e->isPressed());
                 break;
             }
             case GPEB_D_PAD_RIGHT:
             {
-                SET_BIT(inputState, ISF_MOVING_RIGHT, e->isPressed());
+                SET_BIT(inputState, RISF_MOVING_RIGHT, e->isPressed());
                 break;
             }
             case GPEB_STICK_LEFT:
             {
-                SET_BIT(inputState, ISF_MOVING_LEFT, e->_x < 0);
-                SET_BIT(inputState, ISF_MOVING_RIGHT, e->_x > 0);
+                SET_BIT(inputState, RISF_MOVING_LEFT, e->_x < 0);
+                SET_BIT(inputState, RISF_MOVING_RIGHT, e->_x > 0);
                 break;
             }
             case GPEB_UNKNOWN_6:
             {
                 _state = e->isPressed() ? DGIMS_ZOOM_IN : DGIMS_DEFAULT;
-                SET_BIT(inputState, ISF_WARMING_UP, e->isPressed());
                 break;
             }
             case GPEB_BUMPER_RIGHT:
@@ -108,19 +118,10 @@ DanteGameInputProcessorState DanteGameInputProcessor::update()
                 }
                 break;
             case GOW_KEY_J:
-                SET_BIT(inputStateP1, ISF_JUMPING, e->isPressed());
+                SET_BIT(inputStateP1, RISF_JUMPING, e->isPressed());
                 break;
             case GOW_KEY_K:
-                SET_BIT(inputStateP1, ISF_EXECUTING_ATTACK, e->isPressed());
-                break;
-            case GOW_KEY_H:
-                SET_BIT(inputStateP1, ISF_EXECUTING_ABILITY, e->isPressed());
-                break;
-            case GOW_KEY_U:
-                SET_BIT(inputStateP1, ISF_TRIGGERING_SPECIAL, e->isPressed());
-                break;
-            case GOW_KEY_T:
-                SET_BIT(inputStateP1, ISF_WARMING_UP, e->isPressed());
+                SET_BIT(inputStateP1, RISF_EXECUTING_ATTACK, e->isPressed());
                 break;
             case GOW_KEY_I:
                 _state = e->isPressed() ? DGIMS_ZOOM_IN : DGIMS_DEFAULT;
@@ -136,19 +137,19 @@ DanteGameInputProcessorState DanteGameInputProcessor::update()
                 }
                 break;
             case GOW_KEY_A:
-                SET_BIT(inputStateP1, ISF_MOVING_LEFT, e->isPressed());
+                SET_BIT(inputStateP1, RISF_MOVING_LEFT, e->isPressed());
                 break;
             case GOW_KEY_D:
-                SET_BIT(inputStateP1, ISF_MOVING_RIGHT, e->isPressed());
+                SET_BIT(inputStateP1, RISF_MOVING_RIGHT, e->isPressed());
                 break;
             case GOW_KEY_ARROW_UP:
-                SET_BIT(inputStateP2, ISF_JUMPING, e->isPressed());
+                SET_BIT(inputStateP2, RISF_JUMPING, e->isPressed());
                 break;
             case GOW_KEY_ARROW_LEFT:
-                SET_BIT(inputStateP2, ISF_MOVING_LEFT, e->isPressed());
+                SET_BIT(inputStateP2, RISF_MOVING_LEFT, e->isPressed());
                 break;
             case GOW_KEY_ARROW_RIGHT:
-                SET_BIT(inputStateP2, ISF_MOVING_RIGHT, e->isPressed());
+                SET_BIT(inputStateP2, RISF_MOVING_RIGHT, e->isPressed());
                 break;
             case GOW_KEY_PERIOD:
             {
@@ -353,10 +354,6 @@ void DanteGameEngineState::onRender(Renderer& r, double extrapolation)
     r.bindFramebuffer();
     
     Entity* controlledPlayer = getControlledPlayer();
-    if (controlledPlayer != nullptr)
-    {
-        r.updateMatrixCenteredOnEntity(controlledPlayer, static_cast<float>(_world->rightEdge()), static_cast<float>(_world->topEdge()), _scale);
-    }
     
     r.spriteBatcherBegin();
     for (Entity* e : world().getLayers())
@@ -367,6 +364,11 @@ void DanteGameEngineState::onRender(Renderer& r, double extrapolation)
         if (textureForRegionKey == "texture_001")
         {
             r.spriteBatcherAddEntity(e);
+            
+            // TODO, this proves that the parallaxSpeedRatio should be defined for the layer, not the entity
+            // Because, if 2 entities have sprites on texture_001, but have parallaxSpeedRatio values, both will use the last one set here.
+            // #parallaxSpeedRatioShouldBeSetAtLayerLevel
+            r.updateMatrixCenteredOnEntityForParallaxLayer(controlledPlayer, e,  static_cast<float>(_world->rightEdge()), static_cast<float>(_world->topEdge()), _scale);
         }
     }
     r.spriteBatcherEnd("texture_001");
@@ -380,6 +382,9 @@ void DanteGameEngineState::onRender(Renderer& r, double extrapolation)
         if (textureForRegionKey == "texture_002")
         {
             r.spriteBatcherAddEntity(e);
+            
+            // #parallaxSpeedRatioShouldBeSetAtLayerLevel
+            r.updateMatrixCenteredOnEntityForParallaxLayer(controlledPlayer, e,  static_cast<float>(_world->rightEdge()), static_cast<float>(_world->topEdge()), _scale);
         }
     }
     r.spriteBatcherEnd("texture_002");
@@ -393,9 +398,14 @@ void DanteGameEngineState::onRender(Renderer& r, double extrapolation)
         if (textureForRegionKey == "texture_003")
         {
             r.spriteBatcherAddEntity(e);
+            
+            // #parallaxSpeedRatioShouldBeSetAtLayerLevel
+            r.updateMatrixCenteredOnEntityForParallaxLayer(controlledPlayer, e,  static_cast<float>(_world->rightEdge()), static_cast<float>(_world->topEdge()), _scale);
         }
     }
     r.spriteBatcherEnd("texture_003");
+    
+    r.updateMatrixCenteredOnEntity(controlledPlayer, static_cast<float>(_world->rightEdge()), static_cast<float>(_world->topEdge()), _scale);
     
     r.spriteBatcherBegin();
     for (Entity* e : world().getLayers())

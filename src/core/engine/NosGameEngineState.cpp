@@ -33,10 +33,10 @@ NosGameInputProcessorState NosGameInputProcessor::update()
         
         Vector2& pos = INPUT_MGR.convert(e);
         
-        SET_BIT(inputState, ISF_MOVING_LEFT, e->isPressed() && pos._x < 38);
-        SET_BIT(inputState, ISF_MOVING_RIGHT, e->isPressed() && pos._x > 76);
+        SET_BIT(inputState, JISF_MOVING_LEFT, e->isPressed() && pos._x < 38);
+        SET_BIT(inputState, JISF_MOVING_RIGHT, e->isPressed() && pos._x > 76);
         
-        SET_BIT(inputState, ISF_JUMPING, e->isDown() && pos._y > 32);
+        SET_BIT(inputState, JISF_JUMPING, e->isDown() && pos._y > 32);
         
         if (e->isUp() && pos._x > 90 && pos._y < 8)
         {
@@ -61,39 +61,39 @@ NosGameInputProcessorState NosGameInputProcessor::update()
                 _state = e->isDown() ? NGIMS_EXIT : NGIMS_DEFAULT;
                 break;
             case GPEB_BUTTON_A:
-                SET_BIT(inputState, ISF_EXECUTING_ATTACK, e->isPressed());
+                SET_BIT(inputState, JISF_EXECUTING_ATTACK, e->isPressed());
                 break;
             case GPEB_BUTTON_B:
-                SET_BIT(inputState, ISF_JUMPING, e->isPressed());
+                SET_BIT(inputState, JISF_JUMPING, e->isPressed());
                 break;
             case GPEB_BUTTON_Y:
             case GPEB_BUMPER_LEFT:
                 // Weird that Y button on my SNES controller is coming through as GPEB_BUMPER_LEFT
-                SET_BIT(inputState, ISF_EXECUTING_ABILITY, e->isPressed());
+                SET_BIT(inputState, JISF_EXECUTING_ABILITY, e->isPressed());
                 break;
             case GPEB_BUTTON_X:
-                SET_BIT(inputState, ISF_TRIGGERING_SPECIAL, e->isPressed());
+                SET_BIT(inputState, JISF_TRIGGERING_SPECIAL, e->isPressed());
                 break;
             case GPEB_D_PAD_LEFT:
             {
-                SET_BIT(inputState, ISF_MOVING_LEFT, e->isPressed());
+                SET_BIT(inputState, JISF_MOVING_LEFT, e->isPressed());
                 break;
             }
             case GPEB_D_PAD_RIGHT:
             {
-                SET_BIT(inputState, ISF_MOVING_RIGHT, e->isPressed());
+                SET_BIT(inputState, JISF_MOVING_RIGHT, e->isPressed());
                 break;
             }
             case GPEB_STICK_LEFT:
             {
-                SET_BIT(inputState, ISF_MOVING_LEFT, e->_x < 0);
-                SET_BIT(inputState, ISF_MOVING_RIGHT, e->_x > 0);
+                SET_BIT(inputState, JISF_MOVING_LEFT, e->_x < 0);
+                SET_BIT(inputState, JISF_MOVING_RIGHT, e->_x > 0);
                 break;
             }
             case GPEB_UNKNOWN_6:
             {
                 _state = e->isPressed() ? NGIMS_ZOOM_IN : NGIMS_DEFAULT;
-                SET_BIT(inputState, ISF_WARMING_UP, e->isPressed());
+                SET_BIT(inputState, JISF_WARMING_UP, e->isPressed());
                 break;
             }
             case GPEB_BUMPER_RIGHT:
@@ -127,19 +127,19 @@ NosGameInputProcessorState NosGameInputProcessor::update()
                 }
                 break;
             case GOW_KEY_J:
-                SET_BIT(inputStateP1, ISF_JUMPING, e->isPressed());
+                SET_BIT(inputStateP1, JISF_JUMPING, e->isPressed());
                 break;
             case GOW_KEY_K:
-                SET_BIT(inputStateP1, ISF_EXECUTING_ATTACK, e->isPressed());
+                SET_BIT(inputStateP1, JISF_EXECUTING_ATTACK, e->isPressed());
                 break;
             case GOW_KEY_H:
-                SET_BIT(inputStateP1, ISF_EXECUTING_ABILITY, e->isPressed());
+                SET_BIT(inputStateP1, JISF_EXECUTING_ABILITY, e->isPressed());
                 break;
             case GOW_KEY_U:
-                SET_BIT(inputStateP1, ISF_TRIGGERING_SPECIAL, e->isPressed());
+                SET_BIT(inputStateP1, JISF_TRIGGERING_SPECIAL, e->isPressed());
                 break;
             case GOW_KEY_T:
-                SET_BIT(inputStateP1, ISF_WARMING_UP, e->isPressed());
+                SET_BIT(inputStateP1, JISF_WARMING_UP, e->isPressed());
                 break;
             case GOW_KEY_I:
                 _state = e->isPressed() ? NGIMS_ZOOM_IN : NGIMS_DEFAULT;
@@ -155,19 +155,19 @@ NosGameInputProcessorState NosGameInputProcessor::update()
                 }
                 break;
             case GOW_KEY_A:
-                SET_BIT(inputStateP1, ISF_MOVING_LEFT, e->isPressed());
+                SET_BIT(inputStateP1, JISF_MOVING_LEFT, e->isPressed());
                 break;
             case GOW_KEY_D:
-                SET_BIT(inputStateP1, ISF_MOVING_RIGHT, e->isPressed());
+                SET_BIT(inputStateP1, JISF_MOVING_RIGHT, e->isPressed());
                 break;
             case GOW_KEY_ARROW_UP:
-                SET_BIT(inputStateP2, ISF_JUMPING, e->isPressed());
+                SET_BIT(inputStateP2, JISF_JUMPING, e->isPressed());
                 break;
             case GOW_KEY_ARROW_LEFT:
-                SET_BIT(inputStateP2, ISF_MOVING_LEFT, e->isPressed());
+                SET_BIT(inputStateP2, JISF_MOVING_LEFT, e->isPressed());
                 break;
             case GOW_KEY_ARROW_RIGHT:
-                SET_BIT(inputStateP2, ISF_MOVING_RIGHT, e->isPressed());
+                SET_BIT(inputStateP2, JISF_MOVING_RIGHT, e->isPressed());
                 break;
             case GOW_KEY_PERIOD:
             {
