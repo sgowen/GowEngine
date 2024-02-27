@@ -12,6 +12,7 @@ Renderer::Renderer() :
 _box2DPhysicsRenderer(2048),
 _nosPhysicsRenderer(2048),
 _shockwaveRenderer(),
+_lightRenderer(),
 _framebufferRenderer(),
 _screenRenderer(),
 _pixelToUnitRatio(1),
@@ -25,6 +26,7 @@ void Renderer::createDeviceDependentResources()
     _box2DPhysicsRenderer.createDeviceDependentResources();
     _nosPhysicsRenderer.createDeviceDependentResources();
     _shockwaveRenderer.createDeviceDependentResources();
+    _lightRenderer.createDeviceDependentResources();
     _framebufferRenderer.createDeviceDependentResources();
     _screenRenderer.createDeviceDependentResources();
     
@@ -69,6 +71,7 @@ void Renderer::destroyDeviceDependentResources()
     _box2DPhysicsRenderer.destroyDeviceDependentResources();
     _nosPhysicsRenderer.destroyDeviceDependentResources();
     _shockwaveRenderer.destroyDeviceDependentResources();
+    _lightRenderer.destroyDeviceDependentResources();
     _framebufferRenderer.destroyDeviceDependentResources();
     _screenRenderer.destroyDeviceDependentResources();
     
@@ -166,7 +169,7 @@ void Renderer::updateMatrix(MatrixDescriptor& desc, std::string matrixKey)
     updateMatrix(desc._left, desc._right, desc._bottom, desc._top, desc._near, desc._far, matrixKey);
 }
 
-void Renderer::updateMatrixCenteredOnEntity(Entity* e, float maxRight, float maxTop, float scale, std::string matrixKey)
+void Renderer::updateMatrixCenteredOnEntity(Entity* e, uint32_t maxRight, uint32_t maxTop, float scale, std::string matrixKey)
 {
     if (e == nullptr)
     {
@@ -199,32 +202,27 @@ void Renderer::updateMatrixCenteredOnEntity(Entity* e, float maxRight, float max
     updateMatrix(md, matrixKey);
 }
 
-void Renderer::updateMatrixCenteredOnEntityForParallaxLayer(Entity* e, Entity* parallaxLayer, float maxRight, float maxTop, float scale, std::string matrixKey)
+void Renderer::updateMatrixCenteredOnEntityForParallaxLayer(Entity* e, float parallaxSpeedRatio, uint32_t maxRight, uint32_t maxTop, float scale, std::string matrixKey)
 {
-    if (e == nullptr || parallaxLayer == nullptr)
+    if (e == nullptr)
     {
         return;
     }
     
     updateMatrixCenteredOnEntity(e, maxRight, maxTop, scale, matrixKey);
     
-    if (parallaxLayer->data().hasValue("parallaxSpeedRatio"))
-    {
-        float parallaxSpeedRatio = parallaxLayer->data().getFloat("parallaxSpeedRatio");
-        
-        Matrix& m = matrix(matrixKey);
-        MatrixDescriptor md = m._desc;
-        
-        float left = md._left * parallaxSpeedRatio;
-        float bottom = md._bottom * parallaxSpeedRatio;
-        
-        md._right += (left - md._left);
-        md._left = left;
-        md._top += (bottom - md._bottom);
-        md._bottom = bottom;
-        
-        updateMatrix(md, matrixKey);
-    }
+    Matrix& m = matrix(matrixKey);
+    MatrixDescriptor md = m._desc;
+    
+    float left = md._left * parallaxSpeedRatio;
+    float bottom = md._bottom * parallaxSpeedRatio;
+    
+    md._right += (left - md._left);
+    md._left = left;
+    md._top += (bottom - md._bottom);
+    md._bottom = bottom;
+    
+    updateMatrix(md, matrixKey);
 }
 
 void Renderer::rektangleBatcherBegin(std::string rektangleBatcherKey)
@@ -257,6 +255,22 @@ void Renderer::renderSprite(std::string textureKey, std::string textureRegionKey
     sb.begin();
     sb.addSprite(tr, x, y, width, height, angle, flipX);
     sb.end(s, m._matrix, t);
+}
+
+void Renderer::renderEntitiesBoundToTexture(std::vector<Entity*>& entities, std::string texture, std::string spriteBatcherKey)
+{
+    spriteBatcherBegin(spriteBatcherKey);
+    for (Entity* e : entities)
+    {
+        std::string textureRegionKey = e->renderController()->getTextureMapping();
+        std::string textureForRegionKey = ASSETS_MGR.textureForRegionKey(textureRegionKey);
+        
+        if (textureForRegionKey == texture)
+        {
+            spriteBatcherAddEntity(e, spriteBatcherKey);
+        }
+    }
+    spriteBatcherEnd(texture, "main", "sprite", spriteBatcherKey);
 }
 
 void Renderer::renderNosParallaxLayers(std::vector<Entity*>& layers, std::string texture)
@@ -374,13 +388,34 @@ void Renderer::renderNosPhysics(NosPhysicsWorld* world, std::string matrixKey, s
     _nosPhysicsRenderer.render(world, &m._matrix, &s);
 }
 
+void Renderer::renderLight(std::string framebufferKey, std::string framebufferNormalMapKey, float x, float y, float lightPosZFactor, bool ambientLight)
+{
+    Shader& s = ASSETS_MGR.shader("lights");
+    Framebuffer& fb = framebuffer(framebufferKey);
+    Framebuffer& fbNormalMap = framebuffer(framebufferNormalMapKey);
+    Matrix& m = matrix();
+    
+    _lightRenderer.resetLights();
+    if (ambientLight)
+    {
+        _lightRenderer.configAmbientLight(0.3f, 0.3f, 0.3f, 0.3f);
+    }
+    else
+    {
+        _lightRenderer.configAmbientLight(1.0f, 1.0f, 1.0f, 1.0f);
+    }
+    _lightRenderer.configureFallOff(0.1f, 1.0f, 20.0f);
+    _lightRenderer.addLight(x, y - 2, 0.075f * lightPosZFactor, 0.8f, 0.8f, 0.8f, 1.0f);
+    _lightRenderer.render(s, m, fb, fbNormalMap);
+}
+
 void Renderer::renderFramebufferWithShockwave(std::string framebufferKey, float centerX, float centerY, float timeElapsed, bool isTransforming)
 {
     Shader& s = ASSETS_MGR.shader("shockwave");
     Framebuffer& fb = framebuffer(framebufferKey);
     Matrix& m = matrix();
     
-    _shockwaveRenderer.renderShockwave(s, fb, m, centerX, centerY, timeElapsed, isTransforming);
+    _shockwaveRenderer.render(s, fb, m, centerX, centerY, timeElapsed, isTransforming);
 }
 
 void Renderer::renderFramebuffer(std::string framebufferKey, std::string shaderKey)

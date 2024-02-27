@@ -8,19 +8,21 @@
 
 #pragma once
 
+#include "core/assets/ImageView.hpp"
+#include "core/assets/TextView.hpp"
+#include "core/physics/NosPhysicsRenderer.hpp"
+
 #include "CircleBatcher.hpp"
 #include "FontBatcher.hpp"
 #include "Framebuffer.hpp"
-#include "core/assets/ImageView.hpp"
 #include "Matrix.hpp"
 #include "RektangleBatcher.hpp"
 #include "SpriteBatcher.hpp"
-#include "core/assets/TextView.hpp"
 #include "TriangleBatcher.hpp"
 #include "ShockwaveRenderer.hpp"
 #include "ScreenRenderer.hpp"
 #include "FramebufferRenderer.hpp"
-#include "core/physics/NosPhysicsRenderer.hpp"
+#include "LightRenderer.hpp"
 
 #include <map>
 
@@ -48,14 +50,15 @@ public:
     
     void updateMatrix(float l, float r, float b, float t, float n = -1, float f = 1, std::string matrixKey = "main");
     void updateMatrix(MatrixDescriptor& desc, std::string matrixKey = "main");
-    void updateMatrixCenteredOnEntity(Entity* e, float maxRight, float maxTop, float scale = 1.0, std::string matrixKey = "main");
-    void updateMatrixCenteredOnEntityForParallaxLayer(Entity* e, Entity* parallaxLayer, float maxRight, float maxTop, float scale = 1.0, std::string matrixKey = "main");
+    void updateMatrixCenteredOnEntity(Entity* e, uint32_t maxRight, uint32_t maxTop, float scale = 1.0, std::string matrixKey = "main");
+    void updateMatrixCenteredOnEntityForParallaxLayer(Entity* e, float parallaxSpeedRatio, uint32_t maxRight, uint32_t maxTop, float scale = 1.0, std::string matrixKey = "main");
     
     void rektangleBatcherBegin(std::string rektangleBatcherKey = "main");
     void rektangleBatcherAddRektangle(Rektangle& r, std::string rektangleBatcherKey = "main");
     void rektangleBatcherEnd(Color& c, std::string matrixKey = "main", std::string shaderKey = "geometry", std::string rektangleBatcherKey = "main");
     
     void renderSprite(std::string textureKey, std::string textureRegionKey, float x, float y, float width, float height, uint16_t stateTime = 0, float angle = 0, bool flipX = false, std::string matrixKey = "main", std::string shaderKey = "sprite", std::string spriteBatcherKey = "main");
+    void renderEntitiesBoundToTexture(std::vector<Entity*>& entities, std::string texture, std::string spriteBatcherKey = "main");
     void renderNosParallaxLayers(std::vector<Entity*>& layers, std::string texture);
     void spriteBatcherBegin(std::string spriteBatcherKey = "main");
     void spriteBatcherAddEntities(std::vector<Entity*>& entities, std::string spriteBatcherKey = "main");
@@ -69,6 +72,8 @@ public:
     
     void renderBox2DPhysics(Box2DPhysicsWorld* world, std::string matrixKey = "main", std::string shaderKey = "geometry");
     void renderNosPhysics(NosPhysicsWorld* world, std::string matrixKey = "main", std::string shaderKey = "geometry");
+    
+    void renderLight(std::string framebufferKey, std::string framebufferNormalMapKey, float x, float y, float lightPosZFactor, bool ambientLight);
     
     void renderFramebufferWithShockwave(std::string framebufferKey, float centerX, float centerY, float timeElapsed, bool isTransforming);
     void renderFramebuffer(std::string framebufferKey, std::string shaderKey = "framebuffer");
@@ -90,6 +95,7 @@ private:
     Box2DPhysicsRenderer _box2DPhysicsRenderer;
     NosPhysicsRenderer _nosPhysicsRenderer;
     ShockwaveRenderer _shockwaveRenderer;
+    LightRenderer _lightRenderer;
     FramebufferRenderer _framebufferRenderer;
     ScreenRenderer _screenRenderer;
     std::map<std::string, CircleBatcher> _circleBatchers;

@@ -374,7 +374,7 @@ void NosGameEngineState::onRender(Renderer& r, double extrapolation)
     Entity* controlledPlayer = getControlledPlayer();
     if (controlledPlayer != nullptr)
     {
-        r.updateMatrixCenteredOnEntity(controlledPlayer, static_cast<float>(_world->rightEdge()), static_cast<float>(_world->topEdge()), _scale);
+        r.updateMatrixCenteredOnEntity(controlledPlayer, _world->rightEdge(), _world->topEdge(), _scale);
     }
     
     r.renderNosParallaxLayers(world().getLayers(), "background_upper");

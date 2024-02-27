@@ -23,7 +23,7 @@ public:
     
     void createDeviceDependentResources();
     void destroyDeviceDependentResources();
-    void renderShockwave(Shader& s, Framebuffer& fb, Matrix& m, float x, float y, float timeElapsed, bool isTransforming);
+    void render(Shader& s, Framebuffer& fb, Matrix& m, float x, float y, float timeElapsed, bool isTransforming);
     
 private:
     std::vector<VERTEX_2D> _vertices;

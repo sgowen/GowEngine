@@ -351,127 +351,75 @@ void DanteGameEngineState::onRender(Renderer& r, double extrapolation)
         _world->extrapolatePhysics(extrapolation);
     }
     
-    r.bindFramebuffer();
+    // TODO, in the proceeding rendering code, consider using multiple matrices instead of changing
+    // the "main" one over and over again
+    
+    r.bindFramebuffer("behindPlayer");
     
     Entity* controlledPlayer = getControlledPlayer();
     
-    r.spriteBatcherBegin();
-    for (Entity* e : world().getLayers())
-    {
-        std::string textureRegionKey = e->renderController()->getTextureMapping();
-        std::string textureForRegionKey = ASSETS_MGR.textureForRegionKey(textureRegionKey);
-        
-        if (textureForRegionKey == "texture_001")
-        {
-            r.spriteBatcherAddEntity(e);
-            
-            // TODO, this proves that the parallaxSpeedRatio should be defined for the layer, not the entity
-            // Because, if 2 entities have sprites on texture_001, but have parallaxSpeedRatio values, both will use the last one set here.
-            // #parallaxSpeedRatioShouldBeSetAtLayerLevel
-            r.updateMatrixCenteredOnEntityForParallaxLayer(controlledPlayer, e,  static_cast<float>(_world->rightEdge()), static_cast<float>(_world->topEdge()), _scale);
-        }
-    }
-    r.spriteBatcherEnd("texture_001");
+    r.updateMatrixCenteredOnEntityForParallaxLayer(controlledPlayer, 0.5f,  _world->rightEdge(), _world->topEdge(), _scale);
+    r.renderEntitiesBoundToTexture(world().getLayers(), "texture_001", "sb_001");
     
-    r.spriteBatcherBegin();
-    for (Entity* e : world().getLayers())
-    {
-        std::string textureRegionKey = e->renderController()->getTextureMapping();
-        std::string textureForRegionKey = ASSETS_MGR.textureForRegionKey(textureRegionKey);
-        
-        if (textureForRegionKey == "texture_002")
-        {
-            r.spriteBatcherAddEntity(e);
-            
-            // #parallaxSpeedRatioShouldBeSetAtLayerLevel
-            r.updateMatrixCenteredOnEntityForParallaxLayer(controlledPlayer, e,  static_cast<float>(_world->rightEdge()), static_cast<float>(_world->topEdge()), _scale);
-        }
-    }
-    r.spriteBatcherEnd("texture_002");
+    r.updateMatrixCenteredOnEntityForParallaxLayer(controlledPlayer, 0.6f,  _world->rightEdge(), _world->topEdge(), _scale);
+    r.renderEntitiesBoundToTexture(world().getLayers(), "texture_002", "sb_002");
     
-    r.spriteBatcherBegin();
-    for (Entity* e : world().getLayers())
-    {
-        std::string textureRegionKey = e->renderController()->getTextureMapping();
-        std::string textureForRegionKey = ASSETS_MGR.textureForRegionKey(textureRegionKey);
-        
-        if (textureForRegionKey == "texture_003")
-        {
-            r.spriteBatcherAddEntity(e);
-            
-            // #parallaxSpeedRatioShouldBeSetAtLayerLevel
-            r.updateMatrixCenteredOnEntityForParallaxLayer(controlledPlayer, e,  static_cast<float>(_world->rightEdge()), static_cast<float>(_world->topEdge()), _scale);
-        }
-    }
-    r.spriteBatcherEnd("texture_003");
+    r.updateMatrixCenteredOnEntityForParallaxLayer(controlledPlayer, 0.7f,  _world->rightEdge(), _world->topEdge(), _scale);
+    r.renderEntitiesBoundToTexture(world().getLayers(), "texture_003", "sb_003");
     
-    r.updateMatrixCenteredOnEntity(controlledPlayer, static_cast<float>(_world->rightEdge()), static_cast<float>(_world->topEdge()), _scale);
+    r.updateMatrixCenteredOnEntity(controlledPlayer, _world->rightEdge(), _world->topEdge(), _scale);
     
-    r.spriteBatcherBegin();
-    for (Entity* e : world().getLayers())
-    {
-        std::string textureRegionKey = e->renderController()->getTextureMapping();
-        std::string textureForRegionKey = ASSETS_MGR.textureForRegionKey(textureRegionKey);
-        
-        if (textureForRegionKey == "texture_004")
-        {
-            r.spriteBatcherAddEntity(e);
-        }
-    }
-    r.spriteBatcherEnd("texture_004");
+    r.renderEntitiesBoundToTexture(world().getLayers(), "texture_004", "sb_004");
+    r.renderEntitiesBoundToTexture(world().getDynamicEntities(), "texture_005", "sb_005");
     
-    r.spriteBatcherBegin();
-    for (Entity* e : world().getDynamicEntities())
-    {
-        std::string textureRegionKey = e->renderController()->getTextureMapping();
-        std::string textureForRegionKey = ASSETS_MGR.textureForRegionKey(textureRegionKey);
-        
-        if (textureForRegionKey == "texture_005")
-        {
-            r.spriteBatcherAddEntity(e);
-        }
-    }
-    r.spriteBatcherEnd("texture_005");
+    r.bindFramebuffer("behindPlayerNormals");
     
-    r.spriteBatcherBegin();
-    for (Entity* e : world().getDynamicEntities())
-    {
-        std::string textureRegionKey = e->renderController()->getTextureMapping();
-        std::string textureForRegionKey = ASSETS_MGR.textureForRegionKey(textureRegionKey);
-        
-        if (textureForRegionKey == "texture_007")
-        {
-            r.spriteBatcherAddEntity(e);
-        }
-    }
-    r.spriteBatcherEnd("texture_007");
+    r.updateMatrixCenteredOnEntityForParallaxLayer(controlledPlayer, 0.5f,  _world->rightEdge(), _world->topEdge(), _scale);
+    r.spriteBatcherEnd("n_texture_001", "main", "sprite", "sb_001");
     
-    r.spriteBatcherBegin();
-    for (Entity* e : world().getDynamicEntities())
-    {
-        std::string textureRegionKey = e->renderController()->getTextureMapping();
-        std::string textureForRegionKey = ASSETS_MGR.textureForRegionKey(textureRegionKey);
-        
-        if (textureForRegionKey == "texture_008")
-        {
-            r.spriteBatcherAddEntity(e);
-        }
-    }
-    r.spriteBatcherEnd("texture_008");
+    r.updateMatrixCenteredOnEntityForParallaxLayer(controlledPlayer, 0.6f,  _world->rightEdge(), _world->topEdge(), _scale);
+    r.spriteBatcherEnd("n_texture_002", "main", "sprite", "sb_002");
     
-    r.spriteBatcherBegin();
-    for (Entity* e : world().getStaticEntities())
-    {
-        std::string textureRegionKey = e->renderController()->getTextureMapping();
-        std::string textureForRegionKey = ASSETS_MGR.textureForRegionKey(textureRegionKey);
-        
-        if (textureForRegionKey == "texture_009")
-        {
-            r.spriteBatcherAddEntity(e);
-        }
-    }
-    r.spriteBatcherEnd("texture_009");
+    r.updateMatrixCenteredOnEntityForParallaxLayer(controlledPlayer, 0.7f,  _world->rightEdge(), _world->topEdge(), _scale);
+    r.spriteBatcherEnd("n_texture_003", "main", "sprite", "sb_003");
     
+    r.updateMatrixCenteredOnEntity(controlledPlayer, _world->rightEdge(), _world->topEdge(), _scale);
+    
+    r.spriteBatcherEnd("n_texture_004", "main", "sprite", "sb_004");
+    r.spriteBatcherEnd("n_texture_005", "main", "sprite", "sb_005");
+    
+    r.bindFramebuffer("player");
+    r.renderEntitiesBoundToTexture(world().getPlayers(), "texture_006", "sb_006");
+    
+    r.bindFramebuffer("playerNormals");
+    r.spriteBatcherEnd("n_texture_006", "main", "sprite", "sb_006");
+    
+    r.bindFramebuffer("inFrontOfPlayer");
+    r.renderEntitiesBoundToTexture(world().getDynamicEntities(), "texture_007");
+    r.renderEntitiesBoundToTexture(world().getDynamicEntities(), "texture_008");
+    r.renderEntitiesBoundToTexture(world().getStaticEntities(), "texture_009");
+    
+    r.bindFramebuffer("inFrontOfPlayerNormals");
+    r.spriteBatcherEnd("n_texture_007", "main", "sprite", "sb_007");
+    r.spriteBatcherEnd("n_texture_008", "main", "sprite", "sb_008");
+    r.spriteBatcherEnd("n_texture_009", "main", "sprite", "sb_009");
+    
+    float lightX = controlledPlayer != nullptr ? controlledPlayer->position()._x : 0;
+    float lightY = controlledPlayer != nullptr ? controlledPlayer->position()._y : 0;
+    
+    r.bindFramebuffer("behindPlayerLights");
+    r.renderLight("behindPlayer", "behindPlayerNormals", lightX, lightY, 1.4f, true);
+    
+    r.bindFramebuffer("playerLights");
+    r.renderLight("player", "playerNormals", lightX, lightY, 1.0f, true);
+    
+    r.bindFramebuffer("inFrontOfPlayerLights");
+    r.renderLight("inFrontOfPlayer", "inFrontOfPlayerNormals", lightX, lightY, 0.7f, true);
+    
+    r.bindFramebuffer("main");
+    r.renderFramebuffer("behindPlayerLights");
+    r.renderFramebuffer("playerLights");
+    r.renderFramebuffer("inFrontOfPlayerLights");
     renderWithNetwork(r);
     
     if (_inputProcessor.state() == DGIMS_DISPLAY_PHYSICS)
@@ -640,7 +588,7 @@ void DanteGameEngineState::updateWithNetwork(Engine* e)
         uint32_t numMovesProcessed = NW_CLNT->getNumMovesProcessed();
         world().recallCache(numMovesProcessed);
         assert(numMovesProcessed == world().getNumMovesProcessed());
-        numMovesProcessed = world().getNumMovesProcessed();
+        
         world().clearCache(numMovesProcessed);
         input().removeProcessedMovesWithIndexLessThan(numMovesProcessed);
         input().setNumMovesProcessed(numMovesProcessed);
@@ -648,9 +596,6 @@ void DanteGameEngineState::updateWithNetwork(Engine* e)
         Entity* e = getPlayer(1);
         if (e != nullptr)
         {
-            // Okay, somehow, world().recallCache() causes getPlayer(1) to be not null,
-            // after it just was. Crazy huh? Don't like it.
-            LOG("Okay, let's investigate how the fuck we got in here");
             uint32_t entityLayoutKey = e->networkDataField("entityLayoutKey").valueUInt32();
             EntityLayoutDef& eld = ENTITY_LAYOUT_MGR.entityLayoutDef(entityLayoutKey);
             ENGINE_STATE_GAME_DANTE.populateFromEntityLayout(eld);
@@ -824,15 +769,6 @@ void DanteGameEngineState::renderWithNetwork(Renderer& r)
         {
             r.setText("player4Info", STRING_FORMAT("4|%s", player4->playerInfo()._playerName.c_str()));
         }
-        
-        if (!player4->isExiled())
-        {
-            r.spriteBatcherBegin();
-            r.spriteBatcherAddEntity(player4);
-            std::string textureRegionKey = player4->renderController()->getTextureMapping();
-            std::string textureForRegionKey = ASSETS_MGR.textureForRegionKey(textureRegionKey);
-            r.spriteBatcherEnd(textureForRegionKey, "main", "sprite", "main", Color::BLUE);
-        }
     }
     else
     {
@@ -850,15 +786,6 @@ void DanteGameEngineState::renderWithNetwork(Renderer& r)
         else
         {
             r.setText("player3Info", STRING_FORMAT("3|%s", player3->playerInfo()._playerName.c_str()));
-        }
-        
-        if (!player3->isExiled())
-        {
-            r.spriteBatcherBegin();
-            r.spriteBatcherAddEntity(player3);
-            std::string textureRegionKey = player3->renderController()->getTextureMapping();
-            std::string textureForRegionKey = ASSETS_MGR.textureForRegionKey(textureRegionKey);
-            r.spriteBatcherEnd(textureForRegionKey, "main", "sprite", "main", Color::GREEN);
         }
     }
     else
@@ -878,15 +805,6 @@ void DanteGameEngineState::renderWithNetwork(Renderer& r)
         {
             r.setText("player2Info", STRING_FORMAT("2|%s", player2->playerInfo()._playerName.c_str()));
         }
-        
-        if (!player2->isExiled())
-        {
-            r.spriteBatcherBegin();
-            r.spriteBatcherAddEntity(player2);
-            std::string textureRegionKey = player2->renderController()->getTextureMapping();
-            std::string textureForRegionKey = ASSETS_MGR.textureForRegionKey(textureRegionKey);
-            r.spriteBatcherEnd(textureForRegionKey, "main", "sprite", "main", Color::RED);
-        }
     }
     else
     {
@@ -897,15 +815,6 @@ void DanteGameEngineState::renderWithNetwork(Renderer& r)
     if (player1 != nullptr)
     {
         r.setText("player1Info", STRING_FORMAT("1|%s", player1->playerInfo()._playerName.c_str()));
-        
-        if (!player1->isExiled())
-        {
-            r.spriteBatcherBegin();
-            r.spriteBatcherAddEntity(player1);
-            std::string textureRegionKey = player1->renderController()->getTextureMapping();
-            std::string textureForRegionKey = ASSETS_MGR.textureForRegionKey(textureRegionKey);
-            r.spriteBatcherEnd(textureForRegionKey);
-        }
     }
     else
     {

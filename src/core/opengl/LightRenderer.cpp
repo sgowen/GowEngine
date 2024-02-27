@@ -90,13 +90,13 @@ void LightRenderer::addLight(float lightPosX, float lightPosY, float lightPosZ, 
     _numLights[0] = ++_lightIndex;
 }
 
-void LightRenderer::render(Shader& s, mat4& matrix, Framebuffer& texture, Framebuffer& normalMap)
+void LightRenderer::render(Shader& s, Matrix& m, Framebuffer& texture, Framebuffer& normalMap)
 {
     OGL.bindVertexBuffer(_vertexBuffer);
     OGL.bindShader(s);
-    OGL.bindMatrix(s, "u_matrix", matrix);
-    OGL.bindFloat4Array(s, "u_lightPositions", _numLights[0], _lightPositions);
-    OGL.bindFloat4Array(s, "u_lightColors", _numLights[0], _lightColors);
+    OGL.bindMatrix(s, "u_matrix", m._matrix);
+    OGL.bindFloat4Array(s, "u_lightPositions[0]", _numLights[0], _lightPositions);
+    OGL.bindFloat4Array(s, "u_lightColors[0]", _numLights[0], _lightColors);
     OGL.bindFloat4(s, "u_ambientColor", _ambientColor);
     OGL.bindFloat4(s, "u_falloff", _fallOff);
     OGL.bindInt4(s, "u_numLights", _numLights);

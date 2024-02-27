@@ -14,6 +14,7 @@
 
 struct Shader;
 class Framebuffer;
+struct Matrix;
 
 class LightRenderer
 {
@@ -26,7 +27,7 @@ public:
     void configAmbientLight(float r, float g, float b, float a);
     void configureFallOff(float x, float y, float z);
     void addLight(float lightPosX, float lightPosY, float lightPosZ, float lightColorR, float lightColorG, float lightColorB, float lightColorA);
-    void render(Shader& s, mat4& matrix, Framebuffer& texture, Framebuffer& normalMap);
+    void render(Shader& s, Matrix& m, Framebuffer& texture, Framebuffer& normalMap);
     
 private:
     uint32_t _vertexBuffer;

@@ -27,7 +27,7 @@ void ShockwaveRenderer::destroyDeviceDependentResources()
     OGL.unloadBuffer(_indexBuffer);
 }
 
-void ShockwaveRenderer::renderShockwave(Shader& s, Framebuffer& fb, Matrix& m, float x, float y, float timeElapsed, bool isTransforming)
+void ShockwaveRenderer::render(Shader& s, Framebuffer& fb, Matrix& m, float x, float y, float timeElapsed, bool isTransforming)
 {
     float x1 = m._desc._left;
     float y1 = m._desc._bottom;
