@@ -115,6 +115,7 @@ void EntityManagerLoader::initWithJSON(EntityManager& em, const char* json)
                 assert(iv.IsObject());
                 FixtureDef fixtureDef;
                 
+                if (iv.HasMember("vertices"))
                 {
                     const Value& iiv = iv["vertices"];
                     assert(iiv.IsArray());
