@@ -54,7 +54,7 @@ void World::populateFromEntityLayout(EntityLayoutDef& eld)
 
 void World::addNetworkEntity(Entity* e)
 {
-    assert(!e->isLayer() && !e->isStatic());
+    assert(e->isPlayer() || e->isStateSensitive());
     
     e->setWorld(this);
     e->setPhysicsController(createPhysicsController(e));
@@ -63,30 +63,30 @@ void World::addNetworkEntity(Entity* e)
     {
         _players.push_back(e);
     }
-    else if (e->isDynamic())
+    else if (e->isStateSensitive())
     {
-        _dynamicEntities.push_back(e);
+        _networkEntities.push_back(e);
     }
 }
 
 void World::removeNetworkEntity(Entity* e)
 {
-    assert(!e->isLayer() && !e->isStatic());
+    assert(e->isPlayer() || e->isStateSensitive());
     
     if (e->isPlayer())
     {
         removeEntity(e, _players);
     }
-    else if (e->isDynamic())
+    else if (e->isStateSensitive())
     {
-        removeEntity(e, _dynamicEntities);
+        removeEntity(e, _networkEntities);
     }
 }
 
 void World::removeAllNetworkEntities()
 {
     removeAllEntities(_players);
-    removeAllEntities(_dynamicEntities);
+    removeAllEntities(_networkEntities);
 }
 
 void World::storeToCache()
@@ -96,7 +96,7 @@ void World::storeToCache()
         e->networkController()->storeToCache(_numMovesProcessed);
     }
     
-    for (Entity* e : _dynamicEntities)
+    for (Entity* e : _networkEntities)
     {
         e->networkController()->storeToCache(_numMovesProcessed);
     }
@@ -112,7 +112,7 @@ void World::recallCache(uint32_t numMovesProcessed)
         e->physicsController()->updateBodyFromPose();
     }
     
-    for (Entity* e : _dynamicEntities)
+    for (Entity* e : _networkEntities)
     {
         e->networkController()->recallCache(numMovesProcessed);
         e->physicsController()->updateBodyFromPose();
@@ -126,7 +126,7 @@ void World::clearCache(uint32_t numMovesProcessed)
         e->networkController()->clearCache(numMovesProcessed);
     }
     
-    for (Entity* e : _dynamicEntities)
+    for (Entity* e : _networkEntities)
     {
         e->networkController()->clearCache(numMovesProcessed);
     }
@@ -139,7 +139,7 @@ void World::beginFrame()
         e->beginFrame();
     }
     
-    for (Entity* e : _dynamicEntities)
+    for (Entity* e : _networkEntities)
     {
         e->beginFrame();
     }
@@ -157,7 +157,7 @@ std::vector<Entity*> World::update()
         }
     }
     
-    for (Entity* e : _dynamicEntities)
+    for (Entity* e : _networkEntities)
     {
         e->update(_numMovesProcessed);
         if (e->isRequestingDeletion())
@@ -213,7 +213,7 @@ std::vector<Entity*>& World::getStaticEntities()
 
 std::vector<Entity*>& World::getDynamicEntities()
 {
-    return _dynamicEntities;
+    return _networkEntities;
 }
 
 std::vector<Entity*>& World::getPlayers()
@@ -233,7 +233,7 @@ void World::resetNumMovesProcessed()
 
 void World::addEntity(Entity *e)
 {
-    assert(!e->isPlayer() && !e->isDynamic());
+    assert(e->isLayer() || e->isStatic());
     
     e->setWorld(this);
     
@@ -251,7 +251,7 @@ void World::addEntity(Entity *e)
 
 void World::removeEntity(Entity* e)
 {
-    assert(!e->isPlayer() && !e->isDynamic());
+    assert(e->isLayer() || e->isStatic());
     
     if (e->isLayer())
     {

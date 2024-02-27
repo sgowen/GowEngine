@@ -244,13 +244,6 @@ void cb_dante_client_onEntityRegistered(Entity* e)
 {
     ENGINE_STATE_GAME_DANTE.world().addNetworkEntity(e);
     
-//    if (e->isPlayer() && e->playerInfo()._playerID == 1)
-//    {
-//        uint32_t entityLayoutKey = e->networkDataField("entityLayoutKey").valueUInt32();
-//        EntityLayoutDef& eld = ENTITY_LAYOUT_MGR.entityLayoutDef(entityLayoutKey);
-//        ENGINE_STATE_GAME_DANTE.populateFromEntityLayout(eld);
-//    }
-    
     if (e->isPlayer())
     {
         ENGINE_STATE_GAME_DANTE.players().insert({e->playerInfo()._playerID, e->playerInfo()});
@@ -405,7 +398,7 @@ void DanteGameEngineState::onRender(Renderer& r, double extrapolation)
     r.spriteBatcherEnd("texture_003");
     
     r.spriteBatcherBegin();
-    for (Entity* e : world().getStaticEntities())
+    for (Entity* e : world().getLayers())
     {
         std::string textureRegionKey = e->renderController()->getTextureMapping();
         std::string textureForRegionKey = ASSETS_MGR.textureForRegionKey(textureRegionKey);
@@ -469,35 +462,6 @@ void DanteGameEngineState::onRender(Renderer& r, double extrapolation)
     }
     r.spriteBatcherEnd("texture_009");
     
-//    r.renderNosParallaxLayers(world().getLayers(), "texture_001");
-//    r.renderNosParallaxLayers(world().getLayers(), "texture_002");
-//    r.renderNosParallaxLayers(world().getLayers(), "texture_003");
-    
-//    std::vector<Entity*> platformingEntities;
-//    r.spriteBatcherBegin();
-//    for (Entity* e : world().getStaticEntities())
-//    {
-//        // TODO, this isn't the best code you know
-//        std::string name = e->entityDef()._keyName;
-//        bool isPlatformingEntity = name == "P001" || name == "P002" || name == "P003"|| name == "P004";
-//        if (isPlatformingEntity)
-//        {
-//            platformingEntities.push_back(e);
-//        }
-//        else
-//        {
-//            r.spriteBatcherAddEntity(e);
-//        }
-//    }
-//    r.spriteBatcherEnd("ground");
-//    
-//    r.spriteBatcherBegin();
-//    for (Entity* e : platformingEntities)
-//    {
-//        r.spriteBatcherAddEntity(e);
-//    }
-//    r.spriteBatcherEnd("platforming_1");
-    
     renderWithNetwork(r);
     
     if (_inputProcessor.state() == DGIMS_DISPLAY_PHYSICS)
@@ -529,14 +493,20 @@ Entity* DanteGameEngineState::getPlayer(uint8_t playerID)
 {
     Entity* ret = nullptr;
     
+    std::string players;
+    
     for (Entity* e : world().getPlayers())
     {
+        players += StringUtil::toString(e->playerInfo()._playerID);
+        players += ",";
         if (playerID == e->playerInfo()._playerID)
         {
             ret = e;
             break;
         }
     }
+    
+    LOG("players: %s", players.c_str());
     
     return ret;
 }
@@ -657,14 +627,19 @@ void DanteGameEngineState::updateWithNetwork(Engine* e)
     
     if (getPlayer(1) == nullptr)
     {
-        world().recallCache(NW_CLNT->getNumMovesProcessed());
-        world().clearCache(world().getNumMovesProcessed());
-        input().removeProcessedMovesWithIndexLessThan(world().getNumMovesProcessed());
-        input().setNumMovesProcessed(world().getNumMovesProcessed());
+        uint32_t numMovesProcessed = NW_CLNT->getNumMovesProcessed();
+        world().recallCache(numMovesProcessed);
+        assert(numMovesProcessed == world().getNumMovesProcessed());
+        numMovesProcessed = world().getNumMovesProcessed();
+        world().clearCache(numMovesProcessed);
+        input().removeProcessedMovesWithIndexLessThan(numMovesProcessed);
+        input().setNumMovesProcessed(numMovesProcessed);
         
         Entity* e = getPlayer(1);
         if (e != nullptr)
         {
+            // Okay, somehow, world().recallCache() causes getPlayer(1) to be not null,
+            // after it just was. Crazy huh? Don't like it.
             LOG("Okay, let's investigate how the fuck we got in here");
             uint32_t entityLayoutKey = e->networkDataField("entityLayoutKey").valueUInt32();
             EntityLayoutDef& eld = ENTITY_LAYOUT_MGR.entityLayoutDef(entityLayoutKey);
@@ -781,7 +756,6 @@ void DanteGameEngineState::updateWithNetwork(Engine* e)
         world().recallCache(world().getNumMovesProcessed());
         world().clearCache(world().getNumMovesProcessed());
         input().removeProcessedMovesWithIndexLessThan(world().getNumMovesProcessed());
-//        assert (getPlayer(1) != nullptr);
     }
 }
 
@@ -811,8 +785,6 @@ void DanteGameEngineState::updateWorld(const Move& move)
 
 void DanteGameEngineState::renderWithNetwork(Renderer& r)
 {
-    static float frameRate = static_cast<float>(ENGINE_CFG.frameRate());
-    
     r.setTextVisible("rtt", true);
     r.setTextVisible("rollbackFrames", true);
     r.setTextVisible("inBps", true);

@@ -28,7 +28,7 @@ void NosPhysicsWorld::stepPhysics(float deltaTime)
         epc->step(deltaTime);
     }
     
-    for (Entity* e : _dynamicEntities)
+    for (Entity* e : _networkEntities)
     {
         NosPhysicsController* epc = e->physicsController<NosPhysicsController>();
         epc->step(deltaTime);
@@ -37,15 +37,15 @@ void NosPhysicsWorld::stepPhysics(float deltaTime)
     for (Entity* e : _players)
     {
         NosPhysicsController* epc = e->physicsController<NosPhysicsController>();
-        epc->processCollisions(_dynamicEntities);
+        epc->processCollisions(_networkEntities);
         epc->processCollisions(_staticEntities);
     }
     
-    for (Entity* e : _dynamicEntities)
+    for (Entity* e : _networkEntities)
     {
         NosPhysicsController* epc = e->physicsController<NosPhysicsController>();
         epc->processCollisions(_players);
-        epc->processCollisions(_dynamicEntities);
+        epc->processCollisions(_networkEntities);
         epc->processCollisions(_staticEntities);
     }
 }
@@ -58,7 +58,7 @@ void NosPhysicsWorld::extrapolatePhysics(float extrapolation)
         epc->extrapolate(extrapolation);
     }
     
-    for (Entity* e : _dynamicEntities)
+    for (Entity* e : _networkEntities)
     {
         NosPhysicsController* epc = e->physicsController<NosPhysicsController>();
         epc->extrapolate(extrapolation);
@@ -73,7 +73,7 @@ void NosPhysicsWorld::endExtrapolatedPhysics()
         epc->endExtrapolation();
     }
     
-    for (Entity* e : _dynamicEntities)
+    for (Entity* e : _networkEntities)
     {
         NosPhysicsController* epc = e->physicsController<NosPhysicsController>();
         epc->endExtrapolation();

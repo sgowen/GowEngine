@@ -57,9 +57,10 @@ struct FixtureDef
 
 enum BodyFlags
 {
-    BODF_DYNAMIC =         1 << 0,
-    BODF_PLAYER =          1 << 1,
-    BODF_FIXED_ROTATION =  1 << 2
+    BODF_STATE_SENSITIVE = 1 << 0,
+    BODF_DYNAMIC =         1 << 1,
+    BODF_PLAYER =          1 << 2,
+    BODF_FIXED_ROTATION =  1 << 3
 };
 
 enum NetworkDataFieldType
@@ -416,6 +417,7 @@ struct EntityDef
     uint8_t _bodyFlags;
     uint8_t _width;
     uint8_t _height;
+    float _scale;
     Config _data;
     NetworkData _networkData;
     
@@ -431,6 +433,7 @@ struct EntityDef
               uint8_t bodyFlags,
               uint8_t width,
               uint8_t height,
+              float scale,
               Config data,
               NetworkData networkData) :
     _key(key),
@@ -445,6 +448,7 @@ struct EntityDef
     _bodyFlags(bodyFlags),
     _width(width),
     _height(height),
+    _scale(scale),
     _data(data),
     _networkData(networkData)
     {
@@ -484,6 +488,7 @@ public:
     float angle();
     const uint32_t getID();
     bool isLayer();
+    bool isStateSensitive();
     bool isStatic();
     bool isDynamic();
     bool isPlayer();

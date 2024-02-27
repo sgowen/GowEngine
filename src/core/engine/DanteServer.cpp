@@ -11,13 +11,6 @@
 void cb_dante_server_onEntityRegistered(Entity* e)
 {
     DANTE_SERVER->world().addNetworkEntity(e);
-    
-    if (e->isPlayer() && e->playerInfo()._playerID == 1)
-    {
-        uint32_t entityLayoutKey = e->networkDataField("entityLayoutKey").valueUInt32();
-        EntityLayoutDef& eld = ENTITY_LAYOUT_MGR.entityLayoutDef(entityLayoutKey);
-        DANTE_SERVER->populateFromEntityLayout(eld);
-    }
 }
 
 void cb_dante_server_onEntityDeregistered(Entity* e)
@@ -209,8 +202,26 @@ void DanteServer::addPlayer(std::string playerName, uint8_t playerID)
     ClientProxy* cp = NW_SRVR->getClientProxy(playerID);
     assert(cp != nullptr);
 
-    uint32_t spawnX = 32;
-    uint32_t spawnY = 16;
+    // TODO, assert that we don't already have a player for this ID
+    uint32_t spawnX = 20;
+    uint32_t spawnY = 15;
+    uint32_t entityLayoutKey = 'Z001';
+    
+    if (playerID == 1)
+    {
+        EntityLayoutDef& eld = ENTITY_LAYOUT_MGR.entityLayoutDef(entityLayoutKey);
+        DANTE_SERVER->populateFromEntityLayout(eld);
+        
+        for (Entity* e : _world->getLayers())
+        {
+            if (e->entityDef()._key == 'Z1S1')
+            {
+                spawnX = e->position()._x;
+                spawnY = e->position()._y - e->height() / 2 + 9;
+                break;
+            }
+        }
+    }
 
     uint32_t key = 'ROBT';
     uint32_t networkID = _entityIDManager.getNextPlayerEntityID();
@@ -222,7 +233,7 @@ void DanteServer::addPlayer(std::string playerName, uint8_t playerID)
     e->playerInfo()._playerID = playerID;
     if (playerID == 1)
     {
-        e->networkDataField("entityLayoutKey").setValueUInt32('Z002');
+        e->networkDataField("entityLayoutKey").setValueUInt32(entityLayoutKey);
     }
 
     NW_SRVR->registerEntity(e);

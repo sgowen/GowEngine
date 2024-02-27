@@ -49,7 +49,7 @@ void Box2DPhysicsWorld::stepPhysics(float deltaTime)
         epc->updatePoseFromBody();
     }
     
-    for (Entity* e : _dynamicEntities)
+    for (Entity* e : _networkEntities)
     {
         Box2DPhysicsController* epc = e->physicsController<Box2DPhysicsController>();
         epc->updatePoseFromBody();

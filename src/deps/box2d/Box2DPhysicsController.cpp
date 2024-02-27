@@ -21,7 +21,7 @@ _isBodyFacingLeft(false)
 {
     b2BodyDef bd;
     bd.position.Set(_entity->position()._x, _entity->position()._y);
-    bd.type = _entity->isStatic() ? b2_staticBody : b2_dynamicBody;
+    bd.type = _entity->isDynamic() ? b2_dynamicBody : b2_staticBody;
     bd.fixedRotation = _entity->entityDef()._bodyFlags & BODF_FIXED_ROTATION;
     bd.userData.pointer = (uintptr_t)_entity;
     _body = world.CreateBody(&bd);
@@ -150,20 +150,48 @@ void Box2DPhysicsController::createFixtures()
             fd._center._x = -fd._center._x;
         }
         
-        float wFactor = bodyWidth * fd._halfWidthFactor;
-        float hFactor = bodyHeight * fd._halfHeightFactor;
-        fd._center.set(fd._center._x * bodyWidth, fd._center._y * bodyHeight);
-        
-        b2Vec2 center = b2Vec2(fd._center._x, fd._center._y);
-        
-        b2PolygonShape shape;
-        shape.SetAsBox(wFactor, hFactor, center, 0);
+        b2Shape* shape;
+        b2PolygonShape polygonShape;
+        b2CircleShape circleShape;
+        if (fd._flags & BFIXF_CIRCLE)
+        {
+            circleShape.m_p.Set(fd._center._x * bodyWidth, fd._center._y * bodyHeight);
+            circleShape.m_radius = fd._vertices[0]._x * bodyWidth;
+            
+            shape = &circleShape;
+        }
+        else
+        {
+            if (fd._flags & BFIXF_BOX)
+            {
+                float wFactor = bodyWidth * fd._vertices[0]._x;
+                float hFactor = bodyHeight * fd._vertices[0]._y;
+                
+                b2Vec2 center;
+                center.Set(fd._center._x * bodyWidth, fd._center._y * bodyHeight);
+                polygonShape.SetAsBox(wFactor, hFactor, center, 0);
+            }
+            else
+            {
+                std::vector<b2Vec2> b2Vertices;
+                for (std::vector<Vector2>::iterator i = fd._vertices.begin(); i != fd._vertices.end(); ++i)
+                {
+                    Vector2& vertex = (*i);
+                    b2Vertices.emplace_back(vertex._x * bodyWidth, vertex._y * bodyHeight);
+                }
+                
+                int count = static_cast<int>(b2Vertices.size());
+                polygonShape.Set(&b2Vertices[0], count);
+            }
+            shape = &polygonShape;
+        }
         
         b2FixtureDef b2fd;
-        b2fd.shape = &shape;
+        b2fd.shape = shape;
         b2fd.isSensor = IS_BIT_SET(fd._flags, BFIXF_SENSOR);
-        b2fd.density = 1.0f;
-        b2fd.friction = 0.0f;
+        b2fd.density = fd._density;
+        b2fd.friction = fd._friction;
+        b2fd.restitution = fd._restitution;
         b2fd.userData.pointer = (uintptr_t)_entity;
         
         b2Fixture* fixture = _body->CreateFixture(&b2fd);

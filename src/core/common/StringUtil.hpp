@@ -34,6 +34,7 @@ public:
         return value;
     }
     
+    static std::string toString(uint8_t value);
     static std::string toString(uint64_t value);
     static std::string boolToString(bool value);
     static bool stringToBool(const std::string& str, bool defaultValue = false);

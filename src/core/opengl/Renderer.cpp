@@ -441,16 +441,12 @@ TriangleBatcher& Renderer::triangleBatcher(std::string key)
 void Renderer::spriteBatcherAddEntity(SpriteBatcher& sb, Entity& e)
 {
     TextureRegion& tr = ASSETS_MGR.textureRegion(e.renderController()->getTextureMapping(),  e.stateTime());
+    // TODO, is scale the best way to handle this?
+    // It adds 2 multiplication operations for every single entity rendered
+    float scale = e.entityDef()._scale;
     assert(tr._width % _pixelToUnitRatio == 0);
     assert(tr._height % _pixelToUnitRatio == 0);
-//    float realWidth = tr._width / _pixelToUnitRatio;
-//    float realHeight = tr._height / _pixelToUnitRatio;
-    float realWidth = e.width();
-    float realHeight = e.height();
-    // TODO, need ability to override the above commented out calculation
-    // Sometimes the entity does NEED to be rendered larger than what it actually is,
-    // due to a sprite sheet implementation
-    // e.g. jon jumping up as the vampire
-    // we have to render larger because the animation frames themselves are larger than regular frames
+    float realWidth = tr._width / _pixelToUnitRatio * scale;
+    float realHeight = tr._height / _pixelToUnitRatio * scale;
     sb.addSprite(tr, e.position()._x, e.position()._y, realWidth, realHeight, e.angle(), e.isXFlipped());
 }

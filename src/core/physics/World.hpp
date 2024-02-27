@@ -50,8 +50,7 @@ protected:
     EntityLayoutDef _entityLayout;
     std::vector<Entity*> _layers;
     std::vector<Entity*> _staticEntities;
-    std::vector<Entity*> _dynamicEntities;
-    std::vector<Entity*> _effectEntities;
+    std::vector<Entity*> _networkEntities;
     std::vector<Entity*> _players;
     
     virtual EntityPhysicsController* createPhysicsController(Entity* e) = 0;

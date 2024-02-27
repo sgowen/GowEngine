@@ -31,6 +31,11 @@
     #define OUT_Z_ARRAY
 #endif
 
+std::string StringUtil::toString(uint8_t value)
+{
+    return std::to_string(value);
+}
+
 std::string StringUtil::toString(uint64_t value)
 {
     return std::to_string(value);

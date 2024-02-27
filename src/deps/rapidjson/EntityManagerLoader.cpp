@@ -115,6 +115,19 @@ void EntityManagerLoader::initWithJSON(EntityManager& em, const char* json)
                 assert(iv.IsObject());
                 FixtureDef fixtureDef;
                 
+                {
+                    const Value& iiv = iv["vertices"];
+                    assert(iiv.IsArray());
+                    for (SizeType i = 0; i < iiv.Size(); ++i)
+                    {
+                        const Value& iiiv = iiv[i];
+                        assert(iiiv.IsObject());
+                        float x = RapidJSONUtil::getFloat(iiiv, "x");
+                        float y = RapidJSONUtil::getFloat(iiiv, "y");
+                        fixtureDef._vertices.emplace_back(x, y);
+                    }
+                }
+                
                 float x = 0;
                 float y = 0;
                 if (iv.HasMember("center"))
@@ -128,14 +141,18 @@ void EntityManagerLoader::initWithJSON(EntityManager& em, const char* json)
                 
                 fixtureDef._halfWidthFactor = RapidJSONUtil::getFloat(iv, "halfWidthFactor", 0.5f);
                 fixtureDef._halfHeightFactor = RapidJSONUtil::getFloat(iv, "halfHeightFactor", 0.5f);
-                fixtureDef._flags = RapidJSONUtil::getUInt(iv, "flags", 0);
+                fixtureDef._flags = RapidJSONUtil::getUInt(iv, "flags");
+                fixtureDef._restitution = RapidJSONUtil::getFloat(iv, "restitution");
+                fixtureDef._density = RapidJSONUtil::getFloat(iv, "density");
+                fixtureDef._friction = RapidJSONUtil::getFloat(iv, "friction");
                 
                 fixtures.push_back(fixtureDef);
             }
         }
-        uint8_t bodyFlags = RapidJSONUtil::getUInt(iv, "bodyFlags", 0);
+        uint8_t bodyFlags = RapidJSONUtil::getUInt(iv, "bodyFlags");
         uint8_t width = RapidJSONUtil::getUInt(iv, "width");
         uint8_t height = RapidJSONUtil::getUInt(iv, "height");
+        float scale = RapidJSONUtil::getFloat(iv, "scale", 1.0f);
         
         Config data;
         if (iv.HasMember("data"))
@@ -185,6 +202,6 @@ void EntityManagerLoader::initWithJSON(EntityManager& em, const char* json)
         }
         NetworkData nd(networkDataGroups);
         
-        em._entityDefs.emplace(key, EntityDef{key, name, keyName, controller, networkController, renderController, textureMappings, soundMappings, fixtures, bodyFlags, width, height, data, nd});
+        em._entityDefs.emplace(key, EntityDef{key, name, keyName, controller, networkController, renderController, textureMappings, soundMappings, fixtures, bodyFlags, width, height, scale, data, nd});
     }
 }
