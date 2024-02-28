@@ -73,7 +73,7 @@ public:
     void renderBox2DPhysics(Box2DPhysicsWorld* world, std::string matrixKey = "main", std::string shaderKey = "geometry");
     void renderNosPhysics(NosPhysicsWorld* world, std::string matrixKey = "main", std::string shaderKey = "geometry");
     
-    void renderLight(std::string framebufferKey, std::string framebufferNormalMapKey, float x, float y, float lightPosZFactor, bool ambientLight);
+    void renderLight(std::string framebufferKey, std::string framebufferNormalMapKey, float lightPosZ, std::vector<Entity*>& entities);
     
     void renderFramebufferWithShockwave(std::string framebufferKey, float centerX, float centerY, float timeElapsed, bool isTransforming);
     void renderFramebuffer(std::string framebufferKey, std::string shaderKey = "framebuffer");

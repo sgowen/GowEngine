@@ -167,6 +167,11 @@ void InputManager::setMatrix(Matrix* m)
     _matrix = m;
 }
 
+Matrix* InputManager::matrix()
+{
+    return _matrix;
+}
+
 bool InputManager::isKeyNumerical(uint16_t key)
 {
     std::vector<uint16_t>& keys = _numericalKeys;

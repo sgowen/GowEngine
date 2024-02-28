@@ -43,7 +43,7 @@ public:
     const char* getClipboardString();
     void setCursorSize(int cursorWidth, int cursorHeight);
     void setMatrix(Matrix* m);
-    
+    Matrix* matrix();
     
 private:
     FixedSizePool<CursorEvent> _poolCursor;

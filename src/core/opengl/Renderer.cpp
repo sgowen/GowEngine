@@ -388,7 +388,7 @@ void Renderer::renderNosPhysics(NosPhysicsWorld* world, std::string matrixKey, s
     _nosPhysicsRenderer.render(world, &m._matrix, &s);
 }
 
-void Renderer::renderLight(std::string framebufferKey, std::string framebufferNormalMapKey, float x, float y, float lightPosZFactor, bool ambientLight)
+void Renderer::renderLight(std::string framebufferKey, std::string framebufferNormalMapKey, float lightPosZ, std::vector<Entity*>& lights)
 {
     Shader& s = ASSETS_MGR.shader("lights");
     Framebuffer& fb = framebuffer(framebufferKey);
@@ -396,16 +396,14 @@ void Renderer::renderLight(std::string framebufferKey, std::string framebufferNo
     Matrix& m = matrix();
     
     _lightRenderer.resetLights();
-    if (ambientLight)
+    _lightRenderer.configAmbientLight(0.0f, 0.0f, 0.0f, 0.0f);
+    _lightRenderer.configureFallOff(0.3f, 0.3f, 20.0f);
+    
+    for (Entity* e : lights)
     {
-        _lightRenderer.configAmbientLight(0.3f, 0.3f, 0.3f, 0.3f);
+        _lightRenderer.addLight(e->position()._x, e->position()._y, lightPosZ, 0.9f, 0.9f, 0.9f, 0.9f);
     }
-    else
-    {
-        _lightRenderer.configAmbientLight(1.0f, 1.0f, 1.0f, 1.0f);
-    }
-    _lightRenderer.configureFallOff(0.1f, 1.0f, 20.0f);
-    _lightRenderer.addLight(x, y - 2, 0.075f * lightPosZFactor, 0.8f, 0.8f, 0.8f, 1.0f);
+    
     _lightRenderer.render(s, m, fb, fbNormalMap);
 }
 

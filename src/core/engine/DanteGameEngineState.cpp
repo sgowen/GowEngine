@@ -27,21 +27,19 @@ DanteGameInputProcessorState DanteGameInputProcessor::update()
     uint16_t& inputStateP2 = _inputState.playerInputState(1)._inputState;
     
 #if IS_MOBILE
+    Matrix* m = INPUT_MGR.matrix();
+    float halfWidth = m->_desc.width() / 2;
+    float halfHeight = m->_desc.height() / 2;
     for (CursorEvent* e : INPUT_MGR.getCursorEvents())
     {
         uint16_t& inputState = inputStateP1;
         
         Vector2& pos = INPUT_MGR.convert(e);
         
-        SET_BIT(inputState, RISF_MOVING_LEFT, e->isPressed() && pos._x < 38);
-        SET_BIT(inputState, RISF_MOVING_RIGHT, e->isPressed() && pos._x > 76);
+        SET_BIT(inputState, RISF_MOVING_LEFT, e->isPressed() && pos._x < halfWidth);
+        SET_BIT(inputState, RISF_MOVING_RIGHT, e->isPressed() && pos._x > halfWidth);
         
-        SET_BIT(inputState, RISF_JUMPING, e->isDown() && pos._y > 32);
-        
-        if (e->isUp() && pos._x > 90 && pos._y < 8)
-        {
-            _state = DGIMS_EXIT;
-        }
+        SET_BIT(inputState, RISF_JUMPING, e->isPressed() && pos._y > halfHeight);
     }
 #endif
     
@@ -371,6 +369,8 @@ void DanteGameEngineState::onRender(Renderer& r, double extrapolation)
     
     r.renderEntitiesBoundToTexture(world().getLayers(), "texture_004", "sb_004");
     r.renderEntitiesBoundToTexture(world().getDynamicEntities(), "texture_005", "sb_005");
+    r.renderEntitiesBoundToTexture(world().getDynamicEntities(), "texture_007", "sb_007");
+    r.renderEntitiesBoundToTexture(world().getDynamicEntities(), "texture_008", "sb_008");
     
     r.bindFramebuffer("behindPlayerNormals");
     
@@ -387,6 +387,8 @@ void DanteGameEngineState::onRender(Renderer& r, double extrapolation)
     
     r.spriteBatcherEnd("n_texture_004", "main", "sprite", "sb_004");
     r.spriteBatcherEnd("n_texture_005", "main", "sprite", "sb_005");
+    r.spriteBatcherEnd("n_texture_007", "main", "sprite", "sb_007");
+    r.spriteBatcherEnd("n_texture_008", "main", "sprite", "sb_008");
     
     r.bindFramebuffer("player");
     r.renderEntitiesBoundToTexture(world().getPlayers(), "texture_006", "sb_006");
@@ -395,26 +397,19 @@ void DanteGameEngineState::onRender(Renderer& r, double extrapolation)
     r.spriteBatcherEnd("n_texture_006", "main", "sprite", "sb_006");
     
     r.bindFramebuffer("inFrontOfPlayer");
-    r.renderEntitiesBoundToTexture(world().getDynamicEntities(), "texture_007");
-    r.renderEntitiesBoundToTexture(world().getDynamicEntities(), "texture_008");
-    r.renderEntitiesBoundToTexture(world().getStaticEntities(), "texture_009");
+    r.renderEntitiesBoundToTexture(world().getStaticEntities(), "texture_009", "sb_009");
     
     r.bindFramebuffer("inFrontOfPlayerNormals");
-    r.spriteBatcherEnd("n_texture_007", "main", "sprite", "sb_007");
-    r.spriteBatcherEnd("n_texture_008", "main", "sprite", "sb_008");
     r.spriteBatcherEnd("n_texture_009", "main", "sprite", "sb_009");
     
-    float lightX = controlledPlayer != nullptr ? controlledPlayer->position()._x : 0;
-    float lightY = controlledPlayer != nullptr ? controlledPlayer->position()._y : 0;
-    
     r.bindFramebuffer("behindPlayerLights");
-    r.renderLight("behindPlayer", "behindPlayerNormals", lightX, lightY, 1.4f, true);
+    r.renderLight("behindPlayer", "behindPlayerNormals", 0.15f, world().getPlayers());
     
     r.bindFramebuffer("playerLights");
-    r.renderLight("player", "playerNormals", lightX, lightY, 1.0f, true);
+    r.renderLight("player", "playerNormals", 0.1f, world().getPlayers());
     
     r.bindFramebuffer("inFrontOfPlayerLights");
-    r.renderLight("inFrontOfPlayer", "inFrontOfPlayerNormals", lightX, lightY, 0.7f, true);
+    r.renderLight("inFrontOfPlayer", "inFrontOfPlayerNormals", 0.05f, world().getPlayers());
     
     r.bindFramebuffer("main");
     r.renderFramebuffer("behindPlayerLights");
