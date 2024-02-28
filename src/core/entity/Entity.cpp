@@ -15,7 +15,7 @@ _controller(nullptr),
 _networkController(nullptr),
 _physicsController(nullptr),
 _renderController(nullptr),
-_pose(0, 0),
+_pose(eid._x + ed._width / 2.0f, eid._y + ed._height / 2.0f),
 _state(),
 _playerInfo(),
 _exileStateTime(0),
@@ -24,22 +24,6 @@ _height(ed._height),
 _angle(0),
 _world(nullptr)
 {
-    bool isDante = strcmp(ENGINE_CFG.mode().c_str(), "dante") == 0;
-    bool isNos = strcmp(ENGINE_CFG.mode().c_str(), "nosfuratu") == 0;
-    assert(isDante || isNos);
-    
-    // TODO, this _position setter code is VERY TEMPORARY
-    // Only here because I'm currently loading up old map data from dante
-    // will need to convert this data or just create new maps using new bottom left coord system
-    if (isDante)
-    {
-        _pose._position.set(eid._x, eid._y);
-    }
-    else if (isNos)
-    {
-        _pose._position.set(eid._x + ed._width / 2.0f, eid._y + ed._height / 2.0f);
-    }
-    
     _controller = ENTITY_MGR.createEntityController(ed, this);
     _networkController = ENTITY_MGR.createEntityNetworkController(ed, this);
     _renderController = ENTITY_MGR.createEntityRenderController(ed, this);
