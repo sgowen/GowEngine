@@ -356,13 +356,13 @@ void DanteGameEngineState::onRender(Renderer& r, double extrapolation)
     
     Entity* controlledPlayer = getControlledPlayer();
     
-    r.updateMatrixCenteredOnEntityForParallaxLayer(controlledPlayer, 0.5f,  _world->rightEdge(), _world->topEdge(), _scale);
+    r.updateMatrixCenteredOnEntityForParallaxLayer(controlledPlayer, 0.6f,  _world->rightEdge(), _world->topEdge(), _scale);
     r.renderEntitiesBoundToTexture(world().getLayers(), "texture_001", "sb_001");
     
-    r.updateMatrixCenteredOnEntityForParallaxLayer(controlledPlayer, 0.6f,  _world->rightEdge(), _world->topEdge(), _scale);
+    r.updateMatrixCenteredOnEntityForParallaxLayer(controlledPlayer, 0.8f,  _world->rightEdge(), _world->topEdge(), _scale);
     r.renderEntitiesBoundToTexture(world().getLayers(), "texture_002", "sb_002");
     
-    r.updateMatrixCenteredOnEntityForParallaxLayer(controlledPlayer, 0.7f,  _world->rightEdge(), _world->topEdge(), _scale);
+    r.updateMatrixCenteredOnEntityForParallaxLayer(controlledPlayer, 0.9f,  _world->rightEdge(), _world->topEdge(), _scale);
     r.renderEntitiesBoundToTexture(world().getLayers(), "texture_003", "sb_003");
     
     r.updateMatrixCenteredOnEntity(controlledPlayer, _world->rightEdge(), _world->topEdge(), _scale);
@@ -374,13 +374,13 @@ void DanteGameEngineState::onRender(Renderer& r, double extrapolation)
     
     r.bindFramebuffer("behindPlayerNormals");
     
-    r.updateMatrixCenteredOnEntityForParallaxLayer(controlledPlayer, 0.5f,  _world->rightEdge(), _world->topEdge(), _scale);
+    r.updateMatrixCenteredOnEntityForParallaxLayer(controlledPlayer, 0.6f,  _world->rightEdge(), _world->topEdge(), _scale);
     r.spriteBatcherEnd("n_texture_001", "main", "sprite", "sb_001");
     
-    r.updateMatrixCenteredOnEntityForParallaxLayer(controlledPlayer, 0.6f,  _world->rightEdge(), _world->topEdge(), _scale);
+    r.updateMatrixCenteredOnEntityForParallaxLayer(controlledPlayer, 0.8f,  _world->rightEdge(), _world->topEdge(), _scale);
     r.spriteBatcherEnd("n_texture_002", "main", "sprite", "sb_002");
     
-    r.updateMatrixCenteredOnEntityForParallaxLayer(controlledPlayer, 0.7f,  _world->rightEdge(), _world->topEdge(), _scale);
+    r.updateMatrixCenteredOnEntityForParallaxLayer(controlledPlayer, 0.9f,  _world->rightEdge(), _world->topEdge(), _scale);
     r.spriteBatcherEnd("n_texture_003", "main", "sprite", "sb_003");
     
     r.updateMatrixCenteredOnEntity(controlledPlayer, _world->rightEdge(), _world->topEdge(), _scale);
