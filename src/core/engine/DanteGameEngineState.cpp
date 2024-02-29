@@ -342,12 +342,7 @@ void DanteGameEngineState::onRender(Renderer& r, double extrapolation)
     float maxWidthScale = rightEdge / baseRight;
     float maxHeightScale = topEdge / baseTop;
     float maxScale = CLAMP(GOW_MIN(maxWidthScale, maxHeightScale), 1.0f, 200.0f);
-    _scale = CLAMP(_scale, 0.25f, maxScale);
-    
-    if (ENGINE_CFG.extrapolatePhysics())
-    {
-        _world->extrapolatePhysics(extrapolation);
-    }
+    _scale = CLAMP(_scale, 0.125f, maxScale);
     
     // TODO, in the proceeding rendering code, consider using multiple matrices instead of changing
     // the "main" one over and over again
@@ -369,8 +364,6 @@ void DanteGameEngineState::onRender(Renderer& r, double extrapolation)
     
     r.renderEntitiesBoundToTexture(world().getLayers(), "texture_004", "sb_004");
     r.renderEntitiesBoundToTexture(world().getDynamicEntities(), "texture_005", "sb_005");
-    r.renderEntitiesBoundToTexture(world().getDynamicEntities(), "texture_007", "sb_007");
-    r.renderEntitiesBoundToTexture(world().getDynamicEntities(), "texture_008", "sb_008");
     
     r.bindFramebuffer("behindPlayerNormals");
     
@@ -387,8 +380,6 @@ void DanteGameEngineState::onRender(Renderer& r, double extrapolation)
     
     r.spriteBatcherEnd("n_texture_004", "main", "sprite", "sb_004");
     r.spriteBatcherEnd("n_texture_005", "main", "sprite", "sb_005");
-    r.spriteBatcherEnd("n_texture_007", "main", "sprite", "sb_007");
-    r.spriteBatcherEnd("n_texture_008", "main", "sprite", "sb_008");
     
     r.bindFramebuffer("player");
     r.renderEntitiesBoundToTexture(world().getPlayers(), "texture_006", "sb_006");
@@ -397,9 +388,13 @@ void DanteGameEngineState::onRender(Renderer& r, double extrapolation)
     r.spriteBatcherEnd("n_texture_006", "main", "sprite", "sb_006");
     
     r.bindFramebuffer("inFrontOfPlayer");
+    r.renderEntitiesBoundToTexture(world().getDynamicEntities(), "texture_007", "sb_007");
+    r.renderEntitiesBoundToTexture(world().getDynamicEntities(), "texture_008", "sb_008");
     r.renderEntitiesBoundToTexture(world().getStaticEntities(), "texture_009", "sb_009");
     
     r.bindFramebuffer("inFrontOfPlayerNormals");
+    r.spriteBatcherEnd("n_texture_007", "main", "sprite", "sb_007");
+    r.spriteBatcherEnd("n_texture_008", "main", "sprite", "sb_008");
     r.spriteBatcherEnd("n_texture_009", "main", "sprite", "sb_009");
     
     r.bindFramebuffer("behindPlayerLights");
@@ -428,11 +423,6 @@ void DanteGameEngineState::onRender(Renderer& r, double extrapolation)
 
     r.renderCurrentlyBoundFramebufferToScreen();
     
-    if (ENGINE_CFG.extrapolatePhysics())
-    {
-        _world->endExtrapolatedPhysics();
-    }
-    
     renderAudio();
 }
 
@@ -458,8 +448,6 @@ Entity* DanteGameEngineState::getPlayer(uint8_t playerID)
             break;
         }
     }
-    
-    LOG("players: %s", players.c_str());
     
     return ret;
 }
@@ -727,6 +715,11 @@ void DanteGameEngineState::updateWorld(const Move& move)
         e->processInput(inputState);
     }
     
+    for (Entity* e : world().getDynamicEntities())
+    {
+        e->runAI();
+    }
+    
     static float frameRate = static_cast<float>(ENGINE_CFG.frameRate());
     world().stepPhysics(frameRate);
     world().update();
@@ -834,6 +827,11 @@ void DanteGameEngineState::renderAudio()
     }
     
     for (Entity* e : world().getPlayers())
+    {
+        playSoundForEntityIfNecessary(*e, currentMoveIndex);
+    }
+    
+    for (Entity* e : world().getDynamicEntities())
     {
         playSoundForEntityIfNecessary(*e, currentMoveIndex);
     }

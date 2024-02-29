@@ -95,8 +95,14 @@ void LightRenderer::render(Shader& s, Matrix& m, Framebuffer& texture, Framebuff
     OGL.bindVertexBuffer(_vertexBuffer);
     OGL.bindShader(s);
     OGL.bindMatrix(s, "u_matrix", m._matrix);
+#if IS_WINDOWS
+    OGL.bindFloat4Array(s, "u_lightPositions", _numLights[0], _lightPositions);
+    OGL.bindFloat4Array(s, "u_lightColors", _numLights[0], _lightColors);
+#else
     OGL.bindFloat4Array(s, "u_lightPositions[0]", _numLights[0], _lightPositions);
     OGL.bindFloat4Array(s, "u_lightColors[0]", _numLights[0], _lightColors);
+#endif
+    
     OGL.bindFloat4(s, "u_ambientColor", _ambientColor);
     OGL.bindFloat4(s, "u_falloff", _fallOff);
     OGL.bindInt4(s, "u_numLights", _numLights);

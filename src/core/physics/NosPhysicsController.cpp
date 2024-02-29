@@ -177,7 +177,7 @@ void NosPhysicsController::processCollisions(std::vector<Entity*>& entities)
                             myBounds.updateForPosition(p._position);
                             if (IS_BIT_SET(yourBounds._flags, NFIXF_DAMAGE_TOP))
                             {
-                                _entity->message(MSG_DAMAGE);
+                                _entity->message(MSG_DAMAGE, nullptr);
                             }
                             
                             if (ENGINE_CFG.physicsLoggingEnabled())

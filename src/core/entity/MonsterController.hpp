@@ -1,5 +1,5 @@
 //
-//  RobotController.hpp
+//  MonsterController.hpp
 //  GowEngine
 //
 //  Created by Stephen Gowen on 2/24/24.
@@ -10,23 +10,23 @@
 
 #include "EntityController.hpp"
 
-enum RobotInputStateFlags
+enum MonsterInputStateFlags
 {
-    RISF_MOVING_RIGHT       = 1 << 0,
-    RISF_MOVING_LEFT        = 1 << 1,
-    RISF_JUMPING            = 1 << 2,
-    RISF_EXECUTING_ATTACK   = 1 << 3
+    MISF_MOVING_RIGHT       = 1 << 0,
+    MISF_MOVING_LEFT        = 1 << 1,
+    MISF_EXECUTING_ATTACK   = 1 << 2
 };
 
-class RobotController : public EntityController
+class MonsterController : public EntityController
 {    
     DECL_RTTI;
     DECL_EntityController_create;
     
 public:
-    RobotController(Entity* e);
-    virtual ~RobotController() {}
+    MonsterController(Entity* e);
+    virtual ~MonsterController() {}
     
+    virtual void runAI() override;
     virtual void processInput(uint16_t inputState) override;
     virtual void onUpdate(uint32_t numMovesProcessed) override;
     virtual void onMessage(uint16_t message, Entity* fromEntity) override;
@@ -36,18 +36,15 @@ private:
     {
         STATE_IDLE = 0,
         STATE_RUNNING = 1,
-        STATE_JUMPING = 2,
-        STATE_PUNCH_1 = 3,
-        STATE_PUNCH_2 = 4,
-        STATE_PUNCH_3 = 5
+        STATE_PREPARING_ATTACK = 2,
+        STATE_ATTACKING = 3,
+        STATE_DYING = 4
     };
     
     void processMovementInput(uint16_t inputState);
-    void processJumpInput(uint16_t inputState);
     void processAttackInput(uint16_t inputState);
     
     bool isMovementInputAllowed();
-    bool isJumpInputAllowed();
     bool isAttackInputAllowed();
     
     bool needsStateChangeForMovement();

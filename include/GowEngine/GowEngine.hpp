@@ -116,6 +116,7 @@
 #include "core/entity/EntityRegistry.hpp"
 #include "core/entity/EntityRenderController.hpp"
 #include "core/entity/JonController.hpp"
+#include "core/entity/MonsterController.hpp"
 #include "core/entity/RobotController.hpp"
 
 /// core/input

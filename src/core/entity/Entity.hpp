@@ -22,7 +22,9 @@
 enum Messages
 {
     MSG_NONE = 0,
-    MSG_DAMAGE = 1
+    MSG_DANGEROUS_TOUCH = 1,
+    MSG_NO_TOUCH = 2,
+    MSG_DAMAGE = 3
 };
 
 enum Box2DFixtureFlags
@@ -30,7 +32,8 @@ enum Box2DFixtureFlags
     BFIXF_BOX =           1 << 0,
     BFIXF_SENSOR =        1 << 1,
     BFIXF_GROUND_SENSOR = 1 << 2,
-    BFIXF_CIRCLE =        1 << 3
+    BFIXF_CIRCLE =        1 << 3,
+    BFIXF_DAMAGE_SENSOR = 1 << 4
 };
 
 enum NosFixtureFlags
@@ -471,9 +474,10 @@ public:
     ~Entity();
     
     void beginFrame();
+    void runAI();
     void processInput(uint16_t inputState);
     void update(uint32_t numMovesProcessed);
-    void message(uint16_t message);
+    void message(uint16_t message, Entity* fromEntity);
     EntityDef& entityDef();
     Config& data();
     NetworkData& networkData();
@@ -511,6 +515,14 @@ public:
     void setPhysicsController(EntityPhysicsController* physicsController)
     {
         _physicsController = physicsController;
+    }
+    void destroyPhysicsController()
+    {
+        if (_physicsController != nullptr)
+        {
+            delete _physicsController;
+            _physicsController = nullptr;
+        }
     }
     
     template<typename T = EntityPhysicsController>

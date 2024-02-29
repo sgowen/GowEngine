@@ -112,7 +112,8 @@ void Box2DPhysicsController::handleBeginContact(Entity* e, b2Fixture* fixtureA, 
     if (fixtureA == _damageSensorFixture &&
         !fixtureB->IsSensor())
     {
-        e->message(MSG_DAMAGE);
+        Entity* entityA = (Entity*)fixtureA->GetUserData().pointer;
+        entityA->message(MSG_DANGEROUS_TOUCH, e);
     }
 }
 
@@ -127,6 +128,13 @@ void Box2DPhysicsController::handleEndContact(Entity* e, b2Fixture* fixtureA, b2
         {
             LOG("_numGroundContacts: %d", _numGroundContacts);
         }
+    }
+    
+    if (fixtureA == _damageSensorFixture &&
+        !fixtureB->IsSensor())
+    {
+        Entity* entityA = (Entity*)fixtureA->GetUserData().pointer;
+        entityA->message(MSG_NO_TOUCH, e);
     }
 }
 
@@ -201,10 +209,10 @@ void Box2DPhysicsController::createFixtures()
             _groundSensorFixture = fixture;
         }
         
-//        if (IS_BIT_SET(fd._flags, FIXF_DAMAGE_TOP))
-//        {
-//            _damageSensorFixture = fixture;
-//        }
+        if (IS_BIT_SET(fd._flags, BFIXF_DAMAGE_SENSOR))
+        {
+            _damageSensorFixture = fixture;
+        }
         
         _fixtures.push_back(fixture);
     }

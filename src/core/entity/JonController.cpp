@@ -168,7 +168,7 @@ void JonController::onUpdate(uint32_t numMovesProcessed)
     }
 }
 
-void JonController::onMessage(uint16_t message)
+void JonController::onMessage(uint16_t message, Entity* fromEntity)
 {
     Entity& e = *_entity;
     uint8_t& state = e.state()._state;

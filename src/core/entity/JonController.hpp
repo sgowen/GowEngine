@@ -32,7 +32,7 @@ public:
     
     virtual void processInput(uint16_t inputState) override;
     virtual void onUpdate(uint32_t numMovesProcessed) override;
-    virtual void onMessage(uint16_t message) override;
+    virtual void onMessage(uint16_t message, Entity* fromEntity) override;
     
     bool isReleasingShockwave();
     bool isVampire();

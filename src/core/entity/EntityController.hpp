@@ -21,9 +21,10 @@ public:
     EntityController(Entity* e);
     virtual ~EntityController();
     
+    virtual void runAI();
     virtual void processInput(uint16_t inputState);
     virtual void onUpdate(uint32_t numMovesProcessed);
-    virtual void onMessage(uint16_t message);
+    virtual void onMessage(uint16_t message, Entity* fromEntity);
     
 protected:
     Entity* _entity;

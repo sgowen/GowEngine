@@ -22,6 +22,11 @@ EntityController::~EntityController()
     // Empty
 }
 
+void EntityController::runAI()
+{
+    // Empty
+}
+
 void EntityController::processInput(uint16_t inputState)
 {
     // Empty
@@ -32,7 +37,7 @@ void EntityController::onUpdate(uint32_t numMovesProcessed)
     // Empty
 }
 
-void EntityController::onMessage(uint16_t message)
+void EntityController::onMessage(uint16_t message, Entity* fromEntity)
 {
     // Empty
 }

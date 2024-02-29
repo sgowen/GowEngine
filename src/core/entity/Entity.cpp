@@ -54,6 +54,19 @@ void Entity::beginFrame()
     }
 }
 
+void Entity::runAI()
+{
+    if (isExiled())
+    {
+        return;
+    }
+    
+    EntityController* ec = controller();
+    assert(ec != nullptr);
+    
+    ec->runAI();
+}
+
 void Entity::processInput(uint16_t inputState)
 {
     if (isExiled())
@@ -89,14 +102,14 @@ void Entity::update(uint32_t numMovesProcessed)
     _controller->onUpdate(numMovesProcessed);
 }
 
-void Entity::message(uint16_t message)
+void Entity::message(uint16_t message, Entity* fromEntity)
 {
     if (isExiled())
     {
         return;
     }
     
-    _controller->onMessage(message);
+    _controller->onMessage(message, fromEntity);
 }
 
 EntityDef& Entity::entityDef()

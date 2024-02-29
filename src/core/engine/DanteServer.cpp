@@ -11,11 +11,31 @@
 void cb_dante_server_onEntityRegistered(Entity* e)
 {
     DANTE_SERVER->world().addNetworkEntity(e);
+    
+    if (e->isPlayer() && e->playerInfo()._playerID == 1)
+    {
+        uint32_t entityLayoutKey = e->networkDataField("entityLayoutKey").valueUInt32();
+        EntityLayoutDef& eld = ENTITY_LAYOUT_MGR.entityLayoutDef(entityLayoutKey);
+        DANTE_SERVER->populateFromEntityLayout(eld);
+    }
 }
 
 void cb_dante_server_onEntityDeregistered(Entity* e)
 {
+    bool needsRestart = false;
+    
+    if (e->isPlayer())
+    {
+        uint8_t playerID = e->playerInfo()._playerID;
+        needsRestart = NW_SRVR->getClientProxy(playerID) != nullptr;
+    }
+    
     DANTE_SERVER->world().removeNetworkEntity(e);
+    
+    if (needsRestart)
+    {
+        DANTE_SERVER->restart();
+    }
 }
 
 void cb_dante_server_handleNewClient(std::string playerName, uint8_t playerID)
@@ -95,12 +115,21 @@ void DanteServer::populateFromEntityLayout(EntityLayoutDef& eld)
 {
     EntityLayoutManagerLoader::loadEntityLayout(eld, _entityIDManager, true);
     
-    for (auto& e : world().getDynamicEntities())
+    LOG("populateFromEntityLayout");
+    World& w = world();
+    std::vector<Entity*> toDelete = w.getDynamicEntities();
+    for (Entity* e : toDelete)
     {
+        LOG("entity: %d", e->getID());
         NW_SRVR->deregisterEntity(e);
     }
+//    for (auto& e : w.getDynamicEntities())
+//    {
+//        LOG("entity: %d", e->getID());
+//        NW_SRVR->deregisterEntity(e);
+//    }
     
-    world().populateFromEntityLayout(eld);
+    w.populateFromEntityLayout(eld);
     
     for (auto& eid : eld._entitiesNetwork)
     {
@@ -173,12 +202,22 @@ void DanteServer::updateWorld()
         cp->setLastMoveTimestampDirty(true);
     }
     
+    for (Entity* e : world().getDynamicEntities())
+    {
+        e->runAI();
+    }
+    
     static float frameRate = static_cast<float>(ENGINE_CFG.frameRate());
     world().stepPhysics(frameRate);
     std::vector<Entity*> toDelete = world().update();
     for (Entity* e : toDelete)
     {
+        bool exitImmediately = e->isPlayer();
         NW_SRVR->deregisterEntity(e);
+        if (exitImmediately)
+        {
+            return;
+        }
     }
     
     handleDirtyStates(world().getPlayers());
@@ -203,25 +242,9 @@ void DanteServer::addPlayer(std::string playerName, uint8_t playerID)
     assert(cp != nullptr);
 
     // TODO, assert that we don't already have a player for this ID
-    uint32_t spawnX = 20;
-    uint32_t spawnY = 15;
+    uint32_t spawnX = 18;
+    uint32_t spawnY = 9;
     uint32_t entityLayoutKey = 'Z001';
-    
-    if (playerID == 1)
-    {
-        EntityLayoutDef& eld = ENTITY_LAYOUT_MGR.entityLayoutDef(entityLayoutKey);
-        DANTE_SERVER->populateFromEntityLayout(eld);
-        
-        for (Entity* e : _world->getLayers())
-        {
-            if (e->entityDef()._key == 'Z1S1')
-            {
-                spawnX = e->position()._x;
-                spawnY = e->position()._y - e->height() / 2 + 9;
-                break;
-            }
-        }
-    }
 
     uint32_t key = 'ROBT';
     uint32_t networkID = _entityIDManager.getNextPlayerEntityID();

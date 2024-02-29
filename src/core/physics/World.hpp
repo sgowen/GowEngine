@@ -46,6 +46,8 @@ public:
     uint32_t getNumMovesProcessed();
     void resetNumMovesProcessed();
     
+    Entity* getEntityByID(uint32_t id) const;
+    
 protected:
     EntityLayoutDef _entityLayout;
     std::vector<Entity*> _layers;

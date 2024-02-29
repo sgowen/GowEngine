@@ -73,6 +73,8 @@ void World::removeNetworkEntity(Entity* e)
 {
     assert(e->isPlayer() || e->isStateSensitive());
     
+    e->destroyPhysicsController();
+    
     if (e->isPlayer())
     {
         removeEntity(e, _players);
@@ -229,6 +231,43 @@ uint32_t World::getNumMovesProcessed()
 void World::resetNumMovesProcessed()
 {
     _numMovesProcessed = 0;
+}
+
+Entity* World::getEntityByID(uint32_t id) const
+{
+    for (Entity* e : _players)
+    {
+        if (e->getID() == id)
+        {
+            return e;
+        }
+    }
+    
+    for (Entity* e : _networkEntities)
+    {
+        if (e->getID() == id)
+        {
+            return e;
+        }
+    }
+    
+    for (Entity* e : _staticEntities)
+    {
+        if (e->getID() == id)
+        {
+            return e;
+        }
+    }
+    
+    for (Entity* e : _layers)
+    {
+        if (e->getID() == id)
+        {
+            return e;
+        }
+    }
+    
+    return nullptr;
 }
 
 void World::addEntity(Entity *e)

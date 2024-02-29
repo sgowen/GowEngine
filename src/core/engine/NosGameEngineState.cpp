@@ -362,7 +362,7 @@ void NosGameEngineState::onRender(Renderer& r, double extrapolation)
     float maxWidthScale = rightEdge / baseRight;
     float maxHeightScale = topEdge / baseTop;
     float maxScale = CLAMP(GOW_MIN(maxWidthScale, maxHeightScale), 1.0f, 32.0f);
-    _scale = CLAMP(_scale, 0.25f, maxScale);
+    _scale = CLAMP(_scale, 0.125f, maxScale);
     
     if (ENGINE_CFG.extrapolatePhysics())
     {

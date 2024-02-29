@@ -27,6 +27,11 @@ void RobotController::processInput(uint16_t inputState)
     {
         processJumpInput(inputState);
     }
+    
+    if (isAttackInputAllowed())
+    {
+        processAttackInput(inputState);
+    }
 }
 
 void RobotController::onUpdate(uint32_t numMovesProcessed)
@@ -41,6 +46,26 @@ void RobotController::onUpdate(uint32_t numMovesProcessed)
     Animation* animation = ASSETS_MGR.animation(textureMapping);
     uint16_t animationNumFrames = animation == nullptr ? 1 : animation->cycleTime();
     
+    if ((state == STATE_PUNCH_1 && stateTime == 6) ||
+        (state == STATE_PUNCH_2 && stateTime == 6) ||
+        (state == STATE_PUNCH_3 && stateTime == 6))
+    {
+        uint32_t touchingEntityID = e.networkDataField("touchingEntityID").valueUInt32();
+        Entity* touchingEntity = e.world()->getEntityByID(touchingEntityID);
+        if (touchingEntity != nullptr)
+        {
+            touchingEntity->message(MSG_DAMAGE, &e);
+            
+            if (state == STATE_PUNCH_3)
+            {
+                touchingEntity->message(MSG_DAMAGE, &e);
+                touchingEntity->message(MSG_DAMAGE, &e);
+                touchingEntity->message(MSG_DAMAGE, &e);
+                touchingEntity->message(MSG_DAMAGE, &e);
+            }
+        }
+    }
+    
     if (stateTime >= animationNumFrames &&
         needsToResolveNewStateOnceAnimationEnds())
     {
@@ -48,9 +73,25 @@ void RobotController::onUpdate(uint32_t numMovesProcessed)
     }
 }
 
-void RobotController::onMessage(uint16_t message)
+void RobotController::onMessage(uint16_t message, Entity* fromEntity)
 {
-    // TODO
+    Entity& e = *_entity;
+    uint8_t& state = e.state()._state;
+    uint16_t& stateTime = e.state()._stateTime;
+    Vector2& vel = e.velocity();
+    
+    if (message == MSG_DANGEROUS_TOUCH)
+    {
+        e.networkDataField("touchingEntityID").setValueUInt32(fromEntity->getID());
+    }
+    else if (message == MSG_NO_TOUCH)
+    {
+        e.networkDataField("touchingEntityID").setValueUInt32(0);
+    }
+    else if (message == MSG_DAMAGE)
+    {
+        e.exile();
+    }
 }
 
 void RobotController::processMovementInput(uint16_t inputState)
@@ -138,6 +179,43 @@ void RobotController::processJumpInput(uint16_t inputState)
     }
 }
 
+void RobotController::processAttackInput(uint16_t inputState)
+{
+    Entity& e = *_entity;
+    
+    bool isInputAttack = IS_BIT_SET(inputState, RISF_EXECUTING_ATTACK);
+    bool wasInputAttack = IS_BIT_SET(e.lastProcessedInputState(), RISF_EXECUTING_ATTACK);
+    
+    uint8_t& state = e.state()._state;
+    uint16_t& stateTime = e.state()._stateTime;
+    
+    if (isInputAttack &&
+        !wasInputAttack)
+    {
+        // TODO, the stateTime code is temporary
+        // Player shouldn't be able to cut off
+        // the first punch animation with the second
+        // at least, not right away.
+        // This stateTime checker code just prevents
+        // rapid tapping from creating rapid jitter
+        if (state == STATE_PUNCH_2 && stateTime >= 12)
+        {
+            state = STATE_PUNCH_3;
+            stateTime = 0;
+        }
+        else if (state == STATE_PUNCH_1 && stateTime >= 12)
+        {
+            state = STATE_PUNCH_2;
+            stateTime = 0;
+        }
+        else if (state != STATE_PUNCH_1)
+        {
+            state = STATE_PUNCH_1;
+            stateTime = 0;
+        }
+    }
+}
+
 bool RobotController::isMovementInputAllowed()
 {
     Entity& e = *_entity;
@@ -158,6 +236,18 @@ bool RobotController::isJumpInputAllowed()
     state == STATE_RUNNING;
 }
 
+bool RobotController::isAttackInputAllowed()
+{
+    Entity& e = *_entity;
+    uint8_t& state = e.state()._state;
+    
+    return state == STATE_IDLE ||
+    state == STATE_RUNNING ||
+    state == STATE_JUMPING ||
+    state == STATE_PUNCH_1 ||
+    state == STATE_PUNCH_2;
+}
+
 bool RobotController::needsStateChangeForMovement()
 {
     Entity& e = *_entity;
@@ -166,20 +256,15 @@ bool RobotController::needsStateChangeForMovement()
     return state == STATE_IDLE;
 }
 
-bool RobotController::canCurrentStateBeInterruptedByLanding()
-{
-    Entity& e = *_entity;
-    uint8_t& state = e.state()._state;
-    
-    return state == STATE_JUMPING;
-}
-
 bool RobotController::needsToResolveNewStateOnceAnimationEnds()
 {
     Entity& e = *_entity;
     uint8_t& state = e.state()._state;
     
-    return state == STATE_JUMPING;
+    return state == STATE_JUMPING ||
+    state == STATE_PUNCH_1 ||
+    state == STATE_PUNCH_2 ||
+    state == STATE_PUNCH_3;
 }
 
 void RobotController::resolveNewState()
