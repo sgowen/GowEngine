@@ -115,19 +115,12 @@ void DanteServer::populateFromEntityLayout(EntityLayoutDef& eld)
 {
     EntityLayoutManagerLoader::loadEntityLayout(eld, _entityIDManager, true);
     
-    LOG("populateFromEntityLayout");
     World& w = world();
     std::vector<Entity*> toDelete = w.getDynamicEntities();
     for (Entity* e : toDelete)
     {
-        LOG("entity: %d", e->getID());
         NW_SRVR->deregisterEntity(e);
     }
-//    for (auto& e : w.getDynamicEntities())
-//    {
-//        LOG("entity: %d", e->getID());
-//        NW_SRVR->deregisterEntity(e);
-//    }
     
     w.populateFromEntityLayout(eld);
     

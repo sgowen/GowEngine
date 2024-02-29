@@ -30,7 +30,6 @@ public:
     std::string steamProductDescription();
     bool consoleLoggingEnabled();
     uint8_t framesPerSecond();
-    std::string fileLoggingDir();
     bool glfwLoggingEnabled();
     bool logOpenGL();
     bool logOpenAL();
@@ -68,7 +67,6 @@ private:
     std::string _steamProductDescription;
     bool _consoleLoggingEnabled;
     uint8_t _framesPerSecond;
-    std::string _fileLoggingDir;
     bool _glfwLoggingEnabled;
     bool _logOpenGL;
     bool _logOpenAL;

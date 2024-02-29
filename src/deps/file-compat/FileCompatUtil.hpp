@@ -22,7 +22,7 @@ public:
     static ANativeActivity* androidActivity;
 #endif
     
+    static std::string cacheDir();
     static std::string resourceFilePath(std::string filePath);
-    
     static FILE* openFile(std::string filePath, std::string mode);
 };

@@ -1,0 +1,13 @@
+# specific to CodeBlocks IDE
+*.layout
+*.depend
+# generated directories
+bin/
+obj/
+
+# copied to project dir after build
+data/
+GowEngine*
+!GowEngine.cbp
+*.so*
+steam_appid.txt

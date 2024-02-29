@@ -87,11 +87,6 @@ uint8_t EngineConfig::framesPerSecond()
     return _framesPerSecond;
 }
 
-std::string EngineConfig::fileLoggingDir()
-{
-    return _fileLoggingDir;
-}
-
 bool EngineConfig::glfwLoggingEnabled()
 {
     return _glfwLoggingEnabled;
@@ -197,7 +192,6 @@ EngineConfig::EngineConfig(std::string configFilePath)
     _steamProductDescription = _config.getString("steamProductDescription");
     _consoleLoggingEnabled = _config.getBool("consoleLoggingEnabled");
     _framesPerSecond = _config.getUInt("framesPerSecond");
-    _fileLoggingDir = _config.getString("fileLoggingDir");
     _glfwLoggingEnabled = _config.getBool("glfwLoggingEnabled");
     _logOpenGL = _config.getBool("logOpenGL");
     _logOpenAL = _config.getBool("logOpenAL");

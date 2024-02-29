@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6" />
+	<Project>
+		<Option title="GowEngine" />
+		<Option pch_mode="2" />
+		<Option compiler="gcc" />
+		<Build>
+			<Target title="Debug">
+				<Option output="bin/Debug/GowEngine" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj/Debug/" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-g" />
+					<Add option="-DDEBUG=1" />
+				</Compiler>
+				<Linker>
+					<Add option="libglfw3.a \" />
+					<Add option="-ldl" />
+                    <Add option="-lX11" />
+                    <Add option="libbox2d.a" />
+				</Linker>
+			</Target>
+			<Target title="Release">
+				<Option output="bin/Release/GowEngine" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj/Release/" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-O2" />
+				</Compiler>
+				<Linker>
+                    <Add option="libglfw3.a \" />
+					<Add option="-ldl" />
+                    <Add option="-lX11" />
+                    <Add option="libbox2d.a" />
+				</Linker>
+			</Target>
+		</Build>
+		<Compiler>
+			<Add option="-fno-rtti" />
+			<Add option="-fno-unwind-tables" />
+			<Add option="-Wno-multichar" />
+			<Add directory="../../../deps/box2d/include" />
+			<Add directory="../../../deps/file-compat" />
+			<Add directory="../../../deps/glfw/include" />
+			<Add directory="../../../deps/glfw/deps" />
+			<Add directory="../../../deps/libsndfile/include" />
+			<Add directory="../../../deps/openal-soft/include" />
+			<Add directory="../../../deps/rapidjson/include" />
+			<Add directory="../../../deps/stb" />
+			<Add directory="../../../deps/steamworks_sdk/public" />
+			<Add directory="../../../include" />
+			<Add directory="../../../src" />
+		</Compiler>
+		<Linker>
+            <Add option="-lX11" />
+			<Add option="-ldl" />
+			<Add option="-lpthread" />
+			<Add option="-lGL" />
+            <Add option="-lsndfile" />
+			<Add option="-lopenal" />
+            <Add option="-lsteam_api" />
+			<Add directory="../linux" />
+		</Linker>
+		<ExtraCommands>
+			<Add before="chmod a+x build_libraries.sh" />
+			<Add before="./build_libraries.sh" />
+			<Add before="if [ -d $(PROJECT_DIR)/data ]; then rm -Rf $(PROJECT_DIR)/data; fi" />
+			<Add after="cp -r $(PROJECT_DIR)../../../assets/data $(PROJECT_DIR)" />
+            <Add after="cp -r $(PROJECT_DIR)../../../assets/steam_appid.txt $(PROJECT_DIR)" />
+			<Add after="cp $(TARGET_OUTPUT_FILE) $(PROJECT_DIR)" />
+			<Add after="tar -a -cf GowEngine.zip data steam_appid.txt libopenal.so.1 libsndfile.so.1.0.35 libsteam_api.so run.sh GowEngine" />
+			<Mode after="always" />
+		</ExtraCommands>
+		<UnitsGlob directory="../../../src" recursive="1" wildcard="*.cpp" />
+		<UnitsGlob directory="../../../src" recursive="1" wildcard="*.hpp" />
+		<Unit filename="../../../deps/glfw/deps/glad_gl.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Extensions>
+			<lib_finder disable_auto="1" />
+		</Extensions>
+	</Project>
+</CodeBlocks_project_file>

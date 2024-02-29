@@ -1,0 +1,6 @@
+{
+  "filePathAssets": "json/game/Assets.json",
+  "filePathRenderer": "json/game/Renderer.json",
+  "filePathEntityLayoutManager": "json/game/EntityLayoutManager.json",
+  "filePathEntityManager": "json/game/EntityManager.json"
+}

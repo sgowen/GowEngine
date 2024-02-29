@@ -28,6 +28,14 @@ std::string FileCompatUtil::resourceFilePath(std::string filePath)
 #endif
 }
 
+std::string FileCompatUtil::cacheDir()
+{
+    char cacheDir[PATH_MAX];
+    fc_cachedir("gowengine", cacheDir, PATH_MAX);
+    
+    return std::string(cacheDir);
+}
+
 FILE* FileCompatUtil::openFile(std::string filePath, std::string mode)
 {
     FILE* ret;

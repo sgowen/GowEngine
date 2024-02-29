@@ -1,0 +1,21 @@
+# Visual Studio
+*.ipch
+*.user
+*.*sdf
+*.suo
+*.exe
+ARM/
+Debug/
+Release/
+Generated Files/
+BundleArtifacts/
+AppPackages/
+*VC.opendb
+*VC.db
+.vs/
+
+# copied to project dir after build
+data/
+*.exe
+*.zip
+steam_appid.txt

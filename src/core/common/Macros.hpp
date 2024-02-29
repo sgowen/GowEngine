@@ -51,6 +51,7 @@
 #define SOCKET_UTIL SocketUtil::getInstance()
 
 /// Handy static functions
+#define CACHE_FILE_DIR FileCompatUtil::cacheDir()
 #define RES_FILE_PATH(filePath) FileCompatUtil::resourceFilePath(filePath)
 #define OPEN_FILE(filePath, mode) FileCompatUtil::openFile(filePath, mode)
 #define LOG(...) Logger::getInstance().log(__VA_ARGS__)

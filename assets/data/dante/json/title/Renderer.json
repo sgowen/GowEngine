@@ -1,0 +1,107 @@
+{
+  "fontBatchers": {
+    "main": {
+      "font": "main",
+      "matrix": "main",
+      "maxBatchSize": 256
+    }
+  },
+  "framebuffers": {
+    "main": {
+      "width": 1024,
+      "height": 576
+    }
+  },
+  "matrices": {
+    "main": {
+      "width": 16,
+      "height": 9
+    }
+  },
+  "spriteBatchers": {
+    "main": {
+      "maxBatchSize": 1
+    }
+  },
+  "textViews": {
+    "title": {
+      "text": "Project Dante",
+      "alignment": 1,
+      "xWeight": 0.5,
+      "yWeight": 0.7,
+      "glyphWidthWeight": 0.05
+    },
+    "hostServer": {
+      "text": "[H]ost server",
+      "alignment": 1,
+      "xWeight": 0.5,
+      "yWeight": 0.18,
+      "glyphWidthWeight": 0.025
+    },
+    "joinServer": {
+      "text": "[J]oin server",
+      "alignment": 1,
+      "xWeight": 0.5,
+      "yWeight": 0.12,
+      "glyphWidthWeight": 0.025
+    },
+    "joinLANServer": {
+      "text": "Join [L]AN server",
+      "alignment": 1,
+      "xWeight": 0.5,
+      "yWeight": 0.12,
+      "glyphWidthWeight": 0.025
+    },
+    "joinInternetServer": {
+      "text": "Join [I]nternet server",
+      "alignment": 1,
+      "xWeight": 0.5,
+      "yWeight": 0.06,
+      "glyphWidthWeight": 0.025
+    },
+    "enterName": {
+      "text": "Enter name",
+      "alignment": 1,
+      "xWeight": 0.5,
+      "yWeight": 0.12,
+      "glyphWidthWeight": 0.025
+    },
+    "enterIP": {
+      "text": "Enter IP address",
+      "alignment": 1,
+      "xWeight": 0.5,
+      "yWeight": 0.12,
+      "glyphWidthWeight": 0.025
+    },
+    "input": {
+      "alignment": 1,
+      "xWeight": 0.5,
+      "yWeight": 0.06,
+      "glyphWidthWeight": 0.025
+    },
+    "server0": {
+      "alignment": 0,
+      "xWeight": 0.1,
+      "yWeight": 0.9,
+      "glyphWidthWeight": 0.025
+    },
+    "server1": {
+      "alignment": 0,
+      "xWeight": 0.1,
+      "yWeight": 0.8,
+      "glyphWidthWeight": 0.025
+    },
+    "server2": {
+      "alignment": 0,
+      "xWeight": 0.1,
+      "yWeight": 0.7,
+      "glyphWidthWeight": 0.025
+    },
+    "server3": {
+      "alignment": 0,
+      "xWeight": 0.1,
+      "yWeight": 0.6,
+      "glyphWidthWeight": 0.025
+    }
+  }
+}

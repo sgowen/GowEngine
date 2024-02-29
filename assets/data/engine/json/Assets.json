@@ -1,0 +1,46 @@
+{
+  "shaders": [
+    {
+      "name": "framebuffer",
+      "vertexShaderFilePath": "engine/shaders/framebuffer.vsh",
+      "fragmentShaderFilePath": "engine/shaders/framebuffer.fsh"
+    },
+    {
+      "name": "geometry",
+      "vertexShaderFilePath": "engine/shaders/geometry.vsh",
+      "fragmentShaderFilePath": "engine/shaders/geometry.fsh"
+    },
+    {
+      "name": "lights",
+      "vertexShaderFilePath": "engine/shaders/lights.vsh",
+      "fragmentShaderFilePath": "engine/shaders/lights.fsh"
+    },
+    {
+      "name": "shockwave",
+      "vertexShaderFilePath": "engine/shaders/shockwave.vsh",
+      "fragmentShaderFilePath": "engine/shaders/shockwave.fsh"
+    },
+    {
+      "name": "sprite",
+      "vertexShaderFilePath": "engine/shaders/sprite.vsh",
+      "fragmentShaderFilePath": "engine/shaders/sprite.fsh"
+    }
+  ],
+  "fonts": [
+    {
+      "name": "main",
+      "texture": "sf_font",
+      "glyphsPerRow": 16,
+      "glyphWidth": 32,
+      "glyphHeight": 39
+    }
+  ],
+  "textures": [
+    {
+      "name": "sf_font",
+      "filePath": "engine/textures/sf_font.png",
+      "filterMin": "SMOOTH",
+      "filterMag": "SMOOTH"
+    }
+  ]
+}

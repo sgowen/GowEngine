@@ -23,7 +23,19 @@ _hasUpdatedSinceLastRender(false)
     
     if (ENGINE_CFG.fileLoggingEnabled())
     {
-        std::string logFileName = STRING_FORMAT("%s/log_GowEngine_%d", ENGINE_CFG.fileLoggingDir().c_str(), TimeUtil::timeSinceEpochMillisec());
+        // ~~ cacheDir ~~
+        //
+        // macOS
+        // /Users/sgowen/Library/Caches/com.sgowen.GowEngine
+        //
+        // Linux:
+        // /home/parallels/.cache/gowengine/
+        //
+        // Windows:
+        // C:\Users\mains\AppData\Local\gowengine
+        
+        std::string cacheDir = CACHE_FILE_DIR;
+        std::string logFileName = STRING_FORMAT("%s/log_GowEngine_%d", cacheDir.c_str(), TimeUtil::timeSinceEpochMillisec());
         Logger::getInstance().initWithFile(logFileName.c_str());
     }
     

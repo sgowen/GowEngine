@@ -1,0 +1,311 @@
+{
+  "JON0": {
+    "name": "Jon",
+    "controller": "JonController",
+    "textureMappings": {
+      "0": "Jon_Rabbit_Idle",
+      "1": "Jon_Rabbit_Running",
+      "2": "Jon_Rabbit_Jumping",
+      "3": "Jon_Rabbit_Falling",
+      "4": "Jon_Rabbit_DoubleJumping",
+      "5": "Jon_Rabbit_Landing",
+      "6": "Jon_Rabbit_Stomp",
+      "7": "Jon_Rabbit_LandingRoll",
+      "8": "Jon_Rabbit_WarmUp",
+      "9": "Jon_Rabbit_Swinging_Punch",
+      "10": "Jon_Rabbit_Burrow",
+      "11": "Jon_isAttemptingToTransformIntoVampire",
+      "12": "Jon_isTransformingIntoVampire",
+      "13": "Jon_isCancelingAttemptToTransformIntoVampire",
+      "14": "Jon_Vampire_Idle",
+      "15": "Jon_Vampire_Running",
+      "16": "Jon_Vampire_UpwardThrust",
+      "17": "Jon_Vampire_Dash",
+      "18": "Jon_Vampire_DoubleJumping",
+      "19": "Jon_Vampire_Gliding",
+      "20": "Jon_Vampire_Falling",
+      "21": "Jon_Vampire_Landing",
+      "22": "Jon_isAttemptingToRevertToRabbit",
+      "23": "Jon_isRevertingToRabbit",
+      "24": "Jon_isCancelingAttemptToRevertToRabbit",
+      "25": "Jon_Vampire_Dash_Completed",
+      "26": "Jon_Rabbit_Death",
+      "27": "Jon_Vampire_Death"
+    },
+    "soundMappings": {
+      "1": [
+        {
+          "stateTime": 4,
+          "soundID": "jon_footstep_right_grass"
+        },
+        {
+          "stateTime": 28,
+          "soundID": "jon_footstep_left_grass"
+        }
+      ],
+      "2": "jon_rabbit_jump",
+      "4": "jon_rabbit_double_jump",
+      "5": "jon_landing_grass",
+      "6": "jon_rabbit_stomp",
+      "7": "jon_landing_grass",
+      "9": [
+          {
+            "stateTime": 20,
+            "soundID": "jon_rabbit_punch"
+          }
+        ],
+      "10": [
+          {
+            "stateTime": 9,
+            "soundID": "jon_rabbit_drill"
+          }
+        ],
+      "11": "jon_trigger_transform",
+      "12": "jon_complete_transform",
+      "13": "jon_cancel_transform",
+      "15": [
+          {
+            "stateTime": 3,
+            "soundID": "jon_footstep_right_grass"
+          },
+          {
+            "stateTime": 18,
+            "soundID": "jon_footstep_left_grass"
+          }
+        ],
+      "16": "jon_vampire_jump",
+      "17": "jon_vampire_dash",
+      "18": "jon_vampire_double_jump",
+      "19": "jon_vampire_glide",
+      "21": "jon_landing_grass",
+      "22": "jon_trigger_transform",
+      "23": "jon_complete_transform",
+      "24": "jon_cancel_transform",
+      "26": "jon_death",
+      "27": "jon_death"
+    },
+    "fixtures": [
+      {
+        "halfWidthFactor": 0.2,
+        "halfHeightFactor": 0.38
+      },
+      {
+        "center": {
+          "x": 0,
+          "y": -0.42
+        },
+        "halfWidthFactor": 0.19,
+        "halfHeightFactor": 0.02,
+        "flags": 3
+      }
+    ],
+    "bodyFlags": 7,
+    "width": 16,
+    "height": 16,
+    "data": {
+        "gravity": "-120.0",
+      "speedX": "64.0",
+      "speedY": "40.0",
+      "numJumpFrames": "20",
+      "numDoubleJumpFrames": "12",
+      "speedVampireX": "128.0",
+      "speedVampireY": "20.0"
+    },
+    "networkData": [
+      {
+        "name": "entityLayoutInfo",
+        "data": [
+          {
+            "name": "entityLayoutKey",
+            "type": 3
+          }
+        ]
+      }
+    ]
+  },
+  "B001": {
+    "name": "BackgroundType_Mid_Hills",
+    "textureMappings": {
+      "0": "BackgroundType_Mid_Hills"
+    },
+    "width": 128,
+    "height": 45,
+    "data": {
+      "parallaxSpeedRatio": "0.125"
+    }
+  },
+  "B002": {
+    "name": "BackgroundType_Mid_Trees",
+    "textureMappings": {
+      "0": "BackgroundType_Mid_Trees"
+    },
+    "width": 128,
+    "height": 46,
+    "data": {
+      "parallaxSpeedRatio": "0.25"
+    }
+  },
+  "B003": {
+    "name": "BackgroundType_Lower_Top",
+    "textureMappings": {
+      "0": "BackgroundType_Lower_Top"
+    },
+    "width": 128,
+    "height": 62,
+    "data": {
+      "parallaxSpeedRatio": "0.875"
+    }
+  },
+  "B004": {
+    "name": "BackgroundType_Lower_Bottom",
+    "textureMappings": {
+      "0": "BackgroundType_Lower_Bottom"
+    },
+    "width": 128,
+    "height": 33,
+    "data": {
+      "parallaxSpeedRatio": "0.875"
+    }
+  },
+  "B005": {
+    "name": "BackgroundType_Upper",
+    "textureMappings": {
+      "0": "BackgroundType_Upper"
+    },
+    "width": 128,
+    "height": 101,
+    "data": {
+      "parallaxSpeedRatio": "0.0625"
+    }
+  },
+  "G001": {
+    "name": "GroundType_GrassWithoutCaveEndLeft",
+    "textureMappings": {
+      "0": "GroundType_GrassWithoutCaveEndLeft"
+    },
+    "fixtures": [
+      {
+        "center": {
+          "x": 0,
+          "y": -0.02
+        },
+        "halfWidthFactor": 0.5,
+        "halfHeightFactor": 0.48
+      }
+    ],
+    "width": 8,
+    "height": 100
+  },
+  "G002": {
+    "name": "GroundType_GrassWithoutCaveLarge",
+    "textureMappings": {
+      "0": "GroundType_GrassWithoutCaveLarge"
+    },
+    "fixtures": [
+      {
+        "center": {
+          "x": 0,
+          "y": -0.02
+        },
+        "halfWidthFactor": 0.5,
+        "halfHeightFactor": 0.48
+      }
+    ],
+    "width": 128,
+    "height": 100
+  },
+  "G003": {
+    "name": "GroundType_GrassWithoutCaveEndRight",
+    "textureMappings": {
+      "0": "GroundType_GrassWithoutCaveEndRight"
+    },
+    "fixtures": [
+      {
+        "center": {
+          "x": 0,
+          "y": -0.02
+        },
+        "halfWidthFactor": 0.5,
+        "halfHeightFactor": 0.48
+      }
+    ],
+    "width": 8,
+    "height": 100
+  },
+  "P001": {
+    "name": "ForegroundObjectType_GrassPlatformLeft",
+    "textureMappings": {
+      "0": "ForegroundObjectType_GrassPlatformLeft"
+    },
+    "fixtures": [
+      {
+        "center": {
+          "x": 0,
+          "y": 0
+        },
+        "halfWidthFactor": 0.5,
+        "halfHeightFactor": 0.3334,
+        "flags": 28
+      }
+    ],
+    "width": 4,
+    "height": 6
+  },
+  "P002": {
+    "name": "ForegroundObjectType_GrassPlatformCenter",
+    "textureMappings": {
+      "0": "ForegroundObjectType_GrassPlatformCenter"
+    },
+    "fixtures": [
+      {
+        "center": {
+          "x": 0,
+          "y": 0
+        },
+        "halfWidthFactor": 0.5,
+        "halfHeightFactor": 0.3334,
+        "flags": 28
+      }
+    ],
+    "width": 14,
+    "height": 6
+  },
+  "P003": {
+    "name": "ForegroundObjectType_GrassPlatformRight",
+    "textureMappings": {
+      "0": "ForegroundObjectType_GrassPlatformRight"
+    },
+    "fixtures": [
+      {
+        "center": {
+          "x": 0,
+          "y": 0
+        },
+        "halfWidthFactor": 0.5,
+        "halfHeightFactor": 0.3334,
+        "flags": 28
+      }
+    ],
+    "width": 4,
+    "height": 6
+  },
+  "P004": {
+    "name": "ForegroundObjectType_SpikeGrassFour",
+    "textureMappings": {
+      "0": "ForegroundObjectType_SpikeGrassFour"
+    },
+    "fixtures": [
+      {
+        "center": {
+          "x": 0,
+          "y": 0
+        },
+        "halfWidthFactor": 0.5,
+        "halfHeightFactor": 0.5,
+        "flags": 32
+      }
+    ],
+    "width": 18,
+    "height": 6
+  }
+}
