@@ -17,7 +17,7 @@
   "inputLoggingEnabled": "false",
   "networkLoggingEnabled": "false",
   "physicsLoggingEnabled": "false",
-  "audioDisabled": "false",
+  "audioDisabled": "true",
   "musicDisabled": "false",
   "volume": "1.0",
   "extrapolatePhysics": "true",
