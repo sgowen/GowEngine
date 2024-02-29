@@ -60,7 +60,6 @@
 		BB5ED3332B6F105300EFA7EB /* libbox2d.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BB5ED3322B6F105300EFA7EB /* libbox2d.a */; };
 		BB61E1F82A27F64200BFFE38 /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BB61E1F72A27F64200BFFE38 /* OpenGL.framework */; };
 		BB61E1FA2A27F67700BFFE38 /* libglfw3.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BB61E1F92A27F67700BFFE38 /* libglfw3.a */; };
-		BB61E2002A27F73600BFFE38 /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BB61E1FF2A27F73600BFFE38 /* OpenGLES.framework */; };
 		BB631F662AAA67E500953454 /* ShockwaveRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BB631F652AAA67E500953454 /* ShockwaveRenderer.cpp */; };
 		BB631F672AAA67E500953454 /* ShockwaveRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BB631F652AAA67E500953454 /* ShockwaveRenderer.cpp */; };
 		BB631F6A2AAB9B3500953454 /* FramebufferRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BB631F692AAB9B3500953454 /* FramebufferRenderer.cpp */; };
@@ -78,6 +77,7 @@
 		BB7F75BA2B6B119F00CAB63F /* libbox2d.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BB7F75B92B6B119F00CAB63F /* libbox2d.a */; };
 		BB7F75BD2B6B5C4C00CAB63F /* NosPhysicsRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BB7F75BC2B6B5C4C00CAB63F /* NosPhysicsRenderer.cpp */; };
 		BB7F75BE2B6B5C4C00CAB63F /* NosPhysicsRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BB7F75BC2B6B5C4C00CAB63F /* NosPhysicsRenderer.cpp */; };
+		BB82CE5C2B9133FA008BF269 /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BB82CE5B2B9133F9008BF269 /* OpenGLES.framework */; };
 		BB83A6652B83FDE3003AFB1F /* GlfmEngineMount.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BB83A6642B83FDE3003AFB1F /* GlfmEngineMount.cpp */; };
 		BB83A6A92B840544003AFB1F /* libglfm.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BB83A6A82B840543003AFB1F /* libglfm.a */; };
 		BB95E52B2A210FC400D22D0F /* libopenal.1.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = BB95E5292A210FC400D22D0F /* libopenal.1.dylib */; };
@@ -351,7 +351,6 @@
 		BB5ED3322B6F105300EFA7EB /* libbox2d.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libbox2d.a; sourceTree = "<group>"; };
 		BB61E1F72A27F64200BFFE38 /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = System/Library/Frameworks/OpenGL.framework; sourceTree = SDKROOT; };
 		BB61E1F92A27F67700BFFE38 /* libglfw3.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libglfw3.a; sourceTree = "<group>"; };
-		BB61E1FF2A27F73600BFFE38 /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS16.4.sdk/System/Library/Frameworks/OpenGLES.framework; sourceTree = DEVELOPER_DIR; };
 		BB61E2012A280DE900BFFE38 /* build_libraries.bat */ = {isa = PBXFileReference; lastKnownFileType = text; path = build_libraries.bat; sourceTree = "<group>"; };
 		BB61E2022A28116300BFFE38 /* build_libraries.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = build_libraries.sh; sourceTree = "<group>"; };
 		BB631F642AAA67E500953454 /* ShockwaveRenderer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = ShockwaveRenderer.hpp; sourceTree = "<group>"; };
@@ -411,6 +410,7 @@
 		BB7F75B92B6B119F00CAB63F /* libbox2d.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libbox2d.a; sourceTree = "<group>"; };
 		BB7F75BB2B6B5C4C00CAB63F /* NosPhysicsRenderer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = NosPhysicsRenderer.hpp; sourceTree = "<group>"; };
 		BB7F75BC2B6B5C4C00CAB63F /* NosPhysicsRenderer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = NosPhysicsRenderer.cpp; sourceTree = "<group>"; };
+		BB82CE5B2B9133F9008BF269 /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS17.2.sdk/System/Library/Frameworks/OpenGLES.framework; sourceTree = DEVELOPER_DIR; };
 		BB83A62A2B83FC80003AFB1F /* build.gradle.kts */ = {isa = PBXFileReference; lastKnownFileType = text; path = build.gradle.kts; sourceTree = "<group>"; };
 		BB83A6422B83FC80003AFB1F /* strings.xml */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = strings.xml; sourceTree = "<group>"; };
 		BB83A64C2B83FC80003AFB1F /* AndroidManifest.xml */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = AndroidManifest.xml; sourceTree = "<group>"; };
@@ -727,7 +727,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				BB61E2002A27F73600BFFE38 /* OpenGLES.framework in Frameworks */,
+				BB82CE5C2B9133FA008BF269 /* OpenGLES.framework in Frameworks */,
 				BBEC09F42A28FACB0054681F /* libsndfile.1.dylib in Frameworks */,
 				BB83A6A92B840544003AFB1F /* libglfm.a in Frameworks */,
 				BB95E52B2A210FC400D22D0F /* libopenal.1.dylib in Frameworks */,
@@ -827,7 +827,7 @@
 				BB3F0B012A44F2E3008D8AC8 /* Cocoa.framework */,
 				BB3F0B032A44F2EF008D8AC8 /* IOKit.framework */,
 				BB61E1F72A27F64200BFFE38 /* OpenGL.framework */,
-				BB61E1FF2A27F73600BFFE38 /* OpenGLES.framework */,
+				BB82CE5B2B9133F9008BF269 /* OpenGLES.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
