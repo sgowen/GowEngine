@@ -575,17 +575,20 @@ void NosGameEngineState::updateWithNetwork(Engine* e)
     
     if (getPlayer(1) == nullptr)
     {
-        world().recallCache(NW_CLNT->getNumMovesProcessed());
-        world().clearCache(world().getNumMovesProcessed());
-        input().removeProcessedMovesWithIndexLessThan(world().getNumMovesProcessed());
-        input().setNumMovesProcessed(world().getNumMovesProcessed());
+        uint32_t numMovesProcessed = NW_CLNT->getNumMovesProcessed();
+        world().recallCache(numMovesProcessed);
+        assert(numMovesProcessed == world().getNumMovesProcessed());
+        
+        world().clearCache(numMovesProcessed);
+        input().removeProcessedMovesWithIndexLessThan(numMovesProcessed);
+        input().setNumMovesProcessed(numMovesProcessed);
         
         Entity* e = getPlayer(1);
         if (e != nullptr)
         {
             uint32_t entityLayoutKey = e->networkDataField("entityLayoutKey").valueUInt32();
             EntityLayoutDef& eld = ENTITY_LAYOUT_MGR.entityLayoutDef(entityLayoutKey);
-            ENGINE_STATE_GAME_NOS.populateFromEntityLayout(eld);
+            populateFromEntityLayout(eld);
         }
     }
     
@@ -698,7 +701,6 @@ void NosGameEngineState::updateWithNetwork(Engine* e)
         world().recallCache(world().getNumMovesProcessed());
         world().clearCache(world().getNumMovesProcessed());
         input().removeProcessedMovesWithIndexLessThan(world().getNumMovesProcessed());
-        assert (getPlayer(1) != nullptr);
     }
 }
 
@@ -718,6 +720,11 @@ void NosGameEngineState::updateWorld(const Move& move)
         }
         
         e->processInput(inputState);
+    }
+    
+    for (Entity* e : world().getDynamicEntities())
+    {
+        e->runAI();
     }
     
     static float frameRate = static_cast<float>(ENGINE_CFG.frameRate());

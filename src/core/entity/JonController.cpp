@@ -96,6 +96,8 @@ void JonController::onUpdate(uint32_t numMovesProcessed)
     {
         state = STATE_TRANSFORMING;
         stateTime = 0;
+        // TODO, figure out some way to get rid of local data in the Controller
+        // Anything not networked is risky.
         _isReleasingShockwave = true;
         _shockwaveStartTime = numMovesProcessed;
         e.pose()._isSlowed = false;

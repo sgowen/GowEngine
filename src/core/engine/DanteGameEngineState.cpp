@@ -600,7 +600,7 @@ void DanteGameEngineState::updateWithNetwork(Engine* e)
         {
             uint32_t entityLayoutKey = e->networkDataField("entityLayoutKey").valueUInt32();
             EntityLayoutDef& eld = ENTITY_LAYOUT_MGR.entityLayoutDef(entityLayoutKey);
-            ENGINE_STATE_GAME_DANTE.populateFromEntityLayout(eld);
+            populateFromEntityLayout(eld);
         }
     }
     
