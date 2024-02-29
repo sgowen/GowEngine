@@ -27,21 +27,19 @@ NosGameInputProcessorState NosGameInputProcessor::update()
     uint16_t& inputStateP2 = _inputState.playerInputState(1)._inputState;
     
 #if IS_MOBILE
+    Matrix* m = INPUT_MGR.matrix();
+    float halfWidth = m->_desc.width() / 2;
+    float halfHeight = m->_desc.height() / 2;
     for (CursorEvent* e : INPUT_MGR.getCursorEvents())
     {
         uint16_t& inputState = inputStateP1;
         
         Vector2& pos = INPUT_MGR.convert(e);
         
-        SET_BIT(inputState, JISF_MOVING_LEFT, e->isPressed() && pos._x < 38);
-        SET_BIT(inputState, JISF_MOVING_RIGHT, e->isPressed() && pos._x > 76);
+        SET_BIT(inputState, JISF_MOVING_LEFT, e->isPressed() && pos._x < halfWidth);
+        SET_BIT(inputState, JISF_MOVING_RIGHT, e->isPressed() && pos._x > halfWidth);
         
-        SET_BIT(inputState, JISF_JUMPING, e->isDown() && pos._y > 32);
-        
-        if (e->isUp() && pos._x > 90 && pos._y < 8)
-        {
-            _state = NGIMS_EXIT;
-        }
+        SET_BIT(inputState, JISF_JUMPING, e->isPressed() && pos._y > halfHeight);
     }
 #endif
     
@@ -420,7 +418,16 @@ void NosGameEngineState::onRender(Renderer& r, double extrapolation)
     
     if (_inputProcessor.state() == NGIMS_DISPLAY_PHYSICS)
     {
-        r.renderNosPhysics(static_cast<NosPhysicsWorld*>(_world));
+        std::string physicsEngine = _config.getString("physicsEngine");
+        bool isBox2D = physicsEngine == "Box2D";
+        if (isBox2D)
+        {
+            r.renderBox2DPhysics(static_cast<Box2DPhysicsWorld*>(_world));
+        }
+        else
+        {
+            r.renderNosPhysics(static_cast<NosPhysicsWorld*>(_world));
+        }
     }
     
     r.setText("fps", STRING_FORMAT("FPS %d", FPS_UTIL.fps()));
@@ -944,6 +951,11 @@ void NosGameEngineState::renderAudio()
     }
     
     for (Entity* e : world().getPlayers())
+    {
+        playSoundForEntityIfNecessary(*e, currentMoveIndex);
+    }
+    
+    for (Entity* e : world().getDynamicEntities())
     {
         playSoundForEntityIfNecessary(*e, currentMoveIndex);
     }

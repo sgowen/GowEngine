@@ -455,12 +455,8 @@ Entity* DanteGameEngineState::getPlayer(uint8_t playerID)
 {
     Entity* ret = nullptr;
     
-    std::string players;
-    
     for (Entity* e : world().getPlayers())
     {
-        players += StringUtil::toString(e->playerInfo()._playerID);
-        players += ",";
         if (playerID == e->playerInfo()._playerID)
         {
             ret = e;
