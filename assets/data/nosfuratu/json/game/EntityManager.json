@@ -1,5 +1,5 @@
 {
-  "JON0": {
+  "PLYR": {
     "name": "Jon",
     "controller": "JonController",
     "textureMappings": {
@@ -109,7 +109,9 @@
       "numJumpFrames": "20",
       "numDoubleJumpFrames": "12",
       "speedVampireX": "128.0",
-      "speedVampireY": "20.0"
+      "speedVampireY": "20.0",
+      "spawnX": "64",
+      "spawnY": "128"
     },
     "networkData": [
       {

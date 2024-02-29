@@ -60,7 +60,9 @@ EngineState::EngineState(std::string configFilePath) : State<Engine>()
     // Yeah, this should all should be loaded async.
     
     ConfigLoader::initWithJSONFile(_config, configFilePath);
+    
     _filePathAssets = _config.getString("filePathAssets");
+    
     AssetsLoader::initWithJSONFile(_assets, _filePathAssets);
     RendererLoader::initWithJSONFile(_renderer, _config.getString("filePathRenderer"));
     

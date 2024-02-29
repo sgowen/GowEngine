@@ -281,12 +281,22 @@ void cb_nos_client_onPlayerWelcomed(uint8_t playerID)
 
 void NosGameEngineState::onEnter(Engine* e)
 {
-    _world = new NosPhysicsWorld();
+    std::string physicsEngine = _config.getString("physicsEngine");
+    bool isBox2D = physicsEngine == "Box2D";
+    
+    if (isBox2D)
+    {
+        _world = new Box2DPhysicsWorld();
+    }
+    else
+    {
+        _world = new NosPhysicsWorld();
+    }
     
     if (_args.getBool(ARG_IS_HOST, false) == true)
     {
-        NosServer::create();
-        assert(NOS_SERVER != nullptr);
+        GameServer::create(_config);
+        assert(GAME_SERVER != nullptr);
     }
 }
 
@@ -308,7 +318,7 @@ void NosGameEngineState::onExit(Engine* e)
 {
     if (_args.getBool(ARG_IS_HOST, false) == true)
     {
-        NosServer::destroy();
+        GameServer::destroy();
     }
     
     NetworkClient::destroy();
@@ -322,9 +332,9 @@ void NosGameEngineState::onExit(Engine* e)
 
 void NosGameEngineState::onUpdate(Engine* e)
 {
-    if (NOS_SERVER)
+    if (GAME_SERVER)
     {
-        NOS_SERVER->update();
+        GAME_SERVER->update();
     }
     
     _timeTracker.onFrame();

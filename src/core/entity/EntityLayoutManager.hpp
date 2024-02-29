@@ -60,6 +60,7 @@ public:
     }
     
     EntityLayoutDef& entityLayoutDef(uint32_t key);
+    uint32_t getFirstLayout();
     
 private:
     std::map<uint32_t, EntityLayoutDef> _entityLayouts;

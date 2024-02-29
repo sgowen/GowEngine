@@ -15,6 +15,7 @@
 #include <string>
 
 struct EntityInstanceDef;
+struct EntityDef;
 class EntityController;
 class EntityNetworkController;
 class EntityPhysicsController;
@@ -37,6 +38,7 @@ public:
     
     Entity* createEntity(EntityInstanceDef eid);
     EntityDef& getEntityDef(uint32_t fourCCName);
+    Entity* createEntity(EntityDef& ed, EntityInstanceDef eid);
     
     void registerController(std::string name, EntityControllerCreationFunc func);
     EntityController* createEntityController(EntityDef& ed, Entity* e);

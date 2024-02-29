@@ -11,7 +11,7 @@
 Entity* EntityManager::createEntity(EntityInstanceDef eid)
 {
     EntityDef& ed = getEntityDef(eid._key);
-    return new Entity(ed, eid);
+    return createEntity(ed, eid);
 }
 
 EntityDef& EntityManager::getEntityDef(uint32_t fourCCName)
@@ -19,6 +19,11 @@ EntityDef& EntityManager::getEntityDef(uint32_t fourCCName)
     auto q = _entityDefs.find(fourCCName);
     assert(q != _entityDefs.end());
     return q->second;
+}
+
+Entity* EntityManager::createEntity(EntityDef& ed, EntityInstanceDef eid)
+{
+    return new Entity(ed, eid);
 }
 
 void EntityManager::registerController(std::string name, EntityControllerCreationFunc func)

@@ -16,6 +16,11 @@ EntityLayoutDef& EntityLayoutManager::entityLayoutDef(uint32_t key)
     return q->second;
 }
 
+uint32_t EntityLayoutManager::getFirstLayout()
+{
+    return _entityLayouts.begin()->first;
+}
+
 EntityLayoutManager::EntityLayoutManager()
 {
     // Empty

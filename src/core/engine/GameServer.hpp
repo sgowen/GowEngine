@@ -1,8 +1,8 @@
 //
-//  NosServer.hpp
+//  GameServer.hpp
 //  GowEngine
 //
-//  Created by Stephen Gowen on 1/27/21.
+//  Created by Stephen Gowen on 2/24/24.
 //  Copyright © 2023 Stephen Gowen. All rights reserved.
 //
 
@@ -11,11 +11,11 @@
 class Engine;
 class ClientProxy;
 
-class NosServer
+class GameServer
 {
 public:
-    static void create();
-    static NosServer* getInstance();
+    static void create(Config& config);
+    static GameServer* getInstance();
     static void destroy();
     
     void update();
@@ -27,8 +27,9 @@ public:
     World& world();
     
 private:
-    static NosServer* s_instance;
+    static GameServer* s_instance;
     
+    Config& _config;
     EntityIDManager _entityIDManager;
     TimeTracker _timeTracker;
     World* _world;
@@ -37,11 +38,11 @@ private:
     
     void updateWorld();
     void handleDirtyStates(std::vector<Entity*>& entities);
-    void addPlayer(std::string playerName, uint8_t playerID);
+    void spawnPlayer(std::string playerName, uint8_t playerID);
     void removePlayer(uint8_t playerID);
     
-    NosServer();
-    virtual ~NosServer();
-    NosServer(const NosServer&);
-    NosServer& operator=(const NosServer&);
+    GameServer(Config& config);
+    ~GameServer();
+    GameServer(const GameServer&);
+    GameServer& operator=(const GameServer&);
 };

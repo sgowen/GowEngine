@@ -96,13 +96,12 @@
 
 /// core/engine
 #include "core/engine/DanteGameEngineState.hpp"
-#include "core/engine/DanteServer.hpp"
 #include "core/engine/DefaultEngineState.hpp"
 #include "core/engine/Engine.hpp"
 #include "core/engine/EngineConfig.hpp"
 #include "core/engine/EngineState.hpp"
+#include "core/engine/GameServer.hpp"
 #include "core/engine/NosGameEngineState.hpp"
-#include "core/engine/NosServer.hpp"
 #include "core/engine/TitleEngineState.hpp"
 
 /// core/entity

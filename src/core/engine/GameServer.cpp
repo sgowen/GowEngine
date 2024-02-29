@@ -1,26 +1,26 @@
 //
-//  NosServer.cpp
+//  GameServer.cpp
 //  GowEngine
 //
-//  Created by Stephen Gowen on 1/27/21.
+//  Created by Stephen Gowen on 2/24/24.
 //  Copyright © 2023 Stephen Gowen. All rights reserved.
 //
 
 #include <GowEngine/GowEngine.hpp>
 
-void cb_nos_server_onEntityRegistered(Entity* e)
+void cb_game_server_onEntityRegistered(Entity* e)
 {
-    NOS_SERVER->world().addNetworkEntity(e);
+    GAME_SERVER->world().addNetworkEntity(e);
     
     if (e->isPlayer() && e->playerInfo()._playerID == 1)
     {
         uint32_t entityLayoutKey = e->networkDataField("entityLayoutKey").valueUInt32();
         EntityLayoutDef& eld = ENTITY_LAYOUT_MGR.entityLayoutDef(entityLayoutKey);
-        NOS_SERVER->populateFromEntityLayout(eld);
+        GAME_SERVER->populateFromEntityLayout(eld);
     }
 }
 
-void cb_nos_server_onEntityDeregistered(Entity* e)
+void cb_game_server_onEntityDeregistered(Entity* e)
 {
     bool needsRestart = false;
     
@@ -30,39 +30,39 @@ void cb_nos_server_onEntityDeregistered(Entity* e)
         needsRestart = NW_SRVR->getClientProxy(playerID) != nullptr;
     }
     
-    NOS_SERVER->world().removeNetworkEntity(e);
+    GAME_SERVER->world().removeNetworkEntity(e);
     
     if (needsRestart)
     {
-        NOS_SERVER->restart();
+        GAME_SERVER->restart();
     }
 }
 
-void cb_nos_server_handleNewClient(std::string playerName, uint8_t playerID)
+void cb_game_server_handleNewClient(std::string playerName, uint8_t playerID)
 {
-    NOS_SERVER->handleNewClient(playerName, playerID);
+    GAME_SERVER->handleNewClient(playerName, playerID);
 }
 
-void cb_nos_server_handleLostClient(ClientProxy& cp, uint8_t localPlayerIndex)
+void cb_game_server_handleLostClient(ClientProxy& cp, uint8_t localPlayerIndex)
 {
-    NOS_SERVER->handleLostClient(cp, localPlayerIndex);
+    GAME_SERVER->handleLostClient(cp, localPlayerIndex);
 }
 
-NosServer* NosServer::s_instance = nullptr;
+GameServer* GameServer::s_instance = nullptr;
 
-void NosServer::create()
+void GameServer::create(Config& config)
 {
     assert(s_instance == nullptr);
     
-    s_instance = new NosServer();
+    s_instance = new GameServer(config);
 }
 
-NosServer* NosServer::getInstance()
+GameServer* GameServer::getInstance()
 {
     return s_instance;
 }
 
-void NosServer::destroy()
+void GameServer::destroy()
 {
     assert(s_instance != nullptr);
     
@@ -70,7 +70,7 @@ void NosServer::destroy()
     s_instance = nullptr;
 }
 
-void NosServer::update()
+void GameServer::update()
 {
     if (!_isConnected || !NW_SRVR->isConnected())
     {
@@ -89,12 +89,12 @@ void NosServer::update()
     NW_SRVR->sendOutgoingPackets();
 }
 
-void NosServer::handleNewClient(std::string playerName, uint8_t playerID)
+void GameServer::handleNewClient(std::string playerName, uint8_t playerID)
 {
-    addPlayer(playerName, playerID);
+    spawnPlayer(playerName, playerID);
 }
 
-void NosServer::handleLostClient(ClientProxy& cp, uint8_t localPlayerIndex)
+void GameServer::handleLostClient(ClientProxy& cp, uint8_t localPlayerIndex)
 {
     if (localPlayerIndex >= 1)
     {
@@ -111,16 +111,18 @@ void NosServer::handleLostClient(ClientProxy& cp, uint8_t localPlayerIndex)
     }
 }
 
-void NosServer::populateFromEntityLayout(EntityLayoutDef& eld)
+void GameServer::populateFromEntityLayout(EntityLayoutDef& eld)
 {
     EntityLayoutManagerLoader::loadEntityLayout(eld, _entityIDManager, true);
     
-    for (auto& e : world().getDynamicEntities())
+    World& w = world();
+    std::vector<Entity*> toDelete = w.getDynamicEntities();
+    for (Entity* e : toDelete)
     {
         NW_SRVR->deregisterEntity(e);
     }
     
-    world().populateFromEntityLayout(eld);
+    w.populateFromEntityLayout(eld);
     
     for (auto& eid : eld._entitiesNetwork)
     {
@@ -128,7 +130,7 @@ void NosServer::populateFromEntityLayout(EntityLayoutDef& eld)
     }
 }
 
-void NosServer::restart()
+void GameServer::restart()
 {
     if (_isRestarting)
     {
@@ -149,16 +151,16 @@ void NosServer::restart()
     {
         ClientProxy* cp = pair.second;
         assert(cp != nullptr);
-        addPlayer(cp->getUsername(), pair.first);
+        spawnPlayer(cp->getUsername(), pair.first);
     }
 }
 
-World& NosServer::world()
+World& GameServer::world()
 {
     return *_world;
 }
 
-void NosServer::updateWorld()
+void GameServer::updateWorld()
 {
     world().beginFrame();
     for (Entity* e : world().getPlayers())
@@ -193,6 +195,11 @@ void NosServer::updateWorld()
         cp->setLastMoveTimestampDirty(true);
     }
     
+    for (Entity* e : world().getDynamicEntities())
+    {
+        e->runAI();
+    }
+    
     static float frameRate = static_cast<float>(ENGINE_CFG.frameRate());
     world().stepPhysics(frameRate);
     std::vector<Entity*> toDelete = world().update();
@@ -210,7 +217,7 @@ void NosServer::updateWorld()
     handleDirtyStates(world().getDynamicEntities());
 }
 
-void NosServer::handleDirtyStates(std::vector<Entity*>& entities)
+void GameServer::handleDirtyStates(std::vector<Entity*>& entities)
 {
     for (Entity* e : entities)
     {
@@ -222,31 +229,37 @@ void NosServer::handleDirtyStates(std::vector<Entity*>& entities)
     }
 }
 
-void NosServer::addPlayer(std::string playerName, uint8_t playerID)
+void GameServer::spawnPlayer(std::string playerName, uint8_t playerID)
 {
     ClientProxy* cp = NW_SRVR->getClientProxy(playerID);
     assert(cp != nullptr);
 
-    uint32_t spawnX = playerID == 1 ? 64 : 80;
-    uint32_t spawnY = 128;
-
-    uint32_t key = playerID == 1 ? 'JON0' : 'JON0';
+    // TODO, assert that we don't already have a player for this ID
+    
+    uint32_t key = 'PLYR';
+    
+    EntityDef& ed = ENTITY_MGR.getEntityDef(key);
+    uint32_t spawnX = ed._data.getUInt("spawnX", 33);
+    uint32_t spawnY = ed._data.getUInt("spawnY", 22);
+    
     uint32_t networkID = _entityIDManager.getNextPlayerEntityID();
     EntityInstanceDef eid(networkID, key, spawnX, spawnY, true);
-    Entity* e = ENTITY_MGR.createEntity(eid);
+    
+    Entity* e = ENTITY_MGR.createEntity(ed, eid);
     e->playerInfo()._playerAddressHash = cp->getMachineAddress()->getHash();
     e->playerInfo()._playerName = playerName;
     e->playerInfo()._playerAddress = cp->getMachineAddress()->toString();
     e->playerInfo()._playerID = playerID;
     if (playerID == 1)
     {
-        e->networkDataField("entityLayoutKey").setValueUInt32('L001');
+        uint32_t entityLayoutKey = ENTITY_LAYOUT_MGR.getFirstLayout();
+        e->networkDataField("entityLayoutKey").setValueUInt32(entityLayoutKey);
     }
 
     NW_SRVR->registerEntity(e);
 }
 
-void NosServer::removePlayer(uint8_t playerID)
+void GameServer::removePlayer(uint8_t playerID)
 {
     for (Entity* e : world().getPlayers())
     {
@@ -258,13 +271,26 @@ void NosServer::removePlayer(uint8_t playerID)
     }
 }
 
-NosServer::NosServer() :
+GameServer::GameServer(Config& config) :
+_config(config),
 _entityIDManager(),
 _timeTracker(),
-_world(new NosPhysicsWorld()),
+_world(nullptr),
 _isRestarting(false),
 _isConnected(false)
 {
+    std::string physicsEngine = _config.getString("physicsEngine");
+    bool isBox2D = physicsEngine == "Box2D";
+    
+    if (isBox2D)
+    {
+        _world = new Box2DPhysicsWorld();
+    }
+    else
+    {
+        _world = new NosPhysicsWorld();
+    }
+    
     ServerHelper* serverHelper = nullptr;
 #if IS_DESKTOP
     if (ENGINE_CFG.useSteamNetworking())
@@ -290,16 +316,16 @@ _isConnected(false)
     NetworkServer::create(serverHelper,
                           _entityIDManager,
                           _timeTracker,
-                          cb_nos_server_onEntityRegistered,
-                          cb_nos_server_onEntityDeregistered,
-                          cb_nos_server_handleNewClient,
-                          cb_nos_server_handleLostClient);
+                          cb_game_server_onEntityRegistered,
+                          cb_game_server_onEntityDeregistered,
+                          cb_game_server_handleNewClient,
+                          cb_game_server_handleLostClient);
     assert(NW_SRVR != nullptr);
     
     _isConnected = NW_SRVR->connect();
 }
 
-NosServer::~NosServer()
+GameServer::~GameServer()
 {
     NetworkServer::destroy();
     delete _world;

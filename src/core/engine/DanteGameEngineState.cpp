@@ -261,12 +261,22 @@ void cb_dante_client_onPlayerWelcomed(uint8_t playerID)
 
 void DanteGameEngineState::onEnter(Engine* e)
 {
-    _world = new Box2DPhysicsWorld();
+    std::string physicsEngine = _config.getString("physicsEngine");
+    bool isBox2D = physicsEngine == "Box2D";
+    
+    if (isBox2D)
+    {
+        _world = new Box2DPhysicsWorld();
+    }
+    else
+    {
+        _world = new NosPhysicsWorld();
+    }
     
     if (_args.getBool(ARG_IS_HOST, false) == true)
     {
-        DanteServer::create();
-        assert(DANTE_SERVER != nullptr);
+        GameServer::create(_config);
+        assert(GAME_SERVER != nullptr);
     }
 }
 
@@ -288,7 +298,7 @@ void DanteGameEngineState::onExit(Engine* e)
 {
     if (_args.getBool(ARG_IS_HOST, false) == true)
     {
-        DanteServer::destroy();
+        GameServer::destroy();
     }
     
     NetworkClient::destroy();
@@ -302,9 +312,9 @@ void DanteGameEngineState::onExit(Engine* e)
 
 void DanteGameEngineState::onUpdate(Engine* e)
 {
-    if (DANTE_SERVER)
+    if (GAME_SERVER)
     {
-        DANTE_SERVER->update();
+        GAME_SERVER->update();
     }
     
     _timeTracker.onFrame();
@@ -414,7 +424,16 @@ void DanteGameEngineState::onRender(Renderer& r, double extrapolation)
     
     if (_inputProcessor.state() == DGIMS_DISPLAY_PHYSICS)
     {
-        r.renderBox2DPhysics(static_cast<Box2DPhysicsWorld*>(_world));
+        std::string physicsEngine = _config.getString("physicsEngine");
+        bool isBox2D = physicsEngine == "Box2D";
+        if (isBox2D)
+        {
+            r.renderBox2DPhysics(static_cast<Box2DPhysicsWorld*>(_world));
+        }
+        else
+        {
+            r.renderNosPhysics(static_cast<NosPhysicsWorld*>(_world));
+        }
     }
     
     r.setText("fps", STRING_FORMAT("FPS %d", FPS_UTIL.fps()));
