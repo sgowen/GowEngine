@@ -101,6 +101,16 @@ uint32_t AudioEngine::playSound(std::string soundID, uint32_t numFramesSeekedAhe
     return alHandle;
 }
 
+void AudioEngine::playMusic(std::string soundID, float volume, bool isLooping)
+{
+    if (ENGINE_CFG.audioDisabled() || ENGINE_CFG.musicDisabled())
+    {
+        return;
+    }
+    
+    playSound(soundID, 0, volume, isLooping);
+}
+
 void AudioEngine::stopSound(std::string soundID)
 {
     if (ENGINE_CFG.audioDisabled())

@@ -288,10 +288,7 @@ void DanteGameEngineState::onAssetsLoaded(Engine* e)
     std::string filePathEntityLayoutManager = _config.getString("filePathEntityLayoutManager");
     EntityLayoutManagerLoader::initWithJSONFile(ENTITY_LAYOUT_MGR, filePathEntityLayoutManager);
     
-    if (!ENGINE_CFG.musicDisabled())
-    {
-        AUDIO_ENGINE.playSound("music_game", 0, 0.7f, true);
-    }
+    AUDIO_ENGINE.playMusic("music_game", 0.7f);
 }
 
 void DanteGameEngineState::onExit(Engine* e)

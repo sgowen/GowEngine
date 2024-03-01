@@ -9,7 +9,7 @@ A basic no nonsense LGPL 2.1 licensed portable C++ 2D game engine
 * Graphics rendered with OpenGL 2.0 and OpenGL ES 2.0
 * Audio rendered with OpenAL
 * Real-time multiplayer networking with UDP sockets
-* Data Driven Architecture with JSON and Lua scripts
+* Data Driven Architecture with JSON and Lua
 * Homegrown physics and Box2D physics
 * All LGPL licensed dependencies are compiled into shared libraries that can be swapped out by end users, cuz that's how that's supposed to work, right?
 
@@ -35,10 +35,10 @@ A basic no nonsense LGPL 2.1 licensed portable C++ 2D game engine
 * [steamworks_sdk](https://github.com/sgowen/steamworks_sdk): integrates with Steam (optional)
 
 ## Building
-* [src/platform/android](https://github.com/sgowen/GowEngine/tree/main/src/platform/android): Simply open this folder in Android Studio to compile/run the demo on an Android device
-* [src/platform/apple](https://github.com/sgowen/GowEngine/tree/main/src/platform/apple): Open with Xcode to compile/run the demo on a Mac or an iPhone
-* [src/platform/linux](https://github.com/sgowen/GowEngine/tree/main/src/platform/linux): Open with the Code::Blocks IDE and build/run! To run the demo outside of the IDE, just execute run.sh
-* [src/platform/windows](https://github.com/sgowen/GowEngine/tree/main/src/platform/windows): Open with Visual Studio (currently Version 17.1.5) to compile/run the demo on Windows
+* [src/platform/android](https://github.com/sgowen/GowEngine/tree/main/src/platform/android): Simply open this folder in Android Studio to compile/run on an Android device
+* [src/platform/apple](https://github.com/sgowen/GowEngine/tree/main/src/platform/apple): Open with Xcode to compile/run on a Mac or an iPhone
+* [src/platform/linux](https://github.com/sgowen/GowEngine/tree/main/src/platform/linux): Open with Code::Blocks to compile/run in a Linux environment
+* [src/platform/windows](https://github.com/sgowen/GowEngine/tree/main/src/platform/windows): Open with Visual Studio (currently Version 17.1.5) to compile/run on Windows
 
 ## Roadmap
 * Implement a memory tracker via logging calls to malloc with placement new operator (currently no memory leaks, but if ever I encounter them again, I need to be better equipped for that battle)

@@ -15,10 +15,7 @@ void TitleEngineState::onEnter(Engine* e)
 
 void TitleEngineState::onAssetsLoaded(Engine *e)
 {
-//    if (!ENGINE_CFG.musicDisabled())
-//    {
-//        AUDIO_ENGINE.playSound("music_title", 0, 1.0f, true);
-//    }
+    // Empty
 }
 
 void TitleEngineState::onExit(Engine* e)

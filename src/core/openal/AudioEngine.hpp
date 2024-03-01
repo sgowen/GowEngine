@@ -23,6 +23,7 @@ public:
     void resume();
     void render();
     uint32_t playSound(std::string soundID, uint32_t numFramesSeekedAhead = 0, float volume = 1.0f, bool isLooping = false);
+    void playMusic(std::string soundID, float volume = 1.0f, bool isLooping = true);
     void stopSound(std::string soundID);
     void pauseSound(std::string soundID);
     void resumeSound(std::string soundID);
