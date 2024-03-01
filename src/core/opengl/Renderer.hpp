@@ -37,6 +37,8 @@ class Renderer
 public:
     Renderer();
     
+    void reset();
+    
     void createDeviceDependentResources();
     void onWindowSizeChanged(uint16_t screenWidth, uint16_t screenHeight);
     void destroyDeviceDependentResources();

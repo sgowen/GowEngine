@@ -11,6 +11,15 @@
 void EngineState::enter(Engine* e)
 {
     // Should be able to load everything asynchronously, including the config
+    ConfigLoader::initWithJSONFile(_config, _configFilePath);
+    
+    _filePathAssets = _config.getString("filePathAssets");
+    
+    AssetsLoader::initWithJSONFile(_assets, _filePathAssets);
+    RendererLoader::initWithJSONFile(_renderer, _config.getString("filePathRenderer"));
+    
+    INPUT_MGR.setMatrix(&_renderer.matrix());
+    
     ASSETS_MGR.registerAssets(_filePathAssets, _assets);
     createDeviceDependentResources(e);
     onWindowSizeChanged(e);
@@ -57,16 +66,7 @@ void EngineState::exit(Engine* e)
 
 EngineState::EngineState(std::string configFilePath) : State<Engine>()
 {
-    // Yeah, this should all should be loaded async.
-    
-    ConfigLoader::initWithJSONFile(_config, configFilePath);
-    
-    _filePathAssets = _config.getString("filePathAssets");
-    
-    AssetsLoader::initWithJSONFile(_assets, _filePathAssets);
-    RendererLoader::initWithJSONFile(_renderer, _config.getString("filePathRenderer"));
-    
-    INPUT_MGR.setMatrix(&_renderer.matrix());
+    _configFilePath = configFilePath;
 }
 
 void EngineState::createDeviceDependentResources(Engine* e)

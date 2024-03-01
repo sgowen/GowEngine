@@ -19,6 +19,8 @@ void AssetsLoader::initWithJSONFile(Assets& assets, std::string filePath)
 
 void AssetsLoader::initWithJSON(Assets& assets, const char* json)
 {
+    assets.reset();
+    
     using namespace rapidjson;
 
     Document d;

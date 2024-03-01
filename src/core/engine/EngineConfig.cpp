@@ -42,7 +42,7 @@ std::string EngineConfig::title()
     return _title;
 }
 
-std::string EngineConfig::mode()
+std::string& EngineConfig::mode()
 {
     return _mode;
 }

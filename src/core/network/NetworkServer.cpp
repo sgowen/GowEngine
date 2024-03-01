@@ -305,6 +305,12 @@ void NetworkServer::handlePacketFromNewClient(InputMemoryBitStream& imbs, Machin
     {
         std::string name;
         imbs.readSmall(name);
+        if (name.empty())
+        {
+            LOG("Nameless user is attempting to join the server...");
+            LOG("But we don't play that here. Ambiguity kills.");
+            return;
+        }
         
         _addressHashToClientMap.emplace(std::piecewise_construct,
                   std::forward_as_tuple(fromAddress->getHash()),

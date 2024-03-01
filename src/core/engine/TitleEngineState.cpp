@@ -45,7 +45,7 @@ void TitleEngineState::onUpdate(Engine* e)
         }
         else
         {
-            e->setRequestedHostAction(ERHA_EXIT);
+            e->popState();
         }
     }
 #endif
@@ -58,7 +58,7 @@ void TitleEngineState::onUpdate(Engine* e)
             switch (inputState)
             {
                 case IPS_EXIT:
-                    e->setRequestedHostAction(ERHA_EXIT);
+                    e->popState();
                     break;
                 case IPS_ACTION:
                     setState(_inputProcessor.getAction());
@@ -104,8 +104,11 @@ void TitleEngineState::onUpdate(Engine* e)
                 {
                     Config args;
                     args.putBool(ARG_IS_HOST, true);
-                    args.putString(ARG_USERNAME, _inputProcessor.getTextInput());
-                    startGame(e, args);
+                    if (!_inputProcessor.getTextInput().empty())
+                    {
+                        args.putString(ARG_USERNAME, _inputProcessor.getTextInput());
+                        startGame(e, args);
+                    }
                     break;
                 }
             }
@@ -140,8 +143,11 @@ void TitleEngineState::onUpdate(Engine* e)
                 {
                     Config args;
                     args.putString(ARG_IP_ADDRESS, _userEnteredIPAddress);
-                    args.putString(ARG_USERNAME, _inputProcessor.getTextInput());
-                    startGame(e, args);
+                    if (!_inputProcessor.getTextInput().empty())
+                    {
+                        args.putString(ARG_USERNAME, _inputProcessor.getTextInput());
+                        startGame(e, args);
+                    }
                     break;
                 }
             }
@@ -266,13 +272,21 @@ void TitleEngineState::setState(uint8_t state)
 
 void TitleEngineState::startGame(Engine* e, const Config& args)
 {
+    // TODO, remove this code once we have scripting
+    // Cuz then we'll be able to just do:
+    // e->pushState(&ENGINE_STATE_GAME, args);
     bool isDante = strcmp(ENGINE_CFG.mode().c_str(), "dante") == 0;
+    bool isGeoDudes = strcmp(ENGINE_CFG.mode().c_str(), "geoDudes") == 0;
     bool isNos = strcmp(ENGINE_CFG.mode().c_str(), "nosfuratu") == 0;
-    assert(isDante || isNos);
+    assert(isDante || isGeoDudes || isNos);
     
     if (isDante)
     {
         e->pushState(&ENGINE_STATE_GAME_DANTE, args);
+    }
+    else if (isGeoDudes)
+    {
+//        e->pushState(&ENGINE_STATE_GAME, args);
     }
     else if (isNos)
     {

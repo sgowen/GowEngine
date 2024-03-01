@@ -14,6 +14,8 @@ _serverAddress(SocketAddressFactory::createIPv4FromString(serverIPAddress)),
 _name(inName),
 _port(inPort)
 {
+    assert(_name.empty() == false);
+    
     if (_serverAddress == nullptr &&
         ENGINE_CFG.networkLoggingEnabled())
     {

@@ -19,6 +19,8 @@ void ConfigLoader::initWithJSONFile(Config& config, std::string filePath)
 
 void ConfigLoader::initWithJSON(Config& config, const char* json)
 {
+    config.reset();
+    
     using namespace rapidjson;
     
     Document d;

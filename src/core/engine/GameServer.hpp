@@ -8,6 +8,9 @@
 
 #pragma once
 
+#include "core/entity/EntityIDManager.hpp"
+#include "core/common/TimeTracker.hpp"
+
 class Engine;
 class ClientProxy;
 

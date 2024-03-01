@@ -34,6 +34,7 @@ enum EngineRequestedHostAction
 
 class Config;
 class EngineState;
+class Renderer;
 
 class Engine
 {
@@ -75,6 +76,7 @@ public:
     
 private:
     StateMachine<Engine> _stateMachine;
+    Renderer* _renderer;
     EngineRequestedStateAction _requestedStateAction;
     EngineRequestedHostAction _requestedHostAction;
     double _stateTime;
@@ -86,4 +88,5 @@ private:
     bool _hasUpdatedSinceLastRender;
     
     void execute(EngineRequestedStateAction ersa);
+    void renderModePicker();
 };

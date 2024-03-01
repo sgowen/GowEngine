@@ -78,6 +78,11 @@ void AssetsManager::createDeviceDependentResources()
     {
         Assets& a = pair.second;
         
+        if (a._isLoadedIntoEngine)
+        {
+            continue;
+        }
+        
         a._isLoadedIntoEngine = false;
         a._isDataLoaded = false;
         
@@ -94,6 +99,14 @@ void AssetsManager::destroyDeviceDependentResources()
     _shaderMgr.reset();
     _soundMgr.reset();
     _textureMgr.reset();
+    
+    for (auto& pair : _assets)
+    {
+        Assets& a = pair.second;
+        
+        a._isLoadedIntoEngine = false;
+        a._isDataLoaded = false;
+    }
 }
 
 Shader& AssetsManager::shader(std::string name)

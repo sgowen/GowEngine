@@ -95,25 +95,29 @@
 #include "core/common/TimeUtil.hpp"
 
 /// core/engine
-#include "core/engine/DanteGameEngineState.hpp"
 #include "core/engine/DefaultEngineState.hpp"
 #include "core/engine/Engine.hpp"
 #include "core/engine/EngineConfig.hpp"
 #include "core/engine/EngineState.hpp"
 #include "core/engine/GameServer.hpp"
-#include "core/engine/NosGameEngineState.hpp"
 #include "core/engine/TitleEngineState.hpp"
+
+// TODO, remove with scripting
+#include "core/engine/DanteGameEngineState.hpp"
+#include "core/engine/NosGameEngineState.hpp"
 
 /// core/entity
 #include "core/entity/Entity.hpp"
 #include "core/entity/EntityController.hpp"
 #include "core/entity/EntityIDManager.hpp"
+#include "core/entity/EntityInputController.hpp"
 #include "core/entity/EntityLayoutManager.hpp"
 #include "core/entity/EntityManager.hpp"
 #include "core/entity/EntityNetworkController.hpp"
 #include "core/entity/EntityPhysicsController.hpp"
 #include "core/entity/EntityRegistry.hpp"
 #include "core/entity/EntityRenderController.hpp"
+// TODO, remove with scripting
 #include "core/entity/JonController.hpp"
 #include "core/entity/MonsterController.hpp"
 #include "core/entity/RobotController.hpp"

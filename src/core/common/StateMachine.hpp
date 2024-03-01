@@ -87,6 +87,11 @@ public:
         return _states.size() > 0 ? _states.top() : nullptr;
     }
     
+    bool isOnLastState() const
+    {
+        return _states.size() == 1;
+    }
+    
 private:
     T* _owner;
     

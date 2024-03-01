@@ -52,6 +52,10 @@ DanteGameInputProcessorState DanteGameInputProcessor::update()
         
         uint16_t& inputState = e->_index == 0 ? inputStateP1 : inputStateP2;
         
+        // TODO use e->_index to determine the player
+        // then load up whatever input.json is set for that player's entity
+        // That input.json determines how all input is processed for that player.
+        
         switch (e->_button)
         {
             case GPEB_BUTTON_SELECT:

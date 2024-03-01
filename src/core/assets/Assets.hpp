@@ -29,6 +29,16 @@ struct Assets
         // Empty
     }
     
+    void reset()
+    {
+        _fonts.clear();
+        _shaderDescriptors.clear();
+        _soundDescriptors.clear();
+        _textureDescriptors.clear();
+        _isDataLoaded = false;
+        _isLoadedIntoEngine = false;
+    }
+    
     Font* font(std::string key)
     {
         Font* ret = nullptr;

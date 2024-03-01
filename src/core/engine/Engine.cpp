@@ -10,6 +10,7 @@
 
 Engine::Engine() :
 _stateMachine(this, &ENGINE_STATE_DEFAULT),
+_renderer(new Renderer()),
 _requestedStateAction(ERSA_DEFAULT),
 _requestedHostAction(ERHA_DEFAULT),
 _stateTime(0.0),
@@ -23,17 +24,6 @@ _hasUpdatedSinceLastRender(false)
     
     if (ENGINE_CFG.fileLoggingEnabled())
     {
-        // ~~ cacheDir ~~
-        //
-        // macOS
-        // /Users/sgowen/Library/Caches/com.sgowen.GowEngine
-        //
-        // Linux:
-        // /home/parallels/.cache/gowengine/
-        //
-        // Windows:
-        // C:\Users\mains\AppData\Local\gowengine
-        
         std::string cacheDir = CACHE_FILE_DIR;
         std::string logFileName = STRING_FORMAT("%s/log_GowEngine_%d", cacheDir.c_str(), TimeUtil::timeSinceEpochMillisec());
         Logger::getInstance().initWithFile(logFileName.c_str());
@@ -42,10 +32,14 @@ _hasUpdatedSinceLastRender(false)
     Assets assets;
     AssetsLoader::initWithJSONFile(assets, "engine/json/Assets.json");
     ASSETS_MGR.registerAssets(ENGINE_ASSETS, assets);
+    
+    RendererLoader::initWithJSONFile(*_renderer, "engine/json/Renderer.json");
 }
 
 Engine::~Engine()
-{    
+{
+    delete _renderer;
+    
     ASSETS_MGR.deregisterAssets(ENGINE_ASSETS);
     
     Logger::getInstance().closeFileStream();
@@ -64,6 +58,8 @@ void Engine::createDeviceDependentResources(ClipboardHandler* clipboardHandler)
 {
     INPUT_MGR.setClipboardHandler(clipboardHandler);
     
+    _renderer->createDeviceDependentResources();
+    
     AudioEngine::create();
     
     execute(ERSA_CREATE_RESOURCES);
@@ -76,6 +72,7 @@ void Engine::onWindowSizeChanged(uint16_t screenWidth, uint16_t screenHeight, ui
     _cursorWidth = cursorWidth > 0 ? cursorWidth : screenWidth;
     _cursorHeight = cursorHeight > 0 ? cursorHeight : screenHeight;
     
+    _renderer->onWindowSizeChanged(screenWidth, screenHeight);
     INPUT_MGR.setCursorSize(_cursorWidth, _cursorHeight);
     
     execute(ERSA_WINDOW_SIZE_CHANGED);
@@ -83,6 +80,8 @@ void Engine::onWindowSizeChanged(uint16_t screenWidth, uint16_t screenHeight, ui
 
 void Engine::destroyDeviceDependentResources()
 {
+    _renderer->destroyDeviceDependentResources();
+    
     AudioEngine::destroy();
     
     execute(ERSA_DESTROY_RESOURCES);
@@ -209,7 +208,22 @@ void Engine::pushState(State<Engine>* state, const Config& args)
 
 void Engine::popState()
 {
+    if (_stateMachine.isOnLastState())
+    {
+        setRequestedHostAction(ERHA_EXIT);
+        return;
+    }
+    
     _stateMachine.popState();
+    
+    if (_stateMachine.getCurrentState() == &DefaultEngineState::getInstance())
+    {
+        // We are back in the default engine state
+        // This is only possible when running GowEngine
+        // with mode set to "engine"
+        ENGINE_CFG.mode() = "engine";
+        INPUT_MGR.setMatrix(&_renderer->matrix());
+    }
 }
 
 void Engine::setRequestedHostAction(EngineRequestedHostAction value)
@@ -257,4 +271,11 @@ void Engine::execute(EngineRequestedStateAction ersa)
     _requestedStateAction = ersa;
     _stateMachine.execute();
     _requestedStateAction = ERSA_DEFAULT;
+}
+
+void Engine::renderModePicker()
+{
+    _renderer->bindFramebuffer();
+    _renderer->renderTextViews();
+    _renderer->renderToScreen();
 }

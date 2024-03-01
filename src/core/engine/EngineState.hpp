@@ -39,6 +39,7 @@ protected:
     EngineState& operator=(const EngineState&);
     
 private:
+    std::string _configFilePath;
     std::string _filePathAssets;
     Assets _assets;
     Renderer _renderer;

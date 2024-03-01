@@ -21,7 +21,7 @@ public:
     
     bool fullScreen();
     std::string title();
-    std::string mode();
+    std::string& mode();
     bool vsync();
     bool useSteamNetworking();
     std::string versionName();

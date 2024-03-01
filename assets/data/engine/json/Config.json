@@ -1,6 +1,6 @@
 {
   "title": "GowEngine",
-  "mode": "dante",
+  "mode": "engine",
   "fullScreen": "false",
   "vsync": "true",
   "useSteamNetworking": "false",
@@ -29,4 +29,16 @@
   "numFramesOfSimulatedLatency": "0"
 }
 
-// mode can be "dante" or "nosfuratu"
+// mode can be "engine", "dante", "geoDudes", or "nosfuratu"
+
+// When fileLoggingEnabled is true, check the cache directory for the log
+// Just be sure to modify the path accordingly for your username
+//
+// macOS:
+// /Users/sgowen/Library/Caches/com.sgowen.GowEngine
+//
+// Linux:
+// /home/parallels/.cache/gowengine/
+//
+// Windows:
+// C:\Users\mains\AppData\Local\gowengine

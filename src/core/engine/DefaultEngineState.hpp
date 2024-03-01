@@ -21,13 +21,17 @@ public:
         return ret;
     }
 
-    virtual void enter(Engine* e) {}
+    virtual void enter(Engine* e);
     virtual void execute(Engine* e);
     virtual void exit(Engine* e) {}
 
 private:
     bool ERSA_CREATE_RESOURCES_called;
     bool ERSA_WINDOW_SIZE_CHANGED_called;
+    bool needsToRenderModePicker;
+    
+    void update(Engine* e);
+    void render(Engine* e);
 
     DefaultEngineState();
     virtual ~DefaultEngineState() {}

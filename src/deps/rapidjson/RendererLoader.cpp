@@ -19,6 +19,8 @@ void RendererLoader::initWithJSONFile(Renderer& renderer, std::string filePath)
 
 void RendererLoader::initWithJSON(Renderer& renderer, const char* json)
 {
+    renderer.reset();
+    
     using namespace rapidjson;
     
     Document d;

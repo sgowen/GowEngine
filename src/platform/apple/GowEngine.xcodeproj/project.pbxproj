@@ -222,6 +222,8 @@
 		BBBBE1882702584A00D7D319 /* TextureLoader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BBBBDF2D27023E1400D7D319 /* TextureLoader.cpp */; };
 		BBBC314F2720792B00D82E33 /* World.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BBBC314D2720792B00D82E33 /* World.cpp */; };
 		BBBC31502720792B00D82E33 /* World.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BBBC314D2720792B00D82E33 /* World.cpp */; };
+		BBBC57B82B923ACE0037527C /* EntityInputController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BBBC57B62B923ACE0037527C /* EntityInputController.cpp */; };
+		BBBC57B92B923ACE0037527C /* EntityInputController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BBBC57B62B923ACE0037527C /* EntityInputController.cpp */; };
 		BBEC09F42A28FACB0054681F /* libsndfile.1.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = BBEC09F32A28FACB0054681F /* libsndfile.1.dylib */; };
 		BBEC09F52A28FAD20054681F /* libsndfile.1.dylib in Embed Libraries */ = {isa = PBXBuildFile; fileRef = BBEC09F32A28FACB0054681F /* libsndfile.1.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		BBF3E8702A28F062009C9460 /* libsndfile.1.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = BBF3E86F2A28F062009C9460 /* libsndfile.1.dylib */; };
@@ -614,6 +616,8 @@
 		BBBBE07B27024D3B00D7D319 /* BuildConstants.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = BuildConstants.hpp; sourceTree = "<group>"; };
 		BBBC314D2720792B00D82E33 /* World.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = World.cpp; sourceTree = "<group>"; };
 		BBBC314E2720792B00D82E33 /* World.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = World.hpp; sourceTree = "<group>"; };
+		BBBC57B62B923ACE0037527C /* EntityInputController.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = EntityInputController.cpp; sourceTree = "<group>"; };
+		BBBC57B72B923ACE0037527C /* EntityInputController.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = EntityInputController.hpp; sourceTree = "<group>"; };
 		BBEC09E72A28F6380054681F /* libsndfile.so.1.0.35 */ = {isa = PBXFileReference; lastKnownFileType = file; path = libsndfile.so.1.0.35; sourceTree = "<group>"; };
 		BBEC09E82A28F6380054681F /* libopenal.so.1 */ = {isa = PBXFileReference; lastKnownFileType = text.man; path = libopenal.so.1; sourceTree = "<group>"; };
 		BBEC09E92A28F6380054681F /* libglfw3.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libglfw3.a; sourceTree = "<group>"; };
@@ -1283,6 +1287,8 @@
 				BBBBDE8827023E1400D7D319 /* EntityController.hpp */,
 				BBBBDE7F27023E1400D7D319 /* EntityIDManager.cpp */,
 				BBBBDE8227023E1400D7D319 /* EntityIDManager.hpp */,
+				BBBC57B62B923ACE0037527C /* EntityInputController.cpp */,
+				BBBC57B72B923ACE0037527C /* EntityInputController.hpp */,
 				BB1E5C142718C01900149557 /* EntityLayoutManager.cpp */,
 				BB1E5C132718C01900149557 /* EntityLayoutManager.hpp */,
 				BBBBDE7A27023E1400D7D319 /* EntityManager.cpp */,
@@ -1936,6 +1942,7 @@
 				BBBBDFD12702468D00D7D319 /* PacketHandler.cpp in Sources */,
 				BBBBDFD32702468D00D7D319 /* ReplicationCommand.cpp in Sources */,
 				BBB8CB072B8A8D300055CAD4 /* RobotController.cpp in Sources */,
+				BBBC57B82B923ACE0037527C /* EntityInputController.cpp in Sources */,
 				BB7F75B32B6B0B0100CAB63F /* Box2DPhysicsRenderer.cpp in Sources */,
 				BBBBDFD52702468D00D7D319 /* ReplicationManagerClient.cpp in Sources */,
 				BBBBDFD72702468D00D7D319 /* ReplicationManagerServer.cpp in Sources */,
@@ -2081,6 +2088,7 @@
 				BB1153832B85109900E7F3AE /* FileCompatUtil.cpp in Sources */,
 				BB417E4C2A36418300DD4611 /* OpenALUtil.cpp in Sources */,
 				BB1E5C1A2718F7C700149557 /* Framebuffer.cpp in Sources */,
+				BBBC57B92B923ACE0037527C /* EntityInputController.cpp in Sources */,
 				BB1E5C1D27195D3400149557 /* Vector2.cpp in Sources */,
 				BB631F6B2AAB9B3500953454 /* FramebufferRenderer.cpp in Sources */,
 			);

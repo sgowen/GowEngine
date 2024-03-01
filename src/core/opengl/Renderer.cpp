@@ -21,6 +21,22 @@ _currentlyBoundFramebufferKey("null")
     // Empty
 }
 
+void Renderer::reset()
+{
+    _circleBatchers.clear();
+    _fontBatchers.clear();
+    _framebuffers.clear();
+    _imageViews.clear();
+    _matrices.clear();
+    _rektangleBatchers.clear();
+    _spriteBatchers.clear();
+    _textViews.clear();
+    _triangleBatchers.clear();
+    
+    _pixelToUnitRatio = 1;
+    _currentlyBoundFramebufferKey = "";
+}
+
 void Renderer::createDeviceDependentResources()
 {
     _box2DPhysicsRenderer.createDeviceDependentResources();

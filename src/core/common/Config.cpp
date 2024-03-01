@@ -10,6 +10,11 @@
 
 const Config Config::EMPTY = Config();
 
+void Config::reset()
+{
+    _keyValues.clear();
+}
+
 bool Config::hasValues()
 {
     return _keyValues.size() > 0;

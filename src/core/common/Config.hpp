@@ -16,6 +16,8 @@ class Config
 public:
     static const Config EMPTY;
     
+    void reset();
+    
     bool hasValues();
     bool hasValue(std::string key);
     bool getBool(std::string key);
