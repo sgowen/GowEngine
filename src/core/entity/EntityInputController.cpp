@@ -9,6 +9,7 @@
 #include <GowEngine/GowEngine.hpp>
 
 IMPL_RTTI_NOPARENT(EntityInputController)
+IMPL_EntityInputController_create_NOPARENT
 
 EntityInputController::EntityInputController(Entity* e) :
 _entity(e)
@@ -16,7 +17,22 @@ _entity(e)
     // Empty
 }
 
-EntityInputController::~EntityInputController()
+void EntityInputController::processEvent(uint16_t& inputState, CursorEvent* gpe)
+{
+    // Empty
+}
+
+void EntityInputController::processEvent(uint16_t& inputState, GamepadEvent* gpe)
+{
+    // Empty
+}
+
+void EntityInputController::processEvent(uint16_t& inputState, KeyboardEvent* gpe)
+{
+    // Empty
+}
+
+void EntityInputController::runAI(uint16_t& inputState)
 {
     // Empty
 }

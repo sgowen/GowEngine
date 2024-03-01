@@ -42,6 +42,7 @@ public:
     std::vector<Entity*>& getStaticEntities();
     std::vector<Entity*>& getDynamicEntities();
     std::vector<Entity*>& getPlayers();
+    Entity* getPlayer(uint8_t playerID);
     
     uint32_t getNumMovesProcessed();
     void resetNumMovesProcessed();

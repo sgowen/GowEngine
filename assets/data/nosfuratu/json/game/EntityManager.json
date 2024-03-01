@@ -2,6 +2,7 @@
   "PLYR": {
     "name": "Jon",
     "controller": "JonController",
+    "inputController": "JonInputController",
     "textureMappings": {
       "0": "Jon_Rabbit_Idle",
       "1": "Jon_Rabbit_Running",

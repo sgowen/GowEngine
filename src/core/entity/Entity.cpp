@@ -12,6 +12,7 @@ Entity::Entity(EntityDef ed, EntityInstanceDef eid) :
 _entityDef(ed),
 _entityInstanceDef(eid),
 _controller(nullptr),
+_inputController(nullptr),
 _networkController(nullptr),
 _physicsController(nullptr),
 _renderController(nullptr),
@@ -25,6 +26,7 @@ _angle(0),
 _world(nullptr)
 {
     _controller = ENTITY_MGR.createEntityController(ed, this);
+    _inputController = ENTITY_MGR.createEntityInputController(ed, this);
     _networkController = ENTITY_MGR.createEntityNetworkController(ed, this);
     _renderController = ENTITY_MGR.createEntityRenderController(ed, this);
 }
@@ -32,6 +34,7 @@ _world(nullptr)
 Entity::~Entity()
 {
     delete _controller;
+    delete _inputController;
     delete _networkController;
     if (_physicsController != nullptr)
     {
@@ -54,6 +57,45 @@ void Entity::beginFrame()
     }
 }
 
+void Entity::processEvent(uint16_t& inputState, CursorEvent* e)
+{
+    if (isExiled())
+    {
+        return;
+    }
+    
+    EntityInputController* eic = inputController();
+    assert(eic != nullptr);
+    
+    eic->processEvent(inputState, e);
+}
+
+void Entity::processEvent(uint16_t& inputState, GamepadEvent* e)
+{
+    if (isExiled())
+    {
+        return;
+    }
+    
+    EntityInputController* eic = inputController();
+    assert(eic != nullptr);
+    
+    eic->processEvent(inputState, e);
+}
+
+void Entity::processEvent(uint16_t& inputState, KeyboardEvent* e)
+{
+    if (isExiled())
+    {
+        return;
+    }
+    
+    EntityInputController* eic = inputController();
+    assert(eic != nullptr);
+    
+    eic->processEvent(inputState, e);
+}
+
 void Entity::runAI()
 {
     if (isExiled())
@@ -61,10 +103,13 @@ void Entity::runAI()
         return;
     }
     
-    EntityController* ec = controller();
-    assert(ec != nullptr);
+    EntityInputController* eic = inputController();
+    assert(eic != nullptr);
     
-    ec->runAI();
+    uint16_t inputState = 0;
+    eic->runAI(inputState);
+    
+    processInput(inputState);
 }
 
 void Entity::processInput(uint16_t inputState)

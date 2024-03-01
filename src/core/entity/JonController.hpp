@@ -10,17 +10,6 @@
 
 #include "EntityController.hpp"
 
-enum JonInputStateFlags
-{
-    JISF_MOVING_RIGHT       = 1 << 0,
-    JISF_MOVING_LEFT        = 1 << 1,
-    JISF_JUMPING            = 1 << 2,
-    JISF_EXECUTING_ABILITY  = 1 << 3,
-    JISF_WARMING_UP         = 1 << 4,
-    JISF_EXECUTING_ATTACK   = 1 << 5,
-    JISF_TRIGGERING_SPECIAL = 1 << 6
-};
-
 class JonController : public EntityController
 {    
     DECL_RTTI;

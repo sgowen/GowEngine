@@ -15,8 +15,3 @@ _entity(e)
 {
     // Empty
 }
-
-EntityPhysicsController::~EntityPhysicsController()
-{
-    // Empty
-}

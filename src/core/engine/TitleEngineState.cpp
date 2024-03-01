@@ -40,7 +40,7 @@ void TitleEngineState::onUpdate(Engine* e)
                 
                 Config args;
                 args.putUInt64(ARG_STEAM_ADDRESS, serverToJoinSteamID.ConvertToUint64());
-                startGame(e, args);
+                e->pushState(&ENGINE_STATE_GAME, args);
             }
         }
         else
@@ -72,7 +72,7 @@ void TitleEngineState::onUpdate(Engine* e)
                             Config args;
                             args.putBool(ARG_IS_HOST, true);
                             args.putString(ARG_USERNAME, "Mobile User");
-                            startGame(e, args);
+                            e->pushState(&ENGINE_STATE_GAME, args);
                             break;
                         }
                     }
@@ -89,7 +89,7 @@ void TitleEngineState::onUpdate(Engine* e)
                 // We don't need to input a host name on Steam
                 Config args;
                 args.putBool(ARG_IS_HOST, true);
-                startGame(e, args);
+                e->pushState(&ENGINE_STATE_GAME, args);
                 return;
             }
 #endif
@@ -107,7 +107,7 @@ void TitleEngineState::onUpdate(Engine* e)
                     if (!_inputProcessor.getTextInput().empty())
                     {
                         args.putString(ARG_USERNAME, _inputProcessor.getTextInput());
-                        startGame(e, args);
+                        e->pushState(&ENGINE_STATE_GAME, args);
                     }
                     break;
                 }
@@ -146,7 +146,7 @@ void TitleEngineState::onUpdate(Engine* e)
                     if (!_inputProcessor.getTextInput().empty())
                     {
                         args.putString(ARG_USERNAME, _inputProcessor.getTextInput());
-                        startGame(e, args);
+                        e->pushState(&ENGINE_STATE_GAME, args);
                     }
                     break;
                 }
@@ -268,30 +268,6 @@ void TitleEngineState::setState(uint8_t state)
         }
     }
 #endif
-}
-
-void TitleEngineState::startGame(Engine* e, const Config& args)
-{
-    // TODO, remove this code once we have scripting
-    // Cuz then we'll be able to just do:
-    // e->pushState(&ENGINE_STATE_GAME, args);
-    bool isDante = strcmp(ENGINE_CFG.mode().c_str(), "dante") == 0;
-    bool isGeoDudes = strcmp(ENGINE_CFG.mode().c_str(), "geoDudes") == 0;
-    bool isNos = strcmp(ENGINE_CFG.mode().c_str(), "nosfuratu") == 0;
-    assert(isDante || isGeoDudes || isNos);
-    
-    if (isDante)
-    {
-        e->pushState(&ENGINE_STATE_GAME_DANTE, args);
-    }
-    else if (isGeoDudes)
-    {
-//        e->pushState(&ENGINE_STATE_GAME, args);
-    }
-    else if (isNos)
-    {
-        e->pushState(&ENGINE_STATE_GAME_NOS, args);
-    }
 }
 
 TitleEngineState::TitleEngineState() : EngineState("json/title/Config.json"),

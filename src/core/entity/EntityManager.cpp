@@ -44,6 +44,24 @@ const std::map<std::string, EntityControllerCreationFunc>& EntityManager::getEnt
     return _entityControllerCreationFunctions;
 }
 
+void EntityManager::registerInputController(std::string name, EntityInputControllerCreationFunc func)
+{
+    assert(func != nullptr);
+    _entityInputControllerCreationFunctions[name] = func;
+}
+
+EntityInputController* EntityManager::createEntityInputController(EntityDef& ed, Entity* e)
+{
+    EntityInputControllerCreationFunc func = _entityInputControllerCreationFunctions[ed._inputController];
+    assert(func != nullptr);
+    return func(e);
+}
+
+const std::map<std::string, EntityInputControllerCreationFunc>& EntityManager::getEntityInputControllerMap()
+{
+    return _entityInputControllerCreationFunctions;
+}
+
 void EntityManager::registerNetworkController(std::string name, EntityNetworkControllerCreationFunc func)
 {
     assert(func != nullptr);
@@ -82,10 +100,16 @@ const std::map<std::string, EntityRenderControllerCreationFunc>& EntityManager::
 
 EntityManager::EntityManager()
 {
-    registerController("Default", EntityController::create);
+    registerController("EntityController", EntityController::create);
+    registerInputController("EntityInputController", EntityInputController::create);
+    registerNetworkController("EntityNetworkController", EntityNetworkController::create);
+    registerRenderController("EntityRenderController", EntityRenderController::create);
+    
+    // TODO, remove these once we have scripting
     registerController("JonController", JonController::create);
     registerController("MonsterController", MonsterController::create);
     registerController("RobotController", RobotController::create);
-    registerNetworkController("Default", EntityNetworkController::create);
-    registerRenderController("Default", EntityRenderController::create);
+    registerInputController("JonInputController", JonInputController::create);
+    registerInputController("MonsterInputController", MonsterInputController::create);
+    registerInputController("RobotInputController", RobotInputController::create);
 }

@@ -7,6 +7,16 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		BB006FA82B92789300C65215 /* JonInputController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BB006FA22B92789200C65215 /* JonInputController.cpp */; };
+		BB006FA92B92789300C65215 /* JonInputController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BB006FA22B92789200C65215 /* JonInputController.cpp */; };
+		BB006FAA2B92789300C65215 /* MonsterInputController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BB006FA52B92789300C65215 /* MonsterInputController.cpp */; };
+		BB006FAB2B92789300C65215 /* MonsterInputController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BB006FA52B92789300C65215 /* MonsterInputController.cpp */; };
+		BB006FAC2B92789300C65215 /* RobotInputController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BB006FA62B92789300C65215 /* RobotInputController.cpp */; };
+		BB006FAD2B92789300C65215 /* RobotInputController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BB006FA62B92789300C65215 /* RobotInputController.cpp */; };
+		BB006FB02B928E9F00C65215 /* NosRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BB006FAE2B928E9F00C65215 /* NosRenderer.cpp */; };
+		BB006FB12B928E9F00C65215 /* NosRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BB006FAE2B928E9F00C65215 /* NosRenderer.cpp */; };
+		BB006FB42B9290CF00C65215 /* DanteRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BB006FB32B9290CE00C65215 /* DanteRenderer.cpp */; };
+		BB006FB52B9290CF00C65215 /* DanteRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BB006FB32B9290CE00C65215 /* DanteRenderer.cpp */; };
 		BB01D82D2A901E3A002A3BA4 /* Logger.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BB01D82B2A901E3A002A3BA4 /* Logger.cpp */; };
 		BB01D82E2A901E3A002A3BA4 /* Logger.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BB01D82B2A901E3A002A3BA4 /* Logger.cpp */; };
 		BB0BC1B625E050A600276CEC /* data in Resources */ = {isa = PBXBuildFile; fileRef = BB0BC1B525E050A600276CEC /* data */; };
@@ -90,10 +100,8 @@
 		BB9EBF532AAA57250088DBB6 /* JonController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BB9EBF512AAA57250088DBB6 /* JonController.cpp */; };
 		BB9EBF5E2AAA57520088DBB6 /* TitleEngineState.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BB9EBF542AAA57510088DBB6 /* TitleEngineState.cpp */; };
 		BB9EBF5F2AAA57520088DBB6 /* TitleEngineState.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BB9EBF542AAA57510088DBB6 /* TitleEngineState.cpp */; };
-		BB9EBF662AAA57520088DBB6 /* NosGameEngineState.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BB9EBF5D2AAA57520088DBB6 /* NosGameEngineState.cpp */; };
-		BB9EBF672AAA57520088DBB6 /* NosGameEngineState.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BB9EBF5D2AAA57520088DBB6 /* NosGameEngineState.cpp */; };
-		BBB8CB032B8A8D060055CAD4 /* DanteGameEngineState.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BBB8CB002B8A8D060055CAD4 /* DanteGameEngineState.cpp */; };
-		BBB8CB042B8A8D060055CAD4 /* DanteGameEngineState.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BBB8CB002B8A8D060055CAD4 /* DanteGameEngineState.cpp */; };
+		BBB8CB032B8A8D060055CAD4 /* GameEngineState.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BBB8CB002B8A8D060055CAD4 /* GameEngineState.cpp */; };
+		BBB8CB042B8A8D060055CAD4 /* GameEngineState.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BBB8CB002B8A8D060055CAD4 /* GameEngineState.cpp */; };
 		BBB8CB072B8A8D300055CAD4 /* RobotController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BBB8CB052B8A8D300055CAD4 /* RobotController.cpp */; };
 		BBB8CB082B8A8D300055CAD4 /* RobotController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BBB8CB052B8A8D300055CAD4 /* RobotController.cpp */; };
 		BBBB0E5D2703A95D00D7D319 /* GlfwEngineMount.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BBBB0E342703A95D00D7D319 /* GlfwEngineMount.cpp */; };
@@ -287,6 +295,16 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		BB006FA22B92789200C65215 /* JonInputController.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = JonInputController.cpp; sourceTree = "<group>"; };
+		BB006FA32B92789200C65215 /* JonInputController.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = JonInputController.hpp; sourceTree = "<group>"; };
+		BB006FA42B92789200C65215 /* MonsterInputController.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = MonsterInputController.hpp; sourceTree = "<group>"; };
+		BB006FA52B92789300C65215 /* MonsterInputController.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MonsterInputController.cpp; sourceTree = "<group>"; };
+		BB006FA62B92789300C65215 /* RobotInputController.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = RobotInputController.cpp; sourceTree = "<group>"; };
+		BB006FA72B92789300C65215 /* RobotInputController.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = RobotInputController.hpp; sourceTree = "<group>"; };
+		BB006FAE2B928E9F00C65215 /* NosRenderer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = NosRenderer.cpp; sourceTree = "<group>"; };
+		BB006FAF2B928E9F00C65215 /* NosRenderer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = NosRenderer.hpp; sourceTree = "<group>"; };
+		BB006FB22B9290CE00C65215 /* DanteRenderer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = DanteRenderer.hpp; sourceTree = "<group>"; };
+		BB006FB32B9290CE00C65215 /* DanteRenderer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DanteRenderer.cpp; sourceTree = "<group>"; };
 		BB01D82B2A901E3A002A3BA4 /* Logger.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Logger.cpp; sourceTree = "<group>"; };
 		BB01D82C2A901E3A002A3BA4 /* Logger.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Logger.hpp; sourceTree = "<group>"; };
 		BB0BC1B525E050A600276CEC /* data */ = {isa = PBXFileReference; lastKnownFileType = folder; path = data; sourceTree = "<group>"; };
@@ -434,11 +452,9 @@
 		BB9EBF502AAA57250088DBB6 /* JonController.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = JonController.hpp; sourceTree = "<group>"; };
 		BB9EBF512AAA57250088DBB6 /* JonController.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = JonController.cpp; sourceTree = "<group>"; };
 		BB9EBF542AAA57510088DBB6 /* TitleEngineState.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TitleEngineState.cpp; sourceTree = "<group>"; };
-		BB9EBF572AAA57510088DBB6 /* NosGameEngineState.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = NosGameEngineState.hpp; sourceTree = "<group>"; };
 		BB9EBF5B2AAA57510088DBB6 /* TitleEngineState.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = TitleEngineState.hpp; sourceTree = "<group>"; };
-		BB9EBF5D2AAA57520088DBB6 /* NosGameEngineState.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = NosGameEngineState.cpp; sourceTree = "<group>"; };
-		BBB8CAFF2B8A8D060055CAD4 /* DanteGameEngineState.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = DanteGameEngineState.hpp; sourceTree = "<group>"; };
-		BBB8CB002B8A8D060055CAD4 /* DanteGameEngineState.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DanteGameEngineState.cpp; sourceTree = "<group>"; };
+		BBB8CAFF2B8A8D060055CAD4 /* GameEngineState.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = GameEngineState.hpp; sourceTree = "<group>"; };
+		BBB8CB002B8A8D060055CAD4 /* GameEngineState.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GameEngineState.cpp; sourceTree = "<group>"; };
 		BBB8CB052B8A8D300055CAD4 /* RobotController.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = RobotController.cpp; sourceTree = "<group>"; };
 		BBB8CB062B8A8D300055CAD4 /* RobotController.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = RobotController.hpp; sourceTree = "<group>"; };
 		BBBB074E2703A85200D7D319 /* glfw3.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = glfw3.h; sourceTree = "<group>"; };
@@ -1303,10 +1319,16 @@
 				BBBBDE7B27023E1400D7D319 /* EntityRenderController.hpp */,
 				BB9EBF512AAA57250088DBB6 /* JonController.cpp */,
 				BB9EBF502AAA57250088DBB6 /* JonController.hpp */,
+				BB006FA22B92789200C65215 /* JonInputController.cpp */,
+				BB006FA32B92789200C65215 /* JonInputController.hpp */,
 				BB7B6DC42B8FCBB000324423 /* MonsterController.cpp */,
 				BB7B6DC32B8FCBB000324423 /* MonsterController.hpp */,
+				BB006FA52B92789300C65215 /* MonsterInputController.cpp */,
+				BB006FA42B92789200C65215 /* MonsterInputController.hpp */,
 				BBB8CB052B8A8D300055CAD4 /* RobotController.cpp */,
 				BBB8CB062B8A8D300055CAD4 /* RobotController.hpp */,
+				BB006FA62B92789300C65215 /* RobotInputController.cpp */,
+				BB006FA72B92789300C65215 /* RobotInputController.hpp */,
 			);
 			path = entity;
 			sourceTree = "<group>";
@@ -1466,8 +1488,8 @@
 		BBBBDEF927023E1400D7D319 /* engine */ = {
 			isa = PBXGroup;
 			children = (
-				BBB8CB002B8A8D060055CAD4 /* DanteGameEngineState.cpp */,
-				BBB8CAFF2B8A8D060055CAD4 /* DanteGameEngineState.hpp */,
+				BB006FB32B9290CE00C65215 /* DanteRenderer.cpp */,
+				BB006FB22B9290CE00C65215 /* DanteRenderer.hpp */,
 				BBBBDEFB27023E1400D7D319 /* DefaultEngineState.cpp */,
 				BBBBDF0027023E1400D7D319 /* DefaultEngineState.hpp */,
 				BBBBDEFF27023E1400D7D319 /* Engine.cpp */,
@@ -1476,10 +1498,12 @@
 				BBBBDEFE27023E1400D7D319 /* EngineConfig.hpp */,
 				BBBBDEFC27023E1400D7D319 /* EngineState.cpp */,
 				BBBBDF0127023E1400D7D319 /* EngineState.hpp */,
+				BBB8CB002B8A8D060055CAD4 /* GameEngineState.cpp */,
+				BBB8CAFF2B8A8D060055CAD4 /* GameEngineState.hpp */,
 				BB82CE622B91380B008BF269 /* GameServer.cpp */,
 				BB82CE612B91380B008BF269 /* GameServer.hpp */,
-				BB9EBF5D2AAA57520088DBB6 /* NosGameEngineState.cpp */,
-				BB9EBF572AAA57510088DBB6 /* NosGameEngineState.hpp */,
+				BB006FAE2B928E9F00C65215 /* NosRenderer.cpp */,
+				BB006FAF2B928E9F00C65215 /* NosRenderer.hpp */,
 				BB9EBF542AAA57510088DBB6 /* TitleEngineState.cpp */,
 				BB9EBF5B2AAA57510088DBB6 /* TitleEngineState.hpp */,
 			);
@@ -1874,6 +1898,7 @@
 				BB4CCAE72B606A5700B6D2CA /* SocketPacketHandler.cpp in Sources */,
 				BB1E5C2D271F26D800149557 /* NosPhysicsWorld.cpp in Sources */,
 				BB40D8022A26D09C00EDA51E /* SoundLoader.cpp in Sources */,
+				BB006FB02B928E9F00C65215 /* NosRenderer.cpp in Sources */,
 				BB40D7C62A26A2E600EDA51E /* SoundManager.cpp in Sources */,
 				BBFD16432B572CBA00D4D841 /* SteamServerInfo.cpp in Sources */,
 				BBBC314F2720792B00D82E33 /* World.cpp in Sources */,
@@ -1887,7 +1912,7 @@
 				BBFD163B2B572CBA00D4D841 /* SteamAddress.cpp in Sources */,
 				BB1E5C192718F7C700149557 /* Framebuffer.cpp in Sources */,
 				BB7F75B52B6B0B0100CAB63F /* Box2DPhysicsController.cpp in Sources */,
-				BBB8CB032B8A8D060055CAD4 /* DanteGameEngineState.cpp in Sources */,
+				BBB8CB032B8A8D060055CAD4 /* GameEngineState.cpp in Sources */,
 				BBBBDF682702465700D7D319 /* AssetsManager.cpp in Sources */,
 				BBBBDF7D2702467400D7D319 /* Config.cpp in Sources */,
 				BBBBDFEC2702469400D7D319 /* CircleBatcher.cpp in Sources */,
@@ -1913,6 +1938,7 @@
 				BBBBDFFF2702469500D7D319 /* ScreenRenderer.cpp in Sources */,
 				BBBB0E5D2703A95D00D7D319 /* GlfwEngineMount.cpp in Sources */,
 				BBBBE0092702469500D7D319 /* SpriteBatcher.cpp in Sources */,
+				BB006FB42B9290CF00C65215 /* DanteRenderer.cpp in Sources */,
 				BBBBE0102702469600D7D319 /* TriangleBatcher.cpp in Sources */,
 				BBBBDF802702467400D7D319 /* FPSUtil.cpp in Sources */,
 				BB9EBF5E2AAA57520088DBB6 /* TitleEngineState.cpp in Sources */,
@@ -1925,7 +1951,7 @@
 				BB4CCAE32B6061B600B6D2CA /* TimeUtil.cpp in Sources */,
 				BBBBDFBC2702468C00D7D319 /* DeliveryNotificationManager.cpp in Sources */,
 				BBBBDFBE2702468C00D7D319 /* InFlightPacket.cpp in Sources */,
-				BB9EBF662AAA57520088DBB6 /* NosGameEngineState.cpp in Sources */,
+				BB006FA82B92789300C65215 /* JonInputController.cpp in Sources */,
 				BBFD16392B572CBA00D4D841 /* SteamPacketHandler.cpp in Sources */,
 				BBBBDFC02702468C00D7D319 /* InputMemoryBitStream.cpp in Sources */,
 				BBBBDFC22702468C00D7D319 /* MemoryBitStreamUtil.cpp in Sources */,
@@ -1959,6 +1985,7 @@
 				BBBBDFAD2702467D00D7D319 /* InputState.cpp in Sources */,
 				BBBBDF8E2702467700D7D319 /* DefaultEngineState.cpp in Sources */,
 				BBBBDF962702467A00D7D319 /* Entity.cpp in Sources */,
+				BB006FAA2B92789300C65215 /* MonsterInputController.cpp in Sources */,
 				BBBBDF982702467A00D7D319 /* EntityController.cpp in Sources */,
 				BBBBDF9A2702467A00D7D319 /* EntityIDManager.cpp in Sources */,
 				BBBBDF9D2702467A00D7D319 /* EntityManager.cpp in Sources */,
@@ -1973,6 +2000,7 @@
 				BBBBDF902702467700D7D319 /* Engine.cpp in Sources */,
 				BBBBDF922702467700D7D319 /* EngineConfig.cpp in Sources */,
 				BBBBDF942702467700D7D319 /* EngineState.cpp in Sources */,
+				BB006FAC2B92789300C65215 /* RobotInputController.cpp in Sources */,
 				BBBBDF8B2702467400D7D319 /* ThreadManager.cpp in Sources */,
 				BB1915B12B7C894800ED67E8 /* TextureManager.cpp in Sources */,
 			);
@@ -2003,11 +2031,13 @@
 				BBBBE0F42702584600D7D319 /* Engine.cpp in Sources */,
 				BBBBE0F62702584600D7D319 /* EngineConfig.cpp in Sources */,
 				BBBBE0F82702584600D7D319 /* EngineState.cpp in Sources */,
+				BB006FAB2B92789300C65215 /* MonsterInputController.cpp in Sources */,
 				BBBBE0FA2702584600D7D319 /* Entity.cpp in Sources */,
 				BBFD16402B572CBA00D4D841 /* SteamClientHelper.cpp in Sources */,
 				BB01D82E2A901E3A002A3BA4 /* Logger.cpp in Sources */,
 				BB1E5C30271F26D800149557 /* NosPhysicsController.cpp in Sources */,
 				BBBBE0FC2702584600D7D319 /* EntityController.cpp in Sources */,
+				BB006FB12B928E9F00C65215 /* NosRenderer.cpp in Sources */,
 				BBBBE0FE2702584600D7D319 /* EntityIDManager.cpp in Sources */,
 				BBB8CB082B8A8D300055CAD4 /* RobotController.cpp in Sources */,
 				BBBBE1012702584600D7D319 /* EntityManager.cpp in Sources */,
@@ -2048,14 +2078,17 @@
 				BB40D7C72A26A2E600EDA51E /* SoundManager.cpp in Sources */,
 				BBBBE1412702584800D7D319 /* SocketAddressFactory.cpp in Sources */,
 				BBBBE1432702584800D7D319 /* SocketUtil.cpp in Sources */,
+				BB006FAD2B92789300C65215 /* RobotInputController.cpp in Sources */,
 				BBBBE1462702584800D7D319 /* UDPSocket.cpp in Sources */,
 				BBBBE1482702584900D7D319 /* AudioEngine.cpp in Sources */,
 				BBBBE1502702584900D7D319 /* CircleBatcher.cpp in Sources */,
 				BB7F75BE2B6B5C4C00CAB63F /* NosPhysicsRenderer.cpp in Sources */,
+				BB006FB52B9290CF00C65215 /* DanteRenderer.cpp in Sources */,
 				BBBBE1522702584900D7D319 /* Color.cpp in Sources */,
 				BBBBE1542702584900D7D319 /* FontBatcher.cpp in Sources */,
-				BBB8CB042B8A8D060055CAD4 /* DanteGameEngineState.cpp in Sources */,
+				BBB8CB042B8A8D060055CAD4 /* GameEngineState.cpp in Sources */,
 				BB40D8032A26D09C00EDA51E /* SoundLoader.cpp in Sources */,
+				BB006FA92B92789300C65215 /* JonInputController.cpp in Sources */,
 				BBBBE1582702584900D7D319 /* LightRenderer.cpp in Sources */,
 				BB1153882B85166E00E7F3AE /* Animation.cpp in Sources */,
 				BB4CCAE82B606A5700B6D2CA /* SocketPacketHandler.cpp in Sources */,
@@ -2077,7 +2110,6 @@
 				BBBBE1802702584A00D7D319 /* EntityManagerLoader.cpp in Sources */,
 				BBBBE1812702584A00D7D319 /* RendererLoader.cpp in Sources */,
 				BBBBE1832702584A00D7D319 /* ConfigLoader.cpp in Sources */,
-				BB9EBF672AAA57520088DBB6 /* NosGameEngineState.cpp in Sources */,
 				BBBBE1842702584A00D7D319 /* AssetsLoader.cpp in Sources */,
 				BB4CCAD82B5F172600B6D2CA /* ClientHelper.cpp in Sources */,
 				BB1915B22B7C894800ED67E8 /* TextureManager.cpp in Sources */,

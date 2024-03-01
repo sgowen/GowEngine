@@ -36,8 +36,7 @@
 #define THREAD_MGR ThreadManager::getInstance()
 #define ENGINE_STATE_DEFAULT DefaultEngineState::getInstance()
 #define ENGINE_STATE_TITLE TitleEngineState::getInstance()
-#define ENGINE_STATE_GAME_DANTE DanteGameEngineState::getInstance()
-#define ENGINE_STATE_GAME_NOS NosGameEngineState::getInstance()
+#define ENGINE_STATE_GAME GameEngineState::getInstance()
 #define GAME_SERVER GameServer::getInstance()
 #define ENGINE_CFG EngineConfig::getInstance()
 #define ENTITY_LAYOUT_MGR EntityLayoutManager::getInstance()
@@ -73,6 +72,20 @@ EntityController* type::create(Entity* e)     \
 
 #define IMPL_EntityController_create_NOPARENT \
 IMPL_EntityController_create(EntityController)
+
+/// EntityInputController
+#define DECL_EntityInputController_create              \
+public:                                                \
+    static EntityInputController* create(Entity* e)
+
+#define IMPL_EntityInputController_create(type)        \
+EntityInputController* type::create(Entity* e)         \
+{                                                      \
+    return new type(e);                                \
+}
+
+#define IMPL_EntityInputController_create_NOPARENT     \
+IMPL_EntityInputController_create(EntityInputController)
 
 /// EntityNetworkController
 #define DECL_EntityNetworkController_create                \

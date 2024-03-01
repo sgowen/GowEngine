@@ -43,7 +43,6 @@ private:
     std::string _userEnteredIPAddress;
     
     void setState(uint8_t state);
-    void startGame(Engine* e, const Config& args);
     
     TitleEngineState();
     virtual ~TitleEngineState() {}

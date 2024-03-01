@@ -278,6 +278,10 @@ void Renderer::renderEntitiesBoundToTexture(std::vector<Entity*>& entities, std:
     spriteBatcherBegin(spriteBatcherKey);
     for (Entity* e : entities)
     {
+        if (e->isExiled())
+        {
+            continue;
+        }
         std::string textureRegionKey = e->renderController()->getTextureMapping();
         std::string textureForRegionKey = ASSETS_MGR.textureForRegionKey(textureRegionKey);
         
@@ -337,6 +341,11 @@ void Renderer::spriteBatcherAddEntities(std::vector<Entity*>& entities, std::str
     for (Entity* e : entities)
     {
         assert(e != nullptr);
+        
+        if (e->isExiled())
+        {
+            continue;
+        }
         
         spriteBatcherAddEntity(sb, *e);
     }

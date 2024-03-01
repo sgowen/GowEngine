@@ -99,12 +99,12 @@
 #include "core/engine/Engine.hpp"
 #include "core/engine/EngineConfig.hpp"
 #include "core/engine/EngineState.hpp"
+#include "core/engine/GameEngineState.hpp"
 #include "core/engine/GameServer.hpp"
 #include "core/engine/TitleEngineState.hpp"
-
 // TODO, remove with scripting
-#include "core/engine/DanteGameEngineState.hpp"
-#include "core/engine/NosGameEngineState.hpp"
+#include "core/engine/DanteRenderer.hpp"
+#include "core/engine/NosRenderer.hpp"
 
 /// core/entity
 #include "core/entity/Entity.hpp"
@@ -121,6 +121,9 @@
 #include "core/entity/JonController.hpp"
 #include "core/entity/MonsterController.hpp"
 #include "core/entity/RobotController.hpp"
+#include "core/entity/JonInputController.hpp"
+#include "core/entity/MonsterInputController.hpp"
+#include "core/entity/RobotInputController.hpp"
 
 /// core/input
 #include "core/input/ClipboardHandler.hpp"

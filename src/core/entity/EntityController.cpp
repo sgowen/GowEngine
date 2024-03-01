@@ -17,16 +17,6 @@ _entity(e)
     // Empty
 }
 
-EntityController::~EntityController()
-{
-    // Empty
-}
-
-void EntityController::runAI()
-{
-    // Empty
-}
-
 void EntityController::processInput(uint16_t inputState)
 {
     // Empty

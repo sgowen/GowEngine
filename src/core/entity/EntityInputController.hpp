@@ -11,16 +11,23 @@
 #include "core/common/RTTI.hpp"
 
 class Entity;
+struct CursorEvent;
+struct GamepadEvent;
+struct KeyboardEvent;
 
 class EntityInputController
 {
     DECL_RTTI_NOPARENT;
+    DECL_EntityInputController_create;
     
 public:
     EntityInputController(Entity* e);
-    virtual ~EntityInputController();
+    virtual ~EntityInputController() {}
     
-    virtual void updateBodyFromPose() = 0;
+    virtual void processEvent(uint16_t& inputState, CursorEvent* e);
+    virtual void processEvent(uint16_t& inputState, GamepadEvent* e);
+    virtual void processEvent(uint16_t& inputState, KeyboardEvent* e);
+    virtual void runAI(uint16_t& inputState);
     
 protected:
     Entity* _entity;

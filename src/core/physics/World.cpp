@@ -223,6 +223,22 @@ std::vector<Entity*>& World::getPlayers()
     return _players;
 }
 
+Entity* World::getPlayer(uint8_t playerID)
+{
+    Entity* ret = nullptr;
+    
+    for (Entity* e : getPlayers())
+    {
+        if (playerID == e->playerInfo()._playerID)
+        {
+            ret = e;
+            break;
+        }
+    }
+    
+    return ret;
+}
+
 uint32_t World::getNumMovesProcessed()
 {
     return _numMovesProcessed;

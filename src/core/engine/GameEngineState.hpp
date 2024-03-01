@@ -1,9 +1,9 @@
 //
-//  DanteGameEngineState.hpp
+//  GameEngineState.hpp
 //  GowEngine
 //
-//  Created by Stephen Gowen on 2/24/24.
-//  Copyright © 2023 Stephen Gowen. All rights reserved.
+//  Created by Stephen Gowen on 3/1/24.
+//  Copyright © 2024 Stephen Gowen. All rights reserved.
 //
 
 #pragma once
@@ -15,7 +15,7 @@
 #include "core/entity/EntityIDManager.hpp"
 #include "core/entity/Entity.hpp"
 
-enum DanteGameInputProcessorState
+enum GameInputProcessorState
 {
     DGIMS_DEFAULT,
     DGIMS_DISPLAY_PHYSICS,
@@ -25,14 +25,14 @@ enum DanteGameInputProcessorState
     DGIMS_ZOOM_RESET
 };
 
-class DanteGameInputProcessor
+class GameInputProcessor
 {
 public:
-    DanteGameInputProcessor();
-    ~DanteGameInputProcessor();
+    GameInputProcessor();
+    ~GameInputProcessor();
     
-    DanteGameInputProcessorState update();
-    DanteGameInputProcessorState state();
+    GameInputProcessorState update(World& world);
+    GameInputProcessorState state();
     void sampleInputAsNewMove(TimeTracker& tt);
     void removeProcessedMovesWithIndexLessThan(uint32_t numMovesProcessed);
     InputState& inputState();
@@ -44,7 +44,7 @@ private:
     MoveList _moveList;
     Pool<InputState> _poolInputState;
     InputState _inputState;
-    DanteGameInputProcessorState _state;
+    GameInputProcessorState _state;
     uint32_t _numMovesProcessed;
     
     void drop2ndPlayer();
@@ -52,12 +52,12 @@ private:
 
 class World;
 
-class DanteGameEngineState : public EngineState
+class GameEngineState : public EngineState
 {    
 public:    
-    static DanteGameEngineState& getInstance()
+    static GameEngineState& getInstance()
     {
-        static DanteGameEngineState ret = DanteGameEngineState();
+        static GameEngineState ret = GameEngineState();
         return ret;
     }
     
@@ -70,7 +70,7 @@ public:
     void populateFromEntityLayout(EntityLayoutDef& eld);
     Entity* getPlayer(uint8_t playerID);
     Entity* getControlledPlayer();
-    DanteGameInputProcessor& input();
+    GameInputProcessor& input();
     std::map<uint8_t, Entity::PlayerInfo>& players();
     World& world();
     
@@ -79,7 +79,7 @@ private:
     TimeTracker _timeTracker;
     std::map<uint8_t, Entity::PlayerInfo> _players;
     World* _world;
-    DanteGameInputProcessor _inputProcessor;
+    GameInputProcessor _inputProcessor;
     int _numMovesToReprocess;
     float _scale;
     
@@ -109,8 +109,8 @@ private:
     
     void spawnPlayerAndResetWorld();
     
-    DanteGameEngineState();
-    virtual ~DanteGameEngineState() {}
-    DanteGameEngineState(const DanteGameEngineState&);
-    DanteGameEngineState& operator=(const DanteGameEngineState&);
+    GameEngineState();
+    virtual ~GameEngineState() {}
+    GameEngineState(const GameEngineState&);
+    GameEngineState& operator=(const GameEngineState&);
 };

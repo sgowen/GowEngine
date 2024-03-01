@@ -10,14 +10,6 @@
 
 #include "EntityController.hpp"
 
-enum RobotInputStateFlags
-{
-    RISF_MOVING_RIGHT       = 1 << 0,
-    RISF_MOVING_LEFT        = 1 << 1,
-    RISF_JUMPING            = 1 << 2,
-    RISF_EXECUTING_ATTACK   = 1 << 3
-};
-
 class RobotController : public EntityController
 {    
     DECL_RTTI;

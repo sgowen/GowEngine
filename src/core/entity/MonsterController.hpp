@@ -10,13 +10,6 @@
 
 #include "EntityController.hpp"
 
-enum MonsterInputStateFlags
-{
-    MISF_MOVING_RIGHT       = 1 << 0,
-    MISF_MOVING_LEFT        = 1 << 1,
-    MISF_EXECUTING_ATTACK   = 1 << 2
-};
-
 class MonsterController : public EntityController
 {    
     DECL_RTTI;
@@ -26,7 +19,6 @@ public:
     MonsterController(Entity* e);
     virtual ~MonsterController() {}
     
-    virtual void runAI() override;
     virtual void processInput(uint16_t inputState) override;
     virtual void onUpdate(uint32_t numMovesProcessed) override;
     virtual void onMessage(uint16_t message, Entity* fromEntity) override;

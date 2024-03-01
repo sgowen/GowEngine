@@ -1,14 +1,14 @@
 //
-//  DanteGameEngineState.cpp
+//  GameEngineState.cpp
 //  GowEngine
 //
-//  Created by Stephen Gowen on 2/24/24.
-//  Copyright © 2023 Stephen Gowen. All rights reserved.
+//  Created by Stephen Gowen on 3/1/24.
+//  Copyright © 2024 Stephen Gowen. All rights reserved.
 //
 
 #include <GowEngine/GowEngine.hpp>
 
-DanteGameInputProcessor::DanteGameInputProcessor() :
+GameInputProcessor::GameInputProcessor() :
 _inputState(),
 _state(DGIMS_DEFAULT),
 _numMovesProcessed(0)
@@ -16,30 +16,33 @@ _numMovesProcessed(0)
     reset();
 }
 
-DanteGameInputProcessor::~DanteGameInputProcessor()
+GameInputProcessor::~GameInputProcessor()
 {
     // Empty
 }
 
-DanteGameInputProcessorState DanteGameInputProcessor::update()
+GameInputProcessorState GameInputProcessor::update(World& world)
 {
     uint16_t& inputStateP1 = _inputState.playerInputState(0)._inputState;
     uint16_t& inputStateP2 = _inputState.playerInputState(1)._inputState;
     
 #if IS_MOBILE
-    Matrix* m = INPUT_MGR.matrix();
-    float halfWidth = m->_desc.width() / 2;
-    float halfHeight = m->_desc.height() / 2;
     for (CursorEvent* e : INPUT_MGR.getCursorEvents())
     {
+        if (_state == DGIMS_EXIT)
+        {
+            break;
+        }
+        
         uint16_t& inputState = inputStateP1;
         
-        Vector2& pos = INPUT_MGR.convert(e);
+        Entity* entity = world.getPlayer(1);
+        if (entity == nullptr)
+        {
+            continue;
+        }
         
-        SET_BIT(inputState, RISF_MOVING_LEFT, e->isPressed() && pos._x < halfWidth);
-        SET_BIT(inputState, RISF_MOVING_RIGHT, e->isPressed() && pos._x > halfWidth);
-        
-        SET_BIT(inputState, RISF_JUMPING, e->isPressed() && pos._y > halfHeight);
+        entity->processEvent(inputState, e);
     }
 #endif
     
@@ -50,11 +53,20 @@ DanteGameInputProcessorState DanteGameInputProcessor::update()
             break;
         }
         
-        uint16_t& inputState = e->_index == 0 ? inputStateP1 : inputStateP2;
+        bool isPlayer1 = e->_index == 0;
+        uint16_t& inputState = isPlayer1 ? inputStateP1 : inputStateP2;
         
-        // TODO use e->_index to determine the player
-        // then load up whatever input.json is set for that player's entity
-        // That input.json determines how all input is processed for that player.
+        Entity* entity = world.getPlayer(isPlayer1 ? 1 : 2);
+        if (entity == nullptr)
+        {
+            if (!isPlayer1)
+            {
+                SET_BIT(inputStateP2, 1, true);
+            }
+            continue;
+        }
+        
+        entity->processEvent(inputState, e);
         
         switch (e->_button)
         {
@@ -62,28 +74,6 @@ DanteGameInputProcessorState DanteGameInputProcessor::update()
             case GPEB_BUTTON_SNES_SELECT:
                 _state = e->isDown() ? DGIMS_EXIT : DGIMS_DEFAULT;
                 break;
-            case GPEB_BUTTON_A:
-                SET_BIT(inputState, RISF_EXECUTING_ATTACK, e->isPressed());
-                break;
-            case GPEB_BUTTON_B:
-                SET_BIT(inputState, RISF_JUMPING, e->isPressed());
-                break;
-            case GPEB_D_PAD_LEFT:
-            {
-                SET_BIT(inputState, RISF_MOVING_LEFT, e->isPressed());
-                break;
-            }
-            case GPEB_D_PAD_RIGHT:
-            {
-                SET_BIT(inputState, RISF_MOVING_RIGHT, e->isPressed());
-                break;
-            }
-            case GPEB_STICK_LEFT:
-            {
-                SET_BIT(inputState, RISF_MOVING_LEFT, e->_x < 0);
-                SET_BIT(inputState, RISF_MOVING_RIGHT, e->_x > 0);
-                break;
-            }
             case GPEB_UNKNOWN_6:
             {
                 _state = e->isPressed() ? DGIMS_ZOOM_IN : DGIMS_DEFAULT;
@@ -107,6 +97,30 @@ DanteGameInputProcessorState DanteGameInputProcessor::update()
     
     for (KeyboardEvent* e : INPUT_MGR.getKeyboardEvents())
     {
+        if (_state == DGIMS_EXIT)
+        {
+            break;
+        }
+        
+        bool isPlayer1 = e->_key != GOW_KEY_ARROW_UP &&
+        e->_key != GOW_KEY_ARROW_LEFT &&
+        e->_key != GOW_KEY_ARROW_RIGHT &&
+        e->_key != GOW_KEY_ARROW_DOWN;
+        
+        uint16_t& inputState = isPlayer1 ? inputStateP1 : inputStateP2;
+        
+        Entity* entity = world.getPlayer(isPlayer1 ? 1 : 2);
+        if (entity == nullptr)
+        {
+            if (!isPlayer1)
+            {
+                SET_BIT(inputStateP2, 1, true);
+            }
+            continue;
+        }
+        
+        entity->processEvent(inputState, e);
+        
         switch (e->_key)
         {
             case GOW_KEY_ESCAPE:
@@ -118,12 +132,6 @@ DanteGameInputProcessorState DanteGameInputProcessor::update()
                 {
                     _state = _state == DGIMS_DISPLAY_PHYSICS ? DGIMS_DEFAULT : DGIMS_DISPLAY_PHYSICS;
                 }
-                break;
-            case GOW_KEY_J:
-                SET_BIT(inputStateP1, RISF_JUMPING, e->isPressed());
-                break;
-            case GOW_KEY_K:
-                SET_BIT(inputStateP1, RISF_EXECUTING_ATTACK, e->isPressed());
                 break;
             case GOW_KEY_I:
                 _state = e->isPressed() ? DGIMS_ZOOM_IN : DGIMS_DEFAULT;
@@ -137,21 +145,6 @@ DanteGameInputProcessorState DanteGameInputProcessor::update()
                 {
                     _state = e->isPressed() ? DGIMS_ZOOM_OUT : DGIMS_DEFAULT;
                 }
-                break;
-            case GOW_KEY_A:
-                SET_BIT(inputStateP1, RISF_MOVING_LEFT, e->isPressed());
-                break;
-            case GOW_KEY_D:
-                SET_BIT(inputStateP1, RISF_MOVING_RIGHT, e->isPressed());
-                break;
-            case GOW_KEY_ARROW_UP:
-                SET_BIT(inputStateP2, RISF_JUMPING, e->isPressed());
-                break;
-            case GOW_KEY_ARROW_LEFT:
-                SET_BIT(inputStateP2, RISF_MOVING_LEFT, e->isPressed());
-                break;
-            case GOW_KEY_ARROW_RIGHT:
-                SET_BIT(inputStateP2, RISF_MOVING_RIGHT, e->isPressed());
                 break;
             case GOW_KEY_PERIOD:
             {
@@ -175,12 +168,12 @@ DanteGameInputProcessorState DanteGameInputProcessor::update()
     return _state;
 }
 
-DanteGameInputProcessorState DanteGameInputProcessor::state()
+GameInputProcessorState GameInputProcessor::state()
 {
     return _state;
 }
 
-void DanteGameInputProcessor::sampleInputAsNewMove(TimeTracker& tt)
+void GameInputProcessor::sampleInputAsNewMove(TimeTracker& tt)
 {
     InputState* inputState = _poolInputState.obtain();
     _inputState.copyTo(inputState);
@@ -189,22 +182,22 @@ void DanteGameInputProcessor::sampleInputAsNewMove(TimeTracker& tt)
     ++_numMovesProcessed;
 }
 
-void DanteGameInputProcessor::removeProcessedMovesWithIndexLessThan(uint32_t numMovesProcessed)
+void GameInputProcessor::removeProcessedMovesWithIndexLessThan(uint32_t numMovesProcessed)
 {
     _moveList.removeProcessedMovesWithIndexLessThan(numMovesProcessed, _poolInputState);
 }
 
-InputState& DanteGameInputProcessor::inputState()
+InputState& GameInputProcessor::inputState()
 {
     return _inputState;
 }
 
-MoveList& DanteGameInputProcessor::moveList()
+MoveList& GameInputProcessor::moveList()
 {
     return _moveList;
 }
 
-void DanteGameInputProcessor::reset()
+void GameInputProcessor::reset()
 {
     _moveList.removeAllMoves(_poolInputState);
     _inputState.reset();
@@ -213,23 +206,23 @@ void DanteGameInputProcessor::reset()
     _state = DGIMS_DEFAULT;
 }
 
-void DanteGameInputProcessor::setNumMovesProcessed(uint32_t numMovesProcessed)
+void GameInputProcessor::setNumMovesProcessed(uint32_t numMovesProcessed)
 {
     _numMovesProcessed = numMovesProcessed;
 }
 
-void DanteGameInputProcessor::drop2ndPlayer()
+void GameInputProcessor::drop2ndPlayer()
 {
     InputState::PlayerInputState& pis = _inputState.playerInputState(1);
     pis._playerID = 0;
     NW_CLNT->requestToDropLocalPlayer(1);
 }
 
-uint64_t cb_dante_steam_getPlayerAddressHash(uint8_t inPlayerIndex)
+uint64_t cb_steam_getPlayerAddressHash(uint8_t inPlayerIndex)
 {
     uint64_t ret = 0;
     
-    std::map<uint8_t, Entity::PlayerInfo>& players = ENGINE_STATE_GAME_DANTE.players();
+    std::map<uint8_t, Entity::PlayerInfo>& players = ENGINE_STATE_GAME.players();
     
     uint8_t playerID = inPlayerIndex + 1;
     
@@ -243,27 +236,29 @@ uint64_t cb_dante_steam_getPlayerAddressHash(uint8_t inPlayerIndex)
     return ret;
 }
 
-void cb_dante_client_onEntityRegistered(Entity* e)
+void cb_client_onEntityRegistered(Entity* e)
 {
-    ENGINE_STATE_GAME_DANTE.world().addNetworkEntity(e);
+    ENGINE_STATE_GAME.world().addNetworkEntity(e);
     
     if (e->isPlayer())
     {
-        ENGINE_STATE_GAME_DANTE.players().insert({e->playerInfo()._playerID, e->playerInfo()});
+        uint8_t playerID = e->playerInfo()._playerID;
+        ENGINE_STATE_GAME.input().inputState().playerInputState(playerID - 1)._inputState = 0;
+        ENGINE_STATE_GAME.players().insert({playerID, e->playerInfo()});
     }
 }
 
-void cb_dante_client_onEntityDeregistered(Entity* e)
+void cb_client_onEntityDeregistered(Entity* e)
 {
-    ENGINE_STATE_GAME_DANTE.world().removeNetworkEntity(e);
+    ENGINE_STATE_GAME.world().removeNetworkEntity(e);
 }
 
-void cb_dante_client_onPlayerWelcomed(uint8_t playerID)
+void cb_client_onPlayerWelcomed(uint8_t playerID)
 {
-    ENGINE_STATE_GAME_DANTE.input().inputState().activateNextPlayer(playerID);
+    ENGINE_STATE_GAME.input().inputState().activateNextPlayer(playerID);
 }
 
-void DanteGameEngineState::onEnter(Engine* e)
+void GameEngineState::onEnter(Engine* e)
 {
     std::string physicsEngine = _config.getString("physicsEngine");
     bool isBox2D = physicsEngine == "Box2D";
@@ -284,7 +279,7 @@ void DanteGameEngineState::onEnter(Engine* e)
     }
 }
 
-void DanteGameEngineState::onAssetsLoaded(Engine* e)
+void GameEngineState::onAssetsLoaded(Engine* e)
 {
     std::string filePathEntityManager = _config.getString("filePathEntityManager");
     EntityManagerLoader::initWithJSONFile(ENTITY_MGR, filePathEntityManager);
@@ -295,7 +290,7 @@ void DanteGameEngineState::onAssetsLoaded(Engine* e)
     AUDIO_ENGINE.playMusic("music_game", 0.7f);
 }
 
-void DanteGameEngineState::onExit(Engine* e)
+void GameEngineState::onExit(Engine* e)
 {
     if (_args.getBool(ARG_IS_HOST, false) == true)
     {
@@ -311,7 +306,7 @@ void DanteGameEngineState::onExit(Engine* e)
     _scale = 1.0f;
 }
 
-void DanteGameEngineState::onUpdate(Engine* e)
+void GameEngineState::onUpdate(Engine* e)
 {
     if (GAME_SERVER)
     {
@@ -320,7 +315,7 @@ void DanteGameEngineState::onUpdate(Engine* e)
     
     _timeTracker.onFrame();
     
-    DanteGameInputProcessorState gims = _inputProcessor.update();
+    GameInputProcessorState gims = _inputProcessor.update(world());
     if (gims == DGIMS_EXIT)
     {
         e->popState();
@@ -344,7 +339,7 @@ void DanteGameEngineState::onUpdate(Engine* e)
     updateWithNetwork(e);
 }
 
-void DanteGameEngineState::onRender(Renderer& r, double extrapolation)
+void GameEngineState::onRender(Renderer& r, double extrapolation)
 {
     const float baseRight = r.matrix()._base._right;
     const float baseTop = r.matrix()._base._top;
@@ -355,72 +350,30 @@ void DanteGameEngineState::onRender(Renderer& r, double extrapolation)
     float maxScale = CLAMP(GOW_MIN(maxWidthScale, maxHeightScale), 1.0f, 200.0f);
     _scale = CLAMP(_scale, 0.125f, maxScale);
     
-    // TODO, in the proceeding rendering code, consider using multiple matrices instead of changing
-    // the "main" one over and over again
+    if (ENGINE_CFG.extrapolatePhysics())
+    {
+        _world->extrapolatePhysics(extrapolation);
+    }
     
-    r.bindFramebuffer("behindPlayer");
+    // TODO, remove this code once we have scripting
+    bool isDante = strcmp(ENGINE_CFG.mode().c_str(), "dante") == 0;
+    bool isGeoDudes = strcmp(ENGINE_CFG.mode().c_str(), "geoDudes") == 0;
+    bool isNos = strcmp(ENGINE_CFG.mode().c_str(), "nosfuratu") == 0;
+    assert(isDante || isGeoDudes || isNos);
     
-    Entity* controlledPlayer = getControlledPlayer();
+    if (isDante)
+    {
+        DanteRenderer::render(r, world(), getControlledPlayer(), _scale);
+    }
+    else if (isGeoDudes)
+    {
+        // TODO
+    }
+    else if (isNos)
+    {
+        NosRenderer::render(r, world(), getControlledPlayer(), _scale);
+    }
     
-    r.updateMatrixCenteredOnEntityForParallaxLayer(controlledPlayer, 0.6f,  _world->rightEdge(), _world->topEdge(), _scale);
-    r.renderEntitiesBoundToTexture(world().getLayers(), "texture_001", "sb_001");
-    
-    r.updateMatrixCenteredOnEntityForParallaxLayer(controlledPlayer, 0.8f,  _world->rightEdge(), _world->topEdge(), _scale);
-    r.renderEntitiesBoundToTexture(world().getLayers(), "texture_002", "sb_002");
-    
-    r.updateMatrixCenteredOnEntityForParallaxLayer(controlledPlayer, 0.9f,  _world->rightEdge(), _world->topEdge(), _scale);
-    r.renderEntitiesBoundToTexture(world().getLayers(), "texture_003", "sb_003");
-    
-    r.updateMatrixCenteredOnEntity(controlledPlayer, _world->rightEdge(), _world->topEdge(), _scale);
-    
-    r.renderEntitiesBoundToTexture(world().getLayers(), "texture_004", "sb_004");
-    r.renderEntitiesBoundToTexture(world().getDynamicEntities(), "texture_005", "sb_005");
-    
-    r.bindFramebuffer("behindPlayerNormals");
-    
-    r.updateMatrixCenteredOnEntityForParallaxLayer(controlledPlayer, 0.6f,  _world->rightEdge(), _world->topEdge(), _scale);
-    r.spriteBatcherEnd("n_texture_001", "main", "sprite", "sb_001");
-    
-    r.updateMatrixCenteredOnEntityForParallaxLayer(controlledPlayer, 0.8f,  _world->rightEdge(), _world->topEdge(), _scale);
-    r.spriteBatcherEnd("n_texture_002", "main", "sprite", "sb_002");
-    
-    r.updateMatrixCenteredOnEntityForParallaxLayer(controlledPlayer, 0.9f,  _world->rightEdge(), _world->topEdge(), _scale);
-    r.spriteBatcherEnd("n_texture_003", "main", "sprite", "sb_003");
-    
-    r.updateMatrixCenteredOnEntity(controlledPlayer, _world->rightEdge(), _world->topEdge(), _scale);
-    
-    r.spriteBatcherEnd("n_texture_004", "main", "sprite", "sb_004");
-    r.spriteBatcherEnd("n_texture_005", "main", "sprite", "sb_005");
-    
-    r.bindFramebuffer("player");
-    r.renderEntitiesBoundToTexture(world().getPlayers(), "texture_006", "sb_006");
-    
-    r.bindFramebuffer("playerNormals");
-    r.spriteBatcherEnd("n_texture_006", "main", "sprite", "sb_006");
-    
-    r.bindFramebuffer("inFrontOfPlayer");
-    r.renderEntitiesBoundToTexture(world().getDynamicEntities(), "texture_007", "sb_007");
-    r.renderEntitiesBoundToTexture(world().getDynamicEntities(), "texture_008", "sb_008");
-    r.renderEntitiesBoundToTexture(world().getStaticEntities(), "texture_009", "sb_009");
-    
-    r.bindFramebuffer("inFrontOfPlayerNormals");
-    r.spriteBatcherEnd("n_texture_007", "main", "sprite", "sb_007");
-    r.spriteBatcherEnd("n_texture_008", "main", "sprite", "sb_008");
-    r.spriteBatcherEnd("n_texture_009", "main", "sprite", "sb_009");
-    
-    r.bindFramebuffer("behindPlayerLights");
-    r.renderLight("behindPlayer", "behindPlayerNormals", 0.15f, world().getPlayers());
-    
-    r.bindFramebuffer("playerLights");
-    r.renderLight("player", "playerNormals", 0.1f, world().getPlayers());
-    
-    r.bindFramebuffer("inFrontOfPlayerLights");
-    r.renderLight("inFrontOfPlayer", "inFrontOfPlayerNormals", 0.05f, world().getPlayers());
-    
-    r.bindFramebuffer("main");
-    r.renderFramebuffer("behindPlayerLights");
-    r.renderFramebuffer("playerLights");
-    r.renderFramebuffer("inFrontOfPlayerLights");
     renderWithNetwork(r);
     
     if (_inputProcessor.state() == DGIMS_DISPLAY_PHYSICS)
@@ -443,52 +396,46 @@ void DanteGameEngineState::onRender(Renderer& r, double extrapolation)
 
     r.renderCurrentlyBoundFramebufferToScreen();
     
+    if (ENGINE_CFG.extrapolatePhysics())
+    {
+        _world->endExtrapolatedPhysics();
+    }
+    
     renderAudio();
 }
 
-void DanteGameEngineState::populateFromEntityLayout(EntityLayoutDef& eld)
+void GameEngineState::populateFromEntityLayout(EntityLayoutDef& eld)
 {
     EntityLayoutManagerLoader::loadEntityLayout(eld, _entityIDManager, false);
     world().populateFromEntityLayout(eld);
 }
 
-Entity* DanteGameEngineState::getPlayer(uint8_t playerID)
+Entity* GameEngineState::getPlayer(uint8_t playerID)
 {
-    Entity* ret = nullptr;
-    
-    for (Entity* e : world().getPlayers())
-    {
-        if (playerID == e->playerInfo()._playerID)
-        {
-            ret = e;
-            break;
-        }
-    }
-    
-    return ret;
+    return world().getPlayer(playerID);
 }
 
-Entity* DanteGameEngineState::getControlledPlayer()
+Entity* GameEngineState::getControlledPlayer()
 {
     return getPlayer(_inputProcessor.inputState().playerInputState(0)._playerID);
 }
 
-DanteGameInputProcessor& DanteGameEngineState::input()
+GameInputProcessor& GameEngineState::input()
 {
     return _inputProcessor;
 }
 
-std::map<uint8_t, Entity::PlayerInfo>& DanteGameEngineState::players()
+std::map<uint8_t, Entity::PlayerInfo>& GameEngineState::players()
 {
     return _players;
 }
 
-World& DanteGameEngineState::world()
+World& GameEngineState::world()
 {
     return *_world;
 }
 
-void DanteGameEngineState::joinServer(Engine* e)
+void GameEngineState::joinServer(Engine* e)
 {
     ClientHelper* clientHelper = nullptr;
 #if IS_DESKTOP
@@ -506,7 +453,7 @@ void DanteGameEngineState::joinServer(Engine* e)
         }
         clientHelper = new SteamClientHelper(serverSteamID,
                                              _timeTracker,
-                                             cb_dante_steam_getPlayerAddressHash,
+                                             cb_steam_getPlayerAddressHash,
                                              NetworkClient::sProcessPacket);
     }
     else
@@ -538,9 +485,9 @@ void DanteGameEngineState::joinServer(Engine* e)
     
     NetworkClient::create(clientHelper,
                           _timeTracker,
-                          cb_dante_client_onEntityRegistered,
-                          cb_dante_client_onEntityDeregistered,
-                          cb_dante_client_onPlayerWelcomed);
+                          cb_client_onEntityRegistered,
+                          cb_client_onEntityDeregistered,
+                          cb_client_onPlayerWelcomed);
     
     if (NW_CLNT->connect() == false)
     {
@@ -550,7 +497,7 @@ void DanteGameEngineState::joinServer(Engine* e)
     }
 }
 
-void DanteGameEngineState::updateWithNetwork(Engine* e)
+void GameEngineState::updateWithNetwork(Engine* e)
 {
 #if IS_DESKTOP
     if (STEAM_GAME_SERVICES)
@@ -713,7 +660,7 @@ void DanteGameEngineState::updateWithNetwork(Engine* e)
     }
 }
 
-void DanteGameEngineState::updateWorld(const Move& move)
+void GameEngineState::updateWorld(const Move& move)
 {
     world().beginFrame();
     for (Entity* e : world().getPlayers())
@@ -739,10 +686,18 @@ void DanteGameEngineState::updateWorld(const Move& move)
     static float frameRate = static_cast<float>(ENGINE_CFG.frameRate());
     world().stepPhysics(frameRate);
     world().update();
+    // TODO, consider removing exiled entities right away
+    // But just like MtG, exiled entities can come back!
+    // Or in the case of networking, maybe the client got a calculation wrong and the Entity should be still in the world
+    // Will need to maintain a list of exiled entities in the world.
+    // Only the server can delete an entity right away, because it is the server
+    // But the client must allow an entity to sit in an exiled list
+    // Until the server says, "yes, that entity really is exiled", or
+    // no, that entity is not exiled.
     world().storeToCache();
 }
 
-void DanteGameEngineState::renderWithNetwork(Renderer& r)
+void GameEngineState::renderWithNetwork(Renderer& r)
 {
     r.setTextVisible("rtt", true);
     r.setTextVisible("rollbackFrames", true);
@@ -826,7 +781,7 @@ void DanteGameEngineState::renderWithNetwork(Renderer& r)
     }
 }
 
-void DanteGameEngineState::renderAudio()
+void GameEngineState::renderAudio()
 {
     if (AUDIO_ENGINE.isPaused() ||
         world().getNumMovesProcessed() == 0)
@@ -853,14 +808,14 @@ void DanteGameEngineState::renderAudio()
     }
 }
 
-DanteGameEngineState::SoundFrameState& DanteGameEngineState::soundFrameStateAtMoveIndex(uint32_t moveIndex)
+GameEngineState::SoundFrameState& GameEngineState::soundFrameStateAtMoveIndex(uint32_t moveIndex)
 {
     uint32_t index = moveIndex % 360;
     
     return _soundFrameStates[index];
 }
 
-void DanteGameEngineState::playSoundForEntityIfNecessary(Entity& e, uint32_t moveIndex)
+void GameEngineState::playSoundForEntityIfNecessary(Entity& e, uint32_t moveIndex)
 {
     // TODO, support more than 1 sound per entity per frame
     
@@ -949,7 +904,7 @@ void DanteGameEngineState::playSoundForEntityIfNecessary(Entity& e, uint32_t mov
     }
 }
 
-DanteGameEngineState::DanteGameEngineState() : EngineState("json/game/Config.json"),
+GameEngineState::GameEngineState() : EngineState("json/game/Config.json"),
 _entityIDManager(),
 _timeTracker(),
 _world(nullptr),

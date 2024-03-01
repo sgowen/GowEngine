@@ -19,7 +19,7 @@ class EntityPhysicsController
     
 public:
     EntityPhysicsController(Entity* e);
-    virtual ~EntityPhysicsController();
+    virtual ~EntityPhysicsController() {}
     
     virtual void updateBodyFromPose() = 0;
     

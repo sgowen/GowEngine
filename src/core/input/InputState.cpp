@@ -83,6 +83,7 @@ void InputState::activateNextPlayer(uint8_t playerID)
         if (_playerInputStates[i]._playerID == INACTIVE_PLAYER_ID)
         {
             _playerInputStates[i]._playerID = playerID;
+            _playerInputStates[i]._inputState = 0;
             return;
         }
     }

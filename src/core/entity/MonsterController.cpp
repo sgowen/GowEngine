@@ -16,46 +16,6 @@ MonsterController::MonsterController(Entity* e) : EntityController(e)
     e->networkDataField("health").setValueUInt8(7);
 }
 
-void MonsterController::runAI()
-{
-    Entity& e = *_entity;
-    Vector2& vel = e.velocity();
-    uint8_t& state = e.state()._state;
-    uint8_t& stateFlags = e.state()._stateFlags;
-    uint16_t& stateTime = e.state()._stateTime;
-    
-    uint16_t inputState = 0;
-    
-    uint32_t touchingEntityID = e.networkDataField("touchingEntityID").valueUInt32();
-    Entity* touchingEntity = e.world()->getEntityByID(touchingEntityID);
-    SET_BIT(inputState, MISF_EXECUTING_ATTACK, touchingEntity != nullptr && touchingEntity->isPlayer());
-    
-    float shortestDistance = 12.0f;
-    Entity* target = nullptr;
-    for (Entity* e : e.world()->getPlayers())
-    {
-        float distance = e->position().dist(_entity->position());
-        if (distance < shortestDistance)
-        {
-            shortestDistance = distance;
-            target = e;
-        }
-    }
-    if (target)
-    {
-        SET_BIT(inputState, MISF_MOVING_RIGHT, target->position()._x > e.position()._x);
-        SET_BIT(inputState, MISF_MOVING_LEFT, target->position()._x < e.position()._x);
-    }
-    else
-    {
-        SET_BIT(inputState, MISF_MOVING_RIGHT, false);
-        SET_BIT(inputState, MISF_MOVING_LEFT, false);
-        SET_BIT(inputState, MISF_EXECUTING_ATTACK, false);
-    }
-    
-    e.processInput(inputState);
-}
-
 void MonsterController::processInput(uint16_t inputState)
 {
     if (isMovementInputAllowed())

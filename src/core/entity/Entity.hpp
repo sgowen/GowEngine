@@ -407,6 +407,7 @@ struct EntityDef
     std::string _name;
     std::string _keyName;
     std::string _controller;
+    std::string _inputController;
     std::string _networkController;
     std::string _renderController;
     std::map<uint8_t, std::string> _textureMappings;
@@ -428,6 +429,7 @@ struct EntityDef
               std::string name,
               std::string keyName,
               std::string controller,
+              std::string inputController,
               std::string networkController,
               std::string renderController,
               std::map<uint8_t, std::string> textureMappings,
@@ -443,6 +445,7 @@ struct EntityDef
     _name(name),
     _keyName(keyName),
     _controller(controller),
+    _inputController(inputController),
     _networkController(networkController),
     _renderController(renderController),
     _textureMappings(textureMappings),
@@ -460,10 +463,14 @@ struct EntityDef
 };
 
 class EntityController;
+class EntityInputController;
 class EntityNetworkController;
 class EntityPhysicsController;
 class EntityRenderController;
 class World;
+struct CursorEvent;
+struct GamepadEvent;
+struct KeyboardEvent;
 
 class Entity
 {
@@ -474,6 +481,9 @@ public:
     ~Entity();
     
     void beginFrame();
+    void processEvent(uint16_t& inputState, CursorEvent* e);
+    void processEvent(uint16_t& inputState, GamepadEvent* e);
+    void processEvent(uint16_t& inputState, KeyboardEvent* e);
     void runAI();
     void processInput(uint16_t inputState);
     void update(uint32_t numMovesProcessed);
@@ -503,6 +513,13 @@ public:
     {
         assert(_controller != nullptr);
         return static_cast<T*>(_controller);
+    }
+    
+    template<typename T = EntityInputController>
+    T* inputController()
+    {
+        assert(_inputController != nullptr);
+        return static_cast<T*>(_inputController);
     }
     
     template<typename T = EntityNetworkController>
@@ -656,6 +673,7 @@ private:
     EntityDef _entityDef;
     EntityInstanceDef _entityInstanceDef;
     EntityController* _controller;
+    EntityInputController* _inputController;
     EntityNetworkController* _networkController;
     EntityPhysicsController* _physicsController;
     EntityRenderController* _renderController;

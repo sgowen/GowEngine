@@ -2,6 +2,7 @@
     "PLYR": {
         "name": "Robot",
         "controller": "RobotController",
+        "inputController": "RobotInputController",
         "textureMappings": {
             "0": "Player_Idle",
             "1": "Player_Running",
@@ -116,6 +117,7 @@
     "MO01": {
         "name": "Crawler",
         "controller": "MonsterController",
+        "inputController": "MonsterInputController",
         "textureMappings": {
             "0": "Crawler_Idle",
             "1": "Crawler_Crawl",
@@ -182,7 +184,7 @@
         "width": 8,
         "height": 8,
         "data": {
-          "speedX": "8.0"
+          "speedX": "12.0"
         },
         "networkData": [
             {

@@ -39,9 +39,10 @@ void EntityManagerLoader::initWithJSON(EntityManager& em, const char* json)
         
         std::string name = RapidJSONUtil::getString(iv, "name");
         std::string keyName = keyStr;
-        std::string controller = RapidJSONUtil::getString(iv, "controller", "Default");
-        std::string networkController = RapidJSONUtil::getString(iv, "networkController", "Default");
-        std::string renderController = RapidJSONUtil::getString(iv, "renderController", "Default");
+        std::string controller = RapidJSONUtil::getString(iv, "controller", "EntityController");
+        std::string inputController = RapidJSONUtil::getString(iv, "inputController", "EntityInputController");
+        std::string networkController = RapidJSONUtil::getString(iv, "networkController", "EntityNetworkController");
+        std::string renderController = RapidJSONUtil::getString(iv, "renderController", "EntityRenderController");
         
         std::map<uint8_t, std::string> textureMappings;
         if (iv.HasMember("textureMappings"))
@@ -203,6 +204,6 @@ void EntityManagerLoader::initWithJSON(EntityManager& em, const char* json)
         }
         NetworkData nd(networkDataGroups);
         
-        em._entityDefs.emplace(key, EntityDef{key, name, keyName, controller, networkController, renderController, textureMappings, soundMappings, fixtures, bodyFlags, width, height, scale, data, nd});
+        em._entityDefs.emplace(key, EntityDef{key, name, keyName, controller, inputController, networkController, renderController, textureMappings, soundMappings, fixtures, bodyFlags, width, height, scale, data, nd});
     }
 }
