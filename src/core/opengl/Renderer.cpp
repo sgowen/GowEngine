@@ -438,8 +438,9 @@ void Renderer::renderNosPhysics(NosPhysicsWorld* world)
 
 void Renderer::renderGameInfo(World &w, int numRollbackFrames)
 {
-    // This whole function should really be a shared Lua function,
+    // TODO, this whole function should really be a shared Lua function,
     // since it directly references textViews from end user renderer.json
+    
     configMatrix("hud");
     Matrix& m = matrix(_rc.matrixKey);
     updateMatrix(m._base);
