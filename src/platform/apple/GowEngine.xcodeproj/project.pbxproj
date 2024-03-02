@@ -68,6 +68,8 @@
 		BB4CCAEF2B61CA9500B6D2CA /* SocketClientHelper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BB4CCAEB2B61CA9500B6D2CA /* SocketClientHelper.cpp */; };
 		BB4CCAF02B61CA9500B6D2CA /* SocketClientHelper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BB4CCAEB2B61CA9500B6D2CA /* SocketClientHelper.cpp */; };
 		BB5ED3332B6F105300EFA7EB /* libbox2d.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BB5ED3322B6F105300EFA7EB /* libbox2d.a */; };
+		BB60A0FC2B92DA940056BA63 /* World.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BB60A0FA2B92DA940056BA63 /* World.cpp */; };
+		BB60A0FD2B92DA940056BA63 /* World.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BB60A0FA2B92DA940056BA63 /* World.cpp */; };
 		BB61E1F82A27F64200BFFE38 /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BB61E1F72A27F64200BFFE38 /* OpenGL.framework */; };
 		BB61E1FA2A27F67700BFFE38 /* libglfw3.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BB61E1F92A27F67700BFFE38 /* libglfw3.a */; };
 		BB631F662AAA67E500953454 /* ShockwaveRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BB631F652AAA67E500953454 /* ShockwaveRenderer.cpp */; };
@@ -228,8 +230,6 @@
 		BBBBE1832702584A00D7D319 /* ConfigLoader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BBBBDF3927023E1400D7D319 /* ConfigLoader.cpp */; };
 		BBBBE1842702584A00D7D319 /* AssetsLoader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BBBBDF3A27023E1400D7D319 /* AssetsLoader.cpp */; };
 		BBBBE1882702584A00D7D319 /* TextureLoader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BBBBDF2D27023E1400D7D319 /* TextureLoader.cpp */; };
-		BBBC314F2720792B00D82E33 /* World.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BBBC314D2720792B00D82E33 /* World.cpp */; };
-		BBBC31502720792B00D82E33 /* World.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BBBC314D2720792B00D82E33 /* World.cpp */; };
 		BBBC57B82B923ACE0037527C /* EntityInputController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BBBC57B62B923ACE0037527C /* EntityInputController.cpp */; };
 		BBBC57B92B923ACE0037527C /* EntityInputController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BBBC57B62B923ACE0037527C /* EntityInputController.cpp */; };
 		BBEC09F42A28FACB0054681F /* libsndfile.1.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = BBEC09F32A28FACB0054681F /* libsndfile.1.dylib */; };
@@ -367,6 +367,8 @@
 		BB4CCAEB2B61CA9500B6D2CA /* SocketClientHelper.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SocketClientHelper.cpp; sourceTree = "<group>"; };
 		BB4CCAEC2B61CA9500B6D2CA /* SocketClientHelper.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = SocketClientHelper.hpp; sourceTree = "<group>"; };
 		BB5ED3322B6F105300EFA7EB /* libbox2d.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libbox2d.a; sourceTree = "<group>"; };
+		BB60A0FA2B92DA940056BA63 /* World.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = World.cpp; sourceTree = "<group>"; };
+		BB60A0FB2B92DA940056BA63 /* World.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = World.hpp; sourceTree = "<group>"; };
 		BB61E1F72A27F64200BFFE38 /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = System/Library/Frameworks/OpenGL.framework; sourceTree = SDKROOT; };
 		BB61E1F92A27F67700BFFE38 /* libglfw3.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libglfw3.a; sourceTree = "<group>"; };
 		BB61E2012A280DE900BFFE38 /* build_libraries.bat */ = {isa = PBXFileReference; lastKnownFileType = text; path = build_libraries.bat; sourceTree = "<group>"; };
@@ -630,8 +632,6 @@
 		BBBBDF3B27023E1400D7D319 /* RapidJSONUtil.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = RapidJSONUtil.hpp; sourceTree = "<group>"; };
 		BBBBDF3C27023E1400D7D319 /* EntityManagerLoader.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = EntityManagerLoader.hpp; sourceTree = "<group>"; };
 		BBBBE07B27024D3B00D7D319 /* BuildConstants.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = BuildConstants.hpp; sourceTree = "<group>"; };
-		BBBC314D2720792B00D82E33 /* World.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = World.cpp; sourceTree = "<group>"; };
-		BBBC314E2720792B00D82E33 /* World.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = World.hpp; sourceTree = "<group>"; };
 		BBBC57B62B923ACE0037527C /* EntityInputController.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = EntityInputController.cpp; sourceTree = "<group>"; };
 		BBBC57B72B923ACE0037527C /* EntityInputController.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = EntityInputController.hpp; sourceTree = "<group>"; };
 		BBEC09E72A28F6380054681F /* libsndfile.so.1.0.35 */ = {isa = PBXFileReference; lastKnownFileType = file; path = libsndfile.so.1.0.35; sourceTree = "<group>"; };
@@ -781,8 +781,6 @@
 				BB7F75BB2B6B5C4C00CAB63F /* NosPhysicsRenderer.hpp */,
 				BB1E5C27271F26D800149557 /* NosPhysicsWorld.cpp */,
 				BB1E5C29271F26D800149557 /* NosPhysicsWorld.hpp */,
-				BBBC314D2720792B00D82E33 /* World.cpp */,
-				BBBC314E2720792B00D82E33 /* World.hpp */,
 			);
 			path = physics;
 			sourceTree = "<group>";
@@ -1329,6 +1327,8 @@
 				BBB8CB062B8A8D300055CAD4 /* RobotController.hpp */,
 				BB006FA62B92789300C65215 /* RobotInputController.cpp */,
 				BB006FA72B92789300C65215 /* RobotInputController.hpp */,
+				BB60A0FA2B92DA940056BA63 /* World.cpp */,
+				BB60A0FB2B92DA940056BA63 /* World.hpp */,
 			);
 			path = entity;
 			sourceTree = "<group>";
@@ -1896,12 +1896,12 @@
 				BB4CCADF2B5F183F00B6D2CA /* NetworkHelper.cpp in Sources */,
 				BBBBDF6C2702465700D7D319 /* FileAssetHandler.cpp in Sources */,
 				BB4CCAE72B606A5700B6D2CA /* SocketPacketHandler.cpp in Sources */,
+				BB60A0FC2B92DA940056BA63 /* World.cpp in Sources */,
 				BB1E5C2D271F26D800149557 /* NosPhysicsWorld.cpp in Sources */,
 				BB40D8022A26D09C00EDA51E /* SoundLoader.cpp in Sources */,
 				BB006FB02B928E9F00C65215 /* NosRenderer.cpp in Sources */,
 				BB40D7C62A26A2E600EDA51E /* SoundManager.cpp in Sources */,
 				BBFD16432B572CBA00D4D841 /* SteamServerInfo.cpp in Sources */,
-				BBBC314F2720792B00D82E33 /* World.cpp in Sources */,
 				BBFD163F2B572CBA00D4D841 /* SteamClientHelper.cpp in Sources */,
 				BB417E4B2A36418300DD4611 /* OpenALUtil.cpp in Sources */,
 				BBBB0F34270F702400D7D319 /* InputProcessor.cpp in Sources */,
@@ -2010,7 +2010,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				BBBC31502720792B00D82E33 /* World.cpp in Sources */,
 				BB631F672AAA67E500953454 /* ShockwaveRenderer.cpp in Sources */,
 				BB4CCAEE2B61CA9500B6D2CA /* SocketServerHelper.cpp in Sources */,
 				BB9EBF5F2AAA57520088DBB6 /* TitleEngineState.cpp in Sources */,
@@ -2090,6 +2089,7 @@
 				BB40D8032A26D09C00EDA51E /* SoundLoader.cpp in Sources */,
 				BB006FA92B92789300C65215 /* JonInputController.cpp in Sources */,
 				BBBBE1582702584900D7D319 /* LightRenderer.cpp in Sources */,
+				BB60A0FD2B92DA940056BA63 /* World.cpp in Sources */,
 				BB1153882B85166E00E7F3AE /* Animation.cpp in Sources */,
 				BB4CCAE82B606A5700B6D2CA /* SocketPacketHandler.cpp in Sources */,
 				BBFE6DEE2B7FFED7004E8CCF /* EmbeddedAssetHandler.cpp in Sources */,
