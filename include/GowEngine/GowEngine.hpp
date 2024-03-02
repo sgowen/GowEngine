@@ -124,6 +124,7 @@
 #include "core/entity/JonInputController.hpp"
 #include "core/entity/MonsterInputController.hpp"
 #include "core/entity/RobotInputController.hpp"
+#include "core/entity/World.hpp"
 
 /// core/input
 #include "core/input/ClipboardHandler.hpp"
@@ -209,4 +210,3 @@
 #include "core/physics/NosPhysicsController.hpp"
 #include "core/physics/NosPhysicsRenderer.hpp"
 #include "core/physics/NosPhysicsWorld.hpp"
-#include "core/physics/World.hpp"

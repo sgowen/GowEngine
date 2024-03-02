@@ -65,10 +65,9 @@ void RendererLoader::initWithJSON(Renderer& renderer, const char* json)
             std::string key = i->name.GetString();
             
             std::string font = RapidJSONUtil::getString(iv, "font");
-            std::string matrix = RapidJSONUtil::getString(iv, "matrix");
             uint32_t maxBatchSize = RapidJSONUtil::getUInt(iv, "maxBatchSize");
             
-            renderer._fontBatchers.emplace(key, FontBatcher{font, matrix, maxBatchSize});
+            renderer._fontBatchers.emplace(key, FontBatcher{font, maxBatchSize});
         }
     }
     

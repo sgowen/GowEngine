@@ -222,7 +222,7 @@ void Engine::popState()
         // This is only possible when running GowEngine
         // with mode set to "engine"
         ENGINE_CFG.mode() = "engine";
-        INPUT_MGR.setMatrix(&_renderer->matrix());
+        INPUT_MGR.setMatrix(&_renderer->matrixForInput());
     }
 }
 
@@ -275,7 +275,7 @@ void Engine::execute(EngineRequestedStateAction ersa)
 
 void Engine::renderModePicker()
 {
-    _renderer->bindFramebuffer();
+    _renderer->bindFramebuffer("main");
     _renderer->renderTextViews();
     _renderer->renderToScreen();
 }

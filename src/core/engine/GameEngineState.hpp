@@ -17,12 +17,12 @@
 
 enum GameInputProcessorState
 {
-    DGIMS_DEFAULT,
-    DGIMS_DISPLAY_PHYSICS,
-    DGIMS_EXIT,
-    DGIMS_ZOOM_IN,
-    DGIMS_ZOOM_OUT,
-    DGIMS_ZOOM_RESET
+    GIMS_DEFAULT,
+    GIMS_DISPLAY_PHYSICS,
+    GIMS_EXIT,
+    GIMS_ZOOM_IN,
+    GIMS_ZOOM_OUT,
+    GIMS_ZOOM_RESET
 };
 
 class GameInputProcessor

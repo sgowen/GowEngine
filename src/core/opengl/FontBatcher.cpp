@@ -8,9 +8,8 @@
 
 #include <GowEngine/GowEngine.hpp>
 
-FontBatcher::FontBatcher(std::string font, std::string matrix, uint32_t maxBatchSize) :
+FontBatcher::FontBatcher(std::string font, uint32_t maxBatchSize) :
 _font(font),
-_matrix(matrix),
 _spriteBatcher(maxBatchSize)
 {
     // Empty
@@ -31,7 +30,7 @@ void FontBatcher::begin()
     _spriteBatcher.begin();
 }
 
-void FontBatcher::addText(Renderer& r, TextView& tv)
+void FontBatcher::addText(Matrix& m, TextView& tv)
 {
     if (tv._visibility == TEXV_HIDDEN)
     {
@@ -78,7 +77,6 @@ void FontBatcher::addText(Renderer& r, TextView& tv)
         ++rows[rowIndex];
     }
 
-    Matrix& m = r.matrix(_matrix);
     float matrixWidth = m._desc.width();
     float matrixHeight = m._desc.height();
     float y = matrixHeight * tv._yWeight;
@@ -124,15 +122,14 @@ void FontBatcher::addText(Renderer& r, TextView& tv)
     }
 }
 
-void FontBatcher::addText(Renderer& r, std::string text, uint8_t alignment, float xWeight, float yWeight, float glyphWidthWeight)
+void FontBatcher::addText(Matrix& m, std::string text, uint8_t alignment, float xWeight, float yWeight, float glyphWidthWeight)
 {
     TextView tv(text, alignment, xWeight, yWeight, glyphWidthWeight);
-    addText(r, tv);
+    addText(m, tv);
 }
 
-void FontBatcher::end(Renderer& r, Shader& s, Color& c)
+void FontBatcher::end(Matrix& m, Shader& s, Color& c)
 {
-    Matrix& m = r.matrix(_matrix);
     Font& f = ASSETS_MGR.font(_font);
     Texture& t = ASSETS_MGR.texture(f._texture);
     _spriteBatcher.end(s, m._matrix, t, c);

@@ -10,7 +10,7 @@
 
 GameInputProcessor::GameInputProcessor() :
 _inputState(),
-_state(DGIMS_DEFAULT),
+_state(GIMS_DEFAULT),
 _numMovesProcessed(0)
 {
     reset();
@@ -29,7 +29,7 @@ GameInputProcessorState GameInputProcessor::update(World& world)
 #if IS_MOBILE
     for (CursorEvent* e : INPUT_MGR.getCursorEvents())
     {
-        if (_state == DGIMS_EXIT)
+        if (_state == GIMS_EXIT)
         {
             break;
         }
@@ -48,7 +48,7 @@ GameInputProcessorState GameInputProcessor::update(World& world)
     
     for (GamepadEvent* e : INPUT_MGR.getGamepadEvents())
     {
-        if (_state == DGIMS_EXIT)
+        if (_state == GIMS_EXIT)
         {
             break;
         }
@@ -72,22 +72,22 @@ GameInputProcessorState GameInputProcessor::update(World& world)
         {
             case GPEB_BUTTON_SELECT:
             case GPEB_BUTTON_SNES_SELECT:
-                _state = e->isDown() ? DGIMS_EXIT : DGIMS_DEFAULT;
+                _state = e->isDown() ? GIMS_EXIT : GIMS_DEFAULT;
                 break;
             case GPEB_UNKNOWN_6:
             {
-                _state = e->isPressed() ? DGIMS_ZOOM_IN : DGIMS_DEFAULT;
+                _state = e->isPressed() ? GIMS_ZOOM_IN : GIMS_DEFAULT;
                 break;
             }
             case GPEB_BUMPER_RIGHT:
             case GPEB_UNKNOWN_7:
-                if (_state == DGIMS_ZOOM_IN)
+                if (_state == GIMS_ZOOM_IN)
                 {
-                    _state = DGIMS_ZOOM_RESET;
+                    _state = GIMS_ZOOM_RESET;
                 }
                 else
                 {
-                    _state = e->isPressed() ? DGIMS_ZOOM_OUT : DGIMS_DEFAULT;
+                    _state = e->isPressed() ? GIMS_ZOOM_OUT : GIMS_DEFAULT;
                 }
                 break;
             default:
@@ -97,7 +97,7 @@ GameInputProcessorState GameInputProcessor::update(World& world)
     
     for (KeyboardEvent* e : INPUT_MGR.getKeyboardEvents())
     {
-        if (_state == DGIMS_EXIT)
+        if (_state == GIMS_EXIT)
         {
             break;
         }
@@ -125,25 +125,25 @@ GameInputProcessorState GameInputProcessor::update(World& world)
         {
             case GOW_KEY_ESCAPE:
             case GOW_KEY_ANDROID_BACK_BUTTON:
-                _state = e->isUp() ? DGIMS_EXIT : DGIMS_DEFAULT;
+                _state = e->isUp() ? GIMS_EXIT : GIMS_DEFAULT;
                 break;
             case GOW_KEY_P:
                 if (e->isDown())
                 {
-                    _state = _state == DGIMS_DISPLAY_PHYSICS ? DGIMS_DEFAULT : DGIMS_DISPLAY_PHYSICS;
+                    _state = _state == GIMS_DISPLAY_PHYSICS ? GIMS_DEFAULT : GIMS_DISPLAY_PHYSICS;
                 }
                 break;
             case GOW_KEY_I:
-                _state = e->isPressed() ? DGIMS_ZOOM_IN : DGIMS_DEFAULT;
+                _state = e->isPressed() ? GIMS_ZOOM_IN : GIMS_DEFAULT;
                 break;
             case GOW_KEY_O:
-                if (_state == DGIMS_ZOOM_IN)
+                if (_state == GIMS_ZOOM_IN)
                 {
-                    _state = DGIMS_ZOOM_RESET;
+                    _state = GIMS_ZOOM_RESET;
                 }
                 else
                 {
-                    _state = e->isPressed() ? DGIMS_ZOOM_OUT : DGIMS_DEFAULT;
+                    _state = e->isPressed() ? GIMS_ZOOM_OUT : GIMS_DEFAULT;
                 }
                 break;
             case GOW_KEY_PERIOD:
@@ -203,7 +203,7 @@ void GameInputProcessor::reset()
     _inputState.reset();
     _numMovesProcessed = 0;
     
-    _state = DGIMS_DEFAULT;
+    _state = GIMS_DEFAULT;
 }
 
 void GameInputProcessor::setNumMovesProcessed(uint32_t numMovesProcessed)
@@ -316,22 +316,22 @@ void GameEngineState::onUpdate(Engine* e)
     _timeTracker.onFrame();
     
     GameInputProcessorState gims = _inputProcessor.update(world());
-    if (gims == DGIMS_EXIT)
+    if (gims == GIMS_EXIT)
     {
         e->popState();
         return;
     }
     
     static float zoomStep = 0.035398230088496f;
-    if (gims == DGIMS_ZOOM_IN)
+    if (gims == GIMS_ZOOM_IN)
     {
         _scale -= zoomStep;
     }
-    if (gims == DGIMS_ZOOM_OUT)
+    if (gims == GIMS_ZOOM_OUT)
     {
         _scale += zoomStep;
     }
-    if (gims == DGIMS_ZOOM_RESET)
+    if (gims == GIMS_ZOOM_RESET)
     {
         _scale = 1.0f;
     }
@@ -499,29 +499,23 @@ void GameEngineState::onUpdate(Engine* e)
 
 void GameEngineState::onRender(Renderer& r, double extrapolation)
 {
-    const float baseRight = r.matrix()._base._right;
-    const float baseTop = r.matrix()._base._top;
-    float rightEdge = _world->rightEdge();
-    float topEdge = _world->topEdge();
-    float maxWidthScale = rightEdge / baseRight;
-    float maxHeightScale = topEdge / baseTop;
-    float maxScale = CLAMP(GOW_MIN(maxWidthScale, maxHeightScale), 1.0f, 200.0f);
-    _scale = CLAMP(_scale, 0.125f, maxScale);
-    
     if (ENGINE_CFG.extrapolatePhysics())
     {
-        _world->extrapolatePhysics(extrapolation);
+        world().extrapolatePhysics(extrapolation);
     }
+    
+    r.configReset();
+    r.configBounds(world().rightEdge(), world().topEdge(), _scale);
+    r.configControlledPlayerEntity(getControlledPlayer());
     
     // TODO, remove this code once we have scripting
     bool isDante = strcmp(ENGINE_CFG.mode().c_str(), "dante") == 0;
     bool isGeoDudes = strcmp(ENGINE_CFG.mode().c_str(), "geoDudes") == 0;
     bool isNos = strcmp(ENGINE_CFG.mode().c_str(), "nosfuratu") == 0;
     assert(isDante || isGeoDudes || isNos);
-    
     if (isDante)
     {
-        DanteRenderer::render(r, world(), getControlledPlayer(), _scale);
+        DanteRenderer::render(r, world());
     }
     else if (isGeoDudes)
     {
@@ -529,10 +523,10 @@ void GameEngineState::onRender(Renderer& r, double extrapolation)
     }
     else if (isNos)
     {
-        NosRenderer::render(r, world(), getControlledPlayer(), _scale);
+        NosRenderer::render(r, world());
     }
     
-    if (_inputProcessor.state() == DGIMS_DISPLAY_PHYSICS)
+    if (_inputProcessor.state() == GIMS_DISPLAY_PHYSICS)
     {
         std::string physicsEngine = _config.getString("physicsEngine");
         bool isBox2D = physicsEngine == "Box2D";
@@ -546,96 +540,13 @@ void GameEngineState::onRender(Renderer& r, double extrapolation)
         }
     }
     
-    r.setTextVisible("rtt", true);
-    r.setTextVisible("rollbackFrames", true);
-    r.setTextVisible("inBps", true);
-    r.setTextVisible("outBps", true);
-    r.setTextVisible("player4Info", true);
-    r.setTextVisible("player3Info", true);
-    r.setTextVisible("player2Info", true);
-    r.setTextVisible("player1Info", true);
-    
-    if (NW_CLNT)
-    {
-        r.setText("rtt", STRING_FORMAT("RTT %d ms", static_cast<int>(NW_CLNT->avgRoundTripTime())));
-        r.setText("rollbackFrames", STRING_FORMAT("Rollback frames %d", _numMovesToReprocess));
-        r.setText("inBps", STRING_FORMAT(" In %d Bps", static_cast<int>(NW_CLNT->bytesReceivedPerSecond())));
-        r.setText("outBps", STRING_FORMAT("Out %d Bps", static_cast<int>(NW_CLNT->bytesSentPerSecond())));
-    }
-    
-    Entity* player4 = getPlayer(4);
-    if (player4 != nullptr)
-    {
-        if (NW_CLNT->isPlayerIDLocal(4) &&
-            NW_CLNT->isPlayerIDLocal(1))
-        {
-            r.setText("player4Info", STRING_FORMAT("4|%s [.] to drop", player4->playerInfo()._playerName.c_str()));
-        }
-        else
-        {
-            r.setText("player4Info", STRING_FORMAT("4|%s", player4->playerInfo()._playerName.c_str()));
-        }
-    }
-    else
-    {
-        r.setText("player4Info", "4|Maybe someone will join...?");
-    }
-    
-    Entity* player3 = getPlayer(3);
-    if (player3 != nullptr)
-    {
-        if (NW_CLNT->isPlayerIDLocal(3) &&
-            NW_CLNT->isPlayerIDLocal(1))
-        {
-            r.setText("player3Info", STRING_FORMAT("3|%s [.] to drop", player3->playerInfo()._playerName.c_str()));
-        }
-        else
-        {
-            r.setText("player3Info", STRING_FORMAT("3|%s", player3->playerInfo()._playerName.c_str()));
-        }
-    }
-    else
-    {
-        r.setText("player3Info", "3|Maybe someone will join...?");
-    }
-    
-    Entity* player2 = getPlayer(2);
-    if (player2 != nullptr)
-    {
-        if (NW_CLNT->isPlayerIDLocal(2) &&
-            NW_CLNT->isPlayerIDLocal(1))
-        {
-            r.setText("player2Info", STRING_FORMAT("2|%s [.] to drop", player2->playerInfo()._playerName.c_str()));
-        }
-        else
-        {
-            r.setText("player2Info", STRING_FORMAT("2|%s", player2->playerInfo()._playerName.c_str()));
-        }
-    }
-    else
-    {
-        r.setText("player2Info", "2|Connect gamepad or use arrow keys...");
-    }
-    
-    Entity* player1 = getPlayer(1);
-    if (player1 != nullptr)
-    {
-        r.setText("player1Info", STRING_FORMAT("1|%s", player1->playerInfo()._playerName.c_str()));
-    }
-    else
-    {
-        r.setText("player1Info", "1|Joining...");
-    }
-    
-    r.setText("fps", STRING_FORMAT("FPS %d", FPS_UTIL.fps()));
-    
-    r.renderTextViews("main", "sprite", Color::RED);
+    r.renderGameInfo(world(), _numMovesToReprocess);
 
-    r.renderCurrentlyBoundFramebufferToScreen();
+    r.renderToScreen();
     
     if (ENGINE_CFG.extrapolatePhysics())
     {
-        _world->endExtrapolatedPhysics();
+        world().endExtrapolatedPhysics();
     }
     
     renderAudio();

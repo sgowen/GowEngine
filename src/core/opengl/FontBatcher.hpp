@@ -21,22 +21,22 @@ class Renderer;
 struct Shader;
 struct TextureRegion;
 struct Color;
+struct Matrix;
 
 class FontBatcher
 {
 public:
-	FontBatcher(std::string font, std::string matrix, uint32_t maxBatchSize);
+	FontBatcher(std::string font, uint32_t maxBatchSize);
     
     void createDeviceDependentResources();
     void destroyDeviceDependentResources();
     void begin();
-    void addText(Renderer& r, TextView& tv);
-	void addText(Renderer& r, std::string text, uint8_t alignment, float xWeight, float yWeight, float glyphWidthWeight);
-    void end(Renderer& r, Shader& s, Color& c = Color::ONE);
+    void addText(Matrix& m, TextView& tv);
+	void addText(Matrix& m, std::string text, uint8_t alignment, float xWeight, float yWeight, float glyphWidthWeight);
+    void end(Matrix& m, Shader& s, Color& c = Color::ONE);
 
 private:
     std::vector<TextureRegion> _glyphs;
     std::string _font;
-    std::string _matrix;
     SpriteBatcher _spriteBatcher;
 };

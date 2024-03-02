@@ -14,7 +14,7 @@ class World;
 class DanteRenderer
 {
 public:
-    static void render(Renderer& r, World& w, Entity* controlledPlayer, float scale);
+    static void render(Renderer& r, World& w);
     
 private:
     DanteRenderer() {}

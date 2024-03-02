@@ -2,7 +2,6 @@
   "fontBatchers": {
     "main": {
       "font": "main",
-      "matrix": "main",
       "maxBatchSize": 256
     }
   },

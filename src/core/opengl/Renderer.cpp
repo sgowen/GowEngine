@@ -11,18 +11,21 @@
 Renderer::Renderer() :
 _box2DPhysicsRenderer(2048),
 _nosPhysicsRenderer(2048),
-_shockwaveRenderer(),
-_lightRenderer(),
 _framebufferRenderer(),
+_lightRenderer(),
 _screenRenderer(),
-_pixelToUnitRatio(1),
-_currentlyBoundFramebufferKey("null")
+_shockwaveRenderer(),
+_rc(),
+_pixelToUnitRatio(1)
 {
     // Empty
 }
 
 void Renderer::reset()
 {
+    _rc.reset();
+    _pixelToUnitRatio = 1;
+    
     _circleBatchers.clear();
     _fontBatchers.clear();
     _framebuffers.clear();
@@ -32,9 +35,6 @@ void Renderer::reset()
     _spriteBatchers.clear();
     _textViews.clear();
     _triangleBatchers.clear();
-    
-    _pixelToUnitRatio = 1;
-    _currentlyBoundFramebufferKey = "";
 }
 
 void Renderer::createDeviceDependentResources()
@@ -124,10 +124,12 @@ void Renderer::destroyDeviceDependentResources()
 
 void Renderer::renderLoadingView(uint32_t stateTime)
 {
-    clearFramebuffer();
+    configShader("sprite");
     
-    if (!ASSETS_MGR.isShaderLoaded("sprite") ||
-        !ASSETS_MGR.isFontLoaded("main"))
+    clearFramebuffer(_rc.clearColor);
+    
+    if (!ASSETS_MGR.isShaderLoaded(_rc.shaderKey) ||
+        !ASSETS_MGR.isFontLoaded(_rc.fontBatcherKey))
     {
         return;
     }
@@ -139,30 +141,34 @@ void Renderer::renderLoadingView(uint32_t stateTime)
         loadingText += ".";
     }
     
-    FontBatcher& fb = fontBatcher("main");
-    Shader& s = ASSETS_MGR.shader("sprite");
+    Matrix& m = matrix(_rc.matrixKey);
+    FontBatcher& fb = fontBatcher(_rc.fontBatcherKey);
+    Shader& s = ASSETS_MGR.shader(_rc.shaderKey);
     fb.begin();
-    fb.addText(*this, loadingText, TEXA_LEFT, 0.80f, 0.04f, 0.02f);
-    fb.end(*this, s);
+    fb.addText(m, loadingText, TEXA_LEFT, 0.80f, 0.04f, 0.02f);
+    fb.end(m, s);
 }
 
-void Renderer::bindFramebuffer(std::string framebufferKey, bool enableBlending)
+void Renderer::bindFramebuffer(std::string framebufferKey)
 {
     Framebuffer& fb = framebuffer(framebufferKey);
     OGL.bindFramebuffer(fb);
-    OGL.enableBlending(enableBlending);
+    OGL.enableBlending(_rc.enableBlending);
     
-    _currentlyBoundFramebufferKey = framebufferKey;
+    _rc.framebufferKey = framebufferKey;
 }
 
-void Renderer::clearFramebuffer(Color& c)
+void Renderer::clearFramebuffer(Color clearColor)
 {
-    OGL.clearFramebuffer(c);
+    _rc.clearColor = clearColor;
+    OGL.clearFramebuffer(_rc.clearColor);
 }
 
-void Renderer::renderImageViews(float angle, bool flipX, std::string matrixKey, std::string shaderKey, std::string spriteBatcherKey)
+void Renderer::renderImageViews()
 {
-    Matrix& m = matrix(matrixKey);
+    configShader("sprite");
+    
+    Matrix& m = matrix(_rc.matrixKey);
     float l = m._desc._left;
     float b = m._desc._bottom;
     float w = m._desc.width();
@@ -170,34 +176,41 @@ void Renderer::renderImageViews(float angle, bool flipX, std::string matrixKey, 
     for (auto& pair : _imageViews)
     {
         ImageView& iv = pair.second;
-        renderSprite(iv._texture, iv._textureRegion, l + w * iv._xWeight, b + h * iv._yWeight, w * iv._widthWeight, h * iv._heightWeight, 0, angle, flipX, matrixKey, shaderKey, spriteBatcherKey);
+        renderSprite(iv._texture, iv._textureRegion, l + w * iv._xWeight, b + h * iv._yWeight, w * iv._widthWeight, h * iv._heightWeight, 0, 0, false);
     }
 }
 
-void Renderer::updateMatrix(float l, float r, float b, float t, float n, float f, std::string matrixKey)
+void Renderer::resetMatrix()
 {
-    Matrix& m = matrix(matrixKey);
+    Matrix& m = matrix(_rc.matrixKey);
+    updateMatrix(m._base);
+}
+
+void Renderer::updateMatrix(float l, float r, float b, float t, float n, float f)
+{
+    Matrix& m = matrix(_rc.matrixKey);
     m.ortho(l, r, b, t, n, f);
 }
 
-void Renderer::updateMatrix(MatrixDescriptor& desc, std::string matrixKey)
+void Renderer::updateMatrix(MatrixDescriptor& desc)
 {
-    updateMatrix(desc._left, desc._right, desc._bottom, desc._top, desc._near, desc._far, matrixKey);
+    updateMatrix(desc._left, desc._right, desc._bottom, desc._top, desc._near, desc._far);
 }
 
-void Renderer::updateMatrixCenteredOnEntity(Entity* e, uint32_t maxRight, uint32_t maxTop, float scale, std::string matrixKey)
+void Renderer::updateMatrixCenteredOnPlayer()
 {
+    Entity* e = _rc.controlledPlayer;
     if (e == nullptr)
     {
         return;
     }
     
-    Matrix& m = matrix(matrixKey);
+    Matrix& m = matrix(_rc.matrixKey);
     MatrixDescriptor md = m._base;
-    float width = md.width() * scale;
-    float height = md.height() * scale;
-    md._right = CLAMP(e->position()._x + width / 2, 0, maxRight);
-    md._top = CLAMP(e->position()._y + height / 2, 0, maxTop);
+    float width = md.width() * _rc.scale;
+    float height = md.height() * _rc.scale;
+    md._right = CLAMP(e->position()._x + width / 2, 0, _rc.maxRight);
+    md._top = CLAMP(e->position()._y + height / 2, 0, _rc.maxTop);
     
     md._left = md._right - width;
     if (md._left < 0)
@@ -215,19 +228,14 @@ void Renderer::updateMatrixCenteredOnEntity(Entity* e, uint32_t maxRight, uint32
         md._top += diff;
     }
     
-    updateMatrix(md, matrixKey);
+    updateMatrix(md);
 }
 
-void Renderer::updateMatrixCenteredOnEntityForParallaxLayer(Entity* e, float parallaxSpeedRatio, uint32_t maxRight, uint32_t maxTop, float scale, std::string matrixKey)
+void Renderer::updateMatrixCenteredOnPlayerForParallaxLayer(float parallaxSpeedRatio)
 {
-    if (e == nullptr)
-    {
-        return;
-    }
+    updateMatrixCenteredOnPlayer();
     
-    updateMatrixCenteredOnEntity(e, maxRight, maxTop, scale, matrixKey);
-    
-    Matrix& m = matrix(matrixKey);
+    Matrix& m = matrix(_rc.matrixKey);
     MatrixDescriptor md = m._desc;
     
     float left = md._left * parallaxSpeedRatio;
@@ -238,33 +246,33 @@ void Renderer::updateMatrixCenteredOnEntityForParallaxLayer(Entity* e, float par
     md._top += (bottom - md._bottom);
     md._bottom = bottom;
     
-    updateMatrix(md, matrixKey);
+    updateMatrix(md);
 }
 
-void Renderer::rektangleBatcherBegin(std::string rektangleBatcherKey)
+void Renderer::rektangleBatcherBegin()
 {
-    rektangleBatcher(rektangleBatcherKey).begin();
+    rektangleBatcher(_rc.rektangleBatcherKey).begin();
 }
 
-void Renderer::rektangleBatcherAddRektangle(Rektangle& r, std::string rektangleBatcherKey)
+void Renderer::rektangleBatcherAddRektangle(Rektangle& r)
 {
-    rektangleBatcher(rektangleBatcherKey).addRektangle(r);
+    rektangleBatcher(_rc.rektangleBatcherKey).addRektangle(r);
 }
 
-void Renderer::rektangleBatcherEnd(Color& c, std::string matrixKey, std::string shaderKey, std::string rektangleBatcherKey)
+void Renderer::rektangleBatcherEnd(Color& c)
 {
-    RektangleBatcher& rb = rektangleBatcher(rektangleBatcherKey);
-    Matrix& m = matrix(matrixKey);
-    Shader& s = ASSETS_MGR.shader(shaderKey);
+    RektangleBatcher& rb = rektangleBatcher(_rc.rektangleBatcherKey);
+    Matrix& m = matrix(_rc.matrixKey);
+    Shader& s = ASSETS_MGR.shader(_rc.shaderKey);
     
     rb.end(s, m._matrix, c);
 }
 
-void Renderer::renderSprite(std::string textureKey, std::string textureRegionKey, float x, float y, float width, float height, uint16_t stateTime, float angle, bool flipX, std::string matrixKey, std::string shaderKey, std::string spriteBatcherKey)
+void Renderer::renderSprite(std::string textureKey, std::string textureRegionKey, float x, float y, float width, float height, uint16_t stateTime, float angle, bool flipX)
 {
-    SpriteBatcher& sb = spriteBatcher(spriteBatcherKey);
-    Matrix& m = matrix(matrixKey);
-    Shader& s = ASSETS_MGR.shader(shaderKey);
+    SpriteBatcher& sb = spriteBatcher(_rc.spriteBatcherKey);
+    Matrix& m = matrix(_rc.matrixKey);
+    Shader& s = ASSETS_MGR.shader(_rc.shaderKey);
     Texture& t = ASSETS_MGR.texture(textureKey);
     TextureRegion& tr = ASSETS_MGR.textureRegion(textureRegionKey, stateTime);
     
@@ -273,7 +281,7 @@ void Renderer::renderSprite(std::string textureKey, std::string textureRegionKey
     sb.end(s, m._matrix, t);
 }
 
-void Renderer::renderEntitiesBoundToTexture(std::vector<Entity*>& entities, std::string texture, std::string spriteBatcherKey)
+void Renderer::renderEntitiesBoundToTexture(std::string spriteBatcherKey, std::string texture, std::vector<Entity*>& entities)
 {
     spriteBatcherBegin(spriteBatcherKey);
     for (Entity* e : entities)
@@ -287,17 +295,20 @@ void Renderer::renderEntitiesBoundToTexture(std::vector<Entity*>& entities, std:
         
         if (textureForRegionKey == texture)
         {
-            spriteBatcherAddEntity(e, spriteBatcherKey);
+            spriteBatcherAddEntity(e);
         }
     }
-    spriteBatcherEnd(texture, "main", "sprite", spriteBatcherKey);
+    spriteBatcherEnd(spriteBatcherKey, texture);
 }
 
-void Renderer::renderNosParallaxLayers(std::vector<Entity*>& layers, std::string texture)
+void Renderer::renderNosParallaxLayers(std::string spriteBatcherKey, std::string texture, std::vector<Entity*>& layers)
 {
-    Matrix& m = matrix();
+    configSpriteBatcher(spriteBatcherKey);
     
-    spriteBatcherBegin();
+    Matrix& m = matrix(_rc.matrixKey);
+    SpriteBatcher& sb = spriteBatcher(_rc.spriteBatcherKey);
+    
+    sb.begin();
     for (Entity* e : layers)
     {
         std::string textureRegionKey = e->renderController()->getTextureMapping();
@@ -314,7 +325,7 @@ void Renderer::renderNosParallaxLayers(std::vector<Entity*>& layers, std::string
             x %= t._width;
             TextureRegion tr = trRaw.copyWithX(x);
             
-            spriteBatcher().addSprite(tr, e->position()._x + m._desc._left, e->position()._y, e->width(), e->height(), e->angle(), e->isXFlipped());
+            sb.addSprite(tr, e->position()._x + m._desc._left, e->position()._y, e->width(), e->height(), e->angle(), e->isXFlipped());
             
             float matrixWidthRemaining = m._desc.width() - e->width();
             for (int i = 1; matrixWidthRemaining > 0; matrixWidthRemaining -= e->width(), ++i)
@@ -323,21 +334,23 @@ void Renderer::renderNosParallaxLayers(std::vector<Entity*>& layers, std::string
                 x %= t._width;
                 TextureRegion trX = tr.copyWithX(x);
                 
-                spriteBatcher().addSprite(trX, e->position()._x + m._desc._left + e->width() * i, e->position()._y, e->width(), e->height(), e->angle(), e->isXFlipped());
+                sb.addSprite(trX, e->position()._x + m._desc._left + e->width() * i, e->position()._y, e->width(), e->height(), e->angle(), e->isXFlipped());
             }
         }
     }
-    spriteBatcherEnd(texture);
+    spriteBatcherEnd(spriteBatcherKey, texture);
 }
 
 void Renderer::spriteBatcherBegin(std::string spriteBatcherKey)
 {
-    spriteBatcher(spriteBatcherKey).begin();
+    configSpriteBatcher(spriteBatcherKey);
+    
+    spriteBatcher(_rc.spriteBatcherKey).begin();
 }
 
-void Renderer::spriteBatcherAddEntities(std::vector<Entity*>& entities, std::string spriteBatcherKey)
+void Renderer::spriteBatcherAddEntities(std::vector<Entity*>& entities)
 {
-    SpriteBatcher& sb = spriteBatcher(spriteBatcherKey);
+    SpriteBatcher& sb = spriteBatcher(_rc.spriteBatcherKey);
     for (Entity* e : entities)
     {
         assert(e != nullptr);
@@ -351,22 +364,25 @@ void Renderer::spriteBatcherAddEntities(std::vector<Entity*>& entities, std::str
     }
 }
 
-void Renderer::spriteBatcherAddEntity(Entity* e, std::string spriteBatcherKey)
+void Renderer::spriteBatcherAddEntity(Entity* e)
 {
     assert(e != nullptr);
     
-    SpriteBatcher& sb = spriteBatcher(spriteBatcherKey);
+    SpriteBatcher& sb = spriteBatcher(_rc.spriteBatcherKey);
     spriteBatcherAddEntity(sb, *e);
 }
 
-void Renderer::spriteBatcherEnd(std::string textureKey, std::string matrixKey, std::string shaderKey, std::string spriteBatcherKey, Color& colorFactor)
+void Renderer::spriteBatcherEnd(std::string spriteBatcherKey, std::string textureKey)
 {
-    SpriteBatcher& sb = spriteBatcher(spriteBatcherKey);
-    Matrix& m = matrix(matrixKey);
-    Shader& s = ASSETS_MGR.shader(shaderKey);
+    configShader("sprite");
+    configSpriteBatcher(spriteBatcherKey);
+    
+    SpriteBatcher& sb = spriteBatcher(_rc.spriteBatcherKey);
+    Matrix& m = matrix(_rc.matrixKey);
+    Shader& s = ASSETS_MGR.shader(_rc.shaderKey);
     Texture& t = ASSETS_MGR.texture(textureKey);
     
-    sb.end(s, m._matrix, t, colorFactor);
+    sb.end(s, m._matrix, t, _rc.spriteColorFactor);
 }
 
 void Renderer::setTextVisible(std::string textViewKey, bool isVisible)
@@ -387,30 +403,132 @@ void Renderer::hideAllText()
     }
 }
 
-void Renderer::renderTextViews(std::string fontBatcherKey, std::string shaderKey, Color& colorFactor)
+void Renderer::renderTextViews()
 {
-    FontBatcher& fb = fontBatcher(fontBatcherKey);
-    Shader& s = ASSETS_MGR.shader(shaderKey);
+    configShader("sprite");
+    
+    Matrix& m = matrix(_rc.matrixKey);
+    FontBatcher& fb = fontBatcher(_rc.fontBatcherKey);
+    Shader& s = ASSETS_MGR.shader(_rc.shaderKey);
     fb.begin();
     for (auto& pair : _textViews)
     {
-        fb.addText(*this, pair.second);
+        fb.addText(m, pair.second);
     }
-    fb.end(*this, s, colorFactor);
+    fb.end(m, s, _rc.textColorFactor);
 }
 
-void Renderer::renderBox2DPhysics(Box2DPhysicsWorld* world, std::string matrixKey, std::string shaderKey)
+void Renderer::renderBox2DPhysics(Box2DPhysicsWorld* world)
 {
-    Matrix& m = matrix(matrixKey);
-    Shader& s = ASSETS_MGR.shader(shaderKey);
+    configShader("geometry");
+    
+    Matrix& m = matrix(_rc.matrixKey);
+    Shader& s = ASSETS_MGR.shader(_rc.shaderKey);
     _box2DPhysicsRenderer.render(world, &m._matrix, &s);
 }
 
-void Renderer::renderNosPhysics(NosPhysicsWorld* world, std::string matrixKey, std::string shaderKey)
+void Renderer::renderNosPhysics(NosPhysicsWorld* world)
 {
-    Matrix& m = matrix(matrixKey);
-    Shader& s = ASSETS_MGR.shader(shaderKey);
+    configShader("geometry");
+    
+    Matrix& m = matrix(_rc.matrixKey);
+    Shader& s = ASSETS_MGR.shader(_rc.shaderKey);
     _nosPhysicsRenderer.render(world, &m._matrix, &s);
+}
+
+void Renderer::renderGameInfo(World &w, int numRollbackFrames)
+{
+    configMatrix("hud");
+    Matrix& m = matrix(_rc.matrixKey);
+    updateMatrix(m._base);
+    
+    configShader("sprite");
+    
+    setTextVisible("rtt", true);
+    setTextVisible("rollbackFrames", true);
+    setTextVisible("inBps", true);
+    setTextVisible("outBps", true);
+    setTextVisible("player4Info", true);
+    setTextVisible("player3Info", true);
+    setTextVisible("player2Info", true);
+    setTextVisible("player1Info", true);
+    
+    if (NW_CLNT)
+    {
+        setText("rtt", STRING_FORMAT("RTT %d ms", static_cast<int>(NW_CLNT->avgRoundTripTime())));
+        setText("rollbackFrames", STRING_FORMAT("Rollback frames %d", numRollbackFrames));
+        setText("inBps", STRING_FORMAT(" In %d Bps", static_cast<int>(NW_CLNT->bytesReceivedPerSecond())));
+        setText("outBps", STRING_FORMAT("Out %d Bps", static_cast<int>(NW_CLNT->bytesSentPerSecond())));
+    }
+    
+    Entity* player4 = w.getPlayer(4);
+    if (player4 != nullptr)
+    {
+        if (NW_CLNT->isPlayerIDLocal(4) &&
+            NW_CLNT->isPlayerIDLocal(1))
+        {
+            setText("player4Info", STRING_FORMAT("4|%s [.] to drop", player4->playerInfo()._playerName.c_str()));
+        }
+        else
+        {
+            setText("player4Info", STRING_FORMAT("4|%s", player4->playerInfo()._playerName.c_str()));
+        }
+    }
+    else
+    {
+        setText("player4Info", "4|Maybe someone will join...?");
+    }
+    
+    Entity* player3 = w.getPlayer(3);
+    if (player3 != nullptr)
+    {
+        if (NW_CLNT->isPlayerIDLocal(3) &&
+            NW_CLNT->isPlayerIDLocal(1))
+        {
+            setText("player3Info", STRING_FORMAT("3|%s [.] to drop", player3->playerInfo()._playerName.c_str()));
+        }
+        else
+        {
+            setText("player3Info", STRING_FORMAT("3|%s", player3->playerInfo()._playerName.c_str()));
+        }
+    }
+    else
+    {
+        setText("player3Info", "3|Maybe someone will join...?");
+    }
+    
+    Entity* player2 = w.getPlayer(2);
+    if (player2 != nullptr)
+    {
+        if (NW_CLNT->isPlayerIDLocal(2) &&
+            NW_CLNT->isPlayerIDLocal(1))
+        {
+            setText("player2Info", STRING_FORMAT("2|%s [.] to drop", player2->playerInfo()._playerName.c_str()));
+        }
+        else
+        {
+            setText("player2Info", STRING_FORMAT("2|%s", player2->playerInfo()._playerName.c_str()));
+        }
+    }
+    else
+    {
+        setText("player2Info", "2|Connect gamepad or use arrow keys...");
+    }
+    
+    Entity* player1 = w.getPlayer(1);
+    if (player1 != nullptr)
+    {
+        setText("player1Info", STRING_FORMAT("1|%s", player1->playerInfo()._playerName.c_str()));
+    }
+    else
+    {
+        setText("player1Info", "1|Joining...");
+    }
+    
+    setText("fps", STRING_FORMAT("FPS %d", FPS_UTIL.fps()));
+    
+    configTextColorFactor(Color::RED);
+    renderTextViews();
 }
 
 void Renderer::renderLight(std::string framebufferKey, std::string framebufferNormalMapKey, float lightPosZ, std::vector<Entity*>& lights)
@@ -418,7 +536,7 @@ void Renderer::renderLight(std::string framebufferKey, std::string framebufferNo
     Shader& s = ASSETS_MGR.shader("lights");
     Framebuffer& fb = framebuffer(framebufferKey);
     Framebuffer& fbNormalMap = framebuffer(framebufferNormalMapKey);
-    Matrix& m = matrix();
+    Matrix& m = matrix(_rc.matrixKey);
     
     _lightRenderer.resetLights();
     _lightRenderer.configAmbientLight(0.0f, 0.0f, 0.0f, 0.0f);
@@ -432,33 +550,97 @@ void Renderer::renderLight(std::string framebufferKey, std::string framebufferNo
     _lightRenderer.render(s, m, fb, fbNormalMap);
 }
 
-void Renderer::renderFramebufferWithShockwave(std::string framebufferKey, float centerX, float centerY, float timeElapsed, bool isTransforming)
+void Renderer::renderFramebufferWithShockwave(std::string framebufferKey, float centerX, float centerY, uint16_t timeElapsed, bool isTransforming)
 {
     Shader& s = ASSETS_MGR.shader("shockwave");
     Framebuffer& fb = framebuffer(framebufferKey);
-    Matrix& m = matrix();
+    Matrix& m = matrix(_rc.matrixKey);
     
-    _shockwaveRenderer.render(s, fb, m, centerX, centerY, timeElapsed, isTransforming);
+    static float frameRate = static_cast<float>(ENGINE_CFG.frameRate());
+    
+    float realTimeElapsed = timeElapsed * frameRate;
+    
+    _shockwaveRenderer.render(s, fb, m, centerX, centerY, realTimeElapsed, isTransforming);
 }
 
 void Renderer::renderFramebuffer(std::string framebufferKey, std::string shaderKey)
 {
-    Shader& s = ASSETS_MGR.shader(shaderKey);
+    configShader(shaderKey);
+    
+    Shader& s = ASSETS_MGR.shader(_rc.shaderKey);
     Framebuffer& fb = framebuffer(framebufferKey);
     
     _framebufferRenderer.renderFramebuffer(s, fb);
 }
 
-void Renderer::renderToScreen(std::string framebufferKey, std::string shaderKey)
+void Renderer::renderFramebuffer(std::string framebufferKey)
 {
-    Shader& s = ASSETS_MGR.shader(shaderKey);
-    Framebuffer& fb = framebuffer(framebufferKey);
+    renderFramebuffer(framebufferKey, "framebuffer");
+}
+
+void Renderer::renderToScreen()
+{
+    configShader("framebuffer");
+    
+    Shader& s = ASSETS_MGR.shader(_rc.shaderKey);
+    Framebuffer& fb = framebuffer(_rc.framebufferKey);
     _screenRenderer.renderToScreen(s, fb);
 }
 
-void Renderer::renderCurrentlyBoundFramebufferToScreen(std::string shaderKey)
+void Renderer::configReset()
 {
-    renderToScreen(_currentlyBoundFramebufferKey, shaderKey);
+    _rc.reset();
+}
+
+void Renderer::configBounds(uint32_t maxRight, uint32_t maxTop, float& scale)
+{
+    Matrix& m = matrix(_rc.matrixKey);
+    
+    const float baseRight = m._base._right;
+    const float baseTop = m._base._top;
+    float maxWidthScale = maxRight / baseRight;
+    float maxHeightScale = maxTop / baseTop;
+    float maxScale = CLAMP(GOW_MIN(maxWidthScale, maxHeightScale), 1.0f, 200.0f);
+    
+    _rc.maxRight = maxRight;
+    _rc.maxTop = maxTop;
+    scale = CLAMP(scale, 0.125f, maxScale);
+    _rc.scale = scale;
+}
+
+void Renderer::configControlledPlayerEntity(Entity* e)
+{
+    _rc.controlledPlayer = e;
+}
+
+void Renderer::configMatrix(std::string key)
+{
+    _rc.matrixKey = key;
+}
+
+void Renderer::configShader(std::string key)
+{
+    _rc.shaderKey = key;
+}
+
+void Renderer::configSpriteBatcher(std::string key)
+{
+    _rc.spriteBatcherKey = key;
+}
+
+void Renderer::configSpriteColorFactor(Color c)
+{
+    _rc.spriteColorFactor = c;
+}
+
+void Renderer::configTextColorFactor(Color c)
+{
+    _rc.textColorFactor = c;
+}
+
+Matrix& Renderer::matrixForInput()
+{
+    return matrix(_rc.matrixKey);
 }
 
 CircleBatcher& Renderer::circleBatcher(std::string key)

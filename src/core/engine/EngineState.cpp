@@ -18,7 +18,7 @@ void EngineState::enter(Engine* e)
     AssetsLoader::initWithJSONFile(_assets, _filePathAssets);
     RendererLoader::initWithJSONFile(_renderer, _config.getString("filePathRenderer"));
     
-    INPUT_MGR.setMatrix(&_renderer.matrix());
+    INPUT_MGR.setMatrix(&_renderer.matrixForInput());
     
     ASSETS_MGR.registerAssets(_filePathAssets, _assets);
     createDeviceDependentResources(e);

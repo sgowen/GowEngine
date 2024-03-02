@@ -8,7 +8,7 @@
 
 #pragma once
 
-#include "core/physics/World.hpp"
+#include "core/entity/World.hpp"
 
 class NosPhysicsWorld : public World
 {

@@ -199,7 +199,7 @@ void TitleEngineState::onRender(Renderer& r, double extrapolation)
     }
 #endif
     
-    r.bindFramebuffer();
+    r.bindFramebuffer("main");
     
     r.setTextVisible("hostServer", _state == TESS_DEFAULT);
     r.setTextVisible("joinServer", _state == TESS_DEFAULT && !steam);

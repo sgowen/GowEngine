@@ -3,7 +3,6 @@
   "fontBatchers": {
     "main": {
       "font": "main",
-      "matrix": "hud",
       "maxBatchSize": 256
     }
   },

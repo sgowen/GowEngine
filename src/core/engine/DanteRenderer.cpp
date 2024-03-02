@@ -8,58 +8,54 @@
 
 #include <GowEngine/GowEngine.hpp>
 
-void DanteRenderer::render(Renderer& r, World& w, Entity* controlledPlayer, float scale)
+void DanteRenderer::render(Renderer& r, World& w)
 {
-    // TODO, in the proceeding rendering code, consider using multiple matrices instead of changing
-    // the "main" one over and over again
-    
     r.bindFramebuffer("behindPlayer");
     
-    r.updateMatrixCenteredOnEntityForParallaxLayer(controlledPlayer, 0.6f,  w.rightEdge(), w.topEdge(), scale);
-    r.renderEntitiesBoundToTexture(w.getLayers(), "texture_001", "sb_001");
+    r.updateMatrixCenteredOnPlayerForParallaxLayer(0.6f);
+    r.renderEntitiesBoundToTexture("sb_001", "texture_001", w.getLayers());
     
-    r.updateMatrixCenteredOnEntityForParallaxLayer(controlledPlayer, 0.8f,  w.rightEdge(), w.topEdge(), scale);
-    r.renderEntitiesBoundToTexture(w.getLayers(), "texture_002", "sb_002");
+    r.updateMatrixCenteredOnPlayerForParallaxLayer(0.8f);
+    r.renderEntitiesBoundToTexture("sb_002", "texture_002", w.getLayers());
     
-    r.updateMatrixCenteredOnEntityForParallaxLayer(controlledPlayer, 0.9f,  w.rightEdge(), w.topEdge(), scale);
-    r.renderEntitiesBoundToTexture(w.getLayers(), "texture_003", "sb_003");
+    r.updateMatrixCenteredOnPlayerForParallaxLayer(0.9f);
+    r.renderEntitiesBoundToTexture("sb_003", "texture_003", w.getLayers());
     
-    r.updateMatrixCenteredOnEntity(controlledPlayer, w.rightEdge(), w.topEdge(), scale);
-    
-    r.renderEntitiesBoundToTexture(w.getLayers(), "texture_004", "sb_004");
-    r.renderEntitiesBoundToTexture(w.getDynamicEntities(), "texture_005", "sb_005");
+    r.updateMatrixCenteredOnPlayer();
+    r.renderEntitiesBoundToTexture("sb_004", "texture_004", w.getLayers());
+    r.renderEntitiesBoundToTexture("sb_005", "texture_005", w.getDynamicEntities());
     
     r.bindFramebuffer("behindPlayerNormals");
     
-    r.updateMatrixCenteredOnEntityForParallaxLayer(controlledPlayer, 0.6f,  w.rightEdge(), w.topEdge(), scale);
-    r.spriteBatcherEnd("n_texture_001", "main", "sprite", "sb_001");
+    r.updateMatrixCenteredOnPlayerForParallaxLayer(0.6f);
+    r.spriteBatcherEnd("sb_001", "n_texture_001");
     
-    r.updateMatrixCenteredOnEntityForParallaxLayer(controlledPlayer, 0.8f,  w.rightEdge(), w.topEdge(), scale);
-    r.spriteBatcherEnd("n_texture_002", "main", "sprite", "sb_002");
+    r.updateMatrixCenteredOnPlayerForParallaxLayer(0.8f);
+    r.spriteBatcherEnd("sb_002", "n_texture_002");
     
-    r.updateMatrixCenteredOnEntityForParallaxLayer(controlledPlayer, 0.9f,  w.rightEdge(), w.topEdge(), scale);
-    r.spriteBatcherEnd("n_texture_003", "main", "sprite", "sb_003");
+    r.updateMatrixCenteredOnPlayerForParallaxLayer(0.9f);
+    r.spriteBatcherEnd("sb_003", "n_texture_003");
     
-    r.updateMatrixCenteredOnEntity(controlledPlayer, w.rightEdge(), w.topEdge(), scale);
+    r.updateMatrixCenteredOnPlayer();
     
-    r.spriteBatcherEnd("n_texture_004", "main", "sprite", "sb_004");
-    r.spriteBatcherEnd("n_texture_005", "main", "sprite", "sb_005");
+    r.spriteBatcherEnd("sb_004", "n_texture_004");
+    r.spriteBatcherEnd("sb_005", "n_texture_005");
     
     r.bindFramebuffer("player");
-    r.renderEntitiesBoundToTexture(w.getPlayers(), "texture_006", "sb_006");
+    r.renderEntitiesBoundToTexture("sb_006", "texture_006", w.getPlayers());
     
     r.bindFramebuffer("playerNormals");
-    r.spriteBatcherEnd("n_texture_006", "main", "sprite", "sb_006");
+    r.spriteBatcherEnd("sb_006", "n_texture_006");
     
     r.bindFramebuffer("inFrontOfPlayer");
-    r.renderEntitiesBoundToTexture(w.getDynamicEntities(), "texture_007", "sb_007");
-    r.renderEntitiesBoundToTexture(w.getDynamicEntities(), "texture_008", "sb_008");
-    r.renderEntitiesBoundToTexture(w.getStaticEntities(), "texture_009", "sb_009");
+    r.renderEntitiesBoundToTexture("sb_007", "texture_007", w.getDynamicEntities());
+    r.renderEntitiesBoundToTexture("sb_008", "texture_008", w.getDynamicEntities());
+    r.renderEntitiesBoundToTexture("sb_009", "texture_009", w.getStaticEntities());
     
     r.bindFramebuffer("inFrontOfPlayerNormals");
-    r.spriteBatcherEnd("n_texture_007", "main", "sprite", "sb_007");
-    r.spriteBatcherEnd("n_texture_008", "main", "sprite", "sb_008");
-    r.spriteBatcherEnd("n_texture_009", "main", "sprite", "sb_009");
+    r.spriteBatcherEnd("sb_007", "n_texture_007");
+    r.spriteBatcherEnd("sb_008", "n_texture_008");
+    r.spriteBatcherEnd("sb_009", "n_texture_009");
     
     r.bindFramebuffer("behindPlayerLights");
     r.renderLight("behindPlayer", "behindPlayerNormals", 0.15f, w.getPlayers());
@@ -71,6 +67,7 @@ void DanteRenderer::render(Renderer& r, World& w, Entity* controlledPlayer, floa
     r.renderLight("inFrontOfPlayer", "inFrontOfPlayerNormals", 0.05f, w.getPlayers());
     
     r.bindFramebuffer("main");
+    
     r.renderFramebuffer("behindPlayerLights");
     r.renderFramebuffer("playerLights");
     r.renderFramebuffer("inFrontOfPlayerLights");
