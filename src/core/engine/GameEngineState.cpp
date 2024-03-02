@@ -336,169 +336,6 @@ void GameEngineState::onUpdate(Engine* e)
         _scale = 1.0f;
     }
     
-    updateWithNetwork(e);
-}
-
-void GameEngineState::onRender(Renderer& r, double extrapolation)
-{
-    const float baseRight = r.matrix()._base._right;
-    const float baseTop = r.matrix()._base._top;
-    float rightEdge = _world->rightEdge();
-    float topEdge = _world->topEdge();
-    float maxWidthScale = rightEdge / baseRight;
-    float maxHeightScale = topEdge / baseTop;
-    float maxScale = CLAMP(GOW_MIN(maxWidthScale, maxHeightScale), 1.0f, 200.0f);
-    _scale = CLAMP(_scale, 0.125f, maxScale);
-    
-    if (ENGINE_CFG.extrapolatePhysics())
-    {
-        _world->extrapolatePhysics(extrapolation);
-    }
-    
-    // TODO, remove this code once we have scripting
-    bool isDante = strcmp(ENGINE_CFG.mode().c_str(), "dante") == 0;
-    bool isGeoDudes = strcmp(ENGINE_CFG.mode().c_str(), "geoDudes") == 0;
-    bool isNos = strcmp(ENGINE_CFG.mode().c_str(), "nosfuratu") == 0;
-    assert(isDante || isGeoDudes || isNos);
-    
-    if (isDante)
-    {
-        DanteRenderer::render(r, world(), getControlledPlayer(), _scale);
-    }
-    else if (isGeoDudes)
-    {
-        // TODO
-    }
-    else if (isNos)
-    {
-        NosRenderer::render(r, world(), getControlledPlayer(), _scale);
-    }
-    
-    renderWithNetwork(r);
-    
-    if (_inputProcessor.state() == DGIMS_DISPLAY_PHYSICS)
-    {
-        std::string physicsEngine = _config.getString("physicsEngine");
-        bool isBox2D = physicsEngine == "Box2D";
-        if (isBox2D)
-        {
-            r.renderBox2DPhysics(static_cast<Box2DPhysicsWorld*>(_world));
-        }
-        else
-        {
-            r.renderNosPhysics(static_cast<NosPhysicsWorld*>(_world));
-        }
-    }
-    
-    r.setText("fps", STRING_FORMAT("FPS %d", FPS_UTIL.fps()));
-    
-    r.renderTextViews("main", "sprite", Color::RED);
-
-    r.renderCurrentlyBoundFramebufferToScreen();
-    
-    if (ENGINE_CFG.extrapolatePhysics())
-    {
-        _world->endExtrapolatedPhysics();
-    }
-    
-    renderAudio();
-}
-
-void GameEngineState::populateFromEntityLayout(EntityLayoutDef& eld)
-{
-    EntityLayoutManagerLoader::loadEntityLayout(eld, _entityIDManager, false);
-    world().populateFromEntityLayout(eld);
-}
-
-Entity* GameEngineState::getPlayer(uint8_t playerID)
-{
-    return world().getPlayer(playerID);
-}
-
-Entity* GameEngineState::getControlledPlayer()
-{
-    return getPlayer(_inputProcessor.inputState().playerInputState(0)._playerID);
-}
-
-GameInputProcessor& GameEngineState::input()
-{
-    return _inputProcessor;
-}
-
-std::map<uint8_t, Entity::PlayerInfo>& GameEngineState::players()
-{
-    return _players;
-}
-
-World& GameEngineState::world()
-{
-    return *_world;
-}
-
-void GameEngineState::joinServer(Engine* e)
-{
-    ClientHelper* clientHelper = nullptr;
-#if IS_DESKTOP
-    if (ENGINE_CFG.useSteamNetworking())
-    {
-        CSteamID serverSteamID;
-        if (_args.hasValue(ARG_STEAM_ADDRESS))
-        {
-            uint64 ulSteamID = _args.getUInt64(ARG_STEAM_ADDRESS);
-            serverSteamID.SetFromUint64(ulSteamID);
-        }
-        else
-        {
-            serverSteamID = static_cast<SteamAddress*>(NW_SRVR->getServerAddress())->getSteamID();
-        }
-        clientHelper = new SteamClientHelper(serverSteamID,
-                                             _timeTracker,
-                                             cb_steam_getPlayerAddressHash,
-                                             NetworkClient::sProcessPacket);
-    }
-    else
-    {
-#endif
-        std::string serverIPAddress;
-        uint16_t port;
-        if (_args.hasValue(ARG_IP_ADDRESS))
-        {
-            serverIPAddress = _args.getString(ARG_IP_ADDRESS);
-            port = ENGINE_CFG.clientPortJoin();
-        }
-        else
-        {
-            serverIPAddress = "localhost";
-            port = ENGINE_CFG.clientPortHost();
-        }
-        
-        std::string serverAddress = STRING_FORMAT("%s:%d", serverIPAddress.c_str(), ENGINE_CFG.serverPort());
-        std::string playerName = _args.getString(ARG_USERNAME);
-        clientHelper = new SocketClientHelper(_timeTracker,
-                                              serverAddress,
-                                              playerName,
-                                              port,
-                                              NetworkClient::sProcessPacket);
-#if IS_DESKTOP
-    }
-#endif
-    
-    NetworkClient::create(clientHelper,
-                          _timeTracker,
-                          cb_client_onEntityRegistered,
-                          cb_client_onEntityDeregistered,
-                          cb_client_onPlayerWelcomed);
-    
-    if (NW_CLNT->connect() == false)
-    {
-        LOG("Unable to connect, exiting...");
-        e->popState();
-        return;
-    }
-}
-
-void GameEngineState::updateWithNetwork(Engine* e)
-{
 #if IS_DESKTOP
     if (STEAM_GAME_SERVICES)
     {
@@ -506,7 +343,7 @@ void GameEngineState::updateWithNetwork(Engine* e)
     }
 #endif
     
-    if (NW_SRVR && 
+    if (NW_SRVR &&
         NW_SRVR->isConnected() &&
         NW_CLNT == nullptr)
     {
@@ -660,45 +497,55 @@ void GameEngineState::updateWithNetwork(Engine* e)
     }
 }
 
-void GameEngineState::updateWorld(const Move& move)
+void GameEngineState::onRender(Renderer& r, double extrapolation)
 {
-    world().beginFrame();
-    for (Entity* e : world().getPlayers())
+    const float baseRight = r.matrix()._base._right;
+    const float baseTop = r.matrix()._base._top;
+    float rightEdge = _world->rightEdge();
+    float topEdge = _world->topEdge();
+    float maxWidthScale = rightEdge / baseRight;
+    float maxHeightScale = topEdge / baseTop;
+    float maxScale = CLAMP(GOW_MIN(maxWidthScale, maxHeightScale), 1.0f, 200.0f);
+    _scale = CLAMP(_scale, 0.125f, maxScale);
+    
+    if (ENGINE_CFG.extrapolatePhysics())
     {
-        uint16_t inputState = e->lastProcessedInputState();
-        uint8_t playerID = e->playerInfo()._playerID;
-        
-        InputState* is = move.inputState();
-        InputState::PlayerInputState* pis = is->playerInputStateForID(playerID);
-        if (pis != nullptr)
+        _world->extrapolatePhysics(extrapolation);
+    }
+    
+    // TODO, remove this code once we have scripting
+    bool isDante = strcmp(ENGINE_CFG.mode().c_str(), "dante") == 0;
+    bool isGeoDudes = strcmp(ENGINE_CFG.mode().c_str(), "geoDudes") == 0;
+    bool isNos = strcmp(ENGINE_CFG.mode().c_str(), "nosfuratu") == 0;
+    assert(isDante || isGeoDudes || isNos);
+    
+    if (isDante)
+    {
+        DanteRenderer::render(r, world(), getControlledPlayer(), _scale);
+    }
+    else if (isGeoDudes)
+    {
+        // TODO
+    }
+    else if (isNos)
+    {
+        NosRenderer::render(r, world(), getControlledPlayer(), _scale);
+    }
+    
+    if (_inputProcessor.state() == DGIMS_DISPLAY_PHYSICS)
+    {
+        std::string physicsEngine = _config.getString("physicsEngine");
+        bool isBox2D = physicsEngine == "Box2D";
+        if (isBox2D)
         {
-            inputState = pis->_inputState;
+            r.renderBox2DPhysics(static_cast<Box2DPhysicsWorld*>(_world));
         }
-        
-        e->processInput(inputState);
+        else
+        {
+            r.renderNosPhysics(static_cast<NosPhysicsWorld*>(_world));
+        }
     }
     
-    for (Entity* e : world().getDynamicEntities())
-    {
-        e->runAI();
-    }
-    
-    static float frameRate = static_cast<float>(ENGINE_CFG.frameRate());
-    world().stepPhysics(frameRate);
-    world().update();
-    // TODO, consider removing exiled entities right away
-    // But just like MtG, exiled entities can come back!
-    // Or in the case of networking, maybe the client got a calculation wrong and the Entity should be still in the world
-    // Will need to maintain a list of exiled entities in the world.
-    // Only the server can delete an entity right away, because it is the server
-    // But the client must allow an entity to sit in an exiled list
-    // Until the server says, "yes, that entity really is exiled", or
-    // no, that entity is not exiled.
-    world().storeToCache();
-}
-
-void GameEngineState::renderWithNetwork(Renderer& r)
-{
     r.setTextVisible("rtt", true);
     r.setTextVisible("rollbackFrames", true);
     r.setTextVisible("inBps", true);
@@ -779,6 +626,149 @@ void GameEngineState::renderWithNetwork(Renderer& r)
     {
         r.setText("player1Info", "1|Joining...");
     }
+    
+    r.setText("fps", STRING_FORMAT("FPS %d", FPS_UTIL.fps()));
+    
+    r.renderTextViews("main", "sprite", Color::RED);
+
+    r.renderCurrentlyBoundFramebufferToScreen();
+    
+    if (ENGINE_CFG.extrapolatePhysics())
+    {
+        _world->endExtrapolatedPhysics();
+    }
+    
+    renderAudio();
+}
+
+void GameEngineState::populateFromEntityLayout(EntityLayoutDef& eld)
+{
+    EntityLayoutManagerLoader::loadEntityLayout(eld, _entityIDManager, false);
+    world().populateFromEntityLayout(eld);
+}
+
+Entity* GameEngineState::getPlayer(uint8_t playerID)
+{
+    return world().getPlayer(playerID);
+}
+
+Entity* GameEngineState::getControlledPlayer()
+{
+    return getPlayer(_inputProcessor.inputState().playerInputState(0)._playerID);
+}
+
+GameInputProcessor& GameEngineState::input()
+{
+    return _inputProcessor;
+}
+
+std::map<uint8_t, Entity::PlayerInfo>& GameEngineState::players()
+{
+    return _players;
+}
+
+World& GameEngineState::world()
+{
+    return *_world;
+}
+
+void GameEngineState::joinServer(Engine* e)
+{
+    ClientHelper* clientHelper = nullptr;
+#if IS_DESKTOP
+    if (ENGINE_CFG.useSteamNetworking())
+    {
+        CSteamID serverSteamID;
+        if (_args.hasValue(ARG_STEAM_ADDRESS))
+        {
+            uint64 ulSteamID = _args.getUInt64(ARG_STEAM_ADDRESS);
+            serverSteamID.SetFromUint64(ulSteamID);
+        }
+        else
+        {
+            serverSteamID = static_cast<SteamAddress*>(NW_SRVR->getServerAddress())->getSteamID();
+        }
+        clientHelper = new SteamClientHelper(serverSteamID,
+                                             _timeTracker,
+                                             cb_steam_getPlayerAddressHash,
+                                             NetworkClient::sProcessPacket);
+    }
+    else
+    {
+#endif
+        std::string serverIPAddress;
+        uint16_t port;
+        if (_args.hasValue(ARG_IP_ADDRESS))
+        {
+            serverIPAddress = _args.getString(ARG_IP_ADDRESS);
+            port = ENGINE_CFG.clientPortJoin();
+        }
+        else
+        {
+            serverIPAddress = "localhost";
+            port = ENGINE_CFG.clientPortHost();
+        }
+        
+        std::string serverAddress = STRING_FORMAT("%s:%d", serverIPAddress.c_str(), ENGINE_CFG.serverPort());
+        std::string playerName = _args.getString(ARG_USERNAME);
+        clientHelper = new SocketClientHelper(_timeTracker,
+                                              serverAddress,
+                                              playerName,
+                                              port,
+                                              NetworkClient::sProcessPacket);
+#if IS_DESKTOP
+    }
+#endif
+    
+    NetworkClient::create(clientHelper,
+                          _timeTracker,
+                          cb_client_onEntityRegistered,
+                          cb_client_onEntityDeregistered,
+                          cb_client_onPlayerWelcomed);
+    
+    if (NW_CLNT->connect() == false)
+    {
+        LOG("Unable to connect, exiting...");
+        e->popState();
+        return;
+    }
+}
+
+void GameEngineState::updateWorld(const Move& move)
+{
+    world().beginFrame();
+    for (Entity* e : world().getPlayers())
+    {
+        uint16_t inputState = e->lastProcessedInputState();
+        uint8_t playerID = e->playerInfo()._playerID;
+        
+        InputState* is = move.inputState();
+        InputState::PlayerInputState* pis = is->playerInputStateForID(playerID);
+        if (pis != nullptr)
+        {
+            inputState = pis->_inputState;
+        }
+        
+        e->processInput(inputState);
+    }
+    
+    for (Entity* e : world().getDynamicEntities())
+    {
+        e->runAI();
+    }
+    
+    static float frameRate = static_cast<float>(ENGINE_CFG.frameRate());
+    world().stepPhysics(frameRate);
+    world().update();
+    // TODO, consider removing exiled entities right away
+    // But just like MtG, exiled entities can come back!
+    // Or in the case of networking, maybe the client got a calculation wrong and the Entity should be still in the world
+    // Will need to maintain a list of exiled entities in the world.
+    // Only the server can delete an entity right away, because it is the server
+    // But the client must allow an entity to sit in an exiled list
+    // Until the server says, "yes, that entity really is exiled", or
+    // no, that entity is not exiled.
+    world().storeToCache();
 }
 
 void GameEngineState::renderAudio()

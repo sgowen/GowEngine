@@ -97,17 +97,11 @@ private:
     SoundFrameState _soundFrameStates[360];
     
     void joinServer(Engine* e);
-    
-    void updateWithNetwork(Engine* e);
     void updateWorld(const Move& move);
-    
-    void renderWithNetwork(Renderer& r);
     
     void renderAudio();
     SoundFrameState& soundFrameStateAtMoveIndex(uint32_t moveIndex);
     void playSoundForEntityIfNecessary(Entity& e, uint32_t moveIndex);
-    
-    void spawnPlayerAndResetWorld();
     
     GameEngineState();
     virtual ~GameEngineState() {}
