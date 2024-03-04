@@ -67,7 +67,7 @@ public:
     virtual void onUpdate(Engine* e);
     virtual void onRender(Renderer& r, double extrapolation);
     
-    void populateFromEntityLayout(EntityLayoutDef& eld);
+    void populateFromEntityLayout(EntityLayout& eld);
     Entity* getPlayer(uint8_t playerID);
     Entity* getControlledPlayer();
     GameInputProcessor& input();

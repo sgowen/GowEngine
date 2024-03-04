@@ -284,6 +284,9 @@ void GameEngineState::onAssetsLoaded(Engine* e)
     std::string filePathEntityManager = _config.getString("filePathEntityManager");
     EntityManagerLoader::initWithJSONFile(ENTITY_MGR, filePathEntityManager);
     
+    std::string filePathEntityInputMappingManager = _config.getString("filePathEntityInputMappingManager");
+    EntityInputMappingManagerLoader::initWithJSONFile(ENTITY_INPUT_MAPPING_MGR, filePathEntityInputMappingManager);
+    
     std::string filePathEntityLayoutManager = _config.getString("filePathEntityLayoutManager");
     EntityLayoutManagerLoader::initWithJSONFile(ENTITY_LAYOUT_MGR, filePathEntityLayoutManager);
     
@@ -380,7 +383,7 @@ void GameEngineState::onUpdate(Engine* e)
         if (e != nullptr)
         {
             uint32_t entityLayoutKey = e->networkDataField("entityLayoutKey").valueUInt32();
-            EntityLayoutDef& eld = ENTITY_LAYOUT_MGR.entityLayoutDef(entityLayoutKey);
+            EntityLayout& eld = ENTITY_LAYOUT_MGR.entityLayout(entityLayoutKey);
             populateFromEntityLayout(eld);
         }
     }
@@ -515,7 +518,8 @@ void GameEngineState::onRender(Renderer& r, double extrapolation)
     assert(isDante || isGeoDudes || isNos);
     if (isDante)
     {
-        DanteRenderer::render(r, world());
+        _luaRenderer.render(r, world(), "bindFramebuffer() clearFramebuffer()");
+//        DanteRenderer::render(r, world());
     }
     else if (isGeoDudes)
     {
@@ -552,7 +556,7 @@ void GameEngineState::onRender(Renderer& r, double extrapolation)
     renderAudio();
 }
 
-void GameEngineState::populateFromEntityLayout(EntityLayoutDef& eld)
+void GameEngineState::populateFromEntityLayout(EntityLayout& eld)
 {
     EntityLayoutManagerLoader::loadEntityLayout(eld, _entityIDManager, false);
     world().populateFromEntityLayout(eld);

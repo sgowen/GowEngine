@@ -9,6 +9,7 @@
 #pragma once
 
 #include "Font.hpp"
+#include "ScriptDescriptor.hpp"
 #include "ShaderDescriptor.hpp"
 #include "SoundDescriptor.hpp"
 #include "TextureDescriptor.hpp"
@@ -18,6 +19,7 @@
 struct Assets
 {
     std::vector<Font> _fonts;
+    std::vector<ScriptDescriptor> _scriptDescriptors;
     std::vector<ShaderDescriptor> _shaderDescriptors;
     std::vector<SoundDescriptor> _soundDescriptors;
     std::vector<TextureDescriptor> _textureDescriptors;
@@ -32,6 +34,7 @@ struct Assets
     void reset()
     {
         _fonts.clear();
+        _scriptDescriptors.clear();
         _shaderDescriptors.clear();
         _soundDescriptors.clear();
         _textureDescriptors.clear();

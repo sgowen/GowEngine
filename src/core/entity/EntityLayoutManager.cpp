@@ -8,7 +8,7 @@
 
 #include <GowEngine/GowEngine.hpp>
 
-EntityLayoutDef& EntityLayoutManager::entityLayoutDef(uint32_t key)
+EntityLayout& EntityLayoutManager::entityLayout(uint32_t key)
 {
     auto q = _entityLayouts.find(key);
     assert(q != _entityLayouts.end());
@@ -19,9 +19,4 @@ EntityLayoutDef& EntityLayoutManager::entityLayoutDef(uint32_t key)
 uint32_t EntityLayoutManager::getFirstLayout()
 {
     return _entityLayouts.begin()->first;
-}
-
-EntityLayoutManager::EntityLayoutManager()
-{
-    // Empty
 }

@@ -31,3 +31,9 @@
 [submodule "deps/file-compat"]
 	path = deps/file-compat
 	url = git@github.com:brackeen/file-compat.git
+[submodule "deps/Lua"]
+	path = deps/Lua
+	url = git@github.com:walterschell/Lua.git
+[submodule "deps/sol2"]
+	path = deps/sol2
+	url = git@github.com:ThePhD/sol2.git

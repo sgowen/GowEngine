@@ -1,0 +1,88 @@
+{
+  "gamepadEvents": {
+      "A": [
+          {
+              "inputStateFlag": "EXECUTING_ATTACK",
+              "condition": "pressed"
+          }
+      ],
+      "B": [
+          {
+              "inputStateFlag": "JUMPING",
+              "condition": "pressed"
+          }
+      ],
+      "D_PAD_LEFT": [
+          {
+              "inputStateFlag": "MOVING_LEFT",
+              "condition": "pressed"
+          }
+      ],
+      "D_PAD_RIGHT": [
+          {
+              "inputStateFlag": "MOVING_RIGHT",
+              "condition": "pressed"
+          }
+      ],
+      "GPEB_STICK_LEFT": [
+          {
+              "inputStateFlag": "MOVING_LEFT",
+              "condition": "negativeX"
+          },
+          {
+              "inputStateFlag": "MOVING_RIGHT",
+              "condition": "positiveX"
+          }
+      ]
+  },
+  "keyboardEvents": {
+      "J": [
+          {
+              "inputStateFlag": "JUMPING",
+              "condition": "pressed"
+          }
+      ],
+      "K": [
+          {
+              "inputStateFlag": "EXECUTING_ATTACK",
+              "condition": "pressed"
+          }
+      ],
+      "A": [
+          {
+              "inputStateFlag": "MOVING_LEFT",
+              "condition": "pressed"
+          }
+      ],
+      "D": [
+          {
+              "inputStateFlag": "MOVING_RIGHT",
+              "condition": "pressed"
+          }
+      ],
+      "ARROW_UP": [
+          {
+              "inputStateFlag": "JUMPING",
+              "condition": "pressed"
+          }
+      ],
+      "ARROW_LEFT": [
+          {
+              "inputStateFlag": "MOVING_LEFT",
+              "condition": "pressed"
+          }
+      ],
+      "ARROW_RIGHT": [
+          {
+              "inputStateFlag": "MOVING_RIGHT",
+              "condition": "pressed"
+          }
+      ],
+      "ARROW_DOWN": [
+          {
+              "inputStateFlag": "EXECUTING_ATTACK",
+              "condition": "pressed"
+          }
+      ]
+  }
+}

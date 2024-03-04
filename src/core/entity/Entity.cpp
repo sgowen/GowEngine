@@ -12,6 +12,7 @@ Entity::Entity(EntityDef ed, EntityInstanceDef eid) :
 _entityDef(ed),
 _entityInstanceDef(eid),
 _controller(nullptr),
+_aiController(nullptr),
 _inputController(nullptr),
 _networkController(nullptr),
 _physicsController(nullptr),
@@ -26,6 +27,7 @@ _angle(0),
 _world(nullptr)
 {
     _controller = ENTITY_MGR.createEntityController(ed, this);
+    _aiController = ENTITY_MGR.createEntityAIController(ed, this);
     _inputController = ENTITY_MGR.createEntityInputController(ed, this);
     _networkController = ENTITY_MGR.createEntityNetworkController(ed, this);
     _renderController = ENTITY_MGR.createEntityRenderController(ed, this);
@@ -55,6 +57,22 @@ void Entity::beginFrame()
     {
         ++_state._stateTime;
     }
+}
+
+void Entity::runAI()
+{
+    if (isExiled())
+    {
+        return;
+    }
+    
+    EntityAIController* eic = aiController();
+    assert(eic != nullptr);
+    
+    uint16_t inputState = 0;
+    eic->runAI(inputState);
+    
+    processInput(inputState);
 }
 
 void Entity::processEvent(uint16_t& inputState, CursorEvent* e)
@@ -94,22 +112,6 @@ void Entity::processEvent(uint16_t& inputState, KeyboardEvent* e)
     assert(eic != nullptr);
     
     eic->processEvent(inputState, e);
-}
-
-void Entity::runAI()
-{
-    if (isExiled())
-    {
-        return;
-    }
-    
-    EntityInputController* eic = inputController();
-    assert(eic != nullptr);
-    
-    uint16_t inputState = 0;
-    eic->runAI(inputState);
-    
-    processInput(inputState);
 }
 
 void Entity::processInput(uint16_t inputState)
@@ -160,6 +162,45 @@ void Entity::message(uint16_t message, Entity* fromEntity)
 EntityDef& Entity::entityDef()
 {
     return _entityDef;
+}
+
+uint16_t Entity::inputStateFlag(std::string key)
+{
+    auto it = std::find(_entityDef._inputStateFlags.begin(), _entityDef._inputStateFlags.end(), key);
+    assert(it != _entityDef._inputStateFlags.end());
+
+    uint16_t index = std::distance(_entityDef._inputStateFlags.begin(), it);
+    uint16_t ret = 1 << index;
+    
+    return ret;
+}
+
+uint8_t Entity::state(std::string key)
+{
+    auto it = std::find(_entityDef._states.begin(), _entityDef._states.end(), key);
+    assert(it != _entityDef._states.end());
+
+    uint8_t ret = std::distance(_entityDef._states.begin(), it);
+    
+    return ret;
+}
+
+std::string Entity::state(uint8_t state)
+{
+    assert(state < _entityDef._states.size());
+    
+    return _entityDef._states[state];
+}
+
+uint8_t Entity::stateFlag(std::string key)
+{
+    auto it = std::find(_entityDef._stateFlags.begin(), _entityDef._stateFlags.end(), key);
+    assert(it != _entityDef._stateFlags.end());
+
+    uint16_t index = std::distance(_entityDef._stateFlags.begin(), it);
+    uint16_t ret = 1 << index;
+    
+    return ret;
 }
 
 Config& Entity::data()

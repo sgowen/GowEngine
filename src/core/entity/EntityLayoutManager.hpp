@@ -31,7 +31,7 @@ struct EntityInstanceDef
     }
 };
 
-struct EntityLayoutDef
+struct EntityLayout
 {
     uint32_t _key;
     std::string _name;
@@ -39,7 +39,7 @@ struct EntityLayoutDef
     std::vector<EntityInstanceDef> _entities;
     std::vector<EntityInstanceDef> _entitiesNetwork;
     
-    EntityLayoutDef(uint32_t key = 0, std::string name = "", std::string filePath = "") :
+    EntityLayout(uint32_t key = 0, std::string name = "", std::string filePath = "") :
     _key(key),
     _name(name),
     _filePath(filePath)
@@ -59,13 +59,13 @@ public:
         return ret;
     }
     
-    EntityLayoutDef& entityLayoutDef(uint32_t key);
+    EntityLayout& entityLayout(uint32_t key);
     uint32_t getFirstLayout();
     
 private:
-    std::map<uint32_t, EntityLayoutDef> _entityLayouts;
+    std::map<uint32_t, EntityLayout> _entityLayouts;
     
-    EntityLayoutManager();
+    EntityLayoutManager() {}
     ~EntityLayoutManager() {}
     EntityLayoutManager(const EntityLayoutManager&);
     EntityLayoutManager& operator=(const EntityLayoutManager&);

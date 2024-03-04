@@ -24,16 +24,6 @@ public:
     virtual void onMessage(uint16_t message, Entity* fromEntity) override;
     
 private:
-    enum State
-    {
-        STATE_IDLE = 0,
-        STATE_RUNNING = 1,
-        STATE_JUMPING = 2,
-        STATE_PUNCH_1 = 3,
-        STATE_PUNCH_2 = 4,
-        STATE_PUNCH_3 = 5
-    };
-    
     void processMovementInput(uint16_t inputState);
     void processJumpInput(uint16_t inputState);
     void processAttackInput(uint16_t inputState);

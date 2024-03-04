@@ -17,22 +17,116 @@ _entity(e)
     // Empty
 }
 
-void EntityInputController::processEvent(uint16_t& inputState, CursorEvent* gpe)
+void EntityInputController::processEvent(uint16_t& inputState, CursorEvent* ce)
 {
-    // Empty
+    // TODO, this code is temporary, and should be moved to JSON
+    Entity& e = *_entity;
+    Matrix* m = INPUT_MGR.matrix();
+    float halfWidth = m->_desc.width() / 2;
+    float halfHeight = m->_desc.height() / 2;
+    
+    Vector2& pos = INPUT_MGR.convert(ce);
+    
+    SET_BIT(inputState, e.inputStateFlag("MOVING_LEFT"), ce->isPressed() && pos._x < halfWidth);
+    SET_BIT(inputState, e.inputStateFlag("MOVING_RIGHT"), ce->isPressed() && pos._x > halfWidth);
+    
+    SET_BIT(inputState, e.inputStateFlag("JUMPING"), ce->isPressed() && pos._y > halfHeight);
+}
+
+bool isConditionSatisfied(GamepadEvent* gpe, std::string condition)
+{
+    if (condition == "pressed")
+    {
+        return gpe->isPressed();
+    }
+    else if (condition == "down")
+    {
+        return gpe->isDown();
+    }
+    else if (condition == "held")
+    {
+        return gpe->isHeld();
+    }
+    else if (condition == "up")
+    {
+        return gpe->isUp();
+    }
+    else if (condition == "negativeX")
+    {
+        return gpe->_x < 0;
+    }
+    else if (condition == "positiveX")
+    {
+        return gpe->_x > 0;
+    }
+    
+    return false;
 }
 
 void EntityInputController::processEvent(uint16_t& inputState, GamepadEvent* gpe)
 {
-    // Empty
+    Entity& e = *_entity;
+    
+    EntityInputMapping& eim = ENTITY_INPUT_MAPPING_MGR.entityInputMapping(e._entityDef._inputMapping);
+    
+    std::string buttonMapping = INPUT_MGR.mappingForButton(gpe->_button);
+    
+    auto q = eim._gamepadEvents.find(buttonMapping);
+    if (q == eim._gamepadEvents.end())
+    {
+        return;
+    }
+    
+    std::vector<EntityInputMappingInstance>& entityInputMappingInstances = q->second;
+    
+    for (EntityInputMappingInstance& eimi : entityInputMappingInstances)
+    {
+        bool isBitOn = isConditionSatisfied(gpe, eimi._condition);
+        SET_BIT(inputState, e.inputStateFlag(eimi._inputStateFlag), isBitOn);
+    }
 }
 
-void EntityInputController::processEvent(uint16_t& inputState, KeyboardEvent* gpe)
+bool isConditionSatisfied(KeyboardEvent* kbe, std::string condition)
 {
-    // Empty
+    if (condition == "pressed")
+    {
+        return kbe->isPressed();
+    }
+    else if (condition == "down")
+    {
+        return kbe->isDown();
+    }
+    else if (condition == "held")
+    {
+        return kbe->isHeld();
+    }
+    else if (condition == "up")
+    {
+        return kbe->isUp();
+    }
+    
+    return false;
 }
 
-void EntityInputController::runAI(uint16_t& inputState)
+void EntityInputController::processEvent(uint16_t& inputState, KeyboardEvent* kbe)
 {
-    // Empty
+    Entity& e = *_entity;
+    
+    EntityInputMapping& eim = ENTITY_INPUT_MAPPING_MGR.entityInputMapping(e._entityDef._inputMapping);
+    
+    std::string keyMapping = INPUT_MGR.mappingForKey(kbe->_key);
+    
+    auto q = eim._keyboardEvents.find(keyMapping);
+    if (q == eim._keyboardEvents.end())
+    {
+        return;
+    }
+    
+    std::vector<EntityInputMappingInstance>& entityInputMappingInstances = q->second;
+    
+    for (EntityInputMappingInstance& eimi : entityInputMappingInstances)
+    {
+        bool isBitOn = isConditionSatisfied(kbe, eimi._condition);
+        SET_BIT(inputState, e.inputStateFlag(eimi._inputStateFlag), isBitOn);
+    }
 }

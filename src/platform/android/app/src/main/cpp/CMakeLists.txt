@@ -5,7 +5,7 @@ cmake_minimum_required(VERSION 3.22.1)
 
 project("gowengine")
 
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -std=c++11 -fno-rtti -fno-unwind-tables")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -std=c++17 -fno-rtti -fno-unwind-tables")
 set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -O2")
 set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -O3")
 
@@ -14,7 +14,9 @@ set(engine_source_dir ${CMAKE_CURRENT_SOURCE_DIR}/../../../../../..)
 file(GLOB ENGINE_CPP_FILES "${engine_source_dir}/*/*/*.cpp")
 
 include_directories(${engine_source_dir}/../deps/file-compat)
+include_directories(${engine_source_dir}/../deps/Lua/lua-5.4.6/include)
 include_directories(${engine_source_dir}/../deps/rapidjson/include)
+include_directories(${engine_source_dir}/../src/deps/sol2/include)
 include_directories(${engine_source_dir}/../deps/stb)
 include_directories(${engine_source_dir})
 include_directories(${engine_source_dir}/../include)
@@ -40,6 +42,14 @@ option(BUILD_SHARED_LIBS "Build shared libraries" OFF)
 add_subdirectory(${glfm_DIR} ./glfm-bin)
 include_directories(${glfm_DIR}/include)
 
+# lua
+set(lua_DIR ${engine_source_dir}/../deps/Lua)
+option(LUA_BUILD_AS_CXX "Build lua as C++" ON)
+option(LUA_ENABLE_SHARED "Build dynamic liblua" OFF)
+option(LUA_ENABLE_TESTING "Build and run tests" OFF)
+add_subdirectory(${lua_DIR} ./lua-bin)
+include_directories(${lua_DIR}/lua-5.4.6/include)
+
 # libsndfile
 set(libsndfile_DIR ${engine_source_dir}/../deps/libsndfile)
 option(BUILD_SHARED_LIBS "Build shared libraries" ON)
@@ -60,6 +70,7 @@ target_link_libraries(gowengine
         log
         box2d
         glfm
+        lua_static
         sndfile
         OpenSLES
         OpenAL)

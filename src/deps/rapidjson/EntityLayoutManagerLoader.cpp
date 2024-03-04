@@ -40,11 +40,11 @@ void EntityLayoutManagerLoader::initWithJSON(EntityLayoutManager& elm, const cha
         
         std::string filePath = iv.GetString();
         
-        elm._entityLayouts.emplace(key, EntityLayoutDef{key, name, filePath});
+        elm._entityLayouts.emplace(key, EntityLayout{key, name, filePath});
     }
 }
 
-void EntityLayoutManagerLoader::loadEntityLayout(EntityLayoutDef& eld, EntityIDManager& eidm, bool isServer)
+void EntityLayoutManagerLoader::loadEntityLayout(EntityLayout& eld, EntityIDManager& eidm, bool isServer)
 {
     eidm.resetNextLayoutEntityID();
     
@@ -97,7 +97,7 @@ void EntityLayoutManagerLoader::loadEntityLayout(EntityLayoutDef& eld, EntityIDM
     ASSET_HANDLER.unloadAsset(fd);
 }
 
-void EntityLayoutManagerLoader::saveEntityLayout(EntityLayoutDef& eld)
+void EntityLayoutManagerLoader::saveEntityLayout(EntityLayout& eld)
 {
     std::string resFilePath = RES_FILE_PATH(eld._filePath);
     

@@ -23,7 +23,7 @@ public:
     virtual void extrapolatePhysics(float extrapolation) = 0;
     virtual void endExtrapolatedPhysics() = 0;
     
-    void populateFromEntityLayout(EntityLayoutDef& eld);
+    void populateFromEntityLayout(EntityLayout& eld);
     void addNetworkEntity(Entity* e);
     void removeNetworkEntity(Entity* e);
     void removeAllNetworkEntities();
@@ -37,7 +37,7 @@ public:
     uint32_t topEdge();
     
     bool isEntityLayoutLoaded();
-    EntityLayoutDef& getEntityLayout();
+    EntityLayout& getEntityLayout();
     std::vector<Entity*>& getLayers();
     std::vector<Entity*>& getStaticEntities();
     std::vector<Entity*>& getDynamicEntities();
@@ -50,7 +50,7 @@ public:
     Entity* getEntityByID(uint32_t id) const;
     
 protected:
-    EntityLayoutDef _entityLayout;
+    EntityLayout _entityLayout;
     std::vector<Entity*> _layers;
     std::vector<Entity*> _staticEntities;
     std::vector<Entity*> _networkEntities;

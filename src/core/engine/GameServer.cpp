@@ -15,7 +15,7 @@ void cb_game_server_onEntityRegistered(Entity* e)
     if (e->isPlayer() && e->playerInfo()._playerID == 1)
     {
         uint32_t entityLayoutKey = e->networkDataField("entityLayoutKey").valueUInt32();
-        EntityLayoutDef& eld = ENTITY_LAYOUT_MGR.entityLayoutDef(entityLayoutKey);
+        EntityLayout& eld = ENTITY_LAYOUT_MGR.entityLayout(entityLayoutKey);
         GAME_SERVER->populateFromEntityLayout(eld);
     }
 }
@@ -111,7 +111,7 @@ void GameServer::handleLostClient(ClientProxy& cp, uint8_t localPlayerIndex)
     }
 }
 
-void GameServer::populateFromEntityLayout(EntityLayoutDef& eld)
+void GameServer::populateFromEntityLayout(EntityLayout& eld)
 {
     EntityLayoutManagerLoader::loadEntityLayout(eld, _entityIDManager, true);
     

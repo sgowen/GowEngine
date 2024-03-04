@@ -24,10 +24,9 @@ public:
     EntityInputController(Entity* e);
     virtual ~EntityInputController() {}
     
-    virtual void processEvent(uint16_t& inputState, CursorEvent* e);
-    virtual void processEvent(uint16_t& inputState, GamepadEvent* e);
-    virtual void processEvent(uint16_t& inputState, KeyboardEvent* e);
-    virtual void runAI(uint16_t& inputState);
+    virtual void processEvent(uint16_t& inputState, CursorEvent* ce);
+    virtual void processEvent(uint16_t& inputState, GamepadEvent* gpe);
+    virtual void processEvent(uint16_t& inputState, KeyboardEvent* kbe);
     
 protected:
     Entity* _entity;

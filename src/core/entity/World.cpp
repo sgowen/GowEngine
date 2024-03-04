@@ -25,7 +25,7 @@ World::~World()
     removeAllNetworkEntities();
 }
 
-void World::populateFromEntityLayout(EntityLayoutDef& eld)
+void World::populateFromEntityLayout(EntityLayout& eld)
 {
     reset();
     
@@ -175,7 +175,7 @@ std::vector<Entity*> World::update()
 
 void World::reset()
 {
-    _entityLayout = EntityLayoutDef();
+    _entityLayout = EntityLayout();
     _rightEdge = 0;
     _topEdge = 0;
     
@@ -198,7 +198,7 @@ bool World::isEntityLayoutLoaded()
     return _entityLayout._key > 0;
 }
 
-EntityLayoutDef& World::getEntityLayout()
+EntityLayout& World::getEntityLayout()
 {
     return _entityLayout;
 }

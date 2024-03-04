@@ -40,10 +40,14 @@
 /// deps/rapidjson implementation
 #include "deps/rapidjson/AssetsLoader.hpp"
 #include "deps/rapidjson/ConfigLoader.hpp"
+#include "deps/rapidjson/EntityInputMappingManagerLoader.hpp"
 #include "deps/rapidjson/EntityLayoutManagerLoader.hpp"
 #include "deps/rapidjson/EntityManagerLoader.hpp"
 #include "deps/rapidjson/RapidJSONUtil.hpp"
 #include "deps/rapidjson/RendererLoader.hpp"
+
+/// deps/sol2 implementation
+#include "deps/sol2/LuaRenderer.hpp"
 
 /// deps/stb implementation
 #include "deps/stb/TextureLoader.hpp"
@@ -70,6 +74,8 @@
 #include "core/assets/Font.hpp"
 #include "core/assets/ImageView.hpp"
 #include "core/assets/MatrixDescriptor.hpp"
+#include "core/assets/Script.hpp"
+#include "core/assets/ScriptDescriptor.hpp"
 #include "core/assets/ShaderDescriptor.hpp"
 #include "core/assets/ShaderLoader.hpp"
 #include "core/assets/SoundDescriptor.hpp"
@@ -110,21 +116,21 @@
 #include "core/entity/Entity.hpp"
 #include "core/entity/EntityController.hpp"
 #include "core/entity/EntityIDManager.hpp"
+#include "core/entity/EntityAIController.hpp"
 #include "core/entity/EntityInputController.hpp"
+#include "core/entity/EntityInputMappingManager.hpp"
 #include "core/entity/EntityLayoutManager.hpp"
 #include "core/entity/EntityManager.hpp"
 #include "core/entity/EntityNetworkController.hpp"
 #include "core/entity/EntityPhysicsController.hpp"
 #include "core/entity/EntityRegistry.hpp"
 #include "core/entity/EntityRenderController.hpp"
+#include "core/entity/World.hpp"
 // TODO, remove with scripting
 #include "core/entity/JonController.hpp"
 #include "core/entity/MonsterController.hpp"
 #include "core/entity/RobotController.hpp"
-#include "core/entity/JonInputController.hpp"
-#include "core/entity/MonsterInputController.hpp"
-#include "core/entity/RobotInputController.hpp"
-#include "core/entity/World.hpp"
+#include "core/entity/MonsterAIController.hpp"
 
 /// core/input
 #include "core/input/ClipboardHandler.hpp"

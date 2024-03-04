@@ -57,24 +57,20 @@ void DefaultEngineState::execute(Engine* e)
         {
             needsToRenderModePicker = true;
         }
-        else
-        {
-            // Transition to the title screen defined by the end user
-            e->overwriteState(&ENGINE_STATE_TITLE);
-        }
     }
 }
 
 void DefaultEngineState::update(Engine* e)
 {
-    if (!needsToRenderModePicker)
+    ASSETS_MGR.update();
+    if (!ASSETS_MGR.isLoaded())
     {
         return;
     }
     
-    ASSETS_MGR.update();
-    if (!ASSETS_MGR.isLoaded())
+    if (!needsToRenderModePicker)
     {
+        e->overwriteState(&ENGINE_STATE_TITLE);
         return;
     }
     

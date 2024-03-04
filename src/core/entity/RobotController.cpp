@@ -46,9 +46,9 @@ void RobotController::onUpdate(uint32_t numMovesProcessed)
     Animation* animation = ASSETS_MGR.animation(textureMapping);
     uint16_t animationNumFrames = animation == nullptr ? 1 : animation->cycleTime();
     
-    if ((state == STATE_PUNCH_1 && stateTime == 6) ||
-        (state == STATE_PUNCH_2 && stateTime == 6) ||
-        (state == STATE_PUNCH_3 && stateTime == 6))
+    if ((state == e.state("PUNCH_1") && stateTime == 6) ||
+        (state == e.state("PUNCH_2") && stateTime == 6) ||
+        (state == e.state("PUNCH_3") && stateTime == 6))
     {
         uint32_t touchingEntityID = e.networkDataField("touchingEntityID").valueUInt32();
         Entity* touchingEntity = e.world()->getEntityByID(touchingEntityID);
@@ -56,7 +56,7 @@ void RobotController::onUpdate(uint32_t numMovesProcessed)
         {
             touchingEntity->message(MSG_DAMAGE, &e);
             
-            if (state == STATE_PUNCH_3)
+            if (state == e.state("PUNCH_3"))
             {
                 touchingEntity->message(MSG_DAMAGE, &e);
                 touchingEntity->message(MSG_DAMAGE, &e);
@@ -98,10 +98,10 @@ void RobotController::processMovementInput(uint16_t inputState)
 {
     Entity& e = *_entity;
     
-    bool isInputLeft = IS_BIT_SET(inputState, RISF_MOVING_LEFT);
-    bool wasInputLeft = IS_BIT_SET(e.lastProcessedInputState(), RISF_MOVING_LEFT);
-    bool isInputRight = IS_BIT_SET(inputState, RISF_MOVING_RIGHT);
-    bool wasInputRight = IS_BIT_SET(e.lastProcessedInputState(), RISF_MOVING_RIGHT);
+    bool isInputLeft = IS_BIT_SET(inputState, e.inputStateFlag("MOVING_LEFT"));
+    bool wasInputLeft = IS_BIT_SET(e.lastProcessedInputState(), e.inputStateFlag("MOVING_LEFT"));
+    bool isInputRight = IS_BIT_SET(inputState, e.inputStateFlag("MOVING_RIGHT"));
+    bool wasInputRight = IS_BIT_SET(e.lastProcessedInputState(), e.inputStateFlag("MOVING_RIGHT"));
     
     static float speedX = e.data().getFloat("speedX");
     
@@ -114,7 +114,7 @@ void RobotController::processMovementInput(uint16_t inputState)
     {
         if (needsStateChangeForMovement())
         {
-            state = STATE_RUNNING;
+            state = e.state("RUNNING");
             stateTime = 0;
         }
         vel._x = -speedX;
@@ -124,7 +124,7 @@ void RobotController::processMovementInput(uint16_t inputState)
     {
         if (needsStateChangeForMovement())
         {
-            state = STATE_RUNNING;
+            state = e.state("RUNNING");
             stateTime = 0;
         }
         vel._x = speedX;
@@ -134,7 +134,7 @@ void RobotController::processMovementInput(uint16_t inputState)
     {
         if (isGrounded)
         {
-            state = STATE_IDLE;
+            state = e.state("IDLE");
             stateTime = 0;
         }
         vel._x = 0;
@@ -145,8 +145,8 @@ void RobotController::processJumpInput(uint16_t inputState)
 {
     Entity& e = *_entity;
     
-    bool isInputJump = IS_BIT_SET(inputState, RISF_JUMPING);
-    bool wasInputJump = IS_BIT_SET(e.lastProcessedInputState(), RISF_JUMPING);
+    bool isInputJump = IS_BIT_SET(inputState, e.inputStateFlag("JUMPING"));
+    bool wasInputJump = IS_BIT_SET(e.lastProcessedInputState(), e.inputStateFlag("JUMPING"));
     
     static uint32_t numJumpFrames = e.data().getUInt("numJumpFrames");
     static float speedY = e.data().getFloat("speedY");
@@ -157,7 +157,7 @@ void RobotController::processJumpInput(uint16_t inputState)
     Vector2& vel = e.velocity();
     bool isGrounded = e.isGrounded();
     
-    if (state == STATE_JUMPING)
+    if (state == e.state("JUMPING"))
     {
         if (isInputJump)
         {
@@ -172,7 +172,7 @@ void RobotController::processJumpInput(uint16_t inputState)
         if (isInputJump &&
             !wasInputJump)
         {
-            state = STATE_JUMPING;
+            state = e.state("JUMPING");
             stateTime = 0;
             vel._y = speedY;
         }
@@ -183,8 +183,8 @@ void RobotController::processAttackInput(uint16_t inputState)
 {
     Entity& e = *_entity;
     
-    bool isInputAttack = IS_BIT_SET(inputState, RISF_EXECUTING_ATTACK);
-    bool wasInputAttack = IS_BIT_SET(e.lastProcessedInputState(), RISF_EXECUTING_ATTACK);
+    bool isInputAttack = IS_BIT_SET(inputState, e.inputStateFlag("EXECUTING_ATTACK"));
+    bool wasInputAttack = IS_BIT_SET(e.lastProcessedInputState(), e.inputStateFlag("EXECUTING_ATTACK"));
     
     uint8_t& state = e.state()._state;
     uint16_t& stateTime = e.state()._stateTime;
@@ -198,19 +198,19 @@ void RobotController::processAttackInput(uint16_t inputState)
         // at least, not right away.
         // This stateTime checker code just prevents
         // rapid tapping from creating rapid jitter
-        if (state == STATE_PUNCH_2 && stateTime >= 12)
+        if (state == e.state("PUNCH_2") && stateTime >= 12)
         {
-            state = STATE_PUNCH_3;
+            state = e.state("PUNCH_3");
             stateTime = 0;
         }
-        else if (state == STATE_PUNCH_1 && stateTime >= 12)
+        else if (state == e.state("PUNCH_1") && stateTime >= 12)
         {
-            state = STATE_PUNCH_2;
+            state = e.state("PUNCH_2");
             stateTime = 0;
         }
-        else if (state != STATE_PUNCH_1)
+        else if (state != e.state("PUNCH_1"))
         {
-            state = STATE_PUNCH_1;
+            state = e.state("PUNCH_1");
             stateTime = 0;
         }
     }
@@ -219,52 +219,52 @@ void RobotController::processAttackInput(uint16_t inputState)
 bool RobotController::isMovementInputAllowed()
 {
     Entity& e = *_entity;
-    uint8_t& state = e.state()._state;
+    std::string state = e.state(e.state()._state);
     
-    return state == STATE_IDLE ||
-    state == STATE_RUNNING ||
-    state == STATE_JUMPING;
+    return state == "IDLE" ||
+    state == "RUNNING" ||
+    state == "JUMPING";
 }
 
 bool RobotController::isJumpInputAllowed()
 {
     Entity& e = *_entity;
-    uint8_t& state = e.state()._state;
+    std::string state = e.state(e.state()._state);
     
-    return state == STATE_IDLE ||
-    state == STATE_JUMPING ||
-    state == STATE_RUNNING;
+    return state == "IDLE" ||
+    state == "JUMPING" ||
+    state == "RUNNING";
 }
 
 bool RobotController::isAttackInputAllowed()
 {
     Entity& e = *_entity;
-    uint8_t& state = e.state()._state;
+    std::string state = e.state(e.state()._state);
     
-    return state == STATE_IDLE ||
-    state == STATE_RUNNING ||
-    state == STATE_JUMPING ||
-    state == STATE_PUNCH_1 ||
-    state == STATE_PUNCH_2;
+    return state == "IDLE" ||
+    state == "RUNNING" ||
+    state == "JUMPING" ||
+    state == "PUNCH_1" ||
+    state == "PUNCH_2";
 }
 
 bool RobotController::needsStateChangeForMovement()
 {
     Entity& e = *_entity;
-    uint8_t& state = e.state()._state;
+    std::string state = e.state(e.state()._state);
     
-    return state == STATE_IDLE;
+    return state == "IDLE";
 }
 
 bool RobotController::needsToResolveNewStateOnceAnimationEnds()
 {
     Entity& e = *_entity;
-    uint8_t& state = e.state()._state;
+    std::string state = e.state(e.state()._state);
     
-    return state == STATE_JUMPING ||
-    state == STATE_PUNCH_1 ||
-    state == STATE_PUNCH_2 ||
-    state == STATE_PUNCH_3;
+    return state == "JUMPING" ||
+    state == "PUNCH_1" ||
+    state == "PUNCH_2" ||
+    state == "PUNCH_3";
 }
 
 void RobotController::resolveNewState()
@@ -278,7 +278,7 @@ void RobotController::resolveNewState()
     
     if (isGrounded)
     {
-        state = STATE_IDLE;
+        state = e.state("IDLE");
         stateTime = 0;
         vel._x = 0;
     }

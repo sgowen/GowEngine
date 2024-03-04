@@ -15,6 +15,12 @@ if [[ (-e libglfm.a) ]]; then
     libglfm=0
 fi
 
+liblua=1
+if [[ (-e liblua_static.a) ]]; then
+    echo 'liblua_static.a already exists'
+    liblua=0
+fi
+
 libsndfile=1
 if [[ (-e libsndfile.1.dylib) ]]; then
     echo 'libsndfile.1.dylib already exists'
@@ -49,13 +55,33 @@ if [[ "$libglfm" == 1 ]]; then
     rm -rf cmake_build
     mkdir cmake_build
     cd cmake_build
-    cmake .. -G Xcode -DCMAKE_TOOLCHAIN_FILE=../../ios-cmake/ios.toolchain.cmake -DPLATFORM=OS64 -DDEPLOYMENT_TARGET="12.0" -D GLFM_BUILD_EXAMPLES=OFF
+    cmake .. -G Xcode -DCMAKE_TOOLCHAIN_FILE=../../ios-cmake/ios.toolchain.cmake -DPLATFORM=OS64 -DDEPLOYMENT_TARGET="12.0"
     cmake .. -D GLFM_BUILD_EXAMPLES=OFF -B build/apple -G Xcode
     cd build/apple
     cmake --build . --config Release --target glfm
     cp GLFM.build/lib/Release/libglfm.a ${SRCROOT}/iOS/
     cd ../../..
     rm -rf cmake_build
+    cd ..
+fi
+
+if [[ "$liblua" == 1 ]]; then
+    echo 'building liblua'
+    cd Lua
+    rm -rf cmake_build
+    mkdir cmake_build
+    cd cmake_build
+    cmake .. -G Xcode -DCMAKE_TOOLCHAIN_FILE=../../ios-cmake/ios.toolchain.cmake -DPLATFORM=OS64 -DDEPLOYMENT_TARGET="12.0"
+    export CXXFLAGS="-DLUA_USE_IOS=1"
+    cmake .. -DLUA_ENABLE_SHARED=0 -DLUA_ENABLE_TESTING=0 -DLUA_BUILD_AS_CXX=1 -B build/apple -G Xcode
+    cd build/apple
+    cmake --build . --config Release --target lua
+    cp lua-5.4.6/Release/liblua_static.a ${SRCROOT}/iOS/
+    cd ..
+    # Something is wrong with this script
+    # So you need to open the Xcode project inside cmake_build to generate the liblua_static.a
+    # After that, you can delete cmake_build below
+#    rm -rf cmake_build
     cd ..
 fi
 

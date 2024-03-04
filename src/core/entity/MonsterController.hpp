@@ -23,16 +23,7 @@ public:
     virtual void onUpdate(uint32_t numMovesProcessed) override;
     virtual void onMessage(uint16_t message, Entity* fromEntity) override;
     
-private:
-    enum State
-    {
-        STATE_IDLE = 0,
-        STATE_RUNNING = 1,
-        STATE_PREPARING_ATTACK = 2,
-        STATE_ATTACKING = 3,
-        STATE_DYING = 4
-    };
-    
+private:    
     void processMovementInput(uint16_t inputState);
     void processAttackInput(uint16_t inputState);
     

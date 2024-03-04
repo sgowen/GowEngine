@@ -14,6 +14,12 @@ if [[ -f "libglfw3.a" ]]; then
     libglfw3=0
 fi
 
+liblua=1
+if [[ (-e liblua_static.a) ]]; then
+    echo 'liblua_static.a already exists'
+    liblua=0
+fi
+
 libsndfile=1
 if [[ -f "libsndfile.so.1.0.35" ]]; then
     echo 'libsndfile.so.1.0.35 already exists'
@@ -51,6 +57,20 @@ if [[ "$libglfw3" == 1 ]]; then
     cmake ..
     cmake --build . --config Release --target glfw
     cp src/libglfw3.a $solutionDir/
+    cd ..
+    rm -rf cmake_build
+    cd ..
+fi
+
+if [[ "$liblua" == 1 ]]; then
+    echo 'building liblua'
+    cd Lua
+    rm -rf cmake_build
+    mkdir cmake_build
+    cd cmake_build
+    cmake .. -DLUA_ENABLE_SHARED=0 -DLUA_ENABLE_TESTING=0 -DLUA_BUILD_AS_CXX=1
+    cmake --build . --config Release --target lua
+    cp lua-5.4.6/liblua_static.a $solutionDir/
     cd ..
     rm -rf cmake_build
     cd ..

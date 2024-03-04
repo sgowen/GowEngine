@@ -2,39 +2,81 @@
   "PLYR": {
     "name": "Jon",
     "controller": "JonController",
-    "inputController": "JonInputController",
+    "inputMapping": "JonInputMapping",
+    "inputStateFlags": [
+        "MOVING_RIGHT",
+        "MOVING_LEFT",
+        "JUMPING",
+        "EXECUTING_ABILITY",
+        "WARMING_UP",
+        "EXECUTING_ATTACK",
+        "TRIGGERING_SPECIAL"
+    ],
+    "states": [
+        "IDLE",
+        "RUNNING",
+        "JUMPING",
+        "FALLING",
+        "DOUBLE_JUMPING",
+        "LANDING",
+        "DRILL_STOMPING",
+        "LANDING_ROLL",
+        "WARMING_UP",
+        "PUNCHING",
+        "DRILLING",
+        "ATTEMPTING_TO_TRANSFORM",
+        "TRANSFORMING",
+        "CANCELING_ATTEMPT_TO_TRANSFORM",
+        "VAMPIRE_IDLE",
+        "VAMPIRE_RUNNING",
+        "VAMPIRE_JUMPING",
+        "VAMPIRE_DASHING",
+        "VAMPIRE_DOUBLE_JUMPING",
+        "VAMPIRE_GLIDING",
+        "VAMPIRE_FALLING",
+        "VAMPIRE_LANDING",
+        "ATTEMPTING_TO_REVERT",
+        "REVERTING",
+        "CANCELING_ATTEMPT_TO_REVERT",
+        "VAMPIRE_DASH_COMPLETED",
+        "RABBIT_DEATH",
+        "VAMPIRE_DEATH"
+    ],
+    "stateFlags": [
+        "FALLING_FLAG_CAN_JUMP_AGAIN"
+    ],
     "textureMappings": {
-      "0": "Jon_Rabbit_Idle",
-      "1": "Jon_Rabbit_Running",
-      "2": "Jon_Rabbit_Jumping",
-      "3": "Jon_Rabbit_Falling",
-      "4": "Jon_Rabbit_DoubleJumping",
-      "5": "Jon_Rabbit_Landing",
-      "6": "Jon_Rabbit_Stomp",
-      "7": "Jon_Rabbit_LandingRoll",
-      "8": "Jon_Rabbit_WarmUp",
-      "9": "Jon_Rabbit_Swinging_Punch",
-      "10": "Jon_Rabbit_Burrow",
-      "11": "Jon_isAttemptingToTransformIntoVampire",
-      "12": "Jon_isTransformingIntoVampire",
-      "13": "Jon_isCancelingAttemptToTransformIntoVampire",
-      "14": "Jon_Vampire_Idle",
-      "15": "Jon_Vampire_Running",
-      "16": "Jon_Vampire_UpwardThrust",
-      "17": "Jon_Vampire_Dash",
-      "18": "Jon_Vampire_DoubleJumping",
-      "19": "Jon_Vampire_Gliding",
-      "20": "Jon_Vampire_Falling",
-      "21": "Jon_Vampire_Landing",
-      "22": "Jon_isAttemptingToRevertToRabbit",
-      "23": "Jon_isRevertingToRabbit",
-      "24": "Jon_isCancelingAttemptToRevertToRabbit",
-      "25": "Jon_Vampire_Dash_Completed",
-      "26": "Jon_Rabbit_Death",
-      "27": "Jon_Vampire_Death"
+      "IDLE": "Jon_Rabbit_Idle",
+      "RUNNING": "Jon_Rabbit_Running",
+      "JUMPING": "Jon_Rabbit_Jumping",
+      "FALLING": "Jon_Rabbit_Falling",
+      "DOUBLE_JUMPING": "Jon_Rabbit_DoubleJumping",
+      "LANDING": "Jon_Rabbit_Landing",
+      "DRILL_STOMPING": "Jon_Rabbit_Stomp",
+      "LANDING_ROLL": "Jon_Rabbit_LandingRoll",
+      "WARMING_UP": "Jon_Rabbit_WarmUp",
+      "PUNCHING": "Jon_Rabbit_Swinging_Punch",
+      "DRILLING": "Jon_Rabbit_Burrow",
+      "ATTEMPTING_TO_TRANSFORM": "Jon_isAttemptingToTransformIntoVampire",
+      "TRANSFORMING": "Jon_isTransformingIntoVampire",
+      "CANCELING_ATTEMPT_TO_TRANSFORM": "Jon_isCancelingAttemptToTransformIntoVampire",
+      "VAMPIRE_IDLE": "Jon_Vampire_Idle",
+      "VAMPIRE_RUNNING": "Jon_Vampire_Running",
+      "VAMPIRE_JUMPING": "Jon_Vampire_UpwardThrust",
+      "VAMPIRE_DASHING": "Jon_Vampire_Dash",
+      "VAMPIRE_DOUBLE_JUMPING": "Jon_Vampire_DoubleJumping",
+      "VAMPIRE_GLIDING": "Jon_Vampire_Gliding",
+      "VAMPIRE_FALLING": "Jon_Vampire_Falling",
+      "VAMPIRE_LANDING": "Jon_Vampire_Landing",
+      "ATTEMPTING_TO_REVERT": "Jon_isAttemptingToRevertToRabbit",
+      "REVERTING": "Jon_isRevertingToRabbit",
+      "CANCELING_ATTEMPT_TO_REVERT": "Jon_isCancelingAttemptToRevertToRabbit",
+      "VAMPIRE_DASH_COMPLETED": "Jon_Vampire_Dash_Completed",
+      "RABBIT_DEATH": "Jon_Rabbit_Death",
+      "VAMPIRE_DEATH": "Jon_Vampire_Death"
     },
     "soundMappings": {
-      "1": [
+      "RUNNING": [
         {
           "stateTime": 4,
           "soundID": "jon_footstep_right_grass"
@@ -44,27 +86,27 @@
           "soundID": "jon_footstep_left_grass"
         }
       ],
-      "2": "jon_rabbit_jump",
-      "4": "jon_rabbit_double_jump",
-      "5": "jon_landing_grass",
-      "6": "jon_rabbit_stomp",
-      "7": "jon_landing_grass",
-      "9": [
+      "JUMPING": "jon_rabbit_jump",
+      "DOUBLE_JUMPING": "jon_rabbit_double_jump",
+      "LANDING": "jon_landing_grass",
+      "DRILL_STOMPING": "jon_rabbit_stomp",
+      "LANDING_ROLL": "jon_landing_grass",
+      "PUNCHING": [
           {
             "stateTime": 20,
             "soundID": "jon_rabbit_punch"
           }
         ],
-      "10": [
+      "DRILLING": [
           {
             "stateTime": 9,
             "soundID": "jon_rabbit_drill"
           }
         ],
-      "11": "jon_trigger_transform",
-      "12": "jon_complete_transform",
-      "13": "jon_cancel_transform",
-      "15": [
+      "ATTEMPTING_TO_TRANSFORM": "jon_trigger_transform",
+      "TRANSFORMING": "jon_complete_transform",
+      "CANCELING_ATTEMPT_TO_TRANSFORM": "jon_cancel_transform",
+      "VAMPIRE_RUNNING": [
           {
             "stateTime": 3,
             "soundID": "jon_footstep_right_grass"
@@ -74,16 +116,16 @@
             "soundID": "jon_footstep_left_grass"
           }
         ],
-      "16": "jon_vampire_jump",
-      "17": "jon_vampire_dash",
-      "18": "jon_vampire_double_jump",
-      "19": "jon_vampire_glide",
-      "21": "jon_landing_grass",
-      "22": "jon_trigger_transform",
-      "23": "jon_complete_transform",
-      "24": "jon_cancel_transform",
-      "26": "jon_death",
-      "27": "jon_death"
+      "VAMPIRE_JUMPING": "jon_vampire_jump",
+      "VAMPIRE_DASHING": "jon_vampire_dash",
+      "VAMPIRE_DOUBLE_JUMPING": "jon_vampire_double_jump",
+      "VAMPIRE_GLIDING": "jon_vampire_glide",
+      "VAMPIRE_LANDING": "jon_landing_grass",
+      "ATTEMPTING_TO_REVERT": "jon_trigger_transform",
+      "REVERTING": "jon_complete_transform",
+      "CANCELING_ATTEMPT_TO_REVERT": "jon_cancel_transform",
+      "RABBIT_DEATH": "jon_death",
+      "VAMPIRE_DEATH": "jon_death"
     },
     "fixtures": [
       {
@@ -128,9 +170,6 @@
   },
   "B001": {
     "name": "BackgroundType_Mid_Hills",
-    "textureMappings": {
-      "0": "BackgroundType_Mid_Hills"
-    },
     "width": 128,
     "height": 45,
     "data": {
@@ -139,9 +178,6 @@
   },
   "B002": {
     "name": "BackgroundType_Mid_Trees",
-    "textureMappings": {
-      "0": "BackgroundType_Mid_Trees"
-    },
     "width": 128,
     "height": 46,
     "data": {
@@ -150,9 +186,6 @@
   },
   "B003": {
     "name": "BackgroundType_Lower_Top",
-    "textureMappings": {
-      "0": "BackgroundType_Lower_Top"
-    },
     "width": 128,
     "height": 62,
     "data": {
@@ -161,9 +194,6 @@
   },
   "B004": {
     "name": "BackgroundType_Lower_Bottom",
-    "textureMappings": {
-      "0": "BackgroundType_Lower_Bottom"
-    },
     "width": 128,
     "height": 33,
     "data": {
@@ -172,9 +202,6 @@
   },
   "B005": {
     "name": "BackgroundType_Upper",
-    "textureMappings": {
-      "0": "BackgroundType_Upper"
-    },
     "width": 128,
     "height": 101,
     "data": {
@@ -183,9 +210,6 @@
   },
   "G001": {
     "name": "GroundType_GrassWithoutCaveEndLeft",
-    "textureMappings": {
-      "0": "GroundType_GrassWithoutCaveEndLeft"
-    },
     "fixtures": [
       {
         "center": {
@@ -201,9 +225,6 @@
   },
   "G002": {
     "name": "GroundType_GrassWithoutCaveLarge",
-    "textureMappings": {
-      "0": "GroundType_GrassWithoutCaveLarge"
-    },
     "fixtures": [
       {
         "center": {
@@ -219,9 +240,6 @@
   },
   "G003": {
     "name": "GroundType_GrassWithoutCaveEndRight",
-    "textureMappings": {
-      "0": "GroundType_GrassWithoutCaveEndRight"
-    },
     "fixtures": [
       {
         "center": {
@@ -237,9 +255,6 @@
   },
   "P001": {
     "name": "ForegroundObjectType_GrassPlatformLeft",
-    "textureMappings": {
-      "0": "ForegroundObjectType_GrassPlatformLeft"
-    },
     "fixtures": [
       {
         "center": {
@@ -256,9 +271,6 @@
   },
   "P002": {
     "name": "ForegroundObjectType_GrassPlatformCenter",
-    "textureMappings": {
-      "0": "ForegroundObjectType_GrassPlatformCenter"
-    },
     "fixtures": [
       {
         "center": {
@@ -275,9 +287,6 @@
   },
   "P003": {
     "name": "ForegroundObjectType_GrassPlatformRight",
-    "textureMappings": {
-      "0": "ForegroundObjectType_GrassPlatformRight"
-    },
     "fixtures": [
       {
         "center": {
@@ -294,9 +303,6 @@
   },
   "P004": {
     "name": "ForegroundObjectType_SpikeGrassFour",
-    "textureMappings": {
-      "0": "ForegroundObjectType_SpikeGrassFour"
-    },
     "fixtures": [
       {
         "center": {

@@ -44,6 +44,24 @@ const std::map<std::string, EntityControllerCreationFunc>& EntityManager::getEnt
     return _entityControllerCreationFunctions;
 }
 
+void EntityManager::registerAIController(std::string name, EntityAIControllerCreationFunc func)
+{
+    assert(func != nullptr);
+    _entityAIControllerCreationFunctions[name] = func;
+}
+
+EntityAIController* EntityManager::createEntityAIController(EntityDef& ed, Entity* e)
+{
+    EntityAIControllerCreationFunc func = _entityAIControllerCreationFunctions[ed._aiController];
+    assert(func != nullptr);
+    return func(e);
+}
+
+const std::map<std::string, EntityAIControllerCreationFunc>& EntityManager::getEntityAIControllerMap()
+{
+    return _entityAIControllerCreationFunctions;
+}
+
 void EntityManager::registerInputController(std::string name, EntityInputControllerCreationFunc func)
 {
     assert(func != nullptr);
@@ -101,6 +119,7 @@ const std::map<std::string, EntityRenderControllerCreationFunc>& EntityManager::
 EntityManager::EntityManager()
 {
     registerController("EntityController", EntityController::create);
+    registerAIController("EntityAIController", EntityAIController::create);
     registerInputController("EntityInputController", EntityInputController::create);
     registerNetworkController("EntityNetworkController", EntityNetworkController::create);
     registerRenderController("EntityRenderController", EntityRenderController::create);
@@ -109,7 +128,5 @@ EntityManager::EntityManager()
     registerController("JonController", JonController::create);
     registerController("MonsterController", MonsterController::create);
     registerController("RobotController", RobotController::create);
-    registerInputController("JonInputController", JonInputController::create);
-    registerInputController("MonsterInputController", MonsterInputController::create);
-    registerInputController("RobotInputController", RobotInputController::create);
+    registerAIController("MonsterAIController", MonsterAIController::create);
 }

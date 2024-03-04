@@ -1,6 +1,6 @@
 {
   "title": "GowEngine",
-  "mode": "engine",
+  "mode": "dante",
   "fullScreen": "false",
   "vsync": "true",
   "useSteamNetworking": "false",
@@ -10,7 +10,7 @@
   "steamProductDescription": "A 4 Player Co-Op Dungeon Crawler set in a Grim Wasteland",
   "consoleLoggingEnabled": "false",
   "framesPerSecond": "60",
-  "fileLoggingEnabled": "true",
+  "fileLoggingEnabled": "false",
   "glfwLoggingEnabled": "false",
   "logOpenGL": "false",
   "logOpenAL": "false",

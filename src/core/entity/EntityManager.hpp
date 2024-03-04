@@ -23,6 +23,7 @@ class EntityPhysicsController;
 class EntityRenderController;
 
 typedef EntityController* (*EntityControllerCreationFunc)(Entity* e);
+typedef EntityAIController* (*EntityAIControllerCreationFunc)(Entity* e);
 typedef EntityInputController* (*EntityInputControllerCreationFunc)(Entity* e);
 typedef EntityNetworkController* (*EntityNetworkControllerCreationFunc)(Entity* e);
 typedef EntityRenderController* (*EntityRenderControllerCreationFunc)(Entity* e);
@@ -46,6 +47,10 @@ public:
     EntityController* createEntityController(EntityDef& ed, Entity* e);
     const std::map<std::string, EntityControllerCreationFunc>& getEntityControllerMap();
     
+    void registerAIController(std::string name, EntityAIControllerCreationFunc func);
+    EntityAIController* createEntityAIController(EntityDef& ed, Entity* e);
+    const std::map<std::string, EntityAIControllerCreationFunc>& getEntityAIControllerMap();
+    
     void registerInputController(std::string name, EntityInputControllerCreationFunc func);
     EntityInputController* createEntityInputController(EntityDef& ed, Entity* e);
     const std::map<std::string, EntityInputControllerCreationFunc>& getEntityInputControllerMap();
@@ -61,6 +66,7 @@ public:
 private:
     std::map<uint32_t, EntityDef> _entityDefs;
     std::map<std::string, EntityControllerCreationFunc> _entityControllerCreationFunctions;
+    std::map<std::string, EntityAIControllerCreationFunc> _entityAIControllerCreationFunctions;
     std::map<std::string, EntityInputControllerCreationFunc> _entityInputControllerCreationFunctions;
     std::map<std::string, EntityNetworkControllerCreationFunc> _entityNetworkControllerCreationFunctions;
     std::map<std::string, EntityRenderControllerCreationFunc> _entityRenderControllerCreationFunctions;

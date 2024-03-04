@@ -10,7 +10,7 @@
 
 class EntityIDManager;
 class EntityLayoutManager;
-struct EntityLayoutDef;
+struct EntityLayout;
 
 class EntityLayoutManagerLoader
 {
@@ -18,8 +18,8 @@ public:
     static void initWithJSONFile(EntityLayoutManager& elm, std::string filePath);
     static void initWithJSON(EntityLayoutManager& elm, const char* data);
     
-    static void loadEntityLayout(EntityLayoutDef& eld, EntityIDManager& eidm, bool isServer);
-    static void saveEntityLayout(EntityLayoutDef& eld);
+    static void loadEntityLayout(EntityLayout& eld, EntityIDManager& eidm, bool isServer);
+    static void saveEntityLayout(EntityLayout& eld);
     
 private:
     EntityLayoutManagerLoader();

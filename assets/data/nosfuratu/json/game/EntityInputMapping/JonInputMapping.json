@@ -1,0 +1,130 @@
+{
+  "gamepadEvents": {
+      "A": [
+          {
+              "inputStateFlag": "EXECUTING_ATTACK",
+              "condition": "pressed"
+          }
+      ],
+      "B": [
+          {
+              "inputStateFlag": "JUMPING",
+              "condition": "pressed"
+          }
+      ],
+      "X": [
+          {
+              "inputStateFlag": "TRIGGERING_SPECIAL",
+              "condition": "pressed"
+          }
+      ],
+      "Y": [
+          {
+              "inputStateFlag": "EXECUTING_ABILITY",
+              "condition": "pressed"
+          }
+      ],
+      "BUMPER_LEFT": [
+          {
+              "inputStateFlag": "EXECUTING_ABILITY",
+              "condition": "pressed"
+          }
+      ],
+      "D_PAD_LEFT": [
+          {
+              "inputStateFlag": "MOVING_LEFT",
+              "condition": "pressed"
+          }
+      ],
+      "D_PAD_RIGHT": [
+          {
+              "inputStateFlag": "MOVING_RIGHT",
+              "condition": "pressed"
+          }
+      ],
+      "GPEB_STICK_LEFT": [
+          {
+              "inputStateFlag": "MOVING_LEFT",
+              "condition": "negativeX"
+          },
+          {
+              "inputStateFlag": "MOVING_RIGHT",
+              "condition": "positiveX"
+          }
+      ],
+      "UNKNOWN_6": [
+          {
+              "inputStateFlag": "WARMING_UP",
+              "condition": "pressed"
+          }
+      ]
+  },
+  "keyboardEvents": {
+      "J": [
+          {
+              "inputStateFlag": "JUMPING",
+              "condition": "pressed"
+          }
+      ],
+      "K": [
+          {
+              "inputStateFlag": "EXECUTING_ATTACK",
+              "condition": "pressed"
+          }
+      ],
+      "H": [
+          {
+              "inputStateFlag": "EXECUTING_ABILITY",
+              "condition": "pressed"
+          }
+      ],
+      "U": [
+          {
+              "inputStateFlag": "TRIGGERING_SPECIAL",
+              "condition": "pressed"
+          }
+      ],
+      "T": [
+          {
+              "inputStateFlag": "WARMING_UP",
+              "condition": "pressed"
+          }
+      ],
+      "A": [
+          {
+              "inputStateFlag": "MOVING_LEFT",
+              "condition": "pressed"
+          }
+      ],
+      "D": [
+          {
+              "inputStateFlag": "MOVING_RIGHT",
+              "condition": "pressed"
+          }
+      ],
+      "ARROW_UP": [
+          {
+              "inputStateFlag": "JUMPING",
+              "condition": "pressed"
+          }
+      ],
+      "ARROW_LEFT": [
+          {
+              "inputStateFlag": "MOVING_LEFT",
+              "condition": "pressed"
+          }
+      ],
+      "ARROW_RIGHT": [
+          {
+              "inputStateFlag": "MOVING_RIGHT",
+              "condition": "pressed"
+          }
+      ],
+      "ARROW_DOWN": [
+          {
+              "inputStateFlag": "TRIGGERING_SPECIAL",
+              "condition": "pressed"
+          }
+      ]
+  }
+}

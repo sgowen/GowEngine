@@ -15,6 +15,12 @@ if [[ (-e libglfw3.a) ]]; then
     libglfw3=0
 fi
 
+liblua=1
+if [[ (-e liblua_static.a) ]]; then
+    echo 'liblua_static.a already exists'
+    liblua=0
+fi
+
 libsndfile=1
 if [[ (-e libsndfile.1.dylib) ]]; then
     echo 'libsndfile.1.dylib already exists'
@@ -52,6 +58,20 @@ if [[ "$libglfw3" == 1 ]]; then
     cmake .. -G Xcode
     cmake --build . --config Release --target glfw
     cp src/Release/libglfw3.a ${SRCROOT}/macOS/
+    cd ..
+    rm -rf cmake_build
+    cd ..
+fi
+
+if [[ "$liblua" == 1 ]]; then
+    echo 'building liblua'
+    cd Lua
+    rm -rf cmake_build
+    mkdir cmake_build
+    cd cmake_build
+    cmake .. -G Xcode -DLUA_ENABLE_SHARED=0 -DLUA_ENABLE_TESTING=0 -DLUA_BUILD_AS_CXX=1
+    cmake --build . --config Release --target lua
+    cp lua-5.4.6/Release/liblua_static.a ${SRCROOT}/macOS/
     cd ..
     rm -rf cmake_build
     cd ..

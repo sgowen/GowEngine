@@ -27,44 +27,7 @@ public:
     bool isVampire();
     uint16_t shockwaveStateTime();
     
-private:
-    enum State
-    {
-        STATE_IDLE = 0,
-        STATE_RUNNING = 1,
-        STATE_JUMPING = 2,
-        STATE_FALLING = 3,
-        STATE_DOUBLE_JUMPING = 4,
-        STATE_LANDING = 5,
-        STATE_DRILL_STOMPING = 6,
-        STATE_LANDING_ROLL = 7,
-        STATE_WARMING_UP = 8,
-        STATE_PUNCHING = 9,
-        STATE_DRILLING = 10,
-        STATE_ATTEMPTING_TO_TRANSFORM = 11,
-        STATE_TRANSFORMING = 12,
-        STATE_CANCELING_ATTEMPT_TO_TRANSFORM = 13,
-        STATE_VAMPIRE_IDLE = 14,
-        STATE_VAMPIRE_RUNNING = 15,
-        STATE_VAMPIRE_JUMPING = 16,
-        STATE_VAMPIRE_DASHING = 17,
-        STATE_VAMPIRE_DOUBLE_JUMPING = 18,
-        STATE_VAMPIRE_GLIDING = 19,
-        STATE_VAMPIRE_FALLING = 20,
-        STATE_VAMPIRE_LANDING = 21,
-        STATE_ATTEMPTING_TO_REVERT = 22,
-        STATE_REVERTING = 23,
-        STATE_CANCELING_ATTEMPT_TO_REVERT = 24,
-        STATE_VAMPIRE_DASH_COMPLETED = 25,
-        STATE_RABBIT_DEATH = 26,
-        STATE_VAMPIRE_DEATH = 27
-    };
-    
-    enum StateFallingFlags
-    {
-        STATE_FALLING_FLAG_CAN_JUMP_AGAIN = 1 << 0
-    };
-    
+private:    
     uint16_t _shockwaveStartTime;
     uint16_t _shockwaveStateTime;
     bool _isReleasingShockwave;

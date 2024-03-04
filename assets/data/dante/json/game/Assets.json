@@ -350,7 +350,7 @@
       "filterMag": "SHARP",
       "mipMap": true,
       "mappings": {
-          "Map_Crate": {
+          "Crate": {
               "x": 0,
               "y": 378,
               "regionWidth": 128,

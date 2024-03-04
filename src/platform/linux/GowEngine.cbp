@@ -12,14 +12,16 @@
 				<Option type="1" />
 				<Option compiler="gcc" />
 				<Compiler>
+					<Add option="-std=c++17" />
 					<Add option="-g" />
 					<Add option="-DDEBUG=1" />
 				</Compiler>
 				<Linker>
 					<Add option="libglfw3.a \" />
 					<Add option="-ldl" />
-                    <Add option="-lX11" />
-                    <Add option="libbox2d.a" />
+					<Add option="-lX11" />
+					<Add option="libbox2d.a" />
+					<Add option="liblua_static.a" />
 				</Linker>
 			</Target>
 			<Target title="Release">
@@ -29,12 +31,14 @@
 				<Option compiler="gcc" />
 				<Compiler>
 					<Add option="-O2" />
+					<Add option="-std=c++17" />
 				</Compiler>
 				<Linker>
-                    <Add option="libglfw3.a \" />
+					<Add option="libglfw3.a \" />
 					<Add option="-ldl" />
-                    <Add option="-lX11" />
-                    <Add option="libbox2d.a" />
+					<Add option="-lX11" />
+					<Add option="libbox2d.a" />
+					<Add option="liblua_static.a" />
 				</Linker>
 			</Target>
 		</Build>
@@ -47,21 +51,23 @@
 			<Add directory="../../../deps/glfw/include" />
 			<Add directory="../../../deps/glfw/deps" />
 			<Add directory="../../../deps/libsndfile/include" />
+			<Add directory="../../../deps/Lua/lua-5.4.6/include" />
 			<Add directory="../../../deps/openal-soft/include" />
 			<Add directory="../../../deps/rapidjson/include" />
+			<Add directory="../../../src/deps/sol2/include" />
 			<Add directory="../../../deps/stb" />
 			<Add directory="../../../deps/steamworks_sdk/public" />
 			<Add directory="../../../include" />
 			<Add directory="../../../src" />
 		</Compiler>
 		<Linker>
-            <Add option="-lX11" />
+			<Add option="-lX11" />
 			<Add option="-ldl" />
 			<Add option="-lpthread" />
 			<Add option="-lGL" />
-            <Add option="-lsndfile" />
+			<Add option="-lsndfile" />
 			<Add option="-lopenal" />
-            <Add option="-lsteam_api" />
+			<Add option="-lsteam_api" />
 			<Add directory="../linux" />
 		</Linker>
 		<ExtraCommands>
@@ -69,7 +75,7 @@
 			<Add before="./build_libraries.sh" />
 			<Add before="if [ -d $(PROJECT_DIR)/data ]; then rm -Rf $(PROJECT_DIR)/data; fi" />
 			<Add after="cp -r $(PROJECT_DIR)../../../assets/data $(PROJECT_DIR)" />
-            <Add after="cp -r $(PROJECT_DIR)../../../assets/steam_appid.txt $(PROJECT_DIR)" />
+			<Add after="cp -r $(PROJECT_DIR)../../../assets/steam_appid.txt $(PROJECT_DIR)" />
 			<Add after="cp $(TARGET_OUTPUT_FILE) $(PROJECT_DIR)" />
 			<Add after="tar -a -cf GowEngine.zip data steam_appid.txt libopenal.so.1 libsndfile.so.1.0.35 libsteam_api.so run.sh GowEngine" />
 			<Mode after="always" />

@@ -20,6 +20,12 @@ if EXIST glfw3.lib (
     set "glfw3=1"
 )
 
+if EXIST lua_static.lib (
+    set "lua_static=0"
+) else (
+    set "lua_static=1"
+)
+
 if EXIST sndfile.lib (
     set "sndfile=0"
 ) else (
@@ -66,6 +72,22 @@ if "%glfw3%"=="1" (
     cd ..
 ) else (
     ECHO glfw3.lib already exists
+)
+
+if "%lua_static%"=="1" (
+    ECHO building lua_static.lib
+    cd Lua
+    IF EXIST cmake_build @RD /S /Q cmake_build
+    mkdir cmake_build
+    cd cmake_build
+    cmake .. -DLUA_ENABLE_SHARED=0 -DLUA_ENABLE_TESTING=0 -DLUA_BUILD_AS_CXX=1
+    cmake --build . --config Release --target lua
+    xcopy lua-5.4.6\Release\lua_static.lib %solutionDir%\ /Y
+    cd ..
+    IF EXIST cmake_build @RD /S /Q cmake_build
+    cd ..
+) else (
+    ECHO lua_static.lib already exists
 )
 
 if "%sndfile%"=="1" (

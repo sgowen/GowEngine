@@ -2,20 +2,34 @@
     "PLYR": {
         "name": "Robot",
         "controller": "RobotController",
-        "inputController": "RobotInputController",
+        "inputMapping": "RobotInputMapping",
+        "inputStateFlags": [
+            "MOVING_RIGHT",
+            "MOVING_LEFT",
+            "JUMPING",
+            "EXECUTING_ATTACK"
+        ],
+        "states": [
+            "IDLE",
+            "RUNNING",
+            "JUMPING",
+            "PUNCH_1",
+            "PUNCH_2",
+            "PUNCH_3"
+        ],
         "textureMappings": {
-            "0": "Player_Idle",
-            "1": "Player_Running",
-            "2": "Player_Jumping",
-            "3": "Player_First_Punch",
-            "4": "Player_Second_Punch",
-            "5": "Player_Third_Punch"
+            "IDLE": "Player_Idle",
+            "RUNNING": "Player_Running",
+            "JUMPING": "Player_Jumping",
+            "PUNCH_1": "Player_First_Punch",
+            "PUNCH_2": "Player_Second_Punch",
+            "PUNCH_3": "Player_Third_Punch"
         },
         "soundMappings": {
-            "2": "sound_001",
-            "3": "sound_002",
-            "4": "sound_002",
-            "5": "sound_003"
+            "JUMPING": "sound_001",
+            "PUNCH_1": "sound_002",
+            "PUNCH_2": "sound_002",
+            "PUNCH_3": "sound_003"
         },
         "fixtures": [
         {
@@ -117,18 +131,30 @@
     "MO01": {
         "name": "Crawler",
         "controller": "MonsterController",
-        "inputController": "MonsterInputController",
+        "aiController": "MonsterAIController",
+        "inputStateFlags": [
+            "MOVING_RIGHT",
+            "MOVING_LEFT",
+            "EXECUTING_ATTACK"
+        ],
+        "states": [
+            "IDLE",
+            "RUNNING",
+            "PREPARING_ATTACK",
+            "ATTACKING",
+            "DYING"
+        ],
         "textureMappings": {
-            "0": "Crawler_Idle",
-            "1": "Crawler_Crawl",
-            "2": "Crawler_Crawl",
-            "3": "Crawler_Attack",
-            "4": "Crawler_Death"
+            "IDLE": "Crawler_Idle",
+            "RUNNING": "Crawler_Crawl",
+            "PREPARING_ATTACK": "Crawler_Crawl",
+            "ATTACKING": "Crawler_Attack",
+            "DYING": "Crawler_Death"
         },
         "soundMappings": {
-            "1": "sound_006",
-            "3": "sound_005",
-            "4": "sound_007"
+            "RUNNING": "sound_006",
+            "ATTACKING": "sound_005",
+            "DYING": "sound_007"
         },
         "fixtures": [
         {
@@ -209,9 +235,6 @@
     },
     "CRAT": {
         "name": "Crate",
-        "textureMappings": {
-            "0": "Map_Crate"
-        },
         "fixtures": [
         {
             "vertices": [
@@ -237,14 +260,20 @@
     },
     "Z1DR": {
         "name": "Door1",
+        "states": [
+            "UNDAMAGED",
+            "ONE_THIRD_DAMAGED",
+            "TWO_THIRDS_DAMAGED",
+            "DESTRUCTING"
+        ],
         "textureMappings": {
-            "0": "Zone1DoorUndamaged",
-            "1": "Zone1DoorOneThirdDamaged",
-            "2": "Zone1DoorTwoThirdsDamaged",
-            "3": "Zone1DoorDestructing"
+            "UNDAMAGED": "Zone1DoorUndamaged",
+            "ONE_THIRD_DAMAGED": "Zone1DoorOneThirdDamaged",
+            "TWO_THIRDS_DAMAGED": "Zone1DoorTwoThirdsDamaged",
+            "DESTRUCTING": "Zone1DoorDestructing"
         },
         "soundMappings": {
-            "3": "sound_004"
+            "DESTRUCTING": "sound_004"
         },
         "fixtures": [
         {
@@ -270,217 +299,136 @@
     },
     "Z1P1": {
         "name": "Zone1BackgroundParallaxLayer1",
-        "textureMappings": {
-            "0": "Zone1BackgroundParallaxLayer1"
-        },
         "width": 64,
         "height": 24
     },
     "Z1P4": {
         "name": "Zone1BackgroundParallaxLayer4",
-        "textureMappings": {
-            "0": "Zone1BackgroundParallaxLayer4"
-        },
         "width": 64,
         "height": 104
     },
     "Z1P2": {
         "name": "Zone1BackgroundParallaxLayer2",
-        "textureMappings": {
-            "0": "Zone1BackgroundParallaxLayer2"
-        },
         "width": 34,
         "height": 10
     },
     "Z1P3": {
         "name": "Zone1BackgroundParallaxLayer3",
-        "textureMappings": {
-            "0": "Zone1BackgroundParallaxLayer3"
-        },
         "width": 36,
         "height": 10
     },
     "Z1S1": {
         "name": "Zone1BackgroundStaticLayer1",
-        "textureMappings": {
-            "0": "Zone1BackgroundStaticLayer1"
-        },
         "width": 20,
         "height": 30
     },
     "Z1S2": {
         "name": "Zone1BackgroundStaticLayer2",
-        "textureMappings": {
-            "0": "Zone1BackgroundStaticLayer2"
-        },
         "width": 8,
         "height": 8
     },
     "Z1S3": {
         "name": "Zone1BackgroundStaticLayer3",
-        "textureMappings": {
-            "0": "Zone1BackgroundStaticLayer3"
-        },
         "width": 8,
         "height": 8
     },
     "Z1S4": {
         "name": "Zone1BackgroundStaticLayer4",
-        "textureMappings": {
-            "0": "Zone1BackgroundStaticLayer4"
-        },
         "width": 8,
         "height": 8
     },
     "Z1S5": {
         "name": "Zone1BackgroundStaticLayer5",
-        "textureMappings": {
-            "0": "Zone1BackgroundStaticLayer5"
-        },
         "width": 8,
         "height": 8
     },
     "Z1S6": {
         "name": "Zone1BackgroundStaticLayer6",
-        "textureMappings": {
-            "0": "Zone1BackgroundStaticLayer6"
-        },
         "width": 8,
         "height": 8
     },
     "Z1S7": {
         "name": "Zone1BackgroundStaticLayer7",
-        "textureMappings": {
-            "0": "Zone1BackgroundStaticLayer7"
-        },
         "width": 8,
         "height": 8
     },
     "Z1S8": {
         "name": "Zone1BackgroundStaticLayer8",
-        "textureMappings": {
-            "0": "Zone1BackgroundStaticLayer8"
-        },
         "width": 8,
         "height": 8
     },
     "Z1S9": {
         "name": "Zone1BackgroundStaticLayer9",
-        "textureMappings": {
-            "0": "Zone1BackgroundStaticLayer9"
-        },
         "width": 8,
         "height": 8
     },
     "Z1SA": {
         "name": "Zone1BackgroundStaticLayer10",
-        "textureMappings": {
-            "0": "Zone1BackgroundStaticLayer10"
-        },
         "width": 8,
         "height": 8
     },
     "Z1SB": {
         "name": "Zone1BackgroundStaticLayer11",
-        "textureMappings": {
-            "0": "Zone1BackgroundStaticLayer11"
-        },
         "width": 8,
         "height": 8
     },
     "Z1SC": {
         "name": "Zone1BackgroundStaticLayer12",
-        "textureMappings": {
-            "0": "Zone1BackgroundStaticLayer12"
-        },
         "width": 8,
         "height": 8
     },
     "Z1SD": {
         "name": "Zone1BackgroundStaticLayer13",
-        "textureMappings": {
-            "0": "Zone1BackgroundStaticLayer13"
-        },
         "width": 8,
         "height": 8
     },
     "Z1SE": {
         "name": "Zone1BackgroundStaticLayer14",
-        "textureMappings": {
-            "0": "Zone1BackgroundStaticLayer14"
-        },
         "width": 8,
         "height": 8
     },
     "Z1SF": {
         "name": "Zone1BackgroundStaticLayer15",
-        "textureMappings": {
-            "0": "Zone1BackgroundStaticLayer15"
-        },
         "width": 8,
         "height": 8
     },
     "Z1SG": {
         "name": "Zone1BackgroundStaticLayer16",
-        "textureMappings": {
-            "0": "Zone1BackgroundStaticLayer16"
-        },
         "width": 8,
         "height": 8
     },
     "Z1SH": {
         "name": "Zone1BackgroundStaticLayer17",
-        "textureMappings": {
-            "0": "Zone1BackgroundStaticLayer17"
-        },
         "width": 8,
         "height": 8
     },
     "Z1SI": {
         "name": "Zone1BackgroundStaticLayer18",
-        "textureMappings": {
-            "0": "Zone1BackgroundStaticLayer18"
-        },
         "width": 8,
         "height": 8
     },
     "Z1SJ": {
         "name": "Zone1BackgroundStaticLayer19",
-        "textureMappings": {
-            "0": "Zone1BackgroundStaticLayer19"
-        },
         "width": 8,
         "height": 8
     },
     "Z1SK": {
         "name": "Zone1BackgroundStaticLayer20",
-        "textureMappings": {
-            "0": "Zone1BackgroundStaticLayer20"
-        },
         "width": 8,
         "height": 8
     },
     "Z1SL": {
         "name": "Zone1BackgroundStaticLayer21",
-        "textureMappings": {
-            "0": "Zone1BackgroundStaticLayer21"
-        },
         "width": 8,
         "height": 8
     },
     "Z1SM": {
         "name": "Zone1BackgroundStaticLayer22",
-        "textureMappings": {
-            "0": "Zone1BackgroundStaticLayer22"
-        },
         "width": 8,
         "height": 8
     },
     "G001": {
         "name": "Ground1",
-        "textureMappings": {
-            "0": "Ground1"
-        },
         "fixtures": [
         {
             "vertices": [
@@ -513,9 +461,6 @@
     },
     "G002": {
         "name": "Ground2",
-        "textureMappings": {
-            "0": "Ground2"
-        },
         "width": 4,
         "height": 4,
         "fixtures": [
@@ -548,9 +493,6 @@
     },
     "G003": {
         "name": "Ground3",
-        "textureMappings": {
-            "0": "Ground3"
-        },
         "width": 4,
         "height": 4,
         "fixtures": [
@@ -583,9 +525,6 @@
     },
     "G004": {
         "name": "Ground4",
-        "textureMappings": {
-            "0": "Ground4"
-        },
         "width": 4,
         "height": 4,
         "fixtures": [
@@ -618,9 +557,6 @@
     },
     "G005": {
         "name": "Ground5",
-        "textureMappings": {
-            "0": "Ground5"
-        },
         "width": 4,
         "height": 4,
         "fixtures": [
@@ -653,9 +589,6 @@
     },
     "G006": {
         "name": "Ground6",
-        "textureMappings": {
-            "0": "Ground6"
-        },
         "width": 4,
         "height": 4,
         "fixtures": [
@@ -688,9 +621,6 @@
     },
     "G007": {
         "name": "Ground7",
-        "textureMappings": {
-            "0": "Ground7"
-        },
         "width": 4,
         "height": 4,
         "fixtures": [
@@ -723,9 +653,6 @@
     },
     "G008": {
         "name": "Ground8",
-        "textureMappings": {
-            "0": "Ground8"
-        },
         "width": 4,
         "height": 4,
         "fixtures": [
@@ -758,9 +685,6 @@
     },
     "G009": {
         "name": "Ground9",
-        "textureMappings": {
-            "0": "Ground9"
-        },
         "width": 4,
         "height": 4,
         "fixtures": [
@@ -793,9 +717,6 @@
     },
     "G010": {
         "name": "Ground10",
-        "textureMappings": {
-            "0": "Ground10"
-        },
         "width": 4,
         "height": 4,
         "fixtures": [
@@ -828,9 +749,6 @@
     },
     "G011": {
         "name": "Ground11",
-        "textureMappings": {
-            "0": "Ground11"
-        },
         "width": 4,
         "height": 4,
         "fixtures": [
@@ -863,9 +781,6 @@
     },
     "G012": {
         "name": "Ground12",
-        "textureMappings": {
-            "0": "Ground12"
-        },
         "width": 4,
         "height": 4,
         "fixtures": [
@@ -898,9 +813,6 @@
     },
     "G013": {
         "name": "Ground13",
-        "textureMappings": {
-            "0": "Ground13"
-        },
         "width": 4,
         "height": 4,
         "fixtures": [
@@ -933,9 +845,6 @@
     },
     "G014": {
         "name": "Ground14",
-        "textureMappings": {
-            "0": "Ground14"
-        },
         "width": 4,
         "height": 4,
         "fixtures": [
@@ -964,9 +873,6 @@
     },
     "G015": {
         "name": "Ground15",
-        "textureMappings": {
-            "0": "Ground15"
-        },
         "width": 4,
         "height": 4,
         "fixtures": [
@@ -999,9 +905,6 @@
     },
     "G016": {
         "name": "Ground16",
-        "textureMappings": {
-            "0": "Ground16"
-        },
         "width": 4,
         "height": 4,
         "fixtures": [
@@ -1034,9 +937,6 @@
     },
     "G017": {
         "name": "Ground17",
-        "textureMappings": {
-            "0": "Ground17"
-        },
         "width": 4,
         "height": 4,
         "fixtures": [
@@ -1069,9 +969,6 @@
     },
     "G018": {
         "name": "Ground18",
-        "textureMappings": {
-            "0": "Ground18"
-        },
         "width": 4,
         "height": 4,
         "fixtures": [
@@ -1104,9 +1001,6 @@
     },
     "G019": {
         "name": "Ground19",
-        "textureMappings": {
-            "0": "Ground19"
-        },
         "width": 4,
         "height": 4,
         "fixtures": [
@@ -1135,9 +1029,6 @@
     },
     "G020": {
         "name": "Ground20",
-        "textureMappings": {
-            "0": "Ground20"
-        },
         "width": 4,
         "height": 4,
         "fixtures": [
@@ -1170,9 +1061,6 @@
     },
     "G021": {
         "name": "Ground21",
-        "textureMappings": {
-            "0": "Ground21"
-        },
         "width": 4,
         "height": 4,
         "fixtures": [
@@ -1205,9 +1093,6 @@
     },
     "G022": {
         "name": "Ground22",
-        "textureMappings": {
-            "0": "Ground22"
-        },
         "width": 4,
         "height": 4,
         "fixtures": [
@@ -1240,9 +1125,6 @@
     },
     "G023": {
         "name": "Ground23",
-        "textureMappings": {
-            "0": "Ground23"
-        },
         "width": 4,
         "height": 4,
         "fixtures": [
@@ -1271,9 +1153,6 @@
     },
     "G024": {
         "name": "Ground24",
-        "textureMappings": {
-            "0": "Ground24"
-        },
         "width": 4,
         "height": 4,
         "fixtures": [
@@ -1302,9 +1181,6 @@
     },
     "G025": {
         "name": "Ground25",
-        "textureMappings": {
-            "0": "Ground25"
-        },
         "width": 4,
         "height": 4,
         "fixtures": [
@@ -1337,9 +1213,6 @@
     },
     "T001": {
         "name": "Tile1",
-        "textureMappings": {
-            "0": "Tile1"
-        },
         "width": 4,
         "height": 4,
         "fixtures": [
@@ -1364,9 +1237,6 @@
     },
     "T002": {
         "name": "Tile2",
-        "textureMappings": {
-            "0": "Tile2"
-        },
         "width": 4,
         "height": 4,
         "fixtures": [
@@ -1391,9 +1261,6 @@
     },
     "T003": {
         "name": "Tile3",
-        "textureMappings": {
-            "0": "Tile3"
-        },
         "width": 2,
         "height": 2,
         "fixtures": [

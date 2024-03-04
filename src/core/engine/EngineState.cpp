@@ -64,7 +64,8 @@ void EngineState::exit(Engine* e)
     onExit(e);
 }
 
-EngineState::EngineState(std::string configFilePath) : State<Engine>()
+EngineState::EngineState(std::string configFilePath) : State<Engine>(),
+_luaRenderer(_renderer)
 {
     _configFilePath = configFilePath;
 }

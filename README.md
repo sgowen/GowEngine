@@ -5,7 +5,7 @@ A basic no nonsense LGPL 2.1 licensed portable C++ 2D game engine
 ![Demo](https://github.com/sgowen/GowEngine/blob/main/demo.gif)
 
 ## Features
-* Written in portable C++11
+* Written in portable C++17
 * Graphics rendered with OpenGL 2.0 and OpenGL ES 2.0
 * Audio rendered with OpenAL
 * Real-time multiplayer networking with UDP sockets

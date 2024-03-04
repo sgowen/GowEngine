@@ -44,6 +44,8 @@ public:
     void setCursorSize(int cursorWidth, int cursorHeight);
     void setMatrix(Matrix* m);
     Matrix* matrix();
+    std::string mappingForButton(uint8_t button);
+    std::string mappingForKey(uint16_t key);
     
 private:
     FixedSizePool<CursorEvent> _poolCursor;
@@ -52,6 +54,8 @@ private:
     std::vector<uint16_t> _numericalKeys;
     std::vector<uint16_t> _textKeys;
     std::vector<uint16_t> _supportedKeys;
+    std::map<uint16_t, std::string> _keyMap;
+    std::map<uint8_t, std::string> _buttonMap;
     std::map<uint16_t, bool> _lastKnownKeyStates;
     std::map<uint8_t, bool> _lastKnownGamepadButtonStates[MAX_NUM_PLAYERS];
     Vector2 _lastConvertedCursorPos;

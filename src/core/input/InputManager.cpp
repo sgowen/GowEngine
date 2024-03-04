@@ -172,6 +172,22 @@ Matrix* InputManager::matrix()
     return _matrix;
 }
 
+std::string InputManager::mappingForButton(uint8_t button)
+{
+    auto q = _buttonMap.find(button);
+    assert(q != _buttonMap.end());
+    
+    return q->second;
+}
+
+std::string InputManager::mappingForKey(uint16_t key)
+{
+    auto q = _keyMap.find(key);
+    assert(q != _keyMap.end());
+    
+    return q->second;
+}
+
 bool InputManager::isKeyNumerical(uint16_t key)
 {
     std::vector<uint16_t>& keys = _numericalKeys;
@@ -258,4 +274,78 @@ _matrix(nullptr)
     _supportedKeys.push_back(GOW_KEY_ARROW_DOWN);
     _supportedKeys.push_back(GOW_KEY_ARROW_LEFT);
     _supportedKeys.push_back(GOW_KEY_ARROW_RIGHT);
+    
+    _keyMap[GOW_KEY_0] = "0";
+    _keyMap[GOW_KEY_1] = "1";
+    _keyMap[GOW_KEY_2] = "2";
+    _keyMap[GOW_KEY_3] = "3";
+    _keyMap[GOW_KEY_4] = "4";
+    _keyMap[GOW_KEY_5] = "5";
+    _keyMap[GOW_KEY_6] = "6";
+    _keyMap[GOW_KEY_7] = "7";
+    _keyMap[GOW_KEY_8] = "8";
+    _keyMap[GOW_KEY_9] = "9";
+    _keyMap[GOW_KEY_A] = "A";
+    _keyMap[GOW_KEY_B] = "B";
+    _keyMap[GOW_KEY_C] = "C";
+    _keyMap[GOW_KEY_D] = "D";
+    _keyMap[GOW_KEY_E] = "E";
+    _keyMap[GOW_KEY_F] = "F";
+    _keyMap[GOW_KEY_G] = "G";
+    _keyMap[GOW_KEY_H] = "H";
+    _keyMap[GOW_KEY_I] = "I";
+    _keyMap[GOW_KEY_J] = "J";
+    _keyMap[GOW_KEY_K] = "K";
+    _keyMap[GOW_KEY_L] = "L";
+    _keyMap[GOW_KEY_M] = "M";
+    _keyMap[GOW_KEY_N] = "N";
+    _keyMap[GOW_KEY_O] = "O";
+    _keyMap[GOW_KEY_P] = "P";
+    _keyMap[GOW_KEY_Q] = "Q";
+    _keyMap[GOW_KEY_R] = "R";
+    _keyMap[GOW_KEY_S] = "S";
+    _keyMap[GOW_KEY_T] = "T";
+    _keyMap[GOW_KEY_U] = "U";
+    _keyMap[GOW_KEY_V] = "V";
+    _keyMap[GOW_KEY_W] = "W";
+    _keyMap[GOW_KEY_X] = "X";
+    _keyMap[GOW_KEY_Y] = "Y";
+    _keyMap[GOW_KEY_Z] = "Z";
+    _keyMap[GOW_KEY_NEW_LINE] = "NEW_LINE";
+    _keyMap[GOW_KEY_SPACE_BAR] = "SPACE_BAR";
+    _keyMap[GOW_KEY_COMMA] = "COMMA";
+    _keyMap[GOW_KEY_PERIOD] = "PERIOD";
+    _keyMap[GOW_KEY_CTRL] = "CTRL";
+    _keyMap[GOW_KEY_CMD] = "CMD";
+    _keyMap[GOW_KEY_DELETE] = "DELETE";
+    _keyMap[GOW_KEY_BACK_SPACE] = "BACK_SPACE";
+    _keyMap[GOW_KEY_ESCAPE] = "ESCAPE";
+    _keyMap[GOW_KEY_ANDROID_BACK_BUTTON] = "ANDROID_BACK_BUTTON";
+    _keyMap[GOW_KEY_ARROW_LEFT] = "ARROW_LEFT";
+    _keyMap[GOW_KEY_ARROW_UP] = "ARROW_UP";
+    _keyMap[GOW_KEY_ARROW_RIGHT] = "ARROW_RIGHT";
+    _keyMap[GOW_KEY_ARROW_DOWN] = "ARROW_DOWN";
+    _keyMap[GOW_KEY_CARRIAGE_RETURN] = "CARRIAGE_RETURN";
+    
+    _buttonMap[GPEB_BUTTON_A] = "A";
+    _buttonMap[GPEB_BUTTON_B] = "B";
+    _buttonMap[GPEB_BUTTON_Y] = "Y";
+    _buttonMap[GPEB_BUTTON_X] = "X";
+    _buttonMap[GPEB_BUMPER_LEFT] = "BUMPER_LEFT";
+    _buttonMap[GPEB_BUMPER_RIGHT] = "BUMPER_RIGHT";
+    _buttonMap[GPEB_UNKNOWN_6] = "UNKNOWN_6";
+    _buttonMap[GPEB_UNKNOWN_7] = "UNKNOWN_7";
+    _buttonMap[GPEB_BUTTON_SELECT] = "SELECT";
+    _buttonMap[GPEB_BUTTON_START] = "START";
+    _buttonMap[GPEB_BUTTON_SNES_SELECT] = "SNES_SELECT";
+    _buttonMap[GPEB_BUTTON_SNES_START] = "SNES_START";
+    _buttonMap[GPEB_UNKNOWN_12] = "UNKNOWN_12";
+    _buttonMap[GPEB_UNKNOWN_13] = "UNKNOWN_13";
+    _buttonMap[GPEB_D_PAD_UP] = "D_PAD_UP";
+    _buttonMap[GPEB_D_PAD_RIGHT] = "D_PAD_RIGHT";
+    _buttonMap[GPEB_D_PAD_DOWN] = "D_PAD_DOWN";
+    _buttonMap[GPEB_D_PAD_LEFT] = "D_PAD_LEFT";
+    _buttonMap[GPEB_STICK_LEFT] = "STICK_LEFT";
+    _buttonMap[GPEB_STICK_RIGHT] = "STICK_RIGHT";
+    _buttonMap[GPEB_TRIGGER] = "TRIGGER";
 }

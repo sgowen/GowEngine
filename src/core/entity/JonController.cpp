@@ -73,13 +73,13 @@ void JonController::onUpdate(uint32_t numMovesProcessed)
     }
     
     // Rabbit
-    if (state == STATE_DRILL_STOMPING)
+    if (state == e.state("DRILL_STOMPING"))
     {
         if (e.isGrounded())
         {
             static float speedX = e.data().getFloat("speedX");
             
-            state = STATE_LANDING_ROLL;
+            state = e.state("LANDING_ROLL");
             stateTime = 0;
             float landingRollSpeedX = e.pose()._isXFlipped ? -speedX : speedX;
             vel._x = landingRollSpeedX * 2;
@@ -91,10 +91,10 @@ void JonController::onUpdate(uint32_t numMovesProcessed)
         }
     }
     
-    if (state == STATE_ATTEMPTING_TO_TRANSFORM &&
+    if (state == e.state("ATTEMPTING_TO_TRANSFORM") &&
         stateTime == animationNumFrames)
     {
-        state = STATE_TRANSFORMING;
+        state = e.state("TRANSFORMING");
         stateTime = 0;
         // TODO, figure out some way to get rid of local data in the Controller
         // Anything not networked is risky.
@@ -105,28 +105,28 @@ void JonController::onUpdate(uint32_t numMovesProcessed)
     }
     
     // Vampire
-    if (state == STATE_VAMPIRE_DOUBLE_JUMPING &&
+    if (state == e.state("VAMPIRE_DOUBLE_JUMPING") &&
         stateTime == animationNumFrames)
     {
-        state = STATE_VAMPIRE_GLIDING;
+        state = e.state("VAMPIRE_GLIDING");
         stateTime = 0;
     }
     
-    if (state == STATE_VAMPIRE_DASHING)
+    if (state == e.state("VAMPIRE_DASHING"))
     {
         if (stateTime == animationNumFrames)
         {
-            state = STATE_VAMPIRE_DASH_COMPLETED;
+            state = e.state("VAMPIRE_DASH_COMPLETED");
             stateTime = 0;
             vel._x = 0;
             e.pose()._isZeroGravity = false;
         }
     }
     
-    if (state == STATE_ATTEMPTING_TO_REVERT &&
+    if (state == e.state("ATTEMPTING_TO_REVERT") &&
         stateTime == animationNumFrames)
     {
-        state = STATE_REVERTING;
+        state = e.state("REVERTING");
         stateTime = 0;
         _isReleasingShockwave = true;
         _shockwaveStartTime = numMovesProcessed;
@@ -140,8 +140,8 @@ void JonController::onUpdate(uint32_t numMovesProcessed)
         !e.isGrounded() &&
         vel._y < 0)
     {
-        State doubleJumpingState = isRabbit() ? STATE_DOUBLE_JUMPING : STATE_VAMPIRE_DOUBLE_JUMPING;
-        State fallingState = isRabbit() ? STATE_FALLING : STATE_VAMPIRE_FALLING;
+        uint8_t doubleJumpingState = isRabbit() ? e.state("DOUBLE_JUMPING") : e.state("VAMPIRE_DOUBLE_JUMPING");
+        uint8_t fallingState = isRabbit() ? e.state("FALLING") : e.state("VAMPIRE_FALLING");
         
         bool canJumpAgain = true;
         if (state == doubleJumpingState)
@@ -149,17 +149,17 @@ void JonController::onUpdate(uint32_t numMovesProcessed)
             canJumpAgain = false;
         }
         state = fallingState;
-        SET_BIT(stateFlags, STATE_FALLING_FLAG_CAN_JUMP_AGAIN, canJumpAgain);
+        SET_BIT(stateFlags, e.stateFlag("FALLING_FLAG_CAN_JUMP_AGAIN"), canJumpAgain);
         stateTime = 0;
     }
     
     if (canCurrentStateBeInterruptedByLanding() &&
         e.isGrounded())
     {
-        State landingState = isRabbit() ? STATE_LANDING : STATE_VAMPIRE_LANDING;
+        uint8_t landingState = isRabbit() ? e.state("LANDING") : e.state("VAMPIRE_LANDING");
         
         state = landingState;
-        SET_BIT(stateFlags, STATE_FALLING_FLAG_CAN_JUMP_AGAIN, true);
+        SET_BIT(stateFlags, e.stateFlag("FALLING_FLAG_CAN_JUMP_AGAIN"), true);
         stateTime = 0;
     }
     
@@ -177,7 +177,7 @@ void JonController::onMessage(uint16_t message, Entity* fromEntity)
     uint16_t& stateTime = e.state()._stateTime;
     Vector2& vel = e.velocity();
     
-    State deathState = isRabbit() ? STATE_RABBIT_DEATH : STATE_VAMPIRE_DEATH;
+    uint8_t deathState = isRabbit() ? e.state("RABBIT_DEATH") : e.state("VAMPIRE_DEATH");
     
     if (message == MSG_DAMAGE &&
         state != deathState)
@@ -192,10 +192,10 @@ void JonController::processMovementInput(uint16_t inputState)
 {
     Entity& e = *_entity;
     
-    bool isInputLeft = IS_BIT_SET(inputState, JISF_MOVING_LEFT);
-    bool wasInputLeft = IS_BIT_SET(e.lastProcessedInputState(), JISF_MOVING_LEFT);
-    bool isInputRight = IS_BIT_SET(inputState, JISF_MOVING_RIGHT);
-    bool wasInputRight = IS_BIT_SET(e.lastProcessedInputState(), JISF_MOVING_RIGHT);
+    bool isInputLeft = IS_BIT_SET(inputState, e.inputStateFlag("MOVING_LEFT"));
+    bool wasInputLeft = IS_BIT_SET(e.lastProcessedInputState(), e.inputStateFlag("MOVING_LEFT"));
+    bool isInputRight = IS_BIT_SET(inputState, e.inputStateFlag("MOVING_RIGHT"));
+    bool wasInputRight = IS_BIT_SET(e.lastProcessedInputState(), e.inputStateFlag("MOVING_RIGHT"));
     
     static float speedRabbitX = e.data().getFloat("speedX");
     static float speedVampireX = e.data().getFloat("speedVampireX");
@@ -206,8 +206,8 @@ void JonController::processMovementInput(uint16_t inputState)
     Vector2& vel = e.velocity();
     bool isGrounded = e.isGrounded();
     
-    State idleState = isRabbit() ? STATE_IDLE : STATE_VAMPIRE_IDLE;
-    State runningState = isRabbit() ? STATE_RUNNING : STATE_VAMPIRE_RUNNING;
+    uint8_t idleState = isRabbit() ? e.state("IDLE") : e.state("VAMPIRE_IDLE");
+    uint8_t runningState = isRabbit() ? e.state("RUNNING") : e.state("VAMPIRE_RUNNING");
     
     if (isInputLeft)
     {
@@ -244,8 +244,8 @@ void JonController::processJumpInput(uint16_t inputState)
 {
     Entity& e = *_entity;
     
-    bool isInputJump = IS_BIT_SET(inputState, JISF_JUMPING);
-    bool wasInputJump = IS_BIT_SET(e.lastProcessedInputState(), JISF_JUMPING);
+    bool isInputJump = IS_BIT_SET(inputState, e.inputStateFlag("JUMPING"));
+    bool wasInputJump = IS_BIT_SET(e.lastProcessedInputState(), e.inputStateFlag("JUMPING"));
     
     static uint32_t numJumpFrames = e.data().getUInt("numJumpFrames");
     static uint32_t numDoubleJumpFrames = e.data().getUInt("numDoubleJumpFrames");
@@ -259,15 +259,15 @@ void JonController::processJumpInput(uint16_t inputState)
     Vector2& vel = e.velocity();
     bool isGrounded = e.isGrounded();
     
-    State jumpingState = isRabbit() ? STATE_JUMPING : STATE_VAMPIRE_JUMPING;
-    State doubleJumpingState = isRabbit() ? STATE_DOUBLE_JUMPING : STATE_VAMPIRE_DOUBLE_JUMPING;
-    State fallingState = isRabbit() ? STATE_FALLING : STATE_VAMPIRE_FALLING;
+    uint8_t jumpingState = isRabbit() ? e.state("JUMPING") : e.state("VAMPIRE_JUMPING");
+    uint8_t doubleJumpingState = isRabbit() ? e.state("DOUBLE_JUMPING") : e.state("VAMPIRE_DOUBLE_JUMPING");
+    uint8_t fallingState = isRabbit() ? e.state("FALLING") : e.state("VAMPIRE_FALLING");
     
-    if (state == STATE_VAMPIRE_GLIDING)
+    if (state == e.state("VAMPIRE_GLIDING"))
     {
         if (!isInputJump)
         {
-            state = STATE_VAMPIRE_FALLING;
+            state = e.state("VAMPIRE_FALLING");
             stateTime = 0;
         }
         else if (isInputJump &&
@@ -294,7 +294,7 @@ void JonController::processJumpInput(uint16_t inputState)
             if (!wasInputJump)
             {
                 state = doubleJumpingState;
-                SET_BIT(stateFlags, STATE_FALLING_FLAG_CAN_JUMP_AGAIN, false);
+                SET_BIT(stateFlags, e.stateFlag("FALLING_FLAG_CAN_JUMP_AGAIN"), false);
                 stateTime = 0;
                 vel._y = speedY;
             }
@@ -308,10 +308,10 @@ void JonController::processJumpInput(uint16_t inputState)
     {
         if (isInputJump &&
             !wasInputJump &&
-            IS_BIT_SET(stateFlags, STATE_FALLING_FLAG_CAN_JUMP_AGAIN))
+            IS_BIT_SET(stateFlags, e.stateFlag("FALLING_FLAG_CAN_JUMP_AGAIN")))
         {
             state = doubleJumpingState;
-            SET_BIT(stateFlags, STATE_FALLING_FLAG_CAN_JUMP_AGAIN, false);
+            SET_BIT(stateFlags, e.stateFlag("FALLING_FLAG_CAN_JUMP_AGAIN"), false);
             stateTime = 0;
             vel._y = speedY;
         }
@@ -322,7 +322,7 @@ void JonController::processJumpInput(uint16_t inputState)
             !wasInputJump)
         {
             state = jumpingState;
-            SET_BIT(stateFlags, STATE_FALLING_FLAG_CAN_JUMP_AGAIN, true);
+            SET_BIT(stateFlags, e.stateFlag("FALLING_FLAG_CAN_JUMP_AGAIN"), true);
             stateTime = 0;
             vel._y = speedY;
             
@@ -338,18 +338,18 @@ void JonController::processAttackInput(uint16_t inputState)
 {
     Entity& e = *_entity;
     
-    bool isInputAttack = IS_BIT_SET(inputState, JISF_EXECUTING_ATTACK);
-    bool wasInputAttack = IS_BIT_SET(e.lastProcessedInputState(), JISF_EXECUTING_ATTACK);
+    bool isInputAttack = IS_BIT_SET(inputState, e.inputStateFlag("EXECUTING_ATTACK"));
+    bool wasInputAttack = IS_BIT_SET(e.lastProcessedInputState(), e.inputStateFlag("EXECUTING_ATTACK"));
     
     uint8_t& state = e.state()._state;
     uint16_t& stateTime = e.state()._stateTime;
     
     if (isRabbit() &&
-        state != STATE_PUNCHING &&
+        state != e.state("PUNCHING") &&
         isInputAttack &&
         !wasInputAttack)
     {
-        state = STATE_PUNCHING;
+        state = e.state("PUNCHING");
         stateTime = 0;
     }
 }
@@ -358,8 +358,8 @@ void JonController::processAbilityInput(uint16_t inputState)
 {
     Entity& e = *_entity;
     
-    bool isInputAbility = IS_BIT_SET(inputState, JISF_EXECUTING_ABILITY);
-    bool wasInputAbility = IS_BIT_SET(e.lastProcessedInputState(), JISF_EXECUTING_ABILITY);
+    bool isInputAbility = IS_BIT_SET(inputState, e.inputStateFlag("EXECUTING_ABILITY"));
+    bool wasInputAbility = IS_BIT_SET(e.lastProcessedInputState(), e.inputStateFlag("EXECUTING_ABILITY"));
     
     uint8_t& state = e.state()._state;
     uint16_t& stateTime = e.state()._stateTime;
@@ -370,21 +370,21 @@ void JonController::processAbilityInput(uint16_t inputState)
     {
         if (isGrounded)
         {
-            if (state != STATE_DRILLING &&
+            if (state != e.state("DRILLING") &&
                 isInputAbility &&
                 !wasInputAbility)
             {
-                state = STATE_DRILLING;
+                state = e.state("DRILLING");
                 stateTime = 0;
             }
         }
         else
         {
-            if (state != STATE_DRILL_STOMPING &&
+            if (state != e.state("DRILL_STOMPING") &&
                 isInputAbility &&
                 !wasInputAbility)
             {
-                state = STATE_DRILL_STOMPING;
+                state = e.state("DRILL_STOMPING");
                 stateTime = 0;
                 e.pose()._isZeroGravity = true;
                 vel._x = 0;
@@ -394,13 +394,13 @@ void JonController::processAbilityInput(uint16_t inputState)
     }
     else
     {
-        if (state != STATE_VAMPIRE_DASHING &&
+        if (state != e.state("VAMPIRE_DASHING") &&
             isInputAbility &&
             !wasInputAbility)
         {
             static float speedX = e.data().getFloat("speedVampireX");
             
-            state = STATE_VAMPIRE_DASHING;
+            state = e.state("VAMPIRE_DASHING");
             stateTime = 0;
             e.pose()._isZeroGravity = true;
             float dashSpeedX = e.pose()._isXFlipped ? -speedX : speedX;
@@ -414,18 +414,18 @@ void JonController::processWarmingUpInput(uint16_t inputState)
 {
     Entity& e = *_entity;
     
-    bool isInputWarmingUp = IS_BIT_SET(inputState, JISF_WARMING_UP);
-    bool wasInputWarmingUp = IS_BIT_SET(e.lastProcessedInputState(), JISF_WARMING_UP);
+    bool isInputWarmingUp = IS_BIT_SET(inputState, e.inputStateFlag("WARMING_UP"));
+    bool wasInputWarmingUp = IS_BIT_SET(e.lastProcessedInputState(), e.inputStateFlag("WARMING_UP"));
     
     uint8_t& state = e.state()._state;
     uint16_t& stateTime = e.state()._stateTime;
     
     if (isRabbit() &&
-        state != STATE_WARMING_UP &&
+        state != e.state("WARMING_UP") &&
         isInputWarmingUp &&
         !wasInputWarmingUp)
     {
-        state = STATE_WARMING_UP;
+        state = e.state("WARMING_UP");
         stateTime = 0;
     }
 }
@@ -434,14 +434,14 @@ void JonController::processSpecialInput(uint16_t inputState)
 {
     Entity& e = *_entity;
     
-    bool isInputSpecial = IS_BIT_SET(inputState, JISF_TRIGGERING_SPECIAL);
-    bool wasInputSpecial = IS_BIT_SET(e.lastProcessedInputState(), JISF_TRIGGERING_SPECIAL);
+    bool isInputSpecial = IS_BIT_SET(inputState, e.inputStateFlag("TRIGGERING_SPECIAL"));
+    bool wasInputSpecial = IS_BIT_SET(e.lastProcessedInputState(), e.inputStateFlag("TRIGGERING_SPECIAL"));
     
     uint8_t& state = e.state()._state;
     uint16_t& stateTime = e.state()._stateTime;
     
-    State attemptingToTransformState = isRabbit() ? STATE_ATTEMPTING_TO_TRANSFORM : STATE_ATTEMPTING_TO_REVERT;
-    State cancelingAttemptState = isRabbit() ? STATE_CANCELING_ATTEMPT_TO_TRANSFORM : STATE_CANCELING_ATTEMPT_TO_REVERT;
+    uint8_t attemptingToTransformState = isRabbit() ? e.state("ATTEMPTING_TO_TRANSFORM") : e.state("ATTEMPTING_TO_REVERT");
+    uint8_t cancelingAttemptState = isRabbit() ? e.state("CANCELING_ATTEMPT_TO_TRANSFORM") : e.state("CANCELING_ATTEMPT_TO_REVERT");
     
     if (state == attemptingToTransformState)
     {
@@ -472,23 +472,23 @@ void JonController::processSpecialInput(uint16_t inputState)
 bool JonController::isRabbit()
 {
     Entity& e = *_entity;
-    uint8_t& state = e.state()._state;
+    std::string state = e.state(e.state()._state);
     
-    return state == STATE_IDLE ||
-    state == STATE_RUNNING ||
-    state == STATE_JUMPING ||
-    state == STATE_FALLING ||
-    state == STATE_DOUBLE_JUMPING ||
-    state == STATE_LANDING ||
-    state == STATE_DRILL_STOMPING ||
-    state == STATE_LANDING_ROLL ||
-    state == STATE_WARMING_UP ||
-    state == STATE_PUNCHING ||
-    state == STATE_DRILLING ||
-    state == STATE_ATTEMPTING_TO_TRANSFORM ||
-    state == STATE_CANCELING_ATTEMPT_TO_TRANSFORM ||
-    state == STATE_REVERTING ||
-    state == STATE_RABBIT_DEATH;
+    return state == "IDLE" ||
+    state == "RUNNING" ||
+    state == "JUMPING" ||
+    state == "FALLING" ||
+    state == "DOUBLE_JUMPING" ||
+    state == "LANDING" ||
+    state == "DRILL_STOMPING" ||
+    state == "LANDING_ROLL" ||
+    state == "WARMING_UP" ||
+    state == "PUNCHING" ||
+    state == "DRILLING" ||
+    state == "ATTEMPTING_TO_TRANSFORM" ||
+    state == "CANCELING_ATTEMPT_TO_TRANSFORM" ||
+    state == "REVERTING" ||
+    state == "RABBIT_DEATH";
 }
 
 bool JonController::isReleasingShockwave()
@@ -504,179 +504,179 @@ uint16_t JonController::shockwaveStateTime()
 bool JonController::isVampire()
 {
     Entity& e = *_entity;
-    uint8_t& state = e.state()._state;
+    std::string state = e.state(e.state()._state);
     
-    return state == STATE_TRANSFORMING ||
-    state == STATE_VAMPIRE_IDLE ||
-    state == STATE_VAMPIRE_RUNNING ||
-    state == STATE_VAMPIRE_JUMPING ||
-    state == STATE_VAMPIRE_DASHING ||
-    state == STATE_VAMPIRE_DOUBLE_JUMPING ||
-    state == STATE_VAMPIRE_GLIDING ||
-    state == STATE_VAMPIRE_FALLING ||
-    state == STATE_VAMPIRE_LANDING ||
-    state == STATE_ATTEMPTING_TO_REVERT ||
-    state == STATE_CANCELING_ATTEMPT_TO_REVERT ||
-    state == STATE_VAMPIRE_DASH_COMPLETED ||
-    state == STATE_VAMPIRE_DEATH;
+    return state == "TRANSFORMING" ||
+    state == "VAMPIRE_IDLE" ||
+    state == "VAMPIRE_RUNNING" ||
+    state == "VAMPIRE_JUMPING" ||
+    state == "VAMPIRE_DASHING" ||
+    state == "VAMPIRE_DOUBLE_JUMPING" ||
+    state == "VAMPIRE_GLIDING" ||
+    state == "VAMPIRE_FALLING" ||
+    state == "VAMPIRE_LANDING" ||
+    state == "ATTEMPTING_TO_REVERT" ||
+    state == "CANCELING_ATTEMPT_TO_REVERT" ||
+    state == "VAMPIRE_DASH_COMPLETED" ||
+    state == "VAMPIRE_DEATH";
 }
 
 bool JonController::isMovementInputAllowed()
 {
     Entity& e = *_entity;
-    uint8_t& state = e.state()._state;
+    std::string state = e.state(e.state()._state);
     
-    return state == STATE_IDLE ||
-    state == STATE_RUNNING ||
-    state == STATE_JUMPING ||
-    state == STATE_FALLING ||
-    state == STATE_DOUBLE_JUMPING ||
-    state == STATE_LANDING ||
-    state == STATE_WARMING_UP ||
-    state == STATE_VAMPIRE_IDLE ||
-    state == STATE_VAMPIRE_RUNNING ||
-    state == STATE_VAMPIRE_DOUBLE_JUMPING ||
-    state == STATE_VAMPIRE_GLIDING ||
-    state == STATE_VAMPIRE_FALLING ||
-    state == STATE_VAMPIRE_LANDING;
+    return state == "IDLE" ||
+    state == "RUNNING" ||
+    state == "JUMPING" ||
+    state == "FALLING" ||
+    state == "DOUBLE_JUMPING" ||
+    state == "LANDING" ||
+    state == "WARMING_UP" ||
+    state == "VAMPIRE_IDLE" ||
+    state == "VAMPIRE_RUNNING" ||
+    state == "VAMPIRE_DOUBLE_JUMPING" ||
+    state == "VAMPIRE_GLIDING" ||
+    state == "VAMPIRE_FALLING" ||
+    state == "VAMPIRE_LANDING";
 }
 
 bool JonController::isJumpInputAllowed()
 {
     Entity& e = *_entity;
-    uint8_t& state = e.state()._state;
+    std::string state = e.state(e.state()._state);
     
-    return state == STATE_IDLE ||
-    state == STATE_RUNNING ||
-    state == STATE_JUMPING ||
-    state == STATE_FALLING ||
-    state == STATE_DOUBLE_JUMPING ||
-    state == STATE_LANDING ||
-    state == STATE_DRILL_STOMPING ||
-    state == STATE_LANDING_ROLL ||
-    state == STATE_WARMING_UP ||
-    state == STATE_VAMPIRE_IDLE ||
-    state == STATE_VAMPIRE_RUNNING ||
-    state == STATE_VAMPIRE_JUMPING ||
-    state == STATE_VAMPIRE_DOUBLE_JUMPING ||
-    state == STATE_VAMPIRE_GLIDING ||
-    state == STATE_VAMPIRE_FALLING ||
-    state == STATE_VAMPIRE_LANDING;
+    return state == "IDLE" ||
+    state == "RUNNING" ||
+    state == "JUMPING" ||
+    state == "FALLING" ||
+    state == "DOUBLE_JUMPING" ||
+    state == "LANDING" ||
+    state == "DRILL_STOMPING" ||
+    state == "LANDING_ROLL" ||
+    state == "WARMING_UP" ||
+    state == "VAMPIRE_IDLE" ||
+    state == "VAMPIRE_RUNNING" ||
+    state == "VAMPIRE_JUMPING" ||
+    state == "VAMPIRE_DOUBLE_JUMPING" ||
+    state == "VAMPIRE_GLIDING" ||
+    state == "VAMPIRE_FALLING" ||
+    state == "VAMPIRE_LANDING";
 }
 
 bool JonController::isAttackInputAllowed()
 {
     Entity& e = *_entity;
-    uint8_t& state = e.state()._state;
+    std::string state = e.state(e.state()._state);
     
-    return state == STATE_IDLE ||
-    state == STATE_RUNNING ||
-    state == STATE_JUMPING ||
-    state == STATE_FALLING ||
-    state == STATE_DOUBLE_JUMPING ||
-    state == STATE_WARMING_UP;
+    return state == "IDLE" ||
+    state == "RUNNING" ||
+    state == "JUMPING" ||
+    state == "FALLING" ||
+    state == "DOUBLE_JUMPING" ||
+    state == "WARMING_UP";
 }
 
 bool JonController::isAbilityInputAllowed()
 {
     Entity& e = *_entity;
-    uint8_t& state = e.state()._state;
+    std::string state = e.state(e.state()._state);
     
-    return state == STATE_IDLE ||
-    state == STATE_RUNNING ||
-    state == STATE_JUMPING ||
-    state == STATE_FALLING ||
-    state == STATE_DOUBLE_JUMPING ||
-    state == STATE_LANDING ||
-    state == STATE_WARMING_UP ||
-    state == STATE_VAMPIRE_IDLE ||
-    state == STATE_VAMPIRE_RUNNING ||
-    state == STATE_VAMPIRE_JUMPING ||
-    state == STATE_VAMPIRE_DOUBLE_JUMPING ||
-    state == STATE_VAMPIRE_GLIDING ||
-    state == STATE_VAMPIRE_FALLING ||
-    state == STATE_VAMPIRE_LANDING;
+    return state == "IDLE" ||
+    state == "RUNNING" ||
+    state == "JUMPING" ||
+    state == "FALLING" ||
+    state == "DOUBLE_JUMPING" ||
+    state == "LANDING" ||
+    state == "WARMING_UP" ||
+    state == "VAMPIRE_IDLE" ||
+    state == "VAMPIRE_RUNNING" ||
+    state == "VAMPIRE_JUMPING" ||
+    state == "VAMPIRE_DOUBLE_JUMPING" ||
+    state == "VAMPIRE_GLIDING" ||
+    state == "VAMPIRE_FALLING" ||
+    state == "VAMPIRE_LANDING";
 }
 
 bool JonController::isWarmingUpInputAllowed()
 {
     Entity& e = *_entity;
-    uint8_t& state = e.state()._state;
+    std::string state = e.state(e.state()._state);
     
-    return state == STATE_IDLE;
+    return state == "IDLE";
 }
 
 bool JonController::isSpecialInputAllowed()
 {
     Entity& e = *_entity;
-    uint8_t& state = e.state()._state;
+    std::string state = e.state(e.state()._state);
     
-    return state != STATE_TRANSFORMING &&
-    state != STATE_REVERTING;
+    return state != "TRANSFORMING" &&
+    state != "REVERTING";
 }
 
 bool JonController::needsStateChangeForMovement()
 {
     Entity& e = *_entity;
-    uint8_t& state = e.state()._state;
+    std::string state = e.state(e.state()._state);
     
-    return state == STATE_IDLE ||
-    state == STATE_WARMING_UP ||
-    state == STATE_VAMPIRE_IDLE;
+    return state == "IDLE" ||
+    state == "WARMING_UP" ||
+    state == "VAMPIRE_IDLE";
 }
 
 bool JonController::canCurrentStateBeInterruptedByFalling()
 {
     Entity& e = *_entity;
-    uint8_t& state = e.state()._state;
+    std::string state = e.state(e.state()._state);
     
-    return state == STATE_IDLE ||
-    state == STATE_RUNNING ||
-    state == STATE_JUMPING ||
-    state == STATE_DOUBLE_JUMPING ||
-    state == STATE_LANDING ||
-    state == STATE_LANDING_ROLL ||
-    state == STATE_WARMING_UP ||
-    state == STATE_DRILLING ||
-    state == STATE_VAMPIRE_IDLE ||
-    state == STATE_VAMPIRE_RUNNING ||
-    state == STATE_VAMPIRE_JUMPING ||
-    state == STATE_VAMPIRE_DOUBLE_JUMPING ||
-    state == STATE_VAMPIRE_LANDING ||
-    state == STATE_VAMPIRE_DASH_COMPLETED;
+    return state == "IDLE" ||
+    state == "RUNNING" ||
+    state == "JUMPING" ||
+    state == "DOUBLE_JUMPING" ||
+    state == "LANDING" ||
+    state == "LANDING_ROLL" ||
+    state == "WARMING_UP" ||
+    state == "DRILLING" ||
+    state == "VAMPIRE_IDLE" ||
+    state == "VAMPIRE_RUNNING" ||
+    state == "VAMPIRE_JUMPING" ||
+    state == "VAMPIRE_DOUBLE_JUMPING" ||
+    state == "VAMPIRE_LANDING" ||
+    state == "VAMPIRE_DASH_COMPLETED";
 }
 
 bool JonController::canCurrentStateBeInterruptedByLanding()
 {
     Entity& e = *_entity;
-    uint8_t& state = e.state()._state;
+    std::string state = e.state(e.state()._state);
     
-    return state == STATE_FALLING ||
-    state == STATE_VAMPIRE_GLIDING ||
-    state == STATE_VAMPIRE_FALLING;
+    return state == "FALLING" ||
+    state == "VAMPIRE_GLIDING" ||
+    state == "VAMPIRE_FALLING";
 }
 
 bool JonController::needsToResolveNewStateOnceAnimationEnds()
 {
     Entity& e = *_entity;
-    uint8_t& state = e.state()._state;
+    std::string state = e.state(e.state()._state);
     
-    return state == STATE_JUMPING ||
-    state == STATE_DOUBLE_JUMPING ||
-    state == STATE_LANDING ||
-    state == STATE_LANDING_ROLL ||
-    state == STATE_PUNCHING ||
-    state == STATE_DRILLING ||
-    state == STATE_TRANSFORMING ||
-    state == STATE_CANCELING_ATTEMPT_TO_TRANSFORM ||
-    state == STATE_DRILLING ||
-    state == STATE_VAMPIRE_JUMPING ||
-    state == STATE_VAMPIRE_LANDING ||
-    state == STATE_REVERTING ||
-    state == STATE_CANCELING_ATTEMPT_TO_REVERT ||
-    state == STATE_VAMPIRE_DASH_COMPLETED ||
-    state == STATE_RABBIT_DEATH ||
-    state == STATE_VAMPIRE_DEATH;
+    return state == "JUMPING" ||
+    state == "DOUBLE_JUMPING" ||
+    state == "LANDING" ||
+    state == "LANDING_ROLL" ||
+    state == "PUNCHING" ||
+    state == "DRILLING" ||
+    state == "TRANSFORMING" ||
+    state == "CANCELING_ATTEMPT_TO_TRANSFORM" ||
+    state == "DRILLING" ||
+    state == "VAMPIRE_JUMPING" ||
+    state == "VAMPIRE_LANDING" ||
+    state == "REVERTING" ||
+    state == "CANCELING_ATTEMPT_TO_REVERT" ||
+    state == "VAMPIRE_DASH_COMPLETED" ||
+    state == "RABBIT_DEATH" ||
+    state == "VAMPIRE_DEATH";
 }
 
 void JonController::resolveNewState()
@@ -688,10 +688,10 @@ void JonController::resolveNewState()
     Vector2& vel = e.velocity();
     bool isGrounded = e.isGrounded();
     
-    State deathState = isRabbit() ? STATE_RABBIT_DEATH : STATE_VAMPIRE_DEATH;
-    State idleState = isRabbit() ? STATE_IDLE : STATE_VAMPIRE_IDLE;
-    State doubleJumpingState = isRabbit() ? STATE_DOUBLE_JUMPING : STATE_VAMPIRE_DOUBLE_JUMPING;
-    State fallingState = isRabbit() ? STATE_FALLING : STATE_VAMPIRE_FALLING;
+    uint8_t deathState = isRabbit() ? e.state("RABBIT_DEATH") : e.state("VAMPIRE_DEATH");
+    uint8_t idleState = isRabbit() ? e.state("IDLE") : e.state("VAMPIRE_IDLE");
+    uint8_t doubleJumpingState = isRabbit() ? e.state("DOUBLE_JUMPING") : e.state("VAMPIRE_DOUBLE_JUMPING");
+    uint8_t fallingState = isRabbit() ? e.state("FALLING") : e.state("VAMPIRE_FALLING");
     
     if (state == deathState)
     {
@@ -711,7 +711,7 @@ void JonController::resolveNewState()
             canJumpAgain = false;
         }
         state = fallingState;
-        SET_BIT(stateFlags, STATE_FALLING_FLAG_CAN_JUMP_AGAIN, canJumpAgain);
+        SET_BIT(stateFlags, e.stateFlag("FALLING_FLAG_CAN_JUMP_AGAIN"), canJumpAgain);
         stateTime = 0;
     }
 }

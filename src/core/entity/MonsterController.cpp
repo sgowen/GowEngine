@@ -41,12 +41,12 @@ void MonsterController::onUpdate(uint32_t numMovesProcessed)
     Animation* animation = ASSETS_MGR.animation(textureMapping);
     uint16_t animationNumFrames = animation == nullptr ? 1 : animation->cycleTime();
     
-    if (state == STATE_PREPARING_ATTACK && stateTime == 60)
+    if (state == e.state("PREPARING_ATTACK") && stateTime == 60)
     {
-        state = STATE_ATTACKING;
+        state = e.state("ATTACKING");
         stateTime = 0;
     }
-    else if (state == STATE_ATTACKING && stateTime == 30)
+    else if (state == e.state("ATTACKING") && stateTime == 30)
     {
         uint32_t touchingEntityID = e.networkDataField("touchingEntityID").valueUInt32();
         Entity* touchingEntity = e.world()->getEntityByID(touchingEntityID);
@@ -85,14 +85,14 @@ void MonsterController::onMessage(uint16_t message, Entity* fromEntity)
         }
     }
     else if (message == MSG_DAMAGE &&
-        state != STATE_DYING)
+        state != e.state("DYING"))
     {
         uint8_t health = e.networkDataField("health").valueUInt8();
         health -= 1;
         e.networkDataField("health").setValueUInt8(health);
         if (health == 0)
         {
-            state = STATE_DYING;
+            state = e.state("DYING");
             stateTime = 0;
             vel.reset();
         }
@@ -103,10 +103,10 @@ void MonsterController::processMovementInput(uint16_t inputState)
 {
     Entity& e = *_entity;
     
-    bool isInputLeft = IS_BIT_SET(inputState, MISF_MOVING_LEFT);
-    bool wasInputLeft = IS_BIT_SET(e.lastProcessedInputState(), MISF_MOVING_LEFT);
-    bool isInputRight = IS_BIT_SET(inputState, MISF_MOVING_RIGHT);
-    bool wasInputRight = IS_BIT_SET(e.lastProcessedInputState(), MISF_MOVING_RIGHT);
+    bool isInputLeft = IS_BIT_SET(inputState, e.inputStateFlag("MOVING_LEFT"));
+    bool wasInputLeft = IS_BIT_SET(e.lastProcessedInputState(), e.inputStateFlag("MOVING_LEFT"));
+    bool isInputRight = IS_BIT_SET(inputState, e.inputStateFlag("MOVING_RIGHT"));
+    bool wasInputRight = IS_BIT_SET(e.lastProcessedInputState(), e.inputStateFlag("MOVING_RIGHT"));
     
     static float speedX = e.data().getFloat("speedX");
     
@@ -119,7 +119,7 @@ void MonsterController::processMovementInput(uint16_t inputState)
     {
         if (needsStateChangeForMovement())
         {
-            state = STATE_RUNNING;
+            state = e.state("RUNNING");
             stateTime = 0;
         }
         vel._x = -speedX;
@@ -129,7 +129,7 @@ void MonsterController::processMovementInput(uint16_t inputState)
     {
         if (needsStateChangeForMovement())
         {
-            state = STATE_RUNNING;
+            state = e.state("RUNNING");
             stateTime = 0;
         }
         vel._x = speedX;
@@ -139,7 +139,7 @@ void MonsterController::processMovementInput(uint16_t inputState)
     {
         if (isGrounded)
         {
-            state = STATE_IDLE;
+            state = e.state("IDLE");
             stateTime = 0;
         }
         vel._x = 0;
@@ -150,8 +150,8 @@ void MonsterController::processAttackInput(uint16_t inputState)
 {
     Entity& e = *_entity;
     
-    bool isInputAttack = IS_BIT_SET(inputState, MISF_EXECUTING_ATTACK);
-    bool wasInputAttack = IS_BIT_SET(e.lastProcessedInputState(), MISF_EXECUTING_ATTACK);
+    bool isInputAttack = IS_BIT_SET(inputState, e.inputStateFlag("EXECUTING_ATTACK"));
+    bool wasInputAttack = IS_BIT_SET(e.lastProcessedInputState(), e.inputStateFlag("EXECUTING_ATTACK"));
     
     uint8_t& state = e.state()._state;
     uint16_t& stateTime = e.state()._stateTime;
@@ -159,7 +159,7 @@ void MonsterController::processAttackInput(uint16_t inputState)
     if (isInputAttack &&
         !wasInputAttack)
     {
-        state = STATE_PREPARING_ATTACK;
+        state = e.state("PREPARING_ATTACK");
         stateTime = 0;
     }
 }
@@ -167,38 +167,38 @@ void MonsterController::processAttackInput(uint16_t inputState)
 bool MonsterController::isMovementInputAllowed()
 {
     Entity& e = *_entity;
-    uint8_t& state = e.state()._state;
+    std::string state = e.state(e.state()._state);
     
-    return state == STATE_IDLE ||
-    state == STATE_RUNNING ||
-    state == STATE_PREPARING_ATTACK ||
-    state == STATE_ATTACKING;
+    return state == "IDLE" ||
+    state == "RUNNING" ||
+    state == "PREPARING_ATTACK" ||
+    state == "ATTACKING";
 }
 
 bool MonsterController::isAttackInputAllowed()
 {
     Entity& e = *_entity;
-    uint8_t& state = e.state()._state;
+    std::string state = e.state(e.state()._state);
     
-    return state == STATE_IDLE ||
-    state == STATE_RUNNING;
+    return state == "IDLE" ||
+    state == "RUNNING";
 }
 
 bool MonsterController::needsStateChangeForMovement()
 {
     Entity& e = *_entity;
-    uint8_t& state = e.state()._state;
+    std::string state = e.state(e.state()._state);
     
-    return state == STATE_IDLE;
+    return state == "IDLE";
 }
 
 bool MonsterController::needsToResolveNewStateOnceAnimationEnds()
 {
     Entity& e = *_entity;
-    uint8_t& state = e.state()._state;
+    std::string state = e.state(e.state()._state);
     
-    return state == STATE_ATTACKING ||
-    state == STATE_DYING;
+    return state == "ATTACKING" ||
+    state == "DYING";
 }
 
 void MonsterController::resolveNewState()
@@ -210,13 +210,13 @@ void MonsterController::resolveNewState()
     Vector2& vel = e.velocity();
     bool isGrounded = e.isGrounded();
     
-    if (state == STATE_DYING)
+    if (state == e.state("DYING"))
     {
         e.exile();
     }
     else if (isGrounded)
     {
-        state = STATE_IDLE;
+        state = e.state("IDLE");
         stateTime = 0;
         vel._x = 0;
     }

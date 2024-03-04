@@ -39,6 +39,7 @@
 #define ENGINE_STATE_GAME GameEngineState::getInstance()
 #define GAME_SERVER GameServer::getInstance()
 #define ENGINE_CFG EngineConfig::getInstance()
+#define ENTITY_INPUT_MAPPING_MGR EntityInputMappingManager::getInstance()
 #define ENTITY_LAYOUT_MGR EntityLayoutManager::getInstance()
 #define ENTITY_MGR EntityManager::getInstance()
 #define INPUT_MGR InputManager::getInstance()
@@ -73,44 +74,58 @@ EntityController* type::create(Entity* e)     \
 #define IMPL_EntityController_create_NOPARENT \
 IMPL_EntityController_create(EntityController)
 
-/// EntityInputController
-#define DECL_EntityInputController_create              \
-public:                                                \
-    static EntityInputController* create(Entity* e)
+/// EntityAIController
+#define DECL_EntityAIController_create            \
+public:                                           \
+    static EntityAIController* create(Entity* e)
 
-#define IMPL_EntityInputController_create(type)        \
-EntityInputController* type::create(Entity* e)         \
-{                                                      \
-    return new type(e);                                \
+#define IMPL_EntityAIController_create(type)      \
+EntityAIController* type::create(Entity* e)       \
+{                                                 \
+    return new type(e);                           \
 }
 
-#define IMPL_EntityInputController_create_NOPARENT     \
+#define IMPL_EntityAIController_create_NOPARENT   \
+IMPL_EntityAIController_create(EntityAIController)
+
+/// EntityInputController
+#define DECL_EntityInputController_create               \
+public:                                                 \
+    static EntityInputController* create(Entity* e)
+
+#define IMPL_EntityInputController_create(type)         \
+EntityInputController* type::create(Entity* e)          \
+{                                                       \
+    return new type(e);                                 \
+}
+
+#define IMPL_EntityInputController_create_NOPARENT      \
 IMPL_EntityInputController_create(EntityInputController)
 
 /// EntityNetworkController
-#define DECL_EntityNetworkController_create                \
-public:                                                    \
+#define DECL_EntityNetworkController_create                 \
+public:                                                     \
     static EntityNetworkController* create(Entity* e)
 
-#define IMPL_EntityNetworkController_create(type)          \
-EntityNetworkController* type::create(Entity* e)           \
-{                                                          \
-    return new type(e);                                    \
+#define IMPL_EntityNetworkController_create(type)           \
+EntityNetworkController* type::create(Entity* e)            \
+{                                                           \
+    return new type(e);                                     \
 }
 
-#define IMPL_EntityNetworkController_create_NOPARENT       \
+#define IMPL_EntityNetworkController_create_NOPARENT        \
 IMPL_EntityNetworkController_create(EntityNetworkController)
 
 /// EntityRenderController
-#define DECL_EntityRenderController_create               \
-public:                                                  \
+#define DECL_EntityRenderController_create                \
+public:                                                   \
     static EntityRenderController* create(Entity* e)
 
-#define IMPL_EntityRenderController_create(type)         \
-EntityRenderController* type::create(Entity* e)          \
-{                                                        \
-    return new type(e);                                  \
+#define IMPL_EntityRenderController_create(type)          \
+EntityRenderController* type::create(Entity* e)           \
+{                                                         \
+    return new type(e);                                   \
 }
 
-#define IMPL_EntityRenderController_create_NOPARENT      \
+#define IMPL_EntityRenderController_create_NOPARENT       \
 IMPL_EntityRenderController_create(EntityRenderController)

@@ -40,9 +40,56 @@ void EntityManagerLoader::initWithJSON(EntityManager& em, const char* json)
         std::string name = RapidJSONUtil::getString(iv, "name");
         std::string keyName = keyStr;
         std::string controller = RapidJSONUtil::getString(iv, "controller", "EntityController");
+        std::string aiController = RapidJSONUtil::getString(iv, "aiController", "EntityAIController");
         std::string inputController = RapidJSONUtil::getString(iv, "inputController", "EntityInputController");
+        std::string inputMapping = RapidJSONUtil::getString(iv, "inputMapping");
         std::string networkController = RapidJSONUtil::getString(iv, "networkController", "EntityNetworkController");
         std::string renderController = RapidJSONUtil::getString(iv, "renderController", "EntityRenderController");
+        
+        std::vector<std::string> inputStateFlags;
+        if (iv.HasMember("inputStateFlags"))
+        {
+            const Value& v = iv["inputStateFlags"];
+            assert(v.IsArray());
+            for (SizeType i = 0; i < v.Size(); ++i)
+            {
+                const Value& iv = v[i];
+                assert(iv.IsString());
+                
+                std::string inputStateFlag = iv.GetString();
+                inputStateFlags.push_back(inputStateFlag);
+            }
+        }
+        
+        std::vector<std::string> states;
+        if (iv.HasMember("states"))
+        {
+            const Value& v = iv["states"];
+            assert(v.IsArray());
+            for (SizeType i = 0; i < v.Size(); ++i)
+            {
+                const Value& iv = v[i];
+                assert(iv.IsString());
+                
+                std::string state = iv.GetString();
+                states.push_back(state);
+            }
+        }
+        
+        std::vector<std::string> stateFlags;
+        if (iv.HasMember("stateFlags"))
+        {
+            const Value& v = iv["stateFlags"];
+            assert(v.IsArray());
+            for (SizeType i = 0; i < v.Size(); ++i)
+            {
+                const Value& iv = v[i];
+                assert(iv.IsString());
+                
+                std::string stateFlag = iv.GetString();
+                stateFlags.push_back(stateFlag);
+            }
+        }
         
         std::map<uint8_t, std::string> textureMappings;
         if (iv.HasMember("textureMappings"))
@@ -52,20 +99,19 @@ void EntityManagerLoader::initWithJSON(EntityManager& em, const char* json)
             for (Value::ConstMemberIterator i = v.MemberBegin(); i != v.MemberEnd(); ++i)
             {
                 std::string name = i->name.GetString();
-                uint16_t nameVal = StringUtil::stringToNumber<uint16_t>(name);
-                uint8_t state = (uint8_t)nameVal;
-                const Value& value = i->value;
-                assert(value.IsString());
-                std::string stateMapping = value.GetString();
+                auto it = std::find(states.begin(), states.end(), name);
+                assert(it != states.end());
+                uint8_t state = std::distance(states.begin(), it);
+                const Value& v = i->value;
+                assert(v.IsString());
+                std::string stateMapping = v.GetString();
                 textureMappings.emplace(state, stateMapping);
             }
         }
-        else if (iv.HasMember("textureMapping"))
+        else
         {
-            const Value& v = iv["textureMapping"];
-            assert(v.IsString());
             uint8_t state = 0;
-            std::string stateMapping = v.GetString();
+            std::string stateMapping = name;
             textureMappings.emplace(state, stateMapping);
         }
         
@@ -77,8 +123,9 @@ void EntityManagerLoader::initWithJSON(EntityManager& em, const char* json)
             for (Value::ConstMemberIterator member = v.MemberBegin(); member != v.MemberEnd(); ++member)
             {
                 std::string name = member->name.GetString();
-                uint16_t nameVal = StringUtil::stringToNumber<uint16_t>(name);
-                uint8_t state = (uint8_t)nameVal;
+                auto it = std::find(states.begin(), states.end(), name);
+                assert(it != states.end());
+                uint8_t state = std::distance(states.begin(), it);
                 assert(member->value.IsString() || member->value.IsArray());
                 
                 std::vector<SoundMapping> stateSoundMappings;
@@ -204,6 +251,6 @@ void EntityManagerLoader::initWithJSON(EntityManager& em, const char* json)
         }
         NetworkData nd(networkDataGroups);
         
-        em._entityDefs.emplace(key, EntityDef{key, name, keyName, controller, inputController, networkController, renderController, textureMappings, soundMappings, fixtures, bodyFlags, width, height, scale, data, nd});
+        em._entityDefs.emplace(key, EntityDef{key, name, keyName, controller, aiController, inputController, inputMapping, networkController, renderController, inputStateFlags, states, stateFlags, textureMappings, soundMappings, fixtures, bodyFlags, width, height, scale, data, nd});
     }
 }

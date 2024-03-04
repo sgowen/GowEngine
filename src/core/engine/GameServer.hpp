@@ -25,7 +25,7 @@ public:
     void handleNewClient(std::string playerName, uint8_t playerID);
     void handleLostClient(ClientProxy& cp, uint8_t localPlayerIndex);
     void resetWorld();
-    void populateFromEntityLayout(EntityLayoutDef& eld);
+    void populateFromEntityLayout(EntityLayout& eld);
     void restart();
     World& world();
     

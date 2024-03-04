@@ -11,6 +11,7 @@
 #include "core/common/StateMachine.hpp"
 #include "core/assets/Assets.hpp"
 #include "core/opengl/Renderer.hpp"
+#include "deps/sol2/LuaRenderer.hpp"
 
 #include <string>
 
@@ -32,6 +33,7 @@ public:
     
 protected:
     Config _config;
+    LuaRenderer _luaRenderer; // TODO, prolly make this private
     
     EngineState(std::string configFilePath);
     virtual ~EngineState() {}

@@ -7,12 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		BB006FA82B92789300C65215 /* JonInputController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BB006FA22B92789200C65215 /* JonInputController.cpp */; };
-		BB006FA92B92789300C65215 /* JonInputController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BB006FA22B92789200C65215 /* JonInputController.cpp */; };
-		BB006FAA2B92789300C65215 /* MonsterInputController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BB006FA52B92789300C65215 /* MonsterInputController.cpp */; };
-		BB006FAB2B92789300C65215 /* MonsterInputController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BB006FA52B92789300C65215 /* MonsterInputController.cpp */; };
-		BB006FAC2B92789300C65215 /* RobotInputController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BB006FA62B92789300C65215 /* RobotInputController.cpp */; };
-		BB006FAD2B92789300C65215 /* RobotInputController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BB006FA62B92789300C65215 /* RobotInputController.cpp */; };
+		BB006FAA2B92789300C65215 /* MonsterAIController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BB006FA52B92789300C65215 /* MonsterAIController.cpp */; };
+		BB006FAB2B92789300C65215 /* MonsterAIController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BB006FA52B92789300C65215 /* MonsterAIController.cpp */; };
 		BB006FB02B928E9F00C65215 /* NosRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BB006FAE2B928E9F00C65215 /* NosRenderer.cpp */; };
 		BB006FB12B928E9F00C65215 /* NosRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BB006FAE2B928E9F00C65215 /* NosRenderer.cpp */; };
 		BB006FB42B9290CF00C65215 /* DanteRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BB006FB32B9290CE00C65215 /* DanteRenderer.cpp */; };
@@ -43,6 +39,16 @@
 		BB1E5C2E271F26D800149557 /* NosPhysicsWorld.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BB1E5C27271F26D800149557 /* NosPhysicsWorld.cpp */; };
 		BB1E5C2F271F26D800149557 /* NosPhysicsController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BB1E5C2A271F26D800149557 /* NosPhysicsController.cpp */; };
 		BB1E5C30271F26D800149557 /* NosPhysicsController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BB1E5C2A271F26D800149557 /* NosPhysicsController.cpp */; };
+		BB2E55C52B94DE3700D84D3C /* liblua_static.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BB2E55C42B94DE3700D84D3C /* liblua_static.a */; };
+		BB2E5A602B94F86900D84D3C /* liblua_static.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BB2E5A5F2B94F86900D84D3C /* liblua_static.a */; };
+		BB2E5A712B96336300D84D3C /* EntityAIController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BB2E5A702B96336300D84D3C /* EntityAIController.cpp */; };
+		BB2E5A722B96336300D84D3C /* EntityAIController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BB2E5A702B96336300D84D3C /* EntityAIController.cpp */; };
+		BB2E5A792B96587A00D84D3C /* LuaRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BB2E5A772B96587A00D84D3C /* LuaRenderer.cpp */; };
+		BB2E5A7A2B96587A00D84D3C /* LuaRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BB2E5A772B96587A00D84D3C /* LuaRenderer.cpp */; };
+		BB2E5A7D2B9660F400D84D3C /* EntityInputMappingManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BB2E5A7C2B9660F400D84D3C /* EntityInputMappingManager.cpp */; };
+		BB2E5A7E2B9660F400D84D3C /* EntityInputMappingManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BB2E5A7C2B9660F400D84D3C /* EntityInputMappingManager.cpp */; };
+		BB2E5A812B96646400D84D3C /* EntityInputMappingManagerLoader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BB2E5A7F2B96646400D84D3C /* EntityInputMappingManagerLoader.cpp */; };
+		BB2E5A822B96646400D84D3C /* EntityInputMappingManagerLoader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BB2E5A7F2B96646400D84D3C /* EntityInputMappingManagerLoader.cpp */; };
 		BB3F0B022A44F2E3008D8AC8 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BB3F0B012A44F2E3008D8AC8 /* Cocoa.framework */; };
 		BB3F0B042A44F2EF008D8AC8 /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BB3F0B032A44F2EF008D8AC8 /* IOKit.framework */; };
 		BB40D7C62A26A2E600EDA51E /* SoundManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BB40D7BE2A26A2E600EDA51E /* SoundManager.cpp */; };
@@ -295,12 +301,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		BB006FA22B92789200C65215 /* JonInputController.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = JonInputController.cpp; sourceTree = "<group>"; };
-		BB006FA32B92789200C65215 /* JonInputController.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = JonInputController.hpp; sourceTree = "<group>"; };
-		BB006FA42B92789200C65215 /* MonsterInputController.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = MonsterInputController.hpp; sourceTree = "<group>"; };
-		BB006FA52B92789300C65215 /* MonsterInputController.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MonsterInputController.cpp; sourceTree = "<group>"; };
-		BB006FA62B92789300C65215 /* RobotInputController.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = RobotInputController.cpp; sourceTree = "<group>"; };
-		BB006FA72B92789300C65215 /* RobotInputController.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = RobotInputController.hpp; sourceTree = "<group>"; };
+		BB006FA42B92789200C65215 /* MonsterAIController.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = MonsterAIController.hpp; sourceTree = "<group>"; };
+		BB006FA52B92789300C65215 /* MonsterAIController.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MonsterAIController.cpp; sourceTree = "<group>"; };
 		BB006FAE2B928E9F00C65215 /* NosRenderer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = NosRenderer.cpp; sourceTree = "<group>"; };
 		BB006FAF2B928E9F00C65215 /* NosRenderer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = NosRenderer.hpp; sourceTree = "<group>"; };
 		BB006FB22B9290CE00C65215 /* DanteRenderer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = DanteRenderer.hpp; sourceTree = "<group>"; };
@@ -335,6 +337,86 @@
 		BB1E5C27271F26D800149557 /* NosPhysicsWorld.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = NosPhysicsWorld.cpp; sourceTree = "<group>"; };
 		BB1E5C29271F26D800149557 /* NosPhysicsWorld.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = NosPhysicsWorld.hpp; sourceTree = "<group>"; };
 		BB1E5C2A271F26D800149557 /* NosPhysicsController.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = NosPhysicsController.cpp; sourceTree = "<group>"; };
+		BB2E55C42B94DE3700D84D3C /* liblua_static.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = liblua_static.a; sourceTree = "<group>"; };
+		BB2E55CC2B94DE6700D84D3C /* luaconf.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = luaconf.h; sourceTree = "<group>"; };
+		BB2E55CD2B94DE6700D84D3C /* lua.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = lua.hpp; sourceTree = "<group>"; };
+		BB2E55CE2B94DE6700D84D3C /* lualib.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = lualib.h; sourceTree = "<group>"; };
+		BB2E55CF2B94DE6700D84D3C /* lauxlib.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = lauxlib.h; sourceTree = "<group>"; };
+		BB2E55D02B94DE6700D84D3C /* lua.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = lua.h; sourceTree = "<group>"; };
+		BB2E55DF2B94DE6700D84D3C /* lauxlib.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = lauxlib.c; sourceTree = "<group>"; };
+		BB2E55E02B94DE6700D84D3C /* lmem.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = lmem.h; sourceTree = "<group>"; };
+		BB2E55E12B94DE6700D84D3C /* llimits.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = llimits.h; sourceTree = "<group>"; };
+		BB2E55E22B94DE6700D84D3C /* lzio.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = lzio.h; sourceTree = "<group>"; };
+		BB2E55E32B94DE6700D84D3C /* lgc.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = lgc.h; sourceTree = "<group>"; };
+		BB2E55E42B94DE6700D84D3C /* liolib.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = liolib.c; sourceTree = "<group>"; };
+		BB2E55E52B94DE6700D84D3C /* lopcodes.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = lopcodes.c; sourceTree = "<group>"; };
+		BB2E55E62B94DE6700D84D3C /* lstate.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = lstate.c; sourceTree = "<group>"; };
+		BB2E55E72B94DE6700D84D3C /* lobject.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = lobject.c; sourceTree = "<group>"; };
+		BB2E55E82B94DE6700D84D3C /* lmathlib.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = lmathlib.c; sourceTree = "<group>"; };
+		BB2E55E92B94DE6700D84D3C /* lopnames.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = lopnames.h; sourceTree = "<group>"; };
+		BB2E55EA2B94DE6700D84D3C /* loadlib.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = loadlib.c; sourceTree = "<group>"; };
+		BB2E55EB2B94DE6700D84D3C /* lvm.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = lvm.c; sourceTree = "<group>"; };
+		BB2E55EC2B94DE6700D84D3C /* lfunc.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = lfunc.c; sourceTree = "<group>"; };
+		BB2E55ED2B94DE6700D84D3C /* lstrlib.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = lstrlib.c; sourceTree = "<group>"; };
+		BB2E55EE2B94DE6700D84D3C /* Makefile */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.make; path = Makefile; sourceTree = "<group>"; };
+		BB2E55EF2B94DE6700D84D3C /* lua.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = lua.c; sourceTree = "<group>"; };
+		BB2E55F02B94DE6700D84D3C /* ldebug.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ldebug.h; sourceTree = "<group>"; };
+		BB2E55F12B94DE6700D84D3C /* linit.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = linit.c; sourceTree = "<group>"; };
+		BB2E55F22B94DE6700D84D3C /* lcode.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = lcode.h; sourceTree = "<group>"; };
+		BB2E55F32B94DE6700D84D3C /* lapi.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = lapi.h; sourceTree = "<group>"; };
+		BB2E55F42B94DE6700D84D3C /* lstring.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = lstring.c; sourceTree = "<group>"; };
+		BB2E55F52B94DE6700D84D3C /* ldo.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ldo.h; sourceTree = "<group>"; };
+		BB2E55F62B94DE6700D84D3C /* lundump.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = lundump.c; sourceTree = "<group>"; };
+		BB2E55F72B94DE6700D84D3C /* lctype.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = lctype.c; sourceTree = "<group>"; };
+		BB2E55F82B94DE6700D84D3C /* ljumptab.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ljumptab.h; sourceTree = "<group>"; };
+		BB2E55F92B94DE6700D84D3C /* llex.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = llex.h; sourceTree = "<group>"; };
+		BB2E55FA2B94DE6700D84D3C /* luac.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = luac.c; sourceTree = "<group>"; };
+		BB2E55FB2B94DE6700D84D3C /* ltm.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ltm.h; sourceTree = "<group>"; };
+		BB2E55FC2B94DE6700D84D3C /* ltable.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = ltable.c; sourceTree = "<group>"; };
+		BB2E55FD2B94DE6700D84D3C /* lparser.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = lparser.h; sourceTree = "<group>"; };
+		BB2E55FE2B94DE6700D84D3C /* ldump.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = ldump.c; sourceTree = "<group>"; };
+		BB2E55FF2B94DE6700D84D3C /* lobject.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = lobject.h; sourceTree = "<group>"; };
+		BB2E56002B94DE6700D84D3C /* lstate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = lstate.h; sourceTree = "<group>"; };
+		BB2E56012B94DE6700D84D3C /* lopcodes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = lopcodes.h; sourceTree = "<group>"; };
+		BB2E56022B94DE6700D84D3C /* loslib.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = loslib.c; sourceTree = "<group>"; };
+		BB2E56032B94DE6700D84D3C /* lgc.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = lgc.c; sourceTree = "<group>"; };
+		BB2E56042B94DE6700D84D3C /* lzio.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = lzio.c; sourceTree = "<group>"; };
+		BB2E56052B94DE6700D84D3C /* ldblib.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = ldblib.c; sourceTree = "<group>"; };
+		BB2E56062B94DE6700D84D3C /* lutf8lib.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = lutf8lib.c; sourceTree = "<group>"; };
+		BB2E56072B94DE6700D84D3C /* lmem.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = lmem.c; sourceTree = "<group>"; };
+		BB2E56082B94DE6700D84D3C /* lvm.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = lvm.h; sourceTree = "<group>"; };
+		BB2E56092B94DE6700D84D3C /* lcorolib.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = lcorolib.c; sourceTree = "<group>"; };
+		BB2E560A2B94DE6700D84D3C /* lstring.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = lstring.h; sourceTree = "<group>"; };
+		BB2E560B2B94DE6700D84D3C /* lcode.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = lcode.c; sourceTree = "<group>"; };
+		BB2E560C2B94DE6700D84D3C /* ltablib.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = ltablib.c; sourceTree = "<group>"; };
+		BB2E560D2B94DE6700D84D3C /* lapi.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = lapi.c; sourceTree = "<group>"; };
+		BB2E560E2B94DE6700D84D3C /* lbaselib.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = lbaselib.c; sourceTree = "<group>"; };
+		BB2E560F2B94DE6700D84D3C /* ldebug.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = ldebug.c; sourceTree = "<group>"; };
+		BB2E56102B94DE6700D84D3C /* lfunc.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = lfunc.h; sourceTree = "<group>"; };
+		BB2E56112B94DE6700D84D3C /* lprefix.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = lprefix.h; sourceTree = "<group>"; };
+		BB2E56122B94DE6700D84D3C /* lparser.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = lparser.c; sourceTree = "<group>"; };
+		BB2E56132B94DE6700D84D3C /* llex.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = llex.c; sourceTree = "<group>"; };
+		BB2E56142B94DE6700D84D3C /* ltable.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ltable.h; sourceTree = "<group>"; };
+		BB2E56152B94DE6700D84D3C /* ltm.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = ltm.c; sourceTree = "<group>"; };
+		BB2E56162B94DE6700D84D3C /* lctype.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = lctype.h; sourceTree = "<group>"; };
+		BB2E56172B94DE6700D84D3C /* ldo.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = ldo.c; sourceTree = "<group>"; };
+		BB2E56182B94DE6700D84D3C /* lundump.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = lundump.h; sourceTree = "<group>"; };
+		BB2E5A5F2B94F86900D84D3C /* liblua_static.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = liblua_static.a; sourceTree = "<group>"; };
+		BB2E5A6A2B96216C00D84D3C /* sol.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = sol.hpp; sourceTree = "<group>"; };
+		BB2E5A6B2B96216C00D84D3C /* config.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = config.hpp; sourceTree = "<group>"; };
+		BB2E5A6C2B96216C00D84D3C /* forward.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = forward.hpp; sourceTree = "<group>"; };
+		BB2E5A6D2B96242E00D84D3C /* liblua_static.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = liblua_static.a; sourceTree = "<group>"; };
+		BB2E5A6E2B962D0000D84D3C /* lua_static.lib */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = lua_static.lib; sourceTree = "<group>"; };
+		BB2E5A6F2B96336300D84D3C /* EntityAIController.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = EntityAIController.hpp; sourceTree = "<group>"; };
+		BB2E5A702B96336300D84D3C /* EntityAIController.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = EntityAIController.cpp; sourceTree = "<group>"; };
+		BB2E5A772B96587A00D84D3C /* LuaRenderer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = LuaRenderer.cpp; sourceTree = "<group>"; };
+		BB2E5A782B96587A00D84D3C /* LuaRenderer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = LuaRenderer.hpp; sourceTree = "<group>"; };
+		BB2E5A7B2B9660F300D84D3C /* EntityInputMappingManager.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = EntityInputMappingManager.hpp; sourceTree = "<group>"; };
+		BB2E5A7C2B9660F400D84D3C /* EntityInputMappingManager.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = EntityInputMappingManager.cpp; sourceTree = "<group>"; };
+		BB2E5A7F2B96646400D84D3C /* EntityInputMappingManagerLoader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = EntityInputMappingManagerLoader.cpp; sourceTree = "<group>"; };
+		BB2E5A802B96646400D84D3C /* EntityInputMappingManagerLoader.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = EntityInputMappingManagerLoader.hpp; sourceTree = "<group>"; };
+		BB2E5A832B968FC400D84D3C /* Script.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Script.hpp; sourceTree = "<group>"; };
+		BB2E5A842B96900200D84D3C /* ScriptDescriptor.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = ScriptDescriptor.hpp; sourceTree = "<group>"; };
 		BB3710082A1EB77F00A97300 /* al.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = al.h; sourceTree = "<group>"; };
 		BB37100B2A1EB77F00A97300 /* alc.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = alc.h; sourceTree = "<group>"; };
 		BB37100C2A1EB77F00A97300 /* alext.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = alext.h; sourceTree = "<group>"; };
@@ -729,6 +811,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				BB3F0B022A44F2E3008D8AC8 /* Cocoa.framework in Frameworks */,
+				BB2E55C52B94DE3700D84D3C /* liblua_static.a in Frameworks */,
 				BB3F0B042A44F2EF008D8AC8 /* IOKit.framework in Frameworks */,
 				BB61E1F82A27F64200BFFE38 /* OpenGL.framework in Frameworks */,
 				BB61E1FA2A27F67700BFFE38 /* libglfw3.a in Frameworks */,
@@ -747,6 +830,7 @@
 				BBEC09F42A28FACB0054681F /* libsndfile.1.dylib in Frameworks */,
 				BB83A6A92B840544003AFB1F /* libglfm.a in Frameworks */,
 				BB95E52B2A210FC400D22D0F /* libopenal.1.dylib in Frameworks */,
+				BB2E5A602B94F86900D84D3C /* liblua_static.a in Frameworks */,
 				BB5ED3332B6F105300EFA7EB /* libbox2d.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -783,6 +867,128 @@
 				BB1E5C29271F26D800149557 /* NosPhysicsWorld.hpp */,
 			);
 			path = physics;
+			sourceTree = "<group>";
+		};
+		BB2E55C62B94DE6700D84D3C /* Lua */ = {
+			isa = PBXGroup;
+			children = (
+				BB2E55C82B94DE6700D84D3C /* lua-5.4.6 */,
+			);
+			path = Lua;
+			sourceTree = "<group>";
+		};
+		BB2E55C82B94DE6700D84D3C /* lua-5.4.6 */ = {
+			isa = PBXGroup;
+			children = (
+				BB2E55CB2B94DE6700D84D3C /* include */,
+				BB2E55DE2B94DE6700D84D3C /* src */,
+			);
+			path = "lua-5.4.6";
+			sourceTree = "<group>";
+		};
+		BB2E55CB2B94DE6700D84D3C /* include */ = {
+			isa = PBXGroup;
+			children = (
+				BB2E55CF2B94DE6700D84D3C /* lauxlib.h */,
+				BB2E55D02B94DE6700D84D3C /* lua.h */,
+				BB2E55CD2B94DE6700D84D3C /* lua.hpp */,
+				BB2E55CC2B94DE6700D84D3C /* luaconf.h */,
+				BB2E55CE2B94DE6700D84D3C /* lualib.h */,
+			);
+			path = include;
+			sourceTree = "<group>";
+		};
+		BB2E55DE2B94DE6700D84D3C /* src */ = {
+			isa = PBXGroup;
+			children = (
+				BB2E560D2B94DE6700D84D3C /* lapi.c */,
+				BB2E55F32B94DE6700D84D3C /* lapi.h */,
+				BB2E55DF2B94DE6700D84D3C /* lauxlib.c */,
+				BB2E560E2B94DE6700D84D3C /* lbaselib.c */,
+				BB2E560B2B94DE6700D84D3C /* lcode.c */,
+				BB2E55F22B94DE6700D84D3C /* lcode.h */,
+				BB2E56092B94DE6700D84D3C /* lcorolib.c */,
+				BB2E55F72B94DE6700D84D3C /* lctype.c */,
+				BB2E56162B94DE6700D84D3C /* lctype.h */,
+				BB2E56052B94DE6700D84D3C /* ldblib.c */,
+				BB2E560F2B94DE6700D84D3C /* ldebug.c */,
+				BB2E55F02B94DE6700D84D3C /* ldebug.h */,
+				BB2E56172B94DE6700D84D3C /* ldo.c */,
+				BB2E55F52B94DE6700D84D3C /* ldo.h */,
+				BB2E55FE2B94DE6700D84D3C /* ldump.c */,
+				BB2E55EC2B94DE6700D84D3C /* lfunc.c */,
+				BB2E56102B94DE6700D84D3C /* lfunc.h */,
+				BB2E56032B94DE6700D84D3C /* lgc.c */,
+				BB2E55E32B94DE6700D84D3C /* lgc.h */,
+				BB2E55F12B94DE6700D84D3C /* linit.c */,
+				BB2E55E42B94DE6700D84D3C /* liolib.c */,
+				BB2E55F82B94DE6700D84D3C /* ljumptab.h */,
+				BB2E56132B94DE6700D84D3C /* llex.c */,
+				BB2E55F92B94DE6700D84D3C /* llex.h */,
+				BB2E55E12B94DE6700D84D3C /* llimits.h */,
+				BB2E55E82B94DE6700D84D3C /* lmathlib.c */,
+				BB2E56072B94DE6700D84D3C /* lmem.c */,
+				BB2E55E02B94DE6700D84D3C /* lmem.h */,
+				BB2E55EA2B94DE6700D84D3C /* loadlib.c */,
+				BB2E55E72B94DE6700D84D3C /* lobject.c */,
+				BB2E55FF2B94DE6700D84D3C /* lobject.h */,
+				BB2E55E52B94DE6700D84D3C /* lopcodes.c */,
+				BB2E56012B94DE6700D84D3C /* lopcodes.h */,
+				BB2E55E92B94DE6700D84D3C /* lopnames.h */,
+				BB2E56022B94DE6700D84D3C /* loslib.c */,
+				BB2E56122B94DE6700D84D3C /* lparser.c */,
+				BB2E55FD2B94DE6700D84D3C /* lparser.h */,
+				BB2E56112B94DE6700D84D3C /* lprefix.h */,
+				BB2E55E62B94DE6700D84D3C /* lstate.c */,
+				BB2E56002B94DE6700D84D3C /* lstate.h */,
+				BB2E55F42B94DE6700D84D3C /* lstring.c */,
+				BB2E560A2B94DE6700D84D3C /* lstring.h */,
+				BB2E55ED2B94DE6700D84D3C /* lstrlib.c */,
+				BB2E55FC2B94DE6700D84D3C /* ltable.c */,
+				BB2E56142B94DE6700D84D3C /* ltable.h */,
+				BB2E560C2B94DE6700D84D3C /* ltablib.c */,
+				BB2E56152B94DE6700D84D3C /* ltm.c */,
+				BB2E55FB2B94DE6700D84D3C /* ltm.h */,
+				BB2E55EF2B94DE6700D84D3C /* lua.c */,
+				BB2E55FA2B94DE6700D84D3C /* luac.c */,
+				BB2E55F62B94DE6700D84D3C /* lundump.c */,
+				BB2E56182B94DE6700D84D3C /* lundump.h */,
+				BB2E56062B94DE6700D84D3C /* lutf8lib.c */,
+				BB2E55EB2B94DE6700D84D3C /* lvm.c */,
+				BB2E56082B94DE6700D84D3C /* lvm.h */,
+				BB2E56042B94DE6700D84D3C /* lzio.c */,
+				BB2E55E22B94DE6700D84D3C /* lzio.h */,
+				BB2E55EE2B94DE6700D84D3C /* Makefile */,
+			);
+			path = src;
+			sourceTree = "<group>";
+		};
+		BB2E5A672B96216C00D84D3C /* sol2 */ = {
+			isa = PBXGroup;
+			children = (
+				BB2E5A682B96216C00D84D3C /* include */,
+				BB2E5A772B96587A00D84D3C /* LuaRenderer.cpp */,
+				BB2E5A782B96587A00D84D3C /* LuaRenderer.hpp */,
+			);
+			path = sol2;
+			sourceTree = "<group>";
+		};
+		BB2E5A682B96216C00D84D3C /* include */ = {
+			isa = PBXGroup;
+			children = (
+				BB2E5A692B96216C00D84D3C /* sol */,
+			);
+			path = include;
+			sourceTree = "<group>";
+		};
+		BB2E5A692B96216C00D84D3C /* sol */ = {
+			isa = PBXGroup;
+			children = (
+				BB2E5A6B2B96216C00D84D3C /* config.hpp */,
+				BB2E5A6C2B96216C00D84D3C /* forward.hpp */,
+				BB2E5A6A2B96216C00D84D3C /* sol.hpp */,
+			);
+			path = sol;
 			sourceTree = "<group>";
 		};
 		BB370F6C2A1EB77E00A97300 /* openal-soft */ = {
@@ -1118,6 +1324,7 @@
 				BBBBD6D127023B5400D7D319 /* Info.plist */,
 				BB7F75B92B6B119F00CAB63F /* libbox2d.a */,
 				BB61E1F92A27F67700BFFE38 /* libglfw3.a */,
+				BB2E55C42B94DE3700D84D3C /* liblua_static.a */,
 				BB95E52D2A210FD900D22D0F /* libopenal.1.dylib */,
 				BBF3E86F2A28F062009C9460 /* libsndfile.1.dylib */,
 				BBFE6DC02B7FE26B004E8CCF /* run_bin_to_c.sh */,
@@ -1135,6 +1342,7 @@
 				BBBBD6D527023B5400D7D319 /* LaunchScreen.storyboard */,
 				BB5ED3322B6F105300EFA7EB /* libbox2d.a */,
 				BB83A6A82B840543003AFB1F /* libglfm.a */,
+				BB2E5A5F2B94F86900D84D3C /* liblua_static.a */,
 				BB95E5292A210FC400D22D0F /* libopenal.1.dylib */,
 				BBEC09F32A28FACB0054681F /* libsndfile.1.dylib */,
 			);
@@ -1148,6 +1356,7 @@
 				BBBBD6E227023B5400D7D319 /* GowEngine.cbp */,
 				BB11538C2B852C7800E7F3AE /* libbox2d.a */,
 				BBEC09E92A28F6380054681F /* libglfw3.a */,
+				BB2E5A6D2B96242E00D84D3C /* liblua_static.a */,
 				BBEC09E82A28F6380054681F /* libopenal.so.1 */,
 				BBEC09E72A28F6380054681F /* libsndfile.so.1.0.35 */,
 				BB40D7BA2A2695DB00EDA51E /* README.md */,
@@ -1166,6 +1375,7 @@
 				BBBBD72A27023B5400D7D319 /* GowEngine.sln */,
 				BBBBD72C27023B5400D7D319 /* GowEngine.vcxproj */,
 				BBBBD72927023B5400D7D319 /* GowEngine.vcxproj.filters */,
+				BB2E5A6E2B962D0000D84D3C /* lua_static.lib */,
 				BB8DCADD2A2950B900FADEEB /* msvcp140.dll */,
 				BBEC09F22A28F7070054681F /* OpenAL32.dll */,
 				BBEC09F12A28F7070054681F /* OpenAL32.lib */,
@@ -1215,6 +1425,7 @@
 				BB83A6662B83FF03003AFB1F /* glfm */,
 				BBBB073C2703A85200D7D319 /* glfw */,
 				BB3710D12A1EBD1D00A97300 /* libsndfile */,
+				BB2E55C62B94DE6700D84D3C /* Lua */,
 				BB370F6C2A1EB77E00A97300 /* openal-soft */,
 				BBBBDA4A27023E1100D7D319 /* rapidjson */,
 				BB3F09452A44EFA9008D8AC8 /* stb */,
@@ -1297,12 +1508,16 @@
 			children = (
 				BBBBDE7D27023E1400D7D319 /* Entity.cpp */,
 				BBBBDE8727023E1400D7D319 /* Entity.hpp */,
+				BB2E5A702B96336300D84D3C /* EntityAIController.cpp */,
+				BB2E5A6F2B96336300D84D3C /* EntityAIController.hpp */,
 				BBBBDE7C27023E1400D7D319 /* EntityController.cpp */,
 				BBBBDE8827023E1400D7D319 /* EntityController.hpp */,
 				BBBBDE7F27023E1400D7D319 /* EntityIDManager.cpp */,
 				BBBBDE8227023E1400D7D319 /* EntityIDManager.hpp */,
 				BBBC57B62B923ACE0037527C /* EntityInputController.cpp */,
 				BBBC57B72B923ACE0037527C /* EntityInputController.hpp */,
+				BB2E5A7C2B9660F400D84D3C /* EntityInputMappingManager.cpp */,
+				BB2E5A7B2B9660F300D84D3C /* EntityInputMappingManager.hpp */,
 				BB1E5C142718C01900149557 /* EntityLayoutManager.cpp */,
 				BB1E5C132718C01900149557 /* EntityLayoutManager.hpp */,
 				BBBBDE7A27023E1400D7D319 /* EntityManager.cpp */,
@@ -1317,16 +1532,12 @@
 				BBBBDE7B27023E1400D7D319 /* EntityRenderController.hpp */,
 				BB9EBF512AAA57250088DBB6 /* JonController.cpp */,
 				BB9EBF502AAA57250088DBB6 /* JonController.hpp */,
-				BB006FA22B92789200C65215 /* JonInputController.cpp */,
-				BB006FA32B92789200C65215 /* JonInputController.hpp */,
+				BB006FA52B92789300C65215 /* MonsterAIController.cpp */,
+				BB006FA42B92789200C65215 /* MonsterAIController.hpp */,
 				BB7B6DC42B8FCBB000324423 /* MonsterController.cpp */,
 				BB7B6DC32B8FCBB000324423 /* MonsterController.hpp */,
-				BB006FA52B92789300C65215 /* MonsterInputController.cpp */,
-				BB006FA42B92789200C65215 /* MonsterInputController.hpp */,
 				BBB8CB052B8A8D300055CAD4 /* RobotController.cpp */,
 				BBB8CB062B8A8D300055CAD4 /* RobotController.hpp */,
-				BB006FA62B92789300C65215 /* RobotInputController.cpp */,
-				BB006FA72B92789300C65215 /* RobotInputController.hpp */,
 				BB60A0FA2B92DA940056BA63 /* World.cpp */,
 				BB60A0FB2B92DA940056BA63 /* World.hpp */,
 			);
@@ -1474,6 +1685,8 @@
 				BB1E5C1E271C8BE800149557 /* Font.hpp */,
 				BB11538A2B85174E00E7F3AE /* ImageView.hpp */,
 				BBBBDEF227023E1400D7D319 /* MatrixDescriptor.hpp */,
+				BB2E5A832B968FC400D84D3C /* Script.hpp */,
+				BB2E5A842B96900200D84D3C /* ScriptDescriptor.hpp */,
 				BBBBDEEA27023E1400D7D319 /* ShaderDescriptor.hpp */,
 				BB1915A62B7C87BC00ED67E8 /* ShaderLoader.cpp */,
 				BB1915A42B7C87BC00ED67E8 /* ShaderLoader.hpp */,
@@ -1564,6 +1777,7 @@
 				BBBB0E322703A95D00D7D319 /* glfw */,
 				BB95E5332A21306100D22D0F /* libsndfile */,
 				BBBBDF3127023E1400D7D319 /* rapidjson */,
+				BB2E5A672B96216C00D84D3C /* sol2 */,
 				BBBBDF2C27023E1400D7D319 /* stb */,
 				BBFD16282B572CBA00D4D841 /* steamworks_sdk */,
 			);
@@ -1586,6 +1800,8 @@
 				BBBBDF3527023E1400D7D319 /* AssetsLoader.hpp */,
 				BBBBDF3927023E1400D7D319 /* ConfigLoader.cpp */,
 				BBBBDF3427023E1400D7D319 /* ConfigLoader.hpp */,
+				BB2E5A7F2B96646400D84D3C /* EntityInputMappingManagerLoader.cpp */,
+				BB2E5A802B96646400D84D3C /* EntityInputMappingManagerLoader.hpp */,
 				BBBBDF3327023E1400D7D319 /* EntityLayoutManagerLoader.cpp */,
 				BBBBDF3827023E1400D7D319 /* EntityLayoutManagerLoader.hpp */,
 				BBBBDF3627023E1400D7D319 /* EntityManagerLoader.cpp */,
@@ -1894,6 +2110,7 @@
 				BB4CCADB2B5F174D00B6D2CA /* ServerHelper.cpp in Sources */,
 				BB10362527334A7100889341 /* StringUtil.cpp in Sources */,
 				BB4CCADF2B5F183F00B6D2CA /* NetworkHelper.cpp in Sources */,
+				BB2E5A7D2B9660F400D84D3C /* EntityInputMappingManager.cpp in Sources */,
 				BBBBDF6C2702465700D7D319 /* FileAssetHandler.cpp in Sources */,
 				BB4CCAE72B606A5700B6D2CA /* SocketPacketHandler.cpp in Sources */,
 				BB60A0FC2B92DA940056BA63 /* World.cpp in Sources */,
@@ -1905,9 +2122,11 @@
 				BBFD163F2B572CBA00D4D841 /* SteamClientHelper.cpp in Sources */,
 				BB417E4B2A36418300DD4611 /* OpenALUtil.cpp in Sources */,
 				BBBB0F34270F702400D7D319 /* InputProcessor.cpp in Sources */,
+				BB2E5A712B96336300D84D3C /* EntityAIController.cpp in Sources */,
 				BB1E5C152718C01A00149557 /* EntityLayoutManager.cpp in Sources */,
 				BB4CCAD72B5F172600B6D2CA /* ClientHelper.cpp in Sources */,
 				BBFE6DED2B7FFED7004E8CCF /* EmbeddedAssetHandler.cpp in Sources */,
+				BB2E5A812B96646400D84D3C /* EntityInputMappingManagerLoader.cpp in Sources */,
 				BB1E5C2F271F26D800149557 /* NosPhysicsController.cpp in Sources */,
 				BBFD163B2B572CBA00D4D841 /* SteamAddress.cpp in Sources */,
 				BB1E5C192718F7C700149557 /* Framebuffer.cpp in Sources */,
@@ -1951,7 +2170,6 @@
 				BB4CCAE32B6061B600B6D2CA /* TimeUtil.cpp in Sources */,
 				BBBBDFBC2702468C00D7D319 /* DeliveryNotificationManager.cpp in Sources */,
 				BBBBDFBE2702468C00D7D319 /* InFlightPacket.cpp in Sources */,
-				BB006FA82B92789300C65215 /* JonInputController.cpp in Sources */,
 				BBFD16392B572CBA00D4D841 /* SteamPacketHandler.cpp in Sources */,
 				BBBBDFC02702468C00D7D319 /* InputMemoryBitStream.cpp in Sources */,
 				BBBBDFC22702468C00D7D319 /* MemoryBitStreamUtil.cpp in Sources */,
@@ -1979,13 +2197,14 @@
 				BBBBDFDF2702468D00D7D319 /* SocketUtil.cpp in Sources */,
 				BBBBDFE22702468D00D7D319 /* UDPSocket.cpp in Sources */,
 				BB1915AB2B7C87BC00ED67E8 /* ShaderLoader.cpp in Sources */,
+				BB2E5A792B96587A00D84D3C /* LuaRenderer.cpp in Sources */,
 				BBBBDFB32702468800D7D319 /* OverlapTester.cpp in Sources */,
 				BBBBDF862702467400D7D319 /* RTTI.cpp in Sources */,
 				BBBBDFAB2702467D00D7D319 /* InputManager.cpp in Sources */,
 				BBBBDFAD2702467D00D7D319 /* InputState.cpp in Sources */,
 				BBBBDF8E2702467700D7D319 /* DefaultEngineState.cpp in Sources */,
 				BBBBDF962702467A00D7D319 /* Entity.cpp in Sources */,
-				BB006FAA2B92789300C65215 /* MonsterInputController.cpp in Sources */,
+				BB006FAA2B92789300C65215 /* MonsterAIController.cpp in Sources */,
 				BBBBDF982702467A00D7D319 /* EntityController.cpp in Sources */,
 				BBBBDF9A2702467A00D7D319 /* EntityIDManager.cpp in Sources */,
 				BBBBDF9D2702467A00D7D319 /* EntityManager.cpp in Sources */,
@@ -2000,7 +2219,6 @@
 				BBBBDF902702467700D7D319 /* Engine.cpp in Sources */,
 				BBBBDF922702467700D7D319 /* EngineConfig.cpp in Sources */,
 				BBBBDF942702467700D7D319 /* EngineState.cpp in Sources */,
-				BB006FAC2B92789300C65215 /* RobotInputController.cpp in Sources */,
 				BBBBDF8B2702467400D7D319 /* ThreadManager.cpp in Sources */,
 				BB1915B12B7C894800ED67E8 /* TextureManager.cpp in Sources */,
 			);
@@ -2020,6 +2238,7 @@
 				BBFD16442B572CBA00D4D841 /* SteamServerInfo.cpp in Sources */,
 				BBBBE0E22702584600D7D319 /* Config.cpp in Sources */,
 				BBBBE0E52702584600D7D319 /* FPSUtil.cpp in Sources */,
+				BB2E5A722B96336300D84D3C /* EntityAIController.cpp in Sources */,
 				BBBBE0EA2702584600D7D319 /* RTTI.cpp in Sources */,
 				BB9EBF532AAA57250088DBB6 /* JonController.cpp in Sources */,
 				BB1E5C162718C01A00149557 /* EntityLayoutManager.cpp in Sources */,
@@ -2030,7 +2249,7 @@
 				BBBBE0F42702584600D7D319 /* Engine.cpp in Sources */,
 				BBBBE0F62702584600D7D319 /* EngineConfig.cpp in Sources */,
 				BBBBE0F82702584600D7D319 /* EngineState.cpp in Sources */,
-				BB006FAB2B92789300C65215 /* MonsterInputController.cpp in Sources */,
+				BB006FAB2B92789300C65215 /* MonsterAIController.cpp in Sources */,
 				BBBBE0FA2702584600D7D319 /* Entity.cpp in Sources */,
 				BBFD16402B572CBA00D4D841 /* SteamClientHelper.cpp in Sources */,
 				BB01D82E2A901E3A002A3BA4 /* Logger.cpp in Sources */,
@@ -2077,7 +2296,6 @@
 				BB40D7C72A26A2E600EDA51E /* SoundManager.cpp in Sources */,
 				BBBBE1412702584800D7D319 /* SocketAddressFactory.cpp in Sources */,
 				BBBBE1432702584800D7D319 /* SocketUtil.cpp in Sources */,
-				BB006FAD2B92789300C65215 /* RobotInputController.cpp in Sources */,
 				BBBBE1462702584800D7D319 /* UDPSocket.cpp in Sources */,
 				BBBBE1482702584900D7D319 /* AudioEngine.cpp in Sources */,
 				BBBBE1502702584900D7D319 /* CircleBatcher.cpp in Sources */,
@@ -2087,7 +2305,6 @@
 				BBBBE1542702584900D7D319 /* FontBatcher.cpp in Sources */,
 				BBB8CB042B8A8D060055CAD4 /* GameEngineState.cpp in Sources */,
 				BB40D8032A26D09C00EDA51E /* SoundLoader.cpp in Sources */,
-				BB006FA92B92789300C65215 /* JonInputController.cpp in Sources */,
 				BBBBE1582702584900D7D319 /* LightRenderer.cpp in Sources */,
 				BB60A0FD2B92DA940056BA63 /* World.cpp in Sources */,
 				BB1153882B85166E00E7F3AE /* Animation.cpp in Sources */,
@@ -2104,6 +2321,7 @@
 				BBFD163A2B572CBA00D4D841 /* SteamPacketHandler.cpp in Sources */,
 				BBBBE16D2702584A00D7D319 /* SpriteBatcher.cpp in Sources */,
 				BBBBE1742702584A00D7D319 /* TriangleBatcher.cpp in Sources */,
+				BB2E5A7A2B96587A00D84D3C /* LuaRenderer.cpp in Sources */,
 				BB7B6DC62B8FCBB000324423 /* MonsterController.cpp in Sources */,
 				BBBBE17D2702584A00D7D319 /* EntityLayoutManagerLoader.cpp in Sources */,
 				BB4CCAF02B61CA9500B6D2CA /* SocketClientHelper.cpp in Sources */,
@@ -2120,6 +2338,8 @@
 				BB1153832B85109900E7F3AE /* FileCompatUtil.cpp in Sources */,
 				BB417E4C2A36418300DD4611 /* OpenALUtil.cpp in Sources */,
 				BB1E5C1A2718F7C700149557 /* Framebuffer.cpp in Sources */,
+				BB2E5A822B96646400D84D3C /* EntityInputMappingManagerLoader.cpp in Sources */,
+				BB2E5A7E2B9660F400D84D3C /* EntityInputMappingManager.cpp in Sources */,
 				BBBC57B92B923ACE0037527C /* EntityInputController.cpp in Sources */,
 				BB1E5C1D27195D3400149557 /* Vector2.cpp in Sources */,
 				BB631F6B2AAB9B3500953454 /* FramebufferRenderer.cpp in Sources */,
@@ -2268,6 +2488,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CLANG_CXX_LANGUAGE_STANDARD = "c++17";
 				CLANG_WARN_DOCUMENTATION_COMMENTS = NO;
 				CLANG_WARN__EXIT_TIME_DESTRUCTORS = NO;
 				CODE_SIGN_ENTITLEMENTS = "macOS/GowEngine-macOS.entitlements";
@@ -2280,6 +2501,7 @@
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				EXCLUDED_ARCHS = arm64;
+				GCC_C_LANGUAGE_STANDARD = c17;
 				GCC_ENABLE_CPP_EXCEPTIONS = NO;
 				GCC_ENABLE_CPP_RTTI = NO;
 				GCC_PREPROCESSOR_DEFINITIONS = (
@@ -2295,8 +2517,10 @@
 					"\"$(SRCROOT)/../../../deps/file-compat\"",
 					"\"$(SRCROOT)/../../../deps/glfw/include\"",
 					"\"$(SRCROOT)/../../../deps/libsndfile/include\"",
+					"\"$(SRCROOT)/../../../deps/Lua/lua-5.4.6/include\"",
 					"\"$(SRCROOT)/../../../deps/openal-soft/include\"",
 					"\"$(SRCROOT)/../../../deps/rapidjson/include\"",
+					"\"$(SRCROOT)/../../../src/deps/sol2/include\"",
 					"\"$(SRCROOT)/../../../deps/stb\"",
 					"\"$(SRCROOT)/../../../deps/steamworks_sdk/public\"",
 					"\"$(SRCROOT)/../../../include\"",
@@ -2327,6 +2551,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CLANG_CXX_LANGUAGE_STANDARD = "c++17";
 				CLANG_WARN_DOCUMENTATION_COMMENTS = NO;
 				CLANG_WARN__EXIT_TIME_DESTRUCTORS = NO;
 				CODE_SIGN_ENTITLEMENTS = "macOS/GowEngine-macOS.entitlements";
@@ -2339,6 +2564,7 @@
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				EXCLUDED_ARCHS = arm64;
+				GCC_C_LANGUAGE_STANDARD = c17;
 				GCC_ENABLE_CPP_EXCEPTIONS = NO;
 				GCC_ENABLE_CPP_RTTI = NO;
 				GCC_PREPROCESSOR_DEFINITIONS = (
@@ -2354,8 +2580,10 @@
 					"\"$(SRCROOT)/../../../deps/file-compat\"",
 					"\"$(SRCROOT)/../../../deps/glfw/include\"",
 					"\"$(SRCROOT)/../../../deps/libsndfile/include\"",
+					"\"$(SRCROOT)/../../../deps/Lua/lua-5.4.6/include\"",
 					"\"$(SRCROOT)/../../../deps/openal-soft/include\"",
 					"\"$(SRCROOT)/../../../deps/rapidjson/include\"",
+					"\"$(SRCROOT)/../../../src/deps/sol2/include\"",
 					"\"$(SRCROOT)/../../../deps/stb\"",
 					"\"$(SRCROOT)/../../../deps/steamworks_sdk/public\"",
 					"\"$(SRCROOT)/../../../include\"",
@@ -2387,10 +2615,12 @@
 				ALWAYS_SEARCH_USER_PATHS = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CLANG_CXX_LANGUAGE_STANDARD = "c++17";
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 99N88FM7N3;
 				ENABLE_USER_SCRIPT_SANDBOXING = NO;
+				GCC_C_LANGUAGE_STANDARD = c17;
 				GCC_ENABLE_CPP_EXCEPTIONS = NO;
 				GCC_ENABLE_CPP_RTTI = NO;
 				GCC_PREPROCESSOR_DEFINITIONS = (
@@ -2402,8 +2632,10 @@
 					"\"$(SRCROOT)/../../../deps/file-compat\"",
 					"\"$(SRCROOT)/../../../deps/glfm/include\"",
 					"\"$(SRCROOT)/../../../deps/libsndfile/include\"",
+					"\"$(SRCROOT)/../../../deps/Lua/lua-5.4.6/include\"",
 					"\"$(SRCROOT)/../../../deps/openal-soft/include\"",
 					"\"$(SRCROOT)/../../../deps/rapidjson/include\"",
+					"\"$(SRCROOT)/../../../src/deps/sol2/include\"",
 					"\"$(SRCROOT)/../../../deps/stb\"",
 					"\"$(SRCROOT)/../../../include\"",
 					"\"$(SRCROOT)/../../../src\"",
@@ -2434,10 +2666,12 @@
 				ALWAYS_SEARCH_USER_PATHS = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CLANG_CXX_LANGUAGE_STANDARD = "c++17";
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 99N88FM7N3;
 				ENABLE_USER_SCRIPT_SANDBOXING = NO;
+				GCC_C_LANGUAGE_STANDARD = c17;
 				GCC_ENABLE_CPP_EXCEPTIONS = NO;
 				GCC_ENABLE_CPP_RTTI = NO;
 				GCC_PREPROCESSOR_DEFINITIONS = (
@@ -2449,8 +2683,10 @@
 					"\"$(SRCROOT)/../../../deps/file-compat\"",
 					"\"$(SRCROOT)/../../../deps/glfm/include\"",
 					"\"$(SRCROOT)/../../../deps/libsndfile/include\"",
+					"\"$(SRCROOT)/../../../deps/Lua/lua-5.4.6/include\"",
 					"\"$(SRCROOT)/../../../deps/openal-soft/include\"",
 					"\"$(SRCROOT)/../../../deps/rapidjson/include\"",
+					"\"$(SRCROOT)/../../../src/deps/sol2/include\"",
 					"\"$(SRCROOT)/../../../deps/stb\"",
 					"\"$(SRCROOT)/../../../include\"",
 					"\"$(SRCROOT)/../../../src\"",

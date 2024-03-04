@@ -407,9 +407,14 @@ struct EntityDef
     std::string _name;
     std::string _keyName;
     std::string _controller;
+    std::string _aiController;
     std::string _inputController;
+    std::string _inputMapping;
     std::string _networkController;
     std::string _renderController;
+    std::vector<std::string> _inputStateFlags;
+    std::vector<std::string> _states;
+    std::vector<std::string> _stateFlags;
     std::map<uint8_t, std::string> _textureMappings;
     // Need to also include totalTime for each state
     // to correlate state animations to sounds
@@ -429,9 +434,14 @@ struct EntityDef
               std::string name,
               std::string keyName,
               std::string controller,
+              std::string aiController,
               std::string inputController,
+              std::string inputMapping,
               std::string networkController,
               std::string renderController,
+              std::vector<std::string> inputStateFlags,
+              std::vector<std::string> states,
+              std::vector<std::string> stateFlags,
               std::map<uint8_t, std::string> textureMappings,
               std::map<uint8_t, std::vector<SoundMapping>> soundMappings,
               std::vector<FixtureDef> fixtures,
@@ -445,9 +455,14 @@ struct EntityDef
     _name(name),
     _keyName(keyName),
     _controller(controller),
+    _aiController(aiController),
     _inputController(inputController),
+    _inputMapping(inputMapping),
     _networkController(networkController),
     _renderController(renderController),
+    _inputStateFlags(inputStateFlags),
+    _states(states),
+    _stateFlags(stateFlags),
     _textureMappings(textureMappings),
     _soundMappings(soundMappings),
     _fixtures(fixtures),
@@ -463,6 +478,7 @@ struct EntityDef
 };
 
 class EntityController;
+class EntityAIController;
 class EntityInputController;
 class EntityNetworkController;
 class EntityPhysicsController;
@@ -474,6 +490,7 @@ struct KeyboardEvent;
 
 class Entity
 {
+    friend class EntityInputController;
     friend class EntityNetworkController;
     
 public:
@@ -481,14 +498,18 @@ public:
     ~Entity();
     
     void beginFrame();
+    void runAI();
     void processEvent(uint16_t& inputState, CursorEvent* e);
     void processEvent(uint16_t& inputState, GamepadEvent* e);
     void processEvent(uint16_t& inputState, KeyboardEvent* e);
-    void runAI();
     void processInput(uint16_t inputState);
     void update(uint32_t numMovesProcessed);
     void message(uint16_t message, Entity* fromEntity);
     EntityDef& entityDef();
+    uint16_t inputStateFlag(std::string inputStateFlag);
+    uint8_t state(std::string key);
+    std::string state(uint8_t state);
+    uint8_t stateFlag(std::string key);
     Config& data();
     NetworkData& networkData();
     NetworkDataField& networkDataField(std::string name);
@@ -513,6 +534,13 @@ public:
     {
         assert(_controller != nullptr);
         return static_cast<T*>(_controller);
+    }
+    
+    template<typename T = EntityAIController>
+    T* aiController()
+    {
+        assert(_aiController != nullptr);
+        return static_cast<T*>(_aiController);
     }
     
     template<typename T = EntityInputController>
@@ -673,6 +701,7 @@ private:
     EntityDef _entityDef;
     EntityInstanceDef _entityInstanceDef;
     EntityController* _controller;
+    EntityAIController* _aiController;
     EntityInputController* _inputController;
     EntityNetworkController* _networkController;
     EntityPhysicsController* _physicsController;
