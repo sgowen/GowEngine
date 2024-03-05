@@ -40,11 +40,13 @@ void EntityManagerLoader::initWithJSON(EntityManager& em, const char* json)
         std::string name = RapidJSONUtil::getString(iv, "name");
         std::string keyName = keyStr;
         std::string controller = RapidJSONUtil::getString(iv, "controller", "EntityController");
-        std::string aiController = RapidJSONUtil::getString(iv, "aiController", "EntityAIController");
-        std::string inputController = RapidJSONUtil::getString(iv, "inputController", "EntityInputController");
+        std::string controllerScript = RapidJSONUtil::getString(iv, "controllerScript");
+        std::string controllerAI = RapidJSONUtil::getString(iv, "controllerAI", "EntityControllerAI");
+        std::string controllerAIScript = RapidJSONUtil::getString(iv, "controllerAIScript");
+        std::string controllerInput = RapidJSONUtil::getString(iv, "controllerInput", "EntityControllerInput");
         std::string inputMapping = RapidJSONUtil::getString(iv, "inputMapping");
-        std::string networkController = RapidJSONUtil::getString(iv, "networkController", "EntityNetworkController");
-        std::string renderController = RapidJSONUtil::getString(iv, "renderController", "EntityRenderController");
+        std::string controllerNetwork = RapidJSONUtil::getString(iv, "controllerNetwork", "EntityControllerNetwork");
+        std::string controllerRender = RapidJSONUtil::getString(iv, "controllerRender", "EntityControllerRender");
         
         std::vector<std::string> inputStateFlags;
         if (iv.HasMember("inputStateFlags"))
@@ -251,6 +253,6 @@ void EntityManagerLoader::initWithJSON(EntityManager& em, const char* json)
         }
         NetworkData nd(networkDataGroups);
         
-        em._entityDefs.emplace(key, EntityDef{key, name, keyName, controller, aiController, inputController, inputMapping, networkController, renderController, inputStateFlags, states, stateFlags, textureMappings, soundMappings, fixtures, bodyFlags, width, height, scale, data, nd});
+        em._entityDefs.emplace(key, EntityDef{key, name, keyName, controller, controllerScript, controllerAI, controllerAIScript, controllerInput, inputMapping, controllerNetwork, controllerRender, inputStateFlags, states, stateFlags, textureMappings, soundMappings, fixtures, bodyFlags, width, height, scale, data, nd});
     }
 }

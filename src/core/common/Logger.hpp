@@ -19,6 +19,8 @@ public:
         return ret;
     }
     
+    static void log(std::string line);
+    
     void initWithFile(const char* fileName);
     void closeFileStream();
     void log(const char* format, ...);

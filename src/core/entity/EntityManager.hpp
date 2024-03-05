@@ -17,16 +17,16 @@
 struct EntityInstanceDef;
 struct EntityDef;
 class EntityController;
-class EntityInputController;
-class EntityNetworkController;
-class EntityPhysicsController;
-class EntityRenderController;
+class EntityControllerInput;
+class EntityControllerNetwork;
+class EntityControllerPhysics;
+class EntityControllerRender;
 
 typedef EntityController* (*EntityControllerCreationFunc)(Entity* e);
-typedef EntityAIController* (*EntityAIControllerCreationFunc)(Entity* e);
-typedef EntityInputController* (*EntityInputControllerCreationFunc)(Entity* e);
-typedef EntityNetworkController* (*EntityNetworkControllerCreationFunc)(Entity* e);
-typedef EntityRenderController* (*EntityRenderControllerCreationFunc)(Entity* e);
+typedef EntityControllerAI* (*EntityControllerAICreationFunc)(Entity* e);
+typedef EntityControllerInput* (*EntityControllerInputCreationFunc)(Entity* e);
+typedef EntityControllerNetwork* (*EntityControllerNetworkCreationFunc)(Entity* e);
+typedef EntityControllerRender* (*EntityControllerRenderCreationFunc)(Entity* e);
 
 class EntityManager
 {
@@ -47,29 +47,29 @@ public:
     EntityController* createEntityController(EntityDef& ed, Entity* e);
     const std::map<std::string, EntityControllerCreationFunc>& getEntityControllerMap();
     
-    void registerAIController(std::string name, EntityAIControllerCreationFunc func);
-    EntityAIController* createEntityAIController(EntityDef& ed, Entity* e);
-    const std::map<std::string, EntityAIControllerCreationFunc>& getEntityAIControllerMap();
+    void registerAIController(std::string name, EntityControllerAICreationFunc func);
+    EntityControllerAI* createEntityControllerAI(EntityDef& ed, Entity* e);
+    const std::map<std::string, EntityControllerAICreationFunc>& getEntityControllerAIMap();
     
-    void registerInputController(std::string name, EntityInputControllerCreationFunc func);
-    EntityInputController* createEntityInputController(EntityDef& ed, Entity* e);
-    const std::map<std::string, EntityInputControllerCreationFunc>& getEntityInputControllerMap();
+    void registerInputController(std::string name, EntityControllerInputCreationFunc func);
+    EntityControllerInput* createEntityControllerInput(EntityDef& ed, Entity* e);
+    const std::map<std::string, EntityControllerInputCreationFunc>& getEntityControllerInputMap();
     
-    void registerNetworkController(std::string name, EntityNetworkControllerCreationFunc func);
-    EntityNetworkController* createEntityNetworkController(EntityDef& ed, Entity* e);
-    const std::map<std::string, EntityNetworkControllerCreationFunc>& getEntityNetworkControllerMap();
+    void registerNetworkController(std::string name, EntityControllerNetworkCreationFunc func);
+    EntityControllerNetwork* createEntityControllerNetwork(EntityDef& ed, Entity* e);
+    const std::map<std::string, EntityControllerNetworkCreationFunc>& getEntityControllerNetworkMap();
     
-    void registerRenderController(std::string name, EntityRenderControllerCreationFunc func);
-    EntityRenderController* createEntityRenderController(EntityDef& ed, Entity* e);
-    const std::map<std::string, EntityRenderControllerCreationFunc>& getEntityRenderControllerMap();
+    void registerRenderController(std::string name, EntityControllerRenderCreationFunc func);
+    EntityControllerRender* createEntityControllerRender(EntityDef& ed, Entity* e);
+    const std::map<std::string, EntityControllerRenderCreationFunc>& getEntityControllerRenderMap();
     
 private:
     std::map<uint32_t, EntityDef> _entityDefs;
     std::map<std::string, EntityControllerCreationFunc> _entityControllerCreationFunctions;
-    std::map<std::string, EntityAIControllerCreationFunc> _entityAIControllerCreationFunctions;
-    std::map<std::string, EntityInputControllerCreationFunc> _entityInputControllerCreationFunctions;
-    std::map<std::string, EntityNetworkControllerCreationFunc> _entityNetworkControllerCreationFunctions;
-    std::map<std::string, EntityRenderControllerCreationFunc> _entityRenderControllerCreationFunctions;
+    std::map<std::string, EntityControllerAICreationFunc> _entityAIControllerCreationFunctions;
+    std::map<std::string, EntityControllerInputCreationFunc> _entityInputControllerCreationFunctions;
+    std::map<std::string, EntityControllerNetworkCreationFunc> _entityNetworkControllerCreationFunctions;
+    std::map<std::string, EntityControllerRenderCreationFunc> _entityRenderControllerCreationFunctions;
     
     EntityManager();
     ~EntityManager() {}

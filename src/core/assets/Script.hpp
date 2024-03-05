@@ -14,11 +14,11 @@
 struct Script
 {
     ScriptDescriptor _desc;
-    FileData* _scriptFileData;
+    FileData* _fileData;
     
     Script(ScriptDescriptor desc) :
     _desc(desc),
-    _scriptFileData(nullptr)
+    _fileData(nullptr)
     {
         // Empty
     }

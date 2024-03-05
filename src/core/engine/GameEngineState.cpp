@@ -511,24 +511,7 @@ void GameEngineState::onRender(Renderer& r, double extrapolation)
     r.configBounds(world().rightEdge(), world().topEdge(), _scale);
     r.configControlledPlayerEntity(getControlledPlayer());
     
-    // TODO, remove this code once we have scripting
-    bool isDante = strcmp(ENGINE_CFG.mode().c_str(), "dante") == 0;
-    bool isGeoDudes = strcmp(ENGINE_CFG.mode().c_str(), "geoDudes") == 0;
-    bool isNos = strcmp(ENGINE_CFG.mode().c_str(), "nosfuratu") == 0;
-    assert(isDante || isGeoDudes || isNos);
-    if (isDante)
-    {
-        _luaRenderer.render(r, world(), "bindFramebuffer() clearFramebuffer()");
-//        DanteRenderer::render(r, world());
-    }
-    else if (isGeoDudes)
-    {
-        // TODO
-    }
-    else if (isNos)
-    {
-        NosRenderer::render(r, world());
-    }
+    _luaRenderer.render(r, world(), "Renderer");
     
     if (_inputProcessor.state() == GIMS_DISPLAY_PHYSICS)
     {
@@ -729,8 +712,8 @@ void GameEngineState::playSoundForEntityIfNecessary(Entity& e, uint32_t moveInde
         return;
     }
     
-    std::string textureMapping = e.renderController()->getTextureMapping();
-    std::vector<SoundMapping>* soundMappings = e.renderController()->getSoundMapping();
+    std::string textureMapping = e.controllerRender()->getTextureMapping();
+    std::vector<SoundMapping>* soundMappings = e.controllerRender()->getSoundMapping();
     if (soundMappings == nullptr)
     {
         return;

@@ -80,7 +80,7 @@ void NosPhysicsWorld::endExtrapolatedPhysics()
     }
 }
 
-EntityPhysicsController* NosPhysicsWorld::createPhysicsController(Entity* e)
+EntityControllerPhysics* NosPhysicsWorld::createPhysicsController(Entity* e)
 {
     return new NosPhysicsController(e);
 }

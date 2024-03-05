@@ -1,5 +1,5 @@
 //
-//  EntityRenderController.hpp
+//  EntityControllerRender.hpp
 //  GowEngine
 //
 //  Created by Stephen Gowen on 2/17/21.
@@ -9,17 +9,18 @@
 #pragma once
 
 #include "core/common/RTTI.hpp"
+#include "core/common/Macros.hpp"
 
 class Entity;
 
-class EntityRenderController
+class EntityControllerRender
 {
     DECL_RTTI_NOPARENT;
-    DECL_EntityRenderController_create;
+    DECL_EntityControllerRender_create;
     
 public:
-    EntityRenderController(Entity* e);
-    virtual ~EntityRenderController() {}
+    EntityControllerRender(Entity* e);
+    virtual ~EntityControllerRender() {}
     
     virtual std::string getTextureMapping();
     virtual std::string getTextureMapping(uint8_t state);

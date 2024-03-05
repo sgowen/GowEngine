@@ -1,4 +1,9 @@
 {
+    "scripts": {
+        "Renderer": {
+            "filePath": "scripts/Renderer.lua"
+        }
+    },
   "shaders": [
     {
       "name": "framebufferWithTint",

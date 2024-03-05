@@ -19,7 +19,7 @@
 struct Assets
 {
     std::vector<Font> _fonts;
-    std::vector<ScriptDescriptor> _scriptDescriptors;
+    std::map<std::string, ScriptDescriptor> _scriptDescriptors;
     std::vector<ShaderDescriptor> _shaderDescriptors;
     std::vector<SoundDescriptor> _soundDescriptors;
     std::vector<TextureDescriptor> _textureDescriptors;
@@ -40,6 +40,19 @@ struct Assets
         _textureDescriptors.clear();
         _isDataLoaded = false;
         _isLoadedIntoEngine = false;
+    }
+    
+    ScriptDescriptor* script(std::string key)
+    {
+        ScriptDescriptor* ret = nullptr;
+        
+        const auto& q = _scriptDescriptors.find(key);
+        if (q != _scriptDescriptors.end())
+        {
+            ret = &q->second;
+        }
+        
+        return ret;
     }
     
     Font* font(std::string key)

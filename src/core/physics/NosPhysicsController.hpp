@@ -8,7 +8,7 @@
 
 #pragma once
 
-#include "core/entity/EntityPhysicsController.hpp"
+#include "core/entity/EntityControllerPhysics.hpp"
 
 #include "core/math/Rektangle.hpp"
 
@@ -44,7 +44,7 @@ struct Bounds
 
 class Entity;
 
-class NosPhysicsController : public EntityPhysicsController
+class NosPhysicsController : public EntityControllerPhysics
 {
     DECL_RTTI;
     

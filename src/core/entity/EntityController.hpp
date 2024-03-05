@@ -9,6 +9,7 @@
 #pragma once
 
 #include "core/common/RTTI.hpp"
+#include "core/common/Macros.hpp"
 
 class Entity;
 

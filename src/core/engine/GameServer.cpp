@@ -221,7 +221,7 @@ void GameServer::handleDirtyStates(std::vector<Entity*>& entities)
 {
     for (Entity* e : entities)
     {
-        uint8_t dirtyState = e->networkController()->refreshDirtyState();
+        uint8_t dirtyState = e->controllerNetwork()->refreshDirtyState();
         if (dirtyState > 0)
         {
             NW_SRVR->setStateDirty(e->getID(), dirtyState);

@@ -47,6 +47,8 @@
 #include "deps/rapidjson/RendererLoader.hpp"
 
 /// deps/sol2 implementation
+#include "deps/sol2/LuaController.hpp"
+#include "deps/sol2/LuaControllerAI.hpp"
 #include "deps/sol2/LuaRenderer.hpp"
 
 /// deps/stb implementation
@@ -76,6 +78,8 @@
 #include "core/assets/MatrixDescriptor.hpp"
 #include "core/assets/Script.hpp"
 #include "core/assets/ScriptDescriptor.hpp"
+#include "core/assets/ScriptLoader.hpp"
+#include "core/assets/ScriptManager.hpp"
 #include "core/assets/ShaderDescriptor.hpp"
 #include "core/assets/ShaderLoader.hpp"
 #include "core/assets/SoundDescriptor.hpp"
@@ -108,29 +112,25 @@
 #include "core/engine/GameEngineState.hpp"
 #include "core/engine/GameServer.hpp"
 #include "core/engine/TitleEngineState.hpp"
-// TODO, remove with scripting
-#include "core/engine/DanteRenderer.hpp"
-#include "core/engine/NosRenderer.hpp"
 
 /// core/entity
 #include "core/entity/Entity.hpp"
 #include "core/entity/EntityController.hpp"
 #include "core/entity/EntityIDManager.hpp"
-#include "core/entity/EntityAIController.hpp"
-#include "core/entity/EntityInputController.hpp"
+#include "core/entity/EntityControllerAI.hpp"
+#include "core/entity/EntityControllerInput.hpp"
 #include "core/entity/EntityInputMappingManager.hpp"
 #include "core/entity/EntityLayoutManager.hpp"
 #include "core/entity/EntityManager.hpp"
-#include "core/entity/EntityNetworkController.hpp"
-#include "core/entity/EntityPhysicsController.hpp"
+#include "core/entity/EntityControllerNetwork.hpp"
+#include "core/entity/EntityControllerPhysics.hpp"
 #include "core/entity/EntityRegistry.hpp"
-#include "core/entity/EntityRenderController.hpp"
+#include "core/entity/EntityControllerRender.hpp"
 #include "core/entity/World.hpp"
 // TODO, remove with scripting
 #include "core/entity/JonController.hpp"
 #include "core/entity/MonsterController.hpp"
 #include "core/entity/RobotController.hpp"
-#include "core/entity/MonsterAIController.hpp"
 
 /// core/input
 #include "core/input/ClipboardHandler.hpp"

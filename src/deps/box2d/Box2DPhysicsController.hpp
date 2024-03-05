@@ -8,7 +8,7 @@
 
 #pragma once
 
-#include "core/entity/EntityPhysicsController.hpp"
+#include "core/entity/EntityControllerPhysics.hpp"
 
 #include <vector>
 
@@ -17,7 +17,7 @@ class b2Body;
 class b2Fixture;
 class b2World;
 
-class Box2DPhysicsController : public EntityPhysicsController
+class Box2DPhysicsController : public EntityControllerPhysics
 {
     DECL_RTTI;
     

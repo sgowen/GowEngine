@@ -1,5 +1,5 @@
 //
-//  EntityInputController.cpp
+//  EntityControllerInput.cpp
 //  GowEngine
 //
 //  Created by Stephen Gowen on 3/01/24.
@@ -8,16 +8,16 @@
 
 #include <GowEngine/GowEngine.hpp>
 
-IMPL_RTTI_NOPARENT(EntityInputController)
-IMPL_EntityInputController_create_NOPARENT
+IMPL_RTTI_NOPARENT(EntityControllerInput)
+IMPL_EntityControllerInput_create_NOPARENT
 
-EntityInputController::EntityInputController(Entity* e) :
+EntityControllerInput::EntityControllerInput(Entity* e) :
 _entity(e)
 {
     // Empty
 }
 
-void EntityInputController::processEvent(uint16_t& inputState, CursorEvent* ce)
+void EntityControllerInput::processEvent(uint16_t& inputState, CursorEvent* ce)
 {
     // TODO, this code is temporary, and should be moved to JSON
     Entity& e = *_entity;
@@ -63,7 +63,7 @@ bool isConditionSatisfied(GamepadEvent* gpe, std::string condition)
     return false;
 }
 
-void EntityInputController::processEvent(uint16_t& inputState, GamepadEvent* gpe)
+void EntityControllerInput::processEvent(uint16_t& inputState, GamepadEvent* gpe)
 {
     Entity& e = *_entity;
     
@@ -108,7 +108,7 @@ bool isConditionSatisfied(KeyboardEvent* kbe, std::string condition)
     return false;
 }
 
-void EntityInputController::processEvent(uint16_t& inputState, KeyboardEvent* kbe)
+void EntityControllerInput::processEvent(uint16_t& inputState, KeyboardEvent* kbe)
 {
     Entity& e = *_entity;
     

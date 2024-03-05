@@ -86,6 +86,7 @@ void AssetsManager::createDeviceDependentResources()
         a._isLoadedIntoEngine = false;
         a._isDataLoaded = false;
         
+        _scriptMgr.loadData(a._scriptDescriptors);
         _shaderMgr.loadData(a._shaderDescriptors);
         _soundMgr.loadData(a._soundDescriptors);
         _textureMgr.loadData(a._textureDescriptors);
@@ -96,6 +97,7 @@ void AssetsManager::createDeviceDependentResources()
 
 void AssetsManager::destroyDeviceDependentResources()
 {
+    _scriptMgr.reset();
     _shaderMgr.reset();
     _soundMgr.reset();
     _textureMgr.reset();
@@ -107,6 +109,11 @@ void AssetsManager::destroyDeviceDependentResources()
         a._isLoadedIntoEngine = false;
         a._isDataLoaded = false;
     }
+}
+
+Script& AssetsManager::script(std::string name)
+{
+    return _scriptMgr.script(name);
 }
 
 Shader& AssetsManager::shader(std::string name)
@@ -240,6 +247,7 @@ bool AssetsManager::isLoaded()
 }
 
 AssetsManager::AssetsManager() :
+_scriptMgr(),
 _shaderMgr(),
 _soundMgr(),
 _textureMgr(),

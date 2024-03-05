@@ -66,7 +66,7 @@ void Box2DPhysicsWorld::endExtrapolatedPhysics()
     // TODO
 }
 
-EntityPhysicsController* Box2DPhysicsWorld::createPhysicsController(Entity* e)
+EntityControllerPhysics* Box2DPhysicsWorld::createPhysicsController(Entity* e)
 {
     return new Box2DPhysicsController(e, *_world);
 }

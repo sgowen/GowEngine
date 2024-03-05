@@ -23,6 +23,7 @@ public:
     
 private:
     sol::state* _lua;
+    std::map<std::string, Color> _colorMap;
     
     LuaRenderer(const LuaRenderer&);
     LuaRenderer& operator=(const LuaRenderer&);

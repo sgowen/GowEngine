@@ -8,7 +8,7 @@
 
 #pragma once
 
-#include "core/assets/Font.hpp"
+#include "core/assets/ScriptManager.hpp"
 #include "core/opengl/ShaderManager.hpp"
 #include "core/openal/SoundManager.hpp"
 #include "core/opengl/TextureManager.hpp"
@@ -16,6 +16,8 @@
 #include "Assets.hpp"
 
 #include <map>
+
+struct Font;
 
 class AssetsManager
 {
@@ -32,6 +34,7 @@ public:
     void createDeviceDependentResourcesAsync();
     void createDeviceDependentResources();
     void destroyDeviceDependentResources();
+    Script& script(std::string name);
     Shader& shader(std::string name);
     bool isShaderLoaded(std::string name);
     Sound& sound(std::string soundID);
@@ -49,6 +52,7 @@ public:
 
 private:
     std::map<std::string, Assets> _assets;
+    ScriptManager _scriptMgr;
     ShaderManager _shaderMgr;
     SoundManager _soundMgr;
     TextureManager _textureMgr;

@@ -34,8 +34,17 @@ void EntityManager::registerController(std::string name, EntityControllerCreatio
 
 EntityController* EntityManager::createEntityController(EntityDef& ed, Entity* e)
 {
-    EntityControllerCreationFunc func = _entityControllerCreationFunctions[ed._controller];
+    EntityControllerCreationFunc func;
+    if (ed._controllerScript.empty())
+    {
+        func = _entityControllerCreationFunctions[ed._controller];
+    }
+    else
+    {
+        func = _entityControllerCreationFunctions["LuaController"];
+    }
     assert(func != nullptr);
+    
     return func(e);
 }
 
@@ -44,74 +53,83 @@ const std::map<std::string, EntityControllerCreationFunc>& EntityManager::getEnt
     return _entityControllerCreationFunctions;
 }
 
-void EntityManager::registerAIController(std::string name, EntityAIControllerCreationFunc func)
+void EntityManager::registerAIController(std::string name, EntityControllerAICreationFunc func)
 {
     assert(func != nullptr);
     _entityAIControllerCreationFunctions[name] = func;
 }
 
-EntityAIController* EntityManager::createEntityAIController(EntityDef& ed, Entity* e)
+EntityControllerAI* EntityManager::createEntityControllerAI(EntityDef& ed, Entity* e)
 {
-    EntityAIControllerCreationFunc func = _entityAIControllerCreationFunctions[ed._aiController];
+    EntityControllerAICreationFunc func;
+    if (ed._controllerAIScript.empty())
+    {
+        func = _entityAIControllerCreationFunctions[ed._controllerAI];
+    }
+    else
+    {
+        func = _entityAIControllerCreationFunctions["LuaControllerAI"];
+    }
     assert(func != nullptr);
+    
     return func(e);
 }
 
-const std::map<std::string, EntityAIControllerCreationFunc>& EntityManager::getEntityAIControllerMap()
+const std::map<std::string, EntityControllerAICreationFunc>& EntityManager::getEntityControllerAIMap()
 {
     return _entityAIControllerCreationFunctions;
 }
 
-void EntityManager::registerInputController(std::string name, EntityInputControllerCreationFunc func)
+void EntityManager::registerInputController(std::string name, EntityControllerInputCreationFunc func)
 {
     assert(func != nullptr);
     _entityInputControllerCreationFunctions[name] = func;
 }
 
-EntityInputController* EntityManager::createEntityInputController(EntityDef& ed, Entity* e)
+EntityControllerInput* EntityManager::createEntityControllerInput(EntityDef& ed, Entity* e)
 {
-    EntityInputControllerCreationFunc func = _entityInputControllerCreationFunctions[ed._inputController];
+    EntityControllerInputCreationFunc func = _entityInputControllerCreationFunctions[ed._controllerInput];
     assert(func != nullptr);
     return func(e);
 }
 
-const std::map<std::string, EntityInputControllerCreationFunc>& EntityManager::getEntityInputControllerMap()
+const std::map<std::string, EntityControllerInputCreationFunc>& EntityManager::getEntityControllerInputMap()
 {
     return _entityInputControllerCreationFunctions;
 }
 
-void EntityManager::registerNetworkController(std::string name, EntityNetworkControllerCreationFunc func)
+void EntityManager::registerNetworkController(std::string name, EntityControllerNetworkCreationFunc func)
 {
     assert(func != nullptr);
     _entityNetworkControllerCreationFunctions[name] = func;
 }
 
-EntityNetworkController* EntityManager::createEntityNetworkController(EntityDef& ed, Entity* e)
+EntityControllerNetwork* EntityManager::createEntityControllerNetwork(EntityDef& ed, Entity* e)
 {
-    EntityNetworkControllerCreationFunc func = _entityNetworkControllerCreationFunctions[ed._networkController];
+    EntityControllerNetworkCreationFunc func = _entityNetworkControllerCreationFunctions[ed._controllerNetwork];
     assert(func != nullptr);
     return func(e);
 }
 
-const std::map<std::string, EntityNetworkControllerCreationFunc>& EntityManager::getEntityNetworkControllerMap()
+const std::map<std::string, EntityControllerNetworkCreationFunc>& EntityManager::getEntityControllerNetworkMap()
 {
     return _entityNetworkControllerCreationFunctions;
 }
 
-void EntityManager::registerRenderController(std::string name, EntityRenderControllerCreationFunc func)
+void EntityManager::registerRenderController(std::string name, EntityControllerRenderCreationFunc func)
 {
     assert(func != nullptr);
     _entityRenderControllerCreationFunctions[name] = func;
 }
 
-EntityRenderController* EntityManager::createEntityRenderController(EntityDef& ed, Entity* e)
+EntityControllerRender* EntityManager::createEntityControllerRender(EntityDef& ed, Entity* e)
 {
-    EntityRenderControllerCreationFunc func = _entityRenderControllerCreationFunctions[ed._renderController];
+    EntityControllerRenderCreationFunc func = _entityRenderControllerCreationFunctions[ed._controllerRender];
     assert(func != nullptr);
     return func(e);
 }
 
-const std::map<std::string, EntityRenderControllerCreationFunc>& EntityManager::getEntityRenderControllerMap()
+const std::map<std::string, EntityControllerRenderCreationFunc>& EntityManager::getEntityControllerRenderMap()
 {
     return _entityRenderControllerCreationFunctions;
 }
@@ -119,14 +137,15 @@ const std::map<std::string, EntityRenderControllerCreationFunc>& EntityManager::
 EntityManager::EntityManager()
 {
     registerController("EntityController", EntityController::create);
-    registerAIController("EntityAIController", EntityAIController::create);
-    registerInputController("EntityInputController", EntityInputController::create);
-    registerNetworkController("EntityNetworkController", EntityNetworkController::create);
-    registerRenderController("EntityRenderController", EntityRenderController::create);
+    registerController("LuaController", LuaController::create);
+    registerAIController("EntityControllerAI", EntityControllerAI::create);
+    registerAIController("LuaControllerAI", LuaControllerAI::create);
+    registerInputController("EntityControllerInput", EntityControllerInput::create);
+    registerNetworkController("EntityControllerNetwork", EntityControllerNetwork::create);
+    registerRenderController("EntityControllerRender", EntityControllerRender::create);
     
     // TODO, remove these once we have scripting
     registerController("JonController", JonController::create);
     registerController("MonsterController", MonsterController::create);
     registerController("RobotController", RobotController::create);
-    registerAIController("MonsterAIController", MonsterAIController::create);
 }

@@ -1,5 +1,5 @@
 //
-//  EntityNetworkController.hpp
+//  EntityControllerNetwork.hpp
 //  GowEngine
 //
 //  Created by Stephen Gowen on 4/17/18.
@@ -9,6 +9,7 @@
 #pragma once
 
 #include "core/common/RTTI.hpp"
+#include "core/common/Macros.hpp"
 #include "Entity.hpp"
 
 #include <stdint.h>
@@ -17,14 +18,14 @@
 class InputMemoryBitStream;
 class OutputMemoryBitStream;
 
-class EntityNetworkController
+class EntityControllerNetwork
 {
     DECL_RTTI_NOPARENT;
-    DECL_EntityNetworkController_create;
+    DECL_EntityControllerNetwork_create;
     
 public:
-    EntityNetworkController(Entity* e);
-    virtual ~EntityNetworkController() {}
+    EntityControllerNetwork(Entity* e);
+    virtual ~EntityControllerNetwork() {}
     
     virtual void read(InputMemoryBitStream& imbs);
     virtual uint8_t write(OutputMemoryBitStream& ombs, uint8_t dirtyState);

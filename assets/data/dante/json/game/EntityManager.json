@@ -130,8 +130,8 @@
     },
     "MO01": {
         "name": "Crawler",
-        "controller": "MonsterController",
-        "aiController": "MonsterAIController",
+        "controllerScript": "Monster",
+        "controllerAIScript": "MonsterAI",
         "inputStateFlags": [
             "MOVING_RIGHT",
             "MOVING_LEFT",

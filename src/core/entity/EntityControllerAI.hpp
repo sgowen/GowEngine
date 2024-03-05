@@ -1,25 +1,26 @@
 //
-//  EntityAIController.hpp
+//  EntityControllerAI.hpp
 //  GowEngine
 //
-//  Created by Stephen Gowen on 3/01/24.
+//  Created by Stephen Gowen on 3/04/24.
 //  Copyright © 2024 Stephen Gowen. All rights reserved.
 //
 
 #pragma once
 
 #include "core/common/RTTI.hpp"
+#include "core/common/Macros.hpp"
 
 class Entity;
 
-class EntityAIController
+class EntityControllerAI
 {
     DECL_RTTI_NOPARENT;
-    DECL_EntityAIController_create;
+    DECL_EntityControllerAI_create;
     
 public:
-    EntityAIController(Entity* e);
-    virtual ~EntityAIController() {}
+    EntityControllerAI(Entity* e);
+    virtual ~EntityControllerAI() {}
     
     virtual void runAI(uint16_t& inputState);
     

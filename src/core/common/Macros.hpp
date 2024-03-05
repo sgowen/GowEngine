@@ -74,58 +74,58 @@ EntityController* type::create(Entity* e)     \
 #define IMPL_EntityController_create_NOPARENT \
 IMPL_EntityController_create(EntityController)
 
-/// EntityAIController
-#define DECL_EntityAIController_create            \
+/// EntityControllerAI
+#define DECL_EntityControllerAI_create            \
 public:                                           \
-    static EntityAIController* create(Entity* e)
+    static EntityControllerAI* create(Entity* e)
 
-#define IMPL_EntityAIController_create(type)      \
-EntityAIController* type::create(Entity* e)       \
+#define IMPL_EntityControllerAI_create(type)      \
+EntityControllerAI* type::create(Entity* e)       \
 {                                                 \
     return new type(e);                           \
 }
 
-#define IMPL_EntityAIController_create_NOPARENT   \
-IMPL_EntityAIController_create(EntityAIController)
+#define IMPL_EntityControllerAI_create_NOPARENT   \
+IMPL_EntityControllerAI_create(EntityControllerAI)
 
-/// EntityInputController
-#define DECL_EntityInputController_create               \
+/// EntityControllerInput
+#define DECL_EntityControllerInput_create               \
 public:                                                 \
-    static EntityInputController* create(Entity* e)
+    static EntityControllerInput* create(Entity* e)
 
-#define IMPL_EntityInputController_create(type)         \
-EntityInputController* type::create(Entity* e)          \
+#define IMPL_EntityControllerInput_create(type)         \
+EntityControllerInput* type::create(Entity* e)          \
 {                                                       \
     return new type(e);                                 \
 }
 
-#define IMPL_EntityInputController_create_NOPARENT      \
-IMPL_EntityInputController_create(EntityInputController)
+#define IMPL_EntityControllerInput_create_NOPARENT      \
+IMPL_EntityControllerInput_create(EntityControllerInput)
 
-/// EntityNetworkController
-#define DECL_EntityNetworkController_create                 \
+/// EntityControllerNetwork
+#define DECL_EntityControllerNetwork_create                 \
 public:                                                     \
-    static EntityNetworkController* create(Entity* e)
+    static EntityControllerNetwork* create(Entity* e)
 
-#define IMPL_EntityNetworkController_create(type)           \
-EntityNetworkController* type::create(Entity* e)            \
+#define IMPL_EntityControllerNetwork_create(type)           \
+EntityControllerNetwork* type::create(Entity* e)            \
 {                                                           \
     return new type(e);                                     \
 }
 
-#define IMPL_EntityNetworkController_create_NOPARENT        \
-IMPL_EntityNetworkController_create(EntityNetworkController)
+#define IMPL_EntityControllerNetwork_create_NOPARENT        \
+IMPL_EntityControllerNetwork_create(EntityControllerNetwork)
 
-/// EntityRenderController
-#define DECL_EntityRenderController_create                \
+/// EntityControllerRender
+#define DECL_EntityControllerRender_create                \
 public:                                                   \
-    static EntityRenderController* create(Entity* e)
+    static EntityControllerRender* create(Entity* e)
 
-#define IMPL_EntityRenderController_create(type)          \
-EntityRenderController* type::create(Entity* e)           \
+#define IMPL_EntityControllerRender_create(type)          \
+EntityControllerRender* type::create(Entity* e)           \
 {                                                         \
     return new type(e);                                   \
 }
 
-#define IMPL_EntityRenderController_create_NOPARENT       \
-IMPL_EntityRenderController_create(EntityRenderController)
+#define IMPL_EntityControllerRender_create_NOPARENT       \
+IMPL_EntityControllerRender_create(EntityControllerRender)

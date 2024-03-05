@@ -49,7 +49,7 @@ void ReplicationManagerClient::readAndDoCreateAction(InputMemoryBitStream& imbs,
         isEntityNew = true;
     }
     
-    e->networkController()->read(imbs);
+    e->controllerNetwork()->read(imbs);
     
     if (isEntityNew)
     {
@@ -62,7 +62,7 @@ void ReplicationManagerClient::readAndDoUpdateAction(InputMemoryBitStream& imbs,
     Entity* e = er.getEntityByID(networkID);
     assert(e != nullptr);
     
-    e->networkController()->read(imbs);
+    e->controllerNetwork()->read(imbs);
 }
 
 void ReplicationManagerClient::readAndDoDestroyAction(InputMemoryBitStream& imbs, EntityRegistry& er, uint32_t networkID)

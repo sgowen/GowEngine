@@ -1,5 +1,5 @@
 //
-//  EntityNetworkController.cpp
+//  EntityControllerNetwork.cpp
 //  GowEngine
 //
 //  Created by Stephen Gowen on 4/17/18.
@@ -8,16 +8,16 @@
 
 #include <GowEngine/GowEngine.hpp>
 
-IMPL_RTTI_NOPARENT(EntityNetworkController)
-IMPL_EntityNetworkController_create_NOPARENT
+IMPL_RTTI_NOPARENT(EntityControllerNetwork)
+IMPL_EntityControllerNetwork_create_NOPARENT
 
-EntityNetworkController::EntityNetworkController(Entity* e) :
+EntityControllerNetwork::EntityControllerNetwork(Entity* e) :
 _entity(e)
 {
     storeToCache(0);
 }
 
-void EntityNetworkController::read(InputMemoryBitStream& imbs)
+void EntityControllerNetwork::read(InputMemoryBitStream& imbs)
 {
     const uint32_t numMovesProcessed = NW_CLNT->getNumMovesProcessed();
     
@@ -102,7 +102,7 @@ void EntityNetworkController::read(InputMemoryBitStream& imbs)
     }
 }
 
-uint8_t EntityNetworkController::write(OutputMemoryBitStream& ombs, uint8_t dirtyState)
+uint8_t EntityControllerNetwork::write(OutputMemoryBitStream& ombs, uint8_t dirtyState)
 {
     Entity& e = *_entity;
     
@@ -175,7 +175,7 @@ uint8_t EntityNetworkController::write(OutputMemoryBitStream& ombs, uint8_t dirt
     return ret;
 }
 
-void EntityNetworkController::storeToCache(uint32_t numMovesProcessed)
+void EntityControllerNetwork::storeToCache(uint32_t numMovesProcessed)
 {
     Entity& e = *_entity;
     
@@ -200,7 +200,7 @@ void EntityNetworkController::storeToCache(uint32_t numMovesProcessed)
     }
 }
 
-void EntityNetworkController::recallCache(uint32_t numMovesProcessed)
+void EntityControllerNetwork::recallCache(uint32_t numMovesProcessed)
 {
     Entity& e = *_entity;
     
@@ -245,7 +245,7 @@ void EntityNetworkController::recallCache(uint32_t numMovesProcessed)
     }
 }
 
-void EntityNetworkController::clearCache(uint32_t numMovesProcessed)
+void EntityControllerNetwork::clearCache(uint32_t numMovesProcessed)
 {
     for (auto i = _poseCache.begin(); i != _poseCache.end(); )
     {
@@ -296,7 +296,7 @@ void EntityNetworkController::clearCache(uint32_t numMovesProcessed)
     }
 }
 
-uint8_t EntityNetworkController::refreshDirtyState()
+uint8_t EntityControllerNetwork::refreshDirtyState()
 {
     uint8_t ret = 0;
     

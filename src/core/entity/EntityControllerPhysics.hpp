@@ -1,5 +1,5 @@
 //
-//  EntityPhysicsController.hpp
+//  EntityControllerPhysics.hpp
 //  GowEngine
 //
 //  Created by Stephen Gowen on 2/04/21.
@@ -13,13 +13,13 @@
 
 class Entity;
 
-class EntityPhysicsController
+class EntityControllerPhysics
 {
     DECL_RTTI_NOPARENT;
     
 public:
-    EntityPhysicsController(Entity* e);
-    virtual ~EntityPhysicsController() {}
+    EntityControllerPhysics(Entity* e);
+    virtual ~EntityControllerPhysics() {}
     
     virtual void updateBodyFromPose() = 0;
     

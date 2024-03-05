@@ -1,5 +1,5 @@
 //
-//  EntityRenderController.cpp
+//  EntityControllerRender.cpp
 //  GowEngine
 //
 //  Created by Stephen Gowen on 2/17/21.
@@ -8,22 +8,22 @@
 
 #include <GowEngine/GowEngine.hpp>
 
-IMPL_RTTI_NOPARENT(EntityRenderController)
-IMPL_EntityRenderController_create_NOPARENT
+IMPL_RTTI_NOPARENT(EntityControllerRender)
+IMPL_EntityControllerRender_create_NOPARENT
 
-EntityRenderController::EntityRenderController(Entity* e) :
+EntityControllerRender::EntityControllerRender(Entity* e) :
 _entity(e)
 {
     // Empty
 }
 
-std::string EntityRenderController::getTextureMapping()
+std::string EntityControllerRender::getTextureMapping()
 {
     Entity& e = *_entity;
     return getTextureMapping(e.state()._state);
 }
 
-std::string EntityRenderController::getTextureMapping(uint8_t state)
+std::string EntityControllerRender::getTextureMapping(uint8_t state)
 {
     Entity& e = *_entity;
     auto q = e.entityDef()._textureMappings.find(state);
@@ -32,13 +32,13 @@ std::string EntityRenderController::getTextureMapping(uint8_t state)
     return q->second;
 }
 
-std::vector<SoundMapping>* EntityRenderController::getSoundMapping()
+std::vector<SoundMapping>* EntityControllerRender::getSoundMapping()
 {
     Entity& e = *_entity;
     return getSoundMapping(e.state()._state);
 }
 
-std::vector<SoundMapping>* EntityRenderController::getSoundMapping(uint8_t state)
+std::vector<SoundMapping>* EntityControllerRender::getSoundMapping(uint8_t state)
 {
     Entity& e = *_entity;
     auto q = e.entityDef()._soundMappings.find(state);

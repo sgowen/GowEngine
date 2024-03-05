@@ -60,7 +60,7 @@ void JonController::onUpdate(uint32_t numMovesProcessed)
     uint8_t& stateFlags = e.state()._stateFlags;
     uint16_t& stateTime = e.state()._stateTime;
     
-    std::string textureMapping = e.renderController()->getTextureMapping();
+    std::string textureMapping = e.controllerRender()->getTextureMapping();
     Animation* animation = ASSETS_MGR.animation(textureMapping);
     uint16_t animationNumFrames = animation == nullptr ? 1 : animation->cycleTime();
     uint16_t animationNumFramesBeforeFirstLoopingFrame = animation == nullptr ? 1 : animation->cycleTimeBeforeFirstLoopingFrame();

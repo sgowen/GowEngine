@@ -1,5 +1,5 @@
 //
-//  EntityPhysicsController.cpp
+//  EntityControllerPhysics.cpp
 //  GowEngine
 //
 //  Created by Stephen Gowen on 2/04/21.
@@ -8,9 +8,9 @@
 
 #include <GowEngine/GowEngine.hpp>
 
-IMPL_RTTI_NOPARENT(EntityPhysicsController)
+IMPL_RTTI_NOPARENT(EntityControllerPhysics)
 
-EntityPhysicsController::EntityPhysicsController(Entity* e) :
+EntityControllerPhysics::EntityControllerPhysics(Entity* e) :
 _entity(e)
 {
     // Empty

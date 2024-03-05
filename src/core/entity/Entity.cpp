@@ -12,11 +12,11 @@ Entity::Entity(EntityDef ed, EntityInstanceDef eid) :
 _entityDef(ed),
 _entityInstanceDef(eid),
 _controller(nullptr),
-_aiController(nullptr),
-_inputController(nullptr),
-_networkController(nullptr),
+_controllerAI(nullptr),
+_controllerInput(nullptr),
+_controllerNetwork(nullptr),
 _physicsController(nullptr),
-_renderController(nullptr),
+_controllerRender(nullptr),
 _pose(eid._x + ed._width / 2.0f, eid._y + ed._height / 2.0f),
 _state(),
 _playerInfo(),
@@ -27,22 +27,22 @@ _angle(0),
 _world(nullptr)
 {
     _controller = ENTITY_MGR.createEntityController(ed, this);
-    _aiController = ENTITY_MGR.createEntityAIController(ed, this);
-    _inputController = ENTITY_MGR.createEntityInputController(ed, this);
-    _networkController = ENTITY_MGR.createEntityNetworkController(ed, this);
-    _renderController = ENTITY_MGR.createEntityRenderController(ed, this);
+    _controllerAI = ENTITY_MGR.createEntityControllerAI(ed, this);
+    _controllerInput = ENTITY_MGR.createEntityControllerInput(ed, this);
+    _controllerNetwork = ENTITY_MGR.createEntityControllerNetwork(ed, this);
+    _controllerRender = ENTITY_MGR.createEntityControllerRender(ed, this);
 }
 
 Entity::~Entity()
 {
     delete _controller;
-    delete _inputController;
-    delete _networkController;
+    delete _controllerInput;
+    delete _controllerNetwork;
     if (_physicsController != nullptr)
     {
         delete _physicsController;
     }
-    delete _renderController;
+    delete _controllerRender;
 }
 
 void Entity::beginFrame()
@@ -66,7 +66,7 @@ void Entity::runAI()
         return;
     }
     
-    EntityAIController* eic = aiController();
+    EntityControllerAI* eic = controllerAI();
     assert(eic != nullptr);
     
     uint16_t inputState = 0;
@@ -82,7 +82,7 @@ void Entity::processEvent(uint16_t& inputState, CursorEvent* e)
         return;
     }
     
-    EntityInputController* eic = inputController();
+    EntityControllerInput* eic = controllerInput();
     assert(eic != nullptr);
     
     eic->processEvent(inputState, e);
@@ -95,7 +95,7 @@ void Entity::processEvent(uint16_t& inputState, GamepadEvent* e)
         return;
     }
     
-    EntityInputController* eic = inputController();
+    EntityControllerInput* eic = controllerInput();
     assert(eic != nullptr);
     
     eic->processEvent(inputState, e);
@@ -108,7 +108,7 @@ void Entity::processEvent(uint16_t& inputState, KeyboardEvent* e)
         return;
     }
     
-    EntityInputController* eic = inputController();
+    EntityControllerInput* eic = controllerInput();
     assert(eic != nullptr);
     
     eic->processEvent(inputState, e);

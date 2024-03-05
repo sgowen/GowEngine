@@ -47,6 +47,11 @@ void OutputDebugStringA(const char* value)
 }
 #endif
 
+void Logger::log(std::string line)
+{
+    LOG(line.c_str());
+}
+
 void Logger::initWithFile(const char* fileName)
 {
     _fileStream.open(fileName, std::ios::app);

@@ -1,4 +1,15 @@
 {
+    "scripts": {
+        "Monster": {
+            "filePath": "scripts/Monster.lua"
+        },
+        "MonsterAI": {
+            "filePath": "scripts/MonsterAI.lua"
+        },
+        "Renderer": {
+            "filePath": "scripts/Renderer.lua"
+        }
+    },
   "sounds": [
     {
       "soundID": "music_game",

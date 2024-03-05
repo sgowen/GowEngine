@@ -407,11 +407,13 @@ struct EntityDef
     std::string _name;
     std::string _keyName;
     std::string _controller;
-    std::string _aiController;
-    std::string _inputController;
+    std::string _controllerScript;
+    std::string _controllerAI;
+    std::string _controllerAIScript;
+    std::string _controllerInput;
     std::string _inputMapping;
-    std::string _networkController;
-    std::string _renderController;
+    std::string _controllerNetwork;
+    std::string _controllerRender;
     std::vector<std::string> _inputStateFlags;
     std::vector<std::string> _states;
     std::vector<std::string> _stateFlags;
@@ -434,11 +436,13 @@ struct EntityDef
               std::string name,
               std::string keyName,
               std::string controller,
-              std::string aiController,
-              std::string inputController,
+              std::string controllerScript,
+              std::string controllerAI,
+              std::string controllerAIScript,
+              std::string controllerInput,
               std::string inputMapping,
-              std::string networkController,
-              std::string renderController,
+              std::string controllerNetwork,
+              std::string controllerRender,
               std::vector<std::string> inputStateFlags,
               std::vector<std::string> states,
               std::vector<std::string> stateFlags,
@@ -455,11 +459,13 @@ struct EntityDef
     _name(name),
     _keyName(keyName),
     _controller(controller),
-    _aiController(aiController),
-    _inputController(inputController),
+    _controllerScript(controllerScript),
+    _controllerAI(controllerAI),
+    _controllerAIScript(controllerAIScript),
+    _controllerInput(controllerInput),
     _inputMapping(inputMapping),
-    _networkController(networkController),
-    _renderController(renderController),
+    _controllerNetwork(controllerNetwork),
+    _controllerRender(controllerRender),
     _inputStateFlags(inputStateFlags),
     _states(states),
     _stateFlags(stateFlags),
@@ -478,11 +484,11 @@ struct EntityDef
 };
 
 class EntityController;
-class EntityAIController;
-class EntityInputController;
-class EntityNetworkController;
-class EntityPhysicsController;
-class EntityRenderController;
+class EntityControllerAI;
+class EntityControllerInput;
+class EntityControllerNetwork;
+class EntityControllerPhysics;
+class EntityControllerRender;
 class World;
 struct CursorEvent;
 struct GamepadEvent;
@@ -490,8 +496,8 @@ struct KeyboardEvent;
 
 class Entity
 {
-    friend class EntityInputController;
-    friend class EntityNetworkController;
+    friend class EntityControllerInput;
+    friend class EntityControllerNetwork;
     
 public:
     Entity(EntityDef ed, EntityInstanceDef eid);
@@ -536,28 +542,28 @@ public:
         return static_cast<T*>(_controller);
     }
     
-    template<typename T = EntityAIController>
-    T* aiController()
+    template<typename T = EntityControllerAI>
+    T* controllerAI()
     {
-        assert(_aiController != nullptr);
-        return static_cast<T*>(_aiController);
+        assert(_controllerAI != nullptr);
+        return static_cast<T*>(_controllerAI);
     }
     
-    template<typename T = EntityInputController>
-    T* inputController()
+    template<typename T = EntityControllerInput>
+    T* controllerInput()
     {
-        assert(_inputController != nullptr);
-        return static_cast<T*>(_inputController);
+        assert(_controllerInput != nullptr);
+        return static_cast<T*>(_controllerInput);
     }
     
-    template<typename T = EntityNetworkController>
-    T* networkController()
+    template<typename T = EntityControllerNetwork>
+    T* controllerNetwork()
     {
-        assert(_networkController != nullptr);
-        return static_cast<T*>(_networkController);
+        assert(_controllerNetwork != nullptr);
+        return static_cast<T*>(_controllerNetwork);
     }
 
-    void setPhysicsController(EntityPhysicsController* physicsController)
+    void setPhysicsController(EntityControllerPhysics* physicsController)
     {
         _physicsController = physicsController;
     }
@@ -570,18 +576,18 @@ public:
         }
     }
     
-    template<typename T = EntityPhysicsController>
+    template<typename T = EntityControllerPhysics>
     T* physicsController()
     {
         assert(_physicsController != nullptr);
         return static_cast<T*>(_physicsController);
     }
     
-    template<typename T = EntityRenderController>
-    T* renderController()
+    template<typename T = EntityControllerRender>
+    T* controllerRender()
     {
-        assert(_renderController != nullptr);
-        return static_cast<T*>(_renderController);
+        assert(_controllerRender != nullptr);
+        return static_cast<T*>(_controllerRender);
     }
     
     struct Pose
@@ -701,11 +707,11 @@ private:
     EntityDef _entityDef;
     EntityInstanceDef _entityInstanceDef;
     EntityController* _controller;
-    EntityAIController* _aiController;
-    EntityInputController* _inputController;
-    EntityNetworkController* _networkController;
-    EntityPhysicsController* _physicsController;
-    EntityRenderController* _renderController;
+    EntityControllerAI* _controllerAI;
+    EntityControllerInput* _controllerInput;
+    EntityControllerNetwork* _controllerNetwork;
+    EntityControllerPhysics* _physicsController;
+    EntityControllerRender* _controllerRender;
     Pose _pose;
     State _state;
     PlayerInfo _playerInfo;

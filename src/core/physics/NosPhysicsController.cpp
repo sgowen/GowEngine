@@ -8,9 +8,9 @@
 
 #include <GowEngine/GowEngine.hpp>
 
-IMPL_RTTI(NosPhysicsController, EntityPhysicsController)
+IMPL_RTTI(NosPhysicsController, EntityControllerPhysics)
 
-NosPhysicsController::NosPhysicsController(Entity* e) : EntityPhysicsController(e),
+NosPhysicsController::NosPhysicsController(Entity* e) : EntityControllerPhysics(e),
 _velocityCache(e->velocity()),
 _positionCache(e->position()),
 _isBodyFacingLeft(false)

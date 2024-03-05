@@ -10,9 +10,9 @@
 
 #include <box2d/box2d.h>
 
-IMPL_RTTI(Box2DPhysicsController, EntityPhysicsController)
+IMPL_RTTI(Box2DPhysicsController, EntityControllerPhysics)
 
-Box2DPhysicsController::Box2DPhysicsController(Entity* e, b2World& world) : EntityPhysicsController(e),
+Box2DPhysicsController::Box2DPhysicsController(Entity* e, b2World& world) : EntityControllerPhysics(e),
 _body(nullptr),
 _groundSensorFixture(nullptr),
 _damageSensorFixture(nullptr),

@@ -95,12 +95,12 @@ void World::storeToCache()
 {
     for (Entity* e : _players)
     {
-        e->networkController()->storeToCache(_numMovesProcessed);
+        e->controllerNetwork()->storeToCache(_numMovesProcessed);
     }
     
     for (Entity* e : _networkEntities)
     {
-        e->networkController()->storeToCache(_numMovesProcessed);
+        e->controllerNetwork()->storeToCache(_numMovesProcessed);
     }
 }
 
@@ -110,13 +110,13 @@ void World::recallCache(uint32_t numMovesProcessed)
     
     for (Entity* e : _players)
     {
-        e->networkController()->recallCache(numMovesProcessed);
+        e->controllerNetwork()->recallCache(numMovesProcessed);
         e->physicsController()->updateBodyFromPose();
     }
     
     for (Entity* e : _networkEntities)
     {
-        e->networkController()->recallCache(numMovesProcessed);
+        e->controllerNetwork()->recallCache(numMovesProcessed);
         e->physicsController()->updateBodyFromPose();
     }
 }
@@ -125,12 +125,12 @@ void World::clearCache(uint32_t numMovesProcessed)
 {
     for (Entity* e : _players)
     {
-        e->networkController()->clearCache(numMovesProcessed);
+        e->controllerNetwork()->clearCache(numMovesProcessed);
     }
     
     for (Entity* e : _networkEntities)
     {
-        e->networkController()->clearCache(numMovesProcessed);
+        e->controllerNetwork()->clearCache(numMovesProcessed);
     }
 }
 

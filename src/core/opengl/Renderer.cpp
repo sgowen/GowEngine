@@ -290,7 +290,7 @@ void Renderer::renderEntitiesBoundToTexture(std::string spriteBatcherKey, std::s
         {
             continue;
         }
-        std::string textureRegionKey = e->renderController()->getTextureMapping();
+        std::string textureRegionKey = e->controllerRender()->getTextureMapping();
         std::string textureForRegionKey = ASSETS_MGR.textureForRegionKey(textureRegionKey);
         
         if (textureForRegionKey == texture)
@@ -311,12 +311,12 @@ void Renderer::renderNosParallaxLayers(std::string spriteBatcherKey, std::string
     sb.begin();
     for (Entity* e : layers)
     {
-        std::string textureRegionKey = e->renderController()->getTextureMapping();
+        std::string textureRegionKey = e->controllerRender()->getTextureMapping();
         std::string textureForRegionKey = ASSETS_MGR.textureForRegionKey(textureRegionKey);
         
         if (textureForRegionKey == texture)
         {
-            TextureRegion& trRaw = ASSETS_MGR.textureRegion(e->renderController()->getTextureMapping(),  e->stateTime());
+            TextureRegion& trRaw = ASSETS_MGR.textureRegion(e->controllerRender()->getTextureMapping(),  e->stateTime());
             
             Texture& t = ASSETS_MGR.texture(texture);
             float parallaxSpeedRatio = e->data().getFloat("parallaxSpeedRatio");
@@ -711,7 +711,7 @@ TriangleBatcher& Renderer::triangleBatcher(std::string key)
 
 void Renderer::spriteBatcherAddEntity(SpriteBatcher& sb, Entity& e)
 {
-    TextureRegion& tr = ASSETS_MGR.textureRegion(e.renderController()->getTextureMapping(),  e.stateTime());
+    TextureRegion& tr = ASSETS_MGR.textureRegion(e.controllerRender()->getTextureMapping(),  e.stateTime());
     // TODO, is scale the best way to handle this?
     // It adds 2 multiplication operations for every single entity rendered
     float scale = e.entityDef()._scale;

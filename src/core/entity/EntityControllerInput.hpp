@@ -1,5 +1,5 @@
 //
-//  EntityInputController.hpp
+//  EntityControllerInput.hpp
 //  GowEngine
 //
 //  Created by Stephen Gowen on 3/01/24.
@@ -9,20 +9,21 @@
 #pragma once
 
 #include "core/common/RTTI.hpp"
+#include "core/common/Macros.hpp"
 
 class Entity;
 struct CursorEvent;
 struct GamepadEvent;
 struct KeyboardEvent;
 
-class EntityInputController
+class EntityControllerInput
 {
     DECL_RTTI_NOPARENT;
-    DECL_EntityInputController_create;
+    DECL_EntityControllerInput_create;
     
 public:
-    EntityInputController(Entity* e);
-    virtual ~EntityInputController() {}
+    EntityControllerInput(Entity* e);
+    virtual ~EntityControllerInput() {}
     
     virtual void processEvent(uint16_t& inputState, CursorEvent* ce);
     virtual void processEvent(uint16_t& inputState, GamepadEvent* gpe);

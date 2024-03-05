@@ -92,6 +92,11 @@ bool EngineConfig::glfwLoggingEnabled()
     return _glfwLoggingEnabled;
 }
 
+bool EngineConfig::logLua()
+{
+    return _logLua;
+}
+
 bool EngineConfig::logOpenGL()
 {
     return _logOpenGL;
@@ -193,6 +198,7 @@ EngineConfig::EngineConfig(std::string configFilePath)
     _consoleLoggingEnabled = _config.getBool("consoleLoggingEnabled");
     _framesPerSecond = _config.getUInt("framesPerSecond");
     _glfwLoggingEnabled = _config.getBool("glfwLoggingEnabled");
+    _logLua = _config.getBool("logLua");
     _logOpenGL = _config.getBool("logOpenGL");
     _logOpenAL = _config.getBool("logOpenAL");
     _fileLoggingEnabled = _config.getBool("fileLoggingEnabled");

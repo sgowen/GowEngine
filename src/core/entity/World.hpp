@@ -56,7 +56,7 @@ protected:
     std::vector<Entity*> _networkEntities;
     std::vector<Entity*> _players;
     
-    virtual EntityPhysicsController* createPhysicsController(Entity* e) = 0;
+    virtual EntityControllerPhysics* createPhysicsController(Entity* e) = 0;
     
 private:
     uint32_t _numMovesProcessed;

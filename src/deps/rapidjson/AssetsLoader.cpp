@@ -27,55 +27,6 @@ void AssetsLoader::initWithJSON(Assets& assets, const char* json)
     d.Parse<kParseStopWhenDoneFlag>(json);
     assert(d.IsObject());
 
-    std::vector<std::string> soundIDsAdded;
-    if (d.HasMember("music"))
-    {
-        Value& v = d["music"];
-        assert(v.IsObject());
-
-        std::string filePath = RapidJSONUtil::getString(v, "filePath");
-        std::string soundID = "music";
-        assets._soundDescriptors.emplace_back(soundID, filePath, 1);
-        soundIDsAdded.emplace_back(soundID);
-    }
-
-    if (d.HasMember("sounds"))
-    {
-        Value& v = d["sounds"];
-        assert(v.IsArray());
-        for (SizeType i = 0; i < v.Size(); ++i)
-        {
-            const Value& iv = v[i];
-            assert(iv.IsObject());
-
-            std::string soundID = RapidJSONUtil::getString(iv, "soundID");
-            std::string filePath = RapidJSONUtil::getString(iv, "filePath");
-            uint8_t numInstances = RapidJSONUtil::getUInt(iv, "numInstances", 1);
-
-            assert(std::find(soundIDsAdded.begin(), soundIDsAdded.end(), soundID) == soundIDsAdded.end());
-
-            assets._soundDescriptors.emplace_back(soundID, filePath, numInstances);
-            soundIDsAdded.emplace_back(soundID);
-        }
-    }
-
-    if (d.HasMember("shaders"))
-    {
-        Value& v = d["shaders"];
-        assert(v.IsArray());
-        for (SizeType i = 0; i < v.Size(); ++i)
-        {
-            const Value& iv = v[i];
-            assert(iv.IsObject());
-
-            std::string name = RapidJSONUtil::getString(iv, "name");
-            std::string vertexShaderFilePath = RapidJSONUtil::getString(iv, "vertexShaderFilePath");
-            std::string fragmentShaderFilePath = RapidJSONUtil::getString(iv, "fragmentShaderFilePath");
-
-            assets._shaderDescriptors.emplace_back(name, vertexShaderFilePath, fragmentShaderFilePath);
-        }
-    }
-    
     if (d.HasMember("fonts"))
     {
         Value& v = d["fonts"];
@@ -94,7 +45,74 @@ void AssetsLoader::initWithJSON(Assets& assets, const char* json)
             assets._fonts.emplace_back(name, texture, glyphsPerRow, glyphWidth, glyphHeight);
         }
     }
+    
+    if (d.HasMember("scripts"))
+    {
+        const Value& v = d["scripts"];
+        assert(v.IsObject());
+        for (Value::ConstMemberIterator i = v.MemberBegin(); i != v.MemberEnd(); ++i)
+        {
+            const Value& v = i->value;
+            assert(v.IsObject());
+            
+            std::string name = i->name.GetString();
+            
+            std::string filePath = RapidJSONUtil::getString(v, "filePath");
+            
+            assets._scriptDescriptors.emplace(std::piecewise_construct,
+                                              std::forward_as_tuple(name),
+                                              std::forward_as_tuple(name, filePath)
+                                              );
+            
+//            for (Value::ConstMemberIterator i = v.MemberBegin(); i != v.MemberEnd(); ++i)
+//            {
+//                const Value& v = i->value;
+//                assert(v.IsString());
+//                
+//                
+//            }
+        }
+    }
+    
+    if (d.HasMember("shaders"))
+    {
+        Value& v = d["shaders"];
+        assert(v.IsArray());
+        for (SizeType i = 0; i < v.Size(); ++i)
+        {
+            const Value& iv = v[i];
+            assert(iv.IsObject());
 
+            std::string name = RapidJSONUtil::getString(iv, "name");
+            std::string vertexShaderFilePath = RapidJSONUtil::getString(iv, "vertexShaderFilePath");
+            std::string fragmentShaderFilePath = RapidJSONUtil::getString(iv, "fragmentShaderFilePath");
+
+            assets._shaderDescriptors.emplace_back(name, vertexShaderFilePath, fragmentShaderFilePath);
+        }
+    }
+    
+    if (d.HasMember("sounds"))
+    {
+        std::vector<std::string> soundIDsAdded;
+        
+        Value& v = d["sounds"];
+        assert(v.IsArray());
+        for (SizeType i = 0; i < v.Size(); ++i)
+        {
+            const Value& iv = v[i];
+            assert(iv.IsObject());
+
+            std::string soundID = RapidJSONUtil::getString(iv, "soundID");
+            std::string filePath = RapidJSONUtil::getString(iv, "filePath");
+            uint8_t numInstances = RapidJSONUtil::getUInt(iv, "numInstances", 1);
+
+            assert(std::find(soundIDsAdded.begin(), soundIDsAdded.end(), soundID) == soundIDsAdded.end());
+
+            assets._soundDescriptors.emplace_back(soundID, filePath, numInstances);
+            soundIDsAdded.emplace_back(soundID);
+        }
+    }
+    
     if (d.HasMember("textures"))
     {
         Value& v = d["textures"];
