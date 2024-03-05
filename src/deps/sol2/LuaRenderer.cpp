@@ -29,7 +29,10 @@ LuaRenderer::LuaRenderer(Renderer& r) : _lua(new sol::state())
     lua.open_libraries(sol::lib::base);
     
     lua.set_function("log", [](std::string line) {
-        LOG(line.c_str());
+        if (ENGINE_CFG.logLua())
+        {
+            LOG(line.c_str());
+        }
     });
     
     lua.set_function("updateMatrixCenteredOnPlayerForParallaxLayer", [&r](float parallaxSpeedRatio) {

@@ -22,7 +22,10 @@ _lua(new sol::state())
     lua.open_libraries(sol::lib::base, sol::lib::math, sol::lib::os, sol::lib::package, sol::lib::string);
     
     lua.set_function("LOG", [](std::string line) {
-        LOG(line.c_str());
+        if (ENGINE_CFG.logLua())
+        {
+            LOG(line.c_str());
+        }
     });
     
     Script& s = ASSETS_MGR.script(_entity->entityDef()._controllerScript);
