@@ -301,7 +301,7 @@ void Renderer::renderEntitiesBoundToTexture(std::string spriteBatcherKey, std::s
     spriteBatcherEnd(spriteBatcherKey, texture);
 }
 
-void Renderer::renderNosParallaxLayers(std::string spriteBatcherKey, std::string texture, std::vector<Entity*>& layers)
+void Renderer::renderRepeatingTextureParallaxLayers(std::string spriteBatcherKey, std::string texture, std::vector<Entity*>& layers)
 {
     configSpriteBatcher(spriteBatcherKey);
     

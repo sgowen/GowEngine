@@ -1,13 +1,13 @@
 {
     "PLYR": {
         "name": "Robot",
-        "controller": "RobotController",
+        "controllerScript": "Robot",
         "inputMapping": "RobotInputMapping",
         "inputStateFlags": [
             "MOVING_RIGHT",
             "MOVING_LEFT",
             "JUMPING",
-            "EXECUTING_ATTACK"
+            "ATTACKING"
         ],
         "states": [
             "IDLE",
@@ -135,7 +135,7 @@
         "inputStateFlags": [
             "MOVING_RIGHT",
             "MOVING_LEFT",
-            "EXECUTING_ATTACK"
+            "ATTACKING"
         ],
         "states": [
             "IDLE",

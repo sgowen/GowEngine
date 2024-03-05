@@ -1,7 +1,7 @@
 {
   "PLYR": {
     "name": "Jon",
-    "controller": "JonController",
+    "controllerScript": "Jon",
     "inputMapping": "JonInputMapping",
     "inputStateFlags": [
         "MOVING_RIGHT",
@@ -9,7 +9,7 @@
         "JUMPING",
         "EXECUTING_ABILITY",
         "WARMING_UP",
-        "EXECUTING_ATTACK",
+        "ATTACKING",
         "TRIGGERING_SPECIAL"
     ],
     "states": [
@@ -163,6 +163,23 @@
           {
             "name": "entityLayoutKey",
             "type": 3
+          }
+        ]
+      },
+      {
+        "name": "shockwave",
+        "data": [
+          {
+            "name": "shockwaveStartTime",
+            "type": 2
+          },
+          {
+            "name": "shockwaveStateTime",
+            "type": 2
+          },
+          {
+            "name": "isReleasingShockwave",
+            "type": 0
           }
         ]
       }

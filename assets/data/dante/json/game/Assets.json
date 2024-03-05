@@ -8,6 +8,9 @@
         },
         "Renderer": {
             "filePath": "scripts/Renderer.lua"
+        },
+        "Robot": {
+            "filePath": "scripts/Robot.lua"
         }
     },
   "sounds": [

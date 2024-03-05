@@ -11,10 +11,7 @@
 IMPL_RTTI(JonController, EntityController)
 IMPL_EntityController_create(JonController)
 
-JonController::JonController(Entity* e) : EntityController(e),
-_shockwaveStartTime(0),
-_shockwaveStateTime(0),
-_isReleasingShockwave(false)
+JonController::JonController(Entity* e) : EntityController(e)
 {
     // Empty
 }
@@ -65,11 +62,15 @@ void JonController::onUpdate(uint32_t numMovesProcessed)
     uint16_t animationNumFrames = animation == nullptr ? 1 : animation->cycleTime();
     uint16_t animationNumFramesBeforeFirstLoopingFrame = animation == nullptr ? 1 : animation->cycleTimeBeforeFirstLoopingFrame();
     
-    _shockwaveStateTime = numMovesProcessed - _shockwaveStartTime;
-    if (_isReleasingShockwave &&
-        _shockwaveStateTime > 120)
+    uint16_t shockwaveStartTime = e.networkDataField("shockwaveStartTime").valueUInt16();
+    bool isReleasingShockwave = e.networkDataField("isReleasingShockwave").valueBool();
+    
+    uint16_t shockwaveStateTime = numMovesProcessed - shockwaveStartTime;
+    e.networkDataField("shockwaveStateTime").setValueUInt16(shockwaveStateTime);
+    if (isReleasingShockwave &&
+        shockwaveStateTime > 120)
     {
-        _isReleasingShockwave = false;
+        e.networkDataField("isReleasingShockwave").setValueBool(false);
     }
     
     // Rabbit
@@ -98,8 +99,8 @@ void JonController::onUpdate(uint32_t numMovesProcessed)
         stateTime = 0;
         // TODO, figure out some way to get rid of local data in the Controller
         // Anything not networked is risky.
-        _isReleasingShockwave = true;
-        _shockwaveStartTime = numMovesProcessed;
+        e.networkDataField("isReleasingShockwave").setValueBool(true);
+        e.networkDataField("shockwaveStartTime").setValueUInt16(numMovesProcessed);
         e.pose()._isSlowed = false;
         e.pose()._isZeroGravity = false;
     }
@@ -128,8 +129,8 @@ void JonController::onUpdate(uint32_t numMovesProcessed)
     {
         state = e.state("REVERTING");
         stateTime = 0;
-        _isReleasingShockwave = true;
-        _shockwaveStartTime = numMovesProcessed;
+        e.networkDataField("isReleasingShockwave").setValueBool(true);
+        e.networkDataField("shockwaveStartTime").setValueUInt16(numMovesProcessed);
         e.pose()._isSlowed = false;
         e.pose()._isZeroGravity = false;
     }
@@ -338,8 +339,8 @@ void JonController::processAttackInput(uint16_t inputState)
 {
     Entity& e = *_entity;
     
-    bool isInputAttack = IS_BIT_SET(inputState, e.inputStateFlag("EXECUTING_ATTACK"));
-    bool wasInputAttack = IS_BIT_SET(e.lastProcessedInputState(), e.inputStateFlag("EXECUTING_ATTACK"));
+    bool isInputAttack = IS_BIT_SET(inputState, e.inputStateFlag("ATTACKING"));
+    bool wasInputAttack = IS_BIT_SET(e.lastProcessedInputState(), e.inputStateFlag("ATTACKING"));
     
     uint8_t& state = e.state()._state;
     uint16_t& stateTime = e.state()._stateTime;
@@ -489,16 +490,6 @@ bool JonController::isRabbit()
     state == "CANCELING_ATTEMPT_TO_TRANSFORM" ||
     state == "REVERTING" ||
     state == "RABBIT_DEATH";
-}
-
-bool JonController::isReleasingShockwave()
-{
-    return _isReleasingShockwave;
-}
-
-uint16_t JonController::shockwaveStateTime()
-{
-    return _shockwaveStateTime;
 }
 
 bool JonController::isVampire()

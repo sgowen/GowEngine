@@ -178,6 +178,10 @@ uint16_t Entity::inputStateFlag(std::string key)
 uint8_t Entity::state(std::string key)
 {
     auto it = std::find(_entityDef._states.begin(), _entityDef._states.end(), key);
+    if (it == _entityDef._states.end())
+    {
+        LOG("state not found: %s", key.c_str());
+    }
     assert(it != _entityDef._states.end());
 
     uint8_t ret = std::distance(_entityDef._states.begin(), it);

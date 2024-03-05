@@ -23,15 +23,7 @@ public:
     virtual void onUpdate(uint32_t numMovesProcessed) override;
     virtual void onMessage(uint16_t message, Entity* fromEntity) override;
     
-    bool isReleasingShockwave();
-    bool isVampire();
-    uint16_t shockwaveStateTime();
-    
-private:    
-    uint16_t _shockwaveStartTime;
-    uint16_t _shockwaveStateTime;
-    bool _isReleasingShockwave;
-    
+private:
     void processMovementInput(uint16_t inputState);
     void processJumpInput(uint16_t inputState);
     void processAttackInput(uint16_t inputState);
@@ -40,6 +32,7 @@ private:
     void processSpecialInput(uint16_t inputState);
     
     bool isRabbit();
+    bool isVampire();
     
     bool isMovementInputAllowed();
     bool isJumpInputAllowed();

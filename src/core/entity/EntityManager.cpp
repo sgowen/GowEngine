@@ -146,6 +146,4 @@ EntityManager::EntityManager()
     
     // TODO, remove these once we have scripting
     registerController("JonController", JonController::create);
-    registerController("MonsterController", MonsterController::create);
-    registerController("RobotController", RobotController::create);
 }

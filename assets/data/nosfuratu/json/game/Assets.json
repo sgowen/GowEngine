@@ -2,6 +2,9 @@
     "scripts": {
         "Renderer": {
             "filePath": "scripts/Renderer.lua"
+        },
+        "Jon": {
+            "filePath": "scripts/Jon.lua"
         }
     },
   "shaders": [

@@ -29,8 +29,10 @@ A basic no nonsense LGPL 2.1 licensed portable C++ 2D game engine
 * [glfw](https://github.com/glfw/glfw): creates window and OpenGL context and handles input on Linux, macOS, and Windows
 * [ios-cmake](https://github.com/leetal/ios-cmake): handles cmake stuff for iOS and macOS
 * [libsndfile](https://github.com/libsndfile/libsndfile): loads sounds
+* [Lua](https://github.com/walterschell/Lua): convenient CMake project for buidling Lua 5.4.6
 * [openal-soft](https://github.com/kcat/openal-soft): renders audio
 * [rapidjson](https://github.com/Tencent/rapidjson): loads json
+* [sol2](https://github.com/ThePhD/sol2): an incredible C++ Lua API wrapper
 * [stb](https://github.com/nothings/stb): loads textures
 * [steamworks_sdk](https://github.com/sgowen/steamworks_sdk): integrates with Steam (optional)
 

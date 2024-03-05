@@ -84,8 +84,6 @@
 		BB631F672AAA67E500953454 /* ShockwaveRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BB631F652AAA67E500953454 /* ShockwaveRenderer.cpp */; };
 		BB631F6A2AAB9B3500953454 /* FramebufferRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BB631F692AAB9B3500953454 /* FramebufferRenderer.cpp */; };
 		BB631F6B2AAB9B3500953454 /* FramebufferRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BB631F692AAB9B3500953454 /* FramebufferRenderer.cpp */; };
-		BB7B6DC52B8FCBB000324423 /* MonsterController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BB7B6DC42B8FCBB000324423 /* MonsterController.cpp */; };
-		BB7B6DC62B8FCBB000324423 /* MonsterController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BB7B6DC42B8FCBB000324423 /* MonsterController.cpp */; };
 		BB7F74572B6860C600CAB63F /* libsteam_api.dylib in CopyFiles */ = {isa = PBXBuildFile; fileRef = BBFD16602B572ED600D4D841 /* libsteam_api.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		BB7F745B2B69885E00CAB63F /* steam_appid.txt in Resources */ = {isa = PBXBuildFile; fileRef = BB7F745A2B69885E00CAB63F /* steam_appid.txt */; };
 		BB7F75B32B6B0B0100CAB63F /* Box2DPhysicsRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BB7F75AD2B6B0B0100CAB63F /* Box2DPhysicsRenderer.cpp */; };
@@ -112,8 +110,6 @@
 		BB9EBF5F2AAA57520088DBB6 /* TitleEngineState.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BB9EBF542AAA57510088DBB6 /* TitleEngineState.cpp */; };
 		BBB8CB032B8A8D060055CAD4 /* GameEngineState.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BBB8CB002B8A8D060055CAD4 /* GameEngineState.cpp */; };
 		BBB8CB042B8A8D060055CAD4 /* GameEngineState.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BBB8CB002B8A8D060055CAD4 /* GameEngineState.cpp */; };
-		BBB8CB072B8A8D300055CAD4 /* RobotController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BBB8CB052B8A8D300055CAD4 /* RobotController.cpp */; };
-		BBB8CB082B8A8D300055CAD4 /* RobotController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BBB8CB052B8A8D300055CAD4 /* RobotController.cpp */; };
 		BBBB0E5D2703A95D00D7D319 /* GlfwEngineMount.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BBBB0E342703A95D00D7D319 /* GlfwEngineMount.cpp */; };
 		BBBB0E5E2703A95D00D7D319 /* GlfwEngineMount.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BBBB0E342703A95D00D7D319 /* GlfwEngineMount.cpp */; };
 		BBBB0F34270F702400D7D319 /* InputProcessor.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BBBB0F32270F702300D7D319 /* InputProcessor.cpp */; };
@@ -463,8 +459,6 @@
 		BB631F682AAB9B3500953454 /* FramebufferRenderer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = FramebufferRenderer.hpp; sourceTree = "<group>"; };
 		BB631F692AAB9B3500953454 /* FramebufferRenderer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = FramebufferRenderer.cpp; sourceTree = "<group>"; };
 		BB7B045D25B644E00021E545 /* GowEngine-macOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "GowEngine-macOS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
-		BB7B6DC32B8FCBB000324423 /* MonsterController.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = MonsterController.hpp; sourceTree = "<group>"; };
-		BB7B6DC42B8FCBB000324423 /* MonsterController.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MonsterController.cpp; sourceTree = "<group>"; };
 		BB7F745A2B69885E00CAB63F /* steam_appid.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = steam_appid.txt; sourceTree = "<group>"; };
 		BB7F74AE2B6AFFC800CAB63F /* b2_joint.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = b2_joint.h; sourceTree = "<group>"; };
 		BB7F74AF2B6AFFC800CAB63F /* b2_shape.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = b2_shape.h; sourceTree = "<group>"; };
@@ -542,8 +536,6 @@
 		BB9EBF5B2AAA57510088DBB6 /* TitleEngineState.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = TitleEngineState.hpp; sourceTree = "<group>"; };
 		BBB8CAFF2B8A8D060055CAD4 /* GameEngineState.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = GameEngineState.hpp; sourceTree = "<group>"; };
 		BBB8CB002B8A8D060055CAD4 /* GameEngineState.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GameEngineState.cpp; sourceTree = "<group>"; };
-		BBB8CB052B8A8D300055CAD4 /* RobotController.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = RobotController.cpp; sourceTree = "<group>"; };
-		BBB8CB062B8A8D300055CAD4 /* RobotController.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = RobotController.hpp; sourceTree = "<group>"; };
 		BBBB074E2703A85200D7D319 /* glfw3.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = glfw3.h; sourceTree = "<group>"; };
 		BBBB0E342703A95D00D7D319 /* GlfwEngineMount.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GlfwEngineMount.cpp; sourceTree = "<group>"; };
 		BBBB0F32270F702300D7D319 /* InputProcessor.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = InputProcessor.cpp; sourceTree = "<group>"; };
@@ -1540,10 +1532,6 @@
 				BBBBDE8127023E1400D7D319 /* EntityRegistry.hpp */,
 				BB9EBF512AAA57250088DBB6 /* JonController.cpp */,
 				BB9EBF502AAA57250088DBB6 /* JonController.hpp */,
-				BB7B6DC42B8FCBB000324423 /* MonsterController.cpp */,
-				BB7B6DC32B8FCBB000324423 /* MonsterController.hpp */,
-				BBB8CB052B8A8D300055CAD4 /* RobotController.cpp */,
-				BBB8CB062B8A8D300055CAD4 /* RobotController.hpp */,
 				BB60A0FA2B92DA940056BA63 /* World.cpp */,
 				BB60A0FB2B92DA940056BA63 /* World.hpp */,
 			);
@@ -2192,7 +2180,6 @@
 				BB1153872B85166E00E7F3AE /* Animation.cpp in Sources */,
 				BBBBDFD12702468D00D7D319 /* PacketHandler.cpp in Sources */,
 				BBBBDFD32702468D00D7D319 /* ReplicationCommand.cpp in Sources */,
-				BBB8CB072B8A8D300055CAD4 /* RobotController.cpp in Sources */,
 				BBBC57B82B923ACE0037527C /* EntityControllerInput.cpp in Sources */,
 				BB7F75B32B6B0B0100CAB63F /* Box2DPhysicsRenderer.cpp in Sources */,
 				BBBBDFD52702468D00D7D319 /* ReplicationManagerClient.cpp in Sources */,
@@ -2222,7 +2209,6 @@
 				BBFD16472B572CBA00D4D841 /* SteamP2PAuth.cpp in Sources */,
 				BB39A71B2B96D24E00D92ECB /* ScriptManager.cpp in Sources */,
 				BB01D82D2A901E3A002A3BA4 /* Logger.cpp in Sources */,
-				BB7B6DC52B8FCBB000324423 /* MonsterController.cpp in Sources */,
 				BBBBDF902702467700D7D319 /* Engine.cpp in Sources */,
 				BBBBDF922702467700D7D319 /* EngineConfig.cpp in Sources */,
 				BBBBDF942702467700D7D319 /* EngineState.cpp in Sources */,
@@ -2264,7 +2250,6 @@
 				BB1E5C30271F26D800149557 /* NosPhysicsController.cpp in Sources */,
 				BBBBE0FC2702584600D7D319 /* EntityController.cpp in Sources */,
 				BBBBE0FE2702584600D7D319 /* EntityIDManager.cpp in Sources */,
-				BBB8CB082B8A8D300055CAD4 /* RobotController.cpp in Sources */,
 				BBBBE1012702584600D7D319 /* EntityManager.cpp in Sources */,
 				BBBBE1032702584600D7D319 /* EntityControllerNetwork.cpp in Sources */,
 				BBBBE1052702584700D7D319 /* EntityControllerPhysics.cpp in Sources */,
@@ -2328,7 +2313,6 @@
 				BBBBE16D2702584A00D7D319 /* SpriteBatcher.cpp in Sources */,
 				BBBBE1742702584A00D7D319 /* TriangleBatcher.cpp in Sources */,
 				BB2E5A7A2B96587A00D84D3C /* LuaRenderer.cpp in Sources */,
-				BB7B6DC62B8FCBB000324423 /* MonsterController.cpp in Sources */,
 				BBBBE17D2702584A00D7D319 /* EntityLayoutManagerLoader.cpp in Sources */,
 				BB4CCAF02B61CA9500B6D2CA /* SocketClientHelper.cpp in Sources */,
 				BB39A7182B96D11E00D92ECB /* EntityControllerRender.cpp in Sources */,

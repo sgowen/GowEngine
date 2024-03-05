@@ -21,7 +21,7 @@ _lua(new sol::state())
     
     lua.open_libraries(sol::lib::base, sol::lib::math, sol::lib::os, sol::lib::package);
     
-    lua.set_function("log", [](std::string line) {
+    lua.set_function("LOG", [](std::string line) {
         LOG(line.c_str());
     });
 }
@@ -42,12 +42,13 @@ void LuaControllerAI::runAI(uint16_t& inputState)
     
     sol::state& lua = *_lua;
     
-    lua.set_function("networkUInt32Field", [&e, &inputState](std::string name) {
+    lua.set_function("getNetworkUInt32", [&e](std::string name) {
         return e.networkDataField(name).valueUInt32();
     });
     
     lua.set_function("setInput", [&e, &inputState](std::string inputStateFlag, bool value) {
-        SET_BIT(inputState, e.inputStateFlag(inputStateFlag), value);
+        uint16_t flag = e.inputStateFlag(inputStateFlag);
+        SET_BIT(inputState, flag, value);
     });
     
     lua.set_function("findTargetWithinDistance", [&e](float shortestDistance) {
@@ -62,13 +63,17 @@ void LuaControllerAI::runAI(uint16_t& inputState)
             }
         }
         
-        return target ? target->getID() : 0;
+        uint32_t ret = target ? target->getID() : 0;
+        
+        return ret;
     });
     
     lua.set_function("isPlayer", [&e](uint32_t entityID) {
         Entity* entity = e.world()->getEntityByID(entityID);
         
-        return entity ? entity->isPlayer() : false;
+        bool ret = entity ? entity->isPlayer() : false;
+        
+        return ret;
     });
     
     lua.set_function("entityPositionX", [&e](uint32_t entityID) {

@@ -105,7 +105,7 @@ public:
     
     void renderSprite(std::string textureKey, std::string textureRegionKey, float x, float y, float width, float height, uint16_t stateTime, float angle, bool flipX);
     void renderEntitiesBoundToTexture(std::string spriteBatcherKey, std::string texture, std::vector<Entity*>& entities);
-    void renderNosParallaxLayers(std::string spriteBatcherKey, std::string texture, std::vector<Entity*>& layers);
+    void renderRepeatingTextureParallaxLayers(std::string spriteBatcherKey, std::string texture, std::vector<Entity*>& layers);
     void spriteBatcherBegin(std::string spriteBatcherKey);
     void spriteBatcherAddEntities(std::vector<Entity*>& entities);
     void spriteBatcherAddEntity(Entity* e);

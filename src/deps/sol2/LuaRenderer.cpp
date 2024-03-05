@@ -76,23 +76,24 @@ void LuaRenderer::render(Renderer& r, World& w, std::string script)
         
         if (jon != nullptr && !jon->isExiled())
         {
-            JonController* jonC = jon->controller<JonController>();
-            return jonC->isReleasingShockwave();
+            bool isReleasingShockwave = jon->networkDataField("isReleasingShockwave").valueBool();
+            return isReleasingShockwave;
         }
         
         return false;
     });
     
-    lua.set_function("isVampire", [&w](int playerID) {
+    lua.set_function("stateStr", [&w](int playerID) {
         Entity* jon = w.getPlayer(playerID);
         
+        std::string ret;
         if (jon != nullptr && !jon->isExiled())
         {
-            JonController* jonC = jon->controller<JonController>();
-            return jonC->isVampire();
+            uint8_t stateVal = jon->state()._state;
+            ret = jon->state(stateVal);
         }
         
-        return false;
+        return ret;
     });
     
     lua.set_function("shockwaveStateTime", [&w](int playerID) {
@@ -101,8 +102,8 @@ void LuaRenderer::render(Renderer& r, World& w, std::string script)
         
         if (jon != nullptr && !jon->isExiled())
         {
-            JonController* jonC = jon->controller<JonController>();
-            ret = jonC->shockwaveStateTime();
+            uint16_t shockwaveStartTime = jon->networkDataField("shockwaveStateTime").valueUInt16();
+            ret = shockwaveStartTime;
         }
         
         return ret;
@@ -124,8 +125,8 @@ void LuaRenderer::render(Renderer& r, World& w, std::string script)
         r.renderEntitiesBoundToTexture(spriteBatcherKey, texture, w.getPlayers());
     });
     
-    lua.set_function("renderNosParallaxLayers", [&r, &w](std::string spriteBatcherKey, std::string texture) {
-        r.renderNosParallaxLayers(spriteBatcherKey, texture, w.getLayers());
+    lua.set_function("renderRepeatingTextureParallaxLayers", [&r, &w](std::string spriteBatcherKey, std::string texture) {
+        r.renderRepeatingTextureParallaxLayers(spriteBatcherKey, texture, w.getLayers());
     });
     
     lua.set_function("renderLight", [&r, &w](std::string framebufferKey, std::string framebufferNormalMapKey, float lightPosZ) {

@@ -2,7 +2,7 @@
   "gamepadEvents": {
       "A": [
           {
-              "inputStateFlag": "EXECUTING_ATTACK",
+              "inputStateFlag": "ATTACKING",
               "condition": "pressed"
           }
       ],
@@ -68,7 +68,7 @@
       ],
       "K": [
           {
-              "inputStateFlag": "EXECUTING_ATTACK",
+              "inputStateFlag": "ATTACKING",
               "condition": "pressed"
           }
       ],

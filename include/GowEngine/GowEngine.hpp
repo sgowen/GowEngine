@@ -129,8 +129,6 @@
 #include "core/entity/World.hpp"
 // TODO, remove with scripting
 #include "core/entity/JonController.hpp"
-#include "core/entity/MonsterController.hpp"
-#include "core/entity/RobotController.hpp"
 
 /// core/input
 #include "core/input/ClipboardHandler.hpp"
