@@ -56,7 +56,12 @@ bool OverlapTester::doRektanglesOverlap(Rektangle& r1, Rektangle& r2)
         x4 += x;
         y4 += y;
         
-        return isPointInRektangle(Vector2(x1, y1), r2) || isPointInRektangle(Vector2(x2, y2), r2) || isPointInRektangle(Vector2(x3, y3), r2) || isPointInRektangle(Vector2(x4, y4), r2);
+        Vector2 v1 = Vector2(x1, y1);
+        Vector2 v2 = Vector2(x2, y2);
+        Vector2 v3 = Vector2(x3, y3);
+        Vector2 v4 = Vector2(x4, y4);
+        
+        return isPointInRektangle(v1, r2) || isPointInRektangle(v2, r2) || isPointInRektangle(v3, r2) || isPointInRektangle(v4, r2);
     }
     else
     {
@@ -95,7 +100,7 @@ bool OverlapTester::doesRektangleOverlapTriangle(Rektangle& r, Triangle& t)
     return doLineAndRektangleOverlap(t._sideA, r) || doLineAndRektangleOverlap(t._sideB, r) || doLineAndRektangleOverlap(t._sideC, r);
 }
 
-bool OverlapTester::isPointInRektangle(Vector2 p, Rektangle& r)
+bool OverlapTester::isPointInRektangle(Vector2& p, Rektangle& r)
 {
     return isPointInRektangle(p._x, p._y, r);
 }

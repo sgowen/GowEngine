@@ -38,32 +38,6 @@ Box2DControllerPhysics::~Box2DControllerPhysics()
     _body = nullptr;
 }
 
-Vector2 Box2DControllerPhysics::velocity()
-{
-    b2Vec2 bodyVelocity = _body->GetLinearVelocity();
-    return Vector2(bodyVelocity.x, bodyVelocity.y);
-}
-
-void Box2DControllerPhysics::setVelocity(Vector2 v)
-{
-    _body->SetLinearVelocity(b2Vec2(v._x, v._y));
-}
-
-void Box2DControllerPhysics::updatePoseFromBody()
-{
-    if (_body == nullptr)
-    {
-        return;
-    }
-    
-    b2Vec2 bodyVelocity = _body->GetLinearVelocity();
-    b2Vec2 bodyPosition = _body->GetPosition();
-    
-    _entity->velocity().set(bodyVelocity.x, bodyVelocity.y);
-    _entity->position().set(bodyPosition.x, bodyPosition.y);
-    _entity->pose()._numGroundContacts = _numGroundContacts;
-}
-
 void Box2DControllerPhysics::updateBodyFromPose()
 {
     if (_body == nullptr)
@@ -83,6 +57,21 @@ void Box2DControllerPhysics::updateBodyFromPose()
         destroyFixtures();
         createFixtures();
     }
+}
+
+void Box2DControllerPhysics::updatePoseFromBody()
+{
+    if (_body == nullptr)
+    {
+        return;
+    }
+    
+    b2Vec2 bodyVelocity = _body->GetLinearVelocity();
+    b2Vec2 bodyPosition = _body->GetPosition();
+    
+    _entity->velocity().set(bodyVelocity.x, bodyVelocity.y);
+    _entity->position().set(bodyPosition.x, bodyPosition.y);
+    _entity->pose()._numGroundContacts = _numGroundContacts;
 }
 
 bool Box2DControllerPhysics::shouldCollide(Entity *e, b2Fixture* fixtureA, b2Fixture* fixtureB)

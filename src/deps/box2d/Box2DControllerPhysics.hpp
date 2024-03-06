@@ -25,11 +25,9 @@ public:
     Box2DControllerPhysics(Entity* e, b2World& world);
     virtual ~Box2DControllerPhysics();
     
-    virtual Vector2 velocity();
-    virtual void setVelocity(Vector2 v);
-    virtual void updatePoseFromBody();
     virtual void updateBodyFromPose() override;
     
+    void updatePoseFromBody();
     bool shouldCollide(Entity* e, b2Fixture* fixtureA, b2Fixture* fixtureB);
     void handleBeginContact(Entity* e, b2Fixture* fixtureA, b2Fixture* fixtureB);
     void handleEndContact(Entity* e, b2Fixture* fixtureA, b2Fixture* fixtureB);

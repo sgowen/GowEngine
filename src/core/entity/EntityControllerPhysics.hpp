@@ -9,7 +9,6 @@
 #pragma once
 
 #include "core/common/RTTI.hpp"
-#include "core/math/Vector2.hpp"
 
 class Entity;
 

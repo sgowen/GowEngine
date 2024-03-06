@@ -21,7 +21,7 @@ public:
     static bool doRektanglesOverlap(Rektangle& r1, Rektangle& r2);
     static bool doesRektangleOverlapTriangle(Rektangle& r, Triangle& t);
     static bool overlapCircleRektangle(Circle& c, Rektangle& r);
-    static bool isPointInRektangle(Vector2 p, Rektangle& r);
+    static bool isPointInRektangle(Vector2& p, Rektangle& r);
     static bool isPointInRektangle(float x, float y, Rektangle& r);
     static bool isPointInCircle(Vector2& p, Circle& c);
     static bool isPointInTriangle(Vector2& p, Triangle& t);
