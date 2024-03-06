@@ -1,7 +1,7 @@
 {
     "scripts": {
-        "Renderer": {
-            "filePath": "scripts/Renderer.lua"
+        "GameRenderer": {
+            "filePath": "scripts/GameRenderer.lua"
         },
         "Jon": {
             "filePath": "scripts/Jon.lua"

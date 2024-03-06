@@ -503,26 +503,19 @@ void GameEngineState::onUpdate(Engine* e)
 void GameEngineState::onRender(Renderer& r, double extrapolation)
 {
     r.configReset();
+    r.configPhysicsEngine(_config.getString("physicsEngine"));
+    r.configNumRollbackFrames(_numMovesToReprocess);
     r.configBounds(world().rightEdge(), world().topEdge(), _scale);
     r.configControlledPlayerEntity(getControlledPlayer());
     
-    _luaRenderer.render(r, world(), "Renderer");
+    _luaRenderer.render(r, world(), "GameRenderer");
     
     if (_inputProcessor.state() == GIMS_DISPLAY_PHYSICS)
     {
-        std::string physicsEngine = _config.getString("physicsEngine");
-        bool isBox2D = physicsEngine == "Box2D";
-        if (isBox2D)
-        {
-            r.renderBox2DPhysics(static_cast<Box2DPhysicsWorld*>(_world));
-        }
-        else
-        {
-            r.renderNosPhysics(static_cast<NosPhysicsWorld*>(_world));
-        }
+        r.renderPhysics(_world);
     }
     
-    r.renderGameInfo(world(), _numMovesToReprocess);
+    r.renderGameInfo(world());
 
     r.renderToScreen();
     

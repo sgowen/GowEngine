@@ -47,6 +47,8 @@ struct RendererConfig
     Color textColorFactor;
     float parallaxSpeedRatio;
     Entity* controlledPlayer;
+    std::string physicsEngine;
+    int numRollbackFrames;
     
     RendererConfig()
     {
@@ -70,6 +72,8 @@ struct RendererConfig
         textColorFactor = Color::ONE;
         parallaxSpeedRatio = 1.0f;
         controlledPlayer = nullptr;
+        physicsEngine = "";
+        numRollbackFrames = 0;
     }
 };
 
@@ -116,10 +120,11 @@ public:
     void hideAllText();
     void renderTextViews();
     
+    void renderPhysics(World* world);
     void renderBox2DPhysics(Box2DPhysicsWorld* world);
     void renderNosPhysics(NosPhysicsWorld* world);
     
-    void renderGameInfo(World& w, int numRollbackFrames);
+    void renderGameInfo(World& w);
     
     void renderLight(std::string framebufferKey, std::string framebufferNormalMapKey, float lightPosZ, std::vector<Entity*>& entities);
     
@@ -139,6 +144,8 @@ public:
     void configSpriteBatcher(std::string key);
     void configSpriteColorFactor(Color c);
     void configTextColorFactor(Color c);
+    void configPhysicsEngine(std::string physicsEngine);
+    void configNumRollbackFrames(int numRollbackFrames);
     
     Matrix& matrixForInput();
     

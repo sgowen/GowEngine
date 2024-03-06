@@ -418,6 +418,19 @@ void Renderer::renderTextViews()
     fb.end(m, s, _rc.textColorFactor);
 }
 
+void Renderer::renderPhysics(World* world)
+{
+    bool isBox2D = _rc.physicsEngine == "Box2D";
+    if (isBox2D)
+    {
+        renderBox2DPhysics(static_cast<Box2DPhysicsWorld*>(world));
+    }
+    else
+    {
+        renderNosPhysics(static_cast<NosPhysicsWorld*>(world));
+    }
+}
+
 void Renderer::renderBox2DPhysics(Box2DPhysicsWorld* world)
 {
     configShader("geometry");
@@ -436,7 +449,7 @@ void Renderer::renderNosPhysics(NosPhysicsWorld* world)
     _nosPhysicsRenderer.render(world, &m._matrix, &s);
 }
 
-void Renderer::renderGameInfo(World &w, int numRollbackFrames)
+void Renderer::renderGameInfo(World &w)
 {
     // TODO, this whole function should really be a shared Lua function,
     // since it directly references textViews from end user renderer.json
@@ -459,7 +472,7 @@ void Renderer::renderGameInfo(World &w, int numRollbackFrames)
     if (NW_CLNT)
     {
         setText("rtt", STRING_FORMAT("RTT %d ms", static_cast<int>(NW_CLNT->avgRoundTripTime())));
-        setText("rollbackFrames", STRING_FORMAT("Rollback frames %d", numRollbackFrames));
+        setText("rollbackFrames", STRING_FORMAT("Rollback frames %d", _rc.numRollbackFrames));
         setText("inBps", STRING_FORMAT(" In %d Bps", static_cast<int>(NW_CLNT->bytesReceivedPerSecond())));
         setText("outBps", STRING_FORMAT("Out %d Bps", static_cast<int>(NW_CLNT->bytesSentPerSecond())));
     }
@@ -639,6 +652,16 @@ void Renderer::configSpriteColorFactor(Color c)
 void Renderer::configTextColorFactor(Color c)
 {
     _rc.textColorFactor = c;
+}
+
+void Renderer::configPhysicsEngine(std::string physicsEngine)
+{
+    _rc.physicsEngine = physicsEngine;
+}
+
+void Renderer::configNumRollbackFrames(int numRollbackFrames)
+{
+    _rc.numRollbackFrames = numRollbackFrames;
 }
 
 Matrix& Renderer::matrixForInput()

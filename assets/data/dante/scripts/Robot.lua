@@ -63,8 +63,6 @@ local function processJumpInput(inputState)
 
    local numJumpFrames = getUInt("numJumpFrames")
    local speedY = getFloat("speedY")
-   
-   LOG(string.format("numJumpFrames: %d, speedY: %f", numJumpFrames, speedY))
 
    local s = stateStr()
    local st = stateTime()

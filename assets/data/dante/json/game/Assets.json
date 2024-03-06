@@ -6,8 +6,8 @@
         "MonsterAI": {
             "filePath": "scripts/MonsterAI.lua"
         },
-        "Renderer": {
-            "filePath": "scripts/Renderer.lua"
+        "GameRenderer": {
+            "filePath": "scripts/GameRenderer.lua"
         },
         "Robot": {
             "filePath": "scripts/Robot.lua"
