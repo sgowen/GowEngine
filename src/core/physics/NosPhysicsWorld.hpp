@@ -23,5 +23,5 @@ public:
     virtual void endExtrapolatedPhysics() override;
     
 protected:
-    virtual EntityControllerPhysics* createPhysicsController(Entity* e) override;
+    virtual EntityControllerPhysics* createControllerPhysics(Entity* e) override;
 };

@@ -20,7 +20,7 @@ class NosPhysicsRenderer
 {
 public:
     NosPhysicsRenderer(uint32_t maxBatchSize);
-    virtual ~NosPhysicsRenderer();
+    ~NosPhysicsRenderer();
     
     void createDeviceDependentResources();
     void destroyDeviceDependentResources();

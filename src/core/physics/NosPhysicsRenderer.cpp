@@ -17,6 +17,7 @@ _shader(nullptr)
 {
     // Empty
 }
+
 NosPhysicsRenderer::~NosPhysicsRenderer()
 {
     // Empty
@@ -49,7 +50,7 @@ void NosPhysicsRenderer::render(NosPhysicsWorld* world, mat4* matrix, Shader* sh
         _fillRektangleBatcher.begin();
         for (Entity* e : world->getPlayers())
         {
-            NosPhysicsController* epc = e->physicsController<NosPhysicsController>();
+            NosControllerPhysics* epc = e->controllerPhysics<NosControllerPhysics>();
             
             std::vector<Bounds>& bounds = epc->bounds();
             
@@ -60,7 +61,7 @@ void NosPhysicsRenderer::render(NosPhysicsWorld* world, mat4* matrix, Shader* sh
         }
         for (Entity* e : world->getDynamicEntities())
         {
-            NosPhysicsController* epc = e->physicsController<NosPhysicsController>();
+            NosControllerPhysics* epc = e->controllerPhysics<NosControllerPhysics>();
             
             std::vector<Bounds>& bounds = epc->bounds();
             
@@ -77,7 +78,7 @@ void NosPhysicsRenderer::render(NosPhysicsWorld* world, mat4* matrix, Shader* sh
         _fillRektangleBatcher.begin();
         for (Entity* e : world->getStaticEntities())
         {
-            NosPhysicsController* epc = e->physicsController<NosPhysicsController>();
+            NosControllerPhysics* epc = e->controllerPhysics<NosControllerPhysics>();
             
             std::vector<Bounds>& bounds = epc->bounds();
             
@@ -96,7 +97,7 @@ void NosPhysicsRenderer::render(NosPhysicsWorld* world, mat4* matrix, Shader* sh
         _boundsRektangleBatcher.begin();
         for (Entity* e : world->getPlayers())
         {
-            NosPhysicsController* epc = e->physicsController<NosPhysicsController>();
+            NosControllerPhysics* epc = e->controllerPhysics<NosControllerPhysics>();
             
             std::vector<Bounds>& bounds = epc->bounds();
             
@@ -107,7 +108,7 @@ void NosPhysicsRenderer::render(NosPhysicsWorld* world, mat4* matrix, Shader* sh
         }
         for (Entity* e : world->getDynamicEntities())
         {
-            NosPhysicsController* epc = e->physicsController<NosPhysicsController>();
+            NosControllerPhysics* epc = e->controllerPhysics<NosControllerPhysics>();
             
             std::vector<Bounds>& bounds = epc->bounds();
             
@@ -118,7 +119,7 @@ void NosPhysicsRenderer::render(NosPhysicsWorld* world, mat4* matrix, Shader* sh
         }
         for (Entity* e : world->getStaticEntities())
         {
-            NosPhysicsController* epc = e->physicsController<NosPhysicsController>();
+            NosControllerPhysics* epc = e->controllerPhysics<NosControllerPhysics>();
             
             std::vector<Bounds>& bounds = epc->bounds();
             

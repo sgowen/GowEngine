@@ -45,13 +45,13 @@ void Box2DPhysicsWorld::stepPhysics(float deltaTime)
     
     for (Entity* e : _players)
     {
-        Box2DPhysicsController* epc = e->physicsController<Box2DPhysicsController>();
+        Box2DControllerPhysics* epc = e->controllerPhysics<Box2DControllerPhysics>();
         epc->updatePoseFromBody();
     }
     
     for (Entity* e : _networkEntities)
     {
-        Box2DPhysicsController* epc = e->physicsController<Box2DPhysicsController>();
+        Box2DControllerPhysics* epc = e->controllerPhysics<Box2DControllerPhysics>();
         epc->updatePoseFromBody();
     }
 }
@@ -66,9 +66,9 @@ void Box2DPhysicsWorld::endExtrapolatedPhysics()
     // TODO
 }
 
-EntityControllerPhysics* Box2DPhysicsWorld::createPhysicsController(Entity* e)
+EntityControllerPhysics* Box2DPhysicsWorld::createControllerPhysics(Entity* e)
 {
-    return new Box2DPhysicsController(e, *_world);
+    return new Box2DControllerPhysics(e, *_world);
 }
 
 b2World& Box2DPhysicsWorld::getB2World()
@@ -84,8 +84,8 @@ void EntityContactListener::BeginContact(b2Contact* contact)
     Entity* entityA = (Entity*)fixtureA->GetUserData().pointer;
     Entity* entityB = (Entity*)fixtureB->GetUserData().pointer;
     
-    Box2DPhysicsController* entityAPC = entityA->physicsController<Box2DPhysicsController>();
-    Box2DPhysicsController* entityBPC = entityB->physicsController<Box2DPhysicsController>();
+    Box2DControllerPhysics* entityAPC = entityA->controllerPhysics<Box2DControllerPhysics>();
+    Box2DControllerPhysics* entityBPC = entityB->controllerPhysics<Box2DControllerPhysics>();
     
     entityAPC->handleBeginContact(entityB, fixtureA, fixtureB);
     entityBPC->handleBeginContact(entityA, fixtureB, fixtureA);
@@ -99,8 +99,8 @@ void EntityContactListener::EndContact(b2Contact* contact)
     Entity* entityA = (Entity*)fixtureA->GetUserData().pointer;
     Entity* entityB = (Entity*)fixtureB->GetUserData().pointer;
     
-    Box2DPhysicsController* entityAPC = entityA->physicsController<Box2DPhysicsController>();
-    Box2DPhysicsController* entityBPC = entityB->physicsController<Box2DPhysicsController>();
+    Box2DControllerPhysics* entityAPC = entityA->controllerPhysics<Box2DControllerPhysics>();
+    Box2DControllerPhysics* entityBPC = entityB->controllerPhysics<Box2DControllerPhysics>();
     
     entityAPC->handleEndContact(entityB, fixtureA, fixtureB);
     entityBPC->handleEndContact(entityA, fixtureB, fixtureA);
@@ -111,8 +111,8 @@ bool EntityContactFilter::ShouldCollide(b2Fixture* fixtureA, b2Fixture* fixtureB
     Entity* entityA = (Entity*)fixtureA->GetUserData().pointer;
     Entity* entityB = (Entity*)fixtureB->GetUserData().pointer;
     
-    Box2DPhysicsController* entityAPC = entityA->physicsController<Box2DPhysicsController>();
-    Box2DPhysicsController* entityBPC = entityB->physicsController<Box2DPhysicsController>();
+    Box2DControllerPhysics* entityAPC = entityA->controllerPhysics<Box2DControllerPhysics>();
+    Box2DControllerPhysics* entityBPC = entityB->controllerPhysics<Box2DControllerPhysics>();
     
     bool entityAPCShouldCollide = entityAPC->shouldCollide(entityB, fixtureA, fixtureB);
     bool entityBPCShouldCollide = entityBPC->shouldCollide(entityA, fixtureB, fixtureA);

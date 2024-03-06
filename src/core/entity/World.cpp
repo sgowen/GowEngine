@@ -57,7 +57,7 @@ void World::addNetworkEntity(Entity* e)
     assert(e->isPlayer() || e->isStateSensitive());
     
     e->setWorld(this);
-    e->setPhysicsController(createPhysicsController(e));
+    e->setControllerPhysics(createControllerPhysics(e));
     
     if (e->isPlayer())
     {
@@ -73,7 +73,7 @@ void World::removeNetworkEntity(Entity* e)
 {
     assert(e->isPlayer() || e->isStateSensitive());
     
-    e->destroyPhysicsController();
+    e->destroyControllerPhysics();
     
     if (e->isPlayer())
     {
@@ -111,13 +111,13 @@ void World::recallCache(uint32_t numMovesProcessed)
     for (Entity* e : _players)
     {
         e->controllerNetwork()->recallCache(numMovesProcessed);
-        e->physicsController()->updateBodyFromPose();
+        e->controllerPhysics()->updateBodyFromPose();
     }
     
     for (Entity* e : _networkEntities)
     {
         e->controllerNetwork()->recallCache(numMovesProcessed);
-        e->physicsController()->updateBodyFromPose();
+        e->controllerPhysics()->updateBodyFromPose();
     }
 }
 
@@ -298,7 +298,7 @@ void World::addEntity(Entity *e)
     }
     else if (e->isStatic())
     {
-        e->setPhysicsController(createPhysicsController(e));
+        e->setControllerPhysics(createControllerPhysics(e));
         
         _staticEntities.push_back(e);
     }

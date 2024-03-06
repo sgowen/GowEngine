@@ -1,5 +1,5 @@
 //
-//  NosPhysicsController.cpp
+//  NosControllerPhysics.cpp
 //  GowEngine
 //
 //  Created by Stephen Gowen on 2/04/21.
@@ -8,9 +8,9 @@
 
 #include <GowEngine/GowEngine.hpp>
 
-IMPL_RTTI(NosPhysicsController, EntityControllerPhysics)
+IMPL_RTTI(NosControllerPhysics, EntityControllerPhysics)
 
-NosPhysicsController::NosPhysicsController(Entity* e) : EntityControllerPhysics(e),
+NosControllerPhysics::NosControllerPhysics(Entity* e) : EntityControllerPhysics(e),
 _velocityCache(e->velocity()),
 _positionCache(e->position()),
 _isBodyFacingLeft(false)
@@ -18,12 +18,12 @@ _isBodyFacingLeft(false)
     createFixtures();
 }
 
-NosPhysicsController::~NosPhysicsController()
+NosControllerPhysics::~NosControllerPhysics()
 {
     destroyFixtures();
 }
 
-void NosPhysicsController::updateBodyFromPose()
+void NosControllerPhysics::updateBodyFromPose()
 {
     if (_isBodyFacingLeft != _entity->isXFlipped())
     {
@@ -39,7 +39,7 @@ void NosPhysicsController::updateBodyFromPose()
     }
 }
 
-void NosPhysicsController::step(float deltaTime)
+void NosControllerPhysics::step(float deltaTime)
 {
     if (_entity->isExiled())
     {
@@ -75,7 +75,7 @@ void NosPhysicsController::step(float deltaTime)
     }
 }
 
-void NosPhysicsController::extrapolate(float extrapolation)
+void NosControllerPhysics::extrapolate(float extrapolation)
 {
     Entity::Pose& p =_entity->pose();
     
@@ -87,7 +87,7 @@ void NosPhysicsController::extrapolate(float extrapolation)
     p._position.add(p._velocity._x * extrapolation, p._velocity._y * extrapolation);
 }
 
-void NosPhysicsController::endExtrapolation()
+void NosControllerPhysics::endExtrapolation()
 {
     Entity::Pose& p =_entity->pose();
     
@@ -95,7 +95,7 @@ void NosPhysicsController::endExtrapolation()
     p._position = _positionCache;
 }
 
-void NosPhysicsController::processCollisions(std::vector<Entity*>& entities)
+void NosControllerPhysics::processCollisions(std::vector<Entity*>& entities)
 {
     if (_entity->isExiled())
     {
@@ -118,7 +118,7 @@ void NosPhysicsController::processCollisions(std::vector<Entity*>& entities)
             continue;
         }
         
-        NosPhysicsController* epc = e->physicsController<NosPhysicsController>();
+        NosControllerPhysics* epc = e->controllerPhysics<NosControllerPhysics>();
         
         bool t = false;
         bool b = false;
@@ -259,27 +259,27 @@ void NosPhysicsController::processCollisions(std::vector<Entity*>& entities)
     }
 }
 
-std::vector<Bounds>& NosPhysicsController::bounds()
+std::vector<Bounds>& NosControllerPhysics::bounds()
 {
     return _bounds;
 }
 
-bool NosPhysicsController::crossesBottomEdge(float yourBottom, float myTop, float tolerance)
+bool NosControllerPhysics::crossesBottomEdge(float yourBottom, float myTop, float tolerance)
 {
     return areFloatsPracticallyEqual(myTop, yourBottom) ? false : myTop > yourBottom && myTop < yourBottom + tolerance;
 }
 
-bool NosPhysicsController::crossesTopEdge(float yourTop, float myBottom, float tolerance)
+bool NosControllerPhysics::crossesTopEdge(float yourTop, float myBottom, float tolerance)
 {
     return areFloatsPracticallyEqual(myBottom, yourTop) ? false : myBottom < yourTop && myBottom > yourTop - tolerance;
 }
 
-bool NosPhysicsController::isInside(float yourBottom, float yourTop, float myBottom, float myTop)
+bool NosControllerPhysics::isInside(float yourBottom, float yourTop, float myBottom, float myTop)
 {
     return myBottom < yourTop || (myTop > yourBottom && myTop < yourTop);
 }
 
-void NosPhysicsController::createFixtures()
+void NosControllerPhysics::createFixtures()
 {
     _isBodyFacingLeft = _entity->isXFlipped();
     
@@ -306,7 +306,7 @@ void NosPhysicsController::createFixtures()
     }
 }
 
-void NosPhysicsController::destroyFixtures()
+void NosControllerPhysics::destroyFixtures()
 {
     _bounds.clear();
 }

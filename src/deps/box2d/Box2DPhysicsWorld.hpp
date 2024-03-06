@@ -29,7 +29,7 @@ public:
     b2World& getB2World();
     
 protected:
-    virtual EntityControllerPhysics* createPhysicsController(Entity* e) override;
+    virtual EntityControllerPhysics* createControllerPhysics(Entity* e) override;
     
 private:
     b2World* _world;

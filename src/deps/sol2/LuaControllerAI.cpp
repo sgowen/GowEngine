@@ -38,10 +38,6 @@ LuaControllerAI::~LuaControllerAI()
 void LuaControllerAI::runAI(uint16_t& inputState)
 {
     Entity& e = *_entity;
-    Vector2& vel = e.velocity();
-    uint8_t& state = e.state()._state;
-    uint8_t& stateFlags = e.state()._stateFlags;
-    uint16_t& stateTime = e.state()._stateTime;
     
     sol::state& lua = *_lua;
     

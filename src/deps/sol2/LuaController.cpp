@@ -201,14 +201,8 @@ void LuaController::processInput(uint16_t inputState)
 
 void LuaController::onUpdate(uint32_t numMovesProcessed)
 {
-    sol::state& lua = *_lua;
-    
     Entity& e = *_entity;
-    World& w = *e.world();
-    Vector2& vel = e.velocity();
-    uint8_t& state = e.state()._state;
-    uint8_t& stateFlags = e.state()._stateFlags;
-    uint16_t& stateTime = e.state()._stateTime;
+    sol::state& lua = *_lua;
     
     std::string textureMapping = e.controllerRender()->getTextureMapping();
     Animation* animation = ASSETS_MGR.animation(textureMapping);
@@ -229,11 +223,6 @@ void LuaController::onUpdate(uint32_t numMovesProcessed)
 void LuaController::onMessage(uint16_t message, Entity* fromEntity)
 {
     sol::state& lua = *_lua;
-    Entity& e = *_entity;
-    World& w = *e.world();
-    uint8_t& state = e.state()._state;
-    uint16_t& stateTime = e.state()._stateTime;
-    Vector2& vel = e.velocity();
     
     lua.set_function("isMsgDangerousTouch", [&message]() {
         return message == MSG_DANGEROUS_TOUCH;

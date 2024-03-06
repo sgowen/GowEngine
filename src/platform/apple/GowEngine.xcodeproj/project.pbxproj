@@ -31,8 +31,8 @@
 		BB1E5C1D27195D3400149557 /* Vector2.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BB1E5C1B27195D3400149557 /* Vector2.cpp */; };
 		BB1E5C2D271F26D800149557 /* NosPhysicsWorld.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BB1E5C27271F26D800149557 /* NosPhysicsWorld.cpp */; };
 		BB1E5C2E271F26D800149557 /* NosPhysicsWorld.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BB1E5C27271F26D800149557 /* NosPhysicsWorld.cpp */; };
-		BB1E5C2F271F26D800149557 /* NosPhysicsController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BB1E5C2A271F26D800149557 /* NosPhysicsController.cpp */; };
-		BB1E5C30271F26D800149557 /* NosPhysicsController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BB1E5C2A271F26D800149557 /* NosPhysicsController.cpp */; };
+		BB1E5C2F271F26D800149557 /* NosControllerPhysics.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BB1E5C2A271F26D800149557 /* NosControllerPhysics.cpp */; };
+		BB1E5C30271F26D800149557 /* NosControllerPhysics.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BB1E5C2A271F26D800149557 /* NosControllerPhysics.cpp */; };
 		BB2E55C52B94DE3700D84D3C /* liblua_static.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BB2E55C42B94DE3700D84D3C /* liblua_static.a */; };
 		BB2E5A602B94F86900D84D3C /* liblua_static.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BB2E5A5F2B94F86900D84D3C /* liblua_static.a */; };
 		BB2E5A712B96336300D84D3C /* EntityControllerAI.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BB2E5A702B96336300D84D3C /* EntityControllerAI.cpp */; };
@@ -88,8 +88,8 @@
 		BB7F745B2B69885E00CAB63F /* steam_appid.txt in Resources */ = {isa = PBXBuildFile; fileRef = BB7F745A2B69885E00CAB63F /* steam_appid.txt */; };
 		BB7F75B32B6B0B0100CAB63F /* Box2DPhysicsRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BB7F75AD2B6B0B0100CAB63F /* Box2DPhysicsRenderer.cpp */; };
 		BB7F75B42B6B0B0100CAB63F /* Box2DPhysicsRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BB7F75AD2B6B0B0100CAB63F /* Box2DPhysicsRenderer.cpp */; };
-		BB7F75B52B6B0B0100CAB63F /* Box2DPhysicsController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BB7F75AE2B6B0B0100CAB63F /* Box2DPhysicsController.cpp */; };
-		BB7F75B62B6B0B0100CAB63F /* Box2DPhysicsController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BB7F75AE2B6B0B0100CAB63F /* Box2DPhysicsController.cpp */; };
+		BB7F75B52B6B0B0100CAB63F /* Box2DControllerPhysics.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BB7F75AE2B6B0B0100CAB63F /* Box2DControllerPhysics.cpp */; };
+		BB7F75B62B6B0B0100CAB63F /* Box2DControllerPhysics.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BB7F75AE2B6B0B0100CAB63F /* Box2DControllerPhysics.cpp */; };
 		BB7F75B72B6B0B0100CAB63F /* Box2DPhysicsWorld.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BB7F75B22B6B0B0100CAB63F /* Box2DPhysicsWorld.cpp */; };
 		BB7F75B82B6B0B0100CAB63F /* Box2DPhysicsWorld.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BB7F75B22B6B0B0100CAB63F /* Box2DPhysicsWorld.cpp */; };
 		BB7F75BA2B6B119F00CAB63F /* libbox2d.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BB7F75B92B6B119F00CAB63F /* libbox2d.a */; };
@@ -323,10 +323,10 @@
 		BB1E5C182718F7C700149557 /* Framebuffer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Framebuffer.cpp; sourceTree = "<group>"; };
 		BB1E5C1B27195D3400149557 /* Vector2.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Vector2.cpp; sourceTree = "<group>"; };
 		BB1E5C1E271C8BE800149557 /* Font.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Font.hpp; sourceTree = "<group>"; };
-		BB1E5C25271F26D800149557 /* NosPhysicsController.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = NosPhysicsController.hpp; sourceTree = "<group>"; };
+		BB1E5C25271F26D800149557 /* NosControllerPhysics.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = NosControllerPhysics.hpp; sourceTree = "<group>"; };
 		BB1E5C27271F26D800149557 /* NosPhysicsWorld.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = NosPhysicsWorld.cpp; sourceTree = "<group>"; };
 		BB1E5C29271F26D800149557 /* NosPhysicsWorld.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = NosPhysicsWorld.hpp; sourceTree = "<group>"; };
-		BB1E5C2A271F26D800149557 /* NosPhysicsController.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = NosPhysicsController.cpp; sourceTree = "<group>"; };
+		BB1E5C2A271F26D800149557 /* NosControllerPhysics.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = NosControllerPhysics.cpp; sourceTree = "<group>"; };
 		BB2E55C42B94DE3700D84D3C /* liblua_static.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = liblua_static.a; sourceTree = "<group>"; };
 		BB2E55CC2B94DE6700D84D3C /* luaconf.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = luaconf.h; sourceTree = "<group>"; };
 		BB2E55CD2B94DE6700D84D3C /* lua.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = lua.hpp; sourceTree = "<group>"; };
@@ -499,9 +499,9 @@
 		BB7F74D42B6AFFC800CAB63F /* b2_contact_manager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = b2_contact_manager.h; sourceTree = "<group>"; };
 		BB7F74D52B6AFFC800CAB63F /* b2_edge_shape.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = b2_edge_shape.h; sourceTree = "<group>"; };
 		BB7F75AD2B6B0B0100CAB63F /* Box2DPhysicsRenderer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Box2DPhysicsRenderer.cpp; sourceTree = "<group>"; };
-		BB7F75AE2B6B0B0100CAB63F /* Box2DPhysicsController.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Box2DPhysicsController.cpp; sourceTree = "<group>"; };
+		BB7F75AE2B6B0B0100CAB63F /* Box2DControllerPhysics.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Box2DControllerPhysics.cpp; sourceTree = "<group>"; };
 		BB7F75AF2B6B0B0100CAB63F /* Box2DPhysicsWorld.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Box2DPhysicsWorld.hpp; sourceTree = "<group>"; };
-		BB7F75B02B6B0B0100CAB63F /* Box2DPhysicsController.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Box2DPhysicsController.hpp; sourceTree = "<group>"; };
+		BB7F75B02B6B0B0100CAB63F /* Box2DControllerPhysics.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Box2DControllerPhysics.hpp; sourceTree = "<group>"; };
 		BB7F75B12B6B0B0100CAB63F /* Box2DPhysicsRenderer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Box2DPhysicsRenderer.hpp; sourceTree = "<group>"; };
 		BB7F75B22B6B0B0100CAB63F /* Box2DPhysicsWorld.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Box2DPhysicsWorld.cpp; sourceTree = "<group>"; };
 		BB7F75B92B6B119F00CAB63F /* libbox2d.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libbox2d.a; sourceTree = "<group>"; };
@@ -852,8 +852,8 @@
 		BB1E5C24271F26D800149557 /* physics */ = {
 			isa = PBXGroup;
 			children = (
-				BB1E5C2A271F26D800149557 /* NosPhysicsController.cpp */,
-				BB1E5C25271F26D800149557 /* NosPhysicsController.hpp */,
+				BB1E5C2A271F26D800149557 /* NosControllerPhysics.cpp */,
+				BB1E5C25271F26D800149557 /* NosControllerPhysics.hpp */,
 				BB7F75BC2B6B5C4C00CAB63F /* NosPhysicsRenderer.cpp */,
 				BB7F75BB2B6B5C4C00CAB63F /* NosPhysicsRenderer.hpp */,
 				BB1E5C27271F26D800149557 /* NosPhysicsWorld.cpp */,
@@ -1133,8 +1133,8 @@
 		BB7F75AC2B6B0B0100CAB63F /* box2d */ = {
 			isa = PBXGroup;
 			children = (
-				BB7F75AE2B6B0B0100CAB63F /* Box2DPhysicsController.cpp */,
-				BB7F75B02B6B0B0100CAB63F /* Box2DPhysicsController.hpp */,
+				BB7F75AE2B6B0B0100CAB63F /* Box2DControllerPhysics.cpp */,
+				BB7F75B02B6B0B0100CAB63F /* Box2DControllerPhysics.hpp */,
 				BB7F75AD2B6B0B0100CAB63F /* Box2DPhysicsRenderer.cpp */,
 				BB7F75B12B6B0B0100CAB63F /* Box2DPhysicsRenderer.hpp */,
 				BB7F75B22B6B0B0100CAB63F /* Box2DPhysicsWorld.cpp */,
@@ -2117,10 +2117,10 @@
 				BB4CCAD72B5F172600B6D2CA /* ClientHelper.cpp in Sources */,
 				BBFE6DED2B7FFED7004E8CCF /* EmbeddedAssetHandler.cpp in Sources */,
 				BB2E5A812B96646400D84D3C /* EntityInputMappingManagerLoader.cpp in Sources */,
-				BB1E5C2F271F26D800149557 /* NosPhysicsController.cpp in Sources */,
+				BB1E5C2F271F26D800149557 /* NosControllerPhysics.cpp in Sources */,
 				BBFD163B2B572CBA00D4D841 /* SteamAddress.cpp in Sources */,
 				BB1E5C192718F7C700149557 /* Framebuffer.cpp in Sources */,
-				BB7F75B52B6B0B0100CAB63F /* Box2DPhysicsController.cpp in Sources */,
+				BB7F75B52B6B0B0100CAB63F /* Box2DControllerPhysics.cpp in Sources */,
 				BBB8CB032B8A8D060055CAD4 /* GameEngineState.cpp in Sources */,
 				BBBBDF682702465700D7D319 /* AssetsManager.cpp in Sources */,
 				BBBBDF7D2702467400D7D319 /* Config.cpp in Sources */,
@@ -2241,14 +2241,14 @@
 				BBBBE0FA2702584600D7D319 /* Entity.cpp in Sources */,
 				BBFD16402B572CBA00D4D841 /* SteamClientHelper.cpp in Sources */,
 				BB01D82E2A901E3A002A3BA4 /* Logger.cpp in Sources */,
-				BB1E5C30271F26D800149557 /* NosPhysicsController.cpp in Sources */,
+				BB1E5C30271F26D800149557 /* NosControllerPhysics.cpp in Sources */,
 				BBBBE0FC2702584600D7D319 /* EntityController.cpp in Sources */,
 				BBBBE0FE2702584600D7D319 /* EntityIDManager.cpp in Sources */,
 				BBBBE1012702584600D7D319 /* EntityManager.cpp in Sources */,
 				BBBBE1032702584600D7D319 /* EntityControllerNetwork.cpp in Sources */,
 				BBBBE1052702584700D7D319 /* EntityControllerPhysics.cpp in Sources */,
 				BBBBE1072702584700D7D319 /* EntityRegistry.cpp in Sources */,
-				BB7F75B62B6B0B0100CAB63F /* Box2DPhysicsController.cpp in Sources */,
+				BB7F75B62B6B0B0100CAB63F /* Box2DControllerPhysics.cpp in Sources */,
 				BB83A6652B83FDE3003AFB1F /* GlfmEngineMount.cpp in Sources */,
 				BBBBE10F2702584700D7D319 /* InputManager.cpp in Sources */,
 				BBBBE1112702584700D7D319 /* InputState.cpp in Sources */,

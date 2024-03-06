@@ -1,5 +1,5 @@
 //
-//  Box2DPhysicsController.cpp
+//  Box2DControllerPhysics.cpp
 //  GowEngine
 //
 //  Created by Stephen Gowen on 2/04/21.
@@ -10,9 +10,9 @@
 
 #include <box2d/box2d.h>
 
-IMPL_RTTI(Box2DPhysicsController, EntityControllerPhysics)
+IMPL_RTTI(Box2DControllerPhysics, EntityControllerPhysics)
 
-Box2DPhysicsController::Box2DPhysicsController(Entity* e, b2World& world) : EntityControllerPhysics(e),
+Box2DControllerPhysics::Box2DControllerPhysics(Entity* e, b2World& world) : EntityControllerPhysics(e),
 _body(nullptr),
 _groundSensorFixture(nullptr),
 _damageSensorFixture(nullptr),
@@ -29,7 +29,7 @@ _isBodyFacingLeft(false)
     createFixtures();
 }
 
-Box2DPhysicsController::~Box2DPhysicsController()
+Box2DControllerPhysics::~Box2DControllerPhysics()
 {
     destroyFixtures();
     
@@ -38,18 +38,18 @@ Box2DPhysicsController::~Box2DPhysicsController()
     _body = nullptr;
 }
 
-Vector2 Box2DPhysicsController::velocity()
+Vector2 Box2DControllerPhysics::velocity()
 {
     b2Vec2 bodyVelocity = _body->GetLinearVelocity();
     return Vector2(bodyVelocity.x, bodyVelocity.y);
 }
 
-void Box2DPhysicsController::setVelocity(Vector2 v)
+void Box2DControllerPhysics::setVelocity(Vector2 v)
 {
     _body->SetLinearVelocity(b2Vec2(v._x, v._y));
 }
 
-void Box2DPhysicsController::updatePoseFromBody()
+void Box2DControllerPhysics::updatePoseFromBody()
 {
     if (_body == nullptr)
     {
@@ -64,7 +64,7 @@ void Box2DPhysicsController::updatePoseFromBody()
     _entity->pose()._numGroundContacts = _numGroundContacts;
 }
 
-void Box2DPhysicsController::updateBodyFromPose()
+void Box2DControllerPhysics::updateBodyFromPose()
 {
     if (_body == nullptr)
     {
@@ -85,7 +85,7 @@ void Box2DPhysicsController::updateBodyFromPose()
     }
 }
 
-bool Box2DPhysicsController::shouldCollide(Entity *e, b2Fixture* fixtureA, b2Fixture* fixtureB)
+bool Box2DControllerPhysics::shouldCollide(Entity *e, b2Fixture* fixtureA, b2Fixture* fixtureB)
 {
     if (fixtureA == _groundSensorFixture)
     {
@@ -96,7 +96,7 @@ bool Box2DPhysicsController::shouldCollide(Entity *e, b2Fixture* fixtureA, b2Fix
     return true;
 }
 
-void Box2DPhysicsController::handleBeginContact(Entity* e, b2Fixture* fixtureA, b2Fixture* fixtureB)
+void Box2DControllerPhysics::handleBeginContact(Entity* e, b2Fixture* fixtureA, b2Fixture* fixtureB)
 {
     if (fixtureA == _groundSensorFixture &&
         !fixtureB->IsSensor())
@@ -117,7 +117,7 @@ void Box2DPhysicsController::handleBeginContact(Entity* e, b2Fixture* fixtureA, 
     }
 }
 
-void Box2DPhysicsController::handleEndContact(Entity* e, b2Fixture* fixtureA, b2Fixture* fixtureB)
+void Box2DControllerPhysics::handleEndContact(Entity* e, b2Fixture* fixtureA, b2Fixture* fixtureB)
 {
     if (fixtureA == _groundSensorFixture &&
         !fixtureB->IsSensor())
@@ -138,12 +138,12 @@ void Box2DPhysicsController::handleEndContact(Entity* e, b2Fixture* fixtureA, b2
     }
 }
 
-b2Body* Box2DPhysicsController::getBody()
+b2Body* Box2DControllerPhysics::getBody()
 {
     return _body;
 }
 
-void Box2DPhysicsController::createFixtures()
+void Box2DControllerPhysics::createFixtures()
 {
     _isBodyFacingLeft = _entity->isXFlipped();
     float bodyWidth = _entity->width();
@@ -218,7 +218,7 @@ void Box2DPhysicsController::createFixtures()
     }
 }
 
-void Box2DPhysicsController::destroyFixtures()
+void Box2DControllerPhysics::destroyFixtures()
 {
     for (std::vector<b2Fixture*>::iterator i = _fixtures.begin(); i != _fixtures.end(); )
     {

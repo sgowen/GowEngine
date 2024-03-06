@@ -1,5 +1,5 @@
 //
-//  Box2DPhysicsController.hpp
+//  Box2DControllerPhysics.hpp
 //  GowEngine
 //
 //  Created by Stephen Gowen on 2/04/21.
@@ -17,13 +17,13 @@ class b2Body;
 class b2Fixture;
 class b2World;
 
-class Box2DPhysicsController : public EntityControllerPhysics
+class Box2DControllerPhysics : public EntityControllerPhysics
 {
     DECL_RTTI;
     
 public:
-    Box2DPhysicsController(Entity* e, b2World& world);
-    virtual ~Box2DPhysicsController();
+    Box2DControllerPhysics(Entity* e, b2World& world);
+    virtual ~Box2DControllerPhysics();
     
     virtual Vector2 velocity();
     virtual void setVelocity(Vector2 v);

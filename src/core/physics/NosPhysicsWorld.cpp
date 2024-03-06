@@ -24,26 +24,26 @@ void NosPhysicsWorld::stepPhysics(float deltaTime)
 {
     for (Entity* e : _players)
     {
-        NosPhysicsController* epc = e->physicsController<NosPhysicsController>();
+        NosControllerPhysics* epc = e->controllerPhysics<NosControllerPhysics>();
         epc->step(deltaTime);
     }
     
     for (Entity* e : _networkEntities)
     {
-        NosPhysicsController* epc = e->physicsController<NosPhysicsController>();
+        NosControllerPhysics* epc = e->controllerPhysics<NosControllerPhysics>();
         epc->step(deltaTime);
     }
     
     for (Entity* e : _players)
     {
-        NosPhysicsController* epc = e->physicsController<NosPhysicsController>();
+        NosControllerPhysics* epc = e->controllerPhysics<NosControllerPhysics>();
         epc->processCollisions(_networkEntities);
         epc->processCollisions(_staticEntities);
     }
     
     for (Entity* e : _networkEntities)
     {
-        NosPhysicsController* epc = e->physicsController<NosPhysicsController>();
+        NosControllerPhysics* epc = e->controllerPhysics<NosControllerPhysics>();
         epc->processCollisions(_players);
         epc->processCollisions(_networkEntities);
         epc->processCollisions(_staticEntities);
@@ -54,13 +54,13 @@ void NosPhysicsWorld::extrapolatePhysics(float extrapolation)
 {
     for (Entity* e : _players)
     {
-        NosPhysicsController* epc = e->physicsController<NosPhysicsController>();
+        NosControllerPhysics* epc = e->controllerPhysics<NosControllerPhysics>();
         epc->extrapolate(extrapolation);
     }
     
     for (Entity* e : _networkEntities)
     {
-        NosPhysicsController* epc = e->physicsController<NosPhysicsController>();
+        NosControllerPhysics* epc = e->controllerPhysics<NosControllerPhysics>();
         epc->extrapolate(extrapolation);
     }
 }
@@ -69,18 +69,18 @@ void NosPhysicsWorld::endExtrapolatedPhysics()
 {
     for (Entity* e : _players)
     {
-        NosPhysicsController* epc = e->physicsController<NosPhysicsController>();
+        NosControllerPhysics* epc = e->controllerPhysics<NosControllerPhysics>();
         epc->endExtrapolation();
     }
     
     for (Entity* e : _networkEntities)
     {
-        NosPhysicsController* epc = e->physicsController<NosPhysicsController>();
+        NosControllerPhysics* epc = e->controllerPhysics<NosControllerPhysics>();
         epc->endExtrapolation();
     }
 }
 
-EntityControllerPhysics* NosPhysicsWorld::createPhysicsController(Entity* e)
+EntityControllerPhysics* NosPhysicsWorld::createControllerPhysics(Entity* e)
 {
-    return new NosPhysicsController(e);
+    return new NosControllerPhysics(e);
 }

@@ -563,24 +563,24 @@ public:
         return static_cast<T*>(_controllerNetwork);
     }
 
-    void setPhysicsController(EntityControllerPhysics* physicsController)
+    void setControllerPhysics(EntityControllerPhysics* controllerPhysics)
     {
-        _physicsController = physicsController;
+        _controllerPhysics = controllerPhysics;
     }
-    void destroyPhysicsController()
+    void destroyControllerPhysics()
     {
-        if (_physicsController != nullptr)
+        if (_controllerPhysics != nullptr)
         {
-            delete _physicsController;
-            _physicsController = nullptr;
+            delete _controllerPhysics;
+            _controllerPhysics = nullptr;
         }
     }
     
     template<typename T = EntityControllerPhysics>
-    T* physicsController()
+    T* controllerPhysics()
     {
-        assert(_physicsController != nullptr);
-        return static_cast<T*>(_physicsController);
+        assert(_controllerPhysics != nullptr);
+        return static_cast<T*>(_controllerPhysics);
     }
     
     template<typename T = EntityControllerRender>
@@ -710,7 +710,7 @@ private:
     EntityControllerAI* _controllerAI;
     EntityControllerInput* _controllerInput;
     EntityControllerNetwork* _controllerNetwork;
-    EntityControllerPhysics* _physicsController;
+    EntityControllerPhysics* _controllerPhysics;
     EntityControllerRender* _controllerRender;
     Pose _pose;
     State _state;

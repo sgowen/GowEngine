@@ -27,7 +27,7 @@
 #include "BuildConstants.hpp"
 
 /// deps/box2d Implementation
-#include "deps/box2d/Box2DPhysicsController.hpp"
+#include "deps/box2d/Box2DControllerPhysics.hpp"
 #include "deps/box2d/Box2DPhysicsRenderer.hpp"
 #include "deps/box2d/Box2DPhysicsWorld.hpp"
 
@@ -209,6 +209,6 @@
 #include "core/opengl/TriangleBatcher.hpp"
 
 /// core/physics
-#include "core/physics/NosPhysicsController.hpp"
+#include "core/physics/NosControllerPhysics.hpp"
 #include "core/physics/NosPhysicsRenderer.hpp"
 #include "core/physics/NosPhysicsWorld.hpp"

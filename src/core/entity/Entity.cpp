@@ -15,7 +15,7 @@ _controller(nullptr),
 _controllerAI(nullptr),
 _controllerInput(nullptr),
 _controllerNetwork(nullptr),
-_physicsController(nullptr),
+_controllerPhysics(nullptr),
 _controllerRender(nullptr),
 _pose(eid._x + ed._width / 2.0f, eid._y + ed._height / 2.0f),
 _state(),
@@ -38,9 +38,9 @@ Entity::~Entity()
     delete _controller;
     delete _controllerInput;
     delete _controllerNetwork;
-    if (_physicsController != nullptr)
+    if (_controllerPhysics != nullptr)
     {
-        delete _physicsController;
+        delete _controllerPhysics;
     }
     delete _controllerRender;
 }
@@ -127,9 +127,9 @@ void Entity::processInput(uint16_t inputState)
     ec->processInput(inputState);
     _state._lastProcessedInputState = inputState;
     
-    if (_physicsController != nullptr)
+    if (_controllerPhysics != nullptr)
     {
-        _physicsController->updateBodyFromPose();
+        _controllerPhysics->updateBodyFromPose();
     }
 }
 
