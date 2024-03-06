@@ -138,6 +138,7 @@ void LuaController::onUpdate(uint32_t numMovesProcessed)
     std::string textureMapping = e.controllerRender()->getTextureMapping();
     Animation* animation = ASSETS_MGR.animation(textureMapping);
     uint16_t animationNumFrames = animation == nullptr ? 1 : animation->cycleTime();
+    uint16_t animationNumFramesBeforeFirstLoopingFrame = animation == nullptr ? 1 : animation->cycleTimeBeforeFirstLoopingFrame();
     
     lua.set_function("animationNumFrames", [&animationNumFrames]() {
         return animationNumFrames;
