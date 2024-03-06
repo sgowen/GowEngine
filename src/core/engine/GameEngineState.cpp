@@ -502,11 +502,6 @@ void GameEngineState::onUpdate(Engine* e)
 
 void GameEngineState::onRender(Renderer& r, double extrapolation)
 {
-    if (ENGINE_CFG.extrapolatePhysics())
-    {
-        world().extrapolatePhysics(extrapolation);
-    }
-    
     r.configReset();
     r.configBounds(world().rightEdge(), world().topEdge(), _scale);
     r.configControlledPlayerEntity(getControlledPlayer());
@@ -530,11 +525,6 @@ void GameEngineState::onRender(Renderer& r, double extrapolation)
     r.renderGameInfo(world(), _numMovesToReprocess);
 
     r.renderToScreen();
-    
-    if (ENGINE_CFG.extrapolatePhysics())
-    {
-        world().endExtrapolatedPhysics();
-    }
     
     renderAudio();
 }

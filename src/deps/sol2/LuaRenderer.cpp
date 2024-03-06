@@ -35,6 +35,12 @@ LuaRenderer::LuaRenderer(Renderer& r) : _lua(new sol::state())
         }
     });
     
+    std::map<std::string, Color>& colorMap = _colorMap;
+    lua.set_function("configSpriteColorFactor", [&r, &colorMap](std::string colorFactorKey) {
+        Color colorFactor = colorMap[colorFactorKey];
+        r.configSpriteColorFactor(colorFactor);
+    });
+    
     lua.set_function("updateMatrixCenteredOnPlayerForParallaxLayer", [&r](float parallaxSpeedRatio) {
         r.updateMatrixCenteredOnPlayerForParallaxLayer(parallaxSpeedRatio);
     });
@@ -134,12 +140,6 @@ void LuaRenderer::render(Renderer& r, World& w, std::string script)
     
     lua.set_function("renderLight", [&r, &w](std::string framebufferKey, std::string framebufferNormalMapKey, float lightPosZ) {
         r.renderLight(framebufferKey, framebufferNormalMapKey, lightPosZ, w.getPlayers());
-    });
-    
-    std::map<std::string, Color>& colorMap = _colorMap;
-    lua.set_function("configSpriteColorFactor", [&r, &colorMap](std::string colorFactorKey) {
-        Color colorFactor = colorMap[colorFactorKey];
-        r.configSpriteColorFactor(colorFactor);
     });
     
     lua.set_function("spriteBatcherBegin", [&r, &w](std::string spriteBatcherKey) {

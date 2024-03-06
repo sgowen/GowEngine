@@ -7,10 +7,10 @@
         "MOVING_RIGHT",
         "MOVING_LEFT",
         "JUMPING",
-        "EXECUTING_ABILITY",
+        "ABILITY",
         "WARMING_UP",
         "ATTACKING",
-        "TRIGGERING_SPECIAL"
+        "SPECIAL"
     ],
     "states": [
         "IDLE",

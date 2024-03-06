@@ -108,11 +108,11 @@ local function resolveNewState()
    end
 end
 
-function onInit ()
+function onInit()
    -- Empty
 end
 
-function processInput (inputState)
+function processInput(inputState)
    if isMovementInputAllowed() then
       processMovementInput(inputState)
    end
@@ -126,7 +126,7 @@ function processInput (inputState)
    end
 end
 
-function onUpdate (numMovesProcessed)
+function onUpdate(numMovesProcessed)
    s = stateStr()
    st = stateTime()
 
@@ -151,7 +151,7 @@ function onUpdate (numMovesProcessed)
    end
 end
 
-function onMessage (message, fromEntityID)
+function onMessage(message, fromEntityID)
    s = stateStr()
 
    if isMsgDangerousTouch() then

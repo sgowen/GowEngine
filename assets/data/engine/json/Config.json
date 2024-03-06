@@ -1,6 +1,6 @@
 {
   "title": "GowEngine",
-  "mode": "nosfuratu",
+  "mode": "engine",
   "fullScreen": "false",
   "vsync": "true",
   "useSteamNetworking": "false",

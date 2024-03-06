@@ -104,8 +104,6 @@
 		BB95E52F2A210FD900D22D0F /* libopenal.1.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = BB95E52D2A210FD900D22D0F /* libopenal.1.dylib */; };
 		BB95E5312A210FE900D22D0F /* libopenal.1.dylib in Embed Libraries */ = {isa = PBXBuildFile; fileRef = BB95E52D2A210FD900D22D0F /* libopenal.1.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		BB95E5322A21108A00D22D0F /* libopenal.1.dylib in Embed Libraries */ = {isa = PBXBuildFile; fileRef = BB95E5292A210FC400D22D0F /* libopenal.1.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
-		BB9EBF522AAA57250088DBB6 /* JonController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BB9EBF512AAA57250088DBB6 /* JonController.cpp */; };
-		BB9EBF532AAA57250088DBB6 /* JonController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BB9EBF512AAA57250088DBB6 /* JonController.cpp */; };
 		BB9EBF5E2AAA57520088DBB6 /* TitleEngineState.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BB9EBF542AAA57510088DBB6 /* TitleEngineState.cpp */; };
 		BB9EBF5F2AAA57520088DBB6 /* TitleEngineState.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BB9EBF542AAA57510088DBB6 /* TitleEngineState.cpp */; };
 		BBB8CB032B8A8D060055CAD4 /* GameEngineState.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BBB8CB002B8A8D060055CAD4 /* GameEngineState.cpp */; };
@@ -530,8 +528,6 @@
 		BB8DCADF2A2950B900FADEEB /* vcruntime140.dll */ = {isa = PBXFileReference; lastKnownFileType = file; path = vcruntime140.dll; sourceTree = "<group>"; };
 		BB95E5292A210FC400D22D0F /* libopenal.1.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; path = libopenal.1.dylib; sourceTree = "<group>"; };
 		BB95E52D2A210FD900D22D0F /* libopenal.1.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; path = libopenal.1.dylib; sourceTree = "<group>"; };
-		BB9EBF502AAA57250088DBB6 /* JonController.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = JonController.hpp; sourceTree = "<group>"; };
-		BB9EBF512AAA57250088DBB6 /* JonController.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = JonController.cpp; sourceTree = "<group>"; };
 		BB9EBF542AAA57510088DBB6 /* TitleEngineState.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TitleEngineState.cpp; sourceTree = "<group>"; };
 		BB9EBF5B2AAA57510088DBB6 /* TitleEngineState.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = TitleEngineState.hpp; sourceTree = "<group>"; };
 		BBB8CAFF2B8A8D060055CAD4 /* GameEngineState.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = GameEngineState.hpp; sourceTree = "<group>"; };
@@ -1530,8 +1526,6 @@
 				BBBBDE8527023E1400D7D319 /* EntityManager.hpp */,
 				BBBBDE7E27023E1400D7D319 /* EntityRegistry.cpp */,
 				BBBBDE8127023E1400D7D319 /* EntityRegistry.hpp */,
-				BB9EBF512AAA57250088DBB6 /* JonController.cpp */,
-				BB9EBF502AAA57250088DBB6 /* JonController.hpp */,
 				BB60A0FA2B92DA940056BA63 /* World.cpp */,
 				BB60A0FB2B92DA940056BA63 /* World.hpp */,
 			);
@@ -2131,7 +2125,6 @@
 				BBBBDFEC2702469400D7D319 /* CircleBatcher.cpp in Sources */,
 				BBBBDFEE2702469400D7D319 /* Color.cpp in Sources */,
 				BBBBDFF02702469500D7D319 /* FontBatcher.cpp in Sources */,
-				BB9EBF522AAA57250088DBB6 /* JonController.cpp in Sources */,
 				BBBBE019270246A000D7D319 /* EntityLayoutManagerLoader.cpp in Sources */,
 				BBBBE01C270246A000D7D319 /* EntityManagerLoader.cpp in Sources */,
 				BBBBE01D270246A000D7D319 /* RendererLoader.cpp in Sources */,
@@ -2234,7 +2227,6 @@
 				BBBBE0E52702584600D7D319 /* FPSUtil.cpp in Sources */,
 				BB2E5A722B96336300D84D3C /* EntityControllerAI.cpp in Sources */,
 				BBBBE0EA2702584600D7D319 /* RTTI.cpp in Sources */,
-				BB9EBF532AAA57250088DBB6 /* JonController.cpp in Sources */,
 				BB1E5C162718C01A00149557 /* EntityLayoutManager.cpp in Sources */,
 				BBBBE0EF2702584600D7D319 /* ThreadManager.cpp in Sources */,
 				BBBC2B1A2B97149100ABD6BB /* LuaController.cpp in Sources */,

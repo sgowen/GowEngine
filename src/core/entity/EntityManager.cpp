@@ -143,7 +143,4 @@ EntityManager::EntityManager()
     registerInputController("EntityControllerInput", EntityControllerInput::create);
     registerNetworkController("EntityControllerNetwork", EntityControllerNetwork::create);
     registerRenderController("EntityControllerRender", EntityControllerRender::create);
-    
-    // TODO, remove these once we have scripting
-    registerController("JonController", JonController::create);
 }

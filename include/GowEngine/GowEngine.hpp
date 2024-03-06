@@ -127,8 +127,6 @@
 #include "core/entity/EntityRegistry.hpp"
 #include "core/entity/EntityControllerRender.hpp"
 #include "core/entity/World.hpp"
-// TODO, remove with scripting
-#include "core/entity/JonController.hpp"
 
 /// core/input
 #include "core/input/ClipboardHandler.hpp"
