@@ -28,7 +28,7 @@ LuaRenderer::LuaRenderer(Renderer& r) : _lua(new sol::state())
     
     lua.open_libraries(sol::lib::base);
     
-    lua.set_function("log", [](std::string line) {
+    lua.set_function("LOG", [](std::string line) {
         if (ENGINE_CFG.logLua())
         {
             LOG(line.c_str());
