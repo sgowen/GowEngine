@@ -17,6 +17,8 @@ $BIN_TO_C_TOOL $DATA_DIR/json/Assets.json engine_assets_json &> $OUT_DIR/engine_
 
 $BIN_TO_C_TOOL $DATA_DIR/json/Config.json engine_config_json &> $OUT_DIR/engine_config_json.h
 
+$BIN_TO_C_TOOL $DATA_DIR/json/Renderer.json engine_renderer_json &> $OUT_DIR/engine_renderer_json.h
+
 # shaders
 
 $BIN_TO_C_TOOL $DATA_DIR/shaders/framebuffer.vsh framebuffer_vsh &> $OUT_DIR/framebuffer_vsh.h

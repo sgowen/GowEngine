@@ -706,6 +706,7 @@
 		BBBBE07B27024D3B00D7D319 /* BuildConstants.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = BuildConstants.hpp; sourceTree = "<group>"; };
 		BBBC2B172B97149100ABD6BB /* LuaController.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = LuaController.cpp; sourceTree = "<group>"; };
 		BBBC2B182B97149100ABD6BB /* LuaController.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = LuaController.hpp; sourceTree = "<group>"; };
+		BBBC2B1B2B983A9D00ABD6BB /* engine_renderer_json.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = engine_renderer_json.h; sourceTree = "<group>"; };
 		BBBC57B62B923ACE0037527C /* EntityControllerInput.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = EntityControllerInput.cpp; sourceTree = "<group>"; };
 		BBBC57B72B923ACE0037527C /* EntityControllerInput.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = EntityControllerInput.hpp; sourceTree = "<group>"; };
 		BBEC09E72A28F6380054681F /* libsndfile.so.1.0.35 */ = {isa = PBXFileReference; lastKnownFileType = file; path = libsndfile.so.1.0.35; sourceTree = "<group>"; };
@@ -1936,6 +1937,7 @@
 			children = (
 				BBFE6DF32B8013D5004E8CCF /* engine_assets_json.h */,
 				BBFE6DF12B8013D5004E8CCF /* engine_config_json.h */,
+				BBBC2B1B2B983A9D00ABD6BB /* engine_renderer_json.h */,
 				BBFE6DF22B8013D5004E8CCF /* framebuffer_fsh.h */,
 				BBFE6DF02B8013D5004E8CCF /* framebuffer_vsh.h */,
 				BBFE6DF52B8013D5004E8CCF /* geometry_fsh.h */,
