@@ -28,15 +28,6 @@ _lua(new sol::state())
         }
     });
     
-    Script& s = ASSETS_MGR.script(_entity->entityDef()._controllerScript);
-    
-    sol::load_result loadedScript = lua.load_buffer((const char*)s._fileData->_data, s._fileData->_length);
-    sol::protected_function_result result = loadedScript();
-    if (!result.valid() && ENGINE_CFG.logLua())
-    {
-        LOG("LuaController: %s is not valid", s._desc._name.c_str());
-    }
-    
     Entity& e = *_entity;
     Vector2& vel = e.velocity();
     uint8_t& stateFlags = e.state()._stateFlags;
@@ -45,10 +36,9 @@ _lua(new sol::state())
         e.networkDataField("health").setValueUInt8(value);
     });
     
-    lua.set_function("stateStr", [&e]() {
+    lua.set_function("state", [&e]() {
         uint8_t stateVal = e.state()._state;
-        std::string stateStr = e.state(stateVal);
-        return stateStr;
+        return e.state(stateVal);
     });
     
     lua.set_function("stateTime", [&e]() {
@@ -174,7 +164,14 @@ _lua(new sol::state())
         vel.reset();
     });
     
-    lua["onInit"]();
+    Script& s = ASSETS_MGR.script(_entity->entityDef()._controllerScript);
+    
+    sol::load_result loadedScript = lua.load_buffer((const char*)s._fileData->_data, s._fileData->_length);
+    sol::protected_function_result result = loadedScript();
+    if (!result.valid() && ENGINE_CFG.logLua())
+    {
+        LOG("LuaController: %s is not valid", s._desc._name.c_str());
+    }
 }
 
 void LuaController::processInput(uint16_t inputState)

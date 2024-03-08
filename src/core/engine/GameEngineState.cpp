@@ -504,20 +504,12 @@ void GameEngineState::onRender(Renderer& r, double extrapolation)
 {
     r.configReset();
     r.configPhysicsEngine(_config.getString("physicsEngine"));
+    r.configPhysicsRenderingEnabled(_inputProcessor.state() == GIMS_DISPLAY_PHYSICS);
     r.configNumRollbackFrames(_numMovesToReprocess);
     r.configBounds(world().rightEdge(), world().topEdge(), _scale);
     r.configControlledPlayerEntity(getControlledPlayer());
     
     _luaRenderer.render(r, world(), "GameRenderer");
-    
-    if (_inputProcessor.state() == GIMS_DISPLAY_PHYSICS)
-    {
-        r.renderPhysics(_world);
-    }
-    
-    r.renderGameInfo(world());
-
-    r.renderToScreen();
     
     renderAudio();
 }

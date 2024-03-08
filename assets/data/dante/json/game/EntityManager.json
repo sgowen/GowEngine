@@ -218,7 +218,8 @@
               "data": [
                 {
                   "name": "health",
-                  "type": 1
+                  "type": 1,
+                  "value": "7"
                 }
               ]
             },

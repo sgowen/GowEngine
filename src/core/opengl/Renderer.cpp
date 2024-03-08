@@ -180,6 +180,13 @@ void Renderer::renderImageViews()
     }
 }
 
+void Renderer::useMatrix(std::string key)
+{
+    configMatrix(key);
+    Matrix& m = matrix(_rc.matrixKey);
+    updateMatrix(m._base);
+}
+
 void Renderer::resetMatrix()
 {
     Matrix& m = matrix(_rc.matrixKey);
@@ -301,7 +308,7 @@ void Renderer::renderEntitiesBoundToTexture(std::string spriteBatcherKey, std::s
     spriteBatcherEnd(spriteBatcherKey, texture);
 }
 
-void Renderer::renderRepeatingTextureParallaxLayers(std::string spriteBatcherKey, std::string texture, std::vector<Entity*>& layers)
+void Renderer::renderParallaxLayersBoundToRepeatingTexture(std::string spriteBatcherKey, std::string texture, std::vector<Entity*>& layers)
 {
     configSpriteBatcher(spriteBatcherKey);
     
@@ -418,8 +425,13 @@ void Renderer::renderTextViews()
     fb.end(m, s, _rc.textColorFactor);
 }
 
-void Renderer::renderPhysics(World* world)
+void Renderer::renderPhysicsIfEnabled(World* world)
 {
+    if (!_rc.physicsRenderingEnabled)
+    {
+        return;
+    }
+    
     bool isBox2D = _rc.physicsEngine == "Box2D";
     if (isBox2D)
     {
@@ -447,104 +459,6 @@ void Renderer::renderNosPhysics(NosPhysicsWorld* world)
     Matrix& m = matrix(_rc.matrixKey);
     Shader& s = ASSETS_MGR.shader(_rc.shaderKey);
     _nosPhysicsRenderer.render(world, &m._matrix, &s);
-}
-
-void Renderer::renderGameInfo(World &w)
-{
-    // TODO, this whole function should really be a shared Lua function,
-    // since it directly references textViews from end user renderer.json
-    
-    configMatrix("hud");
-    Matrix& m = matrix(_rc.matrixKey);
-    updateMatrix(m._base);
-    
-    configShader("sprite");
-    
-    setTextVisible("rtt", true);
-    setTextVisible("rollbackFrames", true);
-    setTextVisible("inBps", true);
-    setTextVisible("outBps", true);
-    setTextVisible("player4Info", true);
-    setTextVisible("player3Info", true);
-    setTextVisible("player2Info", true);
-    setTextVisible("player1Info", true);
-    
-    if (NW_CLNT)
-    {
-        setText("rtt", STRING_FORMAT("RTT %d ms", static_cast<int>(NW_CLNT->avgRoundTripTime())));
-        setText("rollbackFrames", STRING_FORMAT("Rollback frames %d", _rc.numRollbackFrames));
-        setText("inBps", STRING_FORMAT(" In %d Bps", static_cast<int>(NW_CLNT->bytesReceivedPerSecond())));
-        setText("outBps", STRING_FORMAT("Out %d Bps", static_cast<int>(NW_CLNT->bytesSentPerSecond())));
-    }
-    
-    Entity* player4 = w.getPlayer(4);
-    if (player4 != nullptr)
-    {
-        if (NW_CLNT->isPlayerIDLocal(4) &&
-            NW_CLNT->isPlayerIDLocal(1))
-        {
-            setText("player4Info", STRING_FORMAT("4|%s [.] to drop", player4->playerInfo()._playerName.c_str()));
-        }
-        else
-        {
-            setText("player4Info", STRING_FORMAT("4|%s", player4->playerInfo()._playerName.c_str()));
-        }
-    }
-    else
-    {
-        setText("player4Info", "4|Maybe someone will join...?");
-    }
-    
-    Entity* player3 = w.getPlayer(3);
-    if (player3 != nullptr)
-    {
-        if (NW_CLNT->isPlayerIDLocal(3) &&
-            NW_CLNT->isPlayerIDLocal(1))
-        {
-            setText("player3Info", STRING_FORMAT("3|%s [.] to drop", player3->playerInfo()._playerName.c_str()));
-        }
-        else
-        {
-            setText("player3Info", STRING_FORMAT("3|%s", player3->playerInfo()._playerName.c_str()));
-        }
-    }
-    else
-    {
-        setText("player3Info", "3|Maybe someone will join...?");
-    }
-    
-    Entity* player2 = w.getPlayer(2);
-    if (player2 != nullptr)
-    {
-        if (NW_CLNT->isPlayerIDLocal(2) &&
-            NW_CLNT->isPlayerIDLocal(1))
-        {
-            setText("player2Info", STRING_FORMAT("2|%s [.] to drop", player2->playerInfo()._playerName.c_str()));
-        }
-        else
-        {
-            setText("player2Info", STRING_FORMAT("2|%s", player2->playerInfo()._playerName.c_str()));
-        }
-    }
-    else
-    {
-        setText("player2Info", "2|Connect gamepad or use arrow keys...");
-    }
-    
-    Entity* player1 = w.getPlayer(1);
-    if (player1 != nullptr)
-    {
-        setText("player1Info", STRING_FORMAT("1|%s", player1->playerInfo()._playerName.c_str()));
-    }
-    else
-    {
-        setText("player1Info", "1|Joining...");
-    }
-    
-    setText("fps", STRING_FORMAT("FPS %d", FPS_UTIL.fps()));
-    
-    configTextColorFactor(Color::RED);
-    renderTextViews();
 }
 
 void Renderer::renderLight(std::string framebufferKey, std::string framebufferNormalMapKey, float lightPosZ, std::vector<Entity*>& lights)
@@ -657,6 +571,11 @@ void Renderer::configTextColorFactor(Color c)
 void Renderer::configPhysicsEngine(std::string physicsEngine)
 {
     _rc.physicsEngine = physicsEngine;
+}
+
+void Renderer::configPhysicsRenderingEnabled(bool value)
+{
+    _rc.physicsRenderingEnabled = value;
 }
 
 void Renderer::configNumRollbackFrames(int numRollbackFrames)

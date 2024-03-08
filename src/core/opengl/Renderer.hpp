@@ -48,6 +48,7 @@ struct RendererConfig
     float parallaxSpeedRatio;
     Entity* controlledPlayer;
     std::string physicsEngine;
+    bool physicsRenderingEnabled;
     int numRollbackFrames;
     
     RendererConfig()
@@ -73,6 +74,7 @@ struct RendererConfig
         parallaxSpeedRatio = 1.0f;
         controlledPlayer = nullptr;
         physicsEngine = "";
+        physicsRenderingEnabled = false;
         numRollbackFrames = 0;
     }
 };
@@ -80,6 +82,7 @@ struct RendererConfig
 class Renderer
 {
     friend class RendererLoader;
+    friend class LuaRenderer;
     
 public:
     Renderer();
@@ -97,6 +100,7 @@ public:
     
     void renderImageViews();
     
+    void useMatrix(std::string key);
     void resetMatrix();
     void updateMatrix(float l, float r, float b, float t, float n, float f);
     void updateMatrix(MatrixDescriptor& desc);
@@ -109,7 +113,7 @@ public:
     
     void renderSprite(std::string textureKey, std::string textureRegionKey, float x, float y, float width, float height, uint16_t stateTime, float angle, bool flipX);
     void renderEntitiesBoundToTexture(std::string spriteBatcherKey, std::string texture, std::vector<Entity*>& entities);
-    void renderRepeatingTextureParallaxLayers(std::string spriteBatcherKey, std::string texture, std::vector<Entity*>& layers);
+    void renderParallaxLayersBoundToRepeatingTexture(std::string spriteBatcherKey, std::string texture, std::vector<Entity*>& layers);
     void spriteBatcherBegin(std::string spriteBatcherKey);
     void spriteBatcherAddEntities(std::vector<Entity*>& entities);
     void spriteBatcherAddEntity(Entity* e);
@@ -120,11 +124,9 @@ public:
     void hideAllText();
     void renderTextViews();
     
-    void renderPhysics(World* world);
+    void renderPhysicsIfEnabled(World* world);
     void renderBox2DPhysics(Box2DPhysicsWorld* world);
     void renderNosPhysics(NosPhysicsWorld* world);
-    
-    void renderGameInfo(World& w);
     
     void renderLight(std::string framebufferKey, std::string framebufferNormalMapKey, float lightPosZ, std::vector<Entity*>& entities);
     
@@ -145,6 +147,7 @@ public:
     void configSpriteColorFactor(Color c);
     void configTextColorFactor(Color c);
     void configPhysicsEngine(std::string physicsEngine);
+    void configPhysicsRenderingEnabled(bool value);
     void configNumRollbackFrames(int numRollbackFrames);
     
     Matrix& matrixForInput();

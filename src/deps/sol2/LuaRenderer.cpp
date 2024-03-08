@@ -26,7 +26,7 @@ LuaRenderer::LuaRenderer(Renderer& r) : _lua(new sol::state())
     
     sol::state& lua = *_lua;
     
-    lua.open_libraries(sol::lib::base);
+    lua.open_libraries(sol::lib::base, sol::lib::string);
     
     lua.set_function("LOG", [](std::string line) {
         if (ENGINE_CFG.logLua())
@@ -35,10 +35,79 @@ LuaRenderer::LuaRenderer(Renderer& r) : _lua(new sol::state())
         }
     });
     
+    lua.set_function("networkIsPlayerIDLocal", [](int playerID) {
+        bool ret = false;
+        if (NW_CLNT)
+        {
+            ret = NW_CLNT->isPlayerIDLocal(playerID);
+        }
+        return ret;
+    });
+    
+    lua.set_function("networkAvgRoundTripTime", []() {
+        int ret = 0;
+        if (NW_CLNT)
+        {
+            ret = static_cast<int>(NW_CLNT->avgRoundTripTime());
+        }
+        return ret;
+    });
+    
+    lua.set_function("networkBytesReceivedPerSecond", []() {
+        int ret = 0;
+        if (NW_CLNT)
+        {
+            ret = static_cast<int>(NW_CLNT->bytesReceivedPerSecond());
+        }
+        return ret;
+    });
+    
+    lua.set_function("networkBytesSentPerSecond", []() {
+        int ret = 0;
+        if (NW_CLNT)
+        {
+            ret = static_cast<int>(NW_CLNT->bytesSentPerSecond());
+        }
+        return ret;
+    });
+    
+    lua.set_function("fps", []() {
+        return FPS_UTIL.fps();
+    });
+    
+    lua.set_function("numRollbackFrames", [&r]() {
+        return r._rc.numRollbackFrames;
+    });
+    
+    lua.set_function("useMatrix", [&r](std::string key) {
+        r.useMatrix(key);
+    });
+    
+    lua.set_function("configShader", [&r](std::string key) {
+        r.configShader(key);
+    });
+    
+    lua.set_function("setTextVisible", [&r](std::string key, bool value) {
+        r.setTextVisible(key, value);
+    });
+    
+    lua.set_function("setText", [&r](std::string key, std::string value) {
+        r.setText(key, value);
+    });
+    
+    lua.set_function("renderTextViews", [&r]() {
+        return r.renderTextViews();
+    });
+    
     std::map<std::string, Color>& colorMap = _colorMap;
-    lua.set_function("configSpriteColorFactor", [&r, &colorMap](std::string colorFactorKey) {
-        Color colorFactor = colorMap[colorFactorKey];
+    lua.set_function("configSpriteColorFactor", [&r, &colorMap](std::string key) {
+        Color colorFactor = colorMap[key];
         r.configSpriteColorFactor(colorFactor);
+    });
+    
+    lua.set_function("configTextColorFactor", [&r, &colorMap](std::string key) {
+        Color colorFactor = colorMap[key];
+        r.configTextColorFactor(colorFactor);
     });
     
     lua.set_function("updateMatrixCenteredOnPlayerForParallaxLayer", [&r](float parallaxSpeedRatio) {
@@ -53,13 +122,11 @@ LuaRenderer::LuaRenderer(Renderer& r) : _lua(new sol::state())
         r.bindFramebuffer(framebufferKey);
     });
     
-    lua.set_function("renderFramebuffer", [&r](std::string framebufferKey) {
+    lua.set_function("renderFramebuffer", sol::overload([&r](std::string framebufferKey) {
         r.renderFramebuffer(framebufferKey);
-    });
-    
-    lua.set_function("renderFramebuffer", [&r](std::string framebufferKey, std::string shaderKey) {
+    }, [&r](std::string framebufferKey, std::string shaderKey) {
         r.renderFramebuffer(framebufferKey, shaderKey);
-    });
+    }));
     
     lua.set_function("renderFramebufferWithShockwave", [&r](std::string framebufferKey, float centerX, float centerY, uint16_t timeElapsed, bool isTransforming) {
         r.renderFramebufferWithShockwave(framebufferKey, centerX, centerY, timeElapsed, isTransforming);
@@ -80,39 +147,50 @@ void LuaRenderer::render(Renderer& r, World& w, std::string script)
 {
     sol::state& lua = *_lua;
     
-    lua.set_function("isReleasingShockwave", [&w](int playerID) {
-        Entity* jon = w.getPlayer(playerID);
+    lua.set_function("playerNetworkBool", [&w](int playerID, std::string name) {
+        Entity* entity = w.getPlayer(playerID);
         
-        if (jon != nullptr && !jon->isExiled())
+        bool ret = false;
+        if (entity != nullptr)
         {
-            bool isReleasingShockwave = jon->networkDataField("isReleasingShockwave").valueBool();
-            return isReleasingShockwave;
-        }
-        
-        return false;
-    });
-    
-    lua.set_function("stateStr", [&w](int playerID) {
-        Entity* jon = w.getPlayer(playerID);
-        
-        std::string ret;
-        if (jon != nullptr && !jon->isExiled())
-        {
-            uint8_t stateVal = jon->state()._state;
-            ret = jon->state(stateVal);
+            ret = entity->networkDataField(name).valueBool();
         }
         
         return ret;
     });
     
-    lua.set_function("shockwaveStateTime", [&w](int playerID) {
-        uint16_t ret = 0;
-        Entity* jon = w.getPlayer(playerID);
+    lua.set_function("playerNetworkUInt16", [&w](int playerID, std::string name) {
+        Entity* entity = w.getPlayer(playerID);
         
-        if (jon != nullptr && !jon->isExiled())
+        uint16_t ret = 0;
+        if (entity != nullptr)
         {
-            uint16_t shockwaveStartTime = jon->networkDataField("shockwaveStateTime").valueUInt16();
-            ret = shockwaveStartTime;
+            ret = entity->networkDataField(name).valueUInt16();
+        }
+        
+        return ret;
+    });
+    
+    lua.set_function("playerState", [&w](int playerID) {
+        Entity* entity = w.getPlayer(playerID);
+        
+        std::string ret;
+        if (entity != nullptr && !entity->isExiled())
+        {
+            uint8_t stateVal = entity->state()._state;
+            ret = entity->state(stateVal);
+        }
+        
+        return ret;
+    });
+    
+    lua.set_function("playerName", [&w](int playerID) {
+        Entity* entity = w.getPlayer(playerID);
+        
+        std::string ret;
+        if (entity != nullptr && !entity->isExiled())
+        {
+            ret = entity->playerInfo()._playerName;
         }
         
         return ret;
@@ -134,12 +212,20 @@ void LuaRenderer::render(Renderer& r, World& w, std::string script)
         r.renderEntitiesBoundToTexture(spriteBatcherKey, texture, w.getPlayers());
     });
     
-    lua.set_function("renderRepeatingTextureParallaxLayers", [&r, &w](std::string spriteBatcherKey, std::string texture) {
-        r.renderRepeatingTextureParallaxLayers(spriteBatcherKey, texture, w.getLayers());
+    lua.set_function("renderParallaxLayersBoundToRepeatingTexture", [&r, &w](std::string spriteBatcherKey, std::string texture) {
+        r.renderParallaxLayersBoundToRepeatingTexture(spriteBatcherKey, texture, w.getLayers());
     });
     
-    lua.set_function("renderLight", [&r, &w](std::string framebufferKey, std::string framebufferNormalMapKey, float lightPosZ) {
+    lua.set_function("renderPlayerLights", [&r, &w](std::string framebufferKey, std::string framebufferNormalMapKey, float lightPosZ) {
         r.renderLight(framebufferKey, framebufferNormalMapKey, lightPosZ, w.getPlayers());
+    });
+    
+    lua.set_function("renderPhysicsIfEnabled", [&r, &w]() {
+        r.renderPhysicsIfEnabled(&w);
+    });
+    
+    lua.set_function("renderToScreen", [&r]() {
+        r.renderToScreen();
     });
     
     lua.set_function("spriteBatcherBegin", [&r, &w](std::string spriteBatcherKey) {
@@ -166,6 +252,12 @@ void LuaRenderer::render(Renderer& r, World& w, std::string script)
     
     lua.set_function("spriteBatcherEnd", [&r, &w](std::string spriteBatcherKey, std::string texture) {
         r.spriteBatcherEnd(spriteBatcherKey, texture);
+    });
+    
+    lua.set_function("doesPlayerExist", [&w](int playerID) {
+        Entity* entity = w.getPlayer(playerID);
+        
+        return entity != nullptr && !entity->isExiled();
     });
     
     lua.set_function("textureNameForPlayer", [&r, &w](int playerID) {

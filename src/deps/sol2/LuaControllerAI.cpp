@@ -70,9 +70,7 @@ void LuaControllerAI::runAI(uint16_t& inputState)
     lua.set_function("isPlayer", [&e](uint32_t entityID) {
         Entity* entity = e.world()->getEntityByID(entityID);
         
-        bool ret = entity ? entity->isPlayer() : false;
-        
-        return ret;
+        return entity ? entity->isPlayer() : false;
     });
     
     lua.set_function("entityPositionX", [&e](uint32_t entityID) {
@@ -87,11 +85,11 @@ void LuaControllerAI::runAI(uint16_t& inputState)
         return entity ? entity->position()._y : 0;
     });
     
-    lua.set_function("myPositionX", [&e]() {
+    lua.set_function("positionX", [&e]() {
         return e.position()._x;
     });
     
-    lua.set_function("myPositionY", [&e]() {
+    lua.set_function("positionY", [&e]() {
         return e.position()._y;
     });
     
