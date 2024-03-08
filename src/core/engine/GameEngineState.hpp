@@ -80,7 +80,7 @@ private:
     std::map<uint8_t, Entity::PlayerInfo> _players;
     World* _world;
     GameInputProcessor _inputProcessor;
-    int _numMovesToReprocess;
+    int _numRollbackFrames;
     float _scale;
     
     class SoundFrameState {

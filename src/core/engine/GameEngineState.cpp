@@ -421,13 +421,13 @@ void GameEngineState::onUpdate(Engine* e)
                 return;
             }
             
-            _numMovesToReprocess = numMovesProcessedLocally - world().getNumMovesProcessed();
+            _numRollbackFrames = numMovesProcessedLocally - world().getNumMovesProcessed();
             
-            if (_numMovesToReprocess > 0)
+            if (_numRollbackFrames > 0)
             {
                 if (ENGINE_CFG.networkLoggingEnabled())
                 {
-                    LOG("Rollback replaying last %d moves", _numMovesToReprocess);
+                    LOG("Rollback replaying last %d moves", _numRollbackFrames);
                 }
                 for (const Move& m : ml)
                 {
@@ -505,7 +505,7 @@ void GameEngineState::onRender(Renderer& r, double extrapolation)
     r.configReset();
     r.configPhysicsEngine(_config.getString("physicsEngine"));
     r.configPhysicsRenderingEnabled(_inputProcessor.state() == GIMS_DISPLAY_PHYSICS);
-    r.configNumRollbackFrames(_numMovesToReprocess);
+    r.configNumRollbackFrames(_numRollbackFrames);
     r.configBounds(world().rightEdge(), world().topEdge(), _scale);
     r.configControlledPlayerEntity(getControlledPlayer());
     
@@ -772,7 +772,7 @@ _entityIDManager(),
 _timeTracker(),
 _world(nullptr),
 _inputProcessor(),
-_numMovesToReprocess(0),
+_numRollbackFrames(0),
 _scale(1.0)
 {
     // Empty
