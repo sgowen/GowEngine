@@ -50,6 +50,8 @@
 			<Add directory="../../../deps/file-compat" />
 			<Add directory="../../../deps/glfw/include" />
 			<Add directory="../../../deps/glfw/deps" />
+            <Add directory="../../../deps/imgui" />
+            <Add directory="../../../deps/imgui/backends" />
 			<Add directory="../../../deps/libsndfile/include" />
 			<Add directory="../../../deps/Lua/lua-5.4.6/include" />
 			<Add directory="../../../deps/openal-soft/include" />
@@ -85,6 +87,13 @@
 		<Unit filename="../../../deps/glfw/deps/glad_gl.c">
 			<Option compilerVar="CC" />
 		</Unit>
+        <Unit filename="../../../deps/imgui/backends/imgui_impl_glfw.cpp" />
+        <Unit filename="../../../deps/imgui/backends/imgui_impl_opengl3.cpp" />
+        <Unit filename="../../../deps/imgui/imgui_demo.cpp" />
+        <Unit filename="../../../deps/imgui/imgui_widgets.cpp" />
+        <Unit filename="../../../deps/imgui/imgui_tables.cpp" />
+        <Unit filename="../../../deps/imgui/imgui_draw.cpp" />
+        <Unit filename="../../../deps/imgui/imgui.cpp" />
 		<Extensions>
 			<lib_finder disable_auto="1" />
 		</Extensions>

@@ -103,13 +103,14 @@ void EngineState::update(Engine* e)
     
     ASSETS_MGR.update();
     
+    if (!areAssetsLoaded && ASSETS_MGR.isLoaded())
+    {
+        onAssetsLoaded(e);
+        areAssetsLoaded = true;
+    }
+    
     if (!areAssetsLoaded)
     {
-        if (ASSETS_MGR.isLoaded())
-        {
-            onAssetsLoaded(e);
-        }
-        
         return;
     }
     

@@ -83,8 +83,8 @@
 		BB5F5F652B9BBCCD00475CDD /* imgui_impl_opengl3.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BB5F5F642B9BBCBA00475CDD /* imgui_impl_opengl3.cpp */; };
 		BB5F5F662B9BBD3800475CDD /* imgui.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BB5F5E972B9BB7F200475CDD /* imgui.cpp */; };
 		BB5F5F682B9BC14600475CDD /* imgui_demo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BB5F5F672B9BC14600475CDD /* imgui_demo.cpp */; };
-		BB5F5F6C2B9BC31900475CDD /* IMGUIEngineState.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BB5F5F6A2B9BC31900475CDD /* IMGUIEngineState.cpp */; };
-		BB5F5F6D2B9BC31900475CDD /* IMGUIEngineState.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BB5F5F6A2B9BC31900475CDD /* IMGUIEngineState.cpp */; };
+		BB5F5F6C2B9BC31900475CDD /* IMGUIDemoEngineState.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BB5F5F6A2B9BC31900475CDD /* IMGUIDemoEngineState.cpp */; };
+		BB5F5F6D2B9BC31900475CDD /* IMGUIDemoEngineState.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BB5F5F6A2B9BC31900475CDD /* IMGUIDemoEngineState.cpp */; };
 		BB60A0FC2B92DA940056BA63 /* World.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BB60A0FA2B92DA940056BA63 /* World.cpp */; };
 		BB60A0FD2B92DA940056BA63 /* World.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BB60A0FA2B92DA940056BA63 /* World.cpp */; };
 		BB61E1F82A27F64200BFFE38 /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BB61E1F72A27F64200BFFE38 /* OpenGL.framework */; };
@@ -489,8 +489,8 @@
 		BB5F5F632B9BBCBA00475CDD /* imgui_impl_opengl3.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = imgui_impl_opengl3.h; sourceTree = "<group>"; };
 		BB5F5F642B9BBCBA00475CDD /* imgui_impl_opengl3.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = imgui_impl_opengl3.cpp; sourceTree = "<group>"; };
 		BB5F5F672B9BC14600475CDD /* imgui_demo.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = imgui_demo.cpp; sourceTree = "<group>"; };
-		BB5F5F6A2B9BC31900475CDD /* IMGUIEngineState.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = IMGUIEngineState.cpp; sourceTree = "<group>"; };
-		BB5F5F6B2B9BC31900475CDD /* IMGUIEngineState.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = IMGUIEngineState.hpp; sourceTree = "<group>"; };
+		BB5F5F6A2B9BC31900475CDD /* IMGUIDemoEngineState.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = IMGUIDemoEngineState.cpp; sourceTree = "<group>"; };
+		BB5F5F6B2B9BC31900475CDD /* IMGUIDemoEngineState.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = IMGUIDemoEngineState.hpp; sourceTree = "<group>"; };
 		BB60A0FA2B92DA940056BA63 /* World.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = World.cpp; sourceTree = "<group>"; };
 		BB60A0FB2B92DA940056BA63 /* World.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = World.hpp; sourceTree = "<group>"; };
 		BB61E1F72A27F64200BFFE38 /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = System/Library/Frameworks/OpenGL.framework; sourceTree = SDKROOT; };
@@ -1183,8 +1183,8 @@
 		BB5F5F692B9BC31900475CDD /* imgui */ = {
 			isa = PBXGroup;
 			children = (
-				BB5F5F6A2B9BC31900475CDD /* IMGUIEngineState.cpp */,
-				BB5F5F6B2B9BC31900475CDD /* IMGUIEngineState.hpp */,
+				BB5F5F6A2B9BC31900475CDD /* IMGUIDemoEngineState.cpp */,
+				BB5F5F6B2B9BC31900475CDD /* IMGUIDemoEngineState.hpp */,
 			);
 			path = imgui;
 			sourceTree = "<group>";
@@ -2289,7 +2289,7 @@
 				BBBBDFF02702469500D7D319 /* FontBatcher.cpp in Sources */,
 				BBBBE019270246A000D7D319 /* EntityLayoutManagerLoader.cpp in Sources */,
 				BBBBE01C270246A000D7D319 /* EntityManagerLoader.cpp in Sources */,
-				BB5F5F6C2B9BC31900475CDD /* IMGUIEngineState.cpp in Sources */,
+				BB5F5F6C2B9BC31900475CDD /* IMGUIDemoEngineState.cpp in Sources */,
 				BBBBE01D270246A000D7D319 /* RendererLoader.cpp in Sources */,
 				BBBBE01F270246A000D7D319 /* ConfigLoader.cpp in Sources */,
 				BBBBE020270246A000D7D319 /* AssetsLoader.cpp in Sources */,
@@ -2440,7 +2440,7 @@
 				BBBBE13B2702584800D7D319 /* ReplicationManagerServer.cpp in Sources */,
 				BBBBE13D2702584800D7D319 /* ReplicationTransmissionData.cpp in Sources */,
 				BBBBE13F2702584800D7D319 /* SocketAddress.cpp in Sources */,
-				BB5F5F6D2B9BC31900475CDD /* IMGUIEngineState.cpp in Sources */,
+				BB5F5F6D2B9BC31900475CDD /* IMGUIDemoEngineState.cpp in Sources */,
 				BB40D7C72A26A2E600EDA51E /* SoundManager.cpp in Sources */,
 				BBBBE1412702584800D7D319 /* SocketAddressFactory.cpp in Sources */,
 				BBBBE1432702584800D7D319 /* SocketUtil.cpp in Sources */,
@@ -2665,6 +2665,7 @@
 					"\"$(SRCROOT)/../../../deps/file-compat\"",
 					"\"$(SRCROOT)/../../../deps/glfw/include\"",
 					"\"$(SRCROOT)/../../../deps/imgui\"",
+					"\"$(SRCROOT)/../../../deps/imgui/backends\"",
 					"\"$(SRCROOT)/../../../deps/libsndfile/include\"",
 					"\"$(SRCROOT)/../../../deps/Lua/lua-5.4.6/include\"",
 					"\"$(SRCROOT)/../../../deps/openal-soft/include\"",
@@ -2729,6 +2730,7 @@
 					"\"$(SRCROOT)/../../../deps/file-compat\"",
 					"\"$(SRCROOT)/../../../deps/glfw/include\"",
 					"\"$(SRCROOT)/../../../deps/imgui\"",
+					"\"$(SRCROOT)/../../../deps/imgui/backends\"",
 					"\"$(SRCROOT)/../../../deps/libsndfile/include\"",
 					"\"$(SRCROOT)/../../../deps/Lua/lua-5.4.6/include\"",
 					"\"$(SRCROOT)/../../../deps/openal-soft/include\"",

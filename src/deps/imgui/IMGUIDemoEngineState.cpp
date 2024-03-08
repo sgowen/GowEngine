@@ -1,5 +1,5 @@
 //
-//  IMGUIEngineState.cpp
+//  IMGUIDemoEngineState.cpp
 //  GowEngine
 //
 //  Created by Stephen Gowen on 3/8/24.
@@ -8,63 +8,68 @@
 
 #include <GowEngine/GowEngine.hpp>
 
+#if IS_DESKTOP
+
 #include "imgui.h"
 #include "imgui_impl_glfw.h"
 #include "imgui_impl_opengl3.h"
 
-void IMGUIEngineState::onEnter(Engine* e)
+void IMGUIDemoEngineState::onEnter(Engine* e)
 {
-    // Setup Dear ImGui context
     IMGUI_CHECKVERSION();
     ImGui::CreateContext();
     ImGuiIO& io = ImGui::GetIO();
-    io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;     // Enable Keyboard Controls
-    io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
+    io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
+    io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;
 
-    // Setup Platform/Renderer backends
-    ImGui_ImplGlfw_InitForOpenGL(INST_REG.get<GLFWwindow>("GLFWwindow"), true);          // Second param install_callback=true will install GLFW callbacks and chain to existing ones.
+    ImGui_ImplGlfw_InitForOpenGL(INST_REG.get<GLFWwindow>("GLFWwindow"), true);
     ImGui_ImplOpenGL3_Init("#version 110");
 }
 
-void IMGUIEngineState::onAssetsLoaded(Engine *e)
+void IMGUIDemoEngineState::onAssetsLoaded(Engine *e)
 {
     // Empty
 }
 
-void IMGUIEngineState::onExit(Engine* e)
+void IMGUIDemoEngineState::onExit(Engine* e)
 {
     ImGui_ImplOpenGL3_Shutdown();
     ImGui_ImplGlfw_Shutdown();
     ImGui::DestroyContext();
 }
 
-void IMGUIEngineState::onUpdate(Engine* e)
+void IMGUIDemoEngineState::onUpdate(Engine* e)
 {
     uint8_t inputState = _inputProcessor.update();
     switch (inputState)
     {
         case IPS_EXIT:
             e->popState();
-            break;
+            return;
     }
 }
 
-void IMGUIEngineState::onRender(Renderer& r)
+void IMGUIDemoEngineState::onRender(Renderer& r)
 {
     r.bindFramebuffer("main");
+    // TODO, render game world
     r.renderToScreen();
     
     ImGui_ImplOpenGL3_NewFrame();
     ImGui_ImplGlfw_NewFrame();
     ImGui::NewFrame();
-    ImGui::ShowDemoWindow(); // Show demo window! :)
+    
+    // TODO, show IMGUI windows
+    ImGui::ShowDemoWindow();
     
     ImGui::Render();
     ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 }
 
-IMGUIEngineState::IMGUIEngineState() : EngineState("json/game/Config.json"),
+IMGUIDemoEngineState::IMGUIDemoEngineState() : EngineState("json/game/Config.json"),
 _inputProcessor()
 {
     // Empty
 }
+
+#endif /* IS_DESKTOP */

@@ -72,7 +72,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>../../../deps/box2d/include;../../../deps/file-compat;../../../deps/glfw/include;../../../deps/glfw/deps;../../../deps/libsndfile/include;../../../deps/Lua/lua-5.4.6/include;../../../deps/openal-soft/include;../../../deps/rapidjson/include;../../../src/deps/sol2/include;../../../deps/stb;../../../deps/steamworks_sdk/public;../../../../GowEngine/src;../../../../GowEngine/include;</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../../../deps/box2d/include;../../../deps/file-compat;../../../deps/glfw/include;../../../deps/glfw/deps;../../../deps/imgui;../../../deps/imgui/backends;../../../deps/libsndfile/include;../../../deps/Lua/lua-5.4.6/include;../../../deps/openal-soft/include;../../../deps/rapidjson/include;../../../src/deps/sol2/include;../../../deps/stb;../../../deps/steamworks_sdk/public;../../../../GowEngine/src;../../../../GowEngine/include;</AdditionalIncludeDirectories>
       <RuntimeTypeInfo>false</RuntimeTypeInfo>
       <ExceptionHandling>Sync</ExceptionHandling>
       <LanguageStandard>stdcpp17</LanguageStandard>
@@ -98,7 +98,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>../../../deps/box2d/include;../../../deps/file-compat;../../../deps/glfw/include;../../../deps/glfw/deps;../../../deps/libsndfile/include;../../../deps/Lua/lua-5.4.6/include;../../../deps/openal-soft/include;../../../deps/rapidjson/include;../../../src/deps/sol2/include;../../../deps/stb;../../../deps/steamworks_sdk/public;../../../../GowEngine/src;../../../../GowEngine/include;</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../../../deps/box2d/include;../../../deps/file-compat;../../../deps/glfw/include;../../../deps/glfw/deps;../../../deps/imgui;../../../deps/imgui/backends;../../../deps/libsndfile/include;../../../deps/Lua/lua-5.4.6/include;../../../deps/openal-soft/include;../../../deps/rapidjson/include;../../../src/deps/sol2/include;../../../deps/stb;../../../deps/steamworks_sdk/public;../../../../GowEngine/src;../../../../GowEngine/include;</AdditionalIncludeDirectories>
       <RuntimeTypeInfo>false</RuntimeTypeInfo>
       <ExceptionHandling>Sync</ExceptionHandling>
       <LanguageStandard>stdcpp17</LanguageStandard>
@@ -120,6 +120,13 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\deps\glfw\deps\glad_gl.c" />
+    <ClCompile Include="..\..\..\deps\imgui\backends\imgui_impl_glfw.cpp" />
+    <ClCompile Include="..\..\..\deps\imgui\backends\imgui_impl_opengl3.cpp" />
+    <ClCompile Include="..\..\..\deps\imgui\imgui_demo.cpp" />
+    <ClCompile Include="..\..\..\deps\imgui\imgui_widgets.cpp" />
+    <ClCompile Include="..\..\..\deps\imgui\imgui_tables.cpp" />
+    <ClCompile Include="..\..\..\deps\imgui\imgui_draw.cpp" />
+    <ClCompile Include="..\..\..\deps\imgui\imgui.cpp" />
     <ClCompile Include="..\..\..\src\*\*\*.cpp" />
   </ItemGroup>
   <ItemGroup>
