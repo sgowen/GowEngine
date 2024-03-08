@@ -124,6 +124,7 @@ void EngineState::render(Engine* e)
         return;
     }
     
-    onRender(_renderer, e->extrapolation());
+    _renderer.configExtrapolation(e->extrapolation());
+    onRender(_renderer);
     AUDIO_ENGINE.render();
 }

@@ -51,7 +51,10 @@ struct RendererConfig
     bool physicsRenderingEnabled;
     int numRollbackFrames;
     
-    RendererConfig()
+    double extrapolation;
+    
+    RendererConfig() :
+    extrapolation(0.0)
     {
         reset();
     }
@@ -96,7 +99,7 @@ public:
     void renderLoadingView(uint32_t stateTime);
     
     void bindFramebuffer(std::string framebufferKey);
-    void clearFramebuffer(Color clearColor);
+    void clearFramebuffer(Color clearColor = Color::CLEAR);
     
     void renderImageViews();
     
@@ -138,6 +141,7 @@ public:
     
     float clampScale();
     
+    void configExtrapolation(double value);
     void configReset();
     void configBounds(uint32_t maxRight, uint32_t maxTop, float& scale);
     void configControlledPlayerEntity(Entity* e);

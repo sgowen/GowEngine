@@ -30,6 +30,13 @@
       "yWeight": 0.7,
       "glyphWidthWeight": 0.05
     },
+    "create": {
+        "text": "[C]reate",
+        "alignment": 1,
+        "xWeight": 0.5,
+        "yWeight": 0.24,
+        "glyphWidthWeight": 0.025
+    },
     "hostServer": {
       "text": "[H]ost server",
       "alignment": 1,

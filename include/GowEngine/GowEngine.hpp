@@ -34,6 +34,9 @@
 /// deps/file-compat Implementation
 #include "deps/file-compat/FileCompatUtil.hpp"
 
+/// deps/imgui Implementation
+#include "deps/imgui/IMGUIEngineState.hpp"
+
 /// deps/libsndfile implementation
 #include "deps/libsndfile/SoundLoader.hpp"
 

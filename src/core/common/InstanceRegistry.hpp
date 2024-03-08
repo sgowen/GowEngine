@@ -8,6 +8,7 @@
 
 #pragma once
 
+#include <string>
 #include <map>
 #include <cassert>
 
@@ -21,7 +22,7 @@ public:
     }
     
     template<typename T>
-    T* get(uint32_t key)
+    T* get(std::string key)
     {
         auto q = _instances.find(key);
         
@@ -32,13 +33,13 @@ public:
         return static_cast<T*>(ret);
     }
     
-    void registerInstance(uint32_t key, void* instance)
+    void registerInstance(void* instance, std::string key)
     {
         _instances[key] = instance;
     }
     
 private:
-    std::map<uint32_t, void*> _instances;
+    std::map<std::string, void*> _instances;
     
     InstanceRegistry() {}
     ~InstanceRegistry() {}

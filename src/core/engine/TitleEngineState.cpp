@@ -81,6 +81,12 @@ void TitleEngineState::onUpdate(Engine* e)
             }
         }
             break;
+        case TESS_INPUT_CREATE:
+        {
+            e->pushState(&ENGINE_STATE_IMGUI);
+            return;
+        }
+            break;
         case TESS_INPUT_HOST_NAME:
         {
 #if IS_DESKTOP
@@ -189,7 +195,7 @@ void TitleEngineState::onUpdate(Engine* e)
     }
 }
 
-void TitleEngineState::onRender(Renderer& r, double extrapolation)
+void TitleEngineState::onRender(Renderer& r)
 {
     bool steam = false;
 #if IS_DESKTOP
@@ -275,6 +281,7 @@ _state(TESS_DEFAULT),
 _inputProcessor(),
 _userEnteredIPAddress("")
 {
+    _inputProcessor.registerActionForKey(GOW_KEY_C, TESS_INPUT_CREATE);
     _inputProcessor.registerActionForKey(GOW_KEY_H, TESS_INPUT_HOST_NAME);
     _inputProcessor.registerActionForKey(GOW_KEY_J, TESS_INPUT_IP);
     _inputProcessor.registerActionForKey(GOW_KEY_L, TESS_INPUT_LAN_SERVER);

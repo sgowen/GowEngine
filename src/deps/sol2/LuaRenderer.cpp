@@ -131,10 +131,6 @@ LuaRenderer::LuaRenderer(Renderer& r) : _lua(new sol::state())
     lua.set_function("renderFramebufferWithShockwave", [&r](std::string framebufferKey, float centerX, float centerY, uint16_t timeElapsed, bool isTransforming) {
         r.renderFramebufferWithShockwave(framebufferKey, centerX, centerY, timeElapsed, isTransforming);
     });
-    
-    lua.set_function("clearFramebuffer", [&r] {
-        r.clearFramebuffer(Color::GREEN);
-    });
 }
 
 LuaRenderer::~LuaRenderer()

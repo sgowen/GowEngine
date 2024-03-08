@@ -51,7 +51,7 @@ public:
     void unbindVertexBuffer();
     void bindScreenFramebuffer(int32_t width, int32_t height, Color& clearColor = Color::CLEAR);
     void bindFramebuffer(Framebuffer& fb, Color& c = Color::CLEAR);
-    void clearFramebuffer(Color& c = Color::CLEAR);
+    void clearFramebuffer(Color c = Color::CLEAR);
     void clearFramebuffer(float red, float green, float blue, float alpha);
     void drawLines(uint32_t first, uint32_t count);
     void drawTriangles(uint32_t first, uint32_t count);

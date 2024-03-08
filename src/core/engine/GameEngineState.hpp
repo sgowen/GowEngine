@@ -65,7 +65,7 @@ public:
     virtual void onAssetsLoaded(Engine* e);
     virtual void onExit(Engine* e);
     virtual void onUpdate(Engine* e);
-    virtual void onRender(Renderer& r, double extrapolation);
+    virtual void onRender(Renderer& r);
     
     void populateFromEntityLayout(EntityLayout& eld);
     Entity* getPlayer(uint8_t playerID);

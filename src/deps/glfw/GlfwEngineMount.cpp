@@ -287,6 +287,8 @@ int main(int argc, char *argv[])
         exit(EXIT_FAILURE);
     }
     
+    INST_REG.registerInstance(window, "GLFWwindow");
+    
     for (int jid = GLFW_JOYSTICK_1; jid <= GLFW_JOYSTICK_LAST; ++jid)
     {
         if (glfwJoystickPresent(jid))

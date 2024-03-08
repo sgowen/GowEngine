@@ -500,7 +500,7 @@ void GameEngineState::onUpdate(Engine* e)
     }
 }
 
-void GameEngineState::onRender(Renderer& r, double extrapolation)
+void GameEngineState::onRender(Renderer& r)
 {
     r.configReset();
     r.configPhysicsEngine(_config.getString("physicsEngine"));

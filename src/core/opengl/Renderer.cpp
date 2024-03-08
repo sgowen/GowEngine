@@ -517,6 +517,11 @@ void Renderer::renderToScreen()
     _screenRenderer.renderToScreen(s, fb);
 }
 
+void Renderer::configExtrapolation(double value)
+{
+    _rc.extrapolation = value;
+}
+
 void Renderer::configReset()
 {
     _rc.reset();

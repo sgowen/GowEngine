@@ -37,3 +37,6 @@
 [submodule "deps/sol2"]
 	path = deps/sol2
 	url = git@github.com:ThePhD/sol2.git
+[submodule "deps/imgui"]
+	path = deps/imgui
+	url = git@github.com:ocornut/imgui.git

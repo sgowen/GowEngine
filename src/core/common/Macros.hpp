@@ -36,6 +36,7 @@
 #define THREAD_MGR ThreadManager::getInstance()
 #define ENGINE_STATE_DEFAULT DefaultEngineState::getInstance()
 #define ENGINE_STATE_TITLE TitleEngineState::getInstance()
+#define ENGINE_STATE_IMGUI IMGUIEngineState::getInstance()
 #define ENGINE_STATE_GAME GameEngineState::getInstance()
 #define GAME_SERVER GameServer::getInstance()
 #define ENGINE_CFG EngineConfig::getInstance()

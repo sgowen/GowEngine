@@ -22,7 +22,8 @@ public:
         TESS_INPUT_IP,
         TESS_INPUT_JOIN_NAME,
         TESS_INPUT_LAN_SERVER,
-        TESS_INPUT_INTERNET_SERVER
+        TESS_INPUT_INTERNET_SERVER,
+        TESS_INPUT_CREATE
     };
     
     static TitleEngineState& getInstance()
@@ -35,7 +36,7 @@ public:
     virtual void onAssetsLoaded(Engine* e);
     virtual void onExit(Engine* e);
     virtual void onUpdate(Engine* e);
-    virtual void onRender(Renderer& r, double extrapolation);
+    virtual void onRender(Renderer& r);
     
 private:
     uint8_t _state;

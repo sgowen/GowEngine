@@ -27,6 +27,7 @@ A basic no nonsense LGPL 2.1 licensed portable C++ 2D game engine
 * [file-compat](https://github.com/brackeen/file-compat): implements fopen for Android and Windows  
 * [glfm](https://github.com/brackeen/glfm): creates window and OpenGL context and handles input on Android and iOS
 * [glfw](https://github.com/glfw/glfw): creates window and OpenGL context and handles input on Linux, macOS, and Windows
+* [imgui](https://github.com/ocornut/imgui): handles user interface
 * [ios-cmake](https://github.com/leetal/ios-cmake): handles cmake stuff for iOS and macOS
 * [libsndfile](https://github.com/libsndfile/libsndfile): loads sounds
 * [Lua](https://github.com/walterschell/Lua): convenient CMake project for buidling Lua 5.4.6

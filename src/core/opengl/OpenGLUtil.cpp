@@ -195,7 +195,7 @@ void OpenGLUtil::bindFramebuffer(Framebuffer& fb, Color& c)
     clearFramebuffer(c);
 }
 
-void OpenGLUtil::clearFramebuffer(Color& c)
+void OpenGLUtil::clearFramebuffer(Color c)
 {
     clearFramebuffer(c._red, c._green, c._blue, c._alpha);
 }
