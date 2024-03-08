@@ -30,7 +30,7 @@
   "numFramesOfSimulatedLatency": "0"
 }
 
-// mode can be "engine", "dante", "geoDudes", or "nosfuratu"
+// mode can be "engine", "dante", or "nosfuratu"
 
 // When fileLoggingEnabled is true, check the cache directory for the log
 // Just be sure to modify the path accordingly for your username

@@ -95,10 +95,6 @@ void DefaultEngineState::update(Engine* e)
                 ENGINE_CFG.mode() = "dante";
                 e->pushState(&ENGINE_STATE_TITLE);
                 return;
-            case GOW_KEY_G:
-                ENGINE_CFG.mode() = "geoDudes";
-                e->pushState(&ENGINE_STATE_TITLE);
-                return;
             case GOW_KEY_N:
                 ENGINE_CFG.mode() = "nosfuratu";
                 e->pushState(&ENGINE_STATE_TITLE);
