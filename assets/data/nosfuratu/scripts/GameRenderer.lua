@@ -97,6 +97,7 @@ renderJon(2, colorFactorP2, framebufferP2, framebufferP3)
 renderJon(1, colorFactorP1, framebufferP1, framebufferP2)
 
 renderPhysicsIfEnabled()
+
 renderGameInfo()
 
 renderToScreen()
