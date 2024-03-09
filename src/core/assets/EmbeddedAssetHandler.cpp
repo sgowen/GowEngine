@@ -112,59 +112,20 @@ void EmbeddedAssetHandler::unloadAsset(const FileData& fileData)
 
 bool EmbeddedAssetHandler::isAssetEmbedded(std::string filePath)
 {
-    if (StringUtil::doesStringEndWithString(filePath, FILE_PATH_ENGINE_ASSETS))
-    {
-        return true;
-    }
-    else if (StringUtil::doesStringEndWithString(filePath, FILE_PATH_ENGINE_CONFIG))
-    {
-        return true;
-    }
-    else if (StringUtil::doesStringEndWithString(filePath, FILE_PATH_ENGINE_RENDERER))
-    {
-        return true;
-    }
-    else if (StringUtil::doesStringEndWithString(filePath, FILE_PATH_SHADER_FRAGMENT_FRAMEBUFFER))
-    {
-        return true;
-    }
-    else if (StringUtil::doesStringEndWithString(filePath, FILE_PATH_SHADER_VERTEX_FRAMEBUFFER))
-    {
-        return true;
-    }
-    else if (StringUtil::doesStringEndWithString(filePath, FILE_PATH_SHADER_FRAGMENT_GEOMETRY))
-    {
-        return true;
-    }
-    else if (StringUtil::doesStringEndWithString(filePath, FILE_PATH_SHADER_VERTEX_GEOMETRY))
-    {
-        return true;
-    }
-    else if (StringUtil::doesStringEndWithString(filePath, FILE_PATH_SHADER_FRAGMENT_LIGHTS))
-    {
-        return true;
-    }
-    else if (StringUtil::doesStringEndWithString(filePath, FILE_PATH_SHADER_VERTEX_LIGHTS))
-    {
-        return true;
-    }
-    else if (StringUtil::doesStringEndWithString(filePath, FILE_PATH_SHADER_FRAGMENT_SHOCKWAVE))
-    {
-        return true;
-    }
-    else if (StringUtil::doesStringEndWithString(filePath, FILE_PATH_SHADER_VERTEX_SHOCKWAVE))
-    {
-        return true;
-    }
-    else if (StringUtil::doesStringEndWithString(filePath, FILE_PATH_SHADER_FRAGMENT_SPRITE))
-    {
-        return true;
-    }
-    else if (StringUtil::doesStringEndWithString(filePath, FILE_PATH_SHADER_VERTEX_SPRITE))
-    {
-        return true;
-    }
-    else if (StringUtil::doesStringEndWithString(filePath, FILE_PATH_TEXTURE_FONT))
+    if (StringUtil::doesStringEndWithString(filePath, FILE_PATH_ENGINE_ASSETS) ||
+        StringUtil::doesStringEndWithString(filePath, FILE_PATH_ENGINE_CONFIG) ||
+        StringUtil::doesStringEndWithString(filePath, FILE_PATH_ENGINE_RENDERER) ||
+        StringUtil::doesStringEndWithString(filePath, FILE_PATH_SHADER_FRAGMENT_FRAMEBUFFER) ||
+        StringUtil::doesStringEndWithString(filePath, FILE_PATH_SHADER_VERTEX_FRAMEBUFFER) ||
+        StringUtil::doesStringEndWithString(filePath, FILE_PATH_SHADER_FRAGMENT_GEOMETRY) ||
+        StringUtil::doesStringEndWithString(filePath, FILE_PATH_SHADER_VERTEX_GEOMETRY) ||
+        StringUtil::doesStringEndWithString(filePath, FILE_PATH_SHADER_FRAGMENT_LIGHTS) ||
+        StringUtil::doesStringEndWithString(filePath, FILE_PATH_SHADER_VERTEX_LIGHTS) ||
+        StringUtil::doesStringEndWithString(filePath, FILE_PATH_SHADER_FRAGMENT_SHOCKWAVE) ||
+        StringUtil::doesStringEndWithString(filePath, FILE_PATH_SHADER_VERTEX_SHOCKWAVE) ||
+        StringUtil::doesStringEndWithString(filePath, FILE_PATH_SHADER_FRAGMENT_SPRITE) ||
+        StringUtil::doesStringEndWithString(filePath, FILE_PATH_SHADER_VERTEX_SPRITE) ||
+        StringUtil::doesStringEndWithString(filePath, FILE_PATH_TEXTURE_FONT))
     {
         return true;
     }
