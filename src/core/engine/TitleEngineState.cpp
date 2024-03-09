@@ -83,7 +83,9 @@ void TitleEngineState::onUpdate(Engine* e)
             break;
         case TESS_INPUT_CREATE:
         {
+#if IS_DESKTOP
             e->pushState(&ENGINE_STATE_IMGUI);
+#endif
             return;
         }
             break;
@@ -207,7 +209,12 @@ void TitleEngineState::onRender(Renderer& r)
     
     r.bindFramebuffer("main");
     
+#if IS_DESKTOP
     r.setTextVisible("create", _state == TESS_DEFAULT);
+#else
+    r.setTextVisible("create", false);
+#endif
+    
     r.setTextVisible("hostServer", _state == TESS_DEFAULT);
     r.setTextVisible("joinServer", _state == TESS_DEFAULT && !steam);
     r.setTextVisible("joinLANServer", _state == TESS_DEFAULT && steam);
