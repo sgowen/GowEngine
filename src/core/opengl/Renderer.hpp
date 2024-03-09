@@ -23,12 +23,14 @@
 #include "ScreenRenderer.hpp"
 #include "FramebufferRenderer.hpp"
 #include "LightRenderer.hpp"
+#include "deps/sol2/LuaRenderer.hpp"
 
 #include <map>
 
 class Entity;
 class Box2DPhysicsWorld;
 class NosPhysicsWorld;
+class World;
 
 struct RendererConfig
 {
@@ -50,11 +52,10 @@ struct RendererConfig
     std::string physicsEngine;
     bool physicsRenderingEnabled;
     int numRollbackFrames;
-    
     double extrapolation;
+    std::string scriptName;
     
-    RendererConfig() :
-    extrapolation(0.0)
+    RendererConfig()
     {
         reset();
     }
@@ -79,6 +80,8 @@ struct RendererConfig
         physicsEngine = "";
         physicsRenderingEnabled = false;
         numRollbackFrames = 0;
+        extrapolation = 0.0;
+        scriptName = "";
     }
 };
 
@@ -136,13 +139,12 @@ public:
     void renderFramebufferWithShockwave(std::string framebufferKey, float centerX, float centerY, uint16_t timeElapsed, bool isTransforming);
     void renderFramebuffer(std::string framebufferKey, std::string shaderKey);
     void renderFramebuffer(std::string framebufferKey);
-    
     void renderFramebufferToScreen(std::string framebufferKey);
     
-    float clampScale();
+    void renderWithLuaScript(World& w);
     
-    void configExtrapolation(double value);
     void configReset();
+    void configExtrapolation(double value);
     void configBounds(uint32_t maxRight, uint32_t maxTop, float& scale);
     void configControlledPlayerEntity(Entity* e);
     void configMatrix(std::string key);
@@ -153,10 +155,12 @@ public:
     void configPhysicsEngine(std::string physicsEngine);
     void configPhysicsRenderingEnabled(bool value);
     void configNumRollbackFrames(int numRollbackFrames);
+    void configScriptName(std::string scriptName);
     
     Matrix& matrixForInput();
     
 private:
+    LuaRenderer _luaRenderer;
     Box2DPhysicsRenderer _box2DPhysicsRenderer;
     NosPhysicsRenderer _nosPhysicsRenderer;
     FramebufferRenderer _framebufferRenderer;

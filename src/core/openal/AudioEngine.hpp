@@ -12,6 +12,9 @@
 #include <vector>
 #include <string>
 
+class World;
+class Entity;
+
 class AudioEngine
 {
 public:
@@ -22,6 +25,7 @@ public:
     void pause();
     void resume();
     void render();
+    void playSoundsForWorld(World& w);
     uint32_t playSound(std::string soundID, uint32_t numFramesSeekedAhead = 0, float volume = 1.0f, bool isLooping = false);
     void playMusic(std::string soundID, float volume = 1.0f, bool isLooping = true);
     void stopSound(std::string soundID);
@@ -34,6 +38,19 @@ public:
 
 private:
     static AudioEngine* s_instance;
+    
+    class SoundFrameState {
+    public:
+        std::map<uint32_t, std::map<std::string, uint32_t> > _entitySoundStates;
+        uint32_t _frame;
+        
+        SoundFrameState() :
+        _frame(0)
+        {
+            // Empty
+        }
+    };
+    SoundFrameState _soundFrameStates[360];
     
     struct SoundCommand {
         uint32_t _numFramesSeekedAhead;
@@ -56,6 +73,9 @@ private:
     std::vector<uint32_t> _soundsToPause;
     std::vector<uint32_t> _soundsToResume;
     bool _isPaused;
+    
+    SoundFrameState& soundFrameStateAtMoveIndex(uint32_t moveIndex);
+    void playSoundForEntityIfNecessary(Entity& e, uint32_t moveIndex);
     
     AudioEngine();
     ~AudioEngine();

@@ -9,6 +9,7 @@
 #include <GowEngine/GowEngine.hpp>
 
 Renderer::Renderer() :
+_luaRenderer(),
 _box2DPhysicsRenderer(2048),
 _nosPhysicsRenderer(2048),
 _framebufferRenderer(),
@@ -523,6 +524,11 @@ void Renderer::configExtrapolation(double value)
     _rc.extrapolation = value;
 }
 
+void Renderer::renderWithLuaScript(World& w)
+{
+    _luaRenderer.render(*this, w, _rc.scriptName);
+}
+
 void Renderer::configReset()
 {
     _rc.reset();
@@ -587,6 +593,11 @@ void Renderer::configPhysicsRenderingEnabled(bool value)
 void Renderer::configNumRollbackFrames(int numRollbackFrames)
 {
     _rc.numRollbackFrames = numRollbackFrames;
+}
+
+void Renderer::configScriptName(std::string scriptName)
+{
+    _rc.scriptName = scriptName;
 }
 
 Matrix& Renderer::matrixForInput()

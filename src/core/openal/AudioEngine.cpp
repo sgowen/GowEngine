@@ -84,6 +84,32 @@ void AudioEngine::render()
     _soundsToResume.clear();
 }
 
+void AudioEngine::playSoundsForWorld(World& w)
+{
+    if (isPaused() || w.getNumMovesProcessed() == 0)
+    {
+        return;
+    }
+    
+    uint32_t currentMoveIndex = w.getNumMovesProcessed() - 1;
+    SoundFrameState& sfs = soundFrameStateAtMoveIndex(currentMoveIndex);
+    if (sfs._frame < currentMoveIndex)
+    {
+        sfs._frame = currentMoveIndex;
+        sfs._entitySoundStates.clear();
+    }
+    
+    for (Entity* e : w.getPlayers())
+    {
+        playSoundForEntityIfNecessary(*e, currentMoveIndex);
+    }
+    
+    for (Entity* e : w.getDynamicEntities())
+    {
+        playSoundForEntityIfNecessary(*e, currentMoveIndex);
+    }
+}
+
 uint32_t AudioEngine::playSound(std::string soundID, uint32_t numFramesSeekedAhead, float volume, bool isLooping)
 {
     if (ENGINE_CFG.audioDisabled())
@@ -252,6 +278,102 @@ void AudioEngine::resumeAllSounds()
 bool AudioEngine::isPaused()
 {
     return _isPaused;
+}
+
+AudioEngine::SoundFrameState& AudioEngine::soundFrameStateAtMoveIndex(uint32_t moveIndex)
+{
+    uint32_t index = moveIndex % 360;
+    
+    return _soundFrameStates[index];
+}
+
+void AudioEngine::playSoundForEntityIfNecessary(Entity& e, uint32_t moveIndex)
+{
+    // TODO, support more than 1 sound per entity per frame
+    
+    if (e.isExiled())
+    {
+        return;
+    }
+    
+    std::string textureMapping = e.controllerRender()->getTextureMapping();
+    std::vector<SoundMapping>* soundMappings = e.controllerRender()->getSoundMapping();
+    if (soundMappings == nullptr)
+    {
+        return;
+    }
+    
+    uint16_t soundStateTime = e.stateTime();
+    Animation* animation = ASSETS_MGR.animation(textureMapping);
+    if (animation != nullptr &&
+        animation->isLooping() &&
+        // TODO, this is just a crude hack to make sure
+        // we don't hear the drill stomp sound effect more than once
+        animation->cycleTimeBeforeFirstLoopingFrame() == 0)
+    {
+        soundStateTime = e.stateTime() % animation->cycleTime();
+    }
+    
+    SoundMapping* soundMapping = nullptr;
+    for (int i = 0; i < soundMappings->size(); ++i)
+    {
+        SoundMapping& sm = soundMappings->at(i);
+        if (soundStateTime >= sm._stateTime)
+        {
+            soundMapping = &sm;
+        }
+    }
+    
+    if (soundMapping == nullptr)
+    {
+        return;
+    }
+    
+    std::string soundID = soundMapping->_soundID;
+    uint16_t stateTimeToCheck = soundStateTime - soundMapping->_stateTime;
+    
+    uint32_t moveIndexToCheck = 0;
+    uint32_t numFramesToSkip = 0;
+    if (moveIndex >= stateTimeToCheck)
+    {
+        moveIndexToCheck = moveIndex - stateTimeToCheck;
+        numFramesToSkip = soundStateTime - soundMapping->_stateTime;
+    }
+    
+    std::string soundStateMapping = STRING_FORMAT("%d+%s+%d+%d", e.getID(), soundID.c_str(), e.state()._state, soundMapping->_stateTime);
+    
+    SoundFrameState& sfs = soundFrameStateAtMoveIndex(moveIndexToCheck);
+    
+    std::map<std::string, uint32_t>* entitySoundState = nullptr;
+    
+    const auto& entitySoundStateQuery = sfs._entitySoundStates.find(e.getID());
+    if (entitySoundStateQuery == sfs._entitySoundStates.end())
+    {
+        sfs._entitySoundStates.emplace(e.getID(), std::map<std::string, uint32_t>());
+        sfs._frame = moveIndexToCheck;
+        entitySoundState = &sfs._entitySoundStates[e.getID()];
+    }
+    else
+    {
+        entitySoundState = &entitySoundStateQuery->second;
+    }
+    
+    const auto& soundHandleQuery = entitySoundState->find(soundStateMapping);
+    if (soundHandleQuery == entitySoundState->end())
+    {
+        if (ENGINE_CFG.logOpenAL())
+        {
+            LOG("Playing soundStateMapping: %s", soundStateMapping.c_str());
+        }
+        uint32_t soundHandle = AUDIO_ENGINE.playSound(soundID, numFramesToSkip);
+        
+        if (ENGINE_CFG.logOpenAL())
+        {
+            LOG("Played sound %d seeked ahead %d frames", soundHandle, numFramesToSkip);
+        }
+        
+        entitySoundState->emplace(soundStateMapping, soundHandle);
+    }
 }
 
 AudioEngine::AudioEngine() : _isPaused(false)

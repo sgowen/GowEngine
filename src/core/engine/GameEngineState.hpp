@@ -83,25 +83,8 @@ private:
     int _numRollbackFrames;
     float _scale;
     
-    class SoundFrameState {
-    public:
-        std::map<uint32_t, std::map<std::string, uint32_t> > _entitySoundStates;
-        uint32_t _frame;
-        
-        SoundFrameState() :
-        _frame(0)
-        {
-            // Empty
-        }
-    };
-    SoundFrameState _soundFrameStates[360];
-    
     void joinServer(Engine* e);
     void updateWorld(const Move& move);
-    
-    void renderAudio();
-    SoundFrameState& soundFrameStateAtMoveIndex(uint32_t moveIndex);
-    void playSoundForEntityIfNecessary(Entity& e, uint32_t moveIndex);
     
     GameEngineState();
     virtual ~GameEngineState() {}

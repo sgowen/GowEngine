@@ -502,16 +502,16 @@ void GameEngineState::onUpdate(Engine* e)
 
 void GameEngineState::onRender(Renderer& r)
 {
-    r.configReset();
+    r.configScriptName("GameRenderer"); // TODO this should come from Renderer.json
     r.configPhysicsEngine(_config.getString("physicsEngine"));
     r.configPhysicsRenderingEnabled(_inputProcessor.state() == GIMS_DISPLAY_PHYSICS);
     r.configNumRollbackFrames(_numRollbackFrames);
     r.configBounds(world().rightEdge(), world().topEdge(), _scale);
     r.configControlledPlayerEntity(getControlledPlayer());
     
-    _luaRenderer.render(r, world(), "GameRenderer");
+    r.renderWithLuaScript(world());
     
-    renderAudio();
+    AUDIO_ENGINE.playSoundsForWorld(world());
 }
 
 void GameEngineState::populateFromEntityLayout(EntityLayout& eld)
@@ -642,129 +642,6 @@ void GameEngineState::updateWorld(const Move& move)
     // Until the server says, "yes, that entity really is exiled", or
     // no, that entity is not exiled.
     world().storeToCache();
-}
-
-void GameEngineState::renderAudio()
-{
-    if (AUDIO_ENGINE.isPaused() ||
-        world().getNumMovesProcessed() == 0)
-    {
-        return;
-    }
-    
-    uint32_t currentMoveIndex = world().getNumMovesProcessed() - 1;
-    SoundFrameState& sfs = soundFrameStateAtMoveIndex(currentMoveIndex);
-    if (sfs._frame < currentMoveIndex)
-    {
-        sfs._frame = currentMoveIndex;
-        sfs._entitySoundStates.clear();
-    }
-    
-    for (Entity* e : world().getPlayers())
-    {
-        playSoundForEntityIfNecessary(*e, currentMoveIndex);
-    }
-    
-    for (Entity* e : world().getDynamicEntities())
-    {
-        playSoundForEntityIfNecessary(*e, currentMoveIndex);
-    }
-}
-
-GameEngineState::SoundFrameState& GameEngineState::soundFrameStateAtMoveIndex(uint32_t moveIndex)
-{
-    uint32_t index = moveIndex % 360;
-    
-    return _soundFrameStates[index];
-}
-
-void GameEngineState::playSoundForEntityIfNecessary(Entity& e, uint32_t moveIndex)
-{
-    // TODO, support more than 1 sound per entity per frame
-    
-    if (e.isExiled())
-    {
-        return;
-    }
-    
-    std::string textureMapping = e.controllerRender()->getTextureMapping();
-    std::vector<SoundMapping>* soundMappings = e.controllerRender()->getSoundMapping();
-    if (soundMappings == nullptr)
-    {
-        return;
-    }
-    
-    uint16_t soundStateTime = e.stateTime();
-    Animation* animation = ASSETS_MGR.animation(textureMapping);
-    if (animation != nullptr &&
-        animation->isLooping() &&
-        // TODO, this is just a crude hack to make sure
-        // we don't hear the drill stomp sound effect more than once
-        animation->cycleTimeBeforeFirstLoopingFrame() == 0)
-    {
-        soundStateTime = e.stateTime() % animation->cycleTime();
-    }
-    
-    SoundMapping* soundMapping = nullptr;
-    for (int i = 0; i < soundMappings->size(); ++i)
-    {
-        SoundMapping& sm = soundMappings->at(i);
-        if (soundStateTime >= sm._stateTime)
-        {
-            soundMapping = &sm;
-        }
-    }
-    
-    if (soundMapping == nullptr)
-    {
-        return;
-    }
-    
-    std::string soundID = soundMapping->_soundID;
-    uint16_t stateTimeToCheck = soundStateTime - soundMapping->_stateTime;
-    
-    uint32_t moveIndexToCheck = 0;
-    uint32_t numFramesToSkip = 0;
-    if (moveIndex >= stateTimeToCheck)
-    {
-        moveIndexToCheck = moveIndex - stateTimeToCheck;
-        numFramesToSkip = soundStateTime - soundMapping->_stateTime;
-    }
-    
-    std::string soundStateMapping = STRING_FORMAT("%d+%s+%d+%d", e.getID(), soundID.c_str(), e.state()._state, soundMapping->_stateTime);
-    
-    SoundFrameState& sfs = soundFrameStateAtMoveIndex(moveIndexToCheck);
-    
-    std::map<std::string, uint32_t>* entitySoundState = nullptr;
-    
-    const auto& entitySoundStateQuery = sfs._entitySoundStates.find(e.getID());
-    if (entitySoundStateQuery == sfs._entitySoundStates.end())
-    {
-        sfs._entitySoundStates.emplace(e.getID(), std::map<std::string, uint32_t>());
-        sfs._frame = moveIndexToCheck;
-        entitySoundState = &sfs._entitySoundStates[e.getID()];
-    }
-    else
-    {
-        entitySoundState = &entitySoundStateQuery->second;
-    }
-    
-    const auto& soundHandleQuery = entitySoundState->find(soundStateMapping);
-    if (soundHandleQuery == entitySoundState->end())
-    {
-        if (ENGINE_CFG.logOpenAL())
-        {
-            LOG("Playing soundStateMapping: %s", soundStateMapping.c_str());
-        }
-        uint32_t soundHandle = AUDIO_ENGINE.playSound(soundID, numFramesToSkip);
-        
-        if (ENGINE_CFG.logOpenAL())
-        {
-            LOG("Played sound %d seeked ahead %d frames", soundHandle, numFramesToSkip);
-        }
-        
-        entitySoundState->emplace(soundStateMapping, soundHandle);
-    }
 }
 
 GameEngineState::GameEngineState() : EngineState("json/game/Config.json"),

@@ -11,7 +11,7 @@
 #define SOL_USING_CXX_LUA 1
 #include <sol/sol.hpp>
 
-LuaRenderer::LuaRenderer(Renderer& r) : _lua(new sol::state())
+LuaRenderer::LuaRenderer() : _lua(new sol::state())
 {
     _colorMap.emplace("CLEAR", Color::CLEAR);
     _colorMap.emplace("WHITE", Color::WHITE);
@@ -27,6 +27,17 @@ LuaRenderer::LuaRenderer(Renderer& r) : _lua(new sol::state())
     sol::state& lua = *_lua;
     
     lua.open_libraries(sol::lib::base, sol::lib::string);
+}
+
+LuaRenderer::~LuaRenderer()
+{
+    delete _lua;
+    _lua = nullptr;
+}
+
+void LuaRenderer::render(Renderer& r, World& w, std::string script)
+{
+    sol::state& lua = *_lua;
     
     lua.set_function("LOG", [](std::string line) {
         if (ENGINE_CFG.logLua())
@@ -131,17 +142,6 @@ LuaRenderer::LuaRenderer(Renderer& r) : _lua(new sol::state())
     lua.set_function("renderFramebufferWithShockwave", [&r](std::string framebufferKey, float centerX, float centerY, uint16_t timeElapsed, bool isTransforming) {
         r.renderFramebufferWithShockwave(framebufferKey, centerX, centerY, timeElapsed, isTransforming);
     });
-}
-
-LuaRenderer::~LuaRenderer()
-{
-    delete _lua;
-    _lua = nullptr;
-}
-
-void LuaRenderer::render(Renderer& r, World& w, std::string script)
-{
-    sol::state& lua = *_lua;
     
     lua.set_function("playerNetworkBool", [&w](int playerID, std::string name) {
         Entity* entity = w.getPlayer(playerID);

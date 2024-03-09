@@ -16,7 +16,7 @@ namespace sol { class state; }
 class LuaRenderer
 {
 public:
-    LuaRenderer(Renderer& r);
+    LuaRenderer();
     ~LuaRenderer();
     
     void render(Renderer& r, World& w, std::string script);

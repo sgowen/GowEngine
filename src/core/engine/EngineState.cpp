@@ -64,8 +64,7 @@ void EngineState::exit(Engine* e)
     onExit(e);
 }
 
-EngineState::EngineState(std::string configFilePath) : State<Engine>(),
-_luaRenderer(_renderer)
+EngineState::EngineState(std::string configFilePath) : State<Engine>()
 {
     _configFilePath = configFilePath;
 }
@@ -125,6 +124,7 @@ void EngineState::render(Engine* e)
         return;
     }
     
+    _renderer.configReset();
     _renderer.configExtrapolation(e->extrapolation());
     onRender(_renderer);
     AUDIO_ENGINE.render();
