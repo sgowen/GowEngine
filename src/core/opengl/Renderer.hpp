@@ -137,7 +137,7 @@ public:
     void renderFramebuffer(std::string framebufferKey, std::string shaderKey);
     void renderFramebuffer(std::string framebufferKey);
     
-    void renderToScreen();
+    void renderFramebufferToScreen(std::string framebufferKey);
     
     float clampScale();
     

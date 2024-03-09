@@ -262,7 +262,7 @@ void TitleEngineState::onRender(Renderer& r)
     r.renderImageViews();
     r.renderTextViews();
 
-    r.renderToScreen();
+    r.renderFramebufferToScreen("main");
 }
 
 void TitleEngineState::setState(uint8_t state)

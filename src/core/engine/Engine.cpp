@@ -277,5 +277,5 @@ void Engine::renderModePicker()
 {
     _renderer->bindFramebuffer("main");
     _renderer->renderTextViews();
-    _renderer->renderToScreen();
+    _renderer->renderFramebufferToScreen("main");
 }

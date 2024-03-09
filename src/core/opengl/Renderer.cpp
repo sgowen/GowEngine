@@ -508,9 +508,10 @@ void Renderer::renderFramebuffer(std::string framebufferKey)
     renderFramebuffer(framebufferKey, "framebuffer");
 }
 
-void Renderer::renderToScreen()
+void Renderer::renderFramebufferToScreen(std::string framebufferKey)
 {
     configShader("framebuffer");
+    _rc.framebufferKey = framebufferKey;
     
     Shader& s = ASSETS_MGR.shader(_rc.shaderKey);
     Framebuffer& fb = framebuffer(_rc.framebufferKey);

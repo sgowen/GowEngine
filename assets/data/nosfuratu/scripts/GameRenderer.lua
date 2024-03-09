@@ -100,4 +100,4 @@ renderPhysicsIfEnabled()
 
 renderGameInfo()
 
-renderToScreen()
+renderFramebufferToScreen(framebufferP1)

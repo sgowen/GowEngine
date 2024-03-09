@@ -220,8 +220,8 @@ void LuaRenderer::render(Renderer& r, World& w, std::string script)
         r.renderPhysicsIfEnabled(&w);
     });
     
-    lua.set_function("renderToScreen", [&r]() {
-        r.renderToScreen();
+    lua.set_function("renderFramebufferToScreen", [&r](std::string framebufferKey) {
+        r.renderFramebufferToScreen(framebufferKey);
     });
     
     lua.set_function("spriteBatcherBegin", [&r, &w](std::string spriteBatcherKey) {

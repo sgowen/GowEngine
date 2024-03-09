@@ -53,7 +53,7 @@ void IMGUIDemoEngineState::onRender(Renderer& r)
 {
     r.bindFramebuffer("main");
     // TODO, render game world
-    r.renderToScreen();
+    r.renderFramebufferToScreen("main");
     
     ImGui_ImplOpenGL3_NewFrame();
     ImGui_ImplGlfw_NewFrame();
