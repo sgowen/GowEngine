@@ -207,6 +207,7 @@ void TitleEngineState::onRender(Renderer& r)
     
     r.bindFramebuffer("main");
     
+    r.setTextVisible("create", _state == TESS_DEFAULT);
     r.setTextVisible("hostServer", _state == TESS_DEFAULT);
     r.setTextVisible("joinServer", _state == TESS_DEFAULT && !steam);
     r.setTextVisible("joinLANServer", _state == TESS_DEFAULT && steam);
