@@ -59,7 +59,6 @@ updateMatrixCenteredOnPlayerForParallaxLayer(0.9)
 spriteBatcherEnd("sb_003", "n_texture_003")
 
 updateMatrixCenteredOnPlayer()
-
 spriteBatcherEnd("sb_004", "n_texture_004")
 spriteBatcherEnd("sb_005", "n_texture_005")
 
