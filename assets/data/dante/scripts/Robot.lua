@@ -106,10 +106,6 @@ local function resolveNewState()
     end
 end
 
-function onInit()
-    -- Empty
-end
-
 function processInput(inputState)
     if isMovementInputAllowed() then
         processMovementInput(inputState)
