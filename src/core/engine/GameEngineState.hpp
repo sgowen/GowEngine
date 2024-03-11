@@ -61,11 +61,11 @@ public:
         return ret;
     }
     
-    virtual void onEnter(Engine* e);
-    virtual void onAssetsLoaded(Engine* e);
-    virtual void onExit(Engine* e);
-    virtual void onUpdate(Engine* e);
-    virtual void onRender(Renderer& r);
+    virtual void onEnter(Engine* e) override;
+    virtual void onAssetsLoaded(Engine* e) override;
+    virtual void onExit(Engine* e) override;
+    virtual void onUpdate(Engine* e) override;
+    virtual void onRender(Renderer& r) override;
     
     void populateFromEntityLayout(EntityLayout& eld);
     Entity* getPlayer(uint8_t playerID);

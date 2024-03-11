@@ -27,6 +27,14 @@ void RendererLoader::initWithJSON(Renderer& renderer, const char* json)
     d.Parse<kParseStopWhenDoneFlag>(json);
     assert(d.IsObject());
     
+    if (d.HasMember("script"))
+    {
+        Value& v = d["script"];
+        assert(v.IsString());
+        
+        renderer._scriptName = RapidJSONUtil::getString(d, "script");
+    }
+    
     if (d.HasMember("pixelToUnitRatio"))
     {
         Value& v = d["pixelToUnitRatio"];

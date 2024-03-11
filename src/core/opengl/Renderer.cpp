@@ -17,6 +17,7 @@ _lightRenderer(),
 _screenRenderer(),
 _shockwaveRenderer(),
 _rc(),
+_scriptName(""),
 _pixelToUnitRatio(1)
 {
     // Empty
@@ -524,9 +525,9 @@ void Renderer::configExtrapolation(double value)
     _rc.extrapolation = value;
 }
 
-void Renderer::renderWithLuaScript(World& w)
+void Renderer::renderWorldWithLua(World& w)
 {
-    _luaRenderer.render(*this, w, _rc.scriptName);
+    _luaRenderer.render(*this, w, _scriptName);
 }
 
 void Renderer::configReset()
@@ -593,11 +594,6 @@ void Renderer::configPhysicsRenderingEnabled(bool value)
 void Renderer::configNumRollbackFrames(int numRollbackFrames)
 {
     _rc.numRollbackFrames = numRollbackFrames;
-}
-
-void Renderer::configScriptName(std::string scriptName)
-{
-    _rc.scriptName = scriptName;
 }
 
 Matrix& Renderer::matrixForInput()

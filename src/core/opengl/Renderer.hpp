@@ -53,7 +53,6 @@ struct RendererConfig
     bool physicsRenderingEnabled;
     int numRollbackFrames;
     double extrapolation;
-    std::string scriptName;
     
     RendererConfig()
     {
@@ -81,7 +80,6 @@ struct RendererConfig
         physicsRenderingEnabled = false;
         numRollbackFrames = 0;
         extrapolation = 0.0;
-        scriptName = "";
     }
 };
 
@@ -141,7 +139,7 @@ public:
     void renderFramebuffer(std::string framebufferKey);
     void renderFramebufferToScreen(std::string framebufferKey);
     
-    void renderWithLuaScript(World& w);
+    void renderWorldWithLua(World& w);
     
     void configReset();
     void configExtrapolation(double value);
@@ -155,7 +153,6 @@ public:
     void configPhysicsEngine(std::string physicsEngine);
     void configPhysicsRenderingEnabled(bool value);
     void configNumRollbackFrames(int numRollbackFrames);
-    void configScriptName(std::string scriptName);
     
     Matrix& matrixForInput();
     
@@ -168,6 +165,7 @@ private:
     ScreenRenderer _screenRenderer;
     ShockwaveRenderer _shockwaveRenderer;
     RendererConfig _rc;
+    std::string _scriptName;
     uint8_t _pixelToUnitRatio;
     std::map<std::string, CircleBatcher> _circleBatchers;
     std::map<std::string, FontBatcher> _fontBatchers;

@@ -1,4 +1,5 @@
 {
+    "script": "GameRenderer",
   "pixelToUnitRatio": 16,
   "fontBatchers": {
     "main": {

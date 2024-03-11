@@ -502,14 +502,13 @@ void GameEngineState::onUpdate(Engine* e)
 
 void GameEngineState::onRender(Renderer& r)
 {
-    r.configScriptName("GameRenderer"); // TODO this should come from Renderer.json
     r.configPhysicsEngine(_config.getString("physicsEngine"));
     r.configPhysicsRenderingEnabled(_inputProcessor.state() == GIMS_DISPLAY_PHYSICS);
     r.configNumRollbackFrames(_numRollbackFrames);
     r.configBounds(world().rightEdge(), world().topEdge(), _scale);
     r.configControlledPlayerEntity(getControlledPlayer());
     
-    r.renderWithLuaScript(world());
+    r.renderWorldWithLua(world());
     
     AUDIO_ENGINE.playSoundsForWorld(world());
 }
