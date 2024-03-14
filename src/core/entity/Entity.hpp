@@ -12,7 +12,7 @@
 #include "core/common/Config.hpp"
 #include "core/common/StringUtil.hpp"
 
-#include "EntityLayoutManager.hpp"
+#include "EntityLayout.hpp"
 
 #include <stdint.h>
 #include <string>

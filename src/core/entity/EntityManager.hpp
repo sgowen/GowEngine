@@ -14,12 +14,10 @@
 #include <vector>
 #include <string>
 
-struct EntityInstanceDef;
-struct EntityDef;
 class EntityController;
+class EntityControllerAI;
 class EntityControllerInput;
 class EntityControllerNetwork;
-class EntityControllerPhysics;
 class EntityControllerRender;
 
 typedef EntityController* (*EntityControllerCreationFunc)(Entity* e);
@@ -29,19 +27,13 @@ typedef EntityControllerNetwork* (*EntityControllerNetworkCreationFunc)(Entity* 
 typedef EntityControllerRender* (*EntityControllerRenderCreationFunc)(Entity* e);
 
 class EntityManager
-{
-    friend class EntityManagerLoader;
-    
+{    
 public:
     static EntityManager& getInstance()
     {
         static EntityManager ret = EntityManager();
         return ret;
     }
-    
-    Entity* createEntity(EntityInstanceDef eid);
-    EntityDef& getEntityDef(uint32_t fourCCName);
-    Entity* createEntity(EntityDef& ed, EntityInstanceDef eid);
     
     void registerController(std::string name, EntityControllerCreationFunc func);
     EntityController* createEntityController(EntityDef& ed, Entity* e);
@@ -64,7 +56,6 @@ public:
     const std::map<std::string, EntityControllerRenderCreationFunc>& getEntityControllerRenderMap();
     
 private:
-    std::map<uint32_t, EntityDef> _entityDefs;
     std::map<std::string, EntityControllerCreationFunc> _entityControllerCreationFunctions;
     std::map<std::string, EntityControllerAICreationFunc> _entityAIControllerCreationFunctions;
     std::map<std::string, EntityControllerInputCreationFunc> _entityInputControllerCreationFunctions;

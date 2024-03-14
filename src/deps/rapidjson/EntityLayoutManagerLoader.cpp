@@ -1,5 +1,5 @@
 //
-//  EntityLayoutManagerLoader.cpp
+//  EntityLayoutLoader.cpp
 //  GowEngine
 //
 //  Created by Stephen Gowen on 2/27/21.
@@ -11,14 +11,14 @@
 #include <rapidjson/document.h>
 #include <rapidjson/prettywriter.h>
 
-void EntityLayoutManagerLoader::initWithJSONFile(EntityLayoutManager& elm, std::string filePath)
+void EntityLayoutLoader::initWithJSONFile(EntityLayout& elm, std::string filePath)
 {
     FileData fd = ASSET_HANDLER.loadAsset(filePath);
     initWithJSON(elm, (const char*)fd._data);
     ASSET_HANDLER.unloadAsset(fd);
 }
 
-void EntityLayoutManagerLoader::initWithJSON(EntityLayoutManager& elm, const char* data)
+void EntityLayoutLoader::initWithJSON(EntityLayout& elm, const char* data)
 {
     elm._entityLayouts.clear();
     
@@ -44,7 +44,7 @@ void EntityLayoutManagerLoader::initWithJSON(EntityLayoutManager& elm, const cha
     }
 }
 
-void EntityLayoutManagerLoader::loadEntityLayout(EntityLayout& eld, EntityIDManager& eidm, bool isServer)
+void EntityLayoutLoader::loadEntityLayout(EntityLayout& eld, EntityIDManager& eidm, bool isServer)
 {
     eidm.resetNextLayoutEntityID();
     
@@ -97,7 +97,7 @@ void EntityLayoutManagerLoader::loadEntityLayout(EntityLayout& eld, EntityIDMana
     ASSET_HANDLER.unloadAsset(fd);
 }
 
-void EntityLayoutManagerLoader::saveEntityLayout(EntityLayout& eld)
+void EntityLayoutLoader::saveEntityLayout(EntityLayout& eld)
 {
     std::string resFilePath = RES_FILE_PATH(eld._filePath);
     

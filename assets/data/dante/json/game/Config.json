@@ -1,8 +1,3 @@
 {
-  "filePathAssets": "json/game/Assets.json",
-  "filePathRenderer": "json/game/Renderer.json",
-  "filePathEntityInputMappingManager": "json/game/EntityInputMappingManager.json",
-  "filePathEntityLayoutManager": "json/game/EntityLayoutManager.json",
-  "filePathEntityManager": "json/game/EntityManager.json",
   "physicsEngine": "Box2D"
 }

@@ -1,5 +1,5 @@
 //
-//  EntityLayoutManagerLoader.hpp
+//  EntityLayoutLoader.hpp
 //  GowEngine
 //
 //  Created by Stephen Gowen on 2/27/21.
@@ -9,21 +9,21 @@
 #pragma once
 
 class EntityIDManager;
-class EntityLayoutManager;
+class EntityLayout;
 struct EntityLayout;
 
-class EntityLayoutManagerLoader
+class EntityLayoutLoader
 {
 public:
-    static void initWithJSONFile(EntityLayoutManager& elm, std::string filePath);
-    static void initWithJSON(EntityLayoutManager& elm, const char* data);
+    static void initWithJSONFile(EntityLayout& elm, std::string filePath);
+    static void initWithJSON(EntityLayout& elm, const char* data);
     
     static void loadEntityLayout(EntityLayout& eld, EntityIDManager& eidm, bool isServer);
     static void saveEntityLayout(EntityLayout& eld);
     
 private:
-    EntityLayoutManagerLoader();
-    ~EntityLayoutManagerLoader();
-    EntityLayoutManagerLoader(const EntityLayoutManagerLoader&);
-    EntityLayoutManagerLoader& operator=(const EntityLayoutManagerLoader&);
+    EntityLayoutLoader();
+    ~EntityLayoutLoader();
+    EntityLayoutLoader(const EntityLayoutLoader&);
+    EntityLayoutLoader& operator=(const EntityLayoutLoader&);
 };

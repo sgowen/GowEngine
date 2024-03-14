@@ -287,8 +287,8 @@ void GameEngineState::onAssetsLoaded(Engine* e)
     std::string filePathEntityInputMappingManager = _config.getString("filePathEntityInputMappingManager");
     EntityInputMappingManagerLoader::initWithJSONFile(ENTITY_INPUT_MAPPING_MGR, filePathEntityInputMappingManager);
     
-    std::string filePathEntityLayoutManager = _config.getString("filePathEntityLayoutManager");
-    EntityLayoutManagerLoader::initWithJSONFile(ENTITY_LAYOUT_MGR, filePathEntityLayoutManager);
+    std::string filePathEntityLayout = _config.getString("filePathEntityLayout");
+    EntityLayoutLoader::initWithJSONFile(ENTITY_LAYOUT_MGR, filePathEntityLayout);
     
     AUDIO_ENGINE.playMusic("music_game", 0.7f);
 }
@@ -515,7 +515,7 @@ void GameEngineState::onRender(Renderer& r)
 
 void GameEngineState::populateFromEntityLayout(EntityLayout& eld)
 {
-    EntityLayoutManagerLoader::loadEntityLayout(eld, _entityIDManager, false);
+    EntityLayoutLoader::loadEntityLayout(eld, _entityIDManager, false);
     world().populateFromEntityLayout(eld);
 }
 
@@ -643,7 +643,7 @@ void GameEngineState::updateWorld(const Move& move)
     world().storeToCache();
 }
 
-GameEngineState::GameEngineState() : EngineState("json/game/Config.json"),
+GameEngineState::GameEngineState() : EngineState("json/game/Config.json", "json/game/Assets.json"),
 _entityIDManager(),
 _timeTracker(),
 _world(nullptr),

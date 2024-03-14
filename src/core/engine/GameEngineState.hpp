@@ -61,18 +61,19 @@ public:
         return ret;
     }
     
-    virtual void onEnter(Engine* e) override;
-    virtual void onAssetsLoaded(Engine* e) override;
-    virtual void onExit(Engine* e) override;
-    virtual void onUpdate(Engine* e) override;
-    virtual void onRender(Renderer& r) override;
-    
     void populateFromEntityLayout(EntityLayout& eld);
     Entity* getPlayer(uint8_t playerID);
     Entity* getControlledPlayer();
     GameInputProcessor& input();
     std::map<uint8_t, Entity::PlayerInfo>& players();
     World& world();
+
+protected:
+    virtual void onEnter(Engine* e) override;
+    virtual void onAssetsLoaded(Engine* e) override;
+    virtual void onExit(Engine* e) override;
+    virtual void onUpdate(Engine* e) override;
+    virtual void onRender(Renderer& r) override;
     
 private:
     EntityIDManager _entityIDManager;

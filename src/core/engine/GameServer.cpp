@@ -113,7 +113,7 @@ void GameServer::handleLostClient(ClientProxy& cp, uint8_t localPlayerIndex)
 
 void GameServer::populateFromEntityLayout(EntityLayout& eld)
 {
-    EntityLayoutManagerLoader::loadEntityLayout(eld, _entityIDManager, true);
+    EntityLayoutLoader::loadEntityLayout(eld, _entityIDManager, true);
     
     World& w = world();
     std::vector<Entity*> toDelete = w.getDynamicEntities();

@@ -9,9 +9,11 @@
 #pragma once
 
 #include "core/assets/ScriptManager.hpp"
+#include "core/opengl/Renderer.hpp"
 #include "core/opengl/ShaderManager.hpp"
 #include "core/openal/SoundManager.hpp"
 #include "core/opengl/TextureManager.hpp"
+#include "core/entity/EntityInputMappingManager.hpp"
 
 #include "Assets.hpp"
 
@@ -34,6 +36,13 @@ public:
     void createDeviceDependentResourcesAsync();
     void createDeviceDependentResources();
     void destroyDeviceDependentResources();
+    
+    Entity* createEntity(EntityInstanceDef eid);
+    Entity* createEntity(EntityDef& ed, EntityInstanceDef eid);
+    EntityDef& getEntityDef(uint32_t fourCCName);
+    EntityInputMapping& entityInputMapping(std::string key);
+    EntityLayout& entityLayout(uint32_t key);
+    uint32_t getFirstLayout();
     Script& script(std::string name);
     Shader& shader(std::string name);
     bool isShaderLoaded(std::string name);
@@ -52,10 +61,14 @@ public:
 
 private:
     std::map<std::string, Assets> _assets;
+    std::map<uint32_t, EntityDef> _entityDefs;
+    std::map<std::string, EntityInputMapping> _entityInputMappings;
+    std::map<uint32_t, EntityLayout> _entityLayouts;
     ScriptManager _scriptMgr;
     ShaderManager _shaderMgr;
     SoundManager _soundMgr;
     TextureManager _textureMgr;
+    Renderer _renderer;
     uint32_t _stateTime;
     
     AssetsManager();

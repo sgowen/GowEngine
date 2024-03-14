@@ -23,8 +23,6 @@
 		BB1915B22B7C894800ED67E8 /* TextureManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BB1915AE2B7C894800ED67E8 /* TextureManager.cpp */; };
 		BB1915B32B7C894800ED67E8 /* ShaderManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BB1915AF2B7C894800ED67E8 /* ShaderManager.cpp */; };
 		BB1915B42B7C894800ED67E8 /* ShaderManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BB1915AF2B7C894800ED67E8 /* ShaderManager.cpp */; };
-		BB1E5C152718C01A00149557 /* EntityLayoutManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BB1E5C142718C01900149557 /* EntityLayoutManager.cpp */; };
-		BB1E5C162718C01A00149557 /* EntityLayoutManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BB1E5C142718C01900149557 /* EntityLayoutManager.cpp */; };
 		BB1E5C192718F7C700149557 /* Framebuffer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BB1E5C182718F7C700149557 /* Framebuffer.cpp */; };
 		BB1E5C1A2718F7C700149557 /* Framebuffer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BB1E5C182718F7C700149557 /* Framebuffer.cpp */; };
 		BB1E5C1C27195D3400149557 /* Vector2.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BB1E5C1B27195D3400149557 /* Vector2.cpp */; };
@@ -39,8 +37,6 @@
 		BB2E5A722B96336300D84D3C /* EntityControllerAI.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BB2E5A702B96336300D84D3C /* EntityControllerAI.cpp */; };
 		BB2E5A792B96587A00D84D3C /* LuaRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BB2E5A772B96587A00D84D3C /* LuaRenderer.cpp */; };
 		BB2E5A7A2B96587A00D84D3C /* LuaRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BB2E5A772B96587A00D84D3C /* LuaRenderer.cpp */; };
-		BB2E5A7D2B9660F400D84D3C /* EntityInputMappingManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BB2E5A7C2B9660F400D84D3C /* EntityInputMappingManager.cpp */; };
-		BB2E5A7E2B9660F400D84D3C /* EntityInputMappingManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BB2E5A7C2B9660F400D84D3C /* EntityInputMappingManager.cpp */; };
 		BB2E5A812B96646400D84D3C /* EntityInputMappingManagerLoader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BB2E5A7F2B96646400D84D3C /* EntityInputMappingManagerLoader.cpp */; };
 		BB2E5A822B96646400D84D3C /* EntityInputMappingManagerLoader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BB2E5A7F2B96646400D84D3C /* EntityInputMappingManagerLoader.cpp */; };
 		BB39A7172B96D11E00D92ECB /* EntityControllerRender.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BB39A7162B96D11E00D92ECB /* EntityControllerRender.cpp */; };
@@ -327,8 +323,7 @@
 		BB1915AE2B7C894800ED67E8 /* TextureManager.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TextureManager.cpp; sourceTree = "<group>"; };
 		BB1915AF2B7C894800ED67E8 /* ShaderManager.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ShaderManager.cpp; sourceTree = "<group>"; };
 		BB1915B02B7C894800ED67E8 /* TextureManager.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = TextureManager.hpp; sourceTree = "<group>"; };
-		BB1E5C132718C01900149557 /* EntityLayoutManager.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = EntityLayoutManager.hpp; sourceTree = "<group>"; };
-		BB1E5C142718C01900149557 /* EntityLayoutManager.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = EntityLayoutManager.cpp; sourceTree = "<group>"; };
+		BB1E5C132718C01900149557 /* EntityLayout.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = EntityLayout.hpp; sourceTree = "<group>"; };
 		BB1E5C182718F7C700149557 /* Framebuffer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Framebuffer.cpp; sourceTree = "<group>"; };
 		BB1E5C1B27195D3400149557 /* Vector2.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Vector2.cpp; sourceTree = "<group>"; };
 		BB1E5C1E271C8BE800149557 /* Font.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Font.hpp; sourceTree = "<group>"; };
@@ -411,7 +406,6 @@
 		BB2E5A772B96587A00D84D3C /* LuaRenderer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = LuaRenderer.cpp; sourceTree = "<group>"; };
 		BB2E5A782B96587A00D84D3C /* LuaRenderer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = LuaRenderer.hpp; sourceTree = "<group>"; };
 		BB2E5A7B2B9660F300D84D3C /* EntityInputMappingManager.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = EntityInputMappingManager.hpp; sourceTree = "<group>"; };
-		BB2E5A7C2B9660F400D84D3C /* EntityInputMappingManager.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = EntityInputMappingManager.cpp; sourceTree = "<group>"; };
 		BB2E5A7F2B96646400D84D3C /* EntityInputMappingManagerLoader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = EntityInputMappingManagerLoader.cpp; sourceTree = "<group>"; };
 		BB2E5A802B96646400D84D3C /* EntityInputMappingManagerLoader.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = EntityInputMappingManagerLoader.hpp; sourceTree = "<group>"; };
 		BB2E5A832B968FC400D84D3C /* Script.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Script.hpp; sourceTree = "<group>"; };
@@ -1671,10 +1665,8 @@
 				BBBBDE7B27023E1400D7D319 /* EntityControllerRender.hpp */,
 				BBBBDE7F27023E1400D7D319 /* EntityIDManager.cpp */,
 				BBBBDE8227023E1400D7D319 /* EntityIDManager.hpp */,
-				BB2E5A7C2B9660F400D84D3C /* EntityInputMappingManager.cpp */,
 				BB2E5A7B2B9660F300D84D3C /* EntityInputMappingManager.hpp */,
-				BB1E5C142718C01900149557 /* EntityLayoutManager.cpp */,
-				BB1E5C132718C01900149557 /* EntityLayoutManager.hpp */,
+				BB1E5C132718C01900149557 /* EntityLayout.hpp */,
 				BBBBDE7A27023E1400D7D319 /* EntityManager.cpp */,
 				BBBBDE8527023E1400D7D319 /* EntityManager.hpp */,
 				BBBBDE7E27023E1400D7D319 /* EntityRegistry.cpp */,
@@ -2255,7 +2247,6 @@
 				BB5F5F662B9BBD3800475CDD /* imgui.cpp in Sources */,
 				BB10362527334A7100889341 /* StringUtil.cpp in Sources */,
 				BB4CCADF2B5F183F00B6D2CA /* NetworkHelper.cpp in Sources */,
-				BB2E5A7D2B9660F400D84D3C /* EntityInputMappingManager.cpp in Sources */,
 				BBBBDF6C2702465700D7D319 /* FileAssetHandler.cpp in Sources */,
 				BB4CCAE72B606A5700B6D2CA /* SocketPacketHandler.cpp in Sources */,
 				BB60A0FC2B92DA940056BA63 /* World.cpp in Sources */,
@@ -2270,7 +2261,6 @@
 				BB5F5F652B9BBCCD00475CDD /* imgui_impl_opengl3.cpp in Sources */,
 				BB2E5A712B96336300D84D3C /* EntityControllerAI.cpp in Sources */,
 				BB5F5F682B9BC14600475CDD /* imgui_demo.cpp in Sources */,
-				BB1E5C152718C01A00149557 /* EntityLayoutManager.cpp in Sources */,
 				BB4CCAD72B5F172600B6D2CA /* ClientHelper.cpp in Sources */,
 				BBFE6DED2B7FFED7004E8CCF /* EmbeddedAssetHandler.cpp in Sources */,
 				BB2E5A812B96646400D84D3C /* EntityInputMappingManagerLoader.cpp in Sources */,
@@ -2390,7 +2380,6 @@
 				BBBBE0E52702584600D7D319 /* FPSUtil.cpp in Sources */,
 				BB2E5A722B96336300D84D3C /* EntityControllerAI.cpp in Sources */,
 				BBBBE0EA2702584600D7D319 /* RTTI.cpp in Sources */,
-				BB1E5C162718C01A00149557 /* EntityLayoutManager.cpp in Sources */,
 				BBBBE0EF2702584600D7D319 /* ThreadManager.cpp in Sources */,
 				BBBC2B1A2B97149100ABD6BB /* LuaController.cpp in Sources */,
 				BB4CCADC2B5F174D00B6D2CA /* ServerHelper.cpp in Sources */,
@@ -2487,7 +2476,6 @@
 				BB417E4C2A36418300DD4611 /* OpenALUtil.cpp in Sources */,
 				BB1E5C1A2718F7C700149557 /* Framebuffer.cpp in Sources */,
 				BB2E5A822B96646400D84D3C /* EntityInputMappingManagerLoader.cpp in Sources */,
-				BB2E5A7E2B9660F400D84D3C /* EntityInputMappingManager.cpp in Sources */,
 				BBBC57B92B923ACE0037527C /* EntityControllerInput.cpp in Sources */,
 				BB1E5C1D27195D3400149557 /* Vector2.cpp in Sources */,
 				BB631F6B2AAB9B3500953454 /* FramebufferRenderer.cpp in Sources */,

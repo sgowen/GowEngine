@@ -39,25 +39,3 @@ struct EntityInputMapping
         // Empty
     }
 };
-
-class EntityInputMappingManager
-{
-    friend class EntityInputMappingManagerLoader;
-    
-public:
-    static EntityInputMappingManager& getInstance()
-    {
-        static EntityInputMappingManager ret = EntityInputMappingManager();
-        return ret;
-    }
-    
-    EntityInputMapping& entityInputMapping(std::string key);
-    
-private:
-    std::map<std::string, EntityInputMapping> _entityInputMappings;
-    
-    EntityInputMappingManager() {}
-    ~EntityInputMappingManager() {}
-    EntityInputMappingManager(const EntityInputMappingManager&);
-    EntityInputMappingManager& operator=(const EntityInputMappingManager&);
-};

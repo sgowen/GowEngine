@@ -19,6 +19,8 @@
 struct Assets
 {
     std::vector<Font> _fonts;
+    std::map<std::string, EntityInputMappingDescriptor> _entityInputMappingDescriptors;
+    std::map<std::string, EntityLayoutDescriptor> _entityLayoutDescriptors;
     std::map<std::string, ScriptDescriptor> _scriptDescriptors;
     std::vector<ShaderDescriptor> _shaderDescriptors;
     std::vector<SoundDescriptor> _soundDescriptors;
@@ -34,6 +36,8 @@ struct Assets
     void reset()
     {
         _fonts.clear();
+        _entityInputMappingDescriptors.clear();
+        _entityLayoutDescriptors.clear();
         _scriptDescriptors.clear();
         _shaderDescriptors.clear();
         _soundDescriptors.clear();

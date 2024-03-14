@@ -41,7 +41,7 @@
 #define GAME_SERVER GameServer::getInstance()
 #define ENGINE_CFG EngineConfig::getInstance()
 #define ENTITY_INPUT_MAPPING_MGR EntityInputMappingManager::getInstance()
-#define ENTITY_LAYOUT_MGR EntityLayoutManager::getInstance()
+#define ENTITY_LAYOUT_MGR EntityLayout::getInstance()
 #define ENTITY_MGR EntityManager::getInstance()
 #define INPUT_MGR InputManager::getInstance()
 #define NW_CLNT NetworkClient::getInstance()

@@ -1,4 +1,16 @@
 {
+    "filePathEntityDefs": "json/game/EntityDefs.json",
+    "filePathRenderer": "json/game/Renderer.json",
+    "entityLayouts": {
+        "L001": {
+            "filePath": "json/game/EntityLayout/main.json"
+        }
+    },
+    "entityInputMappings": {
+        "JonInputMapping": {
+            "filePath": "json/game/EntityInputMapping/JonInputMapping.json"
+        }
+    },
     "scripts": {
         "GameRenderer": {
             "filePath": "scripts/GameRenderer.lua"

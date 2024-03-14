@@ -9,7 +9,7 @@
 #pragma once
 
 #include "core/common/RTTI.hpp"
-#include "core/entity/EntityLayoutManager.hpp"
+#include "core/entity/EntityLayout.hpp"
 
 class World
 {

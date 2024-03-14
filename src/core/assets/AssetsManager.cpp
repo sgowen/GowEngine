@@ -111,6 +111,46 @@ void AssetsManager::destroyDeviceDependentResources()
     }
 }
 
+Entity* AssetsManager::createEntity(EntityInstanceDef eid)
+{
+    EntityDef& ed = getEntityDef(eid._key);
+    return createEntity(ed, eid);
+}
+
+Entity* AssetsManager::createEntity(EntityDef& ed, EntityInstanceDef eid)
+{
+    return new Entity(ed, eid);
+}
+
+EntityDef& AssetsManager::getEntityDef(uint32_t fourCCName)
+{
+    auto q = _entityDefs.find(fourCCName);
+    assert(q != _entityDefs.end());
+    
+    return q->second;
+}
+
+EntityInputMapping& AssetsManager::entityInputMapping(std::string key)
+{
+    auto q = _entityInputMappings.find(key);
+    assert(q != _entityInputMappings.end());
+
+    return q->second;
+}
+
+EntityLayout& AssetsManager::entityLayout(uint32_t key)
+{
+    auto q = _entityLayouts.find(key);
+    assert(q != _entityLayouts.end());
+
+    return q->second;
+}
+
+uint32_t AssetsManager::getFirstLayout()
+{
+    return _entityLayouts.begin()->first;
+}
+
 Script& AssetsManager::script(std::string name)
 {
     return _scriptMgr.script(name);

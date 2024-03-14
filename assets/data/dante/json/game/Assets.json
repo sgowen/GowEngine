@@ -1,4 +1,19 @@
 {
+    "EntityDefs": {
+        "filePath": "json/game/EntityDefs.json",
+        "physicsEngine": "Box2D"
+    },
+    "filePathRenderer": "json/game/Renderer.json",
+    "entityLayouts": {
+        "Z001": {
+            "filePath": "json/game/EntityLayout/zone_1.json"
+        }
+    },
+    "entityInputMappings": {
+        "RobotInputMapping": {
+            "filePath": "json/game/EntityInputMapping/RobotInputMapping.json"
+        }
+    },
     "scripts": {
         "Monster": {
             "filePath": "scripts/Monster.lua"
