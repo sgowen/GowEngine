@@ -1,6 +1,7 @@
 {
   "title": "GowEngine",
   "mode": "engine",
+  "physicsEngine": "Box2D",
   "fullScreen": "false",
   "vsync": "true",
   "useSteamNetworking": "false",

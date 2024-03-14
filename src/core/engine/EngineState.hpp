@@ -40,13 +40,14 @@ protected:
     
     Config _config;
     
-    EngineState(std::string configFilePath, std::string filePathAssets);
+    EngineState(std::string filePathConfig, std::string filePathAssets);
     virtual ~EngineState() {}
     EngineState(const EngineState&);
     EngineState& operator=(const EngineState&);
     
 private:
-    std::string _configFilePath;
+    std::string _filePathConfig;
     std::string _filePathAssets;
-    Assets _assets;
+    
+    bool canSkip();
 };

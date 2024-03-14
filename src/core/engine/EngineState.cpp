@@ -10,15 +10,19 @@
 
 void EngineState::enter(Engine* e)
 {
-    // Should be able to load everything asynchronously, including the config
-    ConfigLoader::initWithJSONFile(_config, _configFilePath);
+    ConfigLoader::initWithJSONFile(_config, _filePathConfig);
     
-    AssetsLoader::initWithJSONFile(_assets, _filePathAssets);
-    RendererLoader::initWithJSONFile(_renderer, _config.getString("filePathRenderer"));
+    if (_config.hasValue("physicsEngine"))
+    {
+        std::string physicsEngine = _config.getString("physicsEngine");
+        ENGINE_CFG.physicsEngine() = physicsEngine;
+    }
     
-    INPUT_MGR.setMatrix(&_renderer.matrixForInput());
+    // Should be able to load everything asynchronously
+//    AssetsLoader::initWithJSONFile(_assets, _filePathAssets);
+//    RendererLoader::initWithJSONFile(_renderer, _config.getString("filePathRenderer"));
     
-    ASSETS_MGR.registerAssets(_filePathAssets, _assets);
+    ASSETS_MGR.registerAssets(_filePathAssets);
     createDeviceDependentResources(e);
     onWindowSizeChanged(e);
     onEnter(e);
@@ -32,6 +36,12 @@ void EngineState::execute(Engine* e)
     
     if (!areAssetsLoaded && ASSETS_MGR.isLoaded())
     {
+        // Currently, we can have multiple renderers loaded
+        // concurrently, but only 1 for each EngineState
+        // So, really, we have an Engine Renderer that is live for the full
+        // app lifecycle, and an EngineState renderer that gets set when we switch EngineStates (DefaultEngineState never leaves)
+        Renderer& renderer = ASSETS_MGR.renderer(_filePathAssets);
+        INPUT_MGR.setMatrix(&renderer.matrixForInput());
         onAssetsLoaded(e);
         areAssetsLoaded = true;
     }
@@ -54,17 +64,15 @@ void EngineState::exit(Engine* e)
 void EngineState::createDeviceDependentResources(Engine* e)
 {
     ASSETS_MGR.createDeviceDependentResourcesAsync();
-    _renderer.createDeviceDependentResources();
 }
 
 void EngineState::onWindowSizeChanged(Engine* e)
 {
-    _renderer.onWindowSizeChanged(e->screenWidth(), e->screenHeight());
+    ASSETS_MGR.onWindowSizeChanged(e->screenWidth(), e->screenHeight());
 }
 
 void EngineState::destroyDeviceDependentResources(Engine* e)
 {
-    _renderer.destroyDeviceDependentResources();
     ASSETS_MGR.destroyDeviceDependentResources();
 }
 
@@ -82,18 +90,22 @@ void EngineState::render(Engine* e)
 {
     if (!ASSETS_MGR.isLoaded())
     {
+        // TODO, use the Engine renderer here
         _renderer.renderLoadingView(ASSETS_MGR.getStateTime());
         return;
     }
     
-    _renderer.configReset();
-    _renderer.configExtrapolation(e->extrapolation());
-    onRender(_renderer);
+    Renderer& renderer = ASSETS_MGR.renderer(_filePathAssets);
+    
+    renderer.configReset();
+    renderer.configExtrapolation(e->extrapolation());
+    onRender(renderer);
     AUDIO_ENGINE.render();
 }
 
-EngineState::EngineState(std::string configFilePath, std::string filePathAssets) : State<Engine>()
+EngineState::EngineState(std::string filePathConfig, std::string filePathAssets) : State<Engine>(),
+_filePathConfig(filePathConfig),
+_filePathAssets(filePathAssets)
 {
-    _configFilePath = configFilePath;
-    _filePathAssets = filePathAssets;
+    // Empty
 }

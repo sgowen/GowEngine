@@ -17,11 +17,11 @@
 class ScriptManager
 {
 public:
-    void loadData(std::map<std::string, ScriptDescriptor>& scriptDescriptors);
+    void loadData(std::map<std::string, FileDescriptor>& scriptDescriptors);
     // TODO, it'd be awesome to just load up all the lua scripts and create
     // all the sol::state instances we'd need up front,
     // and just invoke them as needed
-//    void loadIntoLuaAndFreeData(std::vector<ScriptDescriptor>& scriptDescriptors);
+//    void loadIntoLuaAndFreeData(std::vector<FileDescriptor>& scriptDescriptors);
     void reset();
     Script& script(std::string name);
     bool isScriptLoaded(std::string name);

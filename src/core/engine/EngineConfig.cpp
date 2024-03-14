@@ -10,11 +10,11 @@
 
 EngineConfig* EngineConfig::s_instance = nullptr;
 
-void EngineConfig::create(std::string configFilePath)
+void EngineConfig::create(std::string filePathConfig)
 {
     assert(s_instance == nullptr);
     
-    s_instance = new EngineConfig(configFilePath);
+    s_instance = new EngineConfig(filePathConfig);
 }
 
 EngineConfig& EngineConfig::getInstance()
@@ -45,6 +45,11 @@ std::string EngineConfig::title()
 std::string& EngineConfig::mode()
 {
     return _mode;
+}
+
+std::string& EngineConfig::physicsEngine()
+{
+    return _physicsEngine;
 }
 
 bool EngineConfig::vsync()
@@ -182,13 +187,14 @@ double EngineConfig::frameRate()
     return _frameRate;
 }
 
-EngineConfig::EngineConfig(std::string configFilePath)
+EngineConfig::EngineConfig(std::string filePathConfig)
 {
-    ConfigLoader::initWithJSONFile(_config, configFilePath);
+    ConfigLoader::initWithJSONFile(_config, filePathConfig);
     
     _fullScreen = _config.getBool("fullScreen");
     _title = _config.getString("title");
     _mode = _config.getString("mode");
+    _physicsEngine = _config.getBool("physicsEngine");
     _vsync = _config.getBool("vsync");
     _useSteamNetworking = _config.getBool("useSteamNetworking");
     _versionName = _config.getString("versionName");

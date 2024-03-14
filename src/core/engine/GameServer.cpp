@@ -271,18 +271,14 @@ void GameServer::removePlayer(uint8_t playerID)
     }
 }
 
-GameServer::GameServer(Config& config) :
-_config(config),
+GameServer::GameServer() :
 _entityIDManager(),
 _timeTracker(),
 _world(nullptr),
 _isRestarting(false),
 _isConnected(false)
 {
-    std::string physicsEngine = _config.getString("physicsEngine");
-    bool isBox2D = physicsEngine == "Box2D";
-    
-    if (isBox2D)
+    if (ENGINE_CFG.physicsEngine() == "Box2D")
     {
         _world = new Box2DPhysicsWorld();
     }

@@ -409,7 +409,7 @@
 		BB2E5A7F2B96646400D84D3C /* EntityInputMappingManagerLoader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = EntityInputMappingManagerLoader.cpp; sourceTree = "<group>"; };
 		BB2E5A802B96646400D84D3C /* EntityInputMappingManagerLoader.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = EntityInputMappingManagerLoader.hpp; sourceTree = "<group>"; };
 		BB2E5A832B968FC400D84D3C /* Script.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Script.hpp; sourceTree = "<group>"; };
-		BB2E5A842B96900200D84D3C /* ScriptDescriptor.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = ScriptDescriptor.hpp; sourceTree = "<group>"; };
+		BB2E5A842B96900200D84D3C /* FileDescriptor.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = FileDescriptor.hpp; sourceTree = "<group>"; };
 		BB3710082A1EB77F00A97300 /* al.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = al.h; sourceTree = "<group>"; };
 		BB37100B2A1EB77F00A97300 /* alc.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = alc.h; sourceTree = "<group>"; };
 		BB37100C2A1EB77F00A97300 /* alext.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = alext.h; sourceTree = "<group>"; };
@@ -1815,11 +1815,11 @@
 				BBBBDEF627023E1400D7D319 /* FileAssetHandler.cpp */,
 				BBBBDEE927023E1400D7D319 /* FileAssetHandler.hpp */,
 				BBBBDEEE27023E1400D7D319 /* FileData.hpp */,
+				BB2E5A842B96900200D84D3C /* FileDescriptor.hpp */,
 				BB1E5C1E271C8BE800149557 /* Font.hpp */,
 				BB11538A2B85174E00E7F3AE /* ImageView.hpp */,
 				BBBBDEF227023E1400D7D319 /* MatrixDescriptor.hpp */,
 				BB2E5A832B968FC400D84D3C /* Script.hpp */,
-				BB2E5A842B96900200D84D3C /* ScriptDescriptor.hpp */,
 				BB39A71D2B96D38400D92ECB /* ScriptLoader.cpp */,
 				BB39A71E2B96D38500D92ECB /* ScriptLoader.hpp */,
 				BB39A71A2B96D24E00D92ECB /* ScriptManager.cpp */,

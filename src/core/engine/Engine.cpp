@@ -28,17 +28,22 @@ _hasUpdatedSinceLastRender(false)
         Logger::getInstance().initWithFile(logFileName.c_str());
     }
     
-    Assets assets;
-    AssetsLoader::initWithJSONFile(assets, "engine/json/Assets.json");
-    ASSETS_MGR.registerAssets(ENGINE_ASSETS, assets);
+#if IS_DESKTOP
+        if (ENGINE_CFG.useSteamNetworking())
+        {
+            SteamGameServices::create(ENGINE_CFG.steamGameDir().c_str());
+        }
+#endif
     
-    RendererLoader::initWithJSONFile(*_renderer, "engine/json/Renderer.json");
+//    Assets assets;
+//    AssetsLoader::initWithJSONFile(assets, "engine/json/Assets.json");
+//    ASSETS_MGR.registerAssets(ENGINE_ASSETS, assets);
+//    
+//    RendererLoader::initWithJSONFile(*_renderer, "engine/json/Renderer.json");
 }
 
 Engine::~Engine()
 {
-    delete _renderer;
-    
     ASSETS_MGR.deregisterAssets(ENGINE_ASSETS);
     
     Logger::getInstance().closeFileStream();
@@ -56,9 +61,7 @@ Engine::~Engine()
 void Engine::createDeviceDependentResources(ClipboardHandler* clipboardHandler)
 {
     INPUT_MGR.setClipboardHandler(clipboardHandler);
-    
-    _renderer->createDeviceDependentResources();
-    
+        
     AudioEngine::create();
     
     currentState()->createDeviceDependentResources(this);
@@ -71,7 +74,6 @@ void Engine::onWindowSizeChanged(uint16_t screenWidth, uint16_t screenHeight, ui
     _cursorWidth = cursorWidth > 0 ? cursorWidth : screenWidth;
     _cursorHeight = cursorHeight > 0 ? cursorHeight : screenHeight;
     
-    _renderer->onWindowSizeChanged(screenWidth, screenHeight);
     INPUT_MGR.setCursorSize(_cursorWidth, _cursorHeight);
     
     currentState()->onWindowSizeChanged(this);
@@ -79,8 +81,6 @@ void Engine::onWindowSizeChanged(uint16_t screenWidth, uint16_t screenHeight, ui
 
 void Engine::destroyDeviceDependentResources()
 {
-    _renderer->destroyDeviceDependentResources();
-    
     AudioEngine::destroy();
     
     currentState()->destroyDeviceDependentResources(this);
@@ -215,7 +215,7 @@ void Engine::popState()
     
     _stateMachine.popState();
     
-    if (currentState() == &DefaultEngineState::getInstance())
+    if (currentState() == &ENGINE_STATE_DEFAULT)
     {
         // We are back in the default engine state
         // This is only possible when running GowEngine

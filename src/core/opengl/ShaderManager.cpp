@@ -8,21 +8,21 @@
 
 #include <GowEngine/GowEngine.hpp>
 
-void ShaderManager::loadData(std::vector<ShaderDescriptor>& shaderDescriptors)
+void ShaderManager::loadData(std::map<std::string, ShaderDescriptor>& shaderDescriptors)
 {
-    for (auto& sd : shaderDescriptors)
+    for (auto& pair : shaderDescriptors)
     {
-        _shaders.emplace(sd._name, Shader{sd});
-        Shader& s = shader(sd._name);
+        _shaders.emplace(pair.first, Shader{pair.second});
+        Shader& s = shader(pair.first);
         _loader.loadData(s);
     }
 }
 
-void ShaderManager::loadIntoOpenGLAndFreeData(std::vector<ShaderDescriptor>& shaderDescriptors)
+void ShaderManager::loadIntoOpenGLAndFreeData(std::map<std::string, ShaderDescriptor>& shaderDescriptors)
 {
-    for (auto& sd : shaderDescriptors)
+    for (auto& pair : shaderDescriptors)
     {
-        Shader& s = shader(sd._name);
+        Shader& s = shader(pair.first);
         OGL.loadShader(s);
         _loader.freeData(s);
     }

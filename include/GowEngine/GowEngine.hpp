@@ -80,7 +80,7 @@
 #include "core/assets/ImageView.hpp"
 #include "core/assets/MatrixDescriptor.hpp"
 #include "core/assets/Script.hpp"
-#include "core/assets/ScriptDescriptor.hpp"
+#include "core/assets/FileDescriptor.hpp"
 #include "core/assets/ScriptLoader.hpp"
 #include "core/assets/ScriptManager.hpp"
 #include "core/assets/ShaderDescriptor.hpp"

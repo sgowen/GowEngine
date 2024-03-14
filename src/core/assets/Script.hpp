@@ -8,15 +8,15 @@
 
 #pragma once
 
-#include "core/assets/ScriptDescriptor.hpp"
+#include "core/assets/FileDescriptor.hpp"
 #include "core/assets/FileData.hpp"
 
 struct Script
 {
-    ScriptDescriptor _desc;
+    FileDescriptor _desc;
     FileData* _fileData;
     
-    Script(ScriptDescriptor desc) :
+    Script(FileDescriptor desc) :
     _desc(desc),
     _fileData(nullptr)
     {

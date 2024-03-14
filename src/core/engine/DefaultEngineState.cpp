@@ -15,12 +15,7 @@ void DefaultEngineState::onEnter(Engine* e)
 
 void DefaultEngineState::onAssetsLoaded(Engine *e)
 {
-#if IS_DESKTOP
-        if (ENGINE_CFG.useSteamNetworking())
-        {
-            SteamGameServices::create(ENGINE_CFG.steamGameDir().c_str());
-        }
-#endif
+    // Empty
 }
 
 void DefaultEngineState::onExit(Engine* e)
@@ -74,9 +69,7 @@ void DefaultEngineState::onRender(Renderer& r)
     e->renderModePicker();
 }
 
-DefaultEngineState::DefaultEngineState() : EngineState("engine/json/Assets.json"),
-ERSA_CREATE_RESOURCES_called(false),
-ERSA_WINDOW_SIZE_CHANGED_called(false),
+DefaultEngineState::DefaultEngineState() : EngineState("engine/json/Config.json", "engine/json/Assets.json"),
 needsToRenderModePicker(false)
 {
     // Empty

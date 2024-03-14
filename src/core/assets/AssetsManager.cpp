@@ -40,9 +40,9 @@ void AssetsManager::update()
         
         if (a._isDataLoaded)
         {
-            _shaderMgr.loadIntoOpenGLAndFreeData(a._shaderDescriptors);
-            _soundMgr.loadIntoOpenALAndFreeData(a._soundDescriptors);
-            _textureMgr.loadIntoOpenGLAndFreeData(a._textureDescriptors);
+            _shaderMgr.loadIntoOpenGLAndFreeData(a._shaders);
+            _soundMgr.loadIntoOpenALAndFreeData(a._sounds);
+            _textureMgr.loadIntoOpenGLAndFreeData(a._textures);
             
             a._isLoadedIntoEngine = true;
             a._isDataLoaded = false;
@@ -83,20 +83,33 @@ void AssetsManager::createDeviceDependentResources()
             continue;
         }
         
+        if (a.needsToLoadDescriptors())
+        {
+            std::string filePath = pair.first;
+            AssetsLoader::initWithJSONFile(a, filePath);
+        }
+        
         a._isLoadedIntoEngine = false;
         a._isDataLoaded = false;
         
-        _scriptMgr.loadData(a._scriptDescriptors);
-        _shaderMgr.loadData(a._shaderDescriptors);
-        _soundMgr.loadData(a._soundDescriptors);
-        _textureMgr.loadData(a._textureDescriptors);
+        _scriptMgr.loadData(a._scripts);
+        _shaderMgr.loadData(a._shaders);
+        _soundMgr.loadData(a._sounds);
+        _textureMgr.loadData(a._textures);
         
         a._isDataLoaded = true;
     }
 }
 
+void AssetsManager::onWindowSizeChanged(uint16_t screenWidth, uint16_t screenHeight)
+{
+    _renderer.onWindowSizeChanged(screenWidth, screenHeight);
+}
+
 void AssetsManager::destroyDeviceDependentResources()
 {
+    _renderer.destroyDeviceDependentResources();
+    
     _scriptMgr.reset();
     _shaderMgr.reset();
     _soundMgr.reset();
@@ -105,9 +118,7 @@ void AssetsManager::destroyDeviceDependentResources()
     for (auto& pair : _assets)
     {
         Assets& a = pair.second;
-        
-        a._isLoadedIntoEngine = false;
-        a._isDataLoaded = false;
+        a.reset();
     }
 }
 
@@ -205,6 +216,12 @@ bool AssetsManager::isFontLoaded(std::string name)
 {
     Font& f = font(name);
     return _textureMgr.isTextureLoaded(f._texture);
+}
+
+Renderer& AssetsManager::renderer(std::string name)
+{
+    // TODO
+    return nullptr;
 }
 
 Texture& AssetsManager::texture(std::string name)

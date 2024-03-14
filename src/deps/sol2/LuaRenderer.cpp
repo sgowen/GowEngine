@@ -290,4 +290,6 @@ void LuaRenderer::render(Renderer& r, World& w, std::string script)
     {
         LOG("LuaRenderer: %s is not valid", s._desc._name.c_str());
     }
+    
+    lua["render"]();
 }

@@ -35,6 +35,7 @@ public:
     void update();
     void createDeviceDependentResourcesAsync();
     void createDeviceDependentResources();
+    void onWindowSizeChanged(uint16_t screenWidth, uint16_t screenHeight);
     void destroyDeviceDependentResources();
     
     Entity* createEntity(EntityInstanceDef eid);
@@ -51,6 +52,7 @@ public:
     bool areSoundsLoaded();
     Font& font(std::string name);
     bool isFontLoaded(std::string name);
+    Renderer& renderer(std::string name);
     Texture& texture(std::string name);
     bool isTextureLoaded(std::string name);
     std::string textureForRegionKey(std::string key);
@@ -64,6 +66,7 @@ private:
     std::map<uint32_t, EntityDef> _entityDefs;
     std::map<std::string, EntityInputMapping> _entityInputMappings;
     std::map<uint32_t, EntityLayout> _entityLayouts;
+    Renderer _renderer;
     ScriptManager _scriptMgr;
     ShaderManager _shaderMgr;
     SoundManager _soundMgr;

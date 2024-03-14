@@ -26,6 +26,7 @@ _pixelToUnitRatio(1)
 void Renderer::reset()
 {
     _rc.reset();
+    _scriptName = "";
     _pixelToUnitRatio = 1;
     
     _circleBatchers.clear();
@@ -434,8 +435,7 @@ void Renderer::renderPhysicsIfEnabled(World* world)
         return;
     }
     
-    bool isBox2D = _rc.physicsEngine == "Box2D";
-    if (isBox2D)
+    if (ENGINE_CFG.physicsEngine() == "Box2D")
     {
         renderBox2DPhysics(static_cast<Box2DPhysicsWorld*>(world));
     }
@@ -579,11 +579,6 @@ void Renderer::configSpriteColorFactor(Color c)
 void Renderer::configTextColorFactor(Color c)
 {
     _rc.textColorFactor = c;
-}
-
-void Renderer::configPhysicsEngine(std::string physicsEngine)
-{
-    _rc.physicsEngine = physicsEngine;
 }
 
 void Renderer::configPhysicsRenderingEnabled(bool value)

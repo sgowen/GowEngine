@@ -8,7 +8,7 @@
 
 #include <GowEngine/GowEngine.hpp>
 
-void ScriptManager::loadData(std::map<std::string, ScriptDescriptor>& scriptDescriptors)
+void ScriptManager::loadData(std::map<std::string, FileDescriptor>& scriptDescriptors)
 {
     for (auto& pair : scriptDescriptors)
     {

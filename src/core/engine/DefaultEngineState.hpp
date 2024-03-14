@@ -28,9 +28,6 @@ protected:
     
 private:
     bool needsToRenderModePicker;
-    
-    void update(Engine* e);
-    void render(Engine* e);
 
     DefaultEngineState();
     virtual ~DefaultEngineState() {}

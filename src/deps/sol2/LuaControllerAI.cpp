@@ -101,4 +101,6 @@ void LuaControllerAI::runAI(uint16_t& inputState)
     {
         LOG("LuaControllerAI: %s is not valid", s._desc._name.c_str());
     }
+    
+    lua["runAI"]();
 }

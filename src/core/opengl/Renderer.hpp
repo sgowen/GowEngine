@@ -49,7 +49,6 @@ struct RendererConfig
     Color textColorFactor;
     float parallaxSpeedRatio;
     Entity* controlledPlayer;
-    std::string physicsEngine;
     bool physicsRenderingEnabled;
     int numRollbackFrames;
     double extrapolation;
@@ -76,7 +75,6 @@ struct RendererConfig
         textColorFactor = Color::ONE;
         parallaxSpeedRatio = 1.0f;
         controlledPlayer = nullptr;
-        physicsEngine = "";
         physicsRenderingEnabled = false;
         numRollbackFrames = 0;
         extrapolation = 0.0;
@@ -150,7 +148,6 @@ public:
     void configSpriteBatcher(std::string key);
     void configSpriteColorFactor(Color c);
     void configTextColorFactor(Color c);
-    void configPhysicsEngine(std::string physicsEngine);
     void configPhysicsRenderingEnabled(bool value);
     void configNumRollbackFrames(int numRollbackFrames);
     

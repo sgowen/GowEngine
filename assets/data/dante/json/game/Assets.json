@@ -1,18 +1,19 @@
 {
-    "EntityDefs": {
-        "filePath": "json/game/EntityDefs.json",
-        "physicsEngine": "Box2D"
-    },
-    "filePathRenderer": "json/game/Renderer.json",
-    "entityLayouts": {
-        "Z001": {
-            "filePath": "json/game/EntityLayout/zone_1.json"
-        }
+    "entityDefs": {
+        "filePath": "json/game/EntityDefs.json"
     },
     "entityInputMappings": {
         "RobotInputMapping": {
             "filePath": "json/game/EntityInputMapping/RobotInputMapping.json"
         }
+    },
+    "entityLayouts": {
+        "Z001": {
+            "filePath": "json/game/EntityLayout/zone_1.json"
+        }
+    },
+    "renderer": {
+        "filePath": "json/game/Renderer.json"
     },
     "scripts": {
         "Monster": {
@@ -28,651 +29,625 @@
             "filePath": "scripts/Robot.lua"
         }
     },
-  "sounds": [
-    {
-      "soundID": "music_game",
-      "filePath": "sounds/music/music_001.wav"
+    "sounds": {
+        "music_game": {
+            "filePath": "sounds/music/music_001.wav"
+        },
+        "sound_001": {
+            "filePath": "sounds/sound_001.wav",
+            "numInstances": 4
+        },
+        "sound_002": {
+            "filePath": "sounds/sound_002.wav",
+            "numInstances": 4
+        },
+        "sound_003": {
+            "filePath": "sounds/sound_003.wav",
+            "numInstances": 4
+        },
+        "sound_004": {
+            "filePath": "sounds/sound_004.wav",
+            "numInstances": 4
+        },
+        "sound_005": {
+            "filePath": "sounds/sound_005.wav",
+            "numInstances": 4
+        },
+        "sound_006": {
+            "filePath": "sounds/sound_006.wav",
+            "numInstances": 4
+        },
+        "sound_007": {
+            "filePath": "sounds/sound_007.wav",
+            "numInstances": 4
+        }
     },
-    {
-      "soundID": "sound_001",
-      "filePath": "sounds/sound_001.wav",
-      "numInstances": 4
-    },
-    {
-      "soundID": "sound_002",
-      "filePath": "sounds/sound_002.wav",
-      "numInstances": 4
-    },
-    {
-      "soundID": "sound_003",
-      "filePath": "sounds/sound_003.wav",
-      "numInstances": 4
-    },
-    {
-      "soundID": "sound_004",
-      "filePath": "sounds/sound_004.wav",
-      "numInstances": 4
-    },
-    {
-      "soundID": "sound_005",
-      "filePath": "sounds/sound_005.wav",
-      "numInstances": 4
-    },
-    {
-      "soundID": "sound_006",
-      "filePath": "sounds/sound_006.wav",
-      "numInstances": 4
-    },
-    {
-      "soundID": "sound_007",
-      "filePath": "sounds/sound_007.wav",
-      "numInstances": 4
+    "textures": {
+        "texture_001": {
+            "filePath": "textures/texture_001.png",
+            "normalMap": "n_texture_001",
+            "filterMin": "SMOOTH",
+            "filterMag": "SMOOTH",
+            "mipMap": true,
+            "mappings": {
+                "Zone1BackgroundParallaxLayer1": {
+                    "x": 0,
+                    "y": 0,
+                    "regionWidth": 1024,
+                    "regionHeight": 384
+                },
+                "Zone1BackgroundParallaxLayer4": {
+                    "x": 0,
+                    "y": 384,
+                    "regionWidth": 1024,
+                    "regionHeight": 1664
+                }
+            }
+        },
+        "texture_002": {
+            "filePath": "textures/texture_002.png",
+            "normalMap": "n_texture_002",
+            "filterMin": "SMOOTH",
+            "filterMag": "SMOOTH",
+            "mipMap": true,
+            "mappings": {
+                "Zone1BackgroundParallaxLayer2": {
+                    "x": 0,
+                    "y": 0,
+                    "regionWidth": 544,
+                    "regionHeight": 160
+                }
+            }
+        },
+        "texture_003": {
+            "filePath": "textures/texture_003.png",
+            "normalMap": "n_texture_003",
+            "filterMin": "SMOOTH",
+            "filterMag": "SMOOTH",
+            "mipMap": true,
+            "mappings": {
+                "Zone1BackgroundParallaxLayer3": {
+                    "x": 0,
+                    "y": 0,
+                    "regionWidth": 576,
+                    "regionHeight": 160
+                }
+            }
+        },
+        "texture_004": {
+            "filePath": "textures/texture_004.png",
+            "normalMap": "n_texture_004",
+            "filterMin": "SHARP",
+            "filterMag": "SHARP",
+            "mipMap": true,
+            "mappings": {
+                "Zone1BackgroundStaticLayer1": {
+                    "x": 0,
+                    "y": 0,
+                    "regionWidth": 320,
+                    "regionHeight": 480
+                },
+                "Zone1BackgroundStaticLayer2": {
+                    "x": 324,
+                    "y": 256,
+                    "regionWidth": 128,
+                    "regionHeight": 128
+                },
+                "Zone1BackgroundStaticLayer3": {
+                    "x": 452,
+                    "y": 256,
+                    "regionWidth": 128,
+                    "regionHeight": 128
+                },
+                "Zone1BackgroundStaticLayer4": {
+                    "x": 580,
+                    "y": 256,
+                    "regionWidth": 128,
+                    "regionHeight": 128
+                },
+                "Zone1BackgroundStaticLayer5": {
+                    "x": 708,
+                    "y": 256,
+                    "regionWidth": 128,
+                    "regionHeight": 128
+                },
+                "Zone1BackgroundStaticLayer6": {
+                    "x": 836,
+                    "y": 256,
+                    "regionWidth": 128,
+                    "regionHeight": 128
+                },
+                "Zone1BackgroundStaticLayer7": {
+                    "x": 964,
+                    "y": 256,
+                    "regionWidth": 128,
+                    "regionHeight": 128
+                },
+                "Zone1BackgroundStaticLayer8": {
+                    "x": 1092,
+                    "y": 256,
+                    "regionWidth": 128,
+                    "regionHeight": 128
+                },
+                "Zone1BackgroundStaticLayer9": {
+                    "x": 580,
+                    "y": 128,
+                    "regionWidth": 128,
+                    "regionHeight": 128
+                },
+                "Zone1BackgroundStaticLayer10": {
+                    "x": 708,
+                    "y": 128,
+                    "regionWidth": 128,
+                    "regionHeight": 128
+                },
+                "Zone1BackgroundStaticLayer11": {
+                    "x": 836,
+                    "y": 128,
+                    "regionWidth": 128,
+                    "regionHeight": 128
+                },
+                "Zone1BackgroundStaticLayer12": {
+                    "x": 1092,
+                    "y": 128,
+                    "regionWidth": 128,
+                    "regionHeight": 128
+                },
+                "Zone1BackgroundStaticLayer13": {
+                    "x": 836,
+                    "y": 0,
+                    "regionWidth": 128,
+                    "regionHeight": 128
+                },
+                "Zone1BackgroundStaticLayer14": {
+                    "x": 964,
+                    "y": 0,
+                    "regionWidth": 128,
+                    "regionHeight": 128
+                },
+                "Zone1BackgroundStaticLayer15": {
+                    "x": 1092,
+                    "y": 0,
+                    "regionWidth": 128,
+                    "regionHeight": 128
+                },
+                "Zone1BackgroundStaticLayer16": {
+                    "x": 324,
+                    "y": 384,
+                    "regionWidth": 128,
+                    "regionHeight": 128
+                },
+                "Zone1BackgroundStaticLayer17": {
+                    "x": 452,
+                    "y": 384,
+                    "regionWidth": 128,
+                    "regionHeight": 128
+                },
+                "Zone1BackgroundStaticLayer18": {
+                    "x": 580,
+                    "y": 384,
+                    "regionWidth": 128,
+                    "regionHeight": 128
+                },
+                "Zone1BackgroundStaticLayer19": {
+                    "x": 324,
+                    "y": 0,
+                    "regionWidth": 128,
+                    "regionHeight": 128
+                },
+                "Zone1BackgroundStaticLayer20": {
+                    "x": 452,
+                    "y": 0,
+                    "regionWidth": 128,
+                    "regionHeight": 128
+                },
+                "Zone1BackgroundStaticLayer21": {
+                    "x": 324,
+                    "y": 128,
+                    "regionWidth": 128,
+                    "regionHeight": 128
+                },
+                "Zone1BackgroundStaticLayer22": {
+                    "x": 452,
+                    "y": 128,
+                    "regionWidth": 128,
+                    "regionHeight": 128
+                }
+            }
+        },
+        "texture_005": {
+            "filePath": "textures/texture_005.png",
+            "normalMap": "n_texture_005",
+            "filterMin": "SHARP",
+            "filterMag": "SHARP",
+            "mipMap": true,
+            "mappings": {
+                "Crawler_Crawl": {
+                    "x": 0,
+                    "y": 0,
+                    "regionWidth": 128,
+                    "regionHeight": 128,
+                    "frameTime": 6,
+                    "numFrames": 4
+                },
+                "Crawler_Idle": {
+                    "x": 0,
+                    "y": 128,
+                    "regionWidth": 128,
+                    "regionHeight": 128,
+                    "frameTime": 6,
+                    "numFrames": 7
+                },
+                "Crawler_Attack": {
+                    "x": 0,
+                    "y": 256,
+                    "regionWidth": 128,
+                    "regionHeight": 128,
+                    "frameTime": 6,
+                    "numFrames": 5
+                },
+                "Crawler_Death": {
+                    "x": 0,
+                    "y": 384,
+                    "regionWidth": 128,
+                    "regionHeight": 128,
+                    "looping": false,
+                    "frameTime": 6,
+                    "numFrames": 6
+                }
+            }
+        },
+        "texture_006": {
+            "filePath": "textures/texture_006.png",
+            "normalMap": "n_texture_006",
+            "filterMin": "SHARP",
+            "filterMag": "SHARP",
+            "mipMap": true,
+            "mappings": {
+                "Player_Running": {
+                    "x": 0,
+                    "y": 0,
+                    "regionWidth": 96,
+                    "regionHeight": 96,
+                    "frameTime": 6,
+                    "numFrames": 10
+                },
+                "Player_First_Punch": {
+                    "x": 0,
+                    "y": 96,
+                    "regionWidth": 96,
+                    "regionHeight": 96,
+                    "frameTime": 6,
+                    "numFrames": 3,
+                    "looping": false
+                },
+                "Player_Second_Punch": {
+                    "x": 288,
+                    "y": 96,
+                    "regionWidth": 96,
+                    "regionHeight": 96,
+                    "frameTime": 6,
+                    "numFrames": 3,
+                    "looping": false
+                },
+                "Player_Third_Punch": {
+                    "x": 576,
+                    "y": 96,
+                    "regionWidth": 96,
+                    "regionHeight": 96,
+                    "frameTime": 6,
+                    "numFrames": 5,
+                    "looping": false
+                },
+                "Player_Idle": {
+                    "x": 0,
+                    "y": 192,
+                    "regionWidth": 96,
+                    "regionHeight": 96,
+                    "frameTime": 12,
+                    "numFrames": 3
+                },
+                "Player_Jumping": {
+                    "x": 0,
+                    "y": 288,
+                    "regionWidth": 96,
+                    "regionHeight": 96,
+                    "looping": false,
+                    "frameTime": 6,
+                    "numFrames": 3
+                }
+            }
+        },
+        "texture_007": {
+            "filePath": "textures/texture_007.png",
+            "normalMap": "n_texture_007",
+            "filterMin": "SHARP",
+            "filterMag": "SHARP",
+            "mipMap": true,
+            "mappings": {
+                "Crate": {
+                    "x": 0,
+                    "y": 378,
+                    "regionWidth": 128,
+                    "regionHeight": 128
+                }
+            }
+        },
+        "texture_008": {
+            "filePath": "textures/texture_008.png",
+            "normalMap": "n_texture_008",
+            "filterMin": "SHARP",
+            "filterMag": "SHARP",
+            "mipMap": true,
+            "mappings": {
+                "Zone1DoorUndamaged": {
+                    "x": 0,
+                    "y": 0,
+                    "regionWidth": 128,
+                    "regionHeight": 128
+                },
+                "Zone1DoorOneThirdDamaged": {
+                    "x": 128,
+                    "y": 0,
+                    "regionWidth": 128,
+                    "regionHeight": 128
+                },
+                "Zone1DoorTwoThirdsDamaged": {
+                    "x": 256,
+                    "y": 0,
+                    "regionWidth": 128,
+                    "regionHeight": 128
+                },
+                "Zone1DoorDestructing": {
+                    "x": 384,
+                    "y": 0,
+                    "regionWidth": 128,
+                    "regionHeight": 128,
+                    "looping": false,
+                    "frameTime": 6,
+                    "numFrames": 5
+                },
+                "Zone1SpawnDoor": {
+                    "x": 0,
+                    "y": 256,
+                    "regionWidth": 128,
+                    "regionHeight": 128,
+                    "looping": false,
+                    "frameTime": 6,
+                    "numFrames": 3
+                }
+            }
+        },
+        "texture_009": {
+            "filePath": "textures/texture_009.png",
+            "normalMap": "n_texture_009",
+            "filterMin": "SHARP",
+            "filterMag": "SHARP",
+            "mipMap": true,
+            "mappings": {
+                "Ground1": {
+                    "x": 0,
+                    "y": 196,
+                    "regionWidth": 64,
+                    "regionHeight": 64
+                },
+                "Ground2": {
+                    "x": 0,
+                    "y": 260,
+                    "regionWidth": 64,
+                    "regionHeight": 64
+                },
+                "Ground3": {
+                    "x": 68,
+                    "y": 132,
+                    "regionWidth": 64,
+                    "regionHeight": 64
+                },
+                "Ground4": {
+                    "x": 132,
+                    "y": 132,
+                    "regionWidth": 64,
+                    "regionHeight": 64
+                },
+                "Ground5": {
+                    "x": 196,
+                    "y": 132,
+                    "regionWidth": 64,
+                    "regionHeight": 64
+                },
+                "Ground6": {
+                    "x": 68,
+                    "y": 196,
+                    "regionWidth": 64,
+                    "regionHeight": 64
+                },
+                "Ground7": {
+                    "x": 132,
+                    "y": 196,
+                    "regionWidth": 64,
+                    "regionHeight": 64
+                },
+                "Ground8": {
+                    "x": 196,
+                    "y": 196,
+                    "regionWidth": 64,
+                    "regionHeight": 64
+                },
+                "Ground9": {
+                    "x": 68,
+                    "y": 260,
+                    "regionWidth": 64,
+                    "regionHeight": 64
+                },
+                "Ground10": {
+                    "x": 132,
+                    "y": 260,
+                    "regionWidth": 64,
+                    "regionHeight": 64
+                },
+                "Ground11": {
+                    "x": 196,
+                    "y": 260,
+                    "regionWidth": 64,
+                    "regionHeight": 64
+                },
+                "Ground12": {
+                    "x": 264,
+                    "y": 132,
+                    "regionWidth": 64,
+                    "regionHeight": 64
+                },
+                "Ground13": {
+                    "x": 328,
+                    "y": 132,
+                    "regionWidth": 64,
+                    "regionHeight": 64
+                },
+                "Ground14": {
+                    "x": 392,
+                    "y": 132,
+                    "regionWidth": 64,
+                    "regionHeight": 64
+                },
+                "Ground15": {
+                    "x": 0,
+                    "y": 0,
+                    "regionWidth": 64,
+                    "regionHeight": 64
+                },
+                "Ground16": {
+                    "x": 64,
+                    "y": 0,
+                    "regionWidth": 64,
+                    "regionHeight": 64
+                },
+                "Ground17": {
+                    "x": 0,
+                    "y": 64,
+                    "regionWidth": 64,
+                    "regionHeight": 64
+                },
+                "Ground18": {
+                    "x": 64,
+                    "y": 64,
+                    "regionWidth": 64,
+                    "regionHeight": 64
+                },
+                "Ground19": {
+                    "x": 456,
+                    "y": 132,
+                    "regionWidth": 64,
+                    "regionHeight": 64
+                },
+                "Ground20": {
+                    "x": 520,
+                    "y": 132,
+                    "regionWidth": 64,
+                    "regionHeight": 64
+                },
+                "Ground21": {
+                    "x": 264,
+                    "y": 196,
+                    "regionWidth": 64,
+                    "regionHeight": 64
+                },
+                "Ground22": {
+                    "x": 328,
+                    "y": 196,
+                    "regionWidth": 64,
+                    "regionHeight": 64
+                },
+                "Ground23": {
+                    "x": 392,
+                    "y": 196,
+                    "regionWidth": 64,
+                    "regionHeight": 64
+                },
+                "Ground24": {
+                    "x": 456,
+                    "y": 196,
+                    "regionWidth": 64,
+                    "regionHeight": 64
+                },
+                "Ground25": {
+                    "x": 520,
+                    "y": 196,
+                    "regionWidth": 64,
+                    "regionHeight": 64
+                },
+                "Tile1": {
+                    "x": 132,
+                    "y": 0,
+                    "regionWidth": 64,
+                    "regionHeight": 64
+                },
+                "Tile2": {
+                    "x": 196,
+                    "y": 0,
+                    "regionWidth": 64,
+                    "regionHeight": 64
+                },
+                "Tile3": {
+                    "x": 260,
+                    "y": 0,
+                    "regionWidth": 32,
+                    "regionHeight": 32
+                }
+            }
+        },
+        "n_texture_001": {
+            "filePath": "textures/n_texture_001.png",
+            "filterMin": "SMOOTH",
+            "filterMag": "SMOOTH",
+            "mipMap": true
+        },
+        "n_texture_002": {
+            "filePath": "textures/n_texture_002.png",
+            "filterMin": "SMOOTH",
+            "filterMag": "SMOOTH",
+            "mipMap": true
+        },
+        "n_texture_003": {
+            "filePath": "textures/n_texture_003.png",
+            "filterMin": "SMOOTH",
+            "filterMag": "SMOOTH",
+            "mipMap": true
+        },
+        "n_texture_004": {
+            "filePath": "textures/n_texture_004.png",
+            "filterMin": "SMOOTH",
+            "filterMag": "SMOOTH",
+            "mipMap": true
+        },
+        "n_texture_005": {
+            "filePath": "textures/n_texture_005.png",
+            "filterMin": "SMOOTH",
+            "filterMag": "SMOOTH",
+            "mipMap": true
+        },
+        "n_texture_006": {
+            "filePath": "textures/n_texture_006.png",
+            "filterMin": "SMOOTH",
+            "filterMag": "SMOOTH",
+            "mipMap": true
+        },
+        "n_texture_007": {
+            "filePath": "textures/n_texture_007.png",
+            "filterMin": "SMOOTH",
+            "filterMag": "SMOOTH",
+            "mipMap": true
+        },
+        "n_texture_008": {
+            "filePath": "textures/n_texture_008.png",
+            "filterMin": "SMOOTH",
+            "filterMag": "SMOOTH",
+            "mipMap": true
+        },
+        "n_texture_009": {
+            "filePath": "textures/n_texture_009.png",
+            "filterMin": "SMOOTH",
+            "filterMag": "SMOOTH",
+            "mipMap": true
+        }
     }
-  ],
-  "textures": [
-    {
-      "name": "texture_001",
-      "filePath": "textures/texture_001.png",
-      "normalMap": "n_texture_001",
-      "filterMin": "SMOOTH",
-      "filterMag": "SMOOTH",
-      "mipMap": true,
-      "mappings": {
-          "Zone1BackgroundParallaxLayer1": {
-              "x": 0,
-              "y": 0,
-              "regionWidth": 1024,
-              "regionHeight": 384
-          },
-          "Zone1BackgroundParallaxLayer4": {
-              "x": 0,
-              "y": 384,
-              "regionWidth": 1024,
-              "regionHeight": 1664
-          }
-      }
-    },
-    {
-      "name": "texture_002",
-      "filePath": "textures/texture_002.png",
-      "normalMap": "n_texture_002",
-      "filterMin": "SMOOTH",
-      "filterMag": "SMOOTH",
-      "mipMap": true,
-      "mappings": {
-          "Zone1BackgroundParallaxLayer2": {
-              "x": 0,
-              "y": 0,
-              "regionWidth": 544,
-              "regionHeight": 160
-          }
-      }
-    },
-    {
-      "name": "texture_003",
-      "filePath": "textures/texture_003.png",
-      "normalMap": "n_texture_003",
-      "filterMin": "SMOOTH",
-      "filterMag": "SMOOTH",
-      "mipMap": true,
-      "mappings": {
-          "Zone1BackgroundParallaxLayer3": {
-              "x": 0,
-              "y": 0,
-              "regionWidth": 576,
-              "regionHeight": 160
-          }
-      }
-    },
-    {
-      "name": "texture_004",
-      "filePath": "textures/texture_004.png",
-      "normalMap": "n_texture_004",
-      "filterMin": "SHARP",
-      "filterMag": "SHARP",
-      "mipMap": true,
-      "mappings": {
-          "Zone1BackgroundStaticLayer1": {
-              "x": 0,
-              "y": 0,
-              "regionWidth": 320,
-              "regionHeight": 480
-          },
-          "Zone1BackgroundStaticLayer2": {
-              "x": 324,
-              "y": 256,
-              "regionWidth": 128,
-              "regionHeight": 128
-          },
-          "Zone1BackgroundStaticLayer3": {
-              "x": 452,
-              "y": 256,
-              "regionWidth": 128,
-              "regionHeight": 128
-          },
-          "Zone1BackgroundStaticLayer4": {
-              "x": 580,
-              "y": 256,
-              "regionWidth": 128,
-              "regionHeight": 128
-          },
-          "Zone1BackgroundStaticLayer5": {
-              "x": 708,
-              "y": 256,
-              "regionWidth": 128,
-              "regionHeight": 128
-          },
-          "Zone1BackgroundStaticLayer6": {
-              "x": 836,
-              "y": 256,
-              "regionWidth": 128,
-              "regionHeight": 128
-          },
-          "Zone1BackgroundStaticLayer7": {
-              "x": 964,
-              "y": 256,
-              "regionWidth": 128,
-              "regionHeight": 128
-          },
-          "Zone1BackgroundStaticLayer8": {
-              "x": 1092,
-              "y": 256,
-              "regionWidth": 128,
-              "regionHeight": 128
-          },
-          "Zone1BackgroundStaticLayer9": {
-              "x": 580,
-              "y": 128,
-              "regionWidth": 128,
-              "regionHeight": 128
-          },
-          "Zone1BackgroundStaticLayer10": {
-              "x": 708,
-              "y": 128,
-              "regionWidth": 128,
-              "regionHeight": 128
-          },
-          "Zone1BackgroundStaticLayer11": {
-              "x": 836,
-              "y": 128,
-              "regionWidth": 128,
-              "regionHeight": 128
-          },
-          "Zone1BackgroundStaticLayer12": {
-              "x": 1092,
-              "y": 128,
-              "regionWidth": 128,
-              "regionHeight": 128
-          },
-          "Zone1BackgroundStaticLayer13": {
-              "x": 836,
-              "y": 0,
-              "regionWidth": 128,
-              "regionHeight": 128
-          },
-          "Zone1BackgroundStaticLayer14": {
-              "x": 964,
-              "y": 0,
-              "regionWidth": 128,
-              "regionHeight": 128
-          },
-          "Zone1BackgroundStaticLayer15": {
-              "x": 1092,
-              "y": 0,
-              "regionWidth": 128,
-              "regionHeight": 128
-          },
-          "Zone1BackgroundStaticLayer16": {
-              "x": 324,
-              "y": 384,
-              "regionWidth": 128,
-              "regionHeight": 128
-      },
-          "Zone1BackgroundStaticLayer17": {
-              "x": 452,
-              "y": 384,
-              "regionWidth": 128,
-              "regionHeight": 128
-          },
-          "Zone1BackgroundStaticLayer18": {
-              "x": 580,
-              "y": 384,
-              "regionWidth": 128,
-              "regionHeight": 128
-          },
-          "Zone1BackgroundStaticLayer19": {
-              "x": 324,
-              "y": 0,
-              "regionWidth": 128,
-              "regionHeight": 128
-          },
-          "Zone1BackgroundStaticLayer20": {
-              "x": 452,
-              "y": 0,
-              "regionWidth": 128,
-              "regionHeight": 128
-          },
-          "Zone1BackgroundStaticLayer21": {
-              "x": 324,
-              "y": 128,
-              "regionWidth": 128,
-              "regionHeight": 128
-          },
-          "Zone1BackgroundStaticLayer22": {
-              "x": 452,
-              "y": 128,
-              "regionWidth": 128,
-              "regionHeight": 128
-          }
-      }
-    },
-    {
-      "name": "texture_005",
-      "filePath": "textures/texture_005.png",
-      "normalMap": "n_texture_005",
-      "filterMin": "SHARP",
-      "filterMag": "SHARP",
-      "mipMap": true,
-      "mappings": {
-          "Crawler_Crawl": {
-              "x": 0,
-              "y": 0,
-              "regionWidth": 128,
-              "regionHeight": 128,
-              "frameTime": 6,
-              "numFrames": 4
-          },
-          "Crawler_Idle": {
-              "x": 0,
-              "y": 128,
-              "regionWidth": 128,
-              "regionHeight": 128,
-              "frameTime": 6,
-              "numFrames": 7
-          },
-          "Crawler_Attack": {
-              "x": 0,
-              "y": 256,
-              "regionWidth": 128,
-              "regionHeight": 128,
-              "frameTime": 6,
-              "numFrames": 5
-          },
-          "Crawler_Death": {
-              "x": 0,
-              "y": 384,
-              "regionWidth": 128,
-              "regionHeight": 128,
-              "looping": false,
-              "frameTime": 6,
-              "numFrames": 6
-          }
-      }
-    },
-    {
-      "name": "texture_006",
-      "filePath": "textures/texture_006.png",
-      "normalMap": "n_texture_006",
-      "filterMin": "SHARP",
-      "filterMag": "SHARP",
-      "mipMap": true,
-      "mappings": {
-          "Player_Running": {
-              "x": 0,
-              "y": 0,
-              "regionWidth": 96,
-              "regionHeight": 96,
-              "frameTime": 6,
-              "numFrames": 10
-          },
-          "Player_First_Punch": {
-              "x": 0,
-              "y": 96,
-              "regionWidth": 96,
-              "regionHeight": 96,
-              "frameTime": 6,
-              "numFrames": 3,
-              "looping": false
-          },
-          "Player_Second_Punch": {
-              "x": 288,
-              "y": 96,
-              "regionWidth": 96,
-              "regionHeight": 96,
-              "frameTime": 6,
-              "numFrames": 3,
-              "looping": false
-          },
-          "Player_Third_Punch": {
-              "x": 576,
-              "y": 96,
-              "regionWidth": 96,
-              "regionHeight": 96,
-              "frameTime": 6,
-              "numFrames": 5,
-              "looping": false
-          },
-          "Player_Idle": {
-              "x": 0,
-              "y": 192,
-              "regionWidth": 96,
-              "regionHeight": 96,
-              "frameTime": 12,
-              "numFrames": 3
-          },
-          "Player_Jumping": {
-              "x": 0,
-              "y": 288,
-              "regionWidth": 96,
-              "regionHeight": 96,
-              "looping": false,
-              "frameTime": 6,
-              "numFrames": 3
-          }
-      }
-    },
-    {
-      "name": "texture_007",
-      "filePath": "textures/texture_007.png",
-      "normalMap": "n_texture_007",
-      "filterMin": "SHARP",
-      "filterMag": "SHARP",
-      "mipMap": true,
-      "mappings": {
-          "Crate": {
-              "x": 0,
-              "y": 378,
-              "regionWidth": 128,
-              "regionHeight": 128
-          }
-      }
-    },
-    {
-      "name": "texture_008",
-      "filePath": "textures/texture_008.png",
-      "normalMap": "n_texture_008",
-      "filterMin": "SHARP",
-      "filterMag": "SHARP",
-      "mipMap": true,
-      "mappings": {
-          "Zone1DoorUndamaged": {
-              "x": 0,
-              "y": 0,
-              "regionWidth": 128,
-              "regionHeight": 128
-          },
-          "Zone1DoorOneThirdDamaged": {
-              "x": 128,
-              "y": 0,
-              "regionWidth": 128,
-              "regionHeight": 128
-          },
-          "Zone1DoorTwoThirdsDamaged": {
-              "x": 256,
-              "y": 0,
-              "regionWidth": 128,
-              "regionHeight": 128
-          },
-          "Zone1DoorDestructing": {
-              "x": 384,
-              "y": 0,
-              "regionWidth": 128,
-              "regionHeight": 128,
-              "looping": false,
-              "frameTime": 6,
-              "numFrames": 5
-          },
-          "Zone1SpawnDoor": {
-              "x": 0,
-              "y": 256,
-              "regionWidth": 128,
-              "regionHeight": 128,
-              "looping": false,
-              "frameTime": 6,
-              "numFrames": 3
-          }
-      }
-    },
-    {
-      "name": "texture_009",
-      "filePath": "textures/texture_009.png",
-      "normalMap": "n_texture_009",
-      "filterMin": "SHARP",
-      "filterMag": "SHARP",
-      "mipMap": true,
-      "mappings": {
-          "Ground1": {
-              "x": 0,
-              "y": 196,
-              "regionWidth": 64,
-              "regionHeight": 64
-          },
-          "Ground2": {
-              "x": 0,
-              "y": 260,
-              "regionWidth": 64,
-              "regionHeight": 64
-          },
-          "Ground3": {
-              "x": 68,
-              "y": 132,
-              "regionWidth": 64,
-              "regionHeight": 64
-          },
-          "Ground4": {
-              "x": 132,
-              "y": 132,
-              "regionWidth": 64,
-              "regionHeight": 64
-          },
-          "Ground5": {
-              "x": 196,
-              "y": 132,
-              "regionWidth": 64,
-              "regionHeight": 64
-          },
-          "Ground6": {
-              "x": 68,
-              "y": 196,
-              "regionWidth": 64,
-              "regionHeight": 64
-          },
-          "Ground7": {
-              "x": 132,
-              "y": 196,
-              "regionWidth": 64,
-              "regionHeight": 64
-          },
-          "Ground8": {
-              "x": 196,
-              "y": 196,
-              "regionWidth": 64,
-              "regionHeight": 64
-          },
-          "Ground9": {
-              "x": 68,
-              "y": 260,
-              "regionWidth": 64,
-              "regionHeight": 64
-          },
-          "Ground10": {
-              "x": 132,
-              "y": 260,
-              "regionWidth": 64,
-              "regionHeight": 64
-          },
-          "Ground11": {
-              "x": 196,
-              "y": 260,
-              "regionWidth": 64,
-              "regionHeight": 64
-          },
-          "Ground12": {
-              "x": 264,
-              "y": 132,
-              "regionWidth": 64,
-              "regionHeight": 64
-          },
-          "Ground13": {
-              "x": 328,
-              "y": 132,
-              "regionWidth": 64,
-              "regionHeight": 64
-          },
-          "Ground14": {
-              "x": 392,
-              "y": 132,
-              "regionWidth": 64,
-              "regionHeight": 64
-          },
-          "Ground15": {
-              "x": 0,
-              "y": 0,
-              "regionWidth": 64,
-              "regionHeight": 64
-          },
-          "Ground16": {
-              "x": 64,
-              "y": 0,
-              "regionWidth": 64,
-              "regionHeight": 64
-          },
-          "Ground17": {
-              "x": 0,
-              "y": 64,
-              "regionWidth": 64,
-              "regionHeight": 64
-          },
-          "Ground18": {
-              "x": 64,
-              "y": 64,
-              "regionWidth": 64,
-              "regionHeight": 64
-          },
-          "Ground19": {
-              "x": 456,
-              "y": 132,
-              "regionWidth": 64,
-              "regionHeight": 64
-          },
-          "Ground20": {
-              "x": 520,
-              "y": 132,
-              "regionWidth": 64,
-              "regionHeight": 64
-          },
-          "Ground21": {
-              "x": 264,
-              "y": 196,
-              "regionWidth": 64,
-              "regionHeight": 64
-          },
-          "Ground22": {
-              "x": 328,
-              "y": 196,
-              "regionWidth": 64,
-              "regionHeight": 64
-          },
-          "Ground23": {
-              "x": 392,
-              "y": 196,
-              "regionWidth": 64,
-              "regionHeight": 64
-          },
-          "Ground24": {
-              "x": 456,
-              "y": 196,
-              "regionWidth": 64,
-              "regionHeight": 64
-          },
-          "Ground25": {
-              "x": 520,
-              "y": 196,
-              "regionWidth": 64,
-              "regionHeight": 64
-          },
-          "Tile1": {
-              "x": 132,
-              "y": 0,
-              "regionWidth": 64,
-              "regionHeight": 64
-          },
-          "Tile2": {
-              "x": 196,
-              "y": 0,
-              "regionWidth": 64,
-              "regionHeight": 64
-          },
-          "Tile3": {
-              "x": 260,
-              "y": 0,
-              "regionWidth": 32,
-              "regionHeight": 32
-          }
-      }
-    },
-    {
-      "name": "n_texture_001",
-      "filePath": "textures/n_texture_001.png",
-      "filterMin": "SMOOTH",
-      "filterMag": "SMOOTH",
-      "mipMap": true
-    },
-    {
-      "name": "n_texture_002",
-      "filePath": "textures/n_texture_002.png",
-      "filterMin": "SMOOTH",
-      "filterMag": "SMOOTH",
-      "mipMap": true
-    },
-    {
-      "name": "n_texture_003",
-      "filePath": "textures/n_texture_003.png",
-      "filterMin": "SMOOTH",
-      "filterMag": "SMOOTH",
-      "mipMap": true
-    },
-    {
-      "name": "n_texture_004",
-      "filePath": "textures/n_texture_004.png",
-      "filterMin": "SMOOTH",
-      "filterMag": "SMOOTH",
-      "mipMap": true
-    },
-    {
-      "name": "n_texture_005",
-      "filePath": "textures/n_texture_005.png",
-      "filterMin": "SMOOTH",
-      "filterMag": "SMOOTH",
-      "mipMap": true
-    },
-    {
-      "name": "n_texture_006",
-      "filePath": "textures/n_texture_006.png",
-      "filterMin": "SMOOTH",
-      "filterMag": "SMOOTH",
-      "mipMap": true
-    },
-    {
-      "name": "n_texture_007",
-      "filePath": "textures/n_texture_007.png",
-      "filterMin": "SMOOTH",
-      "filterMag": "SMOOTH",
-      "mipMap": true
-    },
-    {
-      "name": "n_texture_008",
-      "filePath": "textures/n_texture_008.png",
-      "filterMin": "SMOOTH",
-      "filterMag": "SMOOTH",
-      "mipMap": true
-    },
-    {
-      "name": "n_texture_009",
-      "filePath": "textures/n_texture_009.png",
-      "filterMin": "SMOOTH",
-      "filterMag": "SMOOTH",
-      "mipMap": true
-    }
-  ]
 }

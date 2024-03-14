@@ -260,10 +260,7 @@ void cb_client_onPlayerWelcomed(uint8_t playerID)
 
 void GameEngineState::onEnter(Engine* e)
 {
-    std::string physicsEngine = _config.getString("physicsEngine");
-    bool isBox2D = physicsEngine == "Box2D";
-    
-    if (isBox2D)
+    if (ENGINE_CFG.physicsEngine() == "Box2D")
     {
         _world = new Box2DPhysicsWorld();
     }
@@ -272,7 +269,7 @@ void GameEngineState::onEnter(Engine* e)
         _world = new NosPhysicsWorld();
     }
     
-    if (_args.getBool(ARG_IS_HOST, false) == true)
+    if (_args.getBool(ARG_IS_HOST))
     {
         GameServer::create(_config);
         assert(GAME_SERVER != nullptr);
@@ -295,7 +292,7 @@ void GameEngineState::onAssetsLoaded(Engine* e)
 
 void GameEngineState::onExit(Engine* e)
 {
-    if (_args.getBool(ARG_IS_HOST, false) == true)
+    if (_args.getBool(ARG_IS_HOST))
     {
         GameServer::destroy();
     }
@@ -502,7 +499,6 @@ void GameEngineState::onUpdate(Engine* e)
 
 void GameEngineState::onRender(Renderer& r)
 {
-    r.configPhysicsEngine(_config.getString("physicsEngine"));
     r.configPhysicsRenderingEnabled(_inputProcessor.state() == GIMS_DISPLAY_PHYSICS);
     r.configNumRollbackFrames(_numRollbackFrames);
     r.configBounds(world().rightEdge(), world().topEdge(), _scale);

@@ -39,6 +39,7 @@ void TitleEngineState::onUpdate(Engine* e)
                 CSteamID serverToJoinSteamID = STEAM_GAME_SERVICES->getServerToJoinSteamID();
                 
                 Config args;
+                args.putBool(ARG_IS_HOST, false);
                 args.putUInt64(ARG_STEAM_ADDRESS, serverToJoinSteamID.ConvertToUint64());
                 e->pushState(&ENGINE_STATE_GAME, args);
             }
@@ -84,7 +85,7 @@ void TitleEngineState::onUpdate(Engine* e)
         case TESS_INPUT_CREATE:
         {
 #if IS_DESKTOP
-            e->pushState(&ENGINE_STATE_IMGUI);
+            e->pushState(&ENGINE_STATE_IMGUI_DEMO);
 #endif
             return;
         }
@@ -150,6 +151,7 @@ void TitleEngineState::onUpdate(Engine* e)
                 case IPS_TEXT_INPUT_READY:
                 {
                     Config args;
+                    args.putBool(ARG_IS_HOST, false);
                     args.putString(ARG_IP_ADDRESS, _userEnteredIPAddress);
                     if (!_inputProcessor.getTextInput().empty())
                     {
