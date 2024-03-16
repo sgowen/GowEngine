@@ -21,12 +21,12 @@ _lua(new sol::state())
     
     lua.open_libraries(sol::lib::base, sol::lib::math, sol::lib::os, sol::lib::package);
     
-    lua.set_function("LOG", [](std::string line) {
-        if (ENGINE_CFG.logLua())
-        {
+    if (ENGINE_CFG.logLua())
+    {
+        lua.set_function("LOG", [](std::string line) {
             LOG(line.c_str());
-        }
-    });
+        });
+    }
 }
 
 LuaControllerAI::~LuaControllerAI()

@@ -39,12 +39,12 @@ void LuaRenderer::render(Renderer& r, World& w, std::string script)
 {
     sol::state& lua = *_lua;
     
-    lua.set_function("LOG", [](std::string line) {
-        if (ENGINE_CFG.logLua())
-        {
+    if (ENGINE_CFG.logLua())
+    {
+        lua.set_function("LOG", [](std::string line) {
             LOG(line.c_str());
-        }
-    });
+        });
+    }
     
     lua.set_function("networkIsPlayerIDLocal", [](int playerID) {
         bool ret = false;
