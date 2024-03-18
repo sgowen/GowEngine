@@ -8,10 +8,10 @@
 
 #include <GowEngine/GowEngine.hpp>
 
-void AssetsManager::registerAssets(std::string key, Assets a)
+void AssetsManager::registerAssets(std::string key)
 {
     assert(_assets.find(key) == _assets.end());
-    _assets.emplace(key, a);
+    _assets.emplace(key, Assets());
 }
 
 void AssetsManager::deregisterAssets(std::string key)
@@ -40,6 +40,7 @@ void AssetsManager::update()
         
         if (a._isDataLoaded)
         {
+            _scriptMgr.loadIntoLuaAndFreeData(a._scripts);
             _shaderMgr.loadIntoOpenGLAndFreeData(a._shaders);
             _soundMgr.loadIntoOpenALAndFreeData(a._sounds);
             _textureMgr.loadIntoOpenGLAndFreeData(a._textures);
@@ -83,14 +84,30 @@ void AssetsManager::createDeviceDependentResources()
             continue;
         }
         
+        a._isLoadedIntoEngine = false;
+        a._isDataLoaded = false;
+        
         if (a.needsToLoadDescriptors())
         {
             std::string filePath = pair.first;
             AssetsLoader::initWithJSONFile(a, filePath);
         }
         
-        a._isLoadedIntoEngine = false;
-        a._isDataLoaded = false;
+        if (a._entityDefs != nullptr)
+        {
+            std::string filePath = a._entityDefs->_filePath;
+            EntityDefsLoader::initWithJSONFile(_entityDefs, filePath);
+        }
+        
+        // TODO, a._entityInputMappings
+        
+        // TODO, a._entityLayouts
+        
+        if (a._renderer != nullptr)
+        {
+            std::string filePath = a._renderer->_filePath;
+            RendererLoader::initWithJSONFile(_renderer, filePath);
+        }
         
         _scriptMgr.loadData(a._scripts);
         _shaderMgr.loadData(a._shaders);
@@ -122,20 +139,9 @@ void AssetsManager::destroyDeviceDependentResources()
     }
 }
 
-Entity* AssetsManager::createEntity(EntityInstanceDef eid)
+EntityDef& AssetsManager::getEntityDef(uint32_t fourCCKey)
 {
-    EntityDef& ed = getEntityDef(eid._key);
-    return createEntity(ed, eid);
-}
-
-Entity* AssetsManager::createEntity(EntityDef& ed, EntityInstanceDef eid)
-{
-    return new Entity(ed, eid);
-}
-
-EntityDef& AssetsManager::getEntityDef(uint32_t fourCCName)
-{
-    auto q = _entityDefs.find(fourCCName);
+    auto q = _entityDefs.find(fourCCKey);
     assert(q != _entityDefs.end());
     
     return q->second;
@@ -304,11 +310,11 @@ bool AssetsManager::isLoaded()
 }
 
 AssetsManager::AssetsManager() :
+_stateTime(0),
 _scriptMgr(),
 _shaderMgr(),
 _soundMgr(),
-_textureMgr(),
-_stateTime(0)
+_textureMgr()
 {
     // Empty
 }

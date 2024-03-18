@@ -483,6 +483,7 @@ struct EntityDef
     }
 };
 
+struct EntityInstanceDef;
 class EntityController;
 class EntityControllerAI;
 class EntityControllerInput;
@@ -500,6 +501,10 @@ class Entity
     friend class EntityControllerNetwork;
     
 public:
+    static Entity* createEntity(const EntityInstanceDef& eid);
+
+    static Entity* createEntity(const EntityDef& ed, const EntityInstanceDef& eid);
+    
     Entity(EntityDef ed, EntityInstanceDef eid);
     ~Entity();
     

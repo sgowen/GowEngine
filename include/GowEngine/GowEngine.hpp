@@ -44,8 +44,7 @@
 #include "deps/rapidjson/AssetsLoader.hpp"
 #include "deps/rapidjson/ConfigLoader.hpp"
 #include "deps/rapidjson/EntityInputMappingManagerLoader.hpp"
-#include "deps/rapidjson/EntityLayoutLoader.hpp"
-#include "deps/rapidjson/EntityManagerLoader.hpp"
+#include "deps/rapidjson/EntityDefsLoader.hpp"
 #include "deps/rapidjson/RapidJSONUtil.hpp"
 #include "deps/rapidjson/RendererLoader.hpp"
 
@@ -53,6 +52,8 @@
 #include "deps/sol2/LuaController.hpp"
 #include "deps/sol2/LuaControllerAI.hpp"
 #include "deps/sol2/LuaRenderer.hpp"
+#include "deps/sol2/Script.hpp"
+#include "deps/sol2/ScriptManager.hpp"
 
 /// deps/stb implementation
 #include "deps/stb/TextureLoader.hpp"
@@ -79,10 +80,8 @@
 #include "core/assets/Font.hpp"
 #include "core/assets/ImageView.hpp"
 #include "core/assets/MatrixDescriptor.hpp"
-#include "core/assets/Script.hpp"
 #include "core/assets/FileDescriptor.hpp"
 #include "core/assets/ScriptLoader.hpp"
-#include "core/assets/ScriptManager.hpp"
 #include "core/assets/ShaderDescriptor.hpp"
 #include "core/assets/ShaderLoader.hpp"
 #include "core/assets/SoundDescriptor.hpp"

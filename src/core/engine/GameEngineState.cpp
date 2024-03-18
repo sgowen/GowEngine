@@ -279,7 +279,7 @@ void GameEngineState::onEnter(Engine* e)
 void GameEngineState::onAssetsLoaded(Engine* e)
 {
     std::string filePathEntityManager = _config.getString("filePathEntityManager");
-    EntityManagerLoader::initWithJSONFile(ENTITY_MGR, filePathEntityManager);
+    EntityDefsLoader::initWithJSONFile(ENTITY_MGR, filePathEntityManager);
     
     std::string filePathEntityInputMappingManager = _config.getString("filePathEntityInputMappingManager");
     EntityInputMappingManagerLoader::initWithJSONFile(ENTITY_INPUT_MAPPING_MGR, filePathEntityInputMappingManager);

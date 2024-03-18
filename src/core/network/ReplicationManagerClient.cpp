@@ -36,15 +36,16 @@ void ReplicationManagerClient::read(InputMemoryBitStream& imbs, EntityRegistry& 
 
 void ReplicationManagerClient::readAndDoCreateAction(InputMemoryBitStream& imbs, EntityRegistry& er, uint32_t networkID)
 {
-    uint32_t fourCCName;
-    imbs.read(fourCCName);
+    uint32_t fourCCKey;
+    imbs.read(fourCCKey);
     
     bool isEntityNew = false;
     Entity* e = er.getEntityByID(networkID);
     if (e == nullptr)
     {
-        EntityInstanceDef eid(networkID, fourCCName, 0, 0, false);
-        e = ENTITY_MGR.createEntity(eid);
+        EntityInstanceDef eid(networkID, fourCCKey, 0, 0, false);
+        EntityDef& ed = ASSETS_MGR.getEntityDef(eid._key);
+        e = Entity::createEntity(ed, eid);
         
         isEntityNew = true;
     }

@@ -12,12 +12,6 @@ void EngineState::enter(Engine* e)
 {
     ConfigLoader::initWithJSONFile(_config, _filePathConfig);
     
-    if (_config.hasValue("physicsEngine"))
-    {
-        std::string physicsEngine = _config.getString("physicsEngine");
-        ENGINE_CFG.physicsEngine() = physicsEngine;
-    }
-    
     // Should be able to load everything asynchronously
 //    AssetsLoader::initWithJSONFile(_assets, _filePathAssets);
 //    RendererLoader::initWithJSONFile(_renderer, _config.getString("filePathRenderer"));

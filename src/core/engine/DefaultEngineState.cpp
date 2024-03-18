@@ -52,10 +52,12 @@ void DefaultEngineState::onUpdate(Engine* e)
                 return;
             case GOW_KEY_D:
                 ENGINE_CFG.mode() = "dante";
+                ENGINE_CFG.physicsEngine() = "Box2D";
                 e->pushState(&ENGINE_STATE_TITLE);
                 return;
             case GOW_KEY_N:
                 ENGINE_CFG.mode() = "nosfuratu";
+                ENGINE_CFG.physicsEngine() = "Nos";
                 e->pushState(&ENGINE_STATE_TITLE);
                 return;
             default:
@@ -69,7 +71,7 @@ void DefaultEngineState::onRender(Renderer& r)
     e->renderModePicker();
 }
 
-DefaultEngineState::DefaultEngineState() : EngineState("engine/json/Config.json", "engine/json/Assets.json"),
+DefaultEngineState::DefaultEngineState() : EngineState("engine/json/default/Assets.json"),
 needsToRenderModePicker(false)
 {
     // Empty

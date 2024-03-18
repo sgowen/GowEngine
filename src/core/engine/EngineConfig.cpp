@@ -97,6 +97,11 @@ bool EngineConfig::glfwLoggingEnabled()
     return _glfwLoggingEnabled;
 }
 
+bool EngineConfig::logFileIO()
+{
+    return _logFileIO;
+}
+
 bool EngineConfig::logLua()
 {
     return _logLua;
@@ -189,7 +194,9 @@ double EngineConfig::frameRate()
 
 EngineConfig::EngineConfig(std::string filePathConfig)
 {
-    ConfigLoader::initWithJSONFile(_config, filePathConfig);
+    FileData jsonData = ASSET_HANDLER.loadAsset(filePathConfig);
+    ConfigLoader::initWithJSON(_config, (const char*)jsonData._data);
+    ASSET_HANDLER.unloadAsset(jsonData);
     
     _fullScreen = _config.getBool("fullScreen");
     _title = _config.getString("title");
@@ -204,6 +211,7 @@ EngineConfig::EngineConfig(std::string filePathConfig)
     _consoleLoggingEnabled = _config.getBool("consoleLoggingEnabled");
     _framesPerSecond = _config.getUInt("framesPerSecond");
     _glfwLoggingEnabled = _config.getBool("glfwLoggingEnabled");
+    _logFileIO = _config.getBool("logFileIO");
     _logLua = _config.getBool("logLua");
     _logOpenGL = _config.getBool("logOpenGL");
     _logOpenAL = _config.getBool("logOpenAL");

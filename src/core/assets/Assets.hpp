@@ -95,12 +95,10 @@ struct Assets
     {
         Font* ret = nullptr;
         
-        for (Font& f : _fonts)
+        const auto& q = _fonts.find(key);
+        if (q != _fonts.end())
         {
-            if (f._name == key)
-            {
-                ret = &f;
-            }
+            ret = &q->second;
         }
         
         return ret;
@@ -108,13 +106,13 @@ struct Assets
     
     std::string textureForRegionKey(std::string key)
     {
-        std::vector<TextureDescriptor>& tds = _textures;
-        for (TextureDescriptor& td : tds)
+        std::map<std::string, TextureDescriptor>& tds = _textures;
+        for (auto& pair : tds)
         {
-            TextureRegion* tr = td.textureRegion(key, 0);
+            TextureRegion* tr = pair.second.textureRegion(key, 0);
             if (tr != nullptr)
             {
-                return td._name;
+                return pair.first;
             }
         }
         
@@ -125,11 +123,11 @@ struct Assets
     {
         TextureRegion* ret = nullptr;
         
-        std::vector<TextureDescriptor>& tds = _textures;
-        for (TextureDescriptor& td : tds)
+        std::map<std::string, TextureDescriptor>& tds = _textures;
+        for (auto& pair : tds)
         {
-            ret = td.textureRegion(key, stateTime);
-            if (ret != nullptr)
+            TextureRegion* tr = pair.second.textureRegion(key, stateTime);
+            if (tr != nullptr)
             {
                 break;
             }
@@ -142,10 +140,10 @@ struct Assets
     {
         Animation* ret = nullptr;
         
-        std::vector<TextureDescriptor>& tds = _textures;
-        for (TextureDescriptor& td : tds)
+        std::map<std::string, TextureDescriptor>& tds = _textures;
+        for (auto& pair : tds)
         {
-            ret = td.animation(key);
+            ret = pair.second.animation(key);
             if (ret != nullptr)
             {
                 break;

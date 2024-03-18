@@ -286,7 +286,7 @@ void LuaRenderer::render(Renderer& r, World& w, std::string script)
     
     sol::load_result loadedScript = lua.load_buffer((const char*)s._fileData->_data, s._fileData->_length);
     sol::protected_function_result result = loadedScript();
-    if (!result.valid() && ENGINE_CFG.logLua())
+    if (!result.valid())
     {
         LOG("LuaRenderer: %s is not valid", s._desc._name.c_str());
     }

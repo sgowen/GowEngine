@@ -1,5 +1,5 @@
 //
-//  EntityManagerLoader.cpp
+//  EntityDefsLoader.cpp
 //  GowEngine
 //
 //  Created by Stephen Gowen on 2/26/21.
@@ -10,16 +10,16 @@
 
 #include <rapidjson/document.h>
 
-void EntityManagerLoader::initWithJSONFile(EntityManager& em, std::string filePath)
+void EntityDefsLoader::initWithJSONFile(std::map<uint32_t, EntityDef>& entityDefs, std::string filePath)
 {
     FileData fd = ASSET_HANDLER.loadAsset(filePath);
-    initWithJSON(em, (const char*)fd._data);
+    initWithJSON(entityDefs, (const char*)fd._data);
     ASSET_HANDLER.unloadAsset(fd);
 }
 
-void EntityManagerLoader::initWithJSON(EntityManager& em, const char* json)
+void EntityDefsLoader::initWithJSON(std::map<uint32_t, EntityDef>& entityDefs, const char* json)
 {
-    em._entityDefs.clear();
+    entityDefs.clear();
     
     using namespace rapidjson;
     
@@ -35,7 +35,7 @@ void EntityManagerLoader::initWithJSON(EntityManager& em, const char* json)
         std::string keyStr = i->name.GetString();
         uint32_t key = StringUtil::fourCharFromString(keyStr);
         
-        assert(em._entityDefs.find(key) == em._entityDefs.end());
+        assert(entityDefs.find(key) == entityDefs.end());
         
         std::string name = RapidJSONUtil::getString(iv, "name");
         std::string keyName = keyStr;
@@ -253,6 +253,6 @@ void EntityManagerLoader::initWithJSON(EntityManager& em, const char* json)
         }
         NetworkData nd(networkDataGroups);
         
-        em._entityDefs.emplace(key, EntityDef{key, name, keyName, controller, controllerScript, controllerAI, controllerAIScript, controllerInput, inputMapping, controllerNetwork, controllerRender, inputStateFlags, states, stateFlags, textureMappings, soundMappings, fixtures, bodyFlags, width, height, scale, data, nd});
+        entityDefs.emplace(key, EntityDef{key, name, keyName, controller, controllerScript, controllerAI, controllerAIScript, controllerInput, inputMapping, controllerNetwork, controllerRender, inputStateFlags, states, stateFlags, textureMappings, soundMappings, fixtures, bodyFlags, width, height, scale, data, nd});
     }
 }

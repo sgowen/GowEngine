@@ -30,7 +30,7 @@
         }
     },
     "renderer": {
-        "filePath": "engine/json/Renderer.json"
+        "filePath": "engine/json/default/Renderer.json"
     },
     "textures": {
         "sf_font": {

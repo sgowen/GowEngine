@@ -8,9 +8,9 @@
 
 #include <GowEngine/GowEngine.hpp>
 
-void ShaderManager::loadData(std::map<std::string, ShaderDescriptor>& shaderDescriptors)
+void ShaderManager::loadData(std::map<std::string, ShaderDescriptor>& sds)
 {
-    for (auto& pair : shaderDescriptors)
+    for (auto& pair : sds)
     {
         _shaders.emplace(pair.first, Shader{pair.second});
         Shader& s = shader(pair.first);
@@ -18,9 +18,9 @@ void ShaderManager::loadData(std::map<std::string, ShaderDescriptor>& shaderDesc
     }
 }
 
-void ShaderManager::loadIntoOpenGLAndFreeData(std::map<std::string, ShaderDescriptor>& shaderDescriptors)
+void ShaderManager::loadIntoOpenGLAndFreeData(std::map<std::string, ShaderDescriptor>& sds)
 {
-    for (auto& pair : shaderDescriptors)
+    for (auto& pair : sds)
     {
         Shader& s = shader(pair.first);
         OGL.loadShader(s);

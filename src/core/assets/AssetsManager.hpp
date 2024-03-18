@@ -8,12 +8,11 @@
 
 #pragma once
 
-#include "core/assets/ScriptManager.hpp"
 #include "core/opengl/Renderer.hpp"
 #include "core/opengl/ShaderManager.hpp"
 #include "core/openal/SoundManager.hpp"
 #include "core/opengl/TextureManager.hpp"
-#include "core/entity/EntityInputMappingManager.hpp"
+#include "deps/sol2/ScriptManager.hpp"
 
 #include "Assets.hpp"
 
@@ -30,7 +29,7 @@ public:
         return ret;
     }
     
-    void registerAssets(std::string key, Assets a);
+    void registerAssets(std::string key);
     void deregisterAssets(std::string key);
     void update();
     void createDeviceDependentResourcesAsync();
@@ -38,11 +37,9 @@ public:
     void onWindowSizeChanged(uint16_t screenWidth, uint16_t screenHeight);
     void destroyDeviceDependentResources();
     
-    Entity* createEntity(EntityInstanceDef eid);
-    Entity* createEntity(EntityDef& ed, EntityInstanceDef eid);
-    EntityDef& getEntityDef(uint32_t fourCCName);
+    EntityDef& getEntityDef(uint32_t fourCCKey);
     EntityInputMapping& entityInputMapping(std::string key);
-    EntityLayout& entityLayout(uint32_t key);
+    EntityLayout& entityLayout(uint32_t fourCCKey);
     uint32_t getFirstLayout();
     Script& script(std::string name);
     Shader& shader(std::string name);
@@ -63,6 +60,8 @@ public:
 
 private:
     std::map<std::string, Assets> _assets;
+    uint32_t _stateTime;
+    
     std::map<uint32_t, EntityDef> _entityDefs;
     std::map<std::string, EntityInputMapping> _entityInputMappings;
     std::map<uint32_t, EntityLayout> _entityLayouts;
@@ -71,8 +70,6 @@ private:
     ShaderManager _shaderMgr;
     SoundManager _soundMgr;
     TextureManager _textureMgr;
-    Renderer _renderer;
-    uint32_t _stateTime;
     
     AssetsManager();
     ~AssetsManager() {}

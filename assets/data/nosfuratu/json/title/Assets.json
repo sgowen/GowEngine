@@ -1,7 +1,6 @@
 {
-    "textures": [
-      {
-        "name": "title",
+    "textures": {
+        "title": {
         "filePath": "textures/title.png",
         "mappings": {
           "TitlePanel_Background": {
@@ -18,5 +17,5 @@
           }
         }
       }
-    ]
+    }
 }

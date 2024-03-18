@@ -126,7 +126,9 @@ void GameServer::populateFromEntityLayout(EntityLayout& eld)
     
     for (auto& eid : eld._entitiesNetwork)
     {
-        NW_SRVR->registerEntity(ENTITY_MGR.createEntity(eid));
+        EntityDef& ed = ASSETS_MGR.getEntityDef(eid._key);
+        Entity* e = Entity::createEntity(ed, eid);
+        NW_SRVR->registerEntity(e);
     }
 }
 
@@ -238,14 +240,14 @@ void GameServer::spawnPlayer(std::string playerName, uint8_t playerID)
     
     uint32_t key = 'PLYR';
     
-    EntityDef& ed = ENTITY_MGR.getEntityDef(key);
+    EntityDef& ed = ASSETS_MGR.getEntityDef(key);
     uint32_t spawnX = ed._data.getUInt("spawnX", 33);
     uint32_t spawnY = ed._data.getUInt("spawnY", 22);
     
     uint32_t networkID = _entityIDManager.getNextPlayerEntityID();
     EntityInstanceDef eid(networkID, key, spawnX, spawnY, true);
     
-    Entity* e = ENTITY_MGR.createEntity(ed, eid);
+    Entity* e = Entity::createEntity(ed, eid);
     e->playerInfo()._playerAddressHash = cp->getMachineAddress()->getHash();
     e->playerInfo()._playerName = playerName;
     e->playerInfo()._playerAddress = cp->getMachineAddress()->toString();

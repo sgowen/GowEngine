@@ -12,7 +12,7 @@ void ScriptLoader::loadData(Script& s)
 {
     std::string filePath = s._desc._filePath;
     
-    if (ENGINE_CFG.logLua())
+    if (ENGINE_CFG.logFileIO())
     {
         LOG("ScriptLoader::loadData %s", filePath.c_str());
     }
@@ -26,7 +26,7 @@ void ScriptLoader::freeData(Script& s)
 {
     std::string filePath = s._desc._filePath;
     
-    if (ENGINE_CFG.logLua())
+    if (ENGINE_CFG.logFileIO())
     {
         LOG("ScriptLoader::freeData %s", filePath.c_str());
     }

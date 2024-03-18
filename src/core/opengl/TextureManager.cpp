@@ -8,9 +8,9 @@
 
 #include <GowEngine/GowEngine.hpp>
 
-void TextureManager::loadData(std::map<std::string, TextureDescriptor>& textureDescriptors)
+void TextureManager::loadData(std::map<std::string, TextureDescriptor>& tds)
 {
-    for (auto& pair : textureDescriptors)
+    for (auto& pair : tds)
     {
         _textures.emplace(pair.first, Texture{pair.second});
         Texture& t = texture(pair.first);
@@ -18,9 +18,9 @@ void TextureManager::loadData(std::map<std::string, TextureDescriptor>& textureD
     }
 }
 
-void TextureManager::loadIntoOpenGLAndFreeData(std::map<std::string, TextureDescriptor>& textureDescriptors)
+void TextureManager::loadIntoOpenGLAndFreeData(std::map<std::string, TextureDescriptor>& tds)
 {
-    for (auto& pair : textureDescriptors)
+    for (auto& pair : tds)
     {
         Texture& t = texture(pair.first);
         OGL.loadTexture(t);

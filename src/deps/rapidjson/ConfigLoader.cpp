@@ -10,13 +10,6 @@
 
 #include <rapidjson/document.h>
 
-void ConfigLoader::initWithJSONFile(Config& config, std::string filePath)
-{
-    FileData jsonData = ASSET_HANDLER.loadAsset(filePath);
-    initWithJSON(config, (const char*)jsonData._data);
-    ASSET_HANDLER.unloadAsset(jsonData);
-}
-
 void ConfigLoader::initWithJSON(Config& config, const char* json)
 {
     config.reset();

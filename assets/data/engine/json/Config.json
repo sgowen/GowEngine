@@ -13,6 +13,7 @@
   "framesPerSecond": "60",
   "fileLoggingEnabled": "false",
   "glfwLoggingEnabled": "false",
+  "logFileIO": "true",
   "logLua": "true",
   "logOpenGL": "false",
   "logOpenAL": "false",

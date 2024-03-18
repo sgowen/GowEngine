@@ -41,10 +41,6 @@
 		BB2E5A822B96646400D84D3C /* EntityInputMappingManagerLoader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BB2E5A7F2B96646400D84D3C /* EntityInputMappingManagerLoader.cpp */; };
 		BB39A7172B96D11E00D92ECB /* EntityControllerRender.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BB39A7162B96D11E00D92ECB /* EntityControllerRender.cpp */; };
 		BB39A7182B96D11E00D92ECB /* EntityControllerRender.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BB39A7162B96D11E00D92ECB /* EntityControllerRender.cpp */; };
-		BB39A71B2B96D24E00D92ECB /* ScriptManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BB39A71A2B96D24E00D92ECB /* ScriptManager.cpp */; };
-		BB39A71C2B96D24E00D92ECB /* ScriptManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BB39A71A2B96D24E00D92ECB /* ScriptManager.cpp */; };
-		BB39A71F2B96D38500D92ECB /* ScriptLoader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BB39A71D2B96D38400D92ECB /* ScriptLoader.cpp */; };
-		BB39A7202B96D38500D92ECB /* ScriptLoader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BB39A71D2B96D38400D92ECB /* ScriptLoader.cpp */; };
 		BB39A7232B96D9D500D92ECB /* LuaControllerAI.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BB39A7212B96D9D500D92ECB /* LuaControllerAI.cpp */; };
 		BB39A7242B96D9D500D92ECB /* LuaControllerAI.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BB39A7212B96D9D500D92ECB /* LuaControllerAI.cpp */; };
 		BB3F0B022A44F2E3008D8AC8 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BB3F0B012A44F2E3008D8AC8 /* Cocoa.framework */; };
@@ -89,6 +85,10 @@
 		BB631F672AAA67E500953454 /* ShockwaveRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BB631F652AAA67E500953454 /* ShockwaveRenderer.cpp */; };
 		BB631F6A2AAB9B3500953454 /* FramebufferRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BB631F692AAB9B3500953454 /* FramebufferRenderer.cpp */; };
 		BB631F6B2AAB9B3500953454 /* FramebufferRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BB631F692AAB9B3500953454 /* FramebufferRenderer.cpp */; };
+		BB6F75A82BA6BCA800C4582B /* ScriptLoader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BB6F75A72BA6BCA800C4582B /* ScriptLoader.cpp */; };
+		BB6F75A92BA6BCA800C4582B /* ScriptLoader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BB6F75A72BA6BCA800C4582B /* ScriptLoader.cpp */; };
+		BB6F75AC2BA6C54000C4582B /* ScriptManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BB6F75AB2BA6C53F00C4582B /* ScriptManager.cpp */; };
+		BB6F75AD2BA6C54000C4582B /* ScriptManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BB6F75AB2BA6C53F00C4582B /* ScriptManager.cpp */; };
 		BB7F74572B6860C600CAB63F /* libsteam_api.dylib in CopyFiles */ = {isa = PBXBuildFile; fileRef = BBFD16602B572ED600D4D841 /* libsteam_api.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		BB7F745B2B69885E00CAB63F /* steam_appid.txt in Resources */ = {isa = PBXBuildFile; fileRef = BB7F745A2B69885E00CAB63F /* steam_appid.txt */; };
 		BB7F75B32B6B0B0100CAB63F /* Box2DPhysicsRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BB7F75AD2B6B0B0100CAB63F /* Box2DPhysicsRenderer.cpp */; };
@@ -171,7 +171,7 @@
 		BBBBE0092702469500D7D319 /* SpriteBatcher.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BBBBDF0327023E1400D7D319 /* SpriteBatcher.cpp */; };
 		BBBBE0102702469600D7D319 /* TriangleBatcher.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BBBBDF1627023E1400D7D319 /* TriangleBatcher.cpp */; };
 		BBBBE019270246A000D7D319 /* EntityLayoutManagerLoader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BBBBDF3327023E1400D7D319 /* EntityLayoutManagerLoader.cpp */; };
-		BBBBE01C270246A000D7D319 /* EntityManagerLoader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BBBBDF3627023E1400D7D319 /* EntityManagerLoader.cpp */; };
+		BBBBE01C270246A000D7D319 /* EntityDefsLoader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BBBBDF3627023E1400D7D319 /* EntityDefsLoader.cpp */; };
 		BBBBE01D270246A000D7D319 /* RendererLoader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BBBBDF3727023E1400D7D319 /* RendererLoader.cpp */; };
 		BBBBE01F270246A000D7D319 /* ConfigLoader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BBBBDF3927023E1400D7D319 /* ConfigLoader.cpp */; };
 		BBBBE020270246A000D7D319 /* AssetsLoader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BBBBDF3A27023E1400D7D319 /* AssetsLoader.cpp */; };
@@ -230,7 +230,7 @@
 		BBBBE16D2702584A00D7D319 /* SpriteBatcher.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BBBBDF0327023E1400D7D319 /* SpriteBatcher.cpp */; };
 		BBBBE1742702584A00D7D319 /* TriangleBatcher.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BBBBDF1627023E1400D7D319 /* TriangleBatcher.cpp */; };
 		BBBBE17D2702584A00D7D319 /* EntityLayoutManagerLoader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BBBBDF3327023E1400D7D319 /* EntityLayoutManagerLoader.cpp */; };
-		BBBBE1802702584A00D7D319 /* EntityManagerLoader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BBBBDF3627023E1400D7D319 /* EntityManagerLoader.cpp */; };
+		BBBBE1802702584A00D7D319 /* EntityDefsLoader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BBBBDF3627023E1400D7D319 /* EntityDefsLoader.cpp */; };
 		BBBBE1812702584A00D7D319 /* RendererLoader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BBBBDF3727023E1400D7D319 /* RendererLoader.cpp */; };
 		BBBBE1832702584A00D7D319 /* ConfigLoader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BBBBDF3927023E1400D7D319 /* ConfigLoader.cpp */; };
 		BBBBE1842702584A00D7D319 /* AssetsLoader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BBBBDF3A27023E1400D7D319 /* AssetsLoader.cpp */; };
@@ -408,7 +408,6 @@
 		BB2E5A7B2B9660F300D84D3C /* EntityInputMappingManager.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = EntityInputMappingManager.hpp; sourceTree = "<group>"; };
 		BB2E5A7F2B96646400D84D3C /* EntityInputMappingManagerLoader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = EntityInputMappingManagerLoader.cpp; sourceTree = "<group>"; };
 		BB2E5A802B96646400D84D3C /* EntityInputMappingManagerLoader.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = EntityInputMappingManagerLoader.hpp; sourceTree = "<group>"; };
-		BB2E5A832B968FC400D84D3C /* Script.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Script.hpp; sourceTree = "<group>"; };
 		BB2E5A842B96900200D84D3C /* FileDescriptor.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = FileDescriptor.hpp; sourceTree = "<group>"; };
 		BB3710082A1EB77F00A97300 /* al.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = al.h; sourceTree = "<group>"; };
 		BB37100B2A1EB77F00A97300 /* alc.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = alc.h; sourceTree = "<group>"; };
@@ -416,10 +415,6 @@
 		BB3710F92A1EBD1D00A97300 /* sndfile.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = sndfile.h; sourceTree = "<group>"; };
 		BB3712562A1EC53400A97300 /* GowEngine-macOS.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "GowEngine-macOS.entitlements"; sourceTree = "<group>"; };
 		BB39A7162B96D11E00D92ECB /* EntityControllerRender.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = EntityControllerRender.cpp; sourceTree = "<group>"; };
-		BB39A7192B96D24E00D92ECB /* ScriptManager.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = ScriptManager.hpp; sourceTree = "<group>"; };
-		BB39A71A2B96D24E00D92ECB /* ScriptManager.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ScriptManager.cpp; sourceTree = "<group>"; };
-		BB39A71D2B96D38400D92ECB /* ScriptLoader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ScriptLoader.cpp; sourceTree = "<group>"; };
-		BB39A71E2B96D38500D92ECB /* ScriptLoader.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = ScriptLoader.hpp; sourceTree = "<group>"; };
 		BB39A7212B96D9D500D92ECB /* LuaControllerAI.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = LuaControllerAI.cpp; sourceTree = "<group>"; };
 		BB39A7222B96D9D500D92ECB /* LuaControllerAI.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = LuaControllerAI.hpp; sourceTree = "<group>"; };
 		BB3F0AC92A44EFA9008D8AC8 /* stb_image.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = stb_image.h; sourceTree = "<group>"; };
@@ -495,6 +490,11 @@
 		BB631F652AAA67E500953454 /* ShockwaveRenderer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ShockwaveRenderer.cpp; sourceTree = "<group>"; };
 		BB631F682AAB9B3500953454 /* FramebufferRenderer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = FramebufferRenderer.hpp; sourceTree = "<group>"; };
 		BB631F692AAB9B3500953454 /* FramebufferRenderer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = FramebufferRenderer.cpp; sourceTree = "<group>"; };
+		BB6F75A52BA6BBA400C4582B /* Script.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Script.hpp; sourceTree = "<group>"; };
+		BB6F75A62BA6BCA800C4582B /* ScriptLoader.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = ScriptLoader.hpp; sourceTree = "<group>"; };
+		BB6F75A72BA6BCA800C4582B /* ScriptLoader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ScriptLoader.cpp; sourceTree = "<group>"; };
+		BB6F75AA2BA6C53F00C4582B /* ScriptManager.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = ScriptManager.hpp; sourceTree = "<group>"; };
+		BB6F75AB2BA6C53F00C4582B /* ScriptManager.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ScriptManager.cpp; sourceTree = "<group>"; };
 		BB7B045D25B644E00021E545 /* GowEngine-macOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "GowEngine-macOS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		BB7F745A2B69885E00CAB63F /* steam_appid.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = steam_appid.txt; sourceTree = "<group>"; };
 		BB7F74AE2B6AFFC800CAB63F /* b2_joint.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = b2_joint.h; sourceTree = "<group>"; };
@@ -735,13 +735,13 @@
 		BBBBDF3327023E1400D7D319 /* EntityLayoutManagerLoader.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = EntityLayoutManagerLoader.cpp; sourceTree = "<group>"; };
 		BBBBDF3427023E1400D7D319 /* ConfigLoader.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = ConfigLoader.hpp; sourceTree = "<group>"; };
 		BBBBDF3527023E1400D7D319 /* AssetsLoader.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = AssetsLoader.hpp; sourceTree = "<group>"; };
-		BBBBDF3627023E1400D7D319 /* EntityManagerLoader.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = EntityManagerLoader.cpp; sourceTree = "<group>"; };
+		BBBBDF3627023E1400D7D319 /* EntityDefsLoader.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = EntityDefsLoader.cpp; sourceTree = "<group>"; };
 		BBBBDF3727023E1400D7D319 /* RendererLoader.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = RendererLoader.cpp; sourceTree = "<group>"; };
 		BBBBDF3827023E1400D7D319 /* EntityLayoutManagerLoader.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = EntityLayoutManagerLoader.hpp; sourceTree = "<group>"; };
 		BBBBDF3927023E1400D7D319 /* ConfigLoader.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ConfigLoader.cpp; sourceTree = "<group>"; };
 		BBBBDF3A27023E1400D7D319 /* AssetsLoader.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = AssetsLoader.cpp; sourceTree = "<group>"; };
 		BBBBDF3B27023E1400D7D319 /* RapidJSONUtil.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = RapidJSONUtil.hpp; sourceTree = "<group>"; };
-		BBBBDF3C27023E1400D7D319 /* EntityManagerLoader.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = EntityManagerLoader.hpp; sourceTree = "<group>"; };
+		BBBBDF3C27023E1400D7D319 /* EntityDefsLoader.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = EntityDefsLoader.hpp; sourceTree = "<group>"; };
 		BBBBE07B27024D3B00D7D319 /* BuildConstants.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = BuildConstants.hpp; sourceTree = "<group>"; };
 		BBBC2B172B97149100ABD6BB /* LuaController.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = LuaController.cpp; sourceTree = "<group>"; };
 		BBBC2B182B97149100ABD6BB /* LuaController.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = LuaController.hpp; sourceTree = "<group>"; };
@@ -1005,6 +1005,9 @@
 				BB39A7222B96D9D500D92ECB /* LuaControllerAI.hpp */,
 				BB2E5A772B96587A00D84D3C /* LuaRenderer.cpp */,
 				BB2E5A782B96587A00D84D3C /* LuaRenderer.hpp */,
+				BB6F75A52BA6BBA400C4582B /* Script.hpp */,
+				BB6F75AB2BA6C53F00C4582B /* ScriptManager.cpp */,
+				BB6F75AA2BA6C53F00C4582B /* ScriptManager.hpp */,
 			);
 			path = sol2;
 			sourceTree = "<group>";
@@ -1819,11 +1822,8 @@
 				BB1E5C1E271C8BE800149557 /* Font.hpp */,
 				BB11538A2B85174E00E7F3AE /* ImageView.hpp */,
 				BBBBDEF227023E1400D7D319 /* MatrixDescriptor.hpp */,
-				BB2E5A832B968FC400D84D3C /* Script.hpp */,
-				BB39A71D2B96D38400D92ECB /* ScriptLoader.cpp */,
-				BB39A71E2B96D38500D92ECB /* ScriptLoader.hpp */,
-				BB39A71A2B96D24E00D92ECB /* ScriptManager.cpp */,
-				BB39A7192B96D24E00D92ECB /* ScriptManager.hpp */,
+				BB6F75A72BA6BCA800C4582B /* ScriptLoader.cpp */,
+				BB6F75A62BA6BCA800C4582B /* ScriptLoader.hpp */,
 				BBBBDEEA27023E1400D7D319 /* ShaderDescriptor.hpp */,
 				BB1915A62B7C87BC00ED67E8 /* ShaderLoader.cpp */,
 				BB1915A42B7C87BC00ED67E8 /* ShaderLoader.hpp */,
@@ -1934,12 +1934,12 @@
 				BBBBDF3527023E1400D7D319 /* AssetsLoader.hpp */,
 				BBBBDF3927023E1400D7D319 /* ConfigLoader.cpp */,
 				BBBBDF3427023E1400D7D319 /* ConfigLoader.hpp */,
+				BBBBDF3627023E1400D7D319 /* EntityDefsLoader.cpp */,
+				BBBBDF3C27023E1400D7D319 /* EntityDefsLoader.hpp */,
 				BB2E5A7F2B96646400D84D3C /* EntityInputMappingManagerLoader.cpp */,
 				BB2E5A802B96646400D84D3C /* EntityInputMappingManagerLoader.hpp */,
 				BBBBDF3327023E1400D7D319 /* EntityLayoutManagerLoader.cpp */,
 				BBBBDF3827023E1400D7D319 /* EntityLayoutManagerLoader.hpp */,
-				BBBBDF3627023E1400D7D319 /* EntityManagerLoader.cpp */,
-				BBBBDF3C27023E1400D7D319 /* EntityManagerLoader.hpp */,
 				BBBBDF3B27023E1400D7D319 /* RapidJSONUtil.hpp */,
 				BBBBDF3727023E1400D7D319 /* RendererLoader.cpp */,
 				BBBBDF3227023E1400D7D319 /* RendererLoader.hpp */,
@@ -2278,8 +2278,9 @@
 				BB5F5F622B9BBC4000475CDD /* imgui_draw.cpp in Sources */,
 				BBBBDFF02702469500D7D319 /* FontBatcher.cpp in Sources */,
 				BBBBE019270246A000D7D319 /* EntityLayoutManagerLoader.cpp in Sources */,
-				BBBBE01C270246A000D7D319 /* EntityManagerLoader.cpp in Sources */,
+				BBBBE01C270246A000D7D319 /* EntityDefsLoader.cpp in Sources */,
 				BB5F5F6C2B9BC31900475CDD /* IMGUIDemoEngineState.cpp in Sources */,
+				BB6F75AC2BA6C54000C4582B /* ScriptManager.cpp in Sources */,
 				BBBBE01D270246A000D7D319 /* RendererLoader.cpp in Sources */,
 				BBBBE01F270246A000D7D319 /* ConfigLoader.cpp in Sources */,
 				BBBBE020270246A000D7D319 /* AssetsLoader.cpp in Sources */,
@@ -2295,12 +2296,12 @@
 				BBBBDFFD2702469500D7D319 /* Renderer.cpp in Sources */,
 				BB7F75B72B6B0B0100CAB63F /* Box2DPhysicsWorld.cpp in Sources */,
 				BBBBDFFF2702469500D7D319 /* ScreenRenderer.cpp in Sources */,
-				BB39A71F2B96D38500D92ECB /* ScriptLoader.cpp in Sources */,
 				BBBB0E5D2703A95D00D7D319 /* GlfwEngineMount.cpp in Sources */,
 				BBBBE0092702469500D7D319 /* SpriteBatcher.cpp in Sources */,
 				BBBBE0102702469600D7D319 /* TriangleBatcher.cpp in Sources */,
 				BBBBDF802702467400D7D319 /* FPSUtil.cpp in Sources */,
 				BB9EBF5E2AAA57520088DBB6 /* TitleEngineState.cpp in Sources */,
+				BB6F75A82BA6BCA800C4582B /* ScriptLoader.cpp in Sources */,
 				BBFD16412B572CBA00D4D841 /* SteamServerHelper.cpp in Sources */,
 				BB4CCAED2B61CA9500B6D2CA /* SocketServerHelper.cpp in Sources */,
 				BB4CCAD32B5F126F00B6D2CA /* MachineAddress.cpp in Sources */,
@@ -2353,7 +2354,6 @@
 				BBBBDFA32702467A00D7D319 /* EntityRegistry.cpp in Sources */,
 				BB1153822B85109900E7F3AE /* FileCompatUtil.cpp in Sources */,
 				BBFD16472B572CBA00D4D841 /* SteamP2PAuth.cpp in Sources */,
-				BB39A71B2B96D24E00D92ECB /* ScriptManager.cpp in Sources */,
 				BB01D82D2A901E3A002A3BA4 /* Logger.cpp in Sources */,
 				BBBBDF902702467700D7D319 /* Engine.cpp in Sources */,
 				BBBBDF922702467700D7D319 /* EngineConfig.cpp in Sources */,
@@ -2373,7 +2373,6 @@
 				BB10362627334A7100889341 /* StringUtil.cpp in Sources */,
 				BBBBE0D22702584500D7D319 /* FileAssetHandler.cpp in Sources */,
 				BB1915B42B7C894800ED67E8 /* ShaderManager.cpp in Sources */,
-				BB39A71C2B96D24E00D92ECB /* ScriptManager.cpp in Sources */,
 				BBBBE0CE2702584500D7D319 /* AssetsManager.cpp in Sources */,
 				BBFD16442B572CBA00D4D841 /* SteamServerInfo.cpp in Sources */,
 				BBBBE0E22702584600D7D319 /* Config.cpp in Sources */,
@@ -2386,6 +2385,7 @@
 				BBFD16482B572CBA00D4D841 /* SteamP2PAuth.cpp in Sources */,
 				BBBBE0F22702584600D7D319 /* DefaultEngineState.cpp in Sources */,
 				BBBBE0F42702584600D7D319 /* Engine.cpp in Sources */,
+				BB6F75AD2BA6C54000C4582B /* ScriptManager.cpp in Sources */,
 				BBBBE0F62702584600D7D319 /* EngineConfig.cpp in Sources */,
 				BBBBE0F82702584600D7D319 /* EngineState.cpp in Sources */,
 				BBBBE0FA2702584600D7D319 /* Entity.cpp in Sources */,
@@ -2408,6 +2408,7 @@
 				BB82CE642B91380B008BF269 /* GameServer.cpp in Sources */,
 				BBBBE1202702584700D7D319 /* DeliveryNotificationManager.cpp in Sources */,
 				BBBBE1222702584700D7D319 /* InFlightPacket.cpp in Sources */,
+				BB6F75A92BA6BCA800C4582B /* ScriptLoader.cpp in Sources */,
 				BBBBE1242702584700D7D319 /* InputMemoryBitStream.cpp in Sources */,
 				BBFD16422B572CBA00D4D841 /* SteamServerHelper.cpp in Sources */,
 				BB1915AC2B7C87BC00ED67E8 /* ShaderLoader.cpp in Sources */,
@@ -2421,7 +2422,6 @@
 				BBBBE12F2702584800D7D319 /* NetworkClient.cpp in Sources */,
 				BBBBE1312702584800D7D319 /* NetworkServer.cpp in Sources */,
 				BB4CCAD42B5F126F00B6D2CA /* MachineAddress.cpp in Sources */,
-				BB39A7202B96D38500D92ECB /* ScriptLoader.cpp in Sources */,
 				BBBBE1332702584800D7D319 /* OutputMemoryBitStream.cpp in Sources */,
 				BBBBE1352702584800D7D319 /* PacketHandler.cpp in Sources */,
 				BBBBE1372702584800D7D319 /* ReplicationCommand.cpp in Sources */,
@@ -2461,7 +2461,7 @@
 				BBBBE17D2702584A00D7D319 /* EntityLayoutManagerLoader.cpp in Sources */,
 				BB4CCAF02B61CA9500B6D2CA /* SocketClientHelper.cpp in Sources */,
 				BB39A7182B96D11E00D92ECB /* EntityControllerRender.cpp in Sources */,
-				BBBBE1802702584A00D7D319 /* EntityManagerLoader.cpp in Sources */,
+				BBBBE1802702584A00D7D319 /* EntityDefsLoader.cpp in Sources */,
 				BBBBE1812702584A00D7D319 /* RendererLoader.cpp in Sources */,
 				BBBBE1832702584A00D7D319 /* ConfigLoader.cpp in Sources */,
 				BBBBE1842702584A00D7D319 /* AssetsLoader.cpp in Sources */,

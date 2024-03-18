@@ -32,6 +32,7 @@ public:
     bool consoleLoggingEnabled();
     uint8_t framesPerSecond();
     bool glfwLoggingEnabled();
+    bool logFileIO();
     bool logLua();
     bool logOpenGL();
     bool logOpenAL();
@@ -71,6 +72,7 @@ private:
     bool _consoleLoggingEnabled;
     uint8_t _framesPerSecond;
     bool _glfwLoggingEnabled;
+    bool _logFileIO;
     bool _logLua;
     bool _logOpenGL;
     bool _logOpenAL;

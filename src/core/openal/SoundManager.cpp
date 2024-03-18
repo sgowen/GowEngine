@@ -8,9 +8,9 @@
 
 #include <GowEngine/GowEngine.hpp>
 
-void SoundManager::loadData(std::map<std::string, SoundDescriptor>& soundDescriptors)
+void SoundManager::loadData(std::map<std::string, SoundDescriptor>& sds)
 {
-    for (auto& pair : soundDescriptors)
+    for (auto& pair : sds)
     {
         _sounds.emplace(pair.first, Sound{pair.second});
         Sound& s = sound(pair.first);
@@ -18,9 +18,9 @@ void SoundManager::loadData(std::map<std::string, SoundDescriptor>& soundDescrip
     }
 }
 
-void SoundManager::loadIntoOpenALAndFreeData(std::map<std::string, SoundDescriptor>& soundDescriptors)
+void SoundManager::loadIntoOpenALAndFreeData(std::map<std::string, SoundDescriptor>& sds)
 {
-    for (auto& pair : soundDescriptors)
+    for (auto& pair : sds)
     {
         Sound& s = sound(pair.first);
         OAL.loadSound(s);
