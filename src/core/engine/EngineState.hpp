@@ -37,17 +37,13 @@ protected:
     virtual void onExit(Engine* e) = 0;
     virtual void onUpdate(Engine* e) = 0;
     virtual void onRender(Renderer& r) = 0;
-    
-    Config _config;
-    
-    EngineState(std::string filePathConfig, std::string filePathAssets);
+        
+    EngineState(std::string filePathAssets, bool areAssetsGlobal = false);
     virtual ~EngineState() {}
     EngineState(const EngineState&);
     EngineState& operator=(const EngineState&);
     
 private:
-    std::string _filePathConfig;
     std::string _filePathAssets;
-    
-    bool canSkip();
+    bool _areAssetsGlobal;
 };

@@ -85,10 +85,12 @@
 		BB631F672AAA67E500953454 /* ShockwaveRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BB631F652AAA67E500953454 /* ShockwaveRenderer.cpp */; };
 		BB631F6A2AAB9B3500953454 /* FramebufferRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BB631F692AAB9B3500953454 /* FramebufferRenderer.cpp */; };
 		BB631F6B2AAB9B3500953454 /* FramebufferRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BB631F692AAB9B3500953454 /* FramebufferRenderer.cpp */; };
-		BB6F75A82BA6BCA800C4582B /* ScriptLoader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BB6F75A72BA6BCA800C4582B /* ScriptLoader.cpp */; };
-		BB6F75A92BA6BCA800C4582B /* ScriptLoader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BB6F75A72BA6BCA800C4582B /* ScriptLoader.cpp */; };
 		BB6F75AC2BA6C54000C4582B /* ScriptManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BB6F75AB2BA6C53F00C4582B /* ScriptManager.cpp */; };
 		BB6F75AD2BA6C54000C4582B /* ScriptManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BB6F75AB2BA6C53F00C4582B /* ScriptManager.cpp */; };
+		BB6F75B42BA8EC8600C4582B /* ScriptLoader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BB6F75B32BA8EC8600C4582B /* ScriptLoader.cpp */; };
+		BB6F75B52BA8EC8600C4582B /* ScriptLoader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BB6F75B32BA8EC8600C4582B /* ScriptLoader.cpp */; };
+		BB6F75B82BA8ED0900C4582B /* LuaUtil.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BB6F75B72BA8ED0800C4582B /* LuaUtil.cpp */; };
+		BB6F75B92BA8ED0900C4582B /* LuaUtil.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BB6F75B72BA8ED0800C4582B /* LuaUtil.cpp */; };
 		BB7F74572B6860C600CAB63F /* libsteam_api.dylib in CopyFiles */ = {isa = PBXBuildFile; fileRef = BBFD16602B572ED600D4D841 /* libsteam_api.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		BB7F745B2B69885E00CAB63F /* steam_appid.txt in Resources */ = {isa = PBXBuildFile; fileRef = BB7F745A2B69885E00CAB63F /* steam_appid.txt */; };
 		BB7F75B32B6B0B0100CAB63F /* Box2DPhysicsRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BB7F75AD2B6B0B0100CAB63F /* Box2DPhysicsRenderer.cpp */; };
@@ -491,10 +493,12 @@
 		BB631F682AAB9B3500953454 /* FramebufferRenderer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = FramebufferRenderer.hpp; sourceTree = "<group>"; };
 		BB631F692AAB9B3500953454 /* FramebufferRenderer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = FramebufferRenderer.cpp; sourceTree = "<group>"; };
 		BB6F75A52BA6BBA400C4582B /* Script.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Script.hpp; sourceTree = "<group>"; };
-		BB6F75A62BA6BCA800C4582B /* ScriptLoader.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = ScriptLoader.hpp; sourceTree = "<group>"; };
-		BB6F75A72BA6BCA800C4582B /* ScriptLoader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ScriptLoader.cpp; sourceTree = "<group>"; };
 		BB6F75AA2BA6C53F00C4582B /* ScriptManager.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = ScriptManager.hpp; sourceTree = "<group>"; };
 		BB6F75AB2BA6C53F00C4582B /* ScriptManager.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ScriptManager.cpp; sourceTree = "<group>"; };
+		BB6F75B22BA8EC8600C4582B /* ScriptLoader.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = ScriptLoader.hpp; sourceTree = "<group>"; };
+		BB6F75B32BA8EC8600C4582B /* ScriptLoader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ScriptLoader.cpp; sourceTree = "<group>"; };
+		BB6F75B62BA8ED0800C4582B /* LuaUtil.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = LuaUtil.hpp; sourceTree = "<group>"; };
+		BB6F75B72BA8ED0800C4582B /* LuaUtil.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = LuaUtil.cpp; sourceTree = "<group>"; };
 		BB7B045D25B644E00021E545 /* GowEngine-macOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "GowEngine-macOS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		BB7F745A2B69885E00CAB63F /* steam_appid.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = steam_appid.txt; sourceTree = "<group>"; };
 		BB7F74AE2B6AFFC800CAB63F /* b2_joint.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = b2_joint.h; sourceTree = "<group>"; };
@@ -1005,6 +1009,8 @@
 				BB39A7222B96D9D500D92ECB /* LuaControllerAI.hpp */,
 				BB2E5A772B96587A00D84D3C /* LuaRenderer.cpp */,
 				BB2E5A782B96587A00D84D3C /* LuaRenderer.hpp */,
+				BB6F75B72BA8ED0800C4582B /* LuaUtil.cpp */,
+				BB6F75B62BA8ED0800C4582B /* LuaUtil.hpp */,
 				BB6F75A52BA6BBA400C4582B /* Script.hpp */,
 				BB6F75AB2BA6C53F00C4582B /* ScriptManager.cpp */,
 				BB6F75AA2BA6C53F00C4582B /* ScriptManager.hpp */,
@@ -1822,8 +1828,8 @@
 				BB1E5C1E271C8BE800149557 /* Font.hpp */,
 				BB11538A2B85174E00E7F3AE /* ImageView.hpp */,
 				BBBBDEF227023E1400D7D319 /* MatrixDescriptor.hpp */,
-				BB6F75A72BA6BCA800C4582B /* ScriptLoader.cpp */,
-				BB6F75A62BA6BCA800C4582B /* ScriptLoader.hpp */,
+				BB6F75B32BA8EC8600C4582B /* ScriptLoader.cpp */,
+				BB6F75B22BA8EC8600C4582B /* ScriptLoader.hpp */,
 				BBBBDEEA27023E1400D7D319 /* ShaderDescriptor.hpp */,
 				BB1915A62B7C87BC00ED67E8 /* ShaderLoader.cpp */,
 				BB1915A42B7C87BC00ED67E8 /* ShaderLoader.hpp */,
@@ -2278,6 +2284,7 @@
 				BB5F5F622B9BBC4000475CDD /* imgui_draw.cpp in Sources */,
 				BBBBDFF02702469500D7D319 /* FontBatcher.cpp in Sources */,
 				BBBBE019270246A000D7D319 /* EntityLayoutManagerLoader.cpp in Sources */,
+				BB6F75B42BA8EC8600C4582B /* ScriptLoader.cpp in Sources */,
 				BBBBE01C270246A000D7D319 /* EntityDefsLoader.cpp in Sources */,
 				BB5F5F6C2B9BC31900475CDD /* IMGUIDemoEngineState.cpp in Sources */,
 				BB6F75AC2BA6C54000C4582B /* ScriptManager.cpp in Sources */,
@@ -2301,7 +2308,6 @@
 				BBBBE0102702469600D7D319 /* TriangleBatcher.cpp in Sources */,
 				BBBBDF802702467400D7D319 /* FPSUtil.cpp in Sources */,
 				BB9EBF5E2AAA57520088DBB6 /* TitleEngineState.cpp in Sources */,
-				BB6F75A82BA6BCA800C4582B /* ScriptLoader.cpp in Sources */,
 				BBFD16412B572CBA00D4D841 /* SteamServerHelper.cpp in Sources */,
 				BB4CCAED2B61CA9500B6D2CA /* SocketServerHelper.cpp in Sources */,
 				BB4CCAD32B5F126F00B6D2CA /* MachineAddress.cpp in Sources */,
@@ -2355,6 +2361,7 @@
 				BB1153822B85109900E7F3AE /* FileCompatUtil.cpp in Sources */,
 				BBFD16472B572CBA00D4D841 /* SteamP2PAuth.cpp in Sources */,
 				BB01D82D2A901E3A002A3BA4 /* Logger.cpp in Sources */,
+				BB6F75B82BA8ED0900C4582B /* LuaUtil.cpp in Sources */,
 				BBBBDF902702467700D7D319 /* Engine.cpp in Sources */,
 				BBBBDF922702467700D7D319 /* EngineConfig.cpp in Sources */,
 				BBBBDF942702467700D7D319 /* EngineState.cpp in Sources */,
@@ -2408,7 +2415,6 @@
 				BB82CE642B91380B008BF269 /* GameServer.cpp in Sources */,
 				BBBBE1202702584700D7D319 /* DeliveryNotificationManager.cpp in Sources */,
 				BBBBE1222702584700D7D319 /* InFlightPacket.cpp in Sources */,
-				BB6F75A92BA6BCA800C4582B /* ScriptLoader.cpp in Sources */,
 				BBBBE1242702584700D7D319 /* InputMemoryBitStream.cpp in Sources */,
 				BBFD16422B572CBA00D4D841 /* SteamServerHelper.cpp in Sources */,
 				BB1915AC2B7C87BC00ED67E8 /* ShaderLoader.cpp in Sources */,
@@ -2447,6 +2453,7 @@
 				BB4CCAE82B606A5700B6D2CA /* SocketPacketHandler.cpp in Sources */,
 				BBFE6DEE2B7FFED7004E8CCF /* EmbeddedAssetHandler.cpp in Sources */,
 				BBFD16462B572CBA00D4D841 /* SteamGameServices.cpp in Sources */,
+				BB6F75B92BA8ED0900C4582B /* LuaUtil.cpp in Sources */,
 				BBBBE15A2702584900D7D319 /* LineBatcher.cpp in Sources */,
 				BBBBE15D2702584900D7D319 /* OpenGLUtil.cpp in Sources */,
 				BBBBE15F2702584900D7D319 /* RektangleBatcher.cpp in Sources */,
@@ -2456,6 +2463,7 @@
 				BB7F75B42B6B0B0100CAB63F /* Box2DPhysicsRenderer.cpp in Sources */,
 				BBFD163A2B572CBA00D4D841 /* SteamPacketHandler.cpp in Sources */,
 				BBBBE16D2702584A00D7D319 /* SpriteBatcher.cpp in Sources */,
+				BB6F75B52BA8EC8600C4582B /* ScriptLoader.cpp in Sources */,
 				BBBBE1742702584A00D7D319 /* TriangleBatcher.cpp in Sources */,
 				BB2E5A7A2B96587A00D84D3C /* LuaRenderer.cpp in Sources */,
 				BBBBE17D2702584A00D7D319 /* EntityLayoutManagerLoader.cpp in Sources */,

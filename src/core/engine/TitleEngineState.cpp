@@ -46,6 +46,7 @@ void TitleEngineState::onUpdate(Engine* e)
         }
         else
         {
+            ENGINE_CFG.mode() = "engine";
             e->popState();
         }
     }
@@ -59,6 +60,7 @@ void TitleEngineState::onUpdate(Engine* e)
             switch (inputState)
             {
                 case IPS_EXIT:
+                    ENGINE_CFG.mode() = "engine";
                     e->popState();
                     break;
                 case IPS_ACTION:

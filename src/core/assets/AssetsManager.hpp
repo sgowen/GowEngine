@@ -50,6 +50,7 @@ public:
     Font& font(std::string name);
     bool isFontLoaded(std::string name);
     Renderer& renderer(std::string name);
+    bool isRendererLoaded(std::string name);
     Texture& texture(std::string name);
     bool isTextureLoaded(std::string name);
     std::string textureForRegionKey(std::string key);

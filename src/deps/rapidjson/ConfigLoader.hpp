@@ -13,6 +13,7 @@ class Config;
 class ConfigLoader
 {
 public:
+    static void initWithJSONFile(Config& config, std::string filePath);
     static void initWithJSON(Config& config, const char* json);
     
 private:

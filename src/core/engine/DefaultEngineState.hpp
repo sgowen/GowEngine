@@ -27,8 +27,6 @@ protected:
     virtual void onRender(Renderer& r) override;
     
 private:
-    bool needsToRenderModePicker;
-
     DefaultEngineState();
     virtual ~DefaultEngineState() {}
     DefaultEngineState(const DefaultEngineState&);

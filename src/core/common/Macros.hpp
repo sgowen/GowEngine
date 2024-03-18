@@ -46,6 +46,7 @@
 #define INPUT_MGR InputManager::getInstance()
 #define NW_CLNT NetworkClient::getInstance()
 #define NW_SRVR NetworkServer::getInstance()
+#define LUA LuaUtil::getInstance()
 #define OAL OpenALUtil::getInstance()
 #define OGL OpenGLUtil::getInstance()
 #define SOCKET_UTIL SocketUtil::getInstance()

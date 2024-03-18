@@ -8,9 +8,6 @@
 
 #include <GowEngine/GowEngine.hpp>
 
-#define SOL_USING_CXX_LUA 1
-#include <sol/sol.hpp>
-
 void ScriptManager::loadData(std::map<std::string, FileDescriptor>& sds)
 {
     for (auto& pair : sds)
@@ -26,14 +23,7 @@ void ScriptManager::loadIntoLuaAndFreeData(std::map<std::string, FileDescriptor>
     for (auto& pair : sds)
     {
         Script& s = script(pair.first);
-        s._lua = new sol::state();
-        sol::state& lua = *s._lua;
-        sol::load_result loadedScript = lua.load_buffer((const char*)s._fileData->_data, s._fileData->_length);
-        sol::protected_function_result result = loadedScript();
-        if (!result.valid())
-        {
-            LOG("Script: %s is not valid", s._desc._name.c_str());
-        }
+        LUA.loadScript(s);
         _loader.freeData(s);
     }
 }
@@ -43,6 +33,10 @@ void ScriptManager::reset()
     for (auto& pair : _scripts)
     {
         Script& s = pair.second;
+        if (s._lua != nullptr)
+        {
+            LUA.unloadScript(s);
+        }
         if (s._fileData != nullptr)
         {
             _loader.freeData(s);
@@ -64,7 +58,7 @@ bool ScriptManager::isScriptLoaded(std::string name)
     if (q != _scripts.end())
     {
         Script& s = q->second;
-        return s._fileData != nullptr && s._fileData->_length > 0;
+        return s._lua != nullptr;
     }
     
     return false;

@@ -20,7 +20,7 @@ void DefaultEngineState::onAssetsLoaded(Engine *e)
 
 void DefaultEngineState::onExit(Engine* e)
 {
-    // TODO, override the EngineState exit() so that it doesn't deregisterAssets engine assets.
+    // Empty
 }
 
 void DefaultEngineState::onUpdate(Engine* e)
@@ -50,6 +50,9 @@ void DefaultEngineState::onUpdate(Engine* e)
             case GOW_KEY_ANDROID_BACK_BUTTON:
                 e->popState();
                 return;
+            case GOW_KEY_C:
+                // TODO, create new mode!
+                return;
             case GOW_KEY_D:
                 ENGINE_CFG.mode() = "dante";
                 ENGINE_CFG.physicsEngine() = "Box2D";
@@ -68,11 +71,11 @@ void DefaultEngineState::onUpdate(Engine* e)
 
 void DefaultEngineState::onRender(Renderer& r)
 {
-    e->renderModePicker();
+    // TODO, render using engine embedded Lua script
+//    e->renderModePicker();
 }
 
-DefaultEngineState::DefaultEngineState() : EngineState("engine/json/default/Assets.json"),
-needsToRenderModePicker(false)
+DefaultEngineState::DefaultEngineState() : EngineState(ENGINE_ASSETS, true)
 {
     // Empty
 }

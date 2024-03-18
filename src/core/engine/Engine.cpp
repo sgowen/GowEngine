@@ -214,15 +214,6 @@ void Engine::popState()
     }
     
     _stateMachine.popState();
-    
-    if (currentState() == &ENGINE_STATE_DEFAULT)
-    {
-        // We are back in the default engine state
-        // This is only possible when running GowEngine
-        // with mode set to "engine"
-        ENGINE_CFG.mode() = "engine";
-        INPUT_MGR.setMatrix(&_renderer->matrixForInput());
-    }
 }
 
 void Engine::setRequestedHostAction(EngineRequestedHostAction value)

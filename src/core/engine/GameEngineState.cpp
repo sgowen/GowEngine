@@ -271,7 +271,7 @@ void GameEngineState::onEnter(Engine* e)
     
     if (_args.getBool(ARG_IS_HOST))
     {
-        GameServer::create(_config);
+        GameServer::create();
         assert(GAME_SERVER != nullptr);
     }
 }

@@ -194,9 +194,7 @@ double EngineConfig::frameRate()
 
 EngineConfig::EngineConfig(std::string filePathConfig)
 {
-    FileData jsonData = ASSET_HANDLER.loadAsset(filePathConfig);
-    ConfigLoader::initWithJSON(_config, (const char*)jsonData._data);
-    ASSET_HANDLER.unloadAsset(jsonData);
+    ConfigLoader::initWithJSONFile(_config, filePathConfig);
     
     _fullScreen = _config.getBool("fullScreen");
     _title = _config.getString("title");

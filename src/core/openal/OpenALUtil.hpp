@@ -35,7 +35,8 @@ public:
     void seekAhead(uint32_t alHandle, uint32_t numFrames);
     bool isPlaying(uint32_t alHandle);
     bool isPaused(uint32_t alHandle);
-    
+
+private:
     OpenALUtil() {}
     ~OpenALUtil() {}
     OpenALUtil(const OpenALUtil&);

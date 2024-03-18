@@ -43,6 +43,7 @@ void AssetsManager::update()
             _scriptMgr.loadIntoLuaAndFreeData(a._scripts);
             _shaderMgr.loadIntoOpenGLAndFreeData(a._shaders);
             _soundMgr.loadIntoOpenALAndFreeData(a._sounds);
+            _renderer.createDeviceDependentResources();
             _textureMgr.loadIntoOpenGLAndFreeData(a._textures);
             
             a._isLoadedIntoEngine = true;
@@ -226,8 +227,14 @@ bool AssetsManager::isFontLoaded(std::string name)
 
 Renderer& AssetsManager::renderer(std::string name)
 {
+    // TODO, get renderer from map using name key
+    return _renderer;
+}
+
+bool AssetsManager::isRendererLoaded(std::string name)
+{
     // TODO
-    return nullptr;
+    return false;
 }
 
 Texture& AssetsManager::texture(std::string name)

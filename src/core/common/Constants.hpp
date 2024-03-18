@@ -15,7 +15,7 @@
 #define ARG_STEAM_ADDRESS "ARG_STEAM_ADDRESS"
 
 /// Engine
-#define ENGINE_ASSETS "aaa_load_this_first"
+#define ENGINE_ASSETS "engine/json/default/Assets.json"
 #define MAX_NUM_PLAYERS 4
 
 /// Entity ID

@@ -37,6 +37,11 @@ struct Assets
         // Empty
     }
     
+    ~Assets()
+    {
+        reset();
+    }
+    
     bool needsToLoadDescriptors()
     {
         return

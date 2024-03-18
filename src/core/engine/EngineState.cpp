@@ -10,15 +10,8 @@
 
 void EngineState::enter(Engine* e)
 {
-    ConfigLoader::initWithJSONFile(_config, _filePathConfig);
-    
-    // Should be able to load everything asynchronously
-//    AssetsLoader::initWithJSONFile(_assets, _filePathAssets);
-//    RendererLoader::initWithJSONFile(_renderer, _config.getString("filePathRenderer"));
-    
     ASSETS_MGR.registerAssets(_filePathAssets);
     createDeviceDependentResources(e);
-    onWindowSizeChanged(e);
     onEnter(e);
 }
 
@@ -34,6 +27,7 @@ void EngineState::execute(Engine* e)
         // concurrently, but only 1 for each EngineState
         // So, really, we have an Engine Renderer that is live for the full
         // app lifecycle, and an EngineState renderer that gets set when we switch EngineStates (DefaultEngineState never leaves)
+        onWindowSizeChanged(e);
         Renderer& renderer = ASSETS_MGR.renderer(_filePathAssets);
         INPUT_MGR.setMatrix(&renderer.matrixForInput());
         onAssetsLoaded(e);
@@ -50,8 +44,12 @@ void EngineState::execute(Engine* e)
 
 void EngineState::exit(Engine* e)
 {
-    ASSETS_MGR.deregisterAssets(_filePathAssets);
-    destroyDeviceDependentResources(e);
+    if (!_areAssetsGlobal)
+    {
+        destroyDeviceDependentResources(e);
+        ASSETS_MGR.deregisterAssets(_filePathAssets);
+    }
+    
     onExit(e);
 }
 
@@ -84,8 +82,12 @@ void EngineState::render(Engine* e)
 {
     if (!ASSETS_MGR.isLoaded())
     {
-        // TODO, use the Engine renderer here
-        _renderer.renderLoadingView(ASSETS_MGR.getStateTime());
+        if (ASSETS_MGR.isRendererLoaded(ENGINE_ASSETS))
+        {
+            Renderer& renderer = ASSETS_MGR.renderer(ENGINE_ASSETS);
+            renderer.renderLoadingView(ASSETS_MGR.getStateTime());
+        }
+        
         return;
     }
     
@@ -94,12 +96,13 @@ void EngineState::render(Engine* e)
     renderer.configReset();
     renderer.configExtrapolation(e->extrapolation());
     onRender(renderer);
+    
     AUDIO_ENGINE.render();
 }
 
-EngineState::EngineState(std::string filePathConfig, std::string filePathAssets) : State<Engine>(),
-_filePathConfig(filePathConfig),
-_filePathAssets(filePathAssets)
+EngineState::EngineState(std::string filePathAssets, bool areAssetsGlobal) : State<Engine>(),
+_filePathAssets(filePathAssets),
+_areAssetsGlobal(areAssetsGlobal)
 {
     // Empty
 }
