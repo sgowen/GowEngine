@@ -25,56 +25,11 @@ void LuaControllerAI::runAI(uint16_t& inputState)
     Script& s = ASSETS_MGR.script(e.entityDef()._controllerAIScript);
     sol::state& lua = *s._lua;
     
-    lua.set_function("getNetworkUInt32", [&e](std::string name) {
-        return e.networkDataField(name).valueUInt32();
-    });
+    LUA.bindToEntity(lua, e);
     
     lua.set_function("setInput", [&e, &inputState](std::string inputStateFlag, bool value) {
         uint16_t flag = e.inputStateFlag(inputStateFlag);
         SET_BIT(inputState, flag, value);
-    });
-    
-    lua.set_function("findTargetWithinDistance", [&e](float shortestDistance) {
-        Entity* target = nullptr;
-        for (Entity* p : e.world()->getPlayers())
-        {
-            float distance = p->position().dist(e.position());
-            if (distance < shortestDistance)
-            {
-                shortestDistance = distance;
-                target = p;
-            }
-        }
-        
-        uint32_t ret = target ? target->getID() : 0;
-        
-        return ret;
-    });
-    
-    lua.set_function("isPlayer", [&e](uint32_t entityID) {
-        Entity* entity = e.world()->getEntityByID(entityID);
-        
-        return entity ? entity->isPlayer() : false;
-    });
-    
-    lua.set_function("entityPositionX", [&e](uint32_t entityID) {
-        Entity* entity = e.world()->getEntityByID(entityID);
-        
-        return entity ? entity->position()._x : 0;
-    });
-    
-    lua.set_function("entityPositionY", [&e](uint32_t entityID) {
-        Entity* entity = e.world()->getEntityByID(entityID);
-        
-        return entity ? entity->position()._y : 0;
-    });
-    
-    lua.set_function("positionX", [&e]() {
-        return e.position()._x;
-    });
-    
-    lua.set_function("positionY", [&e]() {
-        return e.position()._y;
     });
     
     lua["runAI"]();

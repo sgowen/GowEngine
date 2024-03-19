@@ -334,11 +334,10 @@ void AssetsManager::loadData(bool loadOnlyGlobalAssets)
             FileDescriptor& fd = pair.second;
             
             _entityInputMappings.emplace(std::piecewise_construct, std::make_tuple(pair.first), std::make_tuple(pair.first, fd._filePath));
-        }
-        
-        for (auto& pair : _entityInputMappings)
-        {
-            EntityInputMapping& eim = pair.second;
+            
+            auto q = _entityInputMappings.find(pair.first);
+            assert(q != _entityInputMappings.end());
+            EntityInputMapping& eim = q->second;
             
             EntityInputMappingsLoader::loadEntityInputMapping(eim);
         }

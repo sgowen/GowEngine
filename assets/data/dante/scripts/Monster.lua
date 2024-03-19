@@ -89,7 +89,7 @@ function onUpdate(numMovesProcessed)
     elseif s == "ATTACKING" and st == 30 then
         local touchingEntityID = getNetworkUInt32("touchingEntityID")
         if isPlayer(touchingEntityID) then
-            sendMsgDamage(touchingEntityID)
+            sendMessage(touchingEntityID, "MSG_DAMAGE")
         end
     end
 
@@ -102,15 +102,15 @@ end
 function onMessage(message, fromEntityID)
     local s = state()
 
-    if isMsgDangerousTouch() then
+    if message == "MSG_DANGEROUS_TOUCH" then
         if (isPlayer(fromEntityID)) then
             setNetworkUInt32("touchingEntityID", fromEntityID)
         end
-    elseif isMsgNoTouch() then
+    elseif message == "MSG_NO_TOUCH" then
         if (isPlayer(fromEntityID)) then
             setNetworkUInt32("touchingEntityID", 0)
         end
-    elseif isMsgDamage() and s ~= "DYING" then
+    elseif message == "MSG_DAMAGE" and s ~= "DYING" then
         local health = getNetworkUInt8("health")
         health = health - 1
         setNetworkUInt8("health", health)

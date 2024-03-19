@@ -218,6 +218,41 @@ uint8_t Entity::stateFlag(std::string key)
     return ret;
 }
 
+std::string Entity::message(uint16_t message)
+{
+    switch (message) {
+        case MSG_DANGEROUS_TOUCH:
+            return "MSG_DANGEROUS_TOUCH";
+        case MSG_NO_TOUCH:
+            return "MSG_NO_TOUCH";
+        case MSG_DAMAGE:
+            return "MSG_DAMAGE";
+        case MSG_NONE:
+        default:
+            return "MSG_NONE";
+    }
+}
+
+uint16_t Entity::message(std::string message)
+{
+    if (message == "MSG_DANGEROUS_TOUCH")
+    {
+        return MSG_DANGEROUS_TOUCH;
+    }
+    else if (message == "MSG_NO_TOUCH")
+    {
+        return MSG_NO_TOUCH;
+    }
+    else if (message == "MSG_DAMAGE")
+    {
+        return MSG_DAMAGE;
+    }
+    else
+    {
+        return MSG_NONE;
+    }
+}
+
 Config& Entity::data()
 {
     return _entityDef._data;

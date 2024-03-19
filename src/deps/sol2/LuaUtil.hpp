@@ -9,6 +9,11 @@
 #pragma once
 
 struct Script;
+class Entity;
+class Renderer;
+class World;
+
+namespace sol { class state; }
 
 class LuaUtil
 {
@@ -22,8 +27,15 @@ public:
     void loadScript(Script& s);
     void unloadScript(Script& s);
     
+    void bindToEntity(sol::state& lua, Entity& e);
+    void bindToRenderer(sol::state& lua, Renderer& r);
+    void bindToWorld(sol::state& lua, World& w);
+    void bindToRendererAndWorld(sol::state& lua, Renderer& r, World& w);
+    
 private:
-    LuaUtil() {}
+    std::map<std::string, Color> _colorMap;
+    
+    LuaUtil();
     ~LuaUtil() {}
     LuaUtil(const LuaUtil&);
     LuaUtil& operator=(const LuaUtil&);

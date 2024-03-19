@@ -430,7 +430,7 @@ function onMessage(message, fromEntityID)
         deathState = "VAMPIRE_DEATH"
     end
 
-    if isMsgDamage() and s ~= deathState then
+    if message == "MSG_DAMAGE" and s ~= deathState then
         setState(deathState)
         resetVelocity()
     end

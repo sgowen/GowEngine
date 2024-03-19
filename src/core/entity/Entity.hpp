@@ -516,6 +516,8 @@ public:
     void processInput(uint16_t inputState);
     void update(uint32_t numMovesProcessed);
     void message(uint16_t message, Entity* fromEntity);
+    std::string message(uint16_t message);
+    uint16_t message(std::string message);
     EntityDef& entityDef();
     uint16_t inputStateFlag(std::string inputStateFlag);
     uint8_t state(std::string key);
