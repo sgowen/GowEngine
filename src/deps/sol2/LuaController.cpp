@@ -201,6 +201,8 @@ void LuaController::onUpdate(uint32_t numMovesProcessed)
 void LuaController::onMessage(uint16_t message, Entity* fromEntity)
 {
     Entity& e = *_entity;
+    Vector2& vel = e.velocity();
+    uint8_t& stateFlags = e.state()._stateFlags;
     Script& s = ASSETS_MGR.script(e.entityDef()._controllerScript);
     sol::state& lua = *s._lua;
     
@@ -214,6 +216,138 @@ void LuaController::onMessage(uint16_t message, Entity* fromEntity)
     
     lua.set_function("isMsgDamage", [&message]() {
         return message == MSG_DAMAGE;
+    });
+    
+    lua.set_function("setNetworkUInt8", [&e](std::string key, uint8_t value) {
+        e.networkDataField("health").setValueUInt8(value);
+    });
+    
+    lua.set_function("state", [&e]() {
+        uint8_t stateVal = e.state()._state;
+        return e.state(stateVal);
+    });
+    
+    lua.set_function("stateTime", [&e]() {
+        uint16_t stateTimeVal = e.state()._stateTime;
+        return stateTimeVal;
+    });
+    
+    lua.set_function("getFloat", [&e](std::string key) {
+        return e.data().getFloat(key);
+    });
+    
+    lua.set_function("setState", [&e](std::string key) {
+        uint8_t& state = e.state()._state;
+        uint16_t& stateTime = e.state()._stateTime;
+        
+        state = e.state(key);
+        stateTime = 0;
+    });
+    
+    lua.set_function("isGrounded", [&e]() {
+        return e.isGrounded();
+    });
+    
+    lua.set_function("setVelocityX", [&e](float x) {
+        Vector2& vel = e.velocity();
+        vel._x = x;
+    });
+    
+    lua.set_function("setVelocityY", [&e](float y) {
+        Vector2& vel = e.velocity();
+        vel._y = y;
+    });
+    
+    lua.set_function("getVelocityY", [&e]() {
+        Vector2& vel = e.velocity();
+        return vel._y;
+    });
+    
+    lua.set_function("setXFlipped", [&e](bool value) {
+        e.pose()._isXFlipped = value;
+    });
+    
+    lua.set_function("isXFlipped", [&e]() {
+        return e.pose()._isXFlipped;
+    });
+    
+    lua.set_function("getNetworkUInt8", [&e](std::string name) {
+        return e.networkDataField(name).valueUInt8();
+    });
+    
+    lua.set_function("getUInt", [&e](std::string key) {
+        return e.data().getUInt(key);
+    });
+    
+    lua.set_function("exile", [&e]() {
+        e.exile();
+    });
+    
+    lua.set_function("getNetworkUInt32", [&e](std::string name) {
+        return e.networkDataField(name).valueUInt32();
+    });
+    
+    lua.set_function("getNetworkUInt16", [&e](std::string name) {
+        return e.networkDataField(name).valueUInt16();
+    });
+    
+    lua.set_function("sendMsgDamage", [&e](uint32_t entityID) {
+        Entity* entity = e.world()->getEntityByID(entityID);
+        if (entity != nullptr)
+        {
+            entity->message(MSG_DAMAGE, &e);
+        }
+    });
+    
+    lua.set_function("isPlayer", [&e](uint32_t entityID) {
+        Entity* entity = e.world()->getEntityByID(entityID);
+        
+        bool ret = entity ? entity->isPlayer() : false;
+        
+        return ret;
+    });
+    
+    lua.set_function("setNetworkUInt32", [&e](std::string key, uint32_t value) {
+        e.networkDataField(key).setValueUInt32(value);
+    });
+    
+    lua.set_function("setNetworkUInt16", [&e](std::string key, uint16_t value) {
+        e.networkDataField(key).setValueUInt16(value);
+    });
+    
+    lua.set_function("setZeroGravity", [&e](bool value) {
+        e.pose()._isZeroGravity = value;
+    });
+    
+    lua.set_function("setSlowed", [&e](bool value) {
+        e.pose()._isSlowed = value;
+    });
+    
+    lua.set_function("setNetworkUInt8", [&e](std::string key, uint8_t value) {
+        e.networkDataField(key).setValueUInt8(value);
+    });
+    
+    lua.set_function("setNetworkBool", [&e](std::string key, bool value) {
+        e.networkDataField(key).setValueBool(value);
+    });
+    
+    lua.set_function("getNetworkBool", [&e](std::string key) {
+        return e.networkDataField(key).valueBool();
+    });
+    
+    lua.set_function("setStateFlag", [&e, &stateFlags](std::string stateFlag, bool value) {
+        uint16_t flag = e.stateFlag(stateFlag);
+        SET_BIT(stateFlags, flag, value);
+    });
+    
+    lua.set_function("isStateFlagSet", [&e, &stateFlags](std::string key) {
+        bool ret = IS_BIT_SET(stateFlags, e.stateFlag(key));
+        
+        return ret;
+    });
+    
+    lua.set_function("resetVelocity", [&vel]() {
+        vel.reset();
     });
     
     lua["onMessage"](message, fromEntity ? fromEntity->getID() : 0);
