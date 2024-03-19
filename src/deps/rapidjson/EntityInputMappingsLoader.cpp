@@ -1,5 +1,5 @@
 //
-//  EntityInputMappingManagerLoader.cpp
+//  EntityInputMappingsLoader.cpp
 //  GowEngine
 //
 //  Created by Stephen Gowen on 3/4/24.
@@ -11,45 +11,7 @@
 #include <rapidjson/document.h>
 #include <rapidjson/prettywriter.h>
 
-void EntityInputMappingManagerLoader::initWithJSONFile(EntityInputMappingManager& eimm, std::string filePath)
-{
-    FileData fd = ASSET_HANDLER.loadAsset(filePath);
-    initWithJSON(eimm, (const char*)fd._data);
-    ASSET_HANDLER.unloadAsset(fd);
-}
-
-void EntityInputMappingManagerLoader::initWithJSON(EntityInputMappingManager& eimm, const char* data)
-{
-    eimm._entityInputMappings.clear();
-    
-    using namespace rapidjson;
-    
-    Document d;
-    d.Parse<kParseStopWhenDoneFlag>(data);
-    
-    assert(d.IsObject());
-    for (Value::ConstMemberIterator i = d.MemberBegin(); i != d.MemberEnd(); ++i)
-    {
-        const Value& iv = i->value;
-        assert(iv.IsString());
-        
-        std::string key = i->name.GetString();
-        
-        assert(eimm._entityInputMappings.find(key) == eimm._entityInputMappings.end());
-        
-        std::string filePath = iv.GetString();
-        
-        eimm._entityInputMappings.emplace(key, EntityInputMapping{key, filePath});
-    }
-    
-    for (auto& pair : eimm._entityInputMappings)
-    {
-        EntityInputMapping& eim = pair.second;
-        loadEntityInputMapping(eim);
-    }
-}
-
-void EntityInputMappingManagerLoader::loadEntityInputMapping(EntityInputMapping& eim)
+void EntityInputMappingsLoader::loadEntityInputMapping(EntityInputMapping& eim)
 {
     eim._gamepadEvents.clear();
     eim._keyboardEvents.clear();

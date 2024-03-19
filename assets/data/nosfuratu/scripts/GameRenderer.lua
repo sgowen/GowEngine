@@ -67,37 +67,39 @@ local function renderJon(playerID, colorFactorKey, framebufferKey, framebufferTo
     end
 end
 
-updateMatrixCenteredOnPlayer()
+function render()
+    updateMatrixCenteredOnPlayer()
 
-local framebuffer = "main"
-local spriteBatcher = "main"
+    local framebuffer = "main"
+    local spriteBatcher = "main"
 
-bindFramebuffer(framebuffer)
+    bindFramebuffer(framebuffer)
 
-renderParallaxLayersBoundToRepeatingTexture(spriteBatcher, "background_upper")
-renderParallaxLayersBoundToRepeatingTexture(spriteBatcher, "background_mid")
-renderParallaxLayersBoundToRepeatingTexture(spriteBatcher, "background_lower")
+    renderParallaxLayersBoundToRepeatingTexture(spriteBatcher, "background_upper")
+    renderParallaxLayersBoundToRepeatingTexture(spriteBatcher, "background_mid")
+    renderParallaxLayersBoundToRepeatingTexture(spriteBatcher, "background_lower")
 
-renderStaticEntitiesBoundToTexture(spriteBatcher, "ground")
-renderStaticEntitiesBoundToTexture(spriteBatcher, "platforming_1")
+    renderStaticEntitiesBoundToTexture(spriteBatcher, "ground")
+    renderStaticEntitiesBoundToTexture(spriteBatcher, "platforming_1")
 
-local framebufferP4 = "player4"
-local framebufferP3 = "player3"
-local framebufferP2 = "player2"
-local framebufferP1 = "player1"
+    local framebufferP4 = "player4"
+    local framebufferP3 = "player3"
+    local framebufferP2 = "player2"
+    local framebufferP1 = "player1"
 
-local colorFactorP4 = "BLUE"
-local colorFactorP3 = "GREEN"
-local colorFactorP2 = "RED"
-local colorFactorP1 = "ONE"
+    local colorFactorP4 = "BLUE"
+    local colorFactorP3 = "GREEN"
+    local colorFactorP2 = "RED"
+    local colorFactorP1 = "ONE"
 
-renderJon(4, colorFactorP4, framebufferP4, framebuffer)
-renderJon(3, colorFactorP3, framebufferP3, framebufferP4)
-renderJon(2, colorFactorP2, framebufferP2, framebufferP3)
-renderJon(1, colorFactorP1, framebufferP1, framebufferP2)
+    renderJon(4, colorFactorP4, framebufferP4, framebuffer)
+    renderJon(3, colorFactorP3, framebufferP3, framebufferP4)
+    renderJon(2, colorFactorP2, framebufferP2, framebufferP3)
+    renderJon(1, colorFactorP1, framebufferP1, framebufferP2)
 
-renderPhysicsIfEnabled()
+    renderPhysicsIfEnabled()
 
-renderGameInfo()
+    renderGameInfo()
 
-renderFramebufferToScreen(framebufferP1)
+    renderFramebufferToScreen(framebufferP1)
+end

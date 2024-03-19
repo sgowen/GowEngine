@@ -8,11 +8,9 @@
 
 #pragma once
 
-#include "core/common/StateMachine.hpp"
+#include "EngineState.hpp"
 
-class Engine;
-
-class DefaultEngineState : public State<Engine>
+class DefaultEngineState : public EngineState
 {
 public:
     static DefaultEngineState& getInstance()
@@ -21,18 +19,14 @@ public:
         return ret;
     }
 
-    virtual void enter(Engine* e);
-    virtual void execute(Engine* e);
-    virtual void exit(Engine* e) {}
-
-private:
-    bool ERSA_CREATE_RESOURCES_called;
-    bool ERSA_WINDOW_SIZE_CHANGED_called;
-    bool needsToRenderModePicker;
+protected:
+    virtual void onEnter(Engine* e) override;
+    virtual void onAssetsLoaded(Engine* e) override;
+    virtual void onExit(Engine* e) override;
+    virtual void onUpdate(Engine* e) override;
+    virtual void onRender(Renderer& r) override;
     
-    void update(Engine* e);
-    void render(Engine* e);
-
+private:
     DefaultEngineState();
     virtual ~DefaultEngineState() {}
     DefaultEngineState(const DefaultEngineState&);

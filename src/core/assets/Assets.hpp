@@ -9,45 +9,86 @@
 #pragma once
 
 #include "Font.hpp"
-#include "ScriptDescriptor.hpp"
+#include "FileDescriptor.hpp"
 #include "ShaderDescriptor.hpp"
 #include "SoundDescriptor.hpp"
 #include "TextureDescriptor.hpp"
 
-#include <vector>
-
 struct Assets
 {
-    std::vector<Font> _fonts;
-    std::map<std::string, ScriptDescriptor> _scriptDescriptors;
-    std::vector<ShaderDescriptor> _shaderDescriptors;
-    std::vector<SoundDescriptor> _soundDescriptors;
-    std::vector<TextureDescriptor> _textureDescriptors;
+    FileDescriptor* _entityDefs;
+    std::map<std::string, FileDescriptor> _entityInputMappings;
+    std::map<uint32_t, FileDescriptor> _entityLayouts;
+    std::map<std::string, Font> _fonts;
+    FileDescriptor* _renderer;
+    std::map<std::string, FileDescriptor> _scripts;
+    std::map<std::string, ShaderDescriptor> _shaders;
+    std::map<std::string, SoundDescriptor> _sounds;
+    std::map<std::string, TextureDescriptor> _textures;
     bool _isDataLoaded;
     bool _isLoadedIntoEngine;
     
-    Assets() : _isDataLoaded(false), _isLoadedIntoEngine(false)
+    Assets() :
+    _entityDefs(nullptr),
+    _renderer(nullptr),
+    _isDataLoaded(false),
+    _isLoadedIntoEngine(false)
     {
         // Empty
     }
     
+    ~Assets()
+    {
+        reset();
+    }
+    
+    bool needsToLoadDescriptors()
+    {
+        return
+        _entityDefs == nullptr &&
+        _entityInputMappings.empty() &&
+        _entityLayouts.empty() &&
+        _fonts.empty() &&
+        _renderer == nullptr &&
+        _scripts.empty() &&
+        _shaders.empty() &&
+        _sounds.empty() &&
+        _textures.empty();
+    }
+    
     void reset()
     {
+        if (_entityDefs != nullptr)
+        {
+            delete _entityDefs;
+            _entityDefs = nullptr;
+        }
+        
+        _entityInputMappings.clear();
+        _entityLayouts.clear();
         _fonts.clear();
-        _scriptDescriptors.clear();
-        _shaderDescriptors.clear();
-        _soundDescriptors.clear();
-        _textureDescriptors.clear();
+        
+        if (_renderer != nullptr)
+        {
+            delete _renderer;
+            _renderer = nullptr;
+        }
+        
+        _scripts.clear();
+        _shaders.clear();
+        _sounds.clear();
+        _textures.clear();
+        
         _isDataLoaded = false;
         _isLoadedIntoEngine = false;
     }
     
-    ScriptDescriptor* script(std::string key)
+    FileDescriptor* script(std::string key)
     {
-        ScriptDescriptor* ret = nullptr;
+        FileDescriptor* ret = nullptr;
         
-        const auto& q = _scriptDescriptors.find(key);
-        if (q != _scriptDescriptors.end())
+        const auto& q = _scripts.find(key);
+        if (q != _scripts.end())
         {
             ret = &q->second;
         }
@@ -59,12 +100,10 @@ struct Assets
     {
         Font* ret = nullptr;
         
-        for (Font& f : _fonts)
+        const auto& q = _fonts.find(key);
+        if (q != _fonts.end())
         {
-            if (f._name == key)
-            {
-                ret = &f;
-            }
+            ret = &q->second;
         }
         
         return ret;
@@ -72,13 +111,13 @@ struct Assets
     
     std::string textureForRegionKey(std::string key)
     {
-        std::vector<TextureDescriptor>& tds = _textureDescriptors;
-        for (TextureDescriptor& td : tds)
+        std::map<std::string, TextureDescriptor>& tds = _textures;
+        for (auto& pair : tds)
         {
-            TextureRegion* tr = td.textureRegion(key, 0);
+            TextureRegion* tr = pair.second.textureRegion(key, 0);
             if (tr != nullptr)
             {
-                return td._name;
+                return pair.first;
             }
         }
         
@@ -89,10 +128,10 @@ struct Assets
     {
         TextureRegion* ret = nullptr;
         
-        std::vector<TextureDescriptor>& tds = _textureDescriptors;
-        for (TextureDescriptor& td : tds)
+        std::map<std::string, TextureDescriptor>& tds = _textures;
+        for (auto& pair : tds)
         {
-            ret = td.textureRegion(key, stateTime);
+            ret = pair.second.textureRegion(key, stateTime);
             if (ret != nullptr)
             {
                 break;
@@ -106,10 +145,10 @@ struct Assets
     {
         Animation* ret = nullptr;
         
-        std::vector<TextureDescriptor>& tds = _textureDescriptors;
-        for (TextureDescriptor& td : tds)
+        std::map<std::string, TextureDescriptor>& tds = _textures;
+        for (auto& pair : tds)
         {
-            ret = td.animation(key);
+            ret = pair.second.animation(key);
             if (ret != nullptr)
             {
                 break;

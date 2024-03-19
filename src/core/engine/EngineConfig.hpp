@@ -15,13 +15,14 @@
 class EngineConfig
 {
 public:
-    static void create(std::string configFilePath);
+    static void create(std::string filePathConfig);
     static EngineConfig& getInstance();
     static void destroy();
     
     bool fullScreen();
     std::string title();
     std::string& mode();
+    std::string& physicsEngine();
     bool vsync();
     bool useSteamNetworking();
     std::string versionName();
@@ -31,6 +32,7 @@ public:
     bool consoleLoggingEnabled();
     uint8_t framesPerSecond();
     bool glfwLoggingEnabled();
+    bool logFileIO();
     bool logLua();
     bool logOpenGL();
     bool logOpenAL();
@@ -60,6 +62,7 @@ private:
     bool _fullScreen;
     std::string _title;
     std::string _mode;
+    std::string _physicsEngine;
     bool _vsync;
     bool _useSteamNetworking;
     std::string _versionName;
@@ -69,6 +72,7 @@ private:
     bool _consoleLoggingEnabled;
     uint8_t _framesPerSecond;
     bool _glfwLoggingEnabled;
+    bool _logFileIO;
     bool _logLua;
     bool _logOpenGL;
     bool _logOpenAL;
@@ -90,7 +94,7 @@ private:
     /// Derived Values
     float _frameRate;
     
-    EngineConfig(std::string configFilePath);
+    EngineConfig(std::string filePathConfig);
     ~EngineConfig();
     EngineConfig(const EngineConfig&);
     EngineConfig& operator=(const EngineConfig&);

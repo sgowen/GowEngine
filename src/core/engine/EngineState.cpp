@@ -10,79 +10,58 @@
 
 void EngineState::enter(Engine* e)
 {
-    // Should be able to load everything asynchronously, including the config
-    ConfigLoader::initWithJSONFile(_config, _configFilePath);
-    
-    _filePathAssets = _config.getString("filePathAssets");
-    
-    AssetsLoader::initWithJSONFile(_assets, _filePathAssets);
-    RendererLoader::initWithJSONFile(_renderer, _config.getString("filePathRenderer"));
-    
-    INPUT_MGR.setMatrix(&_renderer.matrixForInput());
-    
-    ASSETS_MGR.registerAssets(_filePathAssets, _assets);
+    ASSETS_MGR.registerAssets(_filePathAssets);
     createDeviceDependentResources(e);
-    onWindowSizeChanged(e);
+    
     onEnter(e);
 }
 
 void EngineState::execute(Engine* e)
 {
-    switch (e->requestedStateAction())
+    bool areAssetsLoaded = ASSETS_MGR.isLoaded();
+    
+    ASSETS_MGR.update();
+    
+    if (!areAssetsLoaded && ASSETS_MGR.isLoaded())
     {
-        case ERSA_CREATE_RESOURCES:
-            createDeviceDependentResources(e);
-            break;
-        case ERSA_WINDOW_SIZE_CHANGED:
-            onWindowSizeChanged(e);
-            break;
-        case ERSA_DESTROY_RESOURCES:
-            destroyDeviceDependentResources(e);
-            break;
-        case ERSA_PAUSE:
-            pause(e);
-            break;
-        case ERSA_RESUME:
-            resume(e);
-            break;
-        case ERSA_UPDATE:
-            update(e);
-            break;
-        case ERSA_RENDER:
-            render(e);
-            break;
-        case ERSA_DEFAULT:
-        default:
-            break;
+        // Currently, we can have multiple renderers loaded
+        // concurrently, but only 1 for each EngineState
+        // So, really, we have an Engine Renderer that is live for the full
+        // app lifecycle, and an EngineState renderer that gets set when we switch EngineStates (DefaultEngineState never leaves)
+        Renderer& renderer = ASSETS_MGR.renderer(_filePathAssets);
+        INPUT_MGR.setMatrix(&renderer.matrixForInput());
+        onAssetsLoaded(e);
+        areAssetsLoaded = true;
     }
+    
+    if (!areAssetsLoaded)
+    {
+        return;
+    }
+    
+    onUpdate(e);
 }
 
 void EngineState::exit(Engine* e)
 {
-    ASSETS_MGR.deregisterAssets(_filePathAssets);
-    destroyDeviceDependentResources(e);
     onExit(e);
-}
-
-EngineState::EngineState(std::string configFilePath) : State<Engine>()
-{
-    _configFilePath = configFilePath;
+    
+    if (_areAssetsGlobal)
+    {
+        return;
+    }
+    
+    destroyDeviceDependentResources(e);
+    ASSETS_MGR.deregisterAssets(_filePathAssets);
 }
 
 void EngineState::createDeviceDependentResources(Engine* e)
 {
     ASSETS_MGR.createDeviceDependentResourcesAsync();
-    _renderer.createDeviceDependentResources();
-}
-
-void EngineState::onWindowSizeChanged(Engine* e)
-{
-    _renderer.onWindowSizeChanged(e->screenWidth(), e->screenHeight());
 }
 
 void EngineState::destroyDeviceDependentResources(Engine* e)
 {
-    _renderer.destroyDeviceDependentResources();
     ASSETS_MGR.destroyDeviceDependentResources();
 }
 
@@ -96,36 +75,35 @@ void EngineState::resume(Engine* e)
     AUDIO_ENGINE.resume();
 }
 
-void EngineState::update(Engine* e)
-{
-    bool areAssetsLoaded = ASSETS_MGR.isLoaded();
-    
-    ASSETS_MGR.update();
-    
-    if (!areAssetsLoaded && ASSETS_MGR.isLoaded())
-    {
-        onAssetsLoaded(e);
-        areAssetsLoaded = true;
-    }
-    
-    if (!areAssetsLoaded)
-    {
-        return;
-    }
-    
-    onUpdate(e);
-}
-
 void EngineState::render(Engine* e)
 {
     if (!ASSETS_MGR.isLoaded())
     {
-        _renderer.renderLoadingView(ASSETS_MGR.getStateTime());
+        if (ASSETS_MGR.isRendererLoaded(FILE_PATH_ENGINE_ASSETS))
+        {
+            Renderer& renderer = ASSETS_MGR.renderer(FILE_PATH_ENGINE_ASSETS);
+            renderer.renderLoadingView(ASSETS_MGR.getStateTime());
+        }
+        
         return;
     }
     
-    _renderer.configReset();
-    _renderer.configExtrapolation(e->extrapolation());
-    onRender(_renderer);
+    Renderer& renderer = ASSETS_MGR.renderer(_filePathAssets);
+    
+    renderer.configReset();
+    renderer.configExtrapolation(e->extrapolation());
+    renderer.configScreenSize(e->screenWidth(), e->screenHeight());
+    onRender(renderer);
+    
     AUDIO_ENGINE.render();
+}
+
+EngineState::EngineState(std::string filePathAssets, bool areAssetsGlobal) : State<Engine>(),
+_filePathAssets(filePathAssets),
+_areAssetsGlobal(areAssetsGlobal)
+{
+    if (_areAssetsGlobal)
+    {
+        ASSETS_MGR.registerAssets(_filePathAssets);
+    }
 }

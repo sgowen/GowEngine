@@ -15,23 +15,22 @@ typedef vec4 mat4[4];
 
 struct VERTEX_2D_TEXTURE
 {
-    vec2 _xy;
-    vec2 _uv;
+    vec4 _xyuv;
     
     VERTEX_2D_TEXTURE(float x, float y, float u, float v)
     {
-        _xy[0] = x;
-        _xy[1] = y;
-        _uv[0] = u;
-        _uv[1] = v;
+        _xyuv[0] = x;
+        _xyuv[1] = y;
+        _xyuv[2] = u;
+        _xyuv[3] = v;
     }
     
     VERTEX_2D_TEXTURE()
     {
-        _xy[0] = 0;
-        _xy[1] = 0;
-        _uv[0] = 0;
-        _uv[1] = 0;
+        _xyuv[0] = 0;
+        _xyuv[1] = 0;
+        _xyuv[2] = 0;
+        _xyuv[3] = 0;
     }
 };
 

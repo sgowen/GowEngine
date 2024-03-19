@@ -1,4 +1,20 @@
 {
+    "entityDefs": {
+        "filePath": "json/game/EntityDefs.json"
+    },
+    "entityInputMappings": {
+        "JonInputMapping": {
+            "filePath": "json/game/EntityInputMapping/JonInputMapping.json"
+        }
+    },
+    "entityLayouts": {
+        "L001": {
+            "filePath": "json/game/EntityLayout/main.json"
+        }
+    },
+    "renderer": {
+        "filePath": "json/game/Renderer.json"
+    },
     "scripts": {
         "GameRenderer": {
             "filePath": "scripts/GameRenderer.lua"
@@ -7,535 +23,510 @@
             "filePath": "scripts/Jon.lua"
         }
     },
-  "shaders": [
-    {
-      "name": "framebufferWithTint",
-      "vertexShaderFilePath": "engine/shaders/framebuffer.vsh",
-      "fragmentShaderFilePath": "shaders/framebufferWithTint.fsh"
+    "shaders": {
+        "framebufferWithTint": {
+            "vertexShaderFilePath": "engine/shaders/framebuffer.vsh",
+            "fragmentShaderFilePath": "shaders/framebufferWithTint.fsh"
+        }
+    },
+    "sounds": {
+        "music_game": {
+            "filePath": "sounds/music/game.wav"
+        },
+        "jon_rabbit_double_jump": {
+            "filePath": "sounds/jon_rabbit_double_jump.wav",
+            "numInstances": 4
+        },
+        "jon_footstep_left_grass": {
+            "filePath": "sounds/jon_footstep_left_grass.wav",
+            "numInstances": 4
+        },
+        "jon_footstep_right_grass": {
+            "filePath": "sounds/jon_footstep_right_grass.wav",
+            "numInstances": 4
+        },
+        "jon_rabbit_jump": {
+            "filePath": "sounds/jon_rabbit_jump.wav",
+            "numInstances": 4
+        },
+        "jon_landing_grass": {
+            "filePath": "sounds/jon_landing_grass.wav",
+            "numInstances": 4
+        },
+        "jon_rabbit_stomp": {
+            "filePath": "sounds/jon_rabbit_stomp.wav",
+            "numInstances": 4
+        },
+        "jon_rabbit_punch": {
+            "filePath": "sounds/jon_rabbit_punch.wav",
+            "numInstances": 4
+        },
+        "jon_rabbit_drill": {
+            "filePath": "sounds/jon_rabbit_drill.wav",
+            "numInstances": 4
+        },
+        "jon_trigger_transform": {
+            "filePath": "sounds/jon_trigger_transform.wav",
+            "numInstances": 4
+        },
+        "jon_complete_transform": {
+            "filePath": "sounds/jon_complete_transform.wav",
+            "numInstances": 4
+        },
+        "jon_cancel_transform": {
+            "filePath": "sounds/jon_cancel_transform.wav",
+            "numInstances": 4
+        },
+        "jon_vampire_jump": {
+            "filePath": "sounds/jon_vampire_jump.wav",
+            "numInstances": 4
+        },
+        "jon_vampire_double_jump": {
+            "filePath": "sounds/jon_vampire_double_jump.wav",
+            "numInstances": 4
+        },
+        "jon_vampire_dash": {
+            "filePath": "sounds/jon_vampire_dash.wav",
+            "numInstances": 4
+        },
+        "jon_vampire_glide": {
+            "filePath": "sounds/jon_vampire_glide.wav",
+            "numInstances": 4
+        },
+        "jon_death": {
+            "filePath": "sounds/jon_death.wav",
+            "numInstances": 4
+        }
+    },
+    "textures": {
+        "background_mid": {
+            "filePath": "textures/background_mid.png",
+            "repeatS": true,
+            "mipMap": true,
+            "mappings": {
+                "BackgroundType_Mid_Hills": {
+                    "x": 0,
+                    "y": 80,
+                    "regionWidth": 2048,
+                    "regionHeight": 720
+                },
+                "BackgroundType_Mid_Trees": {
+                    "x": 0,
+                    "y": 1310,
+                    "regionWidth": 2048,
+                    "regionHeight": 736
+                }
+            }
+        },
+        "background_lower": {
+            "filePath": "textures/background_lower.png",
+            "repeatS": true,
+            "mipMap": true,
+            "mappings": {
+                "BackgroundType_Lower_Top": {
+                    "x": 0,
+                    "y": 84,
+                    "regionWidth": 2048,
+                    "regionHeight": 992
+                },
+                "BackgroundType_Lower_Bottom": {
+                    "x": 0,
+                    "y": 1520,
+                    "regionWidth": 2048,
+                    "regionHeight": 528
+                }
+            }
+        },
+        "background_upper": {
+            "filePath": "textures/background_upper.png",
+            "repeatS": true,
+            "mipMap": true,
+            "mappings": {
+                "BackgroundType_Upper": {
+                    "x": 0,
+                    "y": 0,
+                    "regionWidth": 2048,
+                    "regionHeight": 1616
+                }
+            }
+        },
+        "ground": {
+            "filePath": "textures/ground.png",
+            "textureWidth": 4096,
+            "textureHeight": 4096,
+            "mipMap": true,
+            "mappings": {
+                "GroundType_GrassWithoutCaveEndLeft": {
+                    "x": 0,
+                    "y": 2496,
+                    "regionWidth": 128,
+                    "regionHeight": 1600
+                },
+                "GroundType_GrassWithoutCaveLarge": {
+                    "x": 1664,
+                    "y": 2496,
+                    "regionWidth": 2048,
+                    "regionHeight": 1600
+                },
+                "GroundType_GrassWithoutCaveEndRight": {
+                    "x": 3712,
+                    "y": 2496,
+                    "regionWidth": 128,
+                    "regionHeight": 1600
+                }
+            }
+        },
+        "platforming_1": {
+            "filePath": "textures/platforming_1.png",
+            "textureWidth": 4096,
+            "textureHeight": 4096,
+            "mipMap": true,
+            "mappings": {
+                "ForegroundObjectType_GrassPlatformLeft": {
+                    "x": 2000,
+                    "y": 600,
+                    "regionWidth": 64,
+                    "regionHeight": 96
+                },
+                "ForegroundObjectType_GrassPlatformCenter": {
+                    "x": 2064,
+                    "y": 600,
+                    "regionWidth": 224,
+                    "regionHeight": 96
+                },
+                "ForegroundObjectType_GrassPlatformRight": {
+                    "x": 2288,
+                    "y": 600,
+                    "regionWidth": 64,
+                    "regionHeight": 96
+                },
+                "ForegroundObjectType_SpikeGrassFour": {
+                    "x": 2000,
+                    "y": 900,
+                    "regionWidth": 288,
+                    "regionHeight": 96
+                }
+            }
+        },
+        "vampire": {
+            "filePath": "textures/vampire.png",
+            "textureWidth": 4096,
+            "textureHeight": 4096,
+            "filterMin": "SHARP",
+            "filterMag": "SHARP",
+            "mipMap": true,
+            "mappings": {
+                "Jon_isAttemptingToTransformIntoVampire": {
+                    "x": 2048,
+                    "y": 2048,
+                    "regionWidth": 256,
+                    "regionHeight": 256,
+                    "animationWidth": 2048,
+                    "animationHeight": 256,
+                    "frameTime": 6,
+                    "numFrames": 8,
+                    "looping": false
+                },
+                "Jon_isCancelingAttemptToTransformIntoVampire": {
+                    "x": 2048,
+                    "y": 2048,
+                    "regionWidth": 256,
+                    "regionHeight": 256
+                },
+                "Jon_isTransformingIntoVampire": {
+                    "x": 2048,
+                    "y": 2304,
+                    "regionWidth": 256,
+                    "regionHeight": 256,
+                    "animationWidth": 2048,
+                    "animationHeight": 512,
+                    "frameTime": 2,
+                    "numFrames": 11,
+                    "looping": false
+                },
+                "Jon_isAttemptingToRevertToRabbit": {
+                    "x": 2048,
+                    "y": 2816,
+                    "regionWidth": 256,
+                    "regionHeight": 256,
+                    "animationWidth": 2048,
+                    "animationHeight": 256,
+                    "frameTime": 6,
+                    "numFrames": 8,
+                    "looping": false
+                },
+                "Jon_isCancelingAttemptToRevertToRabbit": {
+                    "x": 2048,
+                    "y": 2816,
+                    "regionWidth": 256,
+                    "regionHeight": 256
+                },
+                "Jon_isRevertingToRabbit": {
+                    "x": 2048,
+                    "y": 3072,
+                    "regionWidth": 256,
+                    "regionHeight": 256,
+                    "animationWidth": 2048,
+                    "animationHeight": 512,
+                    "frameTime": 2,
+                    "numFrames": 11,
+                    "looping": false
+                },
+                "Jon_Vampire_Idle": {
+                    "x": 0,
+                    "y": 1792,
+                    "regionWidth": 256,
+                    "regionHeight": 256,
+                    "animationWidth": 2048,
+                    "animationHeight": 256,
+                    "frameTime": 5,
+                    "numFrames": 8,
+                    "looping": true
+                },
+                "Jon_Vampire_Running": {
+                    "x": 0,
+                    "y": 0,
+                    "regionWidth": 256,
+                    "regionHeight": 256,
+                    "animationWidth": 2048,
+                    "animationHeight": 512,
+                    "frameTime": 3,
+                    "numFrames": 10,
+                    "looping": true
+                },
+                "Jon_Vampire_UpwardThrust": {
+                    "x": 0,
+                    "y": 3072,
+                    "regionWidth": 256,
+                    "regionHeight": 512,
+                    "animationWidth": 1536,
+                    "animationHeight": 1024,
+                    "frameTime": 2,
+                    "numFrames": 11,
+                    "looping": false
+                },
+                "Jon_Vampire_Dash": {
+                    "x": 768,
+                    "y": 512,
+                    "regionWidth": 768,
+                    "regionHeight": 256,
+                    "animationWidth": 3072,
+                    "animationHeight": 512,
+                    "frameTime": 3,
+                    "numFrames": 8,
+                    "looping": false
+                },
+                "Jon_Vampire_Dash_Completed": {
+                    "x": 768,
+                    "y": 1024,
+                    "regionWidth": 768,
+                    "regionHeight": 256,
+                    "animationWidth": 3072,
+                    "animationHeight": 512,
+                    "frameTime": 4,
+                    "numFrames": 6,
+                    "looping": false
+                },
+                "Jon_Vampire_DoubleJumping": {
+                    "x": 0,
+                    "y": 512,
+                    "regionWidth": 256,
+                    "regionHeight": 256,
+                    "animationWidth": 768,
+                    "animationHeight": 512,
+                    "frameTime": 3,
+                    "numFrames": 6,
+                    "looping": false
+                },
+                "Jon_Vampire_Gliding": {
+                    "x": 0,
+                    "y": 1024,
+                    "regionWidth": 256,
+                    "regionHeight": 256,
+                    "animationWidth": 512,
+                    "animationHeight": 256,
+                    "frameTime": 3,
+                    "numFrames": 2,
+                    "looping": true
+                },
+                "Jon_Vampire_Falling": {
+                    "x": 0,
+                    "y": 1280,
+                    "regionWidth": 256,
+                    "regionHeight": 256,
+                    "animationWidth": 2048,
+                    "animationHeight": 256,
+                    "frameTime": 3,
+                    "numFrames": 3,
+                    "looping": true
+                },
+                "Jon_Vampire_Landing": {
+                    "x": 0,
+                    "y": 1536,
+                    "regionWidth": 256,
+                    "regionHeight": 256,
+                    "animationWidth": 2048,
+                    "animationHeight": 256,
+                    "frameTime": 6,
+                    "numFrames": 3,
+                    "looping": false
+                },
+                "Jon_Vampire_Death": {
+                    "x": 2048,
+                    "y": 3584,
+                    "regionWidth": 256,
+                    "regionHeight": 256,
+                    "animationWidth": 2048,
+                    "animationHeight": 512,
+                    "frameTime": 4,
+                    "numFrames": 15,
+                    "looping": false
+                }
+            }
+        },
+        "jon": {
+            "filePath": "textures/jon.png",
+            "textureWidth": 4096,
+            "textureHeight": 4096,
+            "filterMin": "SHARP",
+            "filterMag": "SHARP",
+            "mipMap": true,
+            "mappings": {
+                "Jon_Rabbit_Idle": {
+                    "x": 0,
+                    "y": 1792,
+                    "regionWidth": 256,
+                    "regionHeight": 256,
+                    "animationWidth": 1536,
+                    "animationHeight": 256,
+                    "frameTime": 6,
+                    "numFrames": 6,
+                    "looping": true,
+                    "firstLoopingFrame": 2
+                },
+                "Jon_Rabbit_Running": {
+                    "x": 0,
+                    "y": 0,
+                    "regionWidth": 256,
+                    "regionHeight": 256,
+                    "animationWidth": 2048,
+                    "animationHeight": 512,
+                    "frameTime": 4,
+                    "numFrames": 12,
+                    "looping": true
+                },
+                "Jon_Rabbit_Jumping": {
+                    "x": 0,
+                    "y": 512,
+                    "regionWidth": 256,
+                    "regionHeight": 256,
+                    "animationWidth": 2048,
+                    "animationHeight": 256,
+                    "frameTime": 4,
+                    "numFrames": 7,
+                    "looping": false
+                },
+                "Jon_Rabbit_DoubleJumping": {
+                    "x": 0,
+                    "y": 768,
+                    "regionWidth": 256,
+                    "regionHeight": 256,
+                    "animationWidth": 2048,
+                    "animationHeight": 512,
+                    "frameTime": 4,
+                    "numFrames": 9,
+                    "looping": false
+                },
+                "Jon_Rabbit_Falling": {
+                    "x": 0,
+                    "y": 1280,
+                    "regionWidth": 256,
+                    "regionHeight": 256,
+                    "animationWidth": 2048,
+                    "animationHeight": 256,
+                    "frameTime": 2,
+                    "numFrames": 3,
+                    "looping": true
+                },
+                "Jon_Rabbit_Landing": {
+                    "x": 0,
+                    "y": 1536,
+                    "regionWidth": 256,
+                    "regionHeight": 256,
+                    "animationWidth": 2048,
+                    "animationHeight": 256,
+                    "frameTime": 4,
+                    "numFrames": 4,
+                    "looping": false
+                },
+                "Jon_Rabbit_Stomp": {
+                    "x": 2048,
+                    "y": 1024,
+                    "regionWidth": 256,
+                    "regionHeight": 256,
+                    "animationWidth": 2048,
+                    "animationHeight": 512,
+                    "frameTime": 3,
+                    "numFrames": 11,
+                    "looping": true,
+                    "firstLoopingFrame": 9
+                },
+                "Jon_Rabbit_LandingRoll": {
+                    "x": 2816,
+                    "y": 1280,
+                    "regionWidth": 256,
+                    "regionHeight": 256,
+                    "animationWidth": 1280,
+                    "animationHeight": 256,
+                    "frameTime": 6,
+                    "numFrames": 5,
+                    "looping": false
+                },
+                "Jon_Rabbit_WarmUp": {
+                    "x": 0,
+                    "y": 2048,
+                    "regionWidth": 256,
+                    "regionHeight": 256,
+                    "animationWidth": 2048,
+                    "animationHeight": 1024,
+                    "frameTime": 6,
+                    "numFrames": 28,
+                    "looping": true
+                },
+                "Jon_Rabbit_Swinging_Punch": {
+                    "x": 2048,
+                    "y": 0,
+                    "regionWidth": 256,
+                    "regionHeight": 256,
+                    "animationWidth": 2048,
+                    "animationHeight": 256,
+                    "frameTime": 4,
+                    "numFrames": 7,
+                    "looping": false
+                },
+                "Jon_Rabbit_Burrow": {
+                    "x": 1792,
+                    "y": 256,
+                    "regionWidth": 256,
+                    "regionHeight": 256,
+                    "animationWidth": 2304,
+                    "animationHeight": 256,
+                    "frameTime": 3,
+                    "numFrames": 9,
+                    "looping": false
+                },
+                "Jon_Rabbit_Death": {
+                    "x": 0,
+                    "y": 3072,
+                    "regionWidth": 256,
+                    "regionHeight": 256,
+                    "animationWidth": 2048,
+                    "animationHeight": 512,
+                    "frameTime": 6,
+                    "numFrames": 10,
+                    "looping": false
+                }
+            }
+        }
     }
-  ],
-  "sounds": [
-    {
-      "soundID": "music_game",
-      "filePath": "sounds/music/game.wav"
-    },
-    {
-      "soundID": "jon_rabbit_double_jump",
-      "filePath": "sounds/jon_rabbit_double_jump.wav",
-      "numInstances": 4
-    },
-    {
-      "soundID": "jon_footstep_left_grass",
-      "filePath": "sounds/jon_footstep_left_grass.wav",
-      "numInstances": 4
-    },
-    {
-      "soundID": "jon_footstep_right_grass",
-      "filePath": "sounds/jon_footstep_right_grass.wav",
-      "numInstances": 4
-    },
-    {
-      "soundID": "jon_rabbit_jump",
-      "filePath": "sounds/jon_rabbit_jump.wav",
-      "numInstances": 4
-    },
-    {
-      "soundID": "jon_landing_grass",
-      "filePath": "sounds/jon_landing_grass.wav",
-      "numInstances": 4
-    },
-    {
-      "soundID": "jon_rabbit_stomp",
-      "filePath": "sounds/jon_rabbit_stomp.wav",
-      "numInstances": 4
-    },
-    {
-      "soundID": "jon_rabbit_punch",
-      "filePath": "sounds/jon_rabbit_punch.wav",
-      "numInstances": 4
-    },
-    {
-      "soundID": "jon_rabbit_drill",
-      "filePath": "sounds/jon_rabbit_drill.wav",
-      "numInstances": 4
-    },
-    {
-      "soundID": "jon_trigger_transform",
-      "filePath": "sounds/jon_trigger_transform.wav",
-      "numInstances": 4
-    },
-    {
-      "soundID": "jon_complete_transform",
-      "filePath": "sounds/jon_complete_transform.wav",
-      "numInstances": 4
-    },
-    {
-      "soundID": "jon_cancel_transform",
-      "filePath": "sounds/jon_cancel_transform.wav",
-      "numInstances": 4
-    },
-    {
-      "soundID": "jon_vampire_jump",
-      "filePath": "sounds/jon_vampire_jump.wav",
-      "numInstances": 4
-    },
-    {
-      "soundID": "jon_vampire_double_jump",
-      "filePath": "sounds/jon_vampire_double_jump.wav",
-      "numInstances": 4
-    },
-    {
-      "soundID": "jon_vampire_dash",
-      "filePath": "sounds/jon_vampire_dash.wav",
-      "numInstances": 4
-    },
-    {
-      "soundID": "jon_vampire_glide",
-      "filePath": "sounds/jon_vampire_glide.wav",
-      "numInstances": 4
-    },
-    {
-      "soundID": "jon_death",
-      "filePath": "sounds/jon_death.wav",
-      "numInstances": 4
-    }
-  ],
-  "textures": [
-    {
-      "name": "background_mid",
-      "filePath": "textures/background_mid.png",
-      "repeatS": true,
-      "mipMap": true,
-      "mappings": {
-        "BackgroundType_Mid_Hills": {
-          "x": 0,
-          "y": 80,
-          "regionWidth": 2048,
-          "regionHeight": 720
-        },
-        "BackgroundType_Mid_Trees": {
-          "x": 0,
-          "y": 1310,
-          "regionWidth": 2048,
-          "regionHeight": 736
-        }
-      }
-    },
-    {
-      "name": "background_lower",
-      "filePath": "textures/background_lower.png",
-      "repeatS": true,
-      "mipMap": true,
-      "mappings": {
-        "BackgroundType_Lower_Top": {
-          "x": 0,
-          "y": 84,
-          "regionWidth": 2048,
-          "regionHeight": 992
-        },
-        "BackgroundType_Lower_Bottom": {
-          "x": 0,
-          "y": 1520,
-          "regionWidth": 2048,
-          "regionHeight": 528
-        }
-      }
-    },
-    {
-      "name": "background_upper",
-      "filePath": "textures/background_upper.png",
-      "repeatS": true,
-      "mipMap": true,
-      "mappings": {
-        "BackgroundType_Upper": {
-          "x": 0,
-          "y": 0,
-          "regionWidth": 2048,
-          "regionHeight": 1616
-        }
-      }
-    },
-    {
-      "name": "ground",
-      "filePath": "textures/ground.png",
-      "textureWidth": 4096,
-      "textureHeight": 4096,
-      "mipMap": true,
-      "mappings": {
-        "GroundType_GrassWithoutCaveEndLeft": {
-          "x": 0,
-          "y": 2496,
-          "regionWidth": 128,
-          "regionHeight": 1600
-        },
-        "GroundType_GrassWithoutCaveLarge": {
-          "x": 1664,
-          "y": 2496,
-          "regionWidth": 2048,
-          "regionHeight": 1600
-        },
-        "GroundType_GrassWithoutCaveEndRight": {
-          "x": 3712,
-          "y": 2496,
-          "regionWidth": 128,
-          "regionHeight": 1600
-        }
-      }
-    },
-    {
-      "name": "platforming_1",
-      "filePath": "textures/platforming_1.png",
-      "textureWidth": 4096,
-      "textureHeight": 4096,
-      "mipMap": true,
-      "mappings": {
-        "ForegroundObjectType_GrassPlatformLeft": {
-          "x": 2000,
-          "y": 600,
-          "regionWidth": 64,
-          "regionHeight": 96
-        },
-        "ForegroundObjectType_GrassPlatformCenter": {
-          "x": 2064,
-          "y": 600,
-          "regionWidth": 224,
-          "regionHeight": 96
-        },
-        "ForegroundObjectType_GrassPlatformRight": {
-          "x": 2288,
-          "y": 600,
-          "regionWidth": 64,
-          "regionHeight": 96
-        },
-        "ForegroundObjectType_SpikeGrassFour": {
-          "x": 2000,
-          "y": 900,
-          "regionWidth": 288,
-          "regionHeight": 96
-        }
-      }
-    },
-    {
-      "name": "vampire",
-      "filePath": "textures/vampire.png",
-      "textureWidth": 4096,
-      "textureHeight": 4096,
-      "filterMin": "SHARP",
-      "filterMag": "SHARP",
-      "mipMap": true,
-      "mappings": {
-        "Jon_isAttemptingToTransformIntoVampire": {
-          "x": 2048,
-          "y": 2048,
-          "regionWidth": 256,
-          "regionHeight": 256,
-          "animationWidth": 2048,
-          "animationHeight": 256,
-          "frameTime": 6,
-          "numFrames": 8,
-          "looping": false
-        },
-        "Jon_isCancelingAttemptToTransformIntoVampire": {
-          "x": 2048,
-          "y": 2048,
-          "regionWidth": 256,
-          "regionHeight": 256
-        },
-        "Jon_isTransformingIntoVampire": {
-          "x": 2048,
-          "y": 2304,
-          "regionWidth": 256,
-          "regionHeight": 256,
-          "animationWidth": 2048,
-          "animationHeight": 512,
-          "frameTime": 2,
-          "numFrames": 11,
-          "looping": false
-        },
-        "Jon_isAttemptingToRevertToRabbit": {
-          "x": 2048,
-          "y": 2816,
-          "regionWidth": 256,
-          "regionHeight": 256,
-          "animationWidth": 2048,
-          "animationHeight": 256,
-          "frameTime": 6,
-          "numFrames": 8,
-          "looping": false
-        },
-        "Jon_isCancelingAttemptToRevertToRabbit": {
-          "x": 2048,
-          "y": 2816,
-          "regionWidth": 256,
-          "regionHeight": 256
-        },
-        "Jon_isRevertingToRabbit": {
-          "x": 2048,
-          "y": 3072,
-          "regionWidth": 256,
-          "regionHeight": 256,
-          "animationWidth": 2048,
-          "animationHeight": 512,
-          "frameTime": 2,
-          "numFrames": 11,
-          "looping": false
-        },
-        "Jon_Vampire_Idle": {
-          "x": 0,
-          "y": 1792,
-          "regionWidth": 256,
-          "regionHeight": 256,
-          "animationWidth": 2048,
-          "animationHeight": 256,
-          "frameTime": 5,
-          "numFrames": 8,
-          "looping": true
-        },
-        "Jon_Vampire_Running": {
-          "x": 0,
-          "y": 0,
-          "regionWidth": 256,
-          "regionHeight": 256,
-          "animationWidth": 2048,
-          "animationHeight": 512,
-          "frameTime": 3,
-          "numFrames": 10,
-          "looping": true
-        },
-        "Jon_Vampire_UpwardThrust": {
-          "x": 0,
-          "y": 3072,
-          "regionWidth": 256,
-          "regionHeight": 512,
-          "animationWidth": 1536,
-          "animationHeight": 1024,
-          "frameTime": 2,
-          "numFrames": 11,
-          "looping": false
-        },
-        "Jon_Vampire_Dash": {
-          "x": 768,
-          "y": 512,
-          "regionWidth": 768,
-          "regionHeight": 256,
-          "animationWidth": 3072,
-          "animationHeight": 512,
-          "frameTime": 3,
-          "numFrames": 8,
-          "looping": false
-        },
-        "Jon_Vampire_Dash_Completed": {
-          "x": 768,
-          "y": 1024,
-          "regionWidth": 768,
-          "regionHeight": 256,
-          "animationWidth": 3072,
-          "animationHeight": 512,
-          "frameTime": 4,
-          "numFrames": 6,
-          "looping": false
-        },
-        "Jon_Vampire_DoubleJumping": {
-          "x": 0,
-          "y": 512,
-          "regionWidth": 256,
-          "regionHeight": 256,
-          "animationWidth": 768,
-          "animationHeight": 512,
-          "frameTime": 3,
-          "numFrames": 6,
-          "looping": false
-        },
-        "Jon_Vampire_Gliding": {
-          "x": 0,
-          "y": 1024,
-          "regionWidth": 256,
-          "regionHeight": 256,
-          "animationWidth": 512,
-          "animationHeight": 256,
-          "frameTime": 3,
-          "numFrames": 2,
-          "looping": true
-        },
-        "Jon_Vampire_Falling": {
-          "x": 0,
-          "y": 1280,
-          "regionWidth": 256,
-          "regionHeight": 256,
-          "animationWidth": 2048,
-          "animationHeight": 256,
-          "frameTime": 3,
-          "numFrames": 3,
-          "looping": true
-        },
-        "Jon_Vampire_Landing": {
-          "x": 0,
-          "y": 1536,
-          "regionWidth": 256,
-          "regionHeight": 256,
-          "animationWidth": 2048,
-          "animationHeight": 256,
-          "frameTime": 6,
-          "numFrames": 3,
-          "looping": false
-        },
-        "Jon_Vampire_Death": {
-          "x": 2048,
-          "y": 3584,
-          "regionWidth": 256,
-          "regionHeight": 256,
-          "animationWidth": 2048,
-          "animationHeight": 512,
-          "frameTime": 4,
-          "numFrames": 15,
-          "looping": false
-        }
-      }
-    },
-    {
-      "name": "jon",
-      "filePath": "textures/jon.png",
-      "textureWidth": 4096,
-      "textureHeight": 4096,
-      "filterMin": "SHARP",
-      "filterMag": "SHARP",
-      "mipMap": true,
-      "mappings": {
-        "Jon_Rabbit_Idle": {
-          "x": 0,
-          "y": 1792,
-          "regionWidth": 256,
-          "regionHeight": 256,
-          "animationWidth": 1536,
-          "animationHeight": 256,
-          "frameTime": 6,
-          "numFrames": 6,
-          "looping": true,
-          "firstLoopingFrame": 2
-        },
-        "Jon_Rabbit_Running": {
-          "x": 0,
-          "y": 0,
-          "regionWidth": 256,
-          "regionHeight": 256,
-          "animationWidth": 2048,
-          "animationHeight": 512,
-          "frameTime": 4,
-          "numFrames": 12,
-          "looping": true
-        },
-        "Jon_Rabbit_Jumping": {
-          "x": 0,
-          "y": 512,
-          "regionWidth": 256,
-          "regionHeight": 256,
-          "animationWidth": 2048,
-          "animationHeight": 256,
-          "frameTime": 4,
-          "numFrames": 7,
-          "looping": false
-        },
-        "Jon_Rabbit_DoubleJumping": {
-          "x": 0,
-          "y": 768,
-          "regionWidth": 256,
-          "regionHeight": 256,
-          "animationWidth": 2048,
-          "animationHeight": 512,
-          "frameTime": 4,
-          "numFrames": 9,
-          "looping": false
-        },
-        "Jon_Rabbit_Falling": {
-          "x": 0,
-          "y": 1280,
-          "regionWidth": 256,
-          "regionHeight": 256,
-          "animationWidth": 2048,
-          "animationHeight": 256,
-          "frameTime": 2,
-          "numFrames": 3,
-          "looping": true
-        },
-        "Jon_Rabbit_Landing": {
-          "x": 0,
-          "y": 1536,
-          "regionWidth": 256,
-          "regionHeight": 256,
-          "animationWidth": 2048,
-          "animationHeight": 256,
-          "frameTime": 4,
-          "numFrames": 4,
-          "looping": false
-        },
-        "Jon_Rabbit_Stomp": {
-          "x": 2048,
-          "y": 1024,
-          "regionWidth": 256,
-          "regionHeight": 256,
-          "animationWidth": 2048,
-          "animationHeight": 512,
-          "frameTime": 3,
-          "numFrames": 11,
-          "looping": true,
-          "firstLoopingFrame": 9
-        },
-        "Jon_Rabbit_LandingRoll": {
-          "x": 2816,
-          "y": 1280,
-          "regionWidth": 256,
-          "regionHeight": 256,
-          "animationWidth": 1280,
-          "animationHeight": 256,
-          "frameTime": 6,
-          "numFrames": 5,
-          "looping": false
-        },
-        "Jon_Rabbit_WarmUp": {
-          "x": 0,
-          "y": 2048,
-          "regionWidth": 256,
-          "regionHeight": 256,
-          "animationWidth": 2048,
-          "animationHeight": 1024,
-          "frameTime": 6,
-          "numFrames": 28,
-          "looping": true
-        },
-        "Jon_Rabbit_Swinging_Punch": {
-          "x": 2048,
-          "y": 0,
-          "regionWidth": 256,
-          "regionHeight": 256,
-          "animationWidth": 2048,
-          "animationHeight": 256,
-          "frameTime": 4,
-          "numFrames": 7,
-          "looping": false
-        },
-        "Jon_Rabbit_Burrow": {
-          "x": 1792,
-          "y": 256,
-          "regionWidth": 256,
-          "regionHeight": 256,
-          "animationWidth": 2304,
-          "animationHeight": 256,
-          "frameTime": 3,
-          "numFrames": 9,
-          "looping": false
-        },
-        "Jon_Rabbit_Death": {
-          "x": 0,
-          "y": 3072,
-          "regionWidth": 256,
-          "regionHeight": 256,
-          "animationWidth": 2048,
-          "animationHeight": 512,
-          "frameTime": 6,
-          "numFrames": 10,
-          "looping": false
-        }
-      }
-    }
-  ]
 }

@@ -17,7 +17,7 @@ class ClientProxy;
 class GameServer
 {
 public:
-    static void create(Config& config);
+    static void create();
     static GameServer* getInstance();
     static void destroy();
     
@@ -25,14 +25,13 @@ public:
     void handleNewClient(std::string playerName, uint8_t playerID);
     void handleLostClient(ClientProxy& cp, uint8_t localPlayerIndex);
     void resetWorld();
-    void populateFromEntityLayout(EntityLayout& eld);
+    void populateFromEntityLayout(EntityLayout& el);
     void restart();
     World& world();
     
 private:
     static GameServer* s_instance;
     
-    Config& _config;
     EntityIDManager _entityIDManager;
     TimeTracker _timeTracker;
     World* _world;
@@ -44,7 +43,7 @@ private:
     void spawnPlayer(std::string playerName, uint8_t playerID);
     void removePlayer(uint8_t playerID);
     
-    GameServer(Config& config);
+    GameServer();
     ~GameServer();
     GameServer(const GameServer&);
     GameServer& operator=(const GameServer&);

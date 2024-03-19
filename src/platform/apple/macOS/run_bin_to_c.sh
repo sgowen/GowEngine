@@ -13,14 +13,14 @@ rm -rf include/GowEngine/embeddedData
 mkdir include/GowEngine/embeddedData
 
 # json
-$BIN_TO_C_TOOL $DATA_DIR/json/Assets.json engine_assets_json &> $OUT_DIR/engine_assets_json.h
-
 $BIN_TO_C_TOOL $DATA_DIR/json/Config.json engine_config_json &> $OUT_DIR/engine_config_json.h
+$BIN_TO_C_TOOL $DATA_DIR/json/default/Assets.json engine_assets_json &> $OUT_DIR/engine_assets_json.h
+$BIN_TO_C_TOOL $DATA_DIR/json/default/Renderer.json engine_renderer_json &> $OUT_DIR/engine_renderer_json.h
 
-$BIN_TO_C_TOOL $DATA_DIR/json/Renderer.json engine_renderer_json &> $OUT_DIR/engine_renderer_json.h
+# scripts
+$BIN_TO_C_TOOL $DATA_DIR/scripts/DefaultRenderer.lua default_renderer_lua &> $OUT_DIR/default_renderer_lua.h
 
 # shaders
-
 $BIN_TO_C_TOOL $DATA_DIR/shaders/framebuffer.vsh framebuffer_vsh &> $OUT_DIR/framebuffer_vsh.h
 $BIN_TO_C_TOOL $DATA_DIR/shaders/framebuffer.fsh framebuffer_fsh &> $OUT_DIR/framebuffer_fsh.h
 
@@ -37,5 +37,4 @@ $BIN_TO_C_TOOL $DATA_DIR/shaders/sprite.vsh sprite_vsh &> $OUT_DIR/sprite_vsh.h
 $BIN_TO_C_TOOL $DATA_DIR/shaders/sprite.fsh sprite_fsh &> $OUT_DIR/sprite_fsh.h
 
 # textures
-
 $BIN_TO_C_TOOL $DATA_DIR/textures/sf_font.png sf_font_png &> $OUT_DIR/sf_font_png.h

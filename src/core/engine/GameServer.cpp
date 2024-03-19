@@ -15,8 +15,8 @@ void cb_game_server_onEntityRegistered(Entity* e)
     if (e->isPlayer() && e->playerInfo()._playerID == 1)
     {
         uint32_t entityLayoutKey = e->networkDataField("entityLayoutKey").valueUInt32();
-        EntityLayout& eld = ENTITY_LAYOUT_MGR.entityLayout(entityLayoutKey);
-        GAME_SERVER->populateFromEntityLayout(eld);
+        EntityLayout& el = ASSETS_MGR.entityLayout(entityLayoutKey);
+        GAME_SERVER->populateFromEntityLayout(el);
     }
 }
 
@@ -50,11 +50,11 @@ void cb_game_server_handleLostClient(ClientProxy& cp, uint8_t localPlayerIndex)
 
 GameServer* GameServer::s_instance = nullptr;
 
-void GameServer::create(Config& config)
+void GameServer::create()
 {
     assert(s_instance == nullptr);
     
-    s_instance = new GameServer(config);
+    s_instance = new GameServer();
 }
 
 GameServer* GameServer::getInstance()
@@ -111,9 +111,9 @@ void GameServer::handleLostClient(ClientProxy& cp, uint8_t localPlayerIndex)
     }
 }
 
-void GameServer::populateFromEntityLayout(EntityLayout& eld)
+void GameServer::populateFromEntityLayout(EntityLayout& el)
 {
-    EntityLayoutManagerLoader::loadEntityLayout(eld, _entityIDManager, true);
+    EntityLayoutLoader::loadEntityLayout(el, _entityIDManager, true);
     
     World& w = world();
     std::vector<Entity*> toDelete = w.getDynamicEntities();
@@ -122,11 +122,13 @@ void GameServer::populateFromEntityLayout(EntityLayout& eld)
         NW_SRVR->deregisterEntity(e);
     }
     
-    w.populateFromEntityLayout(eld);
+    w.populateFromEntityLayout(el);
     
-    for (auto& eid : eld._entitiesNetwork)
+    for (auto& eid : el._entitiesNetwork)
     {
-        NW_SRVR->registerEntity(ENTITY_MGR.createEntity(eid));
+        EntityDef& ed = ASSETS_MGR.getEntityDef(eid._key);
+        Entity* e = Entity::createEntity(ed, eid);
+        NW_SRVR->registerEntity(e);
     }
 }
 
@@ -238,21 +240,21 @@ void GameServer::spawnPlayer(std::string playerName, uint8_t playerID)
     
     uint32_t key = 'PLYR';
     
-    EntityDef& ed = ENTITY_MGR.getEntityDef(key);
+    EntityDef& ed = ASSETS_MGR.getEntityDef(key);
     uint32_t spawnX = ed._data.getUInt("spawnX", 33);
     uint32_t spawnY = ed._data.getUInt("spawnY", 22);
     
     uint32_t networkID = _entityIDManager.getNextPlayerEntityID();
     EntityInstanceDef eid(networkID, key, spawnX, spawnY, true);
     
-    Entity* e = ENTITY_MGR.createEntity(ed, eid);
+    Entity* e = Entity::createEntity(ed, eid);
     e->playerInfo()._playerAddressHash = cp->getMachineAddress()->getHash();
     e->playerInfo()._playerName = playerName;
     e->playerInfo()._playerAddress = cp->getMachineAddress()->toString();
     e->playerInfo()._playerID = playerID;
     if (playerID == 1)
     {
-        uint32_t entityLayoutKey = ENTITY_LAYOUT_MGR.getFirstLayout();
+        uint32_t entityLayoutKey = ASSETS_MGR.getFirstLayout();
         e->networkDataField("entityLayoutKey").setValueUInt32(entityLayoutKey);
     }
 
@@ -271,18 +273,14 @@ void GameServer::removePlayer(uint8_t playerID)
     }
 }
 
-GameServer::GameServer(Config& config) :
-_config(config),
+GameServer::GameServer() :
 _entityIDManager(),
 _timeTracker(),
 _world(nullptr),
 _isRestarting(false),
 _isConnected(false)
 {
-    std::string physicsEngine = _config.getString("physicsEngine");
-    bool isBox2D = physicsEngine == "Box2D";
-    
-    if (isBox2D)
+    if (ENGINE_CFG.physicsEngine() == "Box2D")
     {
         _world = new Box2DPhysicsWorld();
     }

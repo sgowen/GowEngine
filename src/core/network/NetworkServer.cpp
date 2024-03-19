@@ -93,7 +93,8 @@ void NetworkServer::registerEntity(Entity* e)
 void NetworkServer::registerNewEntity(uint32_t key, uint32_t x, uint32_t y)
 {
     EntityInstanceDef eid(_entityIDManager.getNextNetworkEntityID(), key, x, y, true);
-    Entity* e = ENTITY_MGR.createEntity(eid);
+    EntityDef& ed = ASSETS_MGR.getEntityDef(eid._key);
+    Entity* e = Entity::createEntity(ed, eid);
     registerEntity(e);
 }
 
@@ -600,6 +601,8 @@ _numMovesProcessed(0)
 
 NetworkServer::~NetworkServer()
 {
+    deregisterAllEntities();
+    
     for (auto& pair : _addressHashToClientMap)
     {
         ClientProxy& cp = pair.second;
@@ -614,8 +617,6 @@ NetworkServer::~NetworkServer()
 
     _addressHashToClientMap.clear();
     _playerIDToClientMap.clear();
-    
-    deregisterAllEntities();
     
     delete _serverHelper;
 }

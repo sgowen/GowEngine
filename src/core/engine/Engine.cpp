@@ -10,8 +10,6 @@
 
 Engine::Engine() :
 _stateMachine(this, &ENGINE_STATE_DEFAULT),
-_renderer(new Renderer()),
-_requestedStateAction(ERSA_DEFAULT),
 _requestedHostAction(ERHA_DEFAULT),
 _stateTime(0.0),
 _screenWidth(0),
@@ -29,18 +27,17 @@ _hasUpdatedSinceLastRender(false)
         Logger::getInstance().initWithFile(logFileName.c_str());
     }
     
-    Assets assets;
-    AssetsLoader::initWithJSONFile(assets, "engine/json/Assets.json");
-    ASSETS_MGR.registerAssets(ENGINE_ASSETS, assets);
-    
-    RendererLoader::initWithJSONFile(*_renderer, "engine/json/Renderer.json");
+#if IS_DESKTOP
+        if (ENGINE_CFG.useSteamNetworking())
+        {
+            SteamGameServices::create(ENGINE_CFG.steamGameDir().c_str());
+        }
+#endif
 }
 
 Engine::~Engine()
 {
-    delete _renderer;
-    
-    ASSETS_MGR.deregisterAssets(ENGINE_ASSETS);
+    ASSETS_MGR.deregisterAssets(FILE_PATH_ENGINE_ASSETS);
     
     Logger::getInstance().closeFileStream();
     
@@ -57,12 +54,10 @@ Engine::~Engine()
 void Engine::createDeviceDependentResources(ClipboardHandler* clipboardHandler)
 {
     INPUT_MGR.setClipboardHandler(clipboardHandler);
-    
-    _renderer->createDeviceDependentResources();
-    
+        
     AudioEngine::create();
     
-    execute(ERSA_CREATE_RESOURCES);
+    currentState()->createDeviceDependentResources(this);
 }
 
 void Engine::onWindowSizeChanged(uint16_t screenWidth, uint16_t screenHeight, uint16_t cursorWidth, uint16_t cursorHeight)
@@ -72,29 +67,24 @@ void Engine::onWindowSizeChanged(uint16_t screenWidth, uint16_t screenHeight, ui
     _cursorWidth = cursorWidth > 0 ? cursorWidth : screenWidth;
     _cursorHeight = cursorHeight > 0 ? cursorHeight : screenHeight;
     
-    _renderer->onWindowSizeChanged(screenWidth, screenHeight);
     INPUT_MGR.setCursorSize(_cursorWidth, _cursorHeight);
-    
-    execute(ERSA_WINDOW_SIZE_CHANGED);
 }
 
 void Engine::destroyDeviceDependentResources()
 {
-    _renderer->destroyDeviceDependentResources();
-    
     AudioEngine::destroy();
     
-    execute(ERSA_DESTROY_RESOURCES);
+    currentState()->destroyDeviceDependentResources(this);
 }
 
 void Engine::onPause()
 {
-    execute(ERSA_PAUSE);
+    currentState()->pause(this);
 }
 
 void Engine::onResume()
 {
-    execute(ERSA_RESUME);
+    currentState()->resume(this);
 }
 
 EngineRequestedHostAction Engine::update(double deltaTime)
@@ -130,7 +120,7 @@ EngineRequestedHostAction Engine::update(double deltaTime)
         }
         
         FPS_UTIL.onFrame();
-        execute(ERSA_UPDATE);
+        currentState()->execute(this);
         _hasUpdatedSinceLastRender = true;
     }
     
@@ -142,7 +132,7 @@ EngineRequestedHostAction Engine::update(double deltaTime)
 
 void Engine::render()
 {
-    execute(ERSA_RENDER);
+    currentState()->render(this);
     _hasUpdatedSinceLastRender = false;
 }
 
@@ -196,12 +186,12 @@ void Engine::onKeyboardInput(uint16_t key, bool isUp)
     INPUT_MGR.onKeyboardInput(key, isUp);
 }
 
-void Engine::overwriteState(State<Engine>* state, const Config& args)
+void Engine::overwriteState(EngineState* state, const Config& args)
 {
     _stateMachine.overwriteState(state, args);
 }
 
-void Engine::pushState(State<Engine>* state, const Config& args)
+void Engine::pushState(EngineState* state, const Config& args)
 {
     _stateMachine.pushState(state, args);
 }
@@ -215,25 +205,11 @@ void Engine::popState()
     }
     
     _stateMachine.popState();
-    
-    if (_stateMachine.getCurrentState() == &DefaultEngineState::getInstance())
-    {
-        // We are back in the default engine state
-        // This is only possible when running GowEngine
-        // with mode set to "engine"
-        ENGINE_CFG.mode() = "engine";
-        INPUT_MGR.setMatrix(&_renderer->matrixForInput());
-    }
 }
 
 void Engine::setRequestedHostAction(EngineRequestedHostAction value)
 {
     _requestedHostAction = value;
-}
-
-EngineRequestedStateAction Engine::requestedStateAction()
-{
-    return _requestedStateAction;
 }
 
 uint16_t Engine::screenWidth()
@@ -266,16 +242,8 @@ bool Engine::hasUpdatedSinceLastRender()
     return _hasUpdatedSinceLastRender;
 }
 
-void Engine::execute(EngineRequestedStateAction ersa)
+EngineState* Engine::currentState()
 {
-    _requestedStateAction = ersa;
-    _stateMachine.execute();
-    _requestedStateAction = ERSA_DEFAULT;
-}
-
-void Engine::renderModePicker()
-{
-    _renderer->bindFramebuffer("main");
-    _renderer->renderTextViews();
-    _renderer->renderFramebufferToScreen("main");
+    EngineState* es = static_cast<EngineState*>(_stateMachine.getCurrentState());
+    return es;
 }

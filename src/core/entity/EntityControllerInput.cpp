@@ -67,7 +67,7 @@ void EntityControllerInput::processEvent(uint16_t& inputState, GamepadEvent* gpe
 {
     Entity& e = *_entity;
     
-    EntityInputMapping& eim = ENTITY_INPUT_MAPPING_MGR.entityInputMapping(e._entityDef._inputMapping);
+    EntityInputMapping& eim = ASSETS_MGR.entityInputMapping(e._entityDef._inputMapping);
     
     std::string buttonMapping = INPUT_MGR.mappingForButton(gpe->_button);
     
@@ -112,7 +112,7 @@ void EntityControllerInput::processEvent(uint16_t& inputState, KeyboardEvent* kb
 {
     Entity& e = *_entity;
     
-    EntityInputMapping& eim = ENTITY_INPUT_MAPPING_MGR.entityInputMapping(e._entityDef._inputMapping);
+    EntityInputMapping& eim = ASSETS_MGR.entityInputMapping(e._entityDef._inputMapping);
     
     std::string keyMapping = INPUT_MGR.mappingForKey(kbe->_key);
     

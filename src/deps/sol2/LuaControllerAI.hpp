@@ -10,8 +10,6 @@
 
 #include "core/entity/EntityControllerAI.hpp"
 
-namespace sol { class state; }
-
 class LuaControllerAI : public EntityControllerAI
 {
     DECL_RTTI;
@@ -19,10 +17,7 @@ class LuaControllerAI : public EntityControllerAI
     
 public:
     LuaControllerAI(Entity* e);
-    virtual ~LuaControllerAI();
+    virtual ~LuaControllerAI() {}
     
     virtual void runAI(uint16_t& inputState) override;
-    
-private:
-    sol::state* _lua;
 };

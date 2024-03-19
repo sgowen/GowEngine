@@ -130,12 +130,12 @@ function onUpdate(numMovesProcessed)
 
     if isDeliveringDmgPunch1 or isDeliveringDmgPunch2 or isDeliveringDmgPunch3 then
         local touchingEntityID = getNetworkUInt32("touchingEntityID")
-        sendMsgDamage(touchingEntityID)
+        sendMessage(touchingEntityID, "MSG_DAMAGE")
         if isDeliveringDmgPunch3 then
-            sendMsgDamage(touchingEntityID)
-            sendMsgDamage(touchingEntityID)
-            sendMsgDamage(touchingEntityID)
-            sendMsgDamage(touchingEntityID)
+            sendMessage(touchingEntityID, "MSG_DAMAGE")
+            sendMessage(touchingEntityID, "MSG_DAMAGE")
+            sendMessage(touchingEntityID, "MSG_DAMAGE")
+            sendMessage(touchingEntityID, "MSG_DAMAGE")
         end
     end
 
@@ -148,11 +148,11 @@ end
 function onMessage(message, fromEntityID)
     local s = state()
 
-    if isMsgDangerousTouch() then
+    if message == "MSG_DANGEROUS_TOUCH" then
         setNetworkUInt32("touchingEntityID", fromEntityID)
-    elseif isMsgNoTouch() then
+    elseif message == "MSG_NO_TOUCH" then
         setNetworkUInt32("touchingEntityID", 0)
-    elseif isMsgDamage() then
+    elseif message == "MSG_DAMAGE" then
         exile()
     end
 end

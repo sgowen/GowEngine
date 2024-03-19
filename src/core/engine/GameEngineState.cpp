@@ -260,10 +260,7 @@ void cb_client_onPlayerWelcomed(uint8_t playerID)
 
 void GameEngineState::onEnter(Engine* e)
 {
-    std::string physicsEngine = _config.getString("physicsEngine");
-    bool isBox2D = physicsEngine == "Box2D";
-    
-    if (isBox2D)
+    if (ENGINE_CFG.physicsEngine() == "Box2D")
     {
         _world = new Box2DPhysicsWorld();
     }
@@ -272,30 +269,21 @@ void GameEngineState::onEnter(Engine* e)
         _world = new NosPhysicsWorld();
     }
     
-    if (_args.getBool(ARG_IS_HOST, false) == true)
+    if (_args.getBool(ARG_IS_HOST))
     {
-        GameServer::create(_config);
+        GameServer::create();
         assert(GAME_SERVER != nullptr);
     }
 }
 
 void GameEngineState::onAssetsLoaded(Engine* e)
 {
-    std::string filePathEntityManager = _config.getString("filePathEntityManager");
-    EntityManagerLoader::initWithJSONFile(ENTITY_MGR, filePathEntityManager);
-    
-    std::string filePathEntityInputMappingManager = _config.getString("filePathEntityInputMappingManager");
-    EntityInputMappingManagerLoader::initWithJSONFile(ENTITY_INPUT_MAPPING_MGR, filePathEntityInputMappingManager);
-    
-    std::string filePathEntityLayoutManager = _config.getString("filePathEntityLayoutManager");
-    EntityLayoutManagerLoader::initWithJSONFile(ENTITY_LAYOUT_MGR, filePathEntityLayoutManager);
-    
     AUDIO_ENGINE.playMusic("music_game", 0.7f);
 }
 
 void GameEngineState::onExit(Engine* e)
 {
-    if (_args.getBool(ARG_IS_HOST, false) == true)
+    if (_args.getBool(ARG_IS_HOST))
     {
         GameServer::destroy();
     }
@@ -383,8 +371,8 @@ void GameEngineState::onUpdate(Engine* e)
         if (e != nullptr)
         {
             uint32_t entityLayoutKey = e->networkDataField("entityLayoutKey").valueUInt32();
-            EntityLayout& eld = ENTITY_LAYOUT_MGR.entityLayout(entityLayoutKey);
-            populateFromEntityLayout(eld);
+            EntityLayout& el = ASSETS_MGR.entityLayout(entityLayoutKey);
+            populateFromEntityLayout(el);
         }
     }
     
@@ -502,7 +490,6 @@ void GameEngineState::onUpdate(Engine* e)
 
 void GameEngineState::onRender(Renderer& r)
 {
-    r.configPhysicsEngine(_config.getString("physicsEngine"));
     r.configPhysicsRenderingEnabled(_inputProcessor.state() == GIMS_DISPLAY_PHYSICS);
     r.configNumRollbackFrames(_numRollbackFrames);
     r.configBounds(world().rightEdge(), world().topEdge(), _scale);
@@ -513,10 +500,10 @@ void GameEngineState::onRender(Renderer& r)
     AUDIO_ENGINE.playSoundsForWorld(world());
 }
 
-void GameEngineState::populateFromEntityLayout(EntityLayout& eld)
+void GameEngineState::populateFromEntityLayout(EntityLayout& el)
 {
-    EntityLayoutManagerLoader::loadEntityLayout(eld, _entityIDManager, false);
-    world().populateFromEntityLayout(eld);
+    EntityLayoutLoader::loadEntityLayout(el, _entityIDManager, false);
+    world().populateFromEntityLayout(el);
 }
 
 Entity* GameEngineState::getPlayer(uint8_t playerID)
@@ -643,7 +630,7 @@ void GameEngineState::updateWorld(const Move& move)
     world().storeToCache();
 }
 
-GameEngineState::GameEngineState() : EngineState("json/game/Config.json"),
+GameEngineState::GameEngineState() : EngineState("json/game/Assets.json"),
 _entityIDManager(),
 _timeTracker(),
 _world(nullptr),

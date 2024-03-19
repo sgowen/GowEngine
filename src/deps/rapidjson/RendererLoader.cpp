@@ -10,16 +10,16 @@
 
 #include <rapidjson/document.h>
 
-void RendererLoader::initWithJSONFile(Renderer& renderer, std::string filePath)
+void RendererLoader::initWithJSONFile(Renderer& r, std::string filePath)
 {
     FileData jsonData = ASSET_HANDLER.loadAsset(filePath);
-    initWithJSON(renderer, (const char*)jsonData._data);
+    initWithJSON(r, (const char*)jsonData._data);
     ASSET_HANDLER.unloadAsset(jsonData);
 }
 
-void RendererLoader::initWithJSON(Renderer& renderer, const char* json)
+void RendererLoader::initWithJSON(Renderer& r, const char* json)
 {
-    renderer.reset();
+    r.reset();
     
     using namespace rapidjson;
     
@@ -32,7 +32,7 @@ void RendererLoader::initWithJSON(Renderer& renderer, const char* json)
         Value& v = d["script"];
         assert(v.IsString());
         
-        renderer._scriptName = RapidJSONUtil::getString(d, "script");
+        r._scriptName = RapidJSONUtil::getString(d, "script");
     }
     
     if (d.HasMember("pixelToUnitRatio"))
@@ -40,7 +40,7 @@ void RendererLoader::initWithJSON(Renderer& renderer, const char* json)
         Value& v = d["pixelToUnitRatio"];
         assert(v.IsInt());
         
-        renderer._pixelToUnitRatio = RapidJSONUtil::getUInt(d, "pixelToUnitRatio");
+        r._pixelToUnitRatio = RapidJSONUtil::getUInt(d, "pixelToUnitRatio");
     }
     
     if (d.HasMember("circleBatchers"))
@@ -56,7 +56,7 @@ void RendererLoader::initWithJSON(Renderer& renderer, const char* json)
             std::string key = i->name.GetString();
             uint32_t maxBatchSize = RapidJSONUtil::getUInt(iv, "maxBatchSize");
             
-            renderer._circleBatchers.emplace(key, CircleBatcher{maxBatchSize});
+            r._circleBatchers.emplace(key, CircleBatcher{maxBatchSize});
         }
     }
     
@@ -75,7 +75,7 @@ void RendererLoader::initWithJSON(Renderer& renderer, const char* json)
             std::string font = RapidJSONUtil::getString(iv, "font");
             uint32_t maxBatchSize = RapidJSONUtil::getUInt(iv, "maxBatchSize");
             
-            renderer._fontBatchers.emplace(key, FontBatcher{font, maxBatchSize});
+            r._fontBatchers.emplace(key, FontBatcher{font, maxBatchSize});
         }
     }
     
@@ -98,7 +98,7 @@ void RendererLoader::initWithJSON(Renderer& renderer, const char* json)
             std::string filterMag = RapidJSONUtil::getString(iv, "filterMag", "SHARP");
             assert(filterMag == "SHARP" || filterMag == "SMOOTH");
             
-            renderer._framebuffers.emplace(key, Framebuffer{width, height, filterMin, filterMag});
+            r._framebuffers.emplace(key, Framebuffer{width, height, filterMin, filterMag});
         }
     }
     
@@ -121,7 +121,7 @@ void RendererLoader::initWithJSON(Renderer& renderer, const char* json)
             float widthWeight = RapidJSONUtil::getFloat(iv, "widthWeight");
             float heightWeight = RapidJSONUtil::getFloat(iv, "heightWeight");
             
-            renderer._imageViews.emplace(key, ImageView{texture, textureRegion, xWeight, yWeight, widthWeight, heightWeight});
+            r._imageViews.emplace(key, ImageView{texture, textureRegion, xWeight, yWeight, widthWeight, heightWeight});
         }
     }
     
@@ -142,18 +142,18 @@ void RendererLoader::initWithJSON(Renderer& renderer, const char* json)
                 uint32_t w = RapidJSONUtil::getUInt(iv, "width");
                 uint32_t h = RapidJSONUtil::getUInt(iv, "height");
                 
-                renderer._matrices.emplace(key, Matrix{MatrixDescriptor(w, h)});
+                r._matrices.emplace(key, Matrix{MatrixDescriptor(w, h)});
             }
             else
             {
                 float l = RapidJSONUtil::getFloat(iv, "left");
-                float r = RapidJSONUtil::getFloat(iv, "right");
+                float right = RapidJSONUtil::getFloat(iv, "right");
                 float b = RapidJSONUtil::getFloat(iv, "bottom");
                 float t = RapidJSONUtil::getFloat(iv, "top");
                 float n = RapidJSONUtil::getFloat(iv, "near", -1);
                 float f = RapidJSONUtil::getFloat(iv, "far", 1);
                 
-                renderer._matrices.emplace(key, Matrix{MatrixDescriptor(l, r, b, t, n, f)});
+                r._matrices.emplace(key, Matrix{MatrixDescriptor(l, right, b, t, n, f)});
             }
         }
     }
@@ -173,7 +173,7 @@ void RendererLoader::initWithJSON(Renderer& renderer, const char* json)
             uint32_t maxBatchSize = RapidJSONUtil::getUInt(iv, "maxBatchSize");
             bool isFill = RapidJSONUtil::getBool(iv, "isFill");
             
-            renderer._rektangleBatchers.emplace(key, RektangleBatcher{maxBatchSize, isFill});
+            r._rektangleBatchers.emplace(key, RektangleBatcher{maxBatchSize, isFill});
         }
     }
     
@@ -191,7 +191,7 @@ void RendererLoader::initWithJSON(Renderer& renderer, const char* json)
             
             uint32_t maxBatchSize = RapidJSONUtil::getUInt(iv, "maxBatchSize");
             
-            renderer._spriteBatchers.emplace(key, SpriteBatcher{maxBatchSize});
+            r._spriteBatchers.emplace(key, SpriteBatcher{maxBatchSize});
         }
     }
     
@@ -213,7 +213,7 @@ void RendererLoader::initWithJSON(Renderer& renderer, const char* json)
             float yWeight = RapidJSONUtil::getFloat(iv, "yWeight");
             float glyphWidthWeight = RapidJSONUtil::getFloat(iv, "glyphWidthWeight");
             
-            renderer._textViews.emplace(key, TextView{text, alignment, xWeight, yWeight, glyphWidthWeight});
+            r._textViews.emplace(key, TextView{text, alignment, xWeight, yWeight, glyphWidthWeight});
         }
     }
     
@@ -232,7 +232,7 @@ void RendererLoader::initWithJSON(Renderer& renderer, const char* json)
             uint32_t maxBatchSize = RapidJSONUtil::getUInt(iv, "maxBatchSize");
             bool isFill = RapidJSONUtil::getBool(iv, "isFill");
             
-            renderer._triangleBatchers.emplace(key, TriangleBatcher{maxBatchSize, isFill});
+            r._triangleBatchers.emplace(key, TriangleBatcher{maxBatchSize, isFill});
         }
     }
 }

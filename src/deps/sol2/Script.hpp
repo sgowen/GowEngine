@@ -8,17 +8,21 @@
 
 #pragma once
 
-#include "core/assets/ScriptDescriptor.hpp"
+#include "core/assets/FileDescriptor.hpp"
 #include "core/assets/FileData.hpp"
+
+namespace sol { class state; }
 
 struct Script
 {
-    ScriptDescriptor _desc;
+    FileDescriptor _desc;
     FileData* _fileData;
+    sol::state* _lua;
     
-    Script(ScriptDescriptor desc) :
+    Script(FileDescriptor desc) :
     _desc(desc),
-    _fileData(nullptr)
+    _fileData(nullptr),
+    _lua(nullptr)
     {
         // Empty
     }

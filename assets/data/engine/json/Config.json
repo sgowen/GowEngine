@@ -1,6 +1,7 @@
 {
   "title": "GowEngine",
   "mode": "engine",
+  "physicsEngine": "Box2D",
   "fullScreen": "false",
   "vsync": "true",
   "useSteamNetworking": "false",
@@ -12,6 +13,7 @@
   "framesPerSecond": "60",
   "fileLoggingEnabled": "false",
   "glfwLoggingEnabled": "false",
+  "logFileIO": "true",
   "logLua": "true",
   "logOpenGL": "false",
   "logOpenAL": "false",

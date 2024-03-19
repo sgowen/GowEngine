@@ -1,5 +1,5 @@
 //
-//  EntityLayoutManager.hpp
+//  EntityLayout.hpp
 //  GowEngine
 //
 //  Created by Stephen Gowen on 1/10/18.
@@ -46,27 +46,4 @@ struct EntityLayout
     {
         // Empty
     }
-};
-
-class EntityLayoutManager
-{
-    friend class EntityLayoutManagerLoader;
-    
-public:
-    static EntityLayoutManager& getInstance()
-    {
-        static EntityLayoutManager ret = EntityLayoutManager();
-        return ret;
-    }
-    
-    EntityLayout& entityLayout(uint32_t key);
-    uint32_t getFirstLayout();
-    
-private:
-    std::map<uint32_t, EntityLayout> _entityLayouts;
-    
-    EntityLayoutManager() {}
-    ~EntityLayoutManager() {}
-    EntityLayoutManager(const EntityLayoutManager&);
-    EntityLayoutManager& operator=(const EntityLayoutManager&);
 };

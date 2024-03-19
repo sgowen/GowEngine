@@ -10,8 +10,6 @@
 
 #include "core/entity/EntityController.hpp"
 
-namespace sol { class state; }
-
 class LuaController : public EntityController
 {    
     DECL_RTTI;
@@ -24,7 +22,4 @@ public:
     virtual void processInput(uint16_t inputState) override;
     virtual void onUpdate(uint32_t numMovesProcessed) override;
     virtual void onMessage(uint16_t message, Entity* fromEntity) override;
-    
-private:
-    sol::state* _lua;
 };

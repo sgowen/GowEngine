@@ -1,5 +1,5 @@
 //
-//  ScriptDescriptor.hpp
+//  FileDescriptor.hpp
 //  GowEngine
 //
 //  Created by Stephen Gowen on 3/4/24.
@@ -10,14 +10,14 @@
 
 #include <string>
 
-struct ScriptDescriptor
+struct FileDescriptor
 {
     const std::string _name;
-    const std::string _scriptFilePath;
+    const std::string _filePath;
     
-    ScriptDescriptor(std::string name, std::string scriptFilePath) :
+    FileDescriptor(std::string name, std::string filePath) :
     _name(name),
-    _scriptFilePath(scriptFilePath)
+    _filePath(filePath)
     {
         // Empty
     }

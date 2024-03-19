@@ -10,45 +10,39 @@
 
 #include "core/common/StateMachine.hpp"
 #include "core/assets/Assets.hpp"
-#include "core/opengl/Renderer.hpp"
 
 #include <string>
 
 class Engine;
 class Config;
+class Renderer;
 
 class EngineState : public State<Engine>
 {
 public:
+    virtual void enter(Engine* e) override;
+    virtual void execute(Engine* e) override;
+    virtual void exit(Engine* e) override;
+    
+    void createDeviceDependentResources(Engine* e);
+    void destroyDeviceDependentResources(Engine* e);
+    void pause(Engine* e);
+    void resume(Engine* e);
+    void render(Engine* e);
+    
+protected:
     virtual void onEnter(Engine* e) = 0;
     virtual void onAssetsLoaded(Engine* e) = 0;
     virtual void onExit(Engine* e) = 0;
     virtual void onUpdate(Engine* e) = 0;
     virtual void onRender(Renderer& r) = 0;
-    
-    virtual void enter(Engine* e);
-    virtual void execute(Engine* e);
-    virtual void exit(Engine* e);
-    
-protected:
-    Config _config;
-    
-    EngineState(std::string configFilePath);
+        
+    EngineState(std::string filePathAssets, bool areAssetsGlobal = false);
     virtual ~EngineState() {}
     EngineState(const EngineState&);
     EngineState& operator=(const EngineState&);
     
 private:
-    std::string _configFilePath;
     std::string _filePathAssets;
-    Assets _assets;
-    Renderer _renderer;
-    
-    void createDeviceDependentResources(Engine* e);
-    void onWindowSizeChanged(Engine* e);
-    void destroyDeviceDependentResources(Engine* e);
-    void pause(Engine* e);
-    void resume(Engine* e);
-    void update(Engine* e);
-    void render(Engine* e);
+    bool _areAssetsGlobal;
 };

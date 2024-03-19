@@ -17,8 +17,8 @@
 class SoundManager
 {
 public:
-    void loadData(std::vector<SoundDescriptor>& soundDescriptors);
-    void loadIntoOpenALAndFreeData(std::vector<SoundDescriptor>& soundDescriptors);
+    void loadData(std::map<std::string, SoundDescriptor>& sds);
+    void loadIntoOpenALAndFreeData(std::map<std::string, SoundDescriptor>& sds);
     void reset();
     Sound& sound(std::string soundID);
     std::map<std::string, Sound>& sounds();

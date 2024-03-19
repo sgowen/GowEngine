@@ -1,5 +1,5 @@
 //
-//  EntityLayoutManagerLoader.cpp
+//  EntityLayoutLoader.cpp
 //  GowEngine
 //
 //  Created by Stephen Gowen on 2/27/21.
@@ -11,47 +11,14 @@
 #include <rapidjson/document.h>
 #include <rapidjson/prettywriter.h>
 
-void EntityLayoutManagerLoader::initWithJSONFile(EntityLayoutManager& elm, std::string filePath)
-{
-    FileData fd = ASSET_HANDLER.loadAsset(filePath);
-    initWithJSON(elm, (const char*)fd._data);
-    ASSET_HANDLER.unloadAsset(fd);
-}
-
-void EntityLayoutManagerLoader::initWithJSON(EntityLayoutManager& elm, const char* data)
-{
-    elm._entityLayouts.clear();
-    
-    using namespace rapidjson;
-    
-    Document d;
-    d.Parse<kParseStopWhenDoneFlag>(data);
-    
-    assert(d.IsObject());
-    for (Value::ConstMemberIterator i = d.MemberBegin(); i != d.MemberEnd(); ++i)
-    {
-        const Value& iv = i->value;
-        assert(iv.IsString());
-        
-        std::string name = i->name.GetString();
-        uint32_t key = StringUtil::fourCharFromString(name);
-        
-        assert(elm._entityLayouts.find(key) == elm._entityLayouts.end());
-        
-        std::string filePath = iv.GetString();
-        
-        elm._entityLayouts.emplace(key, EntityLayout{key, name, filePath});
-    }
-}
-
-void EntityLayoutManagerLoader::loadEntityLayout(EntityLayout& eld, EntityIDManager& eidm, bool isServer)
+void EntityLayoutLoader::loadEntityLayout(EntityLayout& el, EntityIDManager& eidm, bool isServer)
 {
     eidm.resetNextLayoutEntityID();
     
-    eld._entities.clear();
-    eld._entitiesNetwork.clear();
+    el._entities.clear();
+    el._entitiesNetwork.clear();
     
-    FileData fd = ASSET_HANDLER.loadAsset(eld._filePath);
+    FileData fd = ASSET_HANDLER.loadAsset(el._filePath);
     
     using namespace rapidjson;
     
@@ -72,7 +39,7 @@ void EntityLayoutManagerLoader::loadEntityLayout(EntityLayout& eld, EntityIDMana
             uint32_t x = RapidJSONUtil::getUInt(iv, "x");
             uint32_t y = RapidJSONUtil::getUInt(iv, "y");
             
-            eld._entities.emplace_back(eidm.getNextLayoutEntityID(), StringUtil::fourCharFromString(key), x, y, isServer);
+            el._entities.emplace_back(eidm.getNextLayoutEntityID(), StringUtil::fourCharFromString(key), x, y, isServer);
         }
     }
     
@@ -90,16 +57,16 @@ void EntityLayoutManagerLoader::loadEntityLayout(EntityLayout& eld, EntityIDMana
             uint32_t x = RapidJSONUtil::getUInt(iv, "x");
             uint32_t y = RapidJSONUtil::getUInt(iv, "y");
             
-            eld._entitiesNetwork.emplace_back(eidm.getNextNetworkEntityID(), StringUtil::fourCharFromString(key), x, y, isServer);
+            el._entitiesNetwork.emplace_back(eidm.getNextNetworkEntityID(), StringUtil::fourCharFromString(key), x, y, isServer);
         }
     }
     
     ASSET_HANDLER.unloadAsset(fd);
 }
 
-void EntityLayoutManagerLoader::saveEntityLayout(EntityLayout& eld)
+void EntityLayoutLoader::saveEntityLayout(EntityLayout& el)
 {
-    std::string resFilePath = RES_FILE_PATH(eld._filePath);
+    std::string resFilePath = RES_FILE_PATH(el._filePath);
     
     FILE* file = OPEN_FILE(resFilePath, "w+");
     if (file == nullptr)
@@ -116,11 +83,11 @@ void EntityLayoutManagerLoader::saveEntityLayout(EntityLayout& eld)
 
     w.StartObject();
     
-    if (eld._entities.size() > 0)
+    if (el._entities.size() > 0)
     {
         w.String("entities");
         w.StartArray();
-        for (auto& eid : eld._entities)
+        for (auto& eid : el._entities)
         {
             w.StartObject();
             {

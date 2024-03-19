@@ -12,7 +12,7 @@
 #include "core/common/Config.hpp"
 #include "core/common/StringUtil.hpp"
 
-#include "EntityLayoutManager.hpp"
+#include "EntityLayout.hpp"
 
 #include <stdint.h>
 #include <string>
@@ -483,6 +483,7 @@ struct EntityDef
     }
 };
 
+struct EntityInstanceDef;
 class EntityController;
 class EntityControllerAI;
 class EntityControllerInput;
@@ -500,7 +501,11 @@ class Entity
     friend class EntityControllerNetwork;
     
 public:
-    Entity(EntityDef ed, EntityInstanceDef eid);
+    static Entity* createEntity(const EntityInstanceDef& eid);
+
+    static Entity* createEntity(const EntityDef& ed, const EntityInstanceDef& eid);
+    
+    Entity(const EntityDef& ed, const EntityInstanceDef& eid);
     ~Entity();
     
     void beginFrame();
@@ -511,6 +516,8 @@ public:
     void processInput(uint16_t inputState);
     void update(uint32_t numMovesProcessed);
     void message(uint16_t message, Entity* fromEntity);
+    std::string message(uint16_t message);
+    uint16_t message(std::string message);
     EntityDef& entityDef();
     uint16_t inputStateFlag(std::string inputStateFlag);
     uint8_t state(std::string key);

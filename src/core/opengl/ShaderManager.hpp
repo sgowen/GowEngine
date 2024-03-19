@@ -17,8 +17,8 @@
 class ShaderManager
 {
 public:
-    void loadData(std::vector<ShaderDescriptor>& sds);
-    void loadIntoOpenGLAndFreeData(std::vector<ShaderDescriptor>& sds);
+    void loadData(std::map<std::string, ShaderDescriptor>& sds);
+    void loadIntoOpenGLAndFreeData(std::map<std::string, ShaderDescriptor>& sds);
     void reset();
     Shader& shader(std::string name);
     bool isShaderLoaded(std::string name);

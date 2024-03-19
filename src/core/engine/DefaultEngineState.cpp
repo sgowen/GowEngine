@@ -8,67 +8,26 @@
 
 #include <GowEngine/GowEngine.hpp>
 
-void DefaultEngineState::enter(Engine *e)
+void DefaultEngineState::onEnter(Engine* e)
 {
-    ASSETS_MGR.createDeviceDependentResources();
+    // Empty
 }
 
-void DefaultEngineState::execute(Engine* e)
+void DefaultEngineState::onAssetsLoaded(Engine *e)
 {
-    switch (e->requestedStateAction())
-    {
-        case ERSA_CREATE_RESOURCES:
-            ERSA_CREATE_RESOURCES_called = true;
-            ASSETS_MGR.createDeviceDependentResources();
-            break;
-        case ERSA_WINDOW_SIZE_CHANGED:
-            ERSA_WINDOW_SIZE_CHANGED_called = true;
-            break;
-        case ERSA_DESTROY_RESOURCES:
-            ASSETS_MGR.destroyDeviceDependentResources();
-            break;
-        case ERSA_UPDATE:
-            update(e);
-            break;
-        case ERSA_RENDER:
-            render(e);
-            break;
-        case ERSA_DEFAULT:
-        default:
-            break;
-    }
-    
-    if (ERSA_CREATE_RESOURCES_called && ERSA_WINDOW_SIZE_CHANGED_called)
-    {
-#if IS_DESKTOP
-        if (ENGINE_CFG.useSteamNetworking())
-        {
-            SteamGameServices::create(ENGINE_CFG.steamGameDir().c_str());
-        }
-#endif
-        
-        if (needsToRenderModePicker)
-        {
-            return;
-        }
-        
-        bool isEngineMode = strcmp(ENGINE_CFG.mode().c_str(), "engine") == 0;
-        if (isEngineMode)
-        {
-            needsToRenderModePicker = true;
-        }
-    }
+    // Empty
 }
 
-void DefaultEngineState::update(Engine* e)
+void DefaultEngineState::onExit(Engine* e)
 {
-    ASSETS_MGR.update();
-    if (!ASSETS_MGR.isLoaded())
-    {
-        return;
-    }
+    // Empty
+}
+
+void DefaultEngineState::onUpdate(Engine* e)
+{
+    bool isEngineMode = strcmp(ENGINE_CFG.mode().c_str(), "engine") == 0;
     
-    if (!needsToRenderModePicker)
+    if (!isEngineMode)
     {
         e->overwriteState(&ENGINE_STATE_TITLE);
         return;
@@ -91,12 +50,17 @@ void DefaultEngineState::update(Engine* e)
             case GOW_KEY_ANDROID_BACK_BUTTON:
                 e->popState();
                 return;
+            case GOW_KEY_C:
+                // TODO, create new mode!
+                return;
             case GOW_KEY_D:
                 ENGINE_CFG.mode() = "dante";
+                ENGINE_CFG.physicsEngine() = "Box2D";
                 e->pushState(&ENGINE_STATE_TITLE);
                 return;
             case GOW_KEY_N:
                 ENGINE_CFG.mode() = "nosfuratu";
+                ENGINE_CFG.physicsEngine() = "Nos";
                 e->pushState(&ENGINE_STATE_TITLE);
                 return;
             default:
@@ -105,21 +69,12 @@ void DefaultEngineState::update(Engine* e)
     }
 }
 
-void DefaultEngineState::render(Engine* e)
+void DefaultEngineState::onRender(Renderer& r)
 {
-    if (!needsToRenderModePicker ||
-        !ASSETS_MGR.isLoaded())
-    {
-        return;
-    }
-    
-    e->renderModePicker();
+    r.renderWithLua();
 }
 
-DefaultEngineState::DefaultEngineState() : State<Engine>(),
-ERSA_CREATE_RESOURCES_called(false),
-ERSA_WINDOW_SIZE_CHANGED_called(false),
-needsToRenderModePicker(false)
+DefaultEngineState::DefaultEngineState() : EngineState(FILE_PATH_ENGINE_ASSETS, true)
 {
     // Empty
 }

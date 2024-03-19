@@ -8,7 +8,18 @@
 
 #include <GowEngine/GowEngine.hpp>
 
-Entity::Entity(EntityDef ed, EntityInstanceDef eid) :
+Entity* Entity::createEntity(const EntityInstanceDef& eid)
+{
+    EntityDef& ed = ASSETS_MGR.getEntityDef(eid._key);
+    return createEntity(ed, eid);
+}
+
+Entity* Entity::createEntity(const EntityDef& ed, const EntityInstanceDef& eid)
+{
+    return new Entity(ed, eid);
+}
+
+Entity::Entity(const EntityDef& ed, const EntityInstanceDef& eid) :
 _entityDef(ed),
 _entityInstanceDef(eid),
 _controller(nullptr),
@@ -205,6 +216,41 @@ uint8_t Entity::stateFlag(std::string key)
     uint16_t ret = 1 << index;
     
     return ret;
+}
+
+std::string Entity::message(uint16_t message)
+{
+    switch (message) {
+        case MSG_DANGEROUS_TOUCH:
+            return "MSG_DANGEROUS_TOUCH";
+        case MSG_NO_TOUCH:
+            return "MSG_NO_TOUCH";
+        case MSG_DAMAGE:
+            return "MSG_DAMAGE";
+        case MSG_NONE:
+        default:
+            return "MSG_NONE";
+    }
+}
+
+uint16_t Entity::message(std::string message)
+{
+    if (message == "MSG_DANGEROUS_TOUCH")
+    {
+        return MSG_DANGEROUS_TOUCH;
+    }
+    else if (message == "MSG_NO_TOUCH")
+    {
+        return MSG_NO_TOUCH;
+    }
+    else if (message == "MSG_DAMAGE")
+    {
+        return MSG_DAMAGE;
+    }
+    else
+    {
+        return MSG_NONE;
+    }
 }
 
 Config& Entity::data()

@@ -25,18 +25,17 @@ World::~World()
     removeAllNetworkEntities();
 }
 
-void World::populateFromEntityLayout(EntityLayout& eld)
+void World::populateFromEntityLayout(EntityLayout& el)
 {
     reset();
     
-    _entityLayout = eld;
+    _entityLayout = el;
     
     for (auto& eid : _entityLayout._entities)
     {
-        Entity* e = ENTITY_MGR.createEntity(eid);
+        EntityDef& ed = ASSETS_MGR.getEntityDef(eid._key);
+        Entity* e = Entity::createEntity(ed, eid);
         addEntity(e);
-        
-        EntityDef& ed = ENTITY_MGR.getEntityDef(eid._key);
         
         uint32_t rightEdge = eid._x + ed._width;
         if (rightEdge > _rightEdge)

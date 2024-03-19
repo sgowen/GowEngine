@@ -49,10 +49,11 @@ struct RendererConfig
     Color textColorFactor;
     float parallaxSpeedRatio;
     Entity* controlledPlayer;
-    std::string physicsEngine;
     bool physicsRenderingEnabled;
     int numRollbackFrames;
     double extrapolation;
+    uint16_t screenWidth;
+    uint16_t screenHeight;
     
     RendererConfig()
     {
@@ -76,10 +77,11 @@ struct RendererConfig
         textColorFactor = Color::ONE;
         parallaxSpeedRatio = 1.0f;
         controlledPlayer = nullptr;
-        physicsEngine = "";
         physicsRenderingEnabled = false;
         numRollbackFrames = 0;
         extrapolation = 0.0;
+        screenWidth = 1;
+        screenHeight = 1;
     }
 };
 
@@ -94,7 +96,6 @@ public:
     void reset();
     
     void createDeviceDependentResources();
-    void onWindowSizeChanged(uint16_t screenWidth, uint16_t screenHeight);
     void destroyDeviceDependentResources();
     
     void renderLoadingView(uint32_t stateTime);
@@ -140,9 +141,11 @@ public:
     void renderFramebufferToScreen(std::string framebufferKey);
     
     void renderWorldWithLua(World& w);
+    void renderWithLua();
     
     void configReset();
     void configExtrapolation(double value);
+    void configScreenSize(uint16_t screenWidth, uint16_t screenHeight);
     void configBounds(uint32_t maxRight, uint32_t maxTop, float& scale);
     void configControlledPlayerEntity(Entity* e);
     void configMatrix(std::string key);
@@ -150,11 +153,12 @@ public:
     void configSpriteBatcher(std::string key);
     void configSpriteColorFactor(Color c);
     void configTextColorFactor(Color c);
-    void configPhysicsEngine(std::string physicsEngine);
     void configPhysicsRenderingEnabled(bool value);
     void configNumRollbackFrames(int numRollbackFrames);
     
     Matrix& matrixForInput();
+    
+    bool isLoadedIntoOpenGL();
     
 private:
     LuaRenderer _luaRenderer;
@@ -176,6 +180,7 @@ private:
     std::map<std::string, SpriteBatcher> _spriteBatchers;
     std::map<std::string, TextView> _textViews;
     std::map<std::string, TriangleBatcher> _triangleBatchers;
+    bool _isLoadedIntoOpenGL;
     
     void spriteBatcherAddEntity(SpriteBatcher& sb, Entity& e);
     

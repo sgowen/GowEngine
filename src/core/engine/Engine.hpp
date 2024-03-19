@@ -14,18 +14,6 @@
 
 #include <stdint.h>
 
-enum EngineRequestedStateAction
-{
-    ERSA_DEFAULT,
-    ERSA_CREATE_RESOURCES,
-    ERSA_WINDOW_SIZE_CHANGED,
-    ERSA_DESTROY_RESOURCES,
-    ERSA_PAUSE,
-    ERSA_RESUME,
-    ERSA_UPDATE,
-    ERSA_RENDER
-};
-
 enum EngineRequestedHostAction
 {
     ERHA_DEFAULT,
@@ -37,9 +25,7 @@ class EngineState;
 class Renderer;
 
 class Engine
-{
-    friend class DefaultEngineState;
-    
+{    
 public:
     Engine();
     ~Engine();
@@ -62,11 +48,10 @@ public:
     void onGamepadInputTrigger(uint8_t index, float triggerLeft, float triggerRight);
     void onGamepadInputButton(uint8_t index, uint8_t gamepadEventType, uint8_t isPressed);
     void onKeyboardInput(uint16_t key, bool isUp);
-    void overwriteState(State<Engine>* state, const Config& args = Config::EMPTY);
-    void pushState(State<Engine>* state, const Config& args = Config::EMPTY);
+    void overwriteState(EngineState* state, const Config& args = Config::EMPTY);
+    void pushState(EngineState* state, const Config& args = Config::EMPTY);
     void popState();
     void setRequestedHostAction(EngineRequestedHostAction value);
-    EngineRequestedStateAction requestedStateAction();
     uint16_t screenWidth();
     uint16_t screenHeight();
     uint16_t cursorWidth();
@@ -76,8 +61,6 @@ public:
     
 private:
     StateMachine<Engine> _stateMachine;
-    Renderer* _renderer;
-    EngineRequestedStateAction _requestedStateAction;
     EngineRequestedHostAction _requestedHostAction;
     double _stateTime;
     double _extrapolation;
@@ -87,6 +70,5 @@ private:
     uint16_t _cursorHeight;
     bool _hasUpdatedSinceLastRender;
     
-    void execute(EngineRequestedStateAction ersa);
-    void renderModePicker();
+    EngineState* currentState();
 };

@@ -10,9 +10,7 @@
 
 ScreenRenderer::ScreenRenderer() :
 _vertexBuffer(0),
-_indexBuffer(0),
-_screenWidth(0),
-_screenHeight(0)
+_indexBuffer(0)
 {
     // Empty
 }
@@ -25,21 +23,15 @@ void ScreenRenderer::createDeviceDependentResources()
     _indexBuffer = OGL.loadRektangleIndexBuffer(1);
 }
 
-void ScreenRenderer::onWindowSizeChanged(uint16_t screenWidth, uint16_t screenHeight)
-{
-    _screenWidth = screenWidth;
-    _screenHeight = screenHeight;
-}
-
 void ScreenRenderer::destroyDeviceDependentResources()
 {
     OGL.unloadBuffer(_vertexBuffer);
     OGL.unloadBuffer(_indexBuffer);
 }
 
-void ScreenRenderer::renderToScreen(Shader& s, Framebuffer& fb)
+void ScreenRenderer::renderToScreen(Shader& s, Framebuffer& fb, uint16_t screenWidth, uint16_t screenHeight)
 {
-    OGL.bindScreenFramebuffer(_screenWidth, _screenHeight, Color::BLACK);
+    OGL.bindScreenFramebuffer(screenWidth, screenHeight, Color::BLACK);
     OGL.enableBlending(false);
     
     renderFramebuffer(s, fb);

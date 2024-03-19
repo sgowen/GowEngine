@@ -8,17 +8,28 @@
 
 #include <GowEngine/GowEngine.hpp>
 
-void AssetsManager::registerAssets(std::string key, Assets a)
+void AssetsManager::registerAssets(std::string key)
 {
-    assert(_assets.find(key) == _assets.end());
-    _assets.emplace(key, a);
+    if (_assets.find(key) == _assets.end())
+    {
+        _assets.emplace(std::piecewise_construct, std::make_tuple(key), std::make_tuple());
+        _renderers.emplace(std::piecewise_construct, std::make_tuple(key), std::make_tuple());
+    }
 }
 
 void AssetsManager::deregisterAssets(std::string key)
 {
-    auto q = _assets.find(key);
-    assert(q != _assets.end());
-    _assets.erase(q);
+    {
+        auto q = _assets.find(key);
+        assert(q != _assets.end());
+        _assets.erase(q);
+    }
+    
+    {
+        auto q = _renderers.find(key);
+        assert(q != _renderers.end());
+        _renderers.erase(q);
+    }
 }
 
 void AssetsManager::update()
@@ -33,6 +44,8 @@ void AssetsManager::update()
     for (auto& pair : _assets)
     {
         Assets& a = pair.second;
+        Renderer& r = renderer(pair.first);
+        
         if (a._isLoadedIntoEngine)
         {
             continue;
@@ -40,9 +53,11 @@ void AssetsManager::update()
         
         if (a._isDataLoaded)
         {
-            _shaderMgr.loadIntoOpenGLAndFreeData(a._shaderDescriptors);
-            _soundMgr.loadIntoOpenALAndFreeData(a._soundDescriptors);
-            _textureMgr.loadIntoOpenGLAndFreeData(a._textureDescriptors);
+            _scriptMgr.loadIntoLuaAndFreeData(a._scripts);
+            _shaderMgr.loadIntoOpenGLAndFreeData(a._shaders);
+            _soundMgr.loadIntoOpenALAndFreeData(a._sounds);
+            r.createDeviceDependentResources();
+            _textureMgr.loadIntoOpenGLAndFreeData(a._textures);
             
             a._isLoadedIntoEngine = true;
             a._isDataLoaded = false;
@@ -74,29 +89,22 @@ void AssetsManager::createDeviceDependentResources()
 {
     _stateTime = 0;
     
-    for (auto& pair : _assets)
-    {
-        Assets& a = pair.second;
-        
-        if (a._isLoadedIntoEngine)
-        {
-            continue;
-        }
-        
-        a._isLoadedIntoEngine = false;
-        a._isDataLoaded = false;
-        
-        _scriptMgr.loadData(a._scriptDescriptors);
-        _shaderMgr.loadData(a._shaderDescriptors);
-        _soundMgr.loadData(a._soundDescriptors);
-        _textureMgr.loadData(a._textureDescriptors);
-        
-        a._isDataLoaded = true;
-    }
+    loadData(true);
+    loadData(false);
 }
 
 void AssetsManager::destroyDeviceDependentResources()
 {
+    for (auto& pair : _renderers)
+    {
+        Renderer& r = pair.second;
+        r.destroyDeviceDependentResources();
+    }
+    
+    _entityDefs.clear();
+    _entityInputMappings.clear();
+    _entityLayouts.clear();
+    
     _scriptMgr.reset();
     _shaderMgr.reset();
     _soundMgr.reset();
@@ -105,10 +113,37 @@ void AssetsManager::destroyDeviceDependentResources()
     for (auto& pair : _assets)
     {
         Assets& a = pair.second;
-        
-        a._isLoadedIntoEngine = false;
-        a._isDataLoaded = false;
+        a.reset();
     }
+}
+
+EntityDef& AssetsManager::getEntityDef(uint32_t fourCCKey)
+{
+    auto q = _entityDefs.find(fourCCKey);
+    assert(q != _entityDefs.end());
+    
+    return q->second;
+}
+
+EntityInputMapping& AssetsManager::entityInputMapping(std::string key)
+{
+    auto q = _entityInputMappings.find(key);
+    assert(q != _entityInputMappings.end());
+
+    return q->second;
+}
+
+EntityLayout& AssetsManager::entityLayout(uint32_t key)
+{
+    auto q = _entityLayouts.find(key);
+    assert(q != _entityLayouts.end());
+
+    return q->second;
+}
+
+uint32_t AssetsManager::getFirstLayout()
+{
+    return _entityLayouts.begin()->first;
 }
 
 Script& AssetsManager::script(std::string name)
@@ -165,6 +200,21 @@ bool AssetsManager::isFontLoaded(std::string name)
 {
     Font& f = font(name);
     return _textureMgr.isTextureLoaded(f._texture);
+}
+
+Renderer& AssetsManager::renderer(std::string name)
+{
+    auto q = _renderers.find(name);
+    assert(q != _renderers.end());
+    
+    return q->second;
+}
+
+bool AssetsManager::isRendererLoaded(std::string name)
+{
+    auto q = _renderers.find(name);
+    
+    return q != _renderers.end() && q->second.isLoadedIntoOpenGL();
 }
 
 Texture& AssetsManager::texture(std::string name)
@@ -243,15 +293,85 @@ bool AssetsManager::isLoaded()
         }
     }
     
-    return true;
+    return _assets.size() > 0;
+}
+
+void AssetsManager::loadData(bool loadOnlyGlobalAssets)
+{
+    for (auto& pair : _assets)
+    {
+        std::string assetsFilePath = pair.first;
+        Assets& a = pair.second;
+        
+        if (a._isLoadedIntoEngine)
+        {
+            continue;
+        }
+        
+        bool isGlobalAsset = pair.first == FILE_PATH_ENGINE_ASSETS;
+        
+        if (isGlobalAsset != loadOnlyGlobalAssets)
+        {
+            continue;
+        }
+        
+        a._isLoadedIntoEngine = false;
+        a._isDataLoaded = false;
+        
+        if (a.needsToLoadDescriptors())
+        {
+            AssetsLoader::initWithJSONFile(a, assetsFilePath);
+        }
+        
+        if (a._entityDefs != nullptr)
+        {
+            std::string filePath = a._entityDefs->_filePath;
+            EntityDefsLoader::initWithJSONFile(_entityDefs, filePath);
+        }
+        
+        for (auto& pair : a._entityInputMappings)
+        {
+            FileDescriptor& fd = pair.second;
+            
+            _entityInputMappings.emplace(std::piecewise_construct, std::make_tuple(pair.first), std::make_tuple(pair.first, fd._filePath));
+            
+            auto q = _entityInputMappings.find(pair.first);
+            assert(q != _entityInputMappings.end());
+            EntityInputMapping& eim = q->second;
+            
+            EntityInputMappingsLoader::loadEntityInputMapping(eim);
+        }
+        
+        for (auto& pair : a._entityLayouts)
+        {
+            FileDescriptor& fd = pair.second;
+            
+            _entityLayouts.emplace(std::piecewise_construct, std::make_tuple(pair.first), std::make_tuple(pair.first, fd._name, fd._filePath));
+        }
+        
+        if (a._renderer != nullptr)
+        {
+            auto q = _renderers.find(assetsFilePath);
+            assert(q != _renderers.end());
+            Renderer& r = q->second;
+            RendererLoader::initWithJSONFile(r, a._renderer->_filePath);
+        }
+        
+        _scriptMgr.loadData(a._scripts);
+        _shaderMgr.loadData(a._shaders);
+        _soundMgr.loadData(a._sounds);
+        _textureMgr.loadData(a._textures);
+        
+        a._isDataLoaded = true;
+    }
 }
 
 AssetsManager::AssetsManager() :
+_stateTime(0),
 _scriptMgr(),
 _shaderMgr(),
 _soundMgr(),
-_textureMgr(),
-_stateTime(0)
+_textureMgr()
 {
     // Empty
 }

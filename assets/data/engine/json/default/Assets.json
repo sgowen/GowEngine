@@ -1,0 +1,47 @@
+{
+    "fonts": {
+        "main": {
+            "texture": "sf_font",
+            "glyphsPerRow": 16,
+            "glyphWidth": 32,
+            "glyphHeight": 39
+        }
+    },
+    "renderer": {
+        "filePath": "engine/json/default/Renderer.json"
+    },
+    "scripts": {
+        "DefaultRenderer": {
+            "filePath": "engine/scripts/DefaultRenderer.lua"
+        }
+    },
+    "shaders": {
+        "framebuffer": {
+            "vertexShaderFilePath": "engine/shaders/framebuffer.vsh",
+            "fragmentShaderFilePath": "engine/shaders/framebuffer.fsh"
+        },
+        "geometry": {
+            "vertexShaderFilePath": "engine/shaders/geometry.vsh",
+            "fragmentShaderFilePath": "engine/shaders/geometry.fsh"
+        },
+        "lights": {
+            "vertexShaderFilePath": "engine/shaders/lights.vsh",
+            "fragmentShaderFilePath": "engine/shaders/lights.fsh"
+        },
+        "shockwave": {
+            "vertexShaderFilePath": "engine/shaders/shockwave.vsh",
+            "fragmentShaderFilePath": "engine/shaders/shockwave.fsh"
+        },
+        "sprite": {
+            "vertexShaderFilePath": "engine/shaders/sprite.vsh",
+            "fragmentShaderFilePath": "engine/shaders/sprite.fsh"
+        }
+    },
+    "textures": {
+        "sf_font": {
+            "filePath": "engine/textures/sf_font.png",
+            "filterMin": "SMOOTH",
+            "filterMag": "SMOOTH"
+        }
+    }
+}

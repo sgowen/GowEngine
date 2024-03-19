@@ -10,9 +10,9 @@
 
 void ScriptLoader::loadData(Script& s)
 {
-    std::string filePath = s._desc._scriptFilePath;
+    std::string filePath = s._desc._filePath;
     
-    if (ENGINE_CFG.logLua())
+    if (ENGINE_CFG.logFileIO())
     {
         LOG("ScriptLoader::loadData %s", filePath.c_str());
     }
@@ -24,9 +24,9 @@ void ScriptLoader::loadData(Script& s)
 
 void ScriptLoader::freeData(Script& s)
 {
-    std::string filePath = s._desc._scriptFilePath;
+    std::string filePath = s._desc._filePath;
     
-    if (ENGINE_CFG.logLua())
+    if (ENGINE_CFG.logFileIO())
     {
         LOG("ScriptLoader::freeData %s", filePath.c_str());
     }

@@ -10,11 +10,11 @@
 
 EngineConfig* EngineConfig::s_instance = nullptr;
 
-void EngineConfig::create(std::string configFilePath)
+void EngineConfig::create(std::string filePathConfig)
 {
     assert(s_instance == nullptr);
     
-    s_instance = new EngineConfig(configFilePath);
+    s_instance = new EngineConfig(filePathConfig);
 }
 
 EngineConfig& EngineConfig::getInstance()
@@ -45,6 +45,11 @@ std::string EngineConfig::title()
 std::string& EngineConfig::mode()
 {
     return _mode;
+}
+
+std::string& EngineConfig::physicsEngine()
+{
+    return _physicsEngine;
 }
 
 bool EngineConfig::vsync()
@@ -90,6 +95,11 @@ uint8_t EngineConfig::framesPerSecond()
 bool EngineConfig::glfwLoggingEnabled()
 {
     return _glfwLoggingEnabled;
+}
+
+bool EngineConfig::logFileIO()
+{
+    return _logFileIO;
 }
 
 bool EngineConfig::logLua()
@@ -182,13 +192,14 @@ double EngineConfig::frameRate()
     return _frameRate;
 }
 
-EngineConfig::EngineConfig(std::string configFilePath)
+EngineConfig::EngineConfig(std::string filePathConfig)
 {
-    ConfigLoader::initWithJSONFile(_config, configFilePath);
+    ConfigLoader::initWithJSONFile(_config, filePathConfig);
     
     _fullScreen = _config.getBool("fullScreen");
     _title = _config.getString("title");
     _mode = _config.getString("mode");
+    _physicsEngine = _config.getBool("physicsEngine");
     _vsync = _config.getBool("vsync");
     _useSteamNetworking = _config.getBool("useSteamNetworking");
     _versionName = _config.getString("versionName");
@@ -198,6 +209,7 @@ EngineConfig::EngineConfig(std::string configFilePath)
     _consoleLoggingEnabled = _config.getBool("consoleLoggingEnabled");
     _framesPerSecond = _config.getUInt("framesPerSecond");
     _glfwLoggingEnabled = _config.getBool("glfwLoggingEnabled");
+    _logFileIO = _config.getBool("logFileIO");
     _logLua = _config.getBool("logLua");
     _logOpenGL = _config.getBool("logOpenGL");
     _logOpenAL = _config.getBool("logOpenAL");

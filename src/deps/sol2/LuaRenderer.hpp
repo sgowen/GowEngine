@@ -11,20 +11,16 @@
 class Renderer;
 class World;
 
-namespace sol { class state; }
-
 class LuaRenderer
 {
 public:
-    LuaRenderer();
-    ~LuaRenderer();
+    LuaRenderer() {}
+    ~LuaRenderer() {}
     
-    void render(Renderer& r, World& w, std::string script);
+    void renderWorld(Renderer& r, World& w, std::string script);
+    void render(Renderer& r, std::string script);
     
 private:
-    sol::state* _lua;
-    std::map<std::string, Color> _colorMap;
-    
     LuaRenderer(const LuaRenderer&);
     LuaRenderer& operator=(const LuaRenderer&);
 };
