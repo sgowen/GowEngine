@@ -52,6 +52,8 @@ struct RendererConfig
     bool physicsRenderingEnabled;
     int numRollbackFrames;
     double extrapolation;
+    uint16_t screenWidth;
+    uint16_t screenHeight;
     
     RendererConfig()
     {
@@ -78,6 +80,8 @@ struct RendererConfig
         physicsRenderingEnabled = false;
         numRollbackFrames = 0;
         extrapolation = 0.0;
+        screenWidth = 1;
+        screenHeight = 1;
     }
 };
 
@@ -92,7 +96,6 @@ public:
     void reset();
     
     void createDeviceDependentResources();
-    void onWindowSizeChanged(uint16_t screenWidth, uint16_t screenHeight);
     void destroyDeviceDependentResources();
     
     void renderLoadingView(uint32_t stateTime);
@@ -138,9 +141,11 @@ public:
     void renderFramebufferToScreen(std::string framebufferKey);
     
     void renderWorldWithLua(World& w);
+    void renderWithLua();
     
     void configReset();
     void configExtrapolation(double value);
+    void configScreenSize(uint16_t screenWidth, uint16_t screenHeight);
     void configBounds(uint32_t maxRight, uint32_t maxTop, float& scale);
     void configControlledPlayerEntity(Entity* e);
     void configMatrix(std::string key);
@@ -152,6 +157,8 @@ public:
     void configNumRollbackFrames(int numRollbackFrames);
     
     Matrix& matrixForInput();
+    
+    bool isLoadedIntoOpenGL();
     
 private:
     LuaRenderer _luaRenderer;
@@ -173,6 +180,7 @@ private:
     std::map<std::string, SpriteBatcher> _spriteBatchers;
     std::map<std::string, TextView> _textViews;
     std::map<std::string, TriangleBatcher> _triangleBatchers;
+    bool _isLoadedIntoOpenGL;
     
     void spriteBatcherAddEntity(SpriteBatcher& sb, Entity& e);
     

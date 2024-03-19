@@ -14,7 +14,7 @@ void EntityManager::registerController(std::string name, EntityControllerCreatio
     _entityControllerCreationFunctions[name] = func;
 }
 
-EntityController* EntityManager::createEntityController(EntityDef& ed, Entity* e)
+EntityController* EntityManager::createEntityController(const EntityDef& ed, Entity* e)
 {
     EntityControllerCreationFunc func;
     if (ed._controllerScript.empty())
@@ -41,7 +41,7 @@ void EntityManager::registerAIController(std::string name, EntityControllerAICre
     _entityAIControllerCreationFunctions[name] = func;
 }
 
-EntityControllerAI* EntityManager::createEntityControllerAI(EntityDef& ed, Entity* e)
+EntityControllerAI* EntityManager::createEntityControllerAI(const EntityDef& ed, Entity* e)
 {
     EntityControllerAICreationFunc func;
     if (ed._controllerAIScript.empty())
@@ -68,7 +68,7 @@ void EntityManager::registerInputController(std::string name, EntityControllerIn
     _entityInputControllerCreationFunctions[name] = func;
 }
 
-EntityControllerInput* EntityManager::createEntityControllerInput(EntityDef& ed, Entity* e)
+EntityControllerInput* EntityManager::createEntityControllerInput(const EntityDef& ed, Entity* e)
 {
     EntityControllerInputCreationFunc func = _entityInputControllerCreationFunctions[ed._controllerInput];
     assert(func != nullptr);
@@ -86,7 +86,7 @@ void EntityManager::registerNetworkController(std::string name, EntityController
     _entityNetworkControllerCreationFunctions[name] = func;
 }
 
-EntityControllerNetwork* EntityManager::createEntityControllerNetwork(EntityDef& ed, Entity* e)
+EntityControllerNetwork* EntityManager::createEntityControllerNetwork(const EntityDef& ed, Entity* e)
 {
     EntityControllerNetworkCreationFunc func = _entityNetworkControllerCreationFunctions[ed._controllerNetwork];
     assert(func != nullptr);
@@ -104,7 +104,7 @@ void EntityManager::registerRenderController(std::string name, EntityControllerR
     _entityRenderControllerCreationFunctions[name] = func;
 }
 
-EntityControllerRender* EntityManager::createEntityControllerRender(EntityDef& ed, Entity* e)
+EntityControllerRender* EntityManager::createEntityControllerRender(const EntityDef& ed, Entity* e)
 {
     EntityControllerRenderCreationFunc func = _entityRenderControllerCreationFunctions[ed._controllerRender];
     assert(func != nullptr);

@@ -15,8 +15,8 @@ void cb_game_server_onEntityRegistered(Entity* e)
     if (e->isPlayer() && e->playerInfo()._playerID == 1)
     {
         uint32_t entityLayoutKey = e->networkDataField("entityLayoutKey").valueUInt32();
-        EntityLayout& eld = ENTITY_LAYOUT_MGR.entityLayout(entityLayoutKey);
-        GAME_SERVER->populateFromEntityLayout(eld);
+        EntityLayout& el = ASSETS_MGR.entityLayout(entityLayoutKey);
+        GAME_SERVER->populateFromEntityLayout(el);
     }
 }
 
@@ -50,11 +50,11 @@ void cb_game_server_handleLostClient(ClientProxy& cp, uint8_t localPlayerIndex)
 
 GameServer* GameServer::s_instance = nullptr;
 
-void GameServer::create(Config& config)
+void GameServer::create()
 {
     assert(s_instance == nullptr);
     
-    s_instance = new GameServer(config);
+    s_instance = new GameServer();
 }
 
 GameServer* GameServer::getInstance()
@@ -111,9 +111,9 @@ void GameServer::handleLostClient(ClientProxy& cp, uint8_t localPlayerIndex)
     }
 }
 
-void GameServer::populateFromEntityLayout(EntityLayout& eld)
+void GameServer::populateFromEntityLayout(EntityLayout& el)
 {
-    EntityLayoutLoader::loadEntityLayout(eld, _entityIDManager, true);
+    EntityLayoutLoader::loadEntityLayout(el, _entityIDManager, true);
     
     World& w = world();
     std::vector<Entity*> toDelete = w.getDynamicEntities();
@@ -122,9 +122,9 @@ void GameServer::populateFromEntityLayout(EntityLayout& eld)
         NW_SRVR->deregisterEntity(e);
     }
     
-    w.populateFromEntityLayout(eld);
+    w.populateFromEntityLayout(el);
     
-    for (auto& eid : eld._entitiesNetwork)
+    for (auto& eid : el._entitiesNetwork)
     {
         EntityDef& ed = ASSETS_MGR.getEntityDef(eid._key);
         Entity* e = Entity::createEntity(ed, eid);
@@ -254,7 +254,7 @@ void GameServer::spawnPlayer(std::string playerName, uint8_t playerID)
     e->playerInfo()._playerID = playerID;
     if (playerID == 1)
     {
-        uint32_t entityLayoutKey = ENTITY_LAYOUT_MGR.getFirstLayout();
+        uint32_t entityLayoutKey = ASSETS_MGR.getFirstLayout();
         e->networkDataField("entityLayoutKey").setValueUInt32(entityLayoutKey);
     }
 

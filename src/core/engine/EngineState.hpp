@@ -25,7 +25,6 @@ public:
     virtual void exit(Engine* e) override;
     
     void createDeviceDependentResources(Engine* e);
-    void onWindowSizeChanged(Engine* e);
     void destroyDeviceDependentResources(Engine* e);
     void pause(Engine* e);
     void resume(Engine* e);

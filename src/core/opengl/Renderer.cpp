@@ -18,7 +18,8 @@ _screenRenderer(),
 _shockwaveRenderer(),
 _rc(),
 _scriptName(""),
-_pixelToUnitRatio(1)
+_pixelToUnitRatio(1),
+_isLoadedIntoOpenGL(false)
 {
     // Empty
 }
@@ -38,6 +39,8 @@ void Renderer::reset()
     _spriteBatchers.clear();
     _textViews.clear();
     _triangleBatchers.clear();
+    
+    _isLoadedIntoOpenGL = false;
 }
 
 void Renderer::createDeviceDependentResources()
@@ -78,11 +81,8 @@ void Renderer::createDeviceDependentResources()
     {
         pair.second.createDeviceDependentResources();
     }
-}
-
-void Renderer::onWindowSizeChanged(uint16_t screenWidth, uint16_t screenHeight)
-{
-    _screenRenderer.onWindowSizeChanged(screenWidth, screenHeight);
+    
+    _isLoadedIntoOpenGL = true;
 }
 
 void Renderer::destroyDeviceDependentResources()
@@ -293,6 +293,11 @@ void Renderer::renderSprite(std::string textureKey, std::string textureRegionKey
 
 void Renderer::renderEntitiesBoundToTexture(std::string spriteBatcherKey, std::string texture, std::vector<Entity*>& entities)
 {
+    if (!ASSETS_MGR.isTextureLoaded(texture))
+    {
+        return;
+    }
+    
     spriteBatcherBegin(spriteBatcherKey);
     for (Entity* e : entities)
     {
@@ -517,7 +522,22 @@ void Renderer::renderFramebufferToScreen(std::string framebufferKey)
     
     Shader& s = ASSETS_MGR.shader(_rc.shaderKey);
     Framebuffer& fb = framebuffer(_rc.framebufferKey);
-    _screenRenderer.renderToScreen(s, fb);
+    _screenRenderer.renderToScreen(s, fb, _rc.screenWidth, _rc.screenHeight);
+}
+
+void Renderer::renderWorldWithLua(World& w)
+{
+    _luaRenderer.renderWorld(*this, w, _scriptName);
+}
+
+void Renderer::renderWithLua()
+{
+    _luaRenderer.render(*this, _scriptName);
+}
+
+void Renderer::configReset()
+{
+    _rc.reset();
 }
 
 void Renderer::configExtrapolation(double value)
@@ -525,14 +545,10 @@ void Renderer::configExtrapolation(double value)
     _rc.extrapolation = value;
 }
 
-void Renderer::renderWorldWithLua(World& w)
+void Renderer::configScreenSize(uint16_t screenWidth, uint16_t screenHeight)
 {
-    _luaRenderer.render(*this, w, _scriptName);
-}
-
-void Renderer::configReset()
-{
-    _rc.reset();
+    _rc.screenWidth = screenWidth;
+    _rc.screenHeight = screenHeight;
 }
 
 void Renderer::configBounds(uint32_t maxRight, uint32_t maxTop, float& scale)
@@ -594,6 +610,11 @@ void Renderer::configNumRollbackFrames(int numRollbackFrames)
 Matrix& Renderer::matrixForInput()
 {
     return matrix(_rc.matrixKey);
+}
+
+bool Renderer::isLoadedIntoOpenGL()
+{
+    return _isLoadedIntoOpenGL;
 }
 
 CircleBatcher& Renderer::circleBatcher(std::string key)

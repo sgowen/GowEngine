@@ -12,6 +12,7 @@ void EngineState::enter(Engine* e)
 {
     ASSETS_MGR.registerAssets(_filePathAssets);
     createDeviceDependentResources(e);
+    
     onEnter(e);
 }
 
@@ -27,7 +28,6 @@ void EngineState::execute(Engine* e)
         // concurrently, but only 1 for each EngineState
         // So, really, we have an Engine Renderer that is live for the full
         // app lifecycle, and an EngineState renderer that gets set when we switch EngineStates (DefaultEngineState never leaves)
-        onWindowSizeChanged(e);
         Renderer& renderer = ASSETS_MGR.renderer(_filePathAssets);
         INPUT_MGR.setMatrix(&renderer.matrixForInput());
         onAssetsLoaded(e);
@@ -44,23 +44,20 @@ void EngineState::execute(Engine* e)
 
 void EngineState::exit(Engine* e)
 {
-    if (!_areAssetsGlobal)
+    onExit(e);
+    
+    if (_areAssetsGlobal)
     {
-        destroyDeviceDependentResources(e);
-        ASSETS_MGR.deregisterAssets(_filePathAssets);
+        return;
     }
     
-    onExit(e);
+    destroyDeviceDependentResources(e);
+    ASSETS_MGR.deregisterAssets(_filePathAssets);
 }
 
 void EngineState::createDeviceDependentResources(Engine* e)
 {
     ASSETS_MGR.createDeviceDependentResourcesAsync();
-}
-
-void EngineState::onWindowSizeChanged(Engine* e)
-{
-    ASSETS_MGR.onWindowSizeChanged(e->screenWidth(), e->screenHeight());
 }
 
 void EngineState::destroyDeviceDependentResources(Engine* e)
@@ -82,9 +79,9 @@ void EngineState::render(Engine* e)
 {
     if (!ASSETS_MGR.isLoaded())
     {
-        if (ASSETS_MGR.isRendererLoaded(ENGINE_ASSETS))
+        if (ASSETS_MGR.isRendererLoaded(FILE_PATH_ENGINE_ASSETS))
         {
-            Renderer& renderer = ASSETS_MGR.renderer(ENGINE_ASSETS);
+            Renderer& renderer = ASSETS_MGR.renderer(FILE_PATH_ENGINE_ASSETS);
             renderer.renderLoadingView(ASSETS_MGR.getStateTime());
         }
         
@@ -95,6 +92,7 @@ void EngineState::render(Engine* e)
     
     renderer.configReset();
     renderer.configExtrapolation(e->extrapolation());
+    renderer.configScreenSize(e->screenWidth(), e->screenHeight());
     onRender(renderer);
     
     AUDIO_ENGINE.render();
@@ -104,5 +102,8 @@ EngineState::EngineState(std::string filePathAssets, bool areAssetsGlobal) : Sta
 _filePathAssets(filePathAssets),
 _areAssetsGlobal(areAssetsGlobal)
 {
-    // Empty
+    if (_areAssetsGlobal)
+    {
+        ASSETS_MGR.registerAssets(_filePathAssets);
+    }
 }

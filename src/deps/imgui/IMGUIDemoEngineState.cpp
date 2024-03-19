@@ -66,7 +66,7 @@ void IMGUIDemoEngineState::onRender(Renderer& r)
     ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 }
 
-IMGUIDemoEngineState::IMGUIDemoEngineState() : EngineState("json/game/Config.json"),
+IMGUIDemoEngineState::IMGUIDemoEngineState() : EngineState("json/game/Assets.json"),
 _inputProcessor()
 {
     // Empty

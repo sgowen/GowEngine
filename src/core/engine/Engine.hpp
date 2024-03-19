@@ -25,9 +25,7 @@ class EngineState;
 class Renderer;
 
 class Engine
-{
-    friend class DefaultEngineState;
-    
+{    
 public:
     Engine();
     ~Engine();
@@ -63,7 +61,6 @@ public:
     
 private:
     StateMachine<Engine> _stateMachine;
-    Renderer* _renderer;
     EngineRequestedHostAction _requestedHostAction;
     double _stateTime;
     double _extrapolation;
@@ -73,7 +70,5 @@ private:
     uint16_t _cursorHeight;
     bool _hasUpdatedSinceLastRender;
     
-    void execute(EngineRequestedStateAction ersa);
-    void renderModePicker();
     EngineState* currentState();
 };

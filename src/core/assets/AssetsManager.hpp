@@ -34,7 +34,6 @@ public:
     void update();
     void createDeviceDependentResourcesAsync();
     void createDeviceDependentResources();
-    void onWindowSizeChanged(uint16_t screenWidth, uint16_t screenHeight);
     void destroyDeviceDependentResources();
     
     EntityDef& getEntityDef(uint32_t fourCCKey);
@@ -66,11 +65,13 @@ private:
     std::map<uint32_t, EntityDef> _entityDefs;
     std::map<std::string, EntityInputMapping> _entityInputMappings;
     std::map<uint32_t, EntityLayout> _entityLayouts;
-    Renderer _renderer;
+    std::map<std::string, Renderer> _renderers;
     ScriptManager _scriptMgr;
     ShaderManager _shaderMgr;
     SoundManager _soundMgr;
     TextureManager _textureMgr;
+    
+    void loadData(bool loadOnlyGlobalAssets);
     
     AssetsManager();
     ~AssetsManager() {}

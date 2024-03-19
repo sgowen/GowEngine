@@ -131,8 +131,8 @@ struct Assets
         std::map<std::string, TextureDescriptor>& tds = _textures;
         for (auto& pair : tds)
         {
-            TextureRegion* tr = pair.second.textureRegion(key, stateTime);
-            if (tr != nullptr)
+            ret = pair.second.textureRegion(key, stateTime);
+            if (ret != nullptr)
             {
                 break;
             }

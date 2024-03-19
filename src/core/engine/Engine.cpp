@@ -10,7 +10,6 @@
 
 Engine::Engine() :
 _stateMachine(this, &ENGINE_STATE_DEFAULT),
-_renderer(new Renderer()),
 _requestedHostAction(ERHA_DEFAULT),
 _stateTime(0.0),
 _screenWidth(0),
@@ -34,17 +33,11 @@ _hasUpdatedSinceLastRender(false)
             SteamGameServices::create(ENGINE_CFG.steamGameDir().c_str());
         }
 #endif
-    
-//    Assets assets;
-//    AssetsLoader::initWithJSONFile(assets, "engine/json/Assets.json");
-//    ASSETS_MGR.registerAssets(ENGINE_ASSETS, assets);
-//    
-//    RendererLoader::initWithJSONFile(*_renderer, "engine/json/Renderer.json");
 }
 
 Engine::~Engine()
 {
-    ASSETS_MGR.deregisterAssets(ENGINE_ASSETS);
+    ASSETS_MGR.deregisterAssets(FILE_PATH_ENGINE_ASSETS);
     
     Logger::getInstance().closeFileStream();
     
@@ -75,8 +68,6 @@ void Engine::onWindowSizeChanged(uint16_t screenWidth, uint16_t screenHeight, ui
     _cursorHeight = cursorHeight > 0 ? cursorHeight : screenHeight;
     
     INPUT_MGR.setCursorSize(_cursorWidth, _cursorHeight);
-    
-    currentState()->onWindowSizeChanged(this);
 }
 
 void Engine::destroyDeviceDependentResources()
@@ -249,13 +240,6 @@ double Engine::extrapolation()
 bool Engine::hasUpdatedSinceLastRender()
 {
     return _hasUpdatedSinceLastRender;
-}
-
-void Engine::renderModePicker()
-{
-    _renderer->bindFramebuffer("main");
-    _renderer->renderTextViews();
-    _renderer->renderFramebufferToScreen("main");
 }
 
 EngineState* Engine::currentState()

@@ -10,15 +10,26 @@
 
 void AssetsManager::registerAssets(std::string key)
 {
-    assert(_assets.find(key) == _assets.end());
-    _assets.emplace(key, Assets());
+    if (_assets.find(key) == _assets.end())
+    {
+        _assets.emplace(std::piecewise_construct, std::make_tuple(key), std::make_tuple());
+        _renderers.emplace(std::piecewise_construct, std::make_tuple(key), std::make_tuple());
+    }
 }
 
 void AssetsManager::deregisterAssets(std::string key)
 {
-    auto q = _assets.find(key);
-    assert(q != _assets.end());
-    _assets.erase(q);
+    {
+        auto q = _assets.find(key);
+        assert(q != _assets.end());
+        _assets.erase(q);
+    }
+    
+    {
+        auto q = _renderers.find(key);
+        assert(q != _renderers.end());
+        _renderers.erase(q);
+    }
 }
 
 void AssetsManager::update()
@@ -33,6 +44,8 @@ void AssetsManager::update()
     for (auto& pair : _assets)
     {
         Assets& a = pair.second;
+        Renderer& r = renderer(pair.first);
+        
         if (a._isLoadedIntoEngine)
         {
             continue;
@@ -43,7 +56,7 @@ void AssetsManager::update()
             _scriptMgr.loadIntoLuaAndFreeData(a._scripts);
             _shaderMgr.loadIntoOpenGLAndFreeData(a._shaders);
             _soundMgr.loadIntoOpenALAndFreeData(a._sounds);
-            _renderer.createDeviceDependentResources();
+            r.createDeviceDependentResources();
             _textureMgr.loadIntoOpenGLAndFreeData(a._textures);
             
             a._isLoadedIntoEngine = true;
@@ -76,57 +89,21 @@ void AssetsManager::createDeviceDependentResources()
 {
     _stateTime = 0;
     
-    for (auto& pair : _assets)
-    {
-        Assets& a = pair.second;
-        
-        if (a._isLoadedIntoEngine)
-        {
-            continue;
-        }
-        
-        a._isLoadedIntoEngine = false;
-        a._isDataLoaded = false;
-        
-        if (a.needsToLoadDescriptors())
-        {
-            std::string filePath = pair.first;
-            AssetsLoader::initWithJSONFile(a, filePath);
-        }
-        
-        if (a._entityDefs != nullptr)
-        {
-            std::string filePath = a._entityDefs->_filePath;
-            EntityDefsLoader::initWithJSONFile(_entityDefs, filePath);
-        }
-        
-        // TODO, a._entityInputMappings
-        
-        // TODO, a._entityLayouts
-        
-        if (a._renderer != nullptr)
-        {
-            std::string filePath = a._renderer->_filePath;
-            RendererLoader::initWithJSONFile(_renderer, filePath);
-        }
-        
-        _scriptMgr.loadData(a._scripts);
-        _shaderMgr.loadData(a._shaders);
-        _soundMgr.loadData(a._sounds);
-        _textureMgr.loadData(a._textures);
-        
-        a._isDataLoaded = true;
-    }
-}
-
-void AssetsManager::onWindowSizeChanged(uint16_t screenWidth, uint16_t screenHeight)
-{
-    _renderer.onWindowSizeChanged(screenWidth, screenHeight);
+    loadData(true);
+    loadData(false);
 }
 
 void AssetsManager::destroyDeviceDependentResources()
 {
-    _renderer.destroyDeviceDependentResources();
+    for (auto& pair : _renderers)
+    {
+        Renderer& r = pair.second;
+        r.destroyDeviceDependentResources();
+    }
+    
+    _entityDefs.clear();
+    _entityInputMappings.clear();
+    _entityLayouts.clear();
     
     _scriptMgr.reset();
     _shaderMgr.reset();
@@ -227,14 +204,17 @@ bool AssetsManager::isFontLoaded(std::string name)
 
 Renderer& AssetsManager::renderer(std::string name)
 {
-    // TODO, get renderer from map using name key
-    return _renderer;
+    auto q = _renderers.find(name);
+    assert(q != _renderers.end());
+    
+    return q->second;
 }
 
 bool AssetsManager::isRendererLoaded(std::string name)
 {
-    // TODO
-    return false;
+    auto q = _renderers.find(name);
+    
+    return q != _renderers.end() && q->second.isLoadedIntoOpenGL();
 }
 
 Texture& AssetsManager::texture(std::string name)
@@ -313,7 +293,78 @@ bool AssetsManager::isLoaded()
         }
     }
     
-    return true;
+    return _assets.size() > 0;
+}
+
+void AssetsManager::loadData(bool loadOnlyGlobalAssets)
+{
+    for (auto& pair : _assets)
+    {
+        std::string assetsFilePath = pair.first;
+        Assets& a = pair.second;
+        
+        if (a._isLoadedIntoEngine)
+        {
+            continue;
+        }
+        
+        bool isGlobalAsset = pair.first == FILE_PATH_ENGINE_ASSETS;
+        
+        if (isGlobalAsset != loadOnlyGlobalAssets)
+        {
+            continue;
+        }
+        
+        a._isLoadedIntoEngine = false;
+        a._isDataLoaded = false;
+        
+        if (a.needsToLoadDescriptors())
+        {
+            AssetsLoader::initWithJSONFile(a, assetsFilePath);
+        }
+        
+        if (a._entityDefs != nullptr)
+        {
+            std::string filePath = a._entityDefs->_filePath;
+            EntityDefsLoader::initWithJSONFile(_entityDefs, filePath);
+        }
+        
+        for (auto& pair : a._entityInputMappings)
+        {
+            FileDescriptor& fd = pair.second;
+            
+            _entityInputMappings.emplace(std::piecewise_construct, std::make_tuple(pair.first), std::make_tuple(pair.first, fd._filePath));
+        }
+        
+        for (auto& pair : _entityInputMappings)
+        {
+            EntityInputMapping& eim = pair.second;
+            
+            EntityInputMappingsLoader::loadEntityInputMapping(eim);
+        }
+        
+        for (auto& pair : a._entityLayouts)
+        {
+            FileDescriptor& fd = pair.second;
+            
+            _entityLayouts.emplace(std::piecewise_construct, std::make_tuple(pair.first), std::make_tuple(pair.first, fd._name, fd._filePath));
+        }
+        
+        if (a._renderer != nullptr)
+        {
+            auto q = _renderers.find(assetsFilePath);
+            assert(q != _renderers.end());
+            Renderer& r = q->second;
+            RendererLoader::initWithJSONFile(r, a._renderer->_filePath);
+        }
+        
+        _scriptMgr.loadData(a._scripts);
+        _shaderMgr.loadData(a._shaders);
+        _soundMgr.loadData(a._sounds);
+        _textureMgr.loadData(a._textures);
+        
+        a._isDataLoaded = true;
+    }
 }
 
 AssetsManager::AssetsManager() :

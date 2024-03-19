@@ -14,23 +14,32 @@
 IMPL_RTTI(LuaController, EntityController)
 IMPL_EntityController_create(LuaController)
 
-LuaController::LuaController(Entity* entity) : EntityController(entity),
-_lua(new sol::state())
+LuaController::LuaController(Entity* entity) : EntityController(entity)
 {
-    sol::state& lua = *_lua;
-    
-    lua.open_libraries(sol::lib::base, sol::lib::math, sol::lib::os, sol::lib::package, sol::lib::string);
-    
-    if (ENGINE_CFG.logLua())
-    {
-        lua.set_function("LOG", [](std::string line) {
-            LOG(line.c_str());
-        });
-    }
-    
+    // Empty
+}
+
+void LuaController::processInput(uint16_t inputState)
+{
     Entity& e = *_entity;
     Vector2& vel = e.velocity();
     uint8_t& stateFlags = e.state()._stateFlags;
+    Script& s = ASSETS_MGR.script(e.entityDef()._controllerScript);
+    sol::state& lua = *s._lua;
+    
+    lua.set_function("isInputFlagSet", [&e, &inputState](std::string key) {
+        uint16_t flag = e.inputStateFlag(key);
+        bool ret = IS_BIT_SET(inputState, flag);
+        
+        return ret;
+    });
+    
+    lua.set_function("wasInputFlagSet", [&e, &inputState](std::string key) {
+        uint16_t flag = e.inputStateFlag(key);
+        bool ret = IS_BIT_SET(e.lastProcessedInputState(), flag);
+        
+        return ret;
+    });
     
     lua.set_function("setNetworkUInt8", [&e](std::string key, uint8_t value) {
         e.networkDataField("health").setValueUInt8(value);
@@ -163,43 +172,15 @@ _lua(new sol::state())
     lua.set_function("resetVelocity", [&vel]() {
         vel.reset();
     });
-    
-    Script& s = ASSETS_MGR.script(_entity->entityDef()._controllerScript);
-    
-    sol::load_result loadedScript = lua.load_buffer((const char*)s._fileData->_data, s._fileData->_length);
-    sol::protected_function_result result = loadedScript();
-    if (!result.valid() && ENGINE_CFG.logLua())
-    {
-        LOG("LuaController: %s is not valid", s._desc._name.c_str());
-    }
-}
-
-void LuaController::processInput(uint16_t inputState)
-{
-    Entity& e = *_entity;
-    sol::state& lua = *_lua;
-    
-    lua.set_function("isInputFlagSet", [&e, &inputState](std::string key) {
-        uint16_t flag = e.inputStateFlag(key);
-        bool ret = IS_BIT_SET(inputState, flag);
         
-        return ret;
-    });
-    
-    lua.set_function("wasInputFlagSet", [&e, &inputState](std::string key) {
-        uint16_t flag = e.inputStateFlag(key);
-        bool ret = IS_BIT_SET(e.lastProcessedInputState(), flag);
-        
-        return ret;
-    });
-    
     lua["processInput"](inputState);
 }
 
 void LuaController::onUpdate(uint32_t numMovesProcessed)
 {
     Entity& e = *_entity;
-    sol::state& lua = *_lua;
+    Script& s = ASSETS_MGR.script(e.entityDef()._controllerScript);
+    sol::state& lua = *s._lua;
     
     std::string textureMapping = e.controllerRender()->getTextureMapping();
     Animation* animation = ASSETS_MGR.animation(textureMapping);
@@ -219,7 +200,9 @@ void LuaController::onUpdate(uint32_t numMovesProcessed)
 
 void LuaController::onMessage(uint16_t message, Entity* fromEntity)
 {
-    sol::state& lua = *_lua;
+    Entity& e = *_entity;
+    Script& s = ASSETS_MGR.script(e.entityDef()._controllerScript);
+    sol::state& lua = *s._lua;
     
     lua.set_function("isMsgDangerousTouch", [&message]() {
         return message == MSG_DANGEROUS_TOUCH;

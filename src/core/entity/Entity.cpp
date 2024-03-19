@@ -10,7 +10,7 @@
 
 Entity* Entity::createEntity(const EntityInstanceDef& eid)
 {
-    EntityDef& ed = getEntityDef(eid._key);
+    EntityDef& ed = ASSETS_MGR.getEntityDef(eid._key);
     return createEntity(ed, eid);
 }
 

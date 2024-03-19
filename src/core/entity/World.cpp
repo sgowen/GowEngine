@@ -25,11 +25,11 @@ World::~World()
     removeAllNetworkEntities();
 }
 
-void World::populateFromEntityLayout(EntityLayout& eld)
+void World::populateFromEntityLayout(EntityLayout& el)
 {
     reset();
     
-    _entityLayout = eld;
+    _entityLayout = el;
     
     for (auto& eid : _entityLayout._entities)
     {

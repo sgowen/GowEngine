@@ -29,6 +29,55 @@ void LuaUtil::loadScript(Script& s)
         LOG("LuaUtil: %s is not valid", s._desc._name.c_str());
     }
     assert(result.valid());
+    
+    lua.open_libraries(sol::lib::base, sol::lib::math, sol::lib::os, sol::lib::package, sol::lib::string);
+    
+    if (ENGINE_CFG.logLua())
+    {
+        lua.set_function("LOG", [](std::string line) {
+            LOG(line.c_str());
+        });
+    }
+    
+    lua.set_function("networkIsPlayerIDLocal", [](int playerID) {
+        bool ret = false;
+        if (NW_CLNT)
+        {
+            ret = NW_CLNT->isPlayerIDLocal(playerID);
+        }
+        return ret;
+    });
+    
+    lua.set_function("networkAvgRoundTripTime", []() {
+        int ret = 0;
+        if (NW_CLNT)
+        {
+            ret = static_cast<int>(NW_CLNT->avgRoundTripTime());
+        }
+        return ret;
+    });
+    
+    lua.set_function("networkBytesReceivedPerSecond", []() {
+        int ret = 0;
+        if (NW_CLNT)
+        {
+            ret = static_cast<int>(NW_CLNT->bytesReceivedPerSecond());
+        }
+        return ret;
+    });
+    
+    lua.set_function("networkBytesSentPerSecond", []() {
+        int ret = 0;
+        if (NW_CLNT)
+        {
+            ret = static_cast<int>(NW_CLNT->bytesSentPerSecond());
+        }
+        return ret;
+    });
+    
+    lua.set_function("fps", []() {
+        return FPS_UTIL.fps();
+    });
 }
 
 void LuaUtil::unloadScript(Script& s)

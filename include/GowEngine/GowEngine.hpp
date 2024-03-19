@@ -43,8 +43,9 @@
 /// deps/rapidjson implementation
 #include "deps/rapidjson/AssetsLoader.hpp"
 #include "deps/rapidjson/ConfigLoader.hpp"
-#include "deps/rapidjson/EntityInputMappingManagerLoader.hpp"
 #include "deps/rapidjson/EntityDefsLoader.hpp"
+#include "deps/rapidjson/EntityInputMappingsLoader.hpp"
+#include "deps/rapidjson/EntityLayoutLoader.hpp"
 #include "deps/rapidjson/RapidJSONUtil.hpp"
 #include "deps/rapidjson/RendererLoader.hpp"
 
@@ -122,7 +123,7 @@
 #include "core/entity/EntityIDManager.hpp"
 #include "core/entity/EntityControllerAI.hpp"
 #include "core/entity/EntityControllerInput.hpp"
-#include "core/entity/EntityInputMappingManager.hpp"
+#include "core/entity/EntityInputMapping.hpp"
 #include "core/entity/EntityLayout.hpp"
 #include "core/entity/EntityManager.hpp"
 #include "core/entity/EntityControllerNetwork.hpp"

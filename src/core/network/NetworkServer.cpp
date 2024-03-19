@@ -601,6 +601,8 @@ _numMovesProcessed(0)
 
 NetworkServer::~NetworkServer()
 {
+    deregisterAllEntities();
+    
     for (auto& pair : _addressHashToClientMap)
     {
         ClientProxy& cp = pair.second;
@@ -615,8 +617,6 @@ NetworkServer::~NetworkServer()
 
     _addressHashToClientMap.clear();
     _playerIDToClientMap.clear();
-    
-    deregisterAllEntities();
     
     delete _serverHelper;
 }

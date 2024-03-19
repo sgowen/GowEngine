@@ -28,6 +28,7 @@ Box2DPhysicsWorld::~Box2DPhysicsWorld()
     // Buuuut, because we delete _world here, the entities that are released
     // in the World destructor AFTER this crash because Box2D has already been shut down
     reset();
+    removeAllNetworkEntities();
     
     delete _entityContactListener;
     delete _entityContactFilter;

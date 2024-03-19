@@ -505,7 +505,7 @@ public:
 
     static Entity* createEntity(const EntityDef& ed, const EntityInstanceDef& eid);
     
-    Entity(EntityDef ed, EntityInstanceDef eid);
+    Entity(const EntityDef& ed, const EntityInstanceDef& eid);
     ~Entity();
     
     void beginFrame();

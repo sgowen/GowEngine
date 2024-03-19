@@ -1,4 +1,7 @@
 {
+    "renderer": {
+        "filePath": "json/title/Renderer.json"
+    },
     "textures": {
         "title": {
         "filePath": "textures/title.png",

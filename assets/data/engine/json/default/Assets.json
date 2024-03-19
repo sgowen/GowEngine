@@ -7,6 +7,14 @@
             "glyphHeight": 39
         }
     },
+    "renderer": {
+        "filePath": "engine/json/default/Renderer.json"
+    },
+    "scripts": {
+        "DefaultRenderer": {
+            "filePath": "engine/scripts/DefaultRenderer.lua"
+        }
+    },
     "shaders": {
         "framebuffer": {
             "vertexShaderFilePath": "engine/shaders/framebuffer.vsh",
@@ -28,9 +36,6 @@
             "vertexShaderFilePath": "engine/shaders/sprite.vsh",
             "fragmentShaderFilePath": "engine/shaders/sprite.fsh"
         }
-    },
-    "renderer": {
-        "filePath": "engine/json/default/Renderer.json"
     },
     "textures": {
         "sf_font": {

@@ -61,7 +61,7 @@ public:
         return ret;
     }
     
-    void populateFromEntityLayout(EntityLayout& eld);
+    void populateFromEntityLayout(EntityLayout& el);
     Entity* getPlayer(uint8_t playerID);
     Entity* getControlledPlayer();
     GameInputProcessor& input();

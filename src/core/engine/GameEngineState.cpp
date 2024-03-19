@@ -278,15 +278,6 @@ void GameEngineState::onEnter(Engine* e)
 
 void GameEngineState::onAssetsLoaded(Engine* e)
 {
-    std::string filePathEntityManager = _config.getString("filePathEntityManager");
-    EntityDefsLoader::initWithJSONFile(ENTITY_MGR, filePathEntityManager);
-    
-    std::string filePathEntityInputMappingManager = _config.getString("filePathEntityInputMappingManager");
-    EntityInputMappingManagerLoader::initWithJSONFile(ENTITY_INPUT_MAPPING_MGR, filePathEntityInputMappingManager);
-    
-    std::string filePathEntityLayout = _config.getString("filePathEntityLayout");
-    EntityLayoutLoader::initWithJSONFile(ENTITY_LAYOUT_MGR, filePathEntityLayout);
-    
     AUDIO_ENGINE.playMusic("music_game", 0.7f);
 }
 
@@ -380,8 +371,8 @@ void GameEngineState::onUpdate(Engine* e)
         if (e != nullptr)
         {
             uint32_t entityLayoutKey = e->networkDataField("entityLayoutKey").valueUInt32();
-            EntityLayout& eld = ENTITY_LAYOUT_MGR.entityLayout(entityLayoutKey);
-            populateFromEntityLayout(eld);
+            EntityLayout& el = ASSETS_MGR.entityLayout(entityLayoutKey);
+            populateFromEntityLayout(el);
         }
     }
     
@@ -509,10 +500,10 @@ void GameEngineState::onRender(Renderer& r)
     AUDIO_ENGINE.playSoundsForWorld(world());
 }
 
-void GameEngineState::populateFromEntityLayout(EntityLayout& eld)
+void GameEngineState::populateFromEntityLayout(EntityLayout& el)
 {
-    EntityLayoutLoader::loadEntityLayout(eld, _entityIDManager, false);
-    world().populateFromEntityLayout(eld);
+    EntityLayoutLoader::loadEntityLayout(el, _entityIDManager, false);
+    world().populateFromEntityLayout(el);
 }
 
 Entity* GameEngineState::getPlayer(uint8_t playerID)
@@ -639,7 +630,7 @@ void GameEngineState::updateWorld(const Move& move)
     world().storeToCache();
 }
 
-GameEngineState::GameEngineState() : EngineState("json/game/Config.json", "json/game/Assets.json"),
+GameEngineState::GameEngineState() : EngineState("json/game/Assets.json"),
 _entityIDManager(),
 _timeTracker(),
 _world(nullptr),

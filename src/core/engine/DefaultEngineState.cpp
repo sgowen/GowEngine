@@ -71,11 +71,10 @@ void DefaultEngineState::onUpdate(Engine* e)
 
 void DefaultEngineState::onRender(Renderer& r)
 {
-    // TODO, render using engine embedded Lua script
-//    e->renderModePicker();
+    r.renderWithLua();
 }
 
-DefaultEngineState::DefaultEngineState() : EngineState(ENGINE_ASSETS, true)
+DefaultEngineState::DefaultEngineState() : EngineState(FILE_PATH_ENGINE_ASSETS, true)
 {
     // Empty
 }

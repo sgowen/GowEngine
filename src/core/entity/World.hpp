@@ -23,7 +23,7 @@ public:
     virtual void extrapolatePhysics(float extrapolation) = 0;
     virtual void endExtrapolatedPhysics() = 0;
     
-    void populateFromEntityLayout(EntityLayout& eld);
+    void populateFromEntityLayout(EntityLayout& el);
     void addNetworkEntity(Entity* e);
     void removeNetworkEntity(Entity* e);
     void removeAllNetworkEntities();

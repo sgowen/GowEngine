@@ -215,13 +215,13 @@ void AssetsLoader::initWithJSON(Assets& assets, const char* json)
                 int textureWidth = RapidJSONUtil::getInt(v, "textureWidth", 2048);
                 int textureHeight = RapidJSONUtil::getInt(v, "textureHeight", 2048);
 
-                TextureDescriptor& td = assets._textures.find(name)->second();
+                TextureDescriptor& td = assets._textures.find(name)->second;
                 std::map<std::string, Animation>& animations = td._animations;
                 std::map<std::string, TextureRegion>& textureRegions = td._textureRegions;
 
-                const Value& v = v["mappings"];
-                assert(v.IsObject());
-                for (Value::ConstMemberIterator i = v.MemberBegin(); i != v.MemberEnd(); ++i)
+                const Value& iv = v["mappings"];
+                assert(iv.IsObject());
+                for (Value::ConstMemberIterator i = iv.MemberBegin(); i != iv.MemberEnd(); ++i)
                 {
                     const Value& v = i->value;
                     assert(v.IsObject());
@@ -251,8 +251,8 @@ void AssetsLoader::initWithJSON(Assets& assets, const char* json)
                             assert(va.IsArray());
                             for (SizeType i = 0; i < va.Size(); ++i)
                             {
-                                const Value& va = va[i];
-                                frameTimes.push_back(va.GetUint());
+                                const Value& iva = va[i];
+                                frameTimes.push_back(iva.GetUint());
                             }
 
                             numFrames = frameTimes.size();
@@ -278,8 +278,8 @@ void AssetsLoader::initWithJSON(Assets& assets, const char* json)
                             assert(va.IsArray());
                             for (SizeType i = 0; i < va.Size(); ++i)
                             {
-                                const Value& va = va[i];
-                                regionWidths.push_back(va.GetUint());
+                                const Value& iva = va[i];
+                                regionWidths.push_back(iva.GetUint());
                             }
                         }
                         else
@@ -297,8 +297,8 @@ void AssetsLoader::initWithJSON(Assets& assets, const char* json)
                             assert(va.IsArray());
                             for (SizeType i = 0; i < va.Size(); ++i)
                             {
-                                const Value& va = va[i];
-                                regionHeights.push_back(va.GetUint());
+                                const Value& iva = va[i];
+                                regionHeights.push_back(iva.GetUint());
                             }
                         }
                         else

@@ -147,13 +147,13 @@ void RendererLoader::initWithJSON(Renderer& r, const char* json)
             else
             {
                 float l = RapidJSONUtil::getFloat(iv, "left");
-                float r = RapidJSONUtil::getFloat(iv, "right");
+                float right = RapidJSONUtil::getFloat(iv, "right");
                 float b = RapidJSONUtil::getFloat(iv, "bottom");
                 float t = RapidJSONUtil::getFloat(iv, "top");
                 float n = RapidJSONUtil::getFloat(iv, "near", -1);
                 float f = RapidJSONUtil::getFloat(iv, "far", 1);
                 
-                r._matrices.emplace(key, Matrix{MatrixDescriptor(l, r, b, t, n, f)});
+                r._matrices.emplace(key, Matrix{MatrixDescriptor(l, right, b, t, n, f)});
             }
         }
     }

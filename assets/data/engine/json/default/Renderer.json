@@ -1,4 +1,5 @@
 {
+    "script": "DefaultRenderer",
   "fontBatchers": {
     "main": {
       "font": "main",

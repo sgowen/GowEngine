@@ -11,6 +11,7 @@
 #include <GowEngine/embeddedData/engine_assets_json.h>
 #include <GowEngine/embeddedData/engine_config_json.h>
 #include <GowEngine/embeddedData/engine_renderer_json.h>
+#include <GowEngine/embeddedData/default_renderer_lua.h>
 #include <GowEngine/embeddedData/framebuffer_fsh.h>
 #include <GowEngine/embeddedData/framebuffer_vsh.h>
 #include <GowEngine/embeddedData/geometry_fsh.h>
@@ -23,9 +24,10 @@
 #include <GowEngine/embeddedData/sprite_vsh.h>
 #include <GowEngine/embeddedData/sf_font_png.h>
 
-#define FILE_PATH_ENGINE_ASSETS "engine/json/Assets.json"
+//#define FILE_PATH_ENGINE_ASSETS "engine/json/default/Assets.json"
 #define FILE_PATH_ENGINE_CONFIG "engine/json/Config.json"
-#define FILE_PATH_ENGINE_RENDERER "engine/json/Renderer.json"
+#define FILE_PATH_ENGINE_RENDERER "engine/json/default/Renderer.json"
+#define FILE_PATH_SCRIPT_DEFAULT_RENDERER "engine/scripts/DefaultRenderer.lua"
 #define FILE_PATH_SHADER_FRAGMENT_FRAMEBUFFER "engine/shaders/framebuffer.fsh"
 #define FILE_PATH_SHADER_VERTEX_FRAMEBUFFER "engine/shaders/framebuffer.vsh"
 #define FILE_PATH_SHADER_FRAGMENT_GEOMETRY "engine/shaders/geometry.fsh"
@@ -53,6 +55,10 @@ FileData EmbeddedAssetHandler::loadAsset(std::string filePath)
     else if (StringUtil::doesStringEndWithString(filePath, FILE_PATH_ENGINE_RENDERER))
     {
         blob->insert(blob->begin(), std::begin(engine_renderer_json), std::end(engine_renderer_json));
+    }
+    else if (StringUtil::doesStringEndWithString(filePath, FILE_PATH_SCRIPT_DEFAULT_RENDERER))
+    {
+        blob->insert(blob->begin(), std::begin(default_renderer_lua), std::end(default_renderer_lua));
     }
     else if (StringUtil::doesStringEndWithString(filePath, FILE_PATH_SHADER_FRAGMENT_FRAMEBUFFER))
     {
@@ -115,6 +121,7 @@ bool EmbeddedAssetHandler::isAssetEmbedded(std::string filePath)
     if (StringUtil::doesStringEndWithString(filePath, FILE_PATH_ENGINE_ASSETS) ||
         StringUtil::doesStringEndWithString(filePath, FILE_PATH_ENGINE_CONFIG) ||
         StringUtil::doesStringEndWithString(filePath, FILE_PATH_ENGINE_RENDERER) ||
+        StringUtil::doesStringEndWithString(filePath, FILE_PATH_SCRIPT_DEFAULT_RENDERER) ||
         StringUtil::doesStringEndWithString(filePath, FILE_PATH_SHADER_FRAGMENT_FRAMEBUFFER) ||
         StringUtil::doesStringEndWithString(filePath, FILE_PATH_SHADER_VERTEX_FRAMEBUFFER) ||
         StringUtil::doesStringEndWithString(filePath, FILE_PATH_SHADER_FRAGMENT_GEOMETRY) ||

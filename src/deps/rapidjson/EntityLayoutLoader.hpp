@@ -14,12 +14,9 @@ struct EntityLayout;
 
 class EntityLayoutLoader
 {
-public:
-    static void initWithJSONFile(EntityLayout& elm, std::string filePath);
-    static void initWithJSON(EntityLayout& elm, const char* data);
-    
-    static void loadEntityLayout(EntityLayout& eld, EntityIDManager& eidm, bool isServer);
-    static void saveEntityLayout(EntityLayout& eld);
+public:    
+    static void loadEntityLayout(EntityLayout& el, EntityIDManager& eidm, bool isServer);
+    static void saveEntityLayout(EntityLayout& el);
     
 private:
     EntityLayoutLoader();
