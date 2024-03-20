@@ -95,15 +95,15 @@ void AssetsManager::createDeviceDependentResources()
 
 void AssetsManager::destroyDeviceDependentResources()
 {
+    _entityDefs.clear();
+    _entityInputMappings.clear();
+    _entityLayouts.clear();
+    
     for (auto& pair : _renderers)
     {
         Renderer& r = pair.second;
         r.destroyDeviceDependentResources();
     }
-    
-    _entityDefs.clear();
-    _entityInputMappings.clear();
-    _entityLayouts.clear();
     
     _scriptMgr.reset();
     _shaderMgr.reset();
