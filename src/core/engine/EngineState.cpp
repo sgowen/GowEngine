@@ -23,10 +23,6 @@ void EngineState::execute(Engine* e)
     
     if (!areAssetsLoaded && ASSETS_MGR.isLoaded())
     {
-        // Currently, we can have multiple renderers loaded
-        // concurrently, but only 1 for each EngineState
-        // So, really, we have an Engine Renderer that is live for the full
-        // app lifecycle, and an EngineState renderer that gets set when we switch EngineStates (DefaultEngineState never leaves)
         Renderer& renderer = ASSETS_MGR.renderer(_filePathAssets);
         INPUT_MGR.setMatrix(&renderer.matrixForInput());
         onAssetsLoaded(e);
