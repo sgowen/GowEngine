@@ -1,151 +1,150 @@
 {
     "script": "GameRenderer",
-  "pixelToUnitRatio": 16,
-  "fontBatchers": {
-    "main": {
-      "font": "main",
-      "maxBatchSize": 256
+    "pixelToUnitRatio": 16,
+    "fontBatchers": {
+        "main": {
+            "font": "main",
+            "maxBatchSize": 256
+        }
+    },
+    "framebuffers": {
+        "behindPlayer": {
+            "width": 1024,
+            "height": 576
+        },
+        "behindPlayerNormals": {
+            "width": 1024,
+            "height": 576
+        },
+        "behindPlayerLights": {
+            "width": 1024,
+            "height": 576
+        },
+        "player": {
+            "width": 1024,
+            "height": 576
+        },
+        "playerNormals": {
+            "width": 1024,
+            "height": 576
+        },
+        "playerLights": {
+            "width": 1024,
+            "height": 576
+        },
+        "inFrontOfPlayer": {
+            "width": 1024,
+            "height": 576
+        },
+        "inFrontOfPlayerNormals": {
+            "width": 1024,
+            "height": 576
+        },
+        "inFrontOfPlayerLights": {
+            "width": 1024,
+            "height": 576
+        },
+        "main": {
+            "width": 1024,
+            "height": 576
+        }
+    },
+    "matrices": {
+        "main": {
+            "width": 64,
+            "height": 36
+        },
+        "hud": {
+            "width": 16,
+            "height": 9
+        }
+    },
+    "spriteBatchers": {
+        "sb_001": {
+            "maxBatchSize": 2048
+        },
+        "sb_002": {
+            "maxBatchSize": 2048
+        },
+        "sb_003": {
+            "maxBatchSize": 2048
+        },
+        "sb_004": {
+            "maxBatchSize": 2048
+        },
+        "sb_005": {
+            "maxBatchSize": 2048
+        },
+        "sb_006": {
+            "maxBatchSize": 2048
+        },
+        "sb_007": {
+            "maxBatchSize": 2048
+        },
+        "sb_008": {
+            "maxBatchSize": 2048
+        },
+        "sb_009": {
+            "maxBatchSize": 2048
+        },
+        "main": {
+            "maxBatchSize": 2048
+        }
+    },
+    "textViews": {
+        "player1Info": {
+            "alignment": 0,
+            "xWeight": 0.02,
+            "yWeight": 0.98,
+            "glyphWidthWeight": 0.016
+        },
+        "player2Info": {
+            "alignment": 0,
+            "xWeight": 0.02,
+            "yWeight": 0.94,
+            "glyphWidthWeight": 0.016
+        },
+        "player3Info": {
+            "alignment": 0,
+            "xWeight": 0.02,
+            "yWeight": 0.9,
+            "glyphWidthWeight": 0.016
+        },
+        "player4Info": {
+            "alignment": 0,
+            "xWeight": 0.02,
+            "yWeight": 0.86,
+            "glyphWidthWeight": 0.016
+        },
+        "fps": {
+            "alignment": 2,
+            "xWeight": 0.98,
+            "yWeight": 0.98,
+            "glyphWidthWeight": 0.016
+        },
+        "rtt": {
+            "alignment": 2,
+            "xWeight": 0.98,
+            "yWeight": 0.94,
+            "glyphWidthWeight": 0.016
+        },
+        "rollbackFrames": {
+            "alignment": 2,
+            "xWeight": 0.98,
+            "yWeight": 0.9,
+            "glyphWidthWeight": 0.016
+        },
+        "inBps": {
+            "alignment": 2,
+            "xWeight": 0.98,
+            "yWeight": 0.86,
+            "glyphWidthWeight": 0.016
+        },
+        "outBps": {
+            "alignment": 2,
+            "xWeight": 0.98,
+            "yWeight": 0.82,
+            "glyphWidthWeight": 0.016
+        }
     }
-  },
-  "framebuffers": {
-      "behindPlayer": {
-        "width": 1024,
-        "height": 576
-      },
-      "behindPlayerNormals": {
-        "width": 1024,
-        "height": 576
-      },
-      "behindPlayerLights": {
-        "width": 1024,
-        "height": 576
-      },
-      "player": {
-        "width": 1024,
-        "height": 576
-      },
-      "playerNormals": {
-        "width": 1024,
-        "height": 576
-      },
-      "playerLights": {
-        "width": 1024,
-        "height": 576
-      },
-      "inFrontOfPlayer": {
-        "width": 1024,
-        "height": 576
-      },
-      "inFrontOfPlayerNormals": {
-        "width": 1024,
-        "height": 576
-      },
-      "inFrontOfPlayerLights": {
-        "width": 1024,
-        "height": 576
-      },
-      "main": {
-        "width": 1024,
-        "height": 576
-      }
-  },
-  "matrices": {
-    "main": {
-      "width": 64,
-      "height": 36
-    },
-    "hud": {
-      "width": 16,
-      "height": 9
-    }
-  },
-  "spriteBatchers": {
-      "sb_001": {
-        "maxBatchSize": 2048
-      },
-      "sb_002": {
-        "maxBatchSize": 2048
-      },
-      "sb_003": {
-        "maxBatchSize": 2048
-      },
-      "sb_004": {
-        "maxBatchSize": 2048
-      },
-      "sb_005": {
-        "maxBatchSize": 2048
-      },
-      "sb_006": {
-        "maxBatchSize": 2048
-      },
-      "sb_007": {
-        "maxBatchSize": 2048
-      },
-      "sb_008": {
-        "maxBatchSize": 2048
-      },
-      "sb_009": {
-        "maxBatchSize": 2048
-      },
-      "main": {
-        "maxBatchSize": 2048
-      }
-  },
-  "textViews": {
-    "player1Info": {
-      "alignment": 0,
-      "xWeight": 0.02,
-      "yWeight": 0.98,
-      "glyphWidthWeight": 0.016
-    },
-    "player2Info": {
-      "alignment": 0,
-      "xWeight": 0.02,
-      "yWeight": 0.94,
-      "glyphWidthWeight": 0.016
-    },
-    "player3Info": {
-      "alignment": 0,
-      "xWeight": 0.02,
-      "yWeight": 0.9,
-      "glyphWidthWeight": 0.016
-    },
-    "player4Info": {
-      "alignment": 0,
-      "xWeight": 0.02,
-      "yWeight": 0.86,
-      "glyphWidthWeight": 0.016
-    },
-    "fps": {
-      "alignment": 2,
-      "xWeight": 0.98,
-      "yWeight": 0.98,
-      "glyphWidthWeight": 0.016
-    },
-    "rtt": {
-      "alignment": 2,
-      "xWeight": 0.98,
-      "yWeight": 0.94,
-      "glyphWidthWeight": 0.016
-    },
-    "rollbackFrames": {
-      "alignment": 2,
-      "xWeight": 0.98,
-      "yWeight": 0.9,
-      "glyphWidthWeight": 0.016
-    },
-    "inBps": {
-      "alignment": 2,
-      "xWeight": 0.98,
-      "yWeight": 0.86,
-      "glyphWidthWeight": 0.016
-    },
-    "outBps": {
-      "alignment": 2,
-      "xWeight": 0.98,
-      "yWeight": 0.82,
-      "glyphWidthWeight": 0.016
-    }
-  }
 }
-

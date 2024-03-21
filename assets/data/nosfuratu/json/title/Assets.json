@@ -4,21 +4,21 @@
     },
     "textures": {
         "title": {
-        "filePath": "textures/title.png",
-        "mappings": {
-          "TitlePanel_Background": {
-            "x": 0,
-            "y": 0,
-            "regionWidth": 1280,
-            "regionHeight": 720
-          },
-          "TitlePanel_Logo": {
-            "x": 1024,
-            "y": 1070,
-            "regionWidth": 874,
-            "regionHeight": 434
-          }
+            "filePath": "textures/title.png",
+            "mappings": {
+                "TitlePanel_Background": {
+                    "x": 0,
+                    "y": 0,
+                    "regionWidth": 1280,
+                    "regionHeight": 720
+                },
+                "TitlePanel_Logo": {
+                    "x": 1024,
+                    "y": 1070,
+                    "regionWidth": 874,
+                    "regionHeight": 434
+                }
+            }
         }
-      }
     }
 }

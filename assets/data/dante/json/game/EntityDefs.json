@@ -32,100 +32,100 @@
             "PUNCH_3": "sound_003"
         },
         "fixtures": [
-        {
-            "vertices": [
             {
-                "x": 0.2,
-                "y": 0.35
-            }
-            ],
-            "center": {
-                "x": 0,
-                "y": 0.05
+                "vertices": [
+                    {
+                        "x": 0.2,
+                        "y": 0.35
+                    }
+                ],
+                "center": {
+                    "x": 0,
+                    "y": 0.05
+                },
+                "restitution": 0.1,
+                "density": 6,
+                "friction": 0.3,
+                "flags": 1
             },
-            "restitution": 0.1,
-            "density": 6,
-            "friction": 0.3,
-            "flags": 1
-        },
-        {
-            "vertices": [
             {
-                "x": 0.2,
-                "y": 0.2
-            }
-            ],
-            "center": {
-                "x": 0,
-                "y": -0.2375
+                "vertices": [
+                    {
+                        "x": 0.2,
+                        "y": 0.2
+                    }
+                ],
+                "center": {
+                    "x": 0,
+                    "y": -0.2375
+                },
+                "restitution": 0.1,
+                "density": 6,
+                "friction": 0.3,
+                "flags": 1
             },
-            "restitution": 0.1,
-            "density": 6,
-            "friction": 0.3,
-            "flags": 1
-        },
-        {
-            "vertices": [
             {
-                "x": 0.36,
-                "y": 0.1
-            }
-            ],
-            "center": {
-                "x": 0,
-                "y": -0.5
+                "vertices": [
+                    {
+                        "x": 0.36,
+                        "y": 0.1
+                    }
+                ],
+                "center": {
+                    "x": 0,
+                    "y": -0.5
+                },
+                "restitution": 0,
+                "density": 0,
+                "friction": 0,
+                "flags": 7
             },
-            "restitution": 0,
-            "density": 0,
-            "friction": 0,
-            "flags": 7
-        },
-        {
-            "vertices": [
             {
-                "x": 0.25,
-                "y": 0.25
+                "vertices": [
+                    {
+                        "x": 0.25,
+                        "y": 0.25
+                    }
+                ],
+                "center": {
+                    "x": 0.3,
+                    "y": 0.15
+                },
+                "restitution": 0,
+                "density": 0,
+                "friction": 0,
+                "flags": 19
             }
-            ],
-            "center": {
-                "x": 0.3,
-                "y": 0.15
-            },
-            "restitution": 0,
-            "density": 0,
-            "friction": 0,
-            "flags": 19
-        }
         ],
         "bodyFlags": 15,
         "width": 6,
         "height": 6,
         "data": {
-          "speedX": "16.0",
-          "speedY": "30.0",
-          "numJumpFrames": "10",
-          "spawnX": "18",
-          "spawnY": "9"
+            "speedX": "16.0",
+            "speedY": "30.0",
+            "numJumpFrames": "10",
+            "spawnX": "18",
+            "spawnY": "9"
         },
         "networkData": [
-          {
-            "name": "entityLayoutInfo",
-            "data": [
-              {
-                "name": "entityLayoutKey",
-                "type": 3
-              }
-            ]
-          },
-          {
-            "name": "prey",
-            "data": [
-              {
-                "name": "touchingEntityID",
-                "type": 3
-              }
-            ]
-          }
+            {
+                "name": "entityLayoutInfo",
+                "data": [
+                    {
+                        "name": "entityLayoutKey",
+                        "type": 3
+                    }
+                ]
+            },
+            {
+                "name": "prey",
+                "data": [
+                    {
+                        "name": "touchingEntityID",
+                        "type": 3
+                    }
+                ]
+            }
         ]
     },
     "MO01": {
@@ -157,102 +157,102 @@
             "DYING": "sound_007"
         },
         "fixtures": [
-        {
-            "vertices": [
             {
-                "x": 0.4,
-                "y": 0.4
-            }
-            ],
-            "center": {
-                "x": 0,
-                "y": 0
+                "vertices": [
+                    {
+                        "x": 0.4,
+                        "y": 0.4
+                    }
+                ],
+                "center": {
+                    "x": 0,
+                    "y": 0
+                },
+                "restitution": 0.1,
+                "density": 8,
+                "friction": 0.3,
+                "flags": 8
             },
-            "restitution": 0.1,
-            "density": 8,
-            "friction": 0.3,
-            "flags": 8
-        },
-        {
-            "vertices": [
             {
-                "x": 0.36,
-                "y": 0.1
-            }
-            ],
-            "center": {
-                "x": 0,
-                "y": -0.5
+                "vertices": [
+                    {
+                        "x": 0.36,
+                        "y": 0.1
+                    }
+                ],
+                "center": {
+                    "x": 0,
+                    "y": -0.5
+                },
+                "restitution": 0,
+                "density": 0,
+                "friction": 0,
+                "flags": 7
             },
-            "restitution": 0,
-            "density": 0,
-            "friction": 0,
-            "flags": 7
-        },
-        {
-            "vertices": [
             {
-                "x": 0.25,
-                "y": 0.2
+                "vertices": [
+                    {
+                        "x": 0.25,
+                        "y": 0.2
+                    }
+                ],
+                "center": {
+                    "x": 0.3,
+                    "y": 0.2
+                },
+                "restitution": 0,
+                "density": 0,
+                "friction": 0,
+                "flags": 19
             }
-            ],
-            "center": {
-                "x": 0.3,
-                "y": 0.2
-            },
-            "restitution": 0,
-            "density": 0,
-            "friction": 0,
-            "flags": 19
-        }
         ],
         "bodyFlags": 11,
         "width": 8,
         "height": 8,
         "data": {
-          "speedX": "10.0"
+            "speedX": "10.0"
         },
         "networkData": [
             {
-              "name": "stats",
-              "data": [
-                {
-                  "name": "health",
-                  "type": 1,
-                  "value": "7"
-                }
-              ]
+                "name": "stats",
+                "data": [
+                    {
+                        "name": "health",
+                        "type": 1,
+                        "value": "7"
+                    }
+                ]
             },
             {
-            "name": "prey",
-            "data": [
-                {
-                "name": "touchingEntityID",
-                "type": 3
-              }
-            ]
-          }
+                "name": "prey",
+                "data": [
+                    {
+                        "name": "touchingEntityID",
+                        "type": 3
+                    }
+                ]
+            }
         ]
     },
     "CRAT": {
         "name": "Crate",
         "fixtures": [
-        {
-            "vertices": [
             {
-                "x": 0.5,
-                "y": 0.5
+                "vertices": [
+                    {
+                        "x": 0.5,
+                        "y": 0.5
+                    }
+                ],
+                "center": {
+                    "x": 0,
+                    "y": 0
+                },
+                "restitution": 0,
+                "density": 4,
+                "friction": 0.3,
+                "flags": 1
             }
-            ],
-            "center": {
-                "x": 0,
-                "y": 0
-            },
-            "restitution": 0.0,
-            "density": 4,
-            "friction": 0.3,
-            "flags": 1
-        }
         ],
         "width": 4,
         "height": 4,
@@ -277,22 +277,22 @@
             "DESTRUCTING": "sound_004"
         },
         "fixtures": [
-        {
-            "vertices": [
             {
-                "x": 0.125,
-                "y": 0.5
+                "vertices": [
+                    {
+                        "x": 0.125,
+                        "y": 0.5
+                    }
+                ],
+                "center": {
+                    "x": -0.35,
+                    "y": 0
+                },
+                "restitution": 0,
+                "density": 0,
+                "friction": 0.3,
+                "flags": 1
             }
-            ],
-            "center": {
-                "x": -0.35,
-                "y": 0
-            },
-            "restitution": 0,
-            "density": 0,
-            "friction": 0.3,
-            "flags": 1
-        }
         ],
         "width": 8,
         "height": 8,
@@ -431,30 +431,30 @@
     "G001": {
         "name": "Ground1",
         "fixtures": [
-        {
-            "vertices": [
             {
-                "x": -0.5,
-                "y": -0.5
-            },
-            {
-                "x": 0.5,
-                "y": -0.5
-            },
-            {
-                "x": 0.5,
-                "y": 0.5
-            },
-            {
-                "x": -0.5,
-                "y": 0.5
+                "vertices": [
+                    {
+                        "x": -0.5,
+                        "y": -0.5
+                    },
+                    {
+                        "x": 0.5,
+                        "y": -0.5
+                    },
+                    {
+                        "x": 0.5,
+                        "y": 0.5
+                    },
+                    {
+                        "x": -0.5,
+                        "y": 0.5
+                    }
+                ],
+                "restitution": 0,
+                "density": 0,
+                "friction": 0.3,
+                "flags": 0
             }
-            ],
-            "restitution": 0,
-            "density": 0,
-            "friction": 0.3,
-            "flags": 0
-        }
         ],
         "width": 4,
         "height": 4,
@@ -465,30 +465,30 @@
         "width": 4,
         "height": 4,
         "fixtures": [
-        {
-            "vertices": [
             {
-                "x": -0.5,
-                "y": -0.5
-            },
-            {
-                "x": 0.5,
-                "y": -0.5
-            },
-            {
-                "x": 0.5,
-                "y": 0.5
-            },
-            {
-                "x": -0.5,
-                "y": 0.5
+                "vertices": [
+                    {
+                        "x": -0.5,
+                        "y": -0.5
+                    },
+                    {
+                        "x": 0.5,
+                        "y": -0.5
+                    },
+                    {
+                        "x": 0.5,
+                        "y": 0.5
+                    },
+                    {
+                        "x": -0.5,
+                        "y": 0.5
+                    }
+                ],
+                "restitution": 0,
+                "density": 0,
+                "friction": 0.3,
+                "flags": 0
             }
-            ],
-            "restitution": 0,
-            "density": 0,
-            "friction": 0.3,
-            "flags": 0
-        }
         ],
         "bodyFlags": 0
     },
@@ -497,30 +497,30 @@
         "width": 4,
         "height": 4,
         "fixtures": [
-        {
-            "vertices": [
             {
-                "x": -0.46875,
-                "y": -0.5
-            },
-            {
-                "x": 0.5,
-                "y": -0.5
-            },
-            {
-                "x": 0.5,
-                "y": 0.46875
-            },
-            {
-                "x": -0.46875,
-                "y": 0.46875
+                "vertices": [
+                    {
+                        "x": -0.46875,
+                        "y": -0.5
+                    },
+                    {
+                        "x": 0.5,
+                        "y": -0.5
+                    },
+                    {
+                        "x": 0.5,
+                        "y": 0.46875
+                    },
+                    {
+                        "x": -0.46875,
+                        "y": 0.46875
+                    }
+                ],
+                "restitution": 0,
+                "density": 0,
+                "friction": 0.3,
+                "flags": 0
             }
-            ],
-            "restitution": 0,
-            "density": 0,
-            "friction": 0.3,
-            "flags": 0
-        }
         ],
         "bodyFlags": 0
     },
@@ -529,30 +529,30 @@
         "width": 4,
         "height": 4,
         "fixtures": [
-        {
-            "vertices": [
             {
-                "x": -0.5,
-                "y": -0.5
-            },
-            {
-                "x": 0.5,
-                "y": -0.5
-            },
-            {
-                "x": 0.5,
-                "y": 0.46875
-            },
-            {
-                "x": -0.5,
-                "y": 0.46875
+                "vertices": [
+                    {
+                        "x": -0.5,
+                        "y": -0.5
+                    },
+                    {
+                        "x": 0.5,
+                        "y": -0.5
+                    },
+                    {
+                        "x": 0.5,
+                        "y": 0.46875
+                    },
+                    {
+                        "x": -0.5,
+                        "y": 0.46875
+                    }
+                ],
+                "restitution": 0,
+                "density": 0,
+                "friction": 0.3,
+                "flags": 0
             }
-            ],
-            "restitution": 0,
-            "density": 0,
-            "friction": 0.3,
-            "flags": 0
-        }
         ],
         "bodyFlags": 0
     },
@@ -561,30 +561,30 @@
         "width": 4,
         "height": 4,
         "fixtures": [
-        {
-            "vertices": [
             {
-                "x": -0.5,
-                "y": -0.5
-            },
-            {
-                "x": 0.46875,
-                "y": -0.5
-            },
-            {
-                "x": 0.46875,
-                "y": 0.46875
-            },
-            {
-                "x": -0.5,
-                "y": 0.46875
+                "vertices": [
+                    {
+                        "x": -0.5,
+                        "y": -0.5
+                    },
+                    {
+                        "x": 0.46875,
+                        "y": -0.5
+                    },
+                    {
+                        "x": 0.46875,
+                        "y": 0.46875
+                    },
+                    {
+                        "x": -0.5,
+                        "y": 0.46875
+                    }
+                ],
+                "restitution": 0,
+                "density": 0,
+                "friction": 0.3,
+                "flags": 0
             }
-            ],
-            "restitution": 0,
-            "density": 0,
-            "friction": 0.3,
-            "flags": 0
-        }
         ],
         "bodyFlags": 0
     },
@@ -593,30 +593,30 @@
         "width": 4,
         "height": 4,
         "fixtures": [
-        {
-            "vertices": [
             {
-                "x": -0.46875,
-                "y": -0.5
-            },
-            {
-                "x": 0.5,
-                "y": -0.5
-            },
-            {
-                "x": 0.5,
-                "y": 0.5
-            },
-            {
-                "x": -0.46875,
-                "y": 0.5
+                "vertices": [
+                    {
+                        "x": -0.46875,
+                        "y": -0.5
+                    },
+                    {
+                        "x": 0.5,
+                        "y": -0.5
+                    },
+                    {
+                        "x": 0.5,
+                        "y": 0.5
+                    },
+                    {
+                        "x": -0.46875,
+                        "y": 0.5
+                    }
+                ],
+                "restitution": 0,
+                "density": 0,
+                "friction": 0.3,
+                "flags": 0
             }
-            ],
-            "restitution": 0,
-            "density": 0,
-            "friction": 0.3,
-            "flags": 0
-        }
         ],
         "bodyFlags": 0
     },
@@ -625,30 +625,30 @@
         "width": 4,
         "height": 4,
         "fixtures": [
-        {
-            "vertices": [
             {
-                "x": -0.5,
-                "y": -0.5
-            },
-            {
-                "x": 0.5,
-                "y": -0.5
-            },
-            {
-                "x": 0.5,
-                "y": 0.5
-            },
-            {
-                "x": -0.5,
-                "y": 0.5
+                "vertices": [
+                    {
+                        "x": -0.5,
+                        "y": -0.5
+                    },
+                    {
+                        "x": 0.5,
+                        "y": -0.5
+                    },
+                    {
+                        "x": 0.5,
+                        "y": 0.5
+                    },
+                    {
+                        "x": -0.5,
+                        "y": 0.5
+                    }
+                ],
+                "restitution": 0,
+                "density": 0,
+                "friction": 0.3,
+                "flags": 0
             }
-            ],
-            "restitution": 0,
-            "density": 0,
-            "friction": 0.3,
-            "flags": 0
-        }
         ],
         "bodyFlags": 0
     },
@@ -657,30 +657,30 @@
         "width": 4,
         "height": 4,
         "fixtures": [
-        {
-            "vertices": [
             {
-                "x": -0.5,
-                "y": -0.5
-            },
-            {
-                "x": 0.46875,
-                "y": -0.5
-            },
-            {
-                "x": 0.46875,
-                "y": 0.5
-            },
-            {
-                "x": -0.5,
-                "y": 0.5
+                "vertices": [
+                    {
+                        "x": -0.5,
+                        "y": -0.5
+                    },
+                    {
+                        "x": 0.46875,
+                        "y": -0.5
+                    },
+                    {
+                        "x": 0.46875,
+                        "y": 0.5
+                    },
+                    {
+                        "x": -0.5,
+                        "y": 0.5
+                    }
+                ],
+                "restitution": 0,
+                "density": 0,
+                "friction": 0.3,
+                "flags": 0
             }
-            ],
-            "restitution": 0,
-            "density": 0,
-            "friction": 0.3,
-            "flags": 0
-        }
         ],
         "bodyFlags": 0
     },
@@ -689,30 +689,30 @@
         "width": 4,
         "height": 4,
         "fixtures": [
-        {
-            "vertices": [
             {
-                "x": -0.46875,
-                "y": -0.46875
-            },
-            {
-                "x": 0.5,
-                "y": -0.46875
-            },
-            {
-                "x": 0.5,
-                "y": 0.5
-            },
-            {
-                "x": -0.46875,
-                "y": 0.5
+                "vertices": [
+                    {
+                        "x": -0.46875,
+                        "y": -0.46875
+                    },
+                    {
+                        "x": 0.5,
+                        "y": -0.46875
+                    },
+                    {
+                        "x": 0.5,
+                        "y": 0.5
+                    },
+                    {
+                        "x": -0.46875,
+                        "y": 0.5
+                    }
+                ],
+                "restitution": 0,
+                "density": 0,
+                "friction": 0.3,
+                "flags": 0
             }
-            ],
-            "restitution": 0,
-            "density": 0,
-            "friction": 0.3,
-            "flags": 0
-        }
         ],
         "bodyFlags": 0
     },
@@ -721,30 +721,30 @@
         "width": 4,
         "height": 4,
         "fixtures": [
-        {
-            "vertices": [
             {
-                "x": -0.5,
-                "y": -0.46875
-            },
-            {
-                "x": 0.5,
-                "y": -0.46875
-            },
-            {
-                "x": 0.5,
-                "y": 0.5
-            },
-            {
-                "x": -0.5,
-                "y": 0.5
+                "vertices": [
+                    {
+                        "x": -0.5,
+                        "y": -0.46875
+                    },
+                    {
+                        "x": 0.5,
+                        "y": -0.46875
+                    },
+                    {
+                        "x": 0.5,
+                        "y": 0.5
+                    },
+                    {
+                        "x": -0.5,
+                        "y": 0.5
+                    }
+                ],
+                "restitution": 0,
+                "density": 0,
+                "friction": 0.3,
+                "flags": 0
             }
-            ],
-            "restitution": 0,
-            "density": 0,
-            "friction": 0.3,
-            "flags": 0
-        }
         ],
         "bodyFlags": 0
     },
@@ -753,30 +753,30 @@
         "width": 4,
         "height": 4,
         "fixtures": [
-        {
-            "vertices": [
             {
-                "x": -0.5,
-                "y": -0.46875
-            },
-            {
-                "x": 0.46875,
-                "y": -0.46875
-            },
-            {
-                "x": 0.46875,
-                "y": 0.5
-            },
-            {
-                "x": -0.5,
-                "y": 0.5
+                "vertices": [
+                    {
+                        "x": -0.5,
+                        "y": -0.46875
+                    },
+                    {
+                        "x": 0.46875,
+                        "y": -0.46875
+                    },
+                    {
+                        "x": 0.46875,
+                        "y": 0.5
+                    },
+                    {
+                        "x": -0.5,
+                        "y": 0.5
+                    }
+                ],
+                "restitution": 0,
+                "density": 0,
+                "friction": 0.3,
+                "flags": 0
             }
-            ],
-            "restitution": 0,
-            "density": 0,
-            "friction": 0.3,
-            "flags": 0
-        }
         ],
         "bodyFlags": 0
     },
@@ -785,30 +785,30 @@
         "width": 4,
         "height": 4,
         "fixtures": [
-        {
-            "vertices": [
             {
-                "x": -0.5,
-                "y": -0.5
-            },
-            {
-                "x": 0.5,
-                "y": -0.5
-            },
-            {
-                "x": 0.5,
-                "y": -0.03125
-            },
-            {
-                "x": -0.5,
-                "y": 0.46875
+                "vertices": [
+                    {
+                        "x": -0.5,
+                        "y": -0.5
+                    },
+                    {
+                        "x": 0.5,
+                        "y": -0.5
+                    },
+                    {
+                        "x": 0.5,
+                        "y": -0.03125
+                    },
+                    {
+                        "x": -0.5,
+                        "y": 0.46875
+                    }
+                ],
+                "restitution": 0,
+                "density": 0,
+                "friction": 0.3,
+                "flags": 0
             }
-            ],
-            "restitution": 0,
-            "density": 0,
-            "friction": 0.3,
-            "flags": 0
-        }
         ],
         "bodyFlags": 0
     },
@@ -817,30 +817,30 @@
         "width": 4,
         "height": 4,
         "fixtures": [
-        {
-            "vertices": [
             {
-                "x": -0.5,
-                "y": -0.5
-            },
-            {
-                "x": 0.5,
-                "y": -0.5
-            },
-            {
-                "x": 0.5,
-                "y": -0.03125
-            },
-            {
-                "x": -0.5,
-                "y": -0.03125
+                "vertices": [
+                    {
+                        "x": -0.5,
+                        "y": -0.5
+                    },
+                    {
+                        "x": 0.5,
+                        "y": -0.5
+                    },
+                    {
+                        "x": 0.5,
+                        "y": -0.03125
+                    },
+                    {
+                        "x": -0.5,
+                        "y": -0.03125
+                    }
+                ],
+                "restitution": 0,
+                "density": 0,
+                "friction": 0.3,
+                "flags": 0
             }
-            ],
-            "restitution": 0,
-            "density": 0,
-            "friction": 0.3,
-            "flags": 0
-        }
         ],
         "bodyFlags": 0
     },
@@ -849,26 +849,26 @@
         "width": 4,
         "height": 4,
         "fixtures": [
-        {
-            "vertices": [
             {
-                "x": -0.5,
-                "y": -0.5
-            },
-            {
-                "x": 0.5,
-                "y": -0.5
-            },
-            {
-                "x": -0.5,
-                "y": -0.03125
+                "vertices": [
+                    {
+                        "x": -0.5,
+                        "y": -0.5
+                    },
+                    {
+                        "x": 0.5,
+                        "y": -0.5
+                    },
+                    {
+                        "x": -0.5,
+                        "y": -0.03125
+                    }
+                ],
+                "restitution": 0,
+                "density": 0,
+                "friction": 0.3,
+                "flags": 0
             }
-            ],
-            "restitution": 0,
-            "density": 0,
-            "friction": 0.3,
-            "flags": 0
-        }
         ],
         "bodyFlags": 0
     },
@@ -877,30 +877,30 @@
         "width": 4,
         "height": 4,
         "fixtures": [
-        {
-            "vertices": [
             {
-                "x": -0.5,
-                "y": -0.5
-            },
-            {
-                "x": 0.5,
-                "y": -0.5
-            },
-            {
-                "x": 0.5,
-                "y": 0.5
-            },
-            {
-                "x": -0.5,
-                "y": 0.5
+                "vertices": [
+                    {
+                        "x": -0.5,
+                        "y": -0.5
+                    },
+                    {
+                        "x": 0.5,
+                        "y": -0.5
+                    },
+                    {
+                        "x": 0.5,
+                        "y": 0.5
+                    },
+                    {
+                        "x": -0.5,
+                        "y": 0.5
+                    }
+                ],
+                "restitution": 0,
+                "density": 0,
+                "friction": 0.3,
+                "flags": 0
             }
-            ],
-            "restitution": 0,
-            "density": 0,
-            "friction": 0.3,
-            "flags": 0
-        }
         ],
         "bodyFlags": 0
     },
@@ -909,30 +909,30 @@
         "width": 4,
         "height": 4,
         "fixtures": [
-        {
-            "vertices": [
             {
-                "x": -0.5,
-                "y": -0.5
-            },
-            {
-                "x": 0.5,
-                "y": -0.5
-            },
-            {
-                "x": 0.5,
-                "y": 0.5
-            },
-            {
-                "x": -0.5,
-                "y": 0.5
+                "vertices": [
+                    {
+                        "x": -0.5,
+                        "y": -0.5
+                    },
+                    {
+                        "x": 0.5,
+                        "y": -0.5
+                    },
+                    {
+                        "x": 0.5,
+                        "y": 0.5
+                    },
+                    {
+                        "x": -0.5,
+                        "y": 0.5
+                    }
+                ],
+                "restitution": 0,
+                "density": 0,
+                "friction": 0.3,
+                "flags": 0
             }
-            ],
-            "restitution": 0,
-            "density": 0,
-            "friction": 0.3,
-            "flags": 0
-        }
         ],
         "bodyFlags": 0
     },
@@ -941,30 +941,30 @@
         "width": 4,
         "height": 4,
         "fixtures": [
-        {
-            "vertices": [
             {
-                "x": -0.5,
-                "y": -0.5
-            },
-            {
-                "x": 0.5,
-                "y": -0.5
-            },
-            {
-                "x": 0.5,
-                "y": 0.5
-            },
-            {
-                "x": -0.5,
-                "y": 0.5
+                "vertices": [
+                    {
+                        "x": -0.5,
+                        "y": -0.5
+                    },
+                    {
+                        "x": 0.5,
+                        "y": -0.5
+                    },
+                    {
+                        "x": 0.5,
+                        "y": 0.5
+                    },
+                    {
+                        "x": -0.5,
+                        "y": 0.5
+                    }
+                ],
+                "restitution": 0,
+                "density": 0,
+                "friction": 0.3,
+                "flags": 0
             }
-            ],
-            "restitution": 0,
-            "density": 0,
-            "friction": 0.3,
-            "flags": 0
-        }
         ],
         "bodyFlags": 0
     },
@@ -973,30 +973,30 @@
         "width": 4,
         "height": 4,
         "fixtures": [
-        {
-            "vertices": [
             {
-                "x": -0.5,
-                "y": -0.5
-            },
-            {
-                "x": 0.5,
-                "y": -0.5
-            },
-            {
-                "x": 0.5,
-                "y": 0.5
-            },
-            {
-                "x": -0.5,
-                "y": 0.5
+                "vertices": [
+                    {
+                        "x": -0.5,
+                        "y": -0.5
+                    },
+                    {
+                        "x": 0.5,
+                        "y": -0.5
+                    },
+                    {
+                        "x": 0.5,
+                        "y": 0.5
+                    },
+                    {
+                        "x": -0.5,
+                        "y": 0.5
+                    }
+                ],
+                "restitution": 0,
+                "density": 0,
+                "friction": 0.3,
+                "flags": 0
             }
-            ],
-            "restitution": 0,
-            "density": 0,
-            "friction": 0.3,
-            "flags": 0
-        }
         ],
         "bodyFlags": 0
     },
@@ -1005,26 +1005,26 @@
         "width": 4,
         "height": 4,
         "fixtures": [
-        {
-            "vertices": [
             {
-                "x": -0.5,
-                "y": -0.5
-            },
-            {
-                "x": 0.5,
-                "y": -0.5
-            },
-            {
-                "x": 0.5,
-                "y": -0.03125
+                "vertices": [
+                    {
+                        "x": -0.5,
+                        "y": -0.5
+                    },
+                    {
+                        "x": 0.5,
+                        "y": -0.5
+                    },
+                    {
+                        "x": 0.5,
+                        "y": -0.03125
+                    }
+                ],
+                "restitution": 0,
+                "density": 0,
+                "friction": 0.3,
+                "flags": 0
             }
-            ],
-            "restitution": 0,
-            "density": 0,
-            "friction": 0.3,
-            "flags": 0
-        }
         ],
         "bodyFlags": 0
     },
@@ -1033,30 +1033,30 @@
         "width": 4,
         "height": 4,
         "fixtures": [
-        {
-            "vertices": [
             {
-                "x": -0.5,
-                "y": -0.5
-            },
-            {
-                "x": 0.5,
-                "y": -0.5
-            },
-            {
-                "x": 0.5,
-                "y": 0.46875
-            },
-            {
-                "x": -0.5,
-                "y": -0.03125
+                "vertices": [
+                    {
+                        "x": -0.5,
+                        "y": -0.5
+                    },
+                    {
+                        "x": 0.5,
+                        "y": -0.5
+                    },
+                    {
+                        "x": 0.5,
+                        "y": 0.46875
+                    },
+                    {
+                        "x": -0.5,
+                        "y": -0.03125
+                    }
+                ],
+                "restitution": 0,
+                "density": 0,
+                "friction": 0.3,
+                "flags": 0
             }
-            ],
-            "restitution": 0,
-            "density": 0,
-            "friction": 0.3,
-            "flags": 0
-        }
         ],
         "bodyFlags": 0
     },
@@ -1065,30 +1065,30 @@
         "width": 4,
         "height": 4,
         "fixtures": [
-        {
-            "vertices": [
             {
-                "x": -0.5,
-                "y": -0.46875
-            },
-            {
-                "x": 0.5,
-                "y": 0.03125
-            },
-            {
-                "x": 0.5,
-                "y": 0.5
-            },
-            {
-                "x": -0.5,
-                "y": 0.5
+                "vertices": [
+                    {
+                        "x": -0.5,
+                        "y": -0.46875
+                    },
+                    {
+                        "x": 0.5,
+                        "y": 0.03125
+                    },
+                    {
+                        "x": 0.5,
+                        "y": 0.5
+                    },
+                    {
+                        "x": -0.5,
+                        "y": 0.5
+                    }
+                ],
+                "restitution": 0,
+                "density": 0,
+                "friction": 0.3,
+                "flags": 0
             }
-            ],
-            "restitution": 0,
-            "density": 0,
-            "friction": 0.3,
-            "flags": 0
-        }
         ],
         "bodyFlags": 0
     },
@@ -1097,30 +1097,30 @@
         "width": 4,
         "height": 4,
         "fixtures": [
-        {
-            "vertices": [
             {
-                "x": -0.5,
-                "y": 0.03125
-            },
-            {
-                "x": 0.5,
-                "y": 0.03125
-            },
-            {
-                "x": 0.5,
-                "y": 0.5
-            },
-            {
-                "x": -0.5,
-                "y": 0.5
+                "vertices": [
+                    {
+                        "x": -0.5,
+                        "y": 0.03125
+                    },
+                    {
+                        "x": 0.5,
+                        "y": 0.03125
+                    },
+                    {
+                        "x": 0.5,
+                        "y": 0.5
+                    },
+                    {
+                        "x": -0.5,
+                        "y": 0.5
+                    }
+                ],
+                "restitution": 0,
+                "density": 0,
+                "friction": 0.3,
+                "flags": 0
             }
-            ],
-            "restitution": 0,
-            "density": 0,
-            "friction": 0.3,
-            "flags": 0
-        }
         ],
         "bodyFlags": 0
     },
@@ -1129,26 +1129,26 @@
         "width": 4,
         "height": 4,
         "fixtures": [
-        {
-            "vertices": [
             {
-                "x": -0.5,
-                "y": 0.03125
-            },
-            {
-                "x": 0.5,
-                "y": 0.5
-            },
-            {
-                "x": -0.5,
-                "y": 0.5
+                "vertices": [
+                    {
+                        "x": -0.5,
+                        "y": 0.03125
+                    },
+                    {
+                        "x": 0.5,
+                        "y": 0.5
+                    },
+                    {
+                        "x": -0.5,
+                        "y": 0.5
+                    }
+                ],
+                "restitution": 0,
+                "density": 0,
+                "friction": 0.3,
+                "flags": 0
             }
-            ],
-            "restitution": 0,
-            "density": 0,
-            "friction": 0.3,
-            "flags": 0
-        }
         ],
         "bodyFlags": 0
     },
@@ -1157,26 +1157,26 @@
         "width": 4,
         "height": 4,
         "fixtures": [
-        {
-            "vertices": [
             {
-                "x": -0.5,
-                "y": 0.5
-            },
-            {
-                "x": 0.5,
-                "y": 0.03125
-            },
-            {
-                "x": 0.5,
-                "y": 0.5
+                "vertices": [
+                    {
+                        "x": -0.5,
+                        "y": 0.5
+                    },
+                    {
+                        "x": 0.5,
+                        "y": 0.03125
+                    },
+                    {
+                        "x": 0.5,
+                        "y": 0.5
+                    }
+                ],
+                "restitution": 0,
+                "density": 0,
+                "friction": 0.3,
+                "flags": 0
             }
-            ],
-            "restitution": 0,
-            "density": 0,
-            "friction": 0.3,
-            "flags": 0
-        }
         ],
         "bodyFlags": 0
     },
@@ -1185,30 +1185,30 @@
         "width": 4,
         "height": 4,
         "fixtures": [
-        {
-            "vertices": [
             {
-                "x": -0.5,
-                "y": 0.03125
-            },
-            {
-                "x": 0.5,
-                "y": -0.46875
-            },
-            {
-                "x": 0.5,
-                "y": 0.5
-            },
-            {
-                "x": -0.5,
-                "y": 0.5
+                "vertices": [
+                    {
+                        "x": -0.5,
+                        "y": 0.03125
+                    },
+                    {
+                        "x": 0.5,
+                        "y": -0.46875
+                    },
+                    {
+                        "x": 0.5,
+                        "y": 0.5
+                    },
+                    {
+                        "x": -0.5,
+                        "y": 0.5
+                    }
+                ],
+                "restitution": 0,
+                "density": 0,
+                "friction": 0.3,
+                "flags": 0
             }
-            ],
-            "restitution": 0,
-            "density": 0,
-            "friction": 0.3,
-            "flags": 0
-        }
         ],
         "bodyFlags": 0
     },
@@ -1217,22 +1217,22 @@
         "width": 4,
         "height": 4,
         "fixtures": [
-        {
-            "vertices": [
             {
-                "x": 0.5,
-                "y": 0.5
+                "vertices": [
+                    {
+                        "x": 0.5,
+                        "y": 0.5
+                    }
+                ],
+                "center": {
+                    "x": 0,
+                    "y": 0
+                },
+                "restitution": 0,
+                "density": 0,
+                "friction": 0.3,
+                "flags": 1
             }
-            ],
-            "center": {
-                "x": 0,
-                "y": 0
-            },
-            "restitution": 0,
-            "density": 0,
-            "friction": 0.3,
-            "flags": 1
-        }
         ],
         "bodyFlags": 0
     },
@@ -1241,22 +1241,22 @@
         "width": 4,
         "height": 4,
         "fixtures": [
-        {
-            "vertices": [
             {
-                "x": 0.5,
-                "y": 0.5
+                "vertices": [
+                    {
+                        "x": 0.5,
+                        "y": 0.5
+                    }
+                ],
+                "center": {
+                    "x": 0,
+                    "y": 0
+                },
+                "restitution": 0,
+                "density": 0,
+                "friction": 0.3,
+                "flags": 1
             }
-            ],
-            "center": {
-                "x": 0,
-                "y": 0
-            },
-            "restitution": 0,
-            "density": 0,
-            "friction": 0.3,
-            "flags": 1
-        }
         ],
         "bodyFlags": 0
     },
@@ -1265,22 +1265,22 @@
         "width": 2,
         "height": 2,
         "fixtures": [
-        {
-            "vertices": [
             {
-                "x": 0.5,
-                "y": 0.5
+                "vertices": [
+                    {
+                        "x": 0.5,
+                        "y": 0.5
+                    }
+                ],
+                "center": {
+                    "x": 0,
+                    "y": 0
+                },
+                "restitution": 0,
+                "density": 0,
+                "friction": 0.3,
+                "flags": 1
             }
-            ],
-            "center": {
-                "x": 0,
-                "y": 0
-            },
-            "restitution": 0,
-            "density": 0,
-            "friction": 0.3,
-            "flags": 1
-        }
         ],
         "bodyFlags": 0
     }

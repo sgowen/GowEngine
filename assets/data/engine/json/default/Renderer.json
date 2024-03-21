@@ -1,51 +1,51 @@
 {
     "script": "DefaultRenderer",
-  "fontBatchers": {
-    "main": {
-      "font": "main",
-      "maxBatchSize": 256
-    }
-  },
-  "framebuffers": {
-    "main": {
-      "width": 1024,
-      "height": 576
-    }
-  },
-  "matrices": {
-    "main": {
-      "width": 16,
-      "height": 9
-    }
-  },
-  "textViews": {
-    "title": {
-      "text": "Welcome to GowEngine",
-      "alignment": 1,
-      "xWeight": 0.5,
-      "yWeight": 0.75,
-      "glyphWidthWeight": 0.04
+    "fontBatchers": {
+        "main": {
+            "font": "main",
+            "maxBatchSize": 256
+        }
     },
-    "instructions": {
-      "text": "Choose a mode to proceed:",
-      "alignment": 1,
-      "xWeight": 0.5,
-      "yWeight": 0.5,
-      "glyphWidthWeight": 0.025
+    "framebuffers": {
+        "main": {
+            "width": 1024,
+            "height": 576
+        }
     },
-    "dante": {
-      "text": "[d]ante",
-      "alignment": 1,
-      "xWeight": 0.5,
-      "yWeight": 0.4,
-      "glyphWidthWeight": 0.025
+    "matrices": {
+        "main": {
+            "width": 16,
+            "height": 9
+        }
     },
-    "nosfuratu": {
-      "text": "[n]osfuratu",
-      "alignment": 1,
-      "xWeight": 0.5,
-      "yWeight": 0.35,
-      "glyphWidthWeight": 0.025
+    "textViews": {
+        "title": {
+            "text": "Welcome to GowEngine",
+            "alignment": 1,
+            "xWeight": 0.5,
+            "yWeight": 0.75,
+            "glyphWidthWeight": 0.04
+        },
+        "instructions": {
+            "text": "Choose a mode to proceed:",
+            "alignment": 1,
+            "xWeight": 0.5,
+            "yWeight": 0.5,
+            "glyphWidthWeight": 0.025
+        },
+        "dante": {
+            "text": "[d]ante",
+            "alignment": 1,
+            "xWeight": 0.5,
+            "yWeight": 0.4,
+            "glyphWidthWeight": 0.025
+        },
+        "nosfuratu": {
+            "text": "[n]osfuratu",
+            "alignment": 1,
+            "xWeight": 0.5,
+            "yWeight": 0.35,
+            "glyphWidthWeight": 0.025
+        }
     }
-  }
 }
