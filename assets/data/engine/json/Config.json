@@ -4,7 +4,7 @@
     "physicsEngine": "Box2D",
     "fullScreen": "false",
     "vsync": "true",
-    "useSteamNetworking": "true",
+    "useSteamNetworking": "false",
     "versionName": "1.0.0.0",
     "steamGameDir": "projectdante",
     "steamProductName": "Project Dante",

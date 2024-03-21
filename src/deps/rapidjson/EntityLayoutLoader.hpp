@@ -9,7 +9,6 @@
 #pragma once
 
 class EntityIDManager;
-class EntityLayout;
 struct EntityLayout;
 
 class EntityLayoutLoader

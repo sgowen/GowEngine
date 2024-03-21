@@ -16,6 +16,20 @@
 
 /// Engine
 #define FILE_PATH_ENGINE_ASSETS "engine/json/default/Assets.json"
+#define FILE_PATH_ENGINE_CONFIG "engine/json/Config.json"
+#define FILE_PATH_ENGINE_RENDERER "engine/json/default/Renderer.json"
+#define FILE_PATH_SCRIPT_DEFAULT_RENDERER "engine/scripts/DefaultRenderer.lua"
+#define FILE_PATH_SHADER_FRAGMENT_FRAMEBUFFER "engine/shaders/framebuffer.fsh"
+#define FILE_PATH_SHADER_VERTEX_FRAMEBUFFER "engine/shaders/framebuffer.vsh"
+#define FILE_PATH_SHADER_FRAGMENT_GEOMETRY "engine/shaders/geometry.fsh"
+#define FILE_PATH_SHADER_VERTEX_GEOMETRY "engine/shaders/geometry.vsh"
+#define FILE_PATH_SHADER_FRAGMENT_LIGHTS "engine/shaders/lights.fsh"
+#define FILE_PATH_SHADER_VERTEX_LIGHTS "engine/shaders/lights.vsh"
+#define FILE_PATH_SHADER_FRAGMENT_SHOCKWAVE "engine/shaders/shockwave.fsh"
+#define FILE_PATH_SHADER_VERTEX_SHOCKWAVE "engine/shaders/shockwave.vsh"
+#define FILE_PATH_SHADER_FRAGMENT_SPRITE "engine/shaders/sprite.fsh"
+#define FILE_PATH_SHADER_VERTEX_SPRITE "engine/shaders/sprite.vsh"
+#define FILE_PATH_TEXTURE_FONT "engine/textures/sf_font.png"
 #define MAX_NUM_PLAYERS 4
 
 /// Entity ID

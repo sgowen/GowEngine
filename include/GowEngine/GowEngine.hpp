@@ -52,6 +52,7 @@
 /// deps/sol2 implementation
 #include "deps/sol2/LuaController.hpp"
 #include "deps/sol2/LuaControllerAI.hpp"
+#include "deps/sol2/LuaEngineState.hpp"
 #include "deps/sol2/LuaRenderer.hpp"
 #include "deps/sol2/LuaUtil.hpp"
 #include "deps/sol2/Script.hpp"

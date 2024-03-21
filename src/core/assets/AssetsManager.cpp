@@ -10,11 +10,13 @@
 
 void AssetsManager::registerAssets(std::string key)
 {
-    if (_assets.find(key) == _assets.end())
+    if (_assets.find(key) != _assets.end())
     {
-        _assets.emplace(std::piecewise_construct, std::make_tuple(key), std::make_tuple());
-        _renderers.emplace(std::piecewise_construct, std::make_tuple(key), std::make_tuple());
+        return;
     }
+    
+    _assets.emplace(std::piecewise_construct, std::make_tuple(key), std::make_tuple());
+    _renderers.emplace(std::piecewise_construct, std::make_tuple(key), std::make_tuple());
 }
 
 void AssetsManager::deregisterAssets(std::string key)

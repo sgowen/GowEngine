@@ -110,6 +110,8 @@
 		BB9E3DEF2BABF9BB0009B7AB /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BB9E3DED2BABF9B40009B7AB /* Cocoa.framework */; };
 		BB9E3DF02BABF9BB0009B7AB /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BB9E3DEB2BABF9B40009B7AB /* OpenGL.framework */; };
 		BB9E3DF12BABF9BB0009B7AB /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BB9E3DEC2BABF9B40009B7AB /* IOKit.framework */; };
+		BB9E3DF42BAC0D4C0009B7AB /* LuaEngineState.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BB9E3DF32BAC0D4C0009B7AB /* LuaEngineState.cpp */; };
+		BB9E3DF52BAC0D4C0009B7AB /* LuaEngineState.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BB9E3DF32BAC0D4C0009B7AB /* LuaEngineState.cpp */; };
 		BB9EBF5E2AAA57520088DBB6 /* TitleEngineState.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BB9EBF542AAA57510088DBB6 /* TitleEngineState.cpp */; };
 		BB9EBF5F2AAA57520088DBB6 /* TitleEngineState.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BB9EBF542AAA57510088DBB6 /* TitleEngineState.cpp */; };
 		BBB8CB032B8A8D060055CAD4 /* GameEngineState.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BBB8CB002B8A8D060055CAD4 /* GameEngineState.cpp */; };
@@ -570,6 +572,8 @@
 		BB9E3DEB2BABF9B40009B7AB /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = System/Library/Frameworks/OpenGL.framework; sourceTree = SDKROOT; };
 		BB9E3DEC2BABF9B40009B7AB /* IOKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOKit.framework; path = System/Library/Frameworks/IOKit.framework; sourceTree = SDKROOT; };
 		BB9E3DED2BABF9B40009B7AB /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
+		BB9E3DF22BAC0D4C0009B7AB /* LuaEngineState.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = LuaEngineState.hpp; sourceTree = "<group>"; };
+		BB9E3DF32BAC0D4C0009B7AB /* LuaEngineState.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = LuaEngineState.cpp; sourceTree = "<group>"; };
 		BB9EBF542AAA57510088DBB6 /* TitleEngineState.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TitleEngineState.cpp; sourceTree = "<group>"; };
 		BB9EBF5B2AAA57510088DBB6 /* TitleEngineState.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = TitleEngineState.hpp; sourceTree = "<group>"; };
 		BBB8CAFF2B8A8D060055CAD4 /* GameEngineState.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = GameEngineState.hpp; sourceTree = "<group>"; };
@@ -1005,6 +1009,8 @@
 				BBBC2B182B97149100ABD6BB /* LuaController.hpp */,
 				BB39A7212B96D9D500D92ECB /* LuaControllerAI.cpp */,
 				BB39A7222B96D9D500D92ECB /* LuaControllerAI.hpp */,
+				BB9E3DF32BAC0D4C0009B7AB /* LuaEngineState.cpp */,
+				BB9E3DF22BAC0D4C0009B7AB /* LuaEngineState.hpp */,
 				BB2E5A772B96587A00D84D3C /* LuaRenderer.cpp */,
 				BB2E5A782B96587A00D84D3C /* LuaRenderer.hpp */,
 				BB6F75B72BA8ED0800C4582B /* LuaUtil.cpp */,
@@ -2314,6 +2320,7 @@
 				BBBBDFE42702468F00D7D319 /* AudioEngine.cpp in Sources */,
 				BBBBDFC42702468C00D7D319 /* Move.cpp in Sources */,
 				BBBBDFC62702468C00D7D319 /* MoveList.cpp in Sources */,
+				BB9E3DF42BAC0D4C0009B7AB /* LuaEngineState.cpp in Sources */,
 				BBFD16452B572CBA00D4D841 /* SteamGameServices.cpp in Sources */,
 				BBBBDFC82702468C00D7D319 /* MovingAverage.cpp in Sources */,
 				BBBBDFCB2702468C00D7D319 /* NetworkClient.cpp in Sources */,
@@ -2374,6 +2381,7 @@
 				BBFD16442B572CBA00D4D841 /* SteamServerInfo.cpp in Sources */,
 				BBBBE0E22702584600D7D319 /* Config.cpp in Sources */,
 				BBBBE0E52702584600D7D319 /* FPSUtil.cpp in Sources */,
+				BB9E3DF52BAC0D4C0009B7AB /* LuaEngineState.cpp in Sources */,
 				BB2E5A722B96336300D84D3C /* EntityControllerAI.cpp in Sources */,
 				BBBBE0EA2702584600D7D319 /* RTTI.cpp in Sources */,
 				BBBBE0EF2702584600D7D319 /* ThreadManager.cpp in Sources */,

@@ -10,7 +10,6 @@
 
 void EngineState::enter(Engine* e)
 {
-    ASSETS_MGR.registerAssets(_filePathAssets);
     createDeviceDependentResources(e);
     
     onEnter(e);
@@ -46,23 +45,22 @@ void EngineState::exit(Engine* e)
 {
     onExit(e);
     
-    if (_areAssetsGlobal)
+    if (!_areAssetsGlobal)
     {
-        return;
+        destroyDeviceDependentResources(e);
     }
-    
-    destroyDeviceDependentResources(e);
-    ASSETS_MGR.deregisterAssets(_filePathAssets);
 }
 
 void EngineState::createDeviceDependentResources(Engine* e)
 {
+    ASSETS_MGR.registerAssets(_filePathAssets);
     ASSETS_MGR.createDeviceDependentResourcesAsync();
 }
 
 void EngineState::destroyDeviceDependentResources(Engine* e)
 {
     ASSETS_MGR.destroyDeviceDependentResources();
+    ASSETS_MGR.deregisterAssets(_filePathAssets);
 }
 
 void EngineState::pause(Engine* e)
@@ -102,8 +100,5 @@ EngineState::EngineState(std::string filePathAssets, bool areAssetsGlobal) : Sta
 _filePathAssets(filePathAssets),
 _areAssetsGlobal(areAssetsGlobal)
 {
-    if (_areAssetsGlobal)
-    {
-        ASSETS_MGR.registerAssets(_filePathAssets);
-    }
+    // Empty
 }
