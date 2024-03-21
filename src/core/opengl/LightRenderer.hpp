@@ -8,6 +8,7 @@
 
 #pragma once
 
+#include "core/common/Constants.hpp"
 #include "ShaderInput.hpp"
 
 #include <stdint.h>
