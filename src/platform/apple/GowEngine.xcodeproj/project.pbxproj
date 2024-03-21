@@ -43,8 +43,6 @@
 		BB39A7182B96D11E00D92ECB /* EntityControllerRender.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BB39A7162B96D11E00D92ECB /* EntityControllerRender.cpp */; };
 		BB39A7232B96D9D500D92ECB /* LuaControllerAI.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BB39A7212B96D9D500D92ECB /* LuaControllerAI.cpp */; };
 		BB39A7242B96D9D500D92ECB /* LuaControllerAI.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BB39A7212B96D9D500D92ECB /* LuaControllerAI.cpp */; };
-		BB3F0B022A44F2E3008D8AC8 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BB3F0B012A44F2E3008D8AC8 /* Cocoa.framework */; };
-		BB3F0B042A44F2EF008D8AC8 /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BB3F0B032A44F2EF008D8AC8 /* IOKit.framework */; };
 		BB40D7C62A26A2E600EDA51E /* SoundManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BB40D7BE2A26A2E600EDA51E /* SoundManager.cpp */; };
 		BB40D7C72A26A2E600EDA51E /* SoundManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BB40D7BE2A26A2E600EDA51E /* SoundManager.cpp */; };
 		BB40D8022A26D09C00EDA51E /* SoundLoader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BB40D8012A26D09C00EDA51E /* SoundLoader.cpp */; };
@@ -79,7 +77,6 @@
 		BB5F5F6D2B9BC31900475CDD /* IMGUIDemoEngineState.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BB5F5F6A2B9BC31900475CDD /* IMGUIDemoEngineState.cpp */; };
 		BB60A0FC2B92DA940056BA63 /* World.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BB60A0FA2B92DA940056BA63 /* World.cpp */; };
 		BB60A0FD2B92DA940056BA63 /* World.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BB60A0FA2B92DA940056BA63 /* World.cpp */; };
-		BB61E1F82A27F64200BFFE38 /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BB61E1F72A27F64200BFFE38 /* OpenGL.framework */; };
 		BB61E1FA2A27F67700BFFE38 /* libglfw3.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BB61E1F92A27F67700BFFE38 /* libglfw3.a */; };
 		BB631F662AAA67E500953454 /* ShockwaveRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BB631F652AAA67E500953454 /* ShockwaveRenderer.cpp */; };
 		BB631F672AAA67E500953454 /* ShockwaveRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BB631F652AAA67E500953454 /* ShockwaveRenderer.cpp */; };
@@ -102,7 +99,6 @@
 		BB7F75BA2B6B119F00CAB63F /* libbox2d.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BB7F75B92B6B119F00CAB63F /* libbox2d.a */; };
 		BB7F75BD2B6B5C4C00CAB63F /* NosPhysicsRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BB7F75BC2B6B5C4C00CAB63F /* NosPhysicsRenderer.cpp */; };
 		BB7F75BE2B6B5C4C00CAB63F /* NosPhysicsRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BB7F75BC2B6B5C4C00CAB63F /* NosPhysicsRenderer.cpp */; };
-		BB82CE5C2B9133FA008BF269 /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BB82CE5B2B9133F9008BF269 /* OpenGLES.framework */; };
 		BB82CE632B91380B008BF269 /* GameServer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BB82CE622B91380B008BF269 /* GameServer.cpp */; };
 		BB82CE642B91380B008BF269 /* GameServer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BB82CE622B91380B008BF269 /* GameServer.cpp */; };
 		BB83A6652B83FDE3003AFB1F /* GlfmEngineMount.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BB83A6642B83FDE3003AFB1F /* GlfmEngineMount.cpp */; };
@@ -111,6 +107,9 @@
 		BB95E52F2A210FD900D22D0F /* libopenal.1.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = BB95E52D2A210FD900D22D0F /* libopenal.1.dylib */; };
 		BB95E5312A210FE900D22D0F /* libopenal.1.dylib in Embed Libraries */ = {isa = PBXBuildFile; fileRef = BB95E52D2A210FD900D22D0F /* libopenal.1.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		BB95E5322A21108A00D22D0F /* libopenal.1.dylib in Embed Libraries */ = {isa = PBXBuildFile; fileRef = BB95E5292A210FC400D22D0F /* libopenal.1.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
+		BB9E3DEF2BABF9BB0009B7AB /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BB9E3DED2BABF9B40009B7AB /* Cocoa.framework */; };
+		BB9E3DF02BABF9BB0009B7AB /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BB9E3DEB2BABF9B40009B7AB /* OpenGL.framework */; };
+		BB9E3DF12BABF9BB0009B7AB /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BB9E3DEC2BABF9B40009B7AB /* IOKit.framework */; };
 		BB9EBF5E2AAA57520088DBB6 /* TitleEngineState.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BB9EBF542AAA57510088DBB6 /* TitleEngineState.cpp */; };
 		BB9EBF5F2AAA57520088DBB6 /* TitleEngineState.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BB9EBF542AAA57510088DBB6 /* TitleEngineState.cpp */; };
 		BBB8CB032B8A8D060055CAD4 /* GameEngineState.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BBB8CB002B8A8D060055CAD4 /* GameEngineState.cpp */; };
@@ -420,8 +419,6 @@
 		BB39A7212B96D9D500D92ECB /* LuaControllerAI.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = LuaControllerAI.cpp; sourceTree = "<group>"; };
 		BB39A7222B96D9D500D92ECB /* LuaControllerAI.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = LuaControllerAI.hpp; sourceTree = "<group>"; };
 		BB3F0AC92A44EFA9008D8AC8 /* stb_image.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = stb_image.h; sourceTree = "<group>"; };
-		BB3F0B012A44F2E3008D8AC8 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
-		BB3F0B032A44F2EF008D8AC8 /* IOKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOKit.framework; path = System/Library/Frameworks/IOKit.framework; sourceTree = SDKROOT; };
 		BB40D7BA2A2695DB00EDA51E /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		BB40D7BD2A26A2E600EDA51E /* SoundManager.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = SoundManager.hpp; sourceTree = "<group>"; };
 		BB40D7BE2A26A2E600EDA51E /* SoundManager.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SoundManager.cpp; sourceTree = "<group>"; };
@@ -484,7 +481,6 @@
 		BB5F5F6B2B9BC31900475CDD /* IMGUIDemoEngineState.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = IMGUIDemoEngineState.hpp; sourceTree = "<group>"; };
 		BB60A0FA2B92DA940056BA63 /* World.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = World.cpp; sourceTree = "<group>"; };
 		BB60A0FB2B92DA940056BA63 /* World.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = World.hpp; sourceTree = "<group>"; };
-		BB61E1F72A27F64200BFFE38 /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = System/Library/Frameworks/OpenGL.framework; sourceTree = SDKROOT; };
 		BB61E1F92A27F67700BFFE38 /* libglfw3.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libglfw3.a; sourceTree = "<group>"; };
 		BB61E2012A280DE900BFFE38 /* build_libraries.bat */ = {isa = PBXFileReference; lastKnownFileType = text; path = build_libraries.bat; sourceTree = "<group>"; };
 		BB61E2022A28116300BFFE38 /* build_libraries.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = build_libraries.sh; sourceTree = "<group>"; };
@@ -551,7 +547,6 @@
 		BB7F75B92B6B119F00CAB63F /* libbox2d.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libbox2d.a; sourceTree = "<group>"; };
 		BB7F75BB2B6B5C4C00CAB63F /* NosPhysicsRenderer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = NosPhysicsRenderer.hpp; sourceTree = "<group>"; };
 		BB7F75BC2B6B5C4C00CAB63F /* NosPhysicsRenderer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = NosPhysicsRenderer.cpp; sourceTree = "<group>"; };
-		BB82CE5B2B9133F9008BF269 /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS17.2.sdk/System/Library/Frameworks/OpenGLES.framework; sourceTree = DEVELOPER_DIR; };
 		BB82CE612B91380B008BF269 /* GameServer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = GameServer.hpp; sourceTree = "<group>"; };
 		BB82CE622B91380B008BF269 /* GameServer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GameServer.cpp; sourceTree = "<group>"; };
 		BB83A62A2B83FC80003AFB1F /* build.gradle.kts */ = {isa = PBXFileReference; lastKnownFileType = text; path = build.gradle.kts; sourceTree = "<group>"; };
@@ -572,6 +567,9 @@
 		BB8DCADF2A2950B900FADEEB /* vcruntime140.dll */ = {isa = PBXFileReference; lastKnownFileType = file; path = vcruntime140.dll; sourceTree = "<group>"; };
 		BB95E5292A210FC400D22D0F /* libopenal.1.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; path = libopenal.1.dylib; sourceTree = "<group>"; };
 		BB95E52D2A210FD900D22D0F /* libopenal.1.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; path = libopenal.1.dylib; sourceTree = "<group>"; };
+		BB9E3DEB2BABF9B40009B7AB /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = System/Library/Frameworks/OpenGL.framework; sourceTree = SDKROOT; };
+		BB9E3DEC2BABF9B40009B7AB /* IOKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOKit.framework; path = System/Library/Frameworks/IOKit.framework; sourceTree = SDKROOT; };
+		BB9E3DED2BABF9B40009B7AB /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
 		BB9EBF542AAA57510088DBB6 /* TitleEngineState.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TitleEngineState.cpp; sourceTree = "<group>"; };
 		BB9EBF5B2AAA57510088DBB6 /* TitleEngineState.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = TitleEngineState.hpp; sourceTree = "<group>"; };
 		BBB8CAFF2B8A8D060055CAD4 /* GameEngineState.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = GameEngineState.hpp; sourceTree = "<group>"; };
@@ -847,15 +845,15 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				BB3F0B022A44F2E3008D8AC8 /* Cocoa.framework in Frameworks */,
+				BB9E3DEF2BABF9BB0009B7AB /* Cocoa.framework in Frameworks */,
+				BB9E3DF02BABF9BB0009B7AB /* OpenGL.framework in Frameworks */,
 				BB2E55C52B94DE3700D84D3C /* liblua_static.a in Frameworks */,
-				BB3F0B042A44F2EF008D8AC8 /* IOKit.framework in Frameworks */,
-				BB61E1F82A27F64200BFFE38 /* OpenGL.framework in Frameworks */,
 				BB61E1FA2A27F67700BFFE38 /* libglfw3.a in Frameworks */,
 				BBF3E8702A28F062009C9460 /* libsndfile.1.dylib in Frameworks */,
 				BBFD16632B572F1900D4D841 /* libsteam_api.dylib in Frameworks */,
 				BB95E52F2A210FD900D22D0F /* libopenal.1.dylib in Frameworks */,
 				BB7F75BA2B6B119F00CAB63F /* libbox2d.a in Frameworks */,
+				BB9E3DF12BABF9BB0009B7AB /* IOKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -863,7 +861,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				BB82CE5C2B9133FA008BF269 /* OpenGLES.framework in Frameworks */,
 				BBEC09F42A28FACB0054681F /* libsndfile.1.dylib in Frameworks */,
 				BB83A6A92B840544003AFB1F /* libglfm.a in Frameworks */,
 				BB95E52B2A210FC400D22D0F /* libopenal.1.dylib in Frameworks */,
@@ -1193,21 +1190,9 @@
 			path = imgui;
 			sourceTree = "<group>";
 		};
-		BB61E1F62A27F64200BFFE38 /* Frameworks */ = {
-			isa = PBXGroup;
-			children = (
-				BB3F0B012A44F2E3008D8AC8 /* Cocoa.framework */,
-				BB3F0B032A44F2EF008D8AC8 /* IOKit.framework */,
-				BB61E1F72A27F64200BFFE38 /* OpenGL.framework */,
-				BB82CE5B2B9133F9008BF269 /* OpenGLES.framework */,
-			);
-			name = Frameworks;
-			sourceTree = "<group>";
-		};
 		BB7B045425B644E00021E545 = {
 			isa = PBXGroup;
 			children = (
-				BB61E1F62A27F64200BFFE38 /* Frameworks */,
 				BBBBD7DF27023E0F00D7D319 /* GowEngine */,
 				BB7B045E25B644E00021E545 /* Products */,
 			);
@@ -1472,13 +1457,16 @@
 			children = (
 				BBBBD6CF27023B5400D7D319 /* Assets.xcassets */,
 				BB8B32952A29460800BD2D30 /* build_libraries.sh */,
+				BB9E3DED2BABF9B40009B7AB /* Cocoa.framework */,
 				BB3712562A1EC53400A97300 /* GowEngine-macOS.entitlements */,
 				BBBBD6D127023B5400D7D319 /* Info.plist */,
+				BB9E3DEC2BABF9B40009B7AB /* IOKit.framework */,
 				BB7F75B92B6B119F00CAB63F /* libbox2d.a */,
 				BB61E1F92A27F67700BFFE38 /* libglfw3.a */,
 				BB2E55C42B94DE3700D84D3C /* liblua_static.a */,
 				BB95E52D2A210FD900D22D0F /* libopenal.1.dylib */,
 				BBF3E86F2A28F062009C9460 /* libsndfile.1.dylib */,
+				BB9E3DEB2BABF9B40009B7AB /* OpenGL.framework */,
 				BBFE6DC02B7FE26B004E8CCF /* run_bin_to_c.sh */,
 			);
 			path = macOS;
