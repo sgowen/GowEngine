@@ -332,7 +332,7 @@ void NetworkClient::handleStatePacket(InputMemoryBitStream& imbs)
 
 void NetworkClient::updateSendingInputPacket(MoveList& ml)
 {
-    OutputMemoryBitStream ombs(NW_MAX_PACKET_SIZE);
+    OutputMemoryBitStream ombs(ENGINE_CFG.mtuSize());
     ombs.writeBits(static_cast<uint8_t>(NWPT_INPUT), 4);
     
     _deliveryNotificationManager.writeState(ombs);

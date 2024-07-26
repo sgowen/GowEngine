@@ -35,7 +35,7 @@ SteamClientHelper::~SteamClientHelper()
         SteamUser()->CancelAuthTicket(_hAuthTicket);
     }
 
-    OutputMemoryBitStream packet(NW_MAX_PACKET_SIZE);
+    OutputMemoryBitStream packet(ENGINE_CFG.mtuSize());
     packet.write(static_cast<uint8_t>(k_EMsgClientLeavingServer));
     sendPacketToServer(packet);
 
@@ -214,7 +214,7 @@ void SteamClientHelper::handleUninitialized()
     {
         case k_EClientNotConnected:
         {
-            OutputMemoryBitStream packet(NW_MAX_PACKET_SIZE);
+            OutputMemoryBitStream packet(ENGINE_CFG.mtuSize());
             packet.write(static_cast<uint8_t>(k_EMsgClientInitiateConnection));
             sendPacketToServer(packet);
         }
@@ -238,7 +238,7 @@ void SteamClientHelper::handleUninitialized()
 
                 LOG("MsgClientBeginAuthentication_t, uTokenLen: %i", unTokenLen);
 
-                OutputMemoryBitStream packet(NW_MAX_PACKET_SIZE);
+                OutputMemoryBitStream packet(ENGINE_CFG.mtuSize());
                 packet.write(static_cast<uint8_t>(k_EMsgClientBeginAuthentication));
                 packet.write(unTokenLen);
                 packet.writeBytes(rgchToken, unTokenLen);

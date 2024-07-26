@@ -44,7 +44,7 @@ SteamServerHelper::~SteamServerHelper()
         {
             SteamAddress* userAddress = static_cast<SteamAddress*>(clientProxy->getMachineAddress());
             
-            OutputMemoryBitStream packet(NW_MAX_PACKET_SIZE);
+            OutputMemoryBitStream packet(ENGINE_CFG.mtuSize());
             packet.write(static_cast<uint8_t>(k_EMsgServerExiting));
             
             sendPacket(packet, userAddress);
@@ -136,7 +136,7 @@ void SteamServerHelper::processSpecialPacket(uint8_t packetType, InputMemoryBitS
             // We always let clients do this without even checking for room on the server since we reserve that for
             // the authentication phase of the connection which comes next
             // TODO
-            OutputMemoryBitStream packet(NW_MAX_PACKET_SIZE);
+            OutputMemoryBitStream packet(ENGINE_CFG.mtuSize());
             packet.write(static_cast<uint8_t>(k_EMsgServerSendInfo));
             uint64_t steamIDGameServer = (uint64_t) SteamGameServer()->GetSteamID().ConvertToUint64();
             packet.write(steamIDGameServer);
@@ -240,7 +240,7 @@ void SteamServerHelper::kickPlayerOffServer(CSteamID steamID)
             _handleClientDisconnectedFunc(clientProxy);
             
             // send him a kick message
-            OutputMemoryBitStream packet(NW_MAX_PACKET_SIZE);
+            OutputMemoryBitStream packet(ENGINE_CFG.mtuSize());
             packet.write(static_cast<uint8_t>(k_EMsgServerFailAuthentication));
             sendDataToClient(steamID, packet);
         }
@@ -315,7 +315,7 @@ void SteamServerHelper::onClientBeginAuthentication(CSteamID steamIDClient, void
     // We are full (or will be if the pending players auth), deny new login
     if (nPendingOrActivePlayerCount >= MAX_NUM_PLAYERS)
     {
-        OutputMemoryBitStream packet(NW_MAX_PACKET_SIZE);
+        OutputMemoryBitStream packet(ENGINE_CFG.mtuSize());
         packet.write(static_cast<uint8_t>(k_EMsgServerFailAuthentication));
         sendDataToClient(steamIDClient, packet);
     }
@@ -328,7 +328,7 @@ void SteamServerHelper::onClientBeginAuthentication(CSteamID steamIDClient, void
             // authenticate the user with the Steam back-end servers
             if (k_EBeginAuthSessionResultOK != SteamGameServer()->BeginAuthSession(token, uTokenLen, steamIDClient))
             {
-                OutputMemoryBitStream packet(NW_MAX_PACKET_SIZE);
+                OutputMemoryBitStream packet(ENGINE_CFG.mtuSize());
                 packet.write(static_cast<uint8_t>(k_EMsgServerFailAuthentication));
                 sendDataToClient(steamIDClient, packet);
                 break;
@@ -359,7 +359,7 @@ void SteamServerHelper::onAuthCompleted(bool bAuthSuccessful, uint32_t iPendingA
             ClientProxy* clientProxy = _getClientProxyFunc(i);
             if (!clientProxy)
             {
-                OutputMemoryBitStream packet(NW_MAX_PACKET_SIZE);
+                OutputMemoryBitStream packet(ENGINE_CFG.mtuSize());
                 packet.write(static_cast<uint8_t>(k_EMsgServerPassAuthentication));
                 sendDataToClient(_rgPendingClientData[iPendingAuthIndex]._steamIDUser, packet);
                 
@@ -376,7 +376,7 @@ void SteamServerHelper::onAuthCompleted(bool bAuthSuccessful, uint32_t iPendingA
         SteamGameServer()->EndAuthSession(_rgPendingClientData[iPendingAuthIndex]._steamIDUser);
         
         // Send a deny for the client, and zero out the pending data
-        OutputMemoryBitStream packet(NW_MAX_PACKET_SIZE);
+        OutputMemoryBitStream packet(ENGINE_CFG.mtuSize());
         packet.write(static_cast<uint8_t>(k_EMsgServerFailAuthentication));
         sendDataToClient(_rgPendingClientData[iPendingAuthIndex]._steamIDUser, packet);
         

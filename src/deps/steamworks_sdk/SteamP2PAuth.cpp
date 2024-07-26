@@ -320,7 +320,7 @@ void SteamP2PNetworkTransport::sendTicket(NetworkHelper* networkHelper, CSteamID
     msg.setToken((char *)pubTicket, cubTicket);
     msg.setSteamID(steamIDFrom.ConvertToUint64());
 
-    OutputMemoryBitStream packet(NW_MAX_PACKET_SIZE);
+    OutputMemoryBitStream packet(ENGINE_CFG.mtuSize());
     packet.write(static_cast<uint8_t>(msg.getMessageType()));
     packet.write(msg.getSteamID());
     packet.write(msg.getTokenLen());

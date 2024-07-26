@@ -66,10 +66,10 @@ SocketAddress& SocketPacketHandler::getSocketAddress()
 
 void SocketPacketHandler::readIncomingPacketsIntoQueue()
 {
-    static char packetMem[NW_MAX_PACKET_SIZE];
-    memset(packetMem, '\0', NW_MAX_PACKET_SIZE);
+    static char packetMem[1500];
+    memset(packetMem, '\0', 1500);
 
-    InputMemoryBitStream imbs(packetMem, NW_MAX_PACKET_SIZE);
+    InputMemoryBitStream imbs(packetMem, ENGINE_CFG.mtuSize());
     SocketAddress fromAddress;
 
     int totalReadByteCount = 0;
@@ -77,8 +77,8 @@ void SocketPacketHandler::readIncomingPacketsIntoQueue()
     uint8_t numFramesOfSimulatedLatency = ENGINE_CFG.numFramesOfSimulatedLatency();
     while (true)
     {
-        int readByteCount = _socket->receiveFromAddress(packetMem, NW_MAX_PACKET_SIZE, fromAddress);
-        assert(readByteCount <= NW_MAX_PACKET_SIZE);
+        int readByteCount = _socket->receiveFromAddress(packetMem, ENGINE_CFG.mtuSize(), fromAddress);
+        assert(readByteCount <= ENGINE_CFG.mtuSize());
         
         if (readByteCount <= 0)
         {

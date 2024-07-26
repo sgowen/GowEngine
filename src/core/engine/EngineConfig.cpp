@@ -172,6 +172,11 @@ uint16_t EngineConfig::serverPort()
     return _serverPort;
 }
 
+uint16_t EngineConfig::mtuSize()
+{
+    return _mtuSize;
+}
+
 uint8_t EngineConfig::maxNumFramesOfRollback()
 {
     return _maxNumFramesOfRollback;
@@ -224,6 +229,7 @@ EngineConfig::EngineConfig(std::string filePathConfig)
     _clientPortHost = _config.getUInt("clientPortHost");
     _clientPortJoin = _config.getUInt("clientPortJoin");
     _serverPort = _config.getUInt("serverPort");
+    _mtuSize = _config.getUInt("mtuSize");
     _maxNumFramesOfRollback = _config.getUInt("maxNumFramesOfRollback");
     _numFramesOfInputDelay = _config.getUInt("numFramesOfInputDelay");
     _numFramesOfSimulatedLatency = _config.getUInt("numFramesOfSimulatedLatency");

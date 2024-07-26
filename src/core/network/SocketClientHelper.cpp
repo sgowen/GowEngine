@@ -25,7 +25,7 @@ _port(inPort)
 
 SocketClientHelper::~SocketClientHelper()
 {
-    OutputMemoryBitStream packet(NW_MAX_PACKET_SIZE);
+    OutputMemoryBitStream packet(ENGINE_CFG.mtuSize());
     packet.write(static_cast<uint8_t>(NWPT_CLNT_EXIT));
     sendPacketToServer(packet);
     

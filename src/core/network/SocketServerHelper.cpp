@@ -22,7 +22,7 @@ SocketServerHelper::~SocketServerHelper()
         {
             SocketAddress* userAddress = static_cast<SocketAddress*>(clientProxy->getMachineAddress());
             
-            OutputMemoryBitStream packet(NW_MAX_PACKET_SIZE);
+            OutputMemoryBitStream packet(ENGINE_CFG.mtuSize());
             packet.write(static_cast<uint8_t>(NWPT_SRVR_EXIT));
             
             sendPacket(packet, userAddress);

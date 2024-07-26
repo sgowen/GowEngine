@@ -389,7 +389,7 @@ void NetworkServer::sendWelcomePacket(ClientProxy& cp)
 
 void NetworkServer::sendStatePacketToClient(ClientProxy& cp)
 {
-    OutputMemoryBitStream ombs(NW_MAX_PACKET_SIZE);
+    OutputMemoryBitStream ombs(ENGINE_CFG.mtuSize());
     ombs.writeBits(static_cast<uint8_t>(NWPT_STATE), 4);
     
     InFlightPacket* ifp = cp.getDeliveryNotificationManager().writeState(ombs);

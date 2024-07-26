@@ -51,10 +51,10 @@ void SteamPacketHandler::sendPacket(const OutputMemoryBitStream& inOutputStream,
 
 void SteamPacketHandler::readIncomingPacketsIntoQueue()
 {
-    static char packetMem[NW_MAX_PACKET_SIZE];
+    static char packetMem[1500];
     static uint32 packetSize = sizeof(packetMem);
     
-    bzero(packetMem, NW_MAX_PACKET_SIZE);
+    bzero(packetMem, ENGINE_CFG.mtuSize());
     
     uint32_t incomingSize = 0;
     InputMemoryBitStream inputStream(packetMem, packetSize * 8);

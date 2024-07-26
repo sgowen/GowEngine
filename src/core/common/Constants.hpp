@@ -70,7 +70,6 @@
 #define VECTOR2_ZERO 0.0f, 0.0f
 
 /// Network
-#define NW_MAX_PACKET_SIZE 508
 #define NW_ALL_DIRTY_STATE 0xFFu
 
 /// Steam
