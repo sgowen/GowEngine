@@ -345,6 +345,10 @@ _matrix(nullptr)
     _buttonMap[GPEB_D_PAD_RIGHT] = "D_PAD_RIGHT";
     _buttonMap[GPEB_D_PAD_DOWN] = "D_PAD_DOWN";
     _buttonMap[GPEB_D_PAD_LEFT] = "D_PAD_LEFT";
+    _buttonMap[GPEB_XBOX_D_PAD_UP] = "D_PAD_UP";
+    _buttonMap[GPEB_XBOX_D_PAD_RIGHT] = "D_PAD_RIGHT";
+    _buttonMap[GPEB_XBOX_D_PAD_DOWN] = "D_PAD_DOWN";
+    _buttonMap[GPEB_XBOX_D_PAD_LEFT] = "D_PAD_LEFT";
     _buttonMap[GPEB_STICK_LEFT] = "STICK_LEFT";
     _buttonMap[GPEB_STICK_RIGHT] = "STICK_RIGHT";
     _buttonMap[GPEB_TRIGGER] = "TRIGGER";
