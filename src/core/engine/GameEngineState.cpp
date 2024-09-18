@@ -61,6 +61,7 @@ GameInputProcessorState GameInputProcessor::update(World& world)
         {
             if (!isPlayer1)
             {
+                // Wtf is this?
                 SET_BIT(inputStateP2, 1, true);
             }
             continue;
