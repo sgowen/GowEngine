@@ -234,8 +234,39 @@ void runEngine(Engine& engine, GLFWwindow* window, double deltaTime)
     }
 }
 
+void printNetInfo()
+{
+    char hostbuffer[256];
+    struct hostent *host_entry;
+    int hostname;
+    struct in_addr **addr_list;
+
+    hostname = gethostname(hostbuffer, sizeof(hostbuffer));
+    if (hostname == -1)
+    {
+        perror("gethostname error");
+        exit(1);
+    }
+    printf("Hostname: %s\n", hostbuffer);
+
+    host_entry = gethostbyname(hostbuffer);
+    if (host_entry == NULL)
+    {
+        perror("gethostbyname error");
+        exit(1);
+    }
+    
+    addr_list = (struct in_addr **)host_entry->h_addr_list;
+    for (int i = 0; addr_list[i] != NULL; i++)
+    {
+        printf("IP address %d: %s\n", i+1, inet_ntoa(*addr_list[i]));
+    }
+}
+
 int main(int argc, char *argv[])
 {
+    printNetInfo();
+    
     memset(joysticks, 0, sizeof(joysticks));
 
     GLFWwindow* window;
