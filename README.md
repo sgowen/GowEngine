@@ -1,5 +1,5 @@
 # GowEngine
-A basic no nonsense LGPL 2.1 licensed portable C++ 2D game engine
+An easy to use, easy to read, no nonsense LGPL 2.1 licensed portable C++ 2D game engine
 
 ## Demo
 ![Demo](https://github.com/sgowen/GowEngine/blob/main/demo.gif)
@@ -19,7 +19,6 @@ A basic no nonsense LGPL 2.1 licensed portable C++ 2D game engine
 * Linux
 * macOS
 * Windows
-* Soon... Nintendo DS!
 
 ## Dependencies
 * [bin_to_c](https://github.com/sgowen/bin_to_c): converts files to binary for embedding inside GowEngine
