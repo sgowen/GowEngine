@@ -265,7 +265,7 @@ void printNetInfo()
 
 int main(int argc, char *argv[])
 {
-    printNetInfo();
+//    printNetInfo();
     
     memset(joysticks, 0, sizeof(joysticks));
 
