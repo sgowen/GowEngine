@@ -19,10 +19,8 @@ using namespace std;
 using namespace std::chrono;
 
 Engine* _engine = nullptr;
-int joysticks[GLFW_JOYSTICK_LAST + 1];
-int joystick_count = 0;
-bool isDown = false;
-bool isAlt = false;
+bool _isMouseDown = false;
+bool _isRightClick = false;
 
 void error_callback(int error, const char* description)
 {
@@ -41,33 +39,6 @@ void window_iconify_callback(GLFWwindow* window, int iconified)
     }
 }
 
-void joystick_callback(int jid, int event)
-{
-    if (event == GLFW_CONNECTED)
-    {
-        joysticks[joystick_count++] = jid;
-    }
-    else if (event == GLFW_DISCONNECTED)
-    {
-        int i;
-
-        for (i = 0; i < joystick_count; ++i)
-        {
-            if (joysticks[i] == jid)
-            {
-                break;
-            }
-        }
-
-        for (i = i + 1; i < joystick_count; ++i)
-        {
-            joysticks[i - 1] = joysticks[i];
-        }
-
-        joystick_count--;
-    }
-}
-
 void mouse_scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
 {
     _engine->onCursorScrolled((float)yoffset);
@@ -79,17 +50,17 @@ void mouse_button_callback(GLFWwindow* window, int button, int action, int mods)
     double y;
     glfwGetCursorPos(window, &x, &y);
     
-    isAlt = button == GLFW_MOUSE_BUTTON_2;
+    _isRightClick = button == GLFW_MOUSE_BUTTON_2;
     
     switch (action)
     {
         case GLFW_PRESS:
-            _engine->onCursorDown((float)x, (float)y, isAlt);
-            isDown = true;
+            _engine->onCursorDown((float)x, (float)y, _isRightClick);
+            _isMouseDown = true;
             break;
         case GLFW_RELEASE:
-            _engine->onCursorUp((float)x, (float)y, isAlt);
-            isDown = false;
+            _engine->onCursorUp((float)x, (float)y, _isRightClick);
+            _isMouseDown = false;
             break;
         default:
             break;
@@ -98,9 +69,9 @@ void mouse_button_callback(GLFWwindow* window, int button, int action, int mods)
 
 void mouse_cursor_pos_callback(GLFWwindow* window, double x, double y)
 {
-    if (isDown)
+    if (_isMouseDown)
     {
-        _engine->onCursorDragged((float)x, (float)y, isAlt);
+        _engine->onCursorDragged((float)x, (float)y, _isRightClick);
     }
     else
     {
@@ -134,55 +105,39 @@ private:
 
 void runEngine(Engine& engine, GLFWwindow* window, double deltaTime)
 {
-    for (int i = 0; i < joystick_count; ++i)
+    for (int i = GLFW_JOYSTICK_1; i <= GLFW_JOYSTICK_4; ++i)
     {
-        int j, axis_count, button_count;
-        const float* axes;
-        const uint8_t* buttons;
-
-        axes = glfwGetJoystickAxes(joysticks[i], &axis_count);
-        buttons = glfwGetJoystickButtons(joysticks[i], &button_count);
-
-        float stickLeftX = 0;
-        float stickLeftY = 0;
-        float stickRightX = 0;
-        float stickRightY = 0;
-        float triggerLeft = 0;
-        float triggerRight = 0;
-
-        for (j = 0; j < axis_count; ++j)
+        bool isJoystickPresent = glfwJoystickPresent(i);
+        bool isJoystickGamepad = glfwJoystickIsGamepad(i);
+        
+        if (!isJoystickPresent || !isJoystickGamepad)
         {
-            switch (j)
-            {
-                case 0:
-                    stickLeftX = axes[j];
-                    break;
-                case 1:
-                    stickLeftY = axes[j];
-                    break;
-                case 2:
-                    stickRightX = axes[j];
-                    break;
-                case 3:
-                    triggerLeft = axes[j];
-                    break;
-                case 4:
-                    triggerRight = axes[j];
-                    break;
-                case 5:
-                    stickRightY = axes[j];
-                default:
-                    break;
-            }
+            continue;
         }
-
-        engine.onGamepadInputStickLeft(i, stickLeftX, stickLeftY);
-        engine.onGamepadInputStickRight(i, stickRightX, stickRightY);
-        engine.onGamepadInputTrigger(i, triggerLeft, triggerRight);
-
-        for (j = 0; j < button_count; ++j)
+        
+        GLFWgamepadstate state;
+        if (glfwGetGamepadState(i, &state))
         {
-            engine.onGamepadInputButton(i, j, buttons[j]);
+            engine.onGamepadInputButton(i, GEB_BUTTON_A, state.buttons[GLFW_GAMEPAD_BUTTON_A] == GLFW_PRESS);
+            engine.onGamepadInputButton(i, GEB_BUTTON_B, state.buttons[GLFW_GAMEPAD_BUTTON_B] == GLFW_PRESS);
+            engine.onGamepadInputButton(i, GEB_BUTTON_X, state.buttons[GLFW_GAMEPAD_BUTTON_X] == GLFW_PRESS);
+            engine.onGamepadInputButton(i, GEB_BUTTON_Y, state.buttons[GLFW_GAMEPAD_BUTTON_Y] == GLFW_PRESS);
+            
+            engine.onGamepadInputButton(i, GEB_BUMPER_LEFT, state.buttons[GLFW_GAMEPAD_BUTTON_LEFT_BUMPER] == GLFW_PRESS);
+            engine.onGamepadInputButton(i, GEB_BUMPER_RIGHT, state.buttons[GLFW_GAMEPAD_BUTTON_RIGHT_BUMPER] == GLFW_PRESS);
+            
+            engine.onGamepadInputButton(i, GEB_BUTTON_START, state.buttons[GLFW_GAMEPAD_BUTTON_START] == GLFW_PRESS);
+            engine.onGamepadInputButton(i, GEB_BUTTON_BACK, state.buttons[GLFW_GAMEPAD_BUTTON_BACK] == GLFW_PRESS);
+            engine.onGamepadInputButton(i, GEB_BUTTON_GUIDE, state.buttons[GLFW_GAMEPAD_BUTTON_GUIDE] == GLFW_PRESS);
+            
+            engine.onGamepadInputButton(i, GEB_D_PAD_UP, state.buttons[GLFW_GAMEPAD_BUTTON_DPAD_UP] == GLFW_PRESS);
+            engine.onGamepadInputButton(i, GEB_D_PAD_DOWN, state.buttons[GLFW_GAMEPAD_BUTTON_DPAD_DOWN] == GLFW_PRESS);
+            engine.onGamepadInputButton(i, GEB_D_PAD_LEFT, state.buttons[GLFW_GAMEPAD_BUTTON_DPAD_LEFT] == GLFW_PRESS);
+            engine.onGamepadInputButton(i, GEB_D_PAD_RIGHT, state.buttons[GLFW_GAMEPAD_BUTTON_DPAD_RIGHT] == GLFW_PRESS);
+            
+            engine.onGamepadInputStickLeft(i, state.axes[GLFW_GAMEPAD_AXIS_LEFT_X], state.axes[GLFW_GAMEPAD_AXIS_LEFT_Y]);
+            engine.onGamepadInputStickRight(i, state.axes[GLFW_GAMEPAD_AXIS_RIGHT_X], state.axes[GLFW_GAMEPAD_AXIS_RIGHT_Y]);
+            engine.onGamepadInputTrigger(i, state.axes[GLFW_GAMEPAD_AXIS_LEFT_TRIGGER], state.axes[GLFW_GAMEPAD_AXIS_RIGHT_TRIGGER]);
         }
     }
 
@@ -244,31 +199,43 @@ void printNetInfo()
     hostname = gethostname(hostbuffer, sizeof(hostbuffer));
     if (hostname == -1)
     {
-        perror("gethostname error");
-        exit(1);
+        LOG("gethostname error");
+        return;
     }
-    printf("Hostname: %s\n", hostbuffer);
+    LOG("Hostname: %s\n", hostbuffer);
 
     host_entry = gethostbyname(hostbuffer);
     if (host_entry == NULL)
     {
-        perror("gethostbyname error");
-        exit(1);
+        LOG("gethostbyname error");
+        return;
     }
     
     addr_list = (struct in_addr **)host_entry->h_addr_list;
     for (int i = 0; addr_list[i] != NULL; i++)
     {
-        printf("IP address %d: %s\n", i+1, inet_ntoa(*addr_list[i]));
+        LOG("IP address %d: %s\n", i+1, inet_ntoa(*addr_list[i]));
     }
+}
+
+void updateGamepadMappings()
+{
+    std::string gamecontrollerdbFilePath = "engine/gamecontrollerdb.txt";
+    FileData mappingsFileData = ASSET_HANDLER.loadAsset(gamecontrollerdbFilePath);
+    const char* mappings = (const char*)mappingsFileData._data;
+    if (glfwUpdateGamepadMappings(mappings))
+    {
+        LOG("Gamepad mappings updated successfully.");
+    }
+    else
+    {
+        LOG("Failed to update gamepad mappings.");
+    }
+    ASSET_HANDLER.unloadAsset(mappingsFileData);
 }
 
 int main(int argc, char *argv[])
 {
-//    printNetInfo();
-    
-    memset(joysticks, 0, sizeof(joysticks));
-
     GLFWwindow* window;
 
     glfwSetErrorCallback(error_callback);
@@ -283,6 +250,9 @@ int main(int argc, char *argv[])
     // Consider loading config here
     // And instanting Engine only inside runEngine function
     Engine engine;
+    
+    printNetInfo();
+    updateGamepadMappings();
 
     GLFWmonitor* monitor = nullptr;
 
@@ -319,17 +289,8 @@ int main(int argc, char *argv[])
     }
     
     INST_REG.registerInstance(window, "GLFWwindow");
-    
-    for (int jid = GLFW_JOYSTICK_1; jid <= GLFW_JOYSTICK_LAST; ++jid)
-    {
-        if (glfwJoystickPresent(jid))
-        {
-            joysticks[joystick_count++] = jid;
-        }
-    }
 
     glfwSetWindowIconifyCallback(window, window_iconify_callback);
-    glfwSetJoystickCallback(joystick_callback);
     glfwSetMouseButtonCallback(window, mouse_button_callback);
     glfwSetCursorPosCallback(window, mouse_cursor_pos_callback);
     glfwSetScrollCallback(window, mouse_scroll_callback);

@@ -76,8 +76,7 @@ uint8_t InputProcessor::update()
         {
             switch (e->_button)
             {
-                case GPEB_BUTTON_SELECT:
-                case GPEB_BUTTON_SNES_SELECT:
+                case GEB_BUTTON_BACK:
                     return IPS_EXIT;
                 default:
                     continue;
@@ -148,29 +147,27 @@ uint8_t InputProcessor::updateReadText(uint16_t maxInputLength)
         
         switch (e->_button)
         {
-            case GPEB_BUTTON_SELECT:
-            case GPEB_BUTTON_SNES_SELECT:
+            case GEB_BUTTON_BACK:
                 clearTextInput();
                 return IPS_EXIT;
-            case GPEB_BUTTON_B:
+            case GEB_BUTTON_B:
                 if (_textInput.end() > _textInput.begin())
                 {
                     _textInput.erase(_textInput.end() - 1, _textInput.end());
                 }
                 continue;
-            case GPEB_BUTTON_A:
+            case GEB_BUTTON_A:
                 acceptKeyInput(GOW_KEY_A);
                 continue;
-            case GPEB_BUTTON_X:
+            case GEB_BUTTON_X:
                 acceptKeyInput(GOW_KEY_X);
                 continue;
-            case GPEB_BUTTON_Y:
-            case GPEB_BUMPER_LEFT:
-                // Weird that Y button on my SNES controller is coming through as GPEB_BUMPER_LEFT
+            case GEB_BUTTON_Y:
+            case GEB_BUMPER_LEFT:
+                // Weird that Y button on my SNES controller is coming through as GEB_BUMPER_LEFT
                 acceptKeyInput(GOW_KEY_Y);
                 continue;
-            case GPEB_BUTTON_START:
-            case GPEB_BUTTON_SNES_START:
+            case GEB_BUTTON_START:
                 return IPS_TEXT_INPUT_READY;
             default:
                 continue;

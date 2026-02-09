@@ -1,12 +1,12 @@
 {
     "gamepadEvents": {
-        "A": [
+        "B": [
             {
                 "inputStateFlag": "ATTACKING",
                 "condition": "pressed"
             }
         ],
-        "B": [
+        "A": [
             {
                 "inputStateFlag": "JUMPING",
                 "condition": "pressed"
@@ -24,7 +24,7 @@
                 "condition": "pressed"
             }
         ],
-        "GPEB_STICK_LEFT": [
+        "STICK_LEFT": [
             {
                 "inputStateFlag": "MOVING_LEFT",
                 "condition": "negativeX"

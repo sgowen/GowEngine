@@ -299,5 +299,5 @@ _userEnteredIPAddress("")
     _inputProcessor.registerActionForKey(GOW_KEY_L, TESS_INPUT_LAN_SERVER);
     _inputProcessor.registerActionForKey(GOW_KEY_I, TESS_INPUT_INTERNET_SERVER);
     
-    _inputProcessor.registerActionForButton(GPEB_BUTTON_A, TESS_INPUT_HOST_NAME);
+    _inputProcessor.registerActionForButton(GEB_BUTTON_A, TESS_INPUT_HOST_NAME);
 }

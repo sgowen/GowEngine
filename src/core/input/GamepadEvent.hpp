@@ -12,38 +12,29 @@
 
 enum GamepadEventButtons
 {
-    GPEB_BUTTON_A = 0,
-    GPEB_BUTTON_B = 1,
-    GPEB_BUTTON_Y = 2,
-    GPEB_BUTTON_X = 3,
-    GPEB_BUMPER_LEFT = 4,
-    GPEB_BUMPER_RIGHT = 5,
-    GPEB_UNKNOWN_6 = 6,
-    GPEB_UNKNOWN_7 = 7,
-    GPEB_BUTTON_SELECT = 8,
-    GPEB_BUTTON_START = 9,
-    GPEB_BUTTON_SNES_SELECT = 10,
-    GPEB_BUTTON_SNES_START = 11,
-    GPEB_UNKNOWN_12 = 12,
-    GPEB_UNKNOWN_13 = 13,
-    GPEB_XBOX_D_PAD_LEFT = 13,
-    GPEB_XBOX_D_PAD_RIGHT = 14,
-    GPEB_XBOX_D_PAD_UP = 11,
-    GPEB_XBOX_D_PAD_DOWN = 12,
-    GPEB_D_PAD_UP = 16,
-    GPEB_D_PAD_RIGHT = 17,
-    GPEB_D_PAD_DOWN = 18,
-    GPEB_D_PAD_LEFT = 19,
-    GPEB_STICK_LEFT = 100,
-    GPEB_STICK_RIGHT = 101,
-    GPEB_TRIGGER = 102
+    GEB_BUTTON_A = 0,
+    GEB_BUTTON_B = 1,
+    GEB_BUTTON_X = 2,
+    GEB_BUTTON_Y = 3,
+    GEB_BUMPER_LEFT = 4,
+    GEB_BUMPER_RIGHT = 5,
+    GEB_BUTTON_BACK = 6,
+    GEB_BUTTON_START = 7,
+    GEB_BUTTON_GUIDE = 8,
+    GEB_D_PAD_UP = 11,
+    GEB_D_PAD_RIGHT = 12,
+    GEB_D_PAD_DOWN = 13,
+    GEB_D_PAD_LEFT = 14,
+    GEB_STICK_LEFT = 100,
+    GEB_STICK_RIGHT = 101,
+    GEB_TRIGGER = 102
 };
 
 enum GamepadEventType
 {
-    GPET_DOWN,
-    GPET_HELD,
-    GPET_UP
+    GET_DOWN,
+    GET_HELD,
+    GET_UP
 };
 
 struct GamepadEvent
@@ -54,7 +45,7 @@ struct GamepadEvent
     float _x;
     float _y;
     
-    GamepadEvent(GamepadEventType type = GPET_DOWN, uint8_t button = GPEB_BUTTON_X, uint8_t index = 0, float x = 0, float y = 0) :
+    GamepadEvent(GamepadEventType type = GET_DOWN, uint8_t button = GEB_BUTTON_X, uint8_t index = 0, float x = 0, float y = 0) :
     _type(type),
     _button(button),
     _index(index),
@@ -66,21 +57,21 @@ struct GamepadEvent
     
     bool isPressed()
     {
-        return _type == GPET_DOWN || _type == GPET_HELD;
+        return _type == GET_DOWN || _type == GET_HELD;
     }
     
     bool isDown()
     {
-        return _type == GPET_DOWN;
+        return _type == GET_DOWN;
     }
     
     bool isHeld()
     {
-        return _type == GPET_HELD;
+        return _type == GET_HELD;
     }
 
     bool isUp()
     {
-        return _type == GPET_UP;
+        return _type == GET_UP;
     }
 };

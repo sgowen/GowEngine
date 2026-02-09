@@ -56,7 +56,7 @@ void InputManager::onGamepadInput(uint8_t button, uint8_t index, float x, float 
     }
     
     GamepadEvent* e = _poolGamepad.newObject();
-    e->_type = isUp ? GPET_UP : wasLastEventUp ? GPET_DOWN : GPET_HELD;
+    e->_type = isUp ? GET_UP : wasLastEventUp ? GET_DOWN : GET_HELD;
     e->_button = button;
     e->_index = index;
     e->_x = sanitizedX;
@@ -327,29 +327,20 @@ _matrix(nullptr)
     _keyMap[GOW_KEY_ARROW_DOWN] = "ARROW_DOWN";
     _keyMap[GOW_KEY_CARRIAGE_RETURN] = "CARRIAGE_RETURN";
     
-    _buttonMap[GPEB_BUTTON_A] = "A";
-    _buttonMap[GPEB_BUTTON_B] = "B";
-    _buttonMap[GPEB_BUTTON_Y] = "Y";
-    _buttonMap[GPEB_BUTTON_X] = "X";
-    _buttonMap[GPEB_BUMPER_LEFT] = "BUMPER_LEFT";
-    _buttonMap[GPEB_BUMPER_RIGHT] = "BUMPER_RIGHT";
-    _buttonMap[GPEB_UNKNOWN_6] = "UNKNOWN_6";
-    _buttonMap[GPEB_UNKNOWN_7] = "UNKNOWN_7";
-    _buttonMap[GPEB_BUTTON_SELECT] = "SELECT";
-    _buttonMap[GPEB_BUTTON_START] = "START";
-    _buttonMap[GPEB_BUTTON_SNES_SELECT] = "SNES_SELECT";
-    _buttonMap[GPEB_BUTTON_SNES_START] = "SNES_START";
-    _buttonMap[GPEB_UNKNOWN_12] = "UNKNOWN_12";
-    _buttonMap[GPEB_UNKNOWN_13] = "UNKNOWN_13";
-    _buttonMap[GPEB_D_PAD_UP] = "D_PAD_UP";
-    _buttonMap[GPEB_D_PAD_RIGHT] = "D_PAD_RIGHT";
-    _buttonMap[GPEB_D_PAD_DOWN] = "D_PAD_DOWN";
-    _buttonMap[GPEB_D_PAD_LEFT] = "D_PAD_LEFT";
-    _buttonMap[GPEB_XBOX_D_PAD_UP] = "D_PAD_UP";
-    _buttonMap[GPEB_XBOX_D_PAD_RIGHT] = "D_PAD_RIGHT";
-    _buttonMap[GPEB_XBOX_D_PAD_DOWN] = "D_PAD_DOWN";
-    _buttonMap[GPEB_XBOX_D_PAD_LEFT] = "D_PAD_LEFT";
-    _buttonMap[GPEB_STICK_LEFT] = "STICK_LEFT";
-    _buttonMap[GPEB_STICK_RIGHT] = "STICK_RIGHT";
-    _buttonMap[GPEB_TRIGGER] = "TRIGGER";
+    _buttonMap[GEB_BUTTON_A] = "A";
+    _buttonMap[GEB_BUTTON_B] = "B";
+    _buttonMap[GEB_BUTTON_Y] = "Y";
+    _buttonMap[GEB_BUTTON_X] = "X";
+    _buttonMap[GEB_BUMPER_LEFT] = "BUMPER_LEFT";
+    _buttonMap[GEB_BUMPER_RIGHT] = "BUMPER_RIGHT";
+    _buttonMap[GEB_BUTTON_BACK] = "BACK";
+    _buttonMap[GEB_BUTTON_START] = "START";
+    _buttonMap[GEB_BUTTON_GUIDE] = "GUIDE";
+    _buttonMap[GEB_D_PAD_UP] = "D_PAD_UP";
+    _buttonMap[GEB_D_PAD_RIGHT] = "D_PAD_RIGHT";
+    _buttonMap[GEB_D_PAD_DOWN] = "D_PAD_DOWN";
+    _buttonMap[GEB_D_PAD_LEFT] = "D_PAD_LEFT";
+    _buttonMap[GEB_STICK_LEFT] = "STICK_LEFT";
+    _buttonMap[GEB_STICK_RIGHT] = "STICK_RIGHT";
+    _buttonMap[GEB_TRIGGER] = "TRIGGER";
 }

@@ -71,25 +71,10 @@ GameInputProcessorState GameInputProcessor::update(World& world)
         
         switch (e->_button)
         {
-            case GPEB_BUTTON_SELECT:
-            case GPEB_BUTTON_SNES_SELECT:
+            case GEB_BUTTON_BACK:
+            case GEB_BUTTON_START:
+            case GEB_BUTTON_GUIDE:
                 _state = e->isDown() ? GIMS_EXIT : GIMS_DEFAULT;
-                break;
-            case GPEB_UNKNOWN_6:
-            {
-                _state = e->isPressed() ? GIMS_ZOOM_IN : GIMS_DEFAULT;
-                break;
-            }
-            case GPEB_BUMPER_RIGHT:
-            case GPEB_UNKNOWN_7:
-                if (_state == GIMS_ZOOM_IN)
-                {
-                    _state = GIMS_ZOOM_RESET;
-                }
-                else
-                {
-                    _state = e->isPressed() ? GIMS_ZOOM_OUT : GIMS_DEFAULT;
-                }
                 break;
             default:
                 break;

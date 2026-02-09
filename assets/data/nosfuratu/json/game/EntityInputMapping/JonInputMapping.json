@@ -1,24 +1,24 @@
 {
     "gamepadEvents": {
-        "A": [
+        "B": [
             {
                 "inputStateFlag": "ATTACKING",
                 "condition": "pressed"
             }
         ],
-        "B": [
+        "A": [
             {
                 "inputStateFlag": "JUMPING",
                 "condition": "pressed"
             }
         ],
-        "X": [
+        "Y": [
             {
                 "inputStateFlag": "SPECIAL",
                 "condition": "pressed"
             }
         ],
-        "Y": [
+        "X": [
             {
                 "inputStateFlag": "ABILITY",
                 "condition": "pressed"
@@ -42,7 +42,7 @@
                 "condition": "pressed"
             }
         ],
-        "GPEB_STICK_LEFT": [
+        "STICK_LEFT": [
             {
                 "inputStateFlag": "MOVING_LEFT",
                 "condition": "negativeX"
@@ -52,7 +52,7 @@
                 "condition": "positiveX"
             }
         ],
-        "UNKNOWN_6": [
+        "BUMPER_RIGHT": [
             {
                 "inputStateFlag": "WARMING_UP",
                 "condition": "pressed"

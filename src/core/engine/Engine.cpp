@@ -163,17 +163,17 @@ void Engine::onCursorScrolled(float yoffset)
 
 void Engine::onGamepadInputStickLeft(uint8_t index, float stickLeftX, float stickLeftY)
 {
-    INPUT_MGR.onGamepadInput(GPEB_STICK_LEFT, index, stickLeftX, stickLeftY);
+    INPUT_MGR.onGamepadInput(GEB_STICK_LEFT, index, stickLeftX, stickLeftY);
 }
 
 void Engine::onGamepadInputStickRight(uint8_t index, float stickRightX, float stickRightY)
 {
-    INPUT_MGR.onGamepadInput(GPEB_STICK_RIGHT, index, stickRightX, stickRightY);
+    INPUT_MGR.onGamepadInput(GEB_STICK_RIGHT, index, stickRightX, stickRightY);
 }
 
 void Engine::onGamepadInputTrigger(uint8_t index, float triggerLeft, float triggerRight)
 {
-    INPUT_MGR.onGamepadInput(GPEB_TRIGGER, index, triggerLeft, triggerRight);
+    INPUT_MGR.onGamepadInput(GEB_TRIGGER, index, triggerLeft, triggerRight);
 }
 
 void Engine::onGamepadInputButton(uint8_t index, uint8_t button, uint8_t isPressed)
