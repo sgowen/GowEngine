@@ -97,8 +97,9 @@ EngineRequestedHostAction Engine::update(double deltaTime)
     _stateTime += deltaTime;
     if (_stateTime > maxStateTimeAllowed)
     {
-        LOG("Okay! So this code really is here for a reason");
-        _stateTime = frameRate;
+        int numFramesSkipped = _stateTime / frameRate;
+        LOG("%d frames skipped!", numFramesSkipped);
+        _stateTime = 0;
     }
     
     while (_stateTime >= frameRate)
