@@ -755,6 +755,7 @@
 		BBBC2B1B2B983A9D00ABD6BB /* engine_renderer_json.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = engine_renderer_json.h; sourceTree = "<group>"; };
 		BBBC57B62B923ACE0037527C /* EntityControllerInput.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = EntityControllerInput.cpp; sourceTree = "<group>"; };
 		BBBC57B72B923ACE0037527C /* EntityControllerInput.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = EntityControllerInput.hpp; sourceTree = "<group>"; };
+		BBDF81D52F3B9CDE0048A042 /* gamecontrollerdb.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = gamecontrollerdb.txt; sourceTree = "<group>"; };
 		BBEC09E72A28F6380054681F /* libsndfile.so.1.0.35 */ = {isa = PBXFileReference; lastKnownFileType = file; path = libsndfile.so.1.0.35; sourceTree = "<group>"; };
 		BBEC09E82A28F6380054681F /* libopenal.so.1 */ = {isa = PBXFileReference; lastKnownFileType = text.man; path = libopenal.so.1; sourceTree = "<group>"; };
 		BBEC09E92A28F6380054681F /* libglfw3.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libglfw3.a; sourceTree = "<group>"; };
@@ -879,8 +880,8 @@
 		BB0BC0F025E0509700276CEC /* assets */ = {
 			isa = PBXGroup;
 			children = (
-				BB7F745A2B69885E00CAB63F /* steam_appid.txt */,
 				BB0BC1B525E050A600276CEC /* data */,
+				BB7F745A2B69885E00CAB63F /* steam_appid.txt */,
 			);
 			path = assets;
 			sourceTree = "<group>";
@@ -1566,6 +1567,7 @@
 		BBBBD7E827023E0F00D7D319 /* deps */ = {
 			isa = PBXGroup;
 			children = (
+				BBDF81CC2F3B9B910048A042 /* SDL_GameControllerDB */,
 				BB7F745C2B6AFFC800CAB63F /* box2d */,
 				BB83A69A2B83FF04003AFB1F /* file-compat */,
 				BB83A6662B83FF03003AFB1F /* glfm */,
@@ -1946,6 +1948,14 @@
 				BBBBDF3227023E1400D7D319 /* RendererLoader.hpp */,
 			);
 			path = rapidjson;
+			sourceTree = "<group>";
+		};
+		BBDF81CC2F3B9B910048A042 /* SDL_GameControllerDB */ = {
+			isa = PBXGroup;
+			children = (
+				BBDF81D52F3B9CDE0048A042 /* gamecontrollerdb.txt */,
+			);
+			path = SDL_GameControllerDB;
 			sourceTree = "<group>";
 		};
 		BBFD14F32B571DE800D4D841 /* steamworks_sdk */ = {

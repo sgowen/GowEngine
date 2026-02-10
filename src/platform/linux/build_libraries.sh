@@ -109,3 +109,7 @@ fi
 
 echo 'copying libsteam_api.so into solution directory'
 cp steamworks_sdk/redistributable_bin/linux64/libsteam_api.so $solutionDir/
+
+echo 'copying gamecontrollerdb.txt to assets/data/engine/ folder'
+cd ..
+cp deps/SDL_GameControllerDB/gamecontrollerdb.txt assets/data/engine/

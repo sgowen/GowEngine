@@ -40,3 +40,6 @@
 [submodule "deps/imgui"]
 	path = deps/imgui
 	url = git@github.com:ocornut/imgui.git
+[submodule "deps/SDL_GameControllerDB"]
+	path = deps/SDL_GameControllerDB
+	url = git@github.com:mdqinc/SDL_GameControllerDB.git

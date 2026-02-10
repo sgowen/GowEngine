@@ -138,3 +138,6 @@ xcopy C:\Windows\System32\vcruntime140_1.dll %solutionDir%\ /Y
 
 ECHO copying vcruntime140.dll into solution directory
 xcopy C:\Windows\System32\vcruntime140.dll %solutionDir%\ /Y
+
+ECHO copying gamecontrollerdb.txt to assets\data\engine\ folder
+xcopy %solutionDir%\..\..\..\..\GowEngine\deps\SDL_GameControllerDB\gamecontrollerdb.txt %solutionDir%\..\..\..\..\GowEngine\assets\data\engine\ /Y

@@ -104,3 +104,7 @@ if [[ "$libopenal" == 1 ]]; then
     rm -rf cmake_build
     cd ..
 fi
+
+echo 'copying gamecontrollerdb.txt to assets/data/engine/ folder'
+cd ..
+cp deps/SDL_GameControllerDB/gamecontrollerdb.txt assets/data/engine/
