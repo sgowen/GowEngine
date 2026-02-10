@@ -1567,7 +1567,6 @@
 		BBBBD7E827023E0F00D7D319 /* deps */ = {
 			isa = PBXGroup;
 			children = (
-				BBDF81CC2F3B9B910048A042 /* SDL_GameControllerDB */,
 				BB7F745C2B6AFFC800CAB63F /* box2d */,
 				BB83A69A2B83FF04003AFB1F /* file-compat */,
 				BB83A6662B83FF03003AFB1F /* glfm */,
@@ -1577,6 +1576,7 @@
 				BB2E55C62B94DE6700D84D3C /* Lua */,
 				BB370F6C2A1EB77E00A97300 /* openal-soft */,
 				BBBBDA4A27023E1100D7D319 /* rapidjson */,
+				BBDF81CC2F3B9B910048A042 /* SDL_GameControllerDB */,
 				BB3F09452A44EFA9008D8AC8 /* stb */,
 				BBFD14F32B571DE800D4D841 /* steamworks_sdk */,
 			);
